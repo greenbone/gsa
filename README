@@ -1,0 +1,41 @@
+About Greenbone Security Assistant
+----------------------------------
+
+The Greenbone Security Assistant is a web application that
+connects to the OpenVAS Manager and OpenVAS Administrator
+to provide for a full-featured user interface for
+vulnerability management.
+
+Greenbone Security Assistant is licensed under GNU General Public License
+Version 2 or any later version. Please see file COPYING for details.
+
+All parts of Greenbone Security Assitant are
+Copyright (C) by Greenbone Networks GmbH (see http://www.greenbone.net).
+
+
+Howto use
+---------
+
+For example, if openvasmd (OpenVAS Manager daemon) is running on
+port 9390, the following command starts Greenbone Security
+Assistant daemon on port 443.
+
+    gsad --mport 9391
+
+
+The program usage message follows.
+
+    Usage:
+      gsad [OPTION...] - Greenbone Security Assistant Daemon
+
+    Help Options:
+      -?, --help                       Show help options
+
+    Application Options:
+      -f, --foreground                 Run in foreground.
+      -p, --port=<number>              Use port number <number>.
+      -m, --mport=<number>             Use manager port number <number>.
+      -v, --verbose                    Print progress messages.
+      --version                        Print version and exit.
+      -k, --ssl-private-key=<file>     Use <file> as the private key for HTTPS
+      -c, --ssl-certificate=<file>     Use <file> as the certificate for HTTPS
