@@ -1,0 +1,120 @@
+m4_define(`PAGE_TITLE', `Help: Configure Targets')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_targets">Jump to dialog</a></div>
+&nbsp;<br />
+
+<h1>Configure Targets</h1>
+
+<p>
+Any <a href="glossary.html#task">task</a> is associated with
+a <a href="glossary.html#target">target</a>.
+The configured targets will appear as selection
+in the dialog for creating a <a href="new_task.html">new task</a>.
+</p>
+
+<a name="newtarget"></a>
+<h2>New Target</h2>
+
+<p>
+For creating a new target the dialog offers these entries.
+Hit the button "Create Target" to submit the new target.
+The list of targets will be updated.
+</p>
+
+<p>
+Note on hosts: incorrect syntax for hosts will not be
+warned but rather accepted. When applied for a scan,
+only correct entries will be used and the rest will be ignored.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td></td>
+  <td>Mandatory</td>
+  <td>Max Length</td>
+  <td>Syntax</td>
+  <td>Example</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>yes</td>
+  <td>80</td>
+  <td>Alphanumeric</td>
+  <td>Staging webservers</td>
+</tr>
+<tr>
+  <td>Hosts</td>
+  <td>yes</td>
+  <td>80</td>
+  <td>Comma separated list of IPs and/or hostnames</td>
+  <td>192.168.1.23, webserv1.mycompany.tld</td>
+</tr>
+<tr class="odd">
+  <td>Comment</td>
+  <td>no</td>
+  <td>40</td>
+  <td>Alphanumeric</td>
+  <td>Covers both of our web staging systems</td>
+</tr>
+</table>
+
+<a name="targets"></a>
+<h2>Targets</h2>
+
+<p>
+This table provides on overview on all configured
+targets. The complete contents of the target entries
+are shown (name, comment and hosts).
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>Shows name of the target and,
+      if specificied, the comment in brackets below
+      the name.</td>
+</tr>
+<tr>
+  <td>Hosts</td>
+  <td>The comma separated list of target hosts, specified
+      either via hostname or IP.</td>
+</tr>
+<tr>
+  <td>IPs</td>
+  <td>The total number of IPs that results from the
+      hosts specification.</td>
+</tr>
+</table>
+
+<a name="actions"></a>
+<h3>Actions</h3>
+
+<p>
+For targets only one action is available: to delete an
+entry. <em>Editing a target</em> is not foreseen.
+You may copy the contents from the list to the above
+shown "New Target" dialog and create a new target from this
+with a different name.
+</p>
+
+<h4>Delete Target</h4>
+
+<p>
+Pressing the delete icon
+<img src="/img/delete.png" alt="Delete" title="Delete" />
+will immedialy remove the entry and update the list.
+</p>
+
+<p>
+Note that if a target is associated with at least one task, it is not possible
+to delete it. In this case the button is greyed
+out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+</p>
+
+m4_include(`footer.m4')

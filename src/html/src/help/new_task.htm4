@@ -1,0 +1,55 @@
+m4_define(`PAGE_TITLE', `Help: New task')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/new_task.html">Jump to dialog</a></div>
+&nbsp;<br />
+
+<h1>New task</h1>
+<a name="newtask"></a>
+<p>
+For creating a new <a href="/help/glossary.html#task">task</a>
+you have to provide the following elements:
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td></td>
+  <td>Mandatory</td>
+  <td>Max Length</td>
+  <td>Syntax</td>
+  <td>Example</td>
+</tr>
+<tr class="odd">
+  <td>Task Name</td>
+  <td>yes</td>
+  <td>80</td>
+  <td>Alphanumeric</td>
+  <td>All Windows desktops in-depth</td>
+</tr>
+<tr>
+  <td>Scan Type</td>
+  <td>yes</td>
+  <td>---</td>
+  <td>One of the
+      <a href="/help/configure_scanconfigs.html">configured scan configs</a>.
+  </td>
+  <td>Full and fast</td>
+</tr>
+<tr class="odd">
+  <td>Scan Targets</td>
+  <td>yes</td>
+  <td>---</td>
+  <td>One of the
+      <a href="/help/configure_targets.html">configured targets</a>.</td>
+  <td>The Windows Desktops</td>
+</tr>
+</table>
+
+<p>
+Pressing button "Create Task" will add a new entry to the list
+of tasks and return to the <a href="/help/tasks.html">Tasks</a>
+overview.
+</p>
+
+m4_include(`footer.m4')
