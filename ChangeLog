@@ -1,5 +1,10 @@
 2009-09-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/help/, src/html/src/login/, src/html/src/img/,
+	src/html/src/favicon.gif: New.
+
+2009-09-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/: New.
 
 2009-09-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
