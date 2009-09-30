@@ -1,5 +1,13 @@
 2009-09-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/img/start.png, src/html/src/img/refresh.png,
+	src/html/src/img/start_inactive.png, src/html/src/img/delete.png,
+	src/html/src/img/delete_inactive.png, src/html/src/img/details.png,
+	src/html/src/img/stop.png, src/html/src/img/stop_inactive.png,
+	src/html/src/img/help.png: New.
+
+2009-09-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/help/, src/html/src/login/, src/html/src/img/,
 	src/html/src/favicon.gif: New.
 
@@ -27,4 +35,4 @@
 
 2009-09-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	Starting package "gsa" (Greenbone Security Manager)
+	Starting package "gsa" (Greenbone Security Assistant)
