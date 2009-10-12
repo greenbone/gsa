@@ -1,0 +1,16 @@
+[gsad main]
+prepend=%t %p
+prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+file=${OPENVAS_LOG_DIR}/gsad.log
+level=128
+
+[gsad  omp]
+prepend=%t %p
+prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+file=${OPENVAS_LOG_DIR}/gsad.log
+level=128
+
+[*]
+prepend=%t %p
+prepend_time_format=%Y-%m-%d %Hh%M.%S %Z
+file=${OPENVAS_LOG_DIR}/gsad.log

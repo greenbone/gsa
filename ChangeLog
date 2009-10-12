@@ -1,3 +1,16 @@
+2009-10-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* VERSION: New.
+
+	* src/gsad_log_conf.cmake_in: New.
+
+	* src/CMakeLists.txt: New.
+
+	* src/html/src/img/rpm.png, src/html/src/img/exe.png,
+	src/html/src/img/key.png, src/html/src/img/deb.png: New.
+
+	* gsad.c: New.
+
 2009-10-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/img/new.png: New.
