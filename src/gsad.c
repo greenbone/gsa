@@ -42,6 +42,25 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /**
+ * @brief Cleanup routine for GSAD.
+ *
+ * This routine will stop the http server, free log resources
+ * and remove the pidfile.
+ */
+void
+gsad_cleanup (void)
+{
+  MHD_stop_daemon (gsad_daemon);
+
+  if (log_config) free_log_configuration (log_config);
+
+  /* Delete pidfile. */
+  char *pidfile_name = strdup (GSAD_PID_DIR "/gsad.pid");
+  unlink (pidfile_name);
+  free (pidfile_name);
+}
+
+/**
  * @brief Handle a SIGTERM signal.
  *
  * @param[in]  signal  The signal that caused this function to run.
@@ -244,7 +263,8 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  omp_init (gsad_manager_port, gsad_administrator_port);
+  omp_init (gsad_manager_port);
+  oap_init (gsad_administrator_port);
 
   int use_ssl = 1;
   gchar *ssl_private_key = NULL;
