@@ -42,6 +42,70 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /**
+ * @brief Initialization routine for GSAD.
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
+ *
+ * This routine checks or required files and initializes the gcrypt
+ * library.
+ */
+int
+gsad_init (void)
+{
+  tracef ("Initializing the Greenbone Security Assistant...\n");
+
+  /* Check for required files. */
+  if (check_is_dir (GSA_STATE_DIR) < 1)
+    {
+      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_STATE_DIR);
+      return MHD_NO;
+    }
+
+  /* Init GCRYPT. */
+  gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
+
+  /* Version check should be the very first call because it makes sure that
+   * important subsystems are intialized. */
+  if (!gcry_check_version (GCRYPT_VERSION))
+    {
+      g_critical ("%s: libgcrypt version mismatch\n", __FUNCTION__);
+      return MHD_NO;
+    }
+
+  /* We don't want to see any warnings, e.g. because we have not yet parsed
+   * program options which might be used to suppress such warnings. */
+  gcry_control (GCRYCTL_SUSPEND_SECMEM_WARN);
+
+  /* ... If required, other initialization goes here.  Note that the process
+   * might still be running with increased privileges and that the secure
+   * memory has not been intialized. */
+
+  /* Allocate a pool of 16k secure memory.  This make the secure memory
+   * available and also drops privileges where needed. */
+  gcry_control (GCRYCTL_INIT_SECMEM, 16384, 0);
+
+  /* It is now okay to let Libgcrypt complain when there was/is a problem with
+   * the secure memory. */
+  gcry_control (GCRYCTL_RESUME_SECMEM_WARN);
+
+  /* ... If required, other initialization goes here. */
+
+  /* Tell Libgcrypt that initialization has completed. */
+  gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
+
+  /* Init GNUTLS. */
+  int ret = gnutls_global_init ();
+  if (ret < 0)
+    {
+      g_critical ("%s: Failed to initialize GNUTLS.\n", __FUNCTION__);
+      return MHD_NO;
+    }
+
+  tracef ("Initialization of GSA successful.\n");
+  return MHD_YES;
+}
+
+/**
  * @brief Cleanup routine for GSAD.
  *
  * This routine will stop the http server, free log resources
