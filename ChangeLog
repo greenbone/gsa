@@ -1,3 +1,12 @@
+2009-10-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/img/p_bar_bg.png, src/html/src/img/p_bar_done.png,
+	src/html/src/img/p_bar_error.png, src/html/src/img/p_bar_new.png,
+	src/html/src/img/p_bar.png, src/html/src/img/p_bar_request.png,
+	src/html/src/img/trend_down.png, src/html/src/img/trend_less.png,
+	src/html/src/img/trend_more.png, src/html/src/img/trend_nochange.png,
+	src/html/src/img/trend_up.png: New.
+
 2009-10-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c (gsad_init): New.
