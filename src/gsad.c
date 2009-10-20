@@ -42,6 +42,250 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /**
+ * @brief HTTP request handler for GSAD.
+ *
+ * @param[in]  cls              Not used for this callback. 
+ * @param[in]  connection       Connection handle, e.g. used to send response.
+ * @param[in]  url              The URL requested.
+ * @param[in]  method           "GET" or "POST", others are disregarded.
+ * @param[in]  version          Not used for this callback. 
+ * @param[in]  upload_data      Data used for POST requests.
+ * @param[in]  upload_data_size Size of upload_data.
+ * @param[out] con_cls          For exhange of connection-related data
+ *                              (here a struct gsad_connection_info).
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
+ *
+ * This routine is the callback request handler for microhttpd.
+ */
+int
+request_handler (void *cls, struct MHD_Connection *connection,
+                 const char *url, const char *method,
+                 const char *version, const char *upload_data,
+                 size_t * upload_data_size, void **con_cls)
+{
+  char *url_base = "/";
+  char *cgi_base = "/omp";
+  char *default_file = "/login/login.html";
+
+  struct MHD_Response *response;
+  int ret;
+  FILE *file;
+  char *path;
+  char *res;
+  credentials_t *credentials;
+
+  /* Never respond on first call of a GET. */
+  if ((!strcmp (method, "GET")) && *con_cls == NULL)
+    {
+      struct gsad_connection_info *con_info;
+
+      con_info = calloc (1, sizeof (struct gsad_connection_info));
+      if (NULL == con_info)
+        return MHD_NO;
+
+      con_info->connectiontype = 2;
+
+      *con_cls = (void *) con_info;
+      return MHD_YES;
+    }
+
+  /* If called with undefined URL, abort request handler. */
+  if (&url[0] == NULL)
+    return MHD_NO;
+
+  /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
+  if ((0 != strcmp (method, "GET")) && (0 != strcmp (method, "POST")))
+    send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+
+  /* Redirect any URL not matching the base to the default file. */
+  if (strcmp (&url[0], url_base) == 0)
+    {
+      send_redirect_header (connection, default_file);
+      return MHD_YES;
+    }
+
+  /* Treat logging out specially. */
+  if ((!strcmp (method, "GET"))
+      && (!strncmp (&url[0], "/logout", strlen ("/logout")))) /* flawfinder: ignore,
+                                                                 it is a const str */
+    {
+      if (is_http_authenticated (connection))
+        {
+          return send_http_authenticate_header (connection, REALM);
+        }
+      else
+        {
+          send_redirect_header (connection, default_file);
+          return MHD_YES;
+        }
+    }
+
+  /* Check for authentication. */
+  if ((!is_http_authenticated (connection))
+      && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
+                                                                it is a const str */
+    return send_http_authenticate_header (connection, REALM);
+
+  credentials = get_header_credentials (connection);
+
+  /* Set HTTP Header values. */
+  MHD_get_connection_values (connection, MHD_HEADER_KIND, print_header, NULL);
+
+  if (!strcmp (method, "GET"))
+    {
+      /* This is a GET request. */
+
+      if (!strncmp (&url[0], cgi_base, strlen (cgi_base))) /* flawfinder: ignore,
+                                                              it is a const str */
+        {
+          /* URL requests to run OMP command. */
+
+          unsigned int res_len = 0;
+          res = exec_omp_get (connection);
+          if (response_size > 0)
+            {
+              res_len = response_size;
+              response_size = 0;
+            }
+          else
+            res_len = strlen (res);
+
+          response = MHD_create_response_from_data (res_len,
+                                                    (void *) res,
+                                                    MHD_NO, MHD_YES);
+          free (res);
+
+          if (content_type != NULL)
+            {
+              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                       content_type);
+              content_type = NULL;
+            }
+          if (content_disposition != NULL)
+            {
+              MHD_add_response_header (response, "Content-Disposition",
+                                       content_disposition);
+              content_disposition = NULL;
+            }
+          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+          MHD_destroy_response (response);
+          return MHD_YES;
+        }
+
+      /* URL does not request OMP command but perhaps a special GSAD command? */
+      if (!strncmp (&url[0], "/new_task.html",
+                    strlen ("/new_task.html"))) /* flawfinder: ignore,
+                                                   it is a const str */
+        {
+          res = gsad_newtask (credentials);
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+          MHD_destroy_response (response);
+          return MHD_YES;
+        }
+
+      /* URL requests neither an OMP command nor a special GSAD command,
+       * so it is a simple file. */
+
+      /* FIXME: validation, URL length restriction */
+      /* flawfinder: ignore, it is a const str */
+      int len = strlen (GSA_STATE_DIR)
+                + strlen (url) + 1;
+      path = malloc (len);
+      snprintf (path, len, "%s%s", GSA_STATE_DIR, url); /* flawfinder: ignore,
+                                                           snprintf OK for the
+                                                           scope */
+      file = fopen (path, "r"); /* flawfinder: ignore, this file is just
+                                   read and sent */
+
+      /* In case the file is not found, always serve the default file. */
+      if (file == NULL)
+        {
+          tracef ("File %s failed, ", path);
+          /* flawfinder: ignore, it is a const str */
+          len = strlen (GSA_STATE_DIR)
+                + strlen (default_file) + 1);
+          path = realloc (path, len);
+          /* flawfinder: ignore, snprintf OK for the scope */
+          snprintf (path, len, "%s%s", GSA_STATE_DIR, default_file);
+          tracef ("trying default file <%s>.\n", path);
+          file = fopen (path, "r"); /* flawfinder: ignore, this file is just
+                                       read and sent */
+        }
+
+      if (file == NULL)
+        {
+          /* Even the default file failed. */
+          tracef ("Default file failed.\n");
+          send_response (connection, FILE_NOT_FOUND, MHD_HTTP_NOT_FOUND);
+        }
+      else
+        {
+          struct stat buf;
+          tracef ("Default file successful.\n");
+          if (stat (path, &buf))
+            {
+              /* File information could not be retrieved. */
+              g_critical ("%s: file <%s> can not be stat'ed.\n",
+                          __FUNCTION__,
+                          path);
+              free (path);
+              return MHD_NO;
+            }
+
+          response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
+                                                        &file_reader,
+                                                        file,
+                                                        (MHD_ContentReaderFreeCallback)
+                                                        & fclose);
+          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+
+          MHD_destroy_response (response);
+          free (path);
+          return MHD_YES;
+        }
+    }
+
+  if (0 == strcmp (method, "POST"))
+    {
+      if (NULL == *con_cls)
+        {
+          struct gsad_connection_info *con_info;
+
+          con_info = calloc (1, sizeof (struct gsad_connection_info));
+          if (NULL == con_info)
+            return MHD_NO;
+
+          con_info->postprocessor =
+            MHD_create_post_processor (connection, POSTBUFFERSIZE,
+                                       serve_post, (void *) con_info);
+          if (NULL == con_info->postprocessor)
+            return MHD_NO;
+          con_info->connectiontype = 1;
+          con_info->answercode = MHD_HTTP_OK;
+
+          *con_cls = (void *) con_info;
+          return MHD_YES;
+        }
+
+      struct gsad_connection_info *con_info = *con_cls;
+      if (0 != *upload_data_size)
+        {
+          MHD_post_process (con_info->postprocessor, upload_data,
+                            *upload_data_size);
+          *upload_data_size = 0;
+          return MHD_YES;
+        }
+      exec_omp_post (credentials, con_info);
+      send_response (connection, con_info->response, MHD_HTTP_OK);
+      return MHD_YES;
+    }
+  return MHD_NO;
+}
+
+/**
  * @brief Initialization routine for GSAD.
  *
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
