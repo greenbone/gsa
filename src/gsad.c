@@ -41,6 +41,8 @@
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
+#include <openvas/base/pidfile.h>
+
 /**
  * @brief HTTP request handler for GSAD.
  *
@@ -362,10 +364,7 @@ gsad_cleanup (void)
 
   if (log_config) free_log_configuration (log_config);
 
-  /* Delete pidfile. */
-  char *pidfile_name = strdup (GSAD_PID_DIR "/gsad.pid");
-  unlink (pidfile_name);
-  free (pidfile_name);
+  pidfile_remove("gsad");
 }
 
 /**
@@ -621,21 +620,8 @@ main (int argc, char **argv)
     }
   else
     {
-      char *pidfile_name = strdup (GSAD_PID_DIR "/gsad.pid");
-      FILE *pidfile = fopen (pidfile_name, "w"); /* flawfinder: ignore, this
-        file is opened for writing, therefore
-        no special file type is opened (the file is newly created) */
-      if (pidfile == NULL)
-        {
-          g_critical ("%s: Unable to write pidfile!\n", __FUNCTION__);
-          exit (EXIT_FAILURE);
-        }
-      else
-        {
-          fprintf (pidfile, "%d\n", getpid ());
-          fclose (pidfile);
-          free (pidfile_name);
-        }
+      if (pidfile_create("gsad")) exit (EXIT_FAILURE);
+
       tracef ("GSAD started successfully and is listening on port %d.\n",
               gsad_port);
     }
