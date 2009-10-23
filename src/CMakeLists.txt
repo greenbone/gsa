@@ -32,6 +32,13 @@ cmake_minimum_required (VERSION 2.4)
 add_definitions (-Werror)
 
 exec_program (pkg-config
+              ARGS --cflags gthread-2.0
+			  OUTPUT_VARIABLE GLIB_THREAD_CFLAGS)
+exec_program (pkg-config
+              ARGS --libs gthread-2.0
+			  OUTPUT_VARIABLE GLIB_THREAD_LDFLAGS)
+
+exec_program (pkg-config
               ARGS --cflags glib-2.0
 			  OUTPUT_VARIABLE GLIB_CFLAGS)
 exec_program (pkg-config
@@ -68,10 +75,10 @@ endif (OPENVAS_LIB_INSTALL_DIR)
 ## Libraries
 
 add_library (gsad-omp gsad-omp.c)
-set_target_properties (gsad-omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+set_target_properties (gsad-omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
 add_library (gsad-oap gsad-oap.c)
-set_target_properties (gsad-oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+set_target_properties (gsad-oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
 ## Program
 
@@ -120,10 +127,10 @@ add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
 set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${LIB_TEMP} -lgnutls ${GLIB_LDFLAGS} ${OPENVAS_LDFLAGS} -lmicrohttpd -pthread -lxslt ${LIBXML_LDFLAGS}")
+                       "${LIB_TEMP} -lgnutls ${GLIB_THREAD_LDFLAGS} ${GLIB_LDFLAGS} ${OPENVAS_LDFLAGS} -lmicrohttpd -pthread -lxslt ${LIBXML_LDFLAGS}")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-                       "${HEADER_TEMP} ${OPENVAS_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+                       "${HEADER_TEMP} ${OPENVAS_CFLAGS} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
 MARK_AS_ADVANCED (LIB_TEMP)
 MARK_AS_ADVANCED (HEADER_TEMP)
