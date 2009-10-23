@@ -44,6 +44,85 @@
 #include <openvas/base/pidfile.h>
 
 /**
+ * @brief Callback iterator for MHD_get_connection_values
+ *
+ * The current implementation is empty.
+ *
+ * @param cls  Not used for this callback.
+ *
+ * @param kind Not used for this callback.
+ *
+ * @param key Header key.
+ *
+ * @param key Header value.
+ *
+ * @return MHD_YES is always returned.
+ */
+int
+print_header (void *cls, enum MHD_ValueKind kind, const char *key,
+              const char *value)
+{
+  return MHD_YES;
+}
+
+/**
+ * @brief Sends a HTTP response.
+ *
+ * @param connection The connection handle.
+ *
+ * @param page       The HTML page content.
+ *
+ * @param status     The HTTP status code.
+ *
+ * @return The result of MHD_queue_response.
+ */
+int
+send_response (struct MHD_Connection *connection, const char *page,
+               int status_code)
+{
+  struct MHD_Response *response;
+  int ret;
+
+  response = MHD_create_response_from_data (strlen (page),
+                                            (void *) page, MHD_NO, MHD_YES);
+  ret = MHD_queue_response (connection, status_code, response);
+  MHD_destroy_response (response);
+  return ret;
+}
+
+/**
+ * @brief Sends a HTTP redirection.
+ *
+ * @param connection The connection handle.
+ *
+ * @param location   The URL where to redirect.
+ *
+ * @return MHD_NO in case of a problem. Else MHD_YES.
+ */
+int
+send_redirect_header (struct MHD_Connection *connection, const char *location)
+{
+  int ret;
+  struct MHD_Response *response;
+
+  response = MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
+
+  if (!response)
+    return MHD_NO;
+
+  ret = MHD_add_response_header (response, "Location", location);
+  if (!ret)
+    {
+      MHD_destroy_response (response);
+      return MHD_NO;
+    }
+
+  ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
+  MHD_destroy_response (response);
+  return ret;
+}
+
+/**
  * @brief Sends HTTP header requesting the browser to authenticate itself.
  *
  * @param connection The connection object.

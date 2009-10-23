@@ -1,5 +1,9 @@
 2009-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (print_header, send_response, send_redirect_header): New.
+
+2009-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* VERSION, CMakeLists.txt: Increased from 0.7.2.SVN to 0.7.3.SVN.
 
 	* src/gsad_log_conf.cmake_in: Added "level".
