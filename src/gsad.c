@@ -88,11 +88,11 @@ send_http_authenticate_header (struct MHD_Connection *connection,
 /**
  * @brief HTTP request handler for GSAD.
  *
- * @param[in]  cls              Not used for this callback. 
+ * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
  * @param[in]  url              The URL requested.
  * @param[in]  method           "GET" or "POST", others are disregarded.
- * @param[in]  version          Not used for this callback. 
+ * @param[in]  version          Not used for this callback.
  * @param[in]  upload_data      Data used for POST requests.
  * @param[in]  upload_data_size Size of upload_data.
  * @param[out] con_cls          For exhange of connection-related data
@@ -222,7 +222,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     strlen ("/new_task.html"))) /* flawfinder: ignore,
                                                    it is a const str */
         {
-          res = gsad_newtask (credentials);
+          res = gsad_newtask (credentials, NULL);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
@@ -234,13 +234,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
        * so it is a simple file. */
 
       /* FIXME: validation, URL length restriction */
-      /* flawfinder: ignore, it is a const str */
-      int len = strlen (GSA_STATE_DIR)
-                + strlen (url) + 1;
-      path = malloc (len);
-      snprintf (path, len, "%s%s", GSA_STATE_DIR, url); /* flawfinder: ignore,
-                                                           snprintf OK for the
-                                                           scope */
+      path = g_strconcat (GSA_STATE_DIR, url, NULL);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                    read and sent */
 
@@ -248,12 +242,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (file == NULL)
         {
           tracef ("File %s failed, ", path);
-          /* flawfinder: ignore, it is a const str */
-          len = strlen (GSA_STATE_DIR)
-                + strlen (default_file) + 1);
-          path = realloc (path, len);
-          /* flawfinder: ignore, snprintf OK for the scope */
-          snprintf (path, len, "%s%s", GSA_STATE_DIR, default_file);
+          g_free (path);
+          path = g_strconcat (GSA_STATE_DIR, default_file, NULLl);
           tracef ("trying default file <%s>.\n", path);
           file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                        read and sent */
@@ -275,7 +265,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               g_critical ("%s: file <%s> can not be stat'ed.\n",
                           __FUNCTION__,
                           path);
-              free (path);
+              g_free (path);
               return MHD_NO;
             }
 
@@ -287,7 +277,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
 
           MHD_destroy_response (response);
-          free (path);
+          g_free (path);
           return MHD_YES;
         }
     }
@@ -341,6 +331,9 @@ int
 gsad_init (void)
 {
   tracef ("Initializing the Greenbone Security Assistant...\n");
+
+  /* Init Glib. */
+  if (!g_thread_supported ()) g_thread_init (NULL);
 
   /* Check for required files. */
   if (check_is_dir (GSA_STATE_DIR) < 1)
@@ -526,12 +519,9 @@ main (int argc, char **argv)
     log_config = load_log_configuration (rc_name);
   g_free (rc_name);
   setup_log_handlers (log_config);
-  g_log_set_handler (G_LOG_DOMAIN, ALL_LOG_LEVELS,
-                     openvas_log_func, log_config);
-  g_log_set_handler ("gsad  omp", ALL_LOG_LEVELS,
-                     openvas_log_func, log_config);
-  g_log_set_handler (NULL, ALL_LOG_LEVELS,
-                     openvas_log_func, log_config);
+  /* Set to ensure that recursion is left out, in case two threads log
+   * concurrently. */
+  g_log_set_always_fatal (G_LOG_FATAL_MASK);
 
   /* Finish processing the command line options */
 
