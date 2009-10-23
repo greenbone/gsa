@@ -243,7 +243,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           tracef ("File %s failed, ", path);
           g_free (path);
-          path = g_strconcat (GSA_STATE_DIR, default_file, NULLl);
+          path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
           tracef ("trying default file <%s>.\n", path);
           file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                        read and sent */
@@ -611,7 +611,7 @@ main (int argc, char **argv)
 
   if (use_ssl == 0)
     {
-      gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION,
+      gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
                                       gsad_port, NULL, NULL, &request_handler,
                                       NULL, MHD_OPTION_NOTIFY_COMPLETED,
                                       free_resources, NULL, MHD_OPTION_END);
@@ -637,7 +637,7 @@ main (int argc, char **argv)
         }
 
       gsad_daemon =
-        MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL,
+        MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL | MHD_USE_DEBUG,
                           gsad_port, NULL, NULL, &request_handler, NULL,
                           MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
                           MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
@@ -666,3 +666,4 @@ main (int argc, char **argv)
     }
   return 0;
 }
+

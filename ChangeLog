@@ -1,5 +1,10 @@
 2009-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (main): Apply DEBUG flag for MHD.
+	(request_handler): Fix typo.
+
+2009-10-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c (request_handler): Fix call of gsad_newtask,
 	use g_strconcat.
 	(gsad_init): Init glib.
