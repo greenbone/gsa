@@ -44,6 +44,48 @@
 #include <openvas/base/pidfile.h>
 
 /**
+ * @brief Sends HTTP header requesting the browser to authenticate itself.
+ *
+ * @param connection The connection object.
+ *
+ * @param realm Name of the realm that was authenticated for.
+ *
+ * @return MHD_NO in case of an error. Else the result of queueing
+ *         the response.
+ */
+int
+send_http_authenticate_header (struct MHD_Connection *connection,
+                               const char *realm)
+{
+  int ret;
+  gchar *headervalue;
+  struct MHD_Response *response =
+    MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
+
+  if (!response)
+    return MHD_NO;
+
+  headervalue = g_strconcat ("Basic realm=", realm, NULL);
+  if (!headervalue)
+    {
+      MHD_destroy_response (response);
+      return MHD_NO;
+    }
+
+  ret = MHD_add_response_header (response, "WWW-Authenticate", headervalue);
+  g_free (headervalue);
+  if (!ret)
+    {
+      MHD_destroy_response (response);
+      return MHD_NO;
+    }
+
+  ret = MHD_queue_response (connection, MHD_HTTP_UNAUTHORIZED, response);
+  MHD_destroy_response (response);
+  return ret;
+}
+
+/**
  * @brief HTTP request handler for GSAD.
  *
  * @param[in]  cls              Not used for this callback. 
