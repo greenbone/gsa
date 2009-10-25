@@ -33,7 +33,7 @@
 #ifndef GSAD_OAP_H
 #define GSAD_OAP_H
 
-#include "gsad-base.h" /* for credentials_t */
+#include "gsad_base.h" /* for credentials_t */
 
 void oap_init (int);
 
