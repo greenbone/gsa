@@ -77,16 +77,16 @@ endif (OPENVAS_LIB_INSTALL_DIR)
 add_library (gsad_base gsad_base.c)
 set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
-add_library (gsad-omp gsad-omp.c)
-set_target_properties (gsad-omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+add_library (gsad_omp gsad_omp.c)
+set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
-add_library (gsad-oap gsad-oap.c)
-set_target_properties (gsad-oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+add_library (gsad_oap gsad_oap.c)
+set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
 ## Program
 
 add_executable (gsad gsad.c)
-target_link_libraries (gsad gsad_base gsad-omp gsad-oap)
+target_link_libraries (gsad gsad_base gsad_omp gsad_oap)
 
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 

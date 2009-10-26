@@ -26,7 +26,7 @@
  */
 
 /**
- * @file gsad-oap.h
+ * @file gsad_oap.h
  * @brief Headers for GSA's OAP communication module
  */
 

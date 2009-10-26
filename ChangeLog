@@ -1,5 +1,13 @@
 2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/CMakeLists.txt: Changed - to _ in module names.
+
+	* src/gsad_oap.h: Fixed filename in doc.
+
+	* src/gsad_base.h: Fixed filename in doc. Added missing proto.
+
+2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad_base.c: New.
 
 	* src/CMakeLists.txt: Added handling of module gsad_base.
