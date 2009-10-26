@@ -1,5 +1,11 @@
 2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/help/configure_scanconfigs.htm4,
+	src/html/src/help/configure_credentials.htm4,
+	src/html/src/help/configure_users.htm4: New. More documentation.
+
+2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/CMakeLists.txt: Changed - to _ in module names.
 
 	* src/gsad_oap.h: Fixed filename in doc.

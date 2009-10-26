@@ -1,0 +1,147 @@
+m4_define(`PAGE_TITLE', `Help: Configure Scan configs')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_configs">Jump to dialog</a></div>
+&nbsp;<br />
+
+<h1>Configure Scan Configs</h1>
+
+<p>
+Any <a href="glossary.html#task">task</a> is associated with
+a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+The configured Scan Configs will appear as selection
+in the dialog for creating a <a href="new_task.html">new task</a>.
+</p>
+
+<a name="newconfig"></a>
+<h2>New Scan Config</h2>
+
+<p>
+For creating a new scan configuration the dialog offers these entries.
+Hit the button "Create Scan Config" to submit the new scan configuration.
+The list of scan configurations will be updated.
+</p>
+
+<p>
+Note on Import config file: a incorrect syntax inside this file
+will not necessarily be warned. When applied for a scan,
+only correct entries will be used and the rest will be ignored.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td></td>
+  <td>Mandatory</td>
+  <td>Max Length</td>
+  <td>Syntax</td>
+  <td>Example</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>yes</td>
+  <td>80</td>
+  <td>Alphanumeric</td>
+  <td>Full and deep scan</td>
+</tr>
+<tr>
+  <td>Comment</td>
+  <td>no</td>
+  <td>40</td>
+  <td>Alphanumeric</td>
+  <td>All-inclusive scan which might consume quite some time.</td>
+</tr>
+<tr class="odd">
+  <td>Import config file</td>
+  <td>yes</td>
+  <td>---</td>
+  <td>A openvasrc scope configuration file of OpenVAS-Client</td>
+  <td>~/.openvas/mytask/myscope/openvasrc<br>
+      ~/.openvas/.Servers/myserver/mytask/openvasrc</td>
+</tr>
+</table>
+
+<a name="scanconfigs"></a>
+<h2>Scan Configs</h2>
+
+<p>
+This table provides on overview on all configured
+scan configurations.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>Shows name of the scan configuration and,
+      if specificied, the comment in brackets below
+      the name.</td>
+</tr>
+<tr>
+  <td>Families: Total</td>
+  <td>The number of NVT families that would be considered
+      with the current NVT set. "N/A" means that the
+      number is not available at the moment.</td>
+</tr>
+<tr class="odd">
+  <td>Families: Trend</td>
+  <td>This field can have two states: "Grow"
+      (<img src="/img/trend_more.png" />) or
+      "Static" (<img src="/img/trend_nochange.png" />). "Grow" means that
+      the NVT selection associated with the Scan Config specified to include
+      any new family that occurs in the NVT set. "Static" means, that the
+      NVT selection associated with the Scan Config has an explicit definition
+      which families are to be considered.</td>
+</tr>
+<tr>
+  <td>NVTs: Total</td>
+  <td>The number of NVTs that would be considered
+      with the current NVT set. "N/A" means that the
+      number is not available at the moment.</td>
+</tr>
+<tr class="odd">
+  <td>NVTs: Trend</td>
+  <td>This field can have two states: "Grow"
+      (<img src="/img/trend_more.png" />) or "Static"
+      (<img src="/img/trend_nochange.png" />). "Grow" means that
+      the NVT selection associated with the Scan Config specified to include
+      new NVTs that occurs in the NVT set at least for one family.
+      "Static" means, that the NVT selection associated with the Scan Config
+      has an explicit definition which NVTs are to be considered.</td>
+</tr>
+</table>
+
+<a name="actions"></a>
+<h3>Actions</h3>
+
+<p>
+For Scan Configurations these are available.
+</p>
+
+<h4>Delete Scan Config</h4>
+
+<p>
+Pressing the delete icon
+<img src="/img/delete.png" alt="Delete" title="Delete" /> will
+immediatly remove the entry and update the list.
+</p>
+
+<p>
+Note that if a scan config is associated with at least one task,
+it is not possible to delete it. In this case the button is greyed
+out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+</p>
+
+<h4>Scan Config Details</h4>
+
+<p>
+Issueing the details icon
+<img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
+will open the Scan Config Details dialog to provide details on the configuration
+such as the selected NVTs and applied settings.
+</p>
+
+m4_include(`footer.m4')
