@@ -1,5 +1,9 @@
 2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* VERSION, CMakeLists.txt: Upgraded from 0.7.3.SVN to 0.7.4.SVN.
+
+2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/help/configure_scanconfigs.htm4,
 	src/html/src/help/configure_credentials.htm4,
 	src/html/src/help/configure_users.htm4: New. More documentation.
