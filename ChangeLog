@@ -1,5 +1,12 @@
 2009-10-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/img/list_inactive.png, src/html/src/img/list.png,
+	src/html/src/img/log.png, src/html/src/img/gsa_splash.png,
+	src/html/src/img/low.png, src/html/src/img/high.png,
+	src/html/src/img/medium.png: New.
+
+2009-10-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/img/style/, src/html/src/img/style/logo_l.png,
 	src/html/src/img/style/logo_m.png, src/html/src/img/style/logo_r.png,
 	src/html/src/img/style/window_dec_a_error.png,
