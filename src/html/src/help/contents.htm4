@@ -1,0 +1,40 @@
+m4_define(`PAGE_TITLE', `Help: Contents')
+m4_include(`header.m4')
+
+<h1>Contents</h1>
+
+<p>
+This is the help system of Greenbone Security Assistant.
+Small <a href="/help/contents.html" title="Help"><img src="/img/help.png"></a>
+icons all over the web interface will jump into the respective contents.
+Alternatively you can browse the following structure.
+</p>
+
+<div id="list">
+<ul>
+<li> Scan Management</li>
+  <ul>
+  <li> <a href="new_task.html">New task</a></li>
+  <li> <a href="tasks.html">Tasks</a></li>
+  <li> <a href="reports.html">Reports</a></li>
+  <li> <a href="view_report.html">View Report</a></li>
+  </ul>
+<li> Configuration</li>
+  <ul>
+  <li> <a href="configure_targets.html">Configure Targets</a></li>
+  <li> <a href="configure_scanconfigs.html">Configure Scan Configs</a></li>
+  <li> <a href="configure_credentials.html">Configure Credentials</a></li>
+  </ul>
+<li> Administration</li>
+  <ul>
+  <li> <a href="configure_users.html">Configure Users</a></li>
+  </ul>
+<li> Miscellaneous</li>
+  <ul>
+  <li> <a href="error_messages.html">Error Messages</a></li>
+  <li> <a href="glossary.html">Glossary</a></li>
+  </ul>
+</ul>
+</div>
+
+m4_include(`footer.m4')
