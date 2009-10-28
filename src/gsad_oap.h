@@ -3,9 +3,9 @@
  * Description: Headers for GSA's OAP communication module
  *
  * Authors:
+ * Matthew Mundell <matthew.mundell@intevation.de>
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  * Michael Wiegand <michael.wiegand@intevation.de>
- * Matthew Mundell <matthew.mundell@intevation.de>
  *
  * Copyright:
  * Copyright (C) 2009 Greenbone Networks GmbH
@@ -30,8 +30,8 @@
  * @brief Headers for GSA's OAP communication module
  */
 
-#ifndef GSAD_OAP_H
-#define GSAD_OAP_H
+#ifndef _GSAD_OAP_H
+#define _GSAD_OAP_H
 
 #include "gsad_base.h" /* for credentials_t */
 
@@ -42,4 +42,4 @@ char * create_user_oap (credentials_t *,
                         const char *, const char *, const char *);
 char * delete_user_oap (credentials_t *, const char *);
 
-#endif
+#endif /* not _GSAD_OAP_H */

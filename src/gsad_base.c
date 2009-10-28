@@ -3,8 +3,8 @@
  * Description: Base functionalities of GSA.
  *
  * Authors:
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  * Matthew Mundell <matthew.mundell@intevation.de>
+ * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2009 Greenbone Networks GmbH
@@ -26,39 +26,64 @@
 
 /**
  * @file gsad_base.c
- * @brief Base functionalities of GSA.
+ * @brief Base functionality of GSA.
  */
+
+#define XSL_PATH GSA_STATE_DIR "/gsad.xsl"
+
+#include "gsad_base.h"
+#include "tracef.h"
 
 #include <string.h> /* for strlen() */
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
 #include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
 
+#undef G_LOG_DOMAIN
+/**
+ * @brief GLib log domain.
+ */
+#define G_LOG_DOMAIN "gsad base"
+
 /**
  * @brief XSL Transformation.
  *
- * Does the transformation from XML to HTML applying the given xsl stylesheet.
+ * Does the transformation from XML to HTML applying omp.xsl.
  *
- * @param[in]  xml_file The xml file to tranform.
- * @param[in]  xsl_file The xsl file to apply for tranformation.
+ * @param[in]  xml_text  The XML text to tranform.
+ *
+ * @return HTML output from XSL transformation.
  */
 char *
-xsl_transform (char *xml_file, char *xsl_file)
+xsl_transform (const char *xml_text)
 {
   xsltStylesheetPtr cur = NULL;
   xmlDocPtr doc, res;
-  const xmlChar *xsl;
   xmlChar *doc_txt_ptr = NULL;
   int doc_txt_len;
-  const char *stream = xml_file;
+
+  tracef ("text to transform: [%s]\n", xml_text);
+
+  /** @todo Check all returns. */
 
   xmlSubstituteEntitiesDefault (1);
   xmlLoadExtDtdDefaultValue = 1;
-  xsl = (const xmlChar *) xsl_file;
-  cur = xsltParseStylesheetFile (xsl);
+  cur = xsltParseStylesheetFile ((const xmlChar *) XSL_PATH);
+  if (cur == NULL)
+    {
+      g_error ("Failed to parse stylesheet " XSL_PATH);
+      abort ();
+    }
 
-  doc = xmlParseMemory (stream, strlen (xml_file));
+  doc = xmlParseMemory (xml_text, strlen (xml_text));
+
   res = xsltApplyStylesheet (cur, doc, NULL);
+  if (cur == NULL)
+    {
+      g_error ("Failed to apply stylesheet " XSL_PATH);
+      abort ();
+    }
+
   xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur);
 
   xsltFreeStylesheet (cur);
@@ -68,4 +93,38 @@ xsl_transform (char *xml_file, char *xsl_file)
   xsltCleanupGlobals ();
   xmlCleanupParser ();
   return (char *) doc_txt_ptr;
+}
+
+/**
+ * @brief Handles fatal errors.
+ *
+ * @todo Make it accept formatted strings.
+ *
+ * @param title The title for the message.
+ *              It should contain a error code.
+ *              By convention these code ranges are reserved:
+ *              1NNN: Problems with manager daemon
+ *              2NNN: Problems with gsad
+ *              3NNN: Problems with administrator daemon
+ *
+ * @param msg The response message.
+ *
+ * @param backurl The URL offered to get back to a sane situation.
+ *                If NULL, a default is used.
+ *
+ * @return A HTML document as string.
+ */
+char *
+gsad_message (const char *title, const char *msg, const char *backurl)
+{
+  char document[] =
+    "<gsad_response>"
+    "<title>%s</title><message>%s</message><backurl>%s</backurl>"
+    "</gsad_response>";
+  char *resp =
+    malloc (strlen (document) + strlen (title) + strlen (msg) +
+            strlen (backurl) + 1);
+
+  sprintf (resp, document, title, msg, backurl);
+  return xsl_transform (resp);
 }

@@ -1,5 +1,15 @@
 2009-10-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad_oap.h: Some cosmetics.
+
+	* src/gsad_base.h: Updated protos and added message string.
+
+	* src/gsad_base.c (xsl_transform): Take only xml text now
+	instead of files for xml and xsl.
+	(gsad_message): New.
+
+2009-10-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/help/tasks.htm4, src/html/src/help/contents.htm4,
 	src/html/src/help/glossary.htm4: New.
 

@@ -3,8 +3,8 @@
  * Description: Headers/structs used generally in GSA
  *
  * Authors:
- * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  * Matthew Mundell <matthew.mundell@intevation.de>
+ * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:
  * Copyright (C) 2009 Greenbone Networks GmbH
@@ -29,8 +29,17 @@
  * @brief Headers/structs used generally in GSA
  */
 
-#ifndef GSAD_BASE_H
-#define GSAD_BASE_H
+#ifndef _GSAD_BASE_H
+#define _GSAD_BASE_H
+
+/** @brief Answer for invalid input. */
+#define GSAD_MESSAGE_INVALID_PARAM(op)                                            \
+  "<gsad_msg status_text=\"Invalid parameter\" operation=\"" op "\">"             \
+  "At least one entered value contains invalid characters or exceeds"             \
+  " a size limit.  You may use the Back button of your browser to adjust"         \
+  " the entered values.  If in doubt, the online help of the respective section"  \
+  " will lead you to the appropriate help page."                                  \
+  "</gsad_msg>"
 
 /**
  *  @brief Structure that combines username and password
@@ -41,6 +50,7 @@ typedef struct
   char *password;
 } credentials_t;
 
-char * xsl_transform (char *, char *);
+char * xsl_transform (const char *);
+char * gsad_message (const char *, const char *, const char *);
 
-#endif
+#endif /* not _GSAD_BASE_H */
