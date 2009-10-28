@@ -25,10 +25,6 @@
 
 ## Config
 
-#project (gsad C)
-
-cmake_minimum_required (VERSION 2.4)
-
 add_definitions (-Werror)
 
 exec_program (pkg-config
@@ -74,19 +70,19 @@ endif (OPENVAS_LIB_INSTALL_DIR)
 
 ## Libraries
 
-add_library (gsad_base gsad_base.c)
+add_library (gsad_base STATIC gsad_base.c)
 set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
-add_library (gsad_omp gsad_omp.c)
+add_library (gsad_omp STATIC gsad_omp.c)
 set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
-add_library (gsad_oap gsad_oap.c)
+add_library (gsad_oap STATIC gsad_oap.c)
 set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
 
 ## Program
 
-add_executable (gsad gsad.c)
-target_link_libraries (gsad gsad_base gsad_omp gsad_oap)
+add_executable (gsad gsad.c validator.c)
+target_link_libraries (gsad gsad_omp gsad_oap gsad_base)
 
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 

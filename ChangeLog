@@ -1,3 +1,19 @@
+2009-10-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/img/style/, src/html/src/img/style/logo_l.png,
+	src/html/src/img/style/logo_m.png, src/html/src/img/style/logo_r.png,
+	src/html/src/img/style/window_dec_a_error.png,
+	src/html/src/img/style/window_dec_a.png,
+	src/html/src/img/style/window_dec_b_error.png,
+	src/html/src/img/style/window_dec_b.png,
+	src/html/src/img/style/window_dec_c_error.png,
+	src/html/src/img/style/window_dec_c.png: New.
+
+	* src/validator.h: New.
+
+	* src/CMakeLists.txt: Add module validator, fix sequence of modules,
+	make libs static, remove cmake minimum requirement.
+
 2009-10-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* VERSION, CMakeLists.txt: Upgraded from 0.7.3.SVN to 0.7.4.SVN.
