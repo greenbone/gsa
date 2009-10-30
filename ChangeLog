@@ -1,3 +1,7 @@
+2009-10-31  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/validator.c: New.
+
 2009-10-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/img/download.png, src/html/src/img/bullet2.png,
