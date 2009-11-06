@@ -79,6 +79,32 @@ openvas_validator_add (validator_t validator,
 }
 
 /**
+ * @brief Make an alias for a rule name.
+ *
+ * @param  validator  Validator to add alias to.
+ * @param  alias      Name of alias for rule.
+ * @param  name       Name of the rule.
+ *
+ * @return 0 success, -1 error.
+ */
+int
+openvas_validator_alias (validator_t validator,
+                         const char *alias,
+                         const char *name)
+{
+  gpointer key, regex;
+
+  if (g_hash_table_lookup_extended (validator, name, &key, &regex))
+    {
+      g_hash_table_insert (validator,
+                           (gpointer) g_strdup (alias),
+                           (gpointer) (regex ? g_strdup (regex) : NULL));
+      return 0;
+    }
+  return -1;
+}
+
+/**
  * @brief Validate a string for a given rule.
  *
  * @param  validator  Validator to validate from.
@@ -93,6 +119,8 @@ openvas_validate (validator_t validator, const char *name, const char *value)
 {
   gpointer key, regex;
 
+  tracef ("%s: name %s value %s", __FUNCTION__, name, value);
+
   if (g_hash_table_lookup_extended (validator, name, &key, &regex))
     {
       if (regex == NULL)
@@ -103,6 +131,12 @@ openvas_validate (validator_t validator, const char *name, const char *value)
               return 0;
             }
           tracef ("%s: failed to match, regex NULL", __FUNCTION__);
+          return 2;
+        }
+
+      if (value == NULL)
+        {
+          tracef ("%s: failed to match, value NULL", __FUNCTION__);
           return 2;
         }
 
@@ -119,7 +153,7 @@ openvas_validate (validator_t validator, const char *name, const char *value)
       return 2;
     }
 
-  tracef ("%s: failed to find name", __FUNCTION__);
+  tracef ("%s: failed to find name: %s", __FUNCTION__, name);
   return 1;
 }
 

@@ -1,5 +1,14 @@
 2009-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/help/reports.htm4: New.
+
+	* src/validator.c (openvas_validator_alias): New.
+	(openvas_validate): Some more tracef-calls.
+
+	* src/validator.h: Add proto accordingly.
+
+2009-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	*  src/html/src/about.htm4, src/html/src/gplv2.htm4: New.
 
 	* src/html/src/img/edit_inactive.png,

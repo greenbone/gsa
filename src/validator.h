@@ -41,6 +41,7 @@ typedef GHashTable *validator_t;
 
 validator_t openvas_validator_new ();
 void openvas_validator_add (validator_t, const char *, const char *);
+int openvas_validator_alias (validator_t, const char *, const char *);
 int openvas_validate (validator_t, const char *, const char *);
 void openvas_validator_free (validator_t);
 
