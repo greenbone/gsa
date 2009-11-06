@@ -1,0 +1,42 @@
+m4_define(`PAGE_TITLE', `About GSA')
+m4_include(`header.m4')
+
+<img align="right" src="/img/gsa_splash.png"/>
+
+<!-- TODO: Get the version in here dynamically -->
+<h1>Greenbone Security Assistant Version 0.7.4</h1>
+
+<p>
+The Greenbone Security Assistant is a web-based graphical
+user interface for OpenVAS Manager. It offers a straight-forward,
+yet powerful method to manage network vulnerability scans.
+</p>
+
+<p>
+Copyright 2009 by Greenbone Networks GmbH,
+<a href="http://www.greenbone.net">www.greenbone.net</a>
+</p>
+
+<p>
+License: GNU General Public License version 2 or any later version
+(<a href="gplv2.html">full license text</a>)
+</p>
+
+<p>
+Contact: For updates, feature proposals and bug reports please
+contact <a href="mailto:info@greenbone.net">info@greenbone.net</a>.
+</p>
+
+<p>
+Main Authors (in alphabetical order):
+</p>
+
+<ul>
+<li> Matthew Mundell
+<li> Karl-Heinz Ruskowski
+<li> Jan-Oliver Wagner
+<li> Michael Wiegand
+<li> Felix Wolfsteller
+</ul>
+
+m4_include(`footer.m4')
