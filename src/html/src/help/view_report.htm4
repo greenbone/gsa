@@ -1,0 +1,27 @@
+m4_define(`PAGE_TITLE', `Help: View Report')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_report&report_id=343435d6-91b0-11de-9478-ffd71f4c6f30">Jump to dialog with sample content</a></div>
+&nbsp;<br />
+
+<a name="viewreport"></a>
+<h1>View Report</h1>
+
+<p>
+This "View Report" page summarizes all information the selected
+<a href="/help/glossary.html#report">report</a> contains.
+This page is structured and designed similar to the
+download formats HTML and PDF.
+</p>
+
+<p>
+It is a single page, the links e.g. to the hosts
+reference to the same page further up or down.
+Exceptions are the links to the
+<a href="/help/reports.html">list of reports</a>
+that result from the same
+<a href="/help/glossary.html#task">task</a>.
+</p>
+
+m4_include(`footer.m4')

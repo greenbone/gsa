@@ -1,3 +1,7 @@
+2009-11-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/gsa-style.css, src/html/src/help/view_report.htm4: New.
+
 2009-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad_base.h, src/gsad_base.c: Cleanups and documentation.
