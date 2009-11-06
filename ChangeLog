@@ -1,5 +1,9 @@
 2009-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad_base.h, src/gsad_base.c: Cleanups and documentation.
+
+2009-11-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/help/reports.htm4: New.
 
 	* src/validator.c (openvas_validator_alias): New.

@@ -29,6 +29,9 @@
  * @brief Base functionality of GSA.
  */
 
+/**
+ * @brief Location of XSL file.
+ */
 #define XSL_PATH GSA_STATE_DIR "/gsad.xsl"
 
 #include "gsad_base.h"
@@ -78,7 +81,7 @@ xsl_transform (const char *xml_text)
   doc = xmlParseMemory (xml_text, strlen (xml_text));
 
   res = xsltApplyStylesheet (cur, doc, NULL);
-  if (cur == NULL)
+  if (res == NULL)
     {
       g_error ("Failed to apply stylesheet " XSL_PATH);
       abort ();
@@ -100,19 +103,19 @@ xsl_transform (const char *xml_text)
  *
  * @todo Make it accept formatted strings.
  *
- * @param title The title for the message.
- *              It should contain a error code.
- *              By convention these code ranges are reserved:
- *              1NNN: Problems with manager daemon
- *              2NNN: Problems with gsad
- *              3NNN: Problems with administrator daemon
+ * @param[in]  title  The title for the message.
+ *                    It should contain a error code.
+ *                    By convention these code ranges are reserved:
+ *                    1NNN: Problems with manager daemon
+ *                    2NNN: Problems with gsad
+ *                    3NNN: Problems with administrator daemon
  *
- * @param msg The response message.
+ * @param[in]  msg    The response message.
  *
- * @param backurl The URL offered to get back to a sane situation.
- *                If NULL, a default is used.
+ * @param[in]  backurl  The URL offered to get back to a sane situation.
+ *                      If NULL, a default is used.
  *
- * @return A HTML document as string.
+ * @return An HTML document as a string.
  */
 char *
 gsad_message (const char *title, const char *msg, const char *backurl)

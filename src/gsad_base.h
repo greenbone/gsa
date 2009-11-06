@@ -26,7 +26,7 @@
 
 /**
  * @file gsad_base.h
- * @brief Headers/structs used generally in GSA
+ * @brief Headers/structs used generally in GSA.
  */
 
 #ifndef _GSAD_BASE_H
@@ -46,8 +46,8 @@
  */
 typedef struct
 {
-  char *username;
-  char *password;
+  char *username;  ///< Name of user.
+  char *password;  ///< User's password.
 } credentials_t;
 
 char * xsl_transform (const char *);
