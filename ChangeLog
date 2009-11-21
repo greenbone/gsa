@@ -1,3 +1,12 @@
+2009-11-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* VERSION, CMakeLists.txt, src/html/src/about.htm4: Version set
+	to 0.8.0.SVN.
+
+	* src/gsad_base.h (preference_t): New.
+
+	* src/gsad_oap.h: Updated proto for get_users_oap.
+
 2009-11-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/gsa-style.css, src/html/src/help/view_report.htm4: New.

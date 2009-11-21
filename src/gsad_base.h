@@ -32,6 +32,8 @@
 #ifndef _GSAD_BASE_H
 #define _GSAD_BASE_H
 
+#include <glib.h>
+
 /** @brief Answer for invalid input. */
 #define GSAD_MESSAGE_INVALID_PARAM(op)                                            \
   "<gsad_msg status_text=\"Invalid parameter\" operation=\"" op "\">"             \
@@ -49,6 +51,17 @@ typedef struct
   char *username;  ///< Name of user.
   char *password;  ///< User's password.
 } credentials_t;
+
+/**
+ * @brief Config preference.
+ */
+typedef struct
+{
+  gchar *name;     ///< Name of preference.
+  gchar *nvt;      ///< ID of NVT.
+  void *value;     ///< Value of preference.
+  int value_size;  ///< Size of value.
+} preference_t;
 
 char * xsl_transform (const char *);
 char * gsad_message (const char *, const char *, const char *);
