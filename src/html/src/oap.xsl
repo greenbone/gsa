@@ -3,10 +3,10 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output
-	  method="html"
-	  doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
-	  doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
-	  encoding="UTF-8"/>
+      method="html"
+      doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+      doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+      encoding="UTF-8"/>
 
 <!--
 Greenbone Security Assistant
@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New User
       <a href="/help/configure_users.html#newuser"
-		 title="Help: Configure Users (New User)">
+         title="Help: Configure Users (New User)">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -55,26 +55,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Name</td>
             <td>
-			  <input type="text" name="name" value="unnamed" size="30"
-				     maxlength="80"/>
-			</td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
           </tr>
           <tr>
             <td valign="top" width="125">Password</td>
             <td>
-			  <input type="password" name="password" value="" size="30"
-				     maxlength="40"/>
-			</td>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+            </td>
           </tr>
-		  <tr>
-			<td>Role</td>
-			<td>
-			  <select name="role">
+          <tr>
+            <td>Role</td>
+            <td>
+              <select name="role">
                 <option value="User">User</option>
                 <option value="Admin">Admin</option>
-			  </select>
-			</td>
-		  </tr>
+              </select>
+            </td>
+          </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create User"/>
@@ -92,7 +92,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Users
       <a href="/help/configure_users.html#users"
-		 title="Help: Configure Users (Users)">
+         title="Help: Configure Users (Users)">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -117,11 +117,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Create User</xsl:with-param>
     <xsl:with-param name="status">
-	  <xsl:value-of select="@status"/>
-	</xsl:with-param>
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
     <xsl:with-param name="msg">
-	  <xsl:value-of select="@status_text"/>
-	</xsl:with-param>
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -131,11 +131,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Delete User</xsl:with-param>
     <xsl:with-param name="status">
-	  <xsl:value-of select="@status"/>
-	</xsl:with-param>
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
     <xsl:with-param name="msg">
-	  <xsl:value-of select="@status_text"/>
-	</xsl:with-param>
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -157,12 +157,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
-			   style="margin-left:3px;"/>
+               style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
           <a href="/oap?cmd=delete_user&amp;name={name}"
-			 title="Delete User"
-			 style="margin-left:3px;">
+             title="Delete User"
+             style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
         </xsl:otherwise>

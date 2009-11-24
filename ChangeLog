@@ -1,5 +1,10 @@
 2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl:
+	Convert tabs to spaces.
+
+2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl: New
 	files.
 
