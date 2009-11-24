@@ -1,3 +1,8 @@
+2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl: New
+	files.
+
 2009-11-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* VERSION, CMakeLists.txt, src/html/src/about.htm4: Version set
