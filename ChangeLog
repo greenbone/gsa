@@ -1,5 +1,14 @@
 2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_base.c (gsad_message): Add function and line arguments.  Free
+	the allocated XML.
+
+	* src/gsad_base.h: Update header.
+
+	* src/gsad_oap.c: New file.
+
+2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl:
 	Convert tabs to spaces.
 

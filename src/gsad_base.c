@@ -37,6 +37,7 @@
 #include "gsad_base.h"
 #include "tracef.h"
 
+#include <glib.h>
 #include <string.h> /* for strlen() */
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
@@ -103,31 +104,30 @@ xsl_transform (const char *xml_text)
  *
  * @todo Make it accept formatted strings.
  *
- * @param[in]  title  The title for the message.
- *                    It should contain a error code.
- *                    By convention these code ranges are reserved:
- *                    1NNN: Problems with manager daemon
- *                    2NNN: Problems with gsad
- *                    3NNN: Problems with administrator daemon
+ * @param[in]  title     The title for the message.
+ * @param[in]  function  The function in which the error occurred.
+ * @param[in]  line      The line number at which the error occurred.
+ * @param[in]  msg       The response message.
+ * @param[in]  backurl   The URL offered to get back to a sane situation.
+ *                       If NULL, the tasks page is used.
  *
- * @param[in]  msg    The response message.
- *
- * @param[in]  backurl  The URL offered to get back to a sane situation.
- *                      If NULL, a default is used.
- *
- * @return An HTML document as a string.
+ * @return An HTML document as a newly allocated string.
  */
 char *
-gsad_message (const char *title, const char *msg, const char *backurl)
+gsad_message (const char *title, const char *function, int line,
+              const char *msg, const char *backurl)
 {
-  char document[] =
-    "<gsad_response>"
-    "<title>%s</title><message>%s</message><backurl>%s</backurl>"
-    "</gsad_response>";
-  char *resp =
-    malloc (strlen (document) + strlen (title) + strlen (msg) +
-            strlen (backurl) + 1);
-
-  sprintf (resp, document, title, msg, backurl);
-  return xsl_transform (resp);
+  gchar *xml = g_strdup_printf ("<gsad_response>"
+                                "<title>%s: %s:%i</title>"
+                                "<message>%s</message>"
+                                "<backurl>%s</backurl>"
+                                "</gsad_response>",
+                                title,
+                                function,
+                                line,
+                                msg,
+                                backurl ? backurl : "/omp?cmd=get_status");
+  char *resp = xsl_transform (xml);
+  g_free (xml);
+  return resp;
 }

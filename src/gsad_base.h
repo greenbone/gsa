@@ -64,6 +64,7 @@ typedef struct
 } preference_t;
 
 char * xsl_transform (const char *);
-char * gsad_message (const char *, const char *, const char *);
+char * gsad_message (const char *, const char *, int, const char *,
+                     const char *);
 
 #endif /* not _GSAD_BASE_H */
