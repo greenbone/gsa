@@ -1,5 +1,14 @@
 2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add per-NVT timeout support.
+
+	* src/html/src/omp.xsl (html-config-family-table): Add timeout column.
+	Always enable the NVT edit button.
+	[details, edit-details] (preferences): Add always-present timeout
+	preference.
+
+2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_base.c (gsad_message): Add function and line arguments.  Free
 	the allocated XML.
 
