@@ -1,5 +1,10 @@
 2009-11-26  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl: Match input widths to validator widths.
+	(get_targets): Apply gsad_msg.
+
+2009-11-26  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl: Convert tabs to spaces.
 
 2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>

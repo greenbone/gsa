@@ -1131,13 +1131,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Name</td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="20"/>
+                     maxlength="80"/>
             </td>
           </tr>
           <tr>
             <td valign="top" width="125">Comment (optional)</td>
             <td>
-              <input type="text" name="comment" size="30" maxlength="40"/>
+              <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -1155,7 +1155,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="radio" name="base" value="pass"/>
                     Password
                   </td>
-                  <td><input type="password" name="password"/></td>
+                  <td>
+                    <input type="password" name="password" size="30"
+                           maxlength="40"/>
+                  </td>
                 </tr>
               </table>
             </td>
@@ -1322,7 +1325,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Comment (optional)</td>
             <td>
-              <input type="text" name="comment" size="30" maxlength="40"/>
+              <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -1453,6 +1456,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_TARGETS_RESPONSE -->
 
 <xsl:template match="get_targets">
+  <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_target_response"/>
   <xsl:apply-templates select="create_target_response"/>
   <xsl:call-template name="html-create-target-form">
@@ -1489,13 +1493,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Name</td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="20"/>
+                     maxlength="80"/>
             </td>
           </tr>
           <tr>
             <td valign="top">Comment (optional)</td>
             <td>
-              <input type="text" name="comment" size="30" maxlength="40"/>
+              <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -1833,7 +1837,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:when test="type='password'">
           <input type="password" name="preference:{nvt/name}[password]:{name}"
-                 value="{value}"/>
+                 value="{value}" size="30" maxlength="40"/>
           <input type="checkbox" name="password:{nvt/name}[password]:{name}"
                  value="yes"/>
           Replace old value
@@ -1843,7 +1847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:when test="type='entry'">
           <input type="text" name="preference:{nvt/name}[entry]:{name}"
-                 value="{value}"/>
+                 value="{value}" size="30" maxlength="400"/>
         </xsl:when>
         <xsl:when test="type='radio'">
           <input type="radio" name="preference:{nvt/name}[radio]:{name}"
@@ -1860,12 +1864,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type=''">
           <input type="text"
                  name="preference:scanner[scanner]:{name}"
-                 value="{value}"/>
+                 value="{value}"
+                 size="30"
+                 maxlength="400"/>
         </xsl:when>
         <xsl:otherwise>
           <input type="text"
                  name="preference:{nvt/name}[{type}]:{name}"
-                 value="{value}"/>
+                 value="{value}"
+                 size="30"
+                 maxlength="400"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -1974,7 +1982,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           <input type="text"
                  name="preference:scanner[scanner]:timeout.{../nvt/@oid}"
-                 value="{timeout}"/>
+                 value="{timeout}"
+                 size="30"
+                 maxlength="400"/>
           <br/>
         </td>
         <td></td>
