@@ -1607,19 +1607,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:value-of select="@oid"/>
                 </td>
-				<td>
-				  <xsl:variable
-					name="timeout"
+                <td>
+                  <xsl:variable
+                    name="timeout"
                     select="../../../get_nvt_details_response/nvt[@oid=$id]/timeout"/>
-				  <xsl:choose>
-					<xsl:when test="string-length($timeout) &gt; 0">
-					  <xsl:value-of select="$timeout"/>
-					</xsl:when>
-					<xsl:otherwise>
-					  default
-					</xsl:otherwise>
-				  </xsl:choose>
-				</td>
+                  <xsl:choose>
+                    <xsl:when test="string-length($timeout) &gt; 0">
+                      <xsl:value-of select="$timeout"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      default
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
                 <td style="text-align:center;">
                   <xsl:choose>
                     <xsl:when test="preference_count&gt;0">
@@ -1645,11 +1645,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      title="NVT Details" style="margin-left:3px;">
                     <img src="/img/details.png" border="0" alt="Details"/>
                   </a>
-				  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
-					 title="Select and Edit NVT Details"
-					 style="margin-left:3px;">
-					<img src="/img/edit.png" border="0" alt="Details"/>
-				  </a>
+                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
+                     title="Select and Edit NVT Details"
+                     style="margin-left:3px;">
+                    <img src="/img/edit.png" border="0" alt="Details"/>
+                  </a>
                 </td>
               </tr>
             </xsl:for-each>
@@ -1691,16 +1691,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <xsl:value-of select="@oid"/>
               </td>
-			  <td>
-				<xsl:choose>
-				  <xsl:when test="string-length(timeout) &gt; 0">
-					<xsl:value-of select="timeout"/>
-				  </xsl:when>
-				  <xsl:otherwise>
-					default
-				  </xsl:otherwise>
-				</xsl:choose>
-			  </td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="string-length(timeout) &gt; 0">
+                    <xsl:value-of select="timeout"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    default
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
               <td style="text-align:center;">
                 <xsl:choose>
                   <xsl:when test="preference_count&gt;0">
@@ -1911,20 +1911,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
 
       <!-- Special case the NVT timeout. -->
-	  <tr class="even">
-		<td>Timeout</td>
-		<td>
-		  <xsl:choose>
-			<xsl:when test="string-length(timeout) &gt; 0">
-			  <xsl:value-of select="timeout"/>
-			</xsl:when>
-			<xsl:otherwise>
-			  default
-			</xsl:otherwise>
-		  </xsl:choose>
-		</td>
-		<td></td>
-	  </tr>
+      <tr class="even">
+        <td>Timeout</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="string-length(timeout) &gt; 0">
+              <xsl:value-of select="timeout"/>
+            </xsl:when>
+            <xsl:otherwise>
+              default
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+        <td></td>
+      </tr>
 
       <xsl:apply-templates select="preference" mode="details"/>
     </table>
@@ -1941,44 +1941,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
 
       <!-- Special case the NVT timeout. -->
-	  <tr class="even">
-		<td>Timeout</td>
-		<td>
-		  <xsl:choose>
-			<xsl:when test="string-length(timeout) &gt; 0">
-			  <input type="radio"
-					 name="timeout"
-					 value="0"/>
-			</xsl:when>
-			<xsl:otherwise>
-			  <input type="radio"
-					 name="timeout"
-					 value="0"
-					 checked="1"/>
-			</xsl:otherwise>
-		  </xsl:choose>
-		  Apply default timeout
-		  <br/>
-		  <xsl:choose>
-			<xsl:when test="string-length(timeout) &gt; 0">
-			  <input type="radio"
-					 name="timeout"
-					 value="1"
-				     checked="1"/>
-			</xsl:when>
-			<xsl:otherwise>
-			  <input type="radio"
-					 name="timeout"
-					 value="1"/>
-			</xsl:otherwise>
-		  </xsl:choose>
-		  <input type="text"
-				 name="preference:scanner[scanner]:timeout.{../nvt/@oid}"
-				 value="{timeout}"/>
-		  <br/>
-		</td>
-		<td></td>
-	  </tr>
+      <tr class="even">
+        <td>Timeout</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="string-length(timeout) &gt; 0">
+              <input type="radio"
+                     name="timeout"
+                     value="0"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio"
+                     name="timeout"
+                     value="0"
+                     checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          Apply default timeout
+          <br/>
+          <xsl:choose>
+            <xsl:when test="string-length(timeout) &gt; 0">
+              <input type="radio"
+                     name="timeout"
+                     value="1"
+                     checked="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio"
+                     name="timeout"
+                     value="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <input type="text"
+                 name="preference:scanner[scanner]:timeout.{../nvt/@oid}"
+                 value="{timeout}"/>
+          <br/>
+        </td>
+        <td></td>
+      </tr>
 
       <xsl:apply-templates
         select="preference"
