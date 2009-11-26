@@ -1,0 +1,68 @@
+m4_define(`PAGE_TITLE', `Help: Error Messages')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=unknown_cmd">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+&nbsp;<br />
+
+<h1>Error Messages</h1>
+
+<h2>Problems during a operation</h2>
+
+<p>
+Whenever an operation does not work as expected,
+the "Results of last operation" window title bar
+turns to red color.
+In such a case the "Status code" is 4xx and the
+"Status Message" explains what happened.
+</p>
+
+<p>
+No serious failures happened and you can continue
+working with GSA. You should consider the
+contents of "Status Message" to avoid the problem.
+</p>
+
+<h2>Internal Error Dialog</h2>
+
+<p>
+Usually, GSA itself is not affected
+critically as long as you get
+such error dialogs.
+</p>
+
+<p>
+The dialog shows a <em>function name:line number</em> (this has only
+meaning to the software developers) and a <em>error text</em>
+(which might give your system administrator a valuable hint). 
+</p>
+
+<p>
+You always have three options:
+</p>
+
+<ol>
+<p><li>
+  "Back" button of browser: This will go back to the previous
+  page. Note, that if the last action that caused the error
+  was to submit a form, the form is resent. In some cases,
+  a action like "Create Task" may have been successful already
+  and will even be for any resent. Please read the error text
+  carefully about hints.
+</li></p>
+<p><li>
+  Assumed last sane state: GSA tries to guess a last sane
+  state. The guess might be wrong or it might help.
+  In any case, no re-posting will happen, so that unwanted
+  actions like could happen with the browsers back button
+  are prevented.
+</li></p>
+<p><li>
+  Logout: In case of serious problems where neither of the
+  two other options helps, you shoud log out of GSA. As long
+  as GSA is still running, you will get the login dialog.
+</li></p>
+
+</ol>
+
+m4_include(`footer.m4')

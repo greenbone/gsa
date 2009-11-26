@@ -1,3 +1,12 @@
+2009-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/header.m4, src/html/footer.m4, src/html/template.m4: New.
+
+	* src/html/make_html: New.
+
+	* src/html/src/login/login.html,
+	src/html/src/help/error_messages.htm4: New.
+
 2009-11-26  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl: Match input widths to validator widths.
