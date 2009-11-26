@@ -1,5 +1,10 @@
 2009-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* VERSION, CMakeLists.txt, src/html/src/about.htm4: Version set
+	to 0.8.1.SVN.
+
+2009-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/header.m4, src/html/footer.m4, src/html/template.m4: New.
 
 	* src/html/make_html: New.
