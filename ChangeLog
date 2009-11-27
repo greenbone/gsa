@@ -1,5 +1,11 @@
 2009-11-27  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.h, src/gsad_omp.c: New files.
+
+	* src/CMakeLists.txt: Add static analysis rules.
+
+2009-11-27  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-config-nvt-table): Always show the
 	preferences, as there is always the timeout preference.
 

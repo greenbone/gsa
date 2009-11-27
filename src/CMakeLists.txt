@@ -155,4 +155,18 @@ install (DIRECTORY html/build/
 install (FILES gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 
+## Static analysis
+
+add_custom_target (splint COMMENT "Running splint..."
+                   COMMAND sh -c \"splint -booltype gboolean -predboolint +unixlib +export-header `pkg-config --cflags glib-2.0` `libopenvas-config --cflags` *.c\")
+
+add_custom_target (rats COMMENT "Running rats..."
+                   COMMAND sh -c \"rats --warning 2 *.[ch]\")
+
+add_custom_target (flawfinder COMMENT "Running flawfinder..."
+                   COMMAND sh -c \"flawfinder *.[ch]\")
+
+add_custom_target (check COMMENT "Checking code...")
+ADD_DEPENDENCIES (check splint rats flawfinder)
+
 ## End
