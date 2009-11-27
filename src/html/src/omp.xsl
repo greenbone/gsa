@@ -2093,32 +2093,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h2>Details</h2>
     <xsl:apply-templates select="get_nvt_details_response/nvt"/>
 
+    <h2>Preferences</h2>
     <xsl:choose>
-      <xsl:when test="count(get_nvt_details_response/preferences/preference) = 0">
-        <h2>Preferences: None</h2>
+      <xsl:when test="edit">
+        <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="cmd" value="save_config_nvt"/>
+          <input type="hidden" name="name" value="{config/name}"/>
+          <input type="hidden" name="family" value="{$family}"/>
+          <input type="hidden"
+                 name="oid"
+                 value="{get_nvt_details_response/nvt/@oid}"/>
+          <xsl:apply-templates
+            select="get_nvt_details_response/preferences"
+            mode="edit-details"/>
+        </form>
       </xsl:when>
       <xsl:otherwise>
-        <h2>Preferences</h2>
-        <xsl:choose>
-          <xsl:when test="edit">
-            <form action="" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="cmd" value="save_config_nvt"/>
-              <input type="hidden" name="name" value="{config/name}"/>
-              <input type="hidden" name="family" value="{$family}"/>
-              <input type="hidden"
-                     name="oid"
-                     value="{get_nvt_details_response/nvt/@oid}"/>
-              <xsl:apply-templates
-                select="get_nvt_details_response/preferences"
-                mode="edit-details"/>
-            </form>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates
-              select="get_nvt_details_response/preferences"
-              mode="details"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates
+          select="get_nvt_details_response/preferences"
+          mode="details"/>
       </xsl:otherwise>
     </xsl:choose>
   </div>
