@@ -1413,7 +1413,7 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                                 "%s%s%s"
                                 "</create_config>",
                                 name,
-                                base ? base : "Full and fast",
+                                base ? base : "empty",
                                 comment ? "<comment>" : "",
                                 comment ? comment : "",
                                 comment ? "</comment>" : "") == -1)

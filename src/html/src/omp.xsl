@@ -1508,9 +1508,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base" value="Full and fast"
+                    <input type="radio" name="base" value="empty"
                            checked="1"/>
-                    Full and fast
+                    Empty, static and fast
                   </td>
                 </tr>
                 <tr>
