@@ -1,3 +1,7 @@
+2009-12-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/omp.xsl: Grey out Stop/Delete in case a Task is "Requested".
+
 2009-11-27  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.h, src/gsad_omp.c: New files.

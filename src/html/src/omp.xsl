@@ -1033,7 +1033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
-            <xsl:when test="status='New' or status='Done' or status='Stopped'">
+            <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped'">
               <img src="/img/stop_inactive.png" border="0"
                    alt="Abort"
                    style="margin-left:3px;"/>
@@ -1048,7 +1048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
-            <xsl:when test="status='Running'">
+            <xsl:when test="status='Running' or status='Requested'">
               <img src="/img/delete_inactive.png"
                    border="0"
                    alt="Delete"
