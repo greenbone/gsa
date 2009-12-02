@@ -1,5 +1,14 @@
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (print_header, send_response,
+	send_http_authenticate_header, request_handler): Improve documentation.
+	(request_handler): Use "const" where possible. Introduce
+	oap_cgi_base. Improve redirect for non-base URLs. Redirect
+	"/login/". Fix memleak.
+	(gsad_init): Improve documentation. Call init_validator. 
+
+2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c: Fixed some comments. Added list of includes.
 	(DEFAULT_GSAD_PORT, DEFAULT_OPENVAS_ADMINISTRATOR_PORT,
 	DEFAULT_OPENVAS_MANAGER_PORT, GCRY_THREAD_OPTION_PTHREAD_IMPL,

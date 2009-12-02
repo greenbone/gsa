@@ -174,13 +174,10 @@ init_validator ()
  *
  * The current implementation is empty.
  *
- * @param cls  Not used for this callback.
- *
- * @param kind Not used for this callback.
- *
- * @param key Header key.
- *
- * @param key Header value.
+ * @param[in]  cls    Not used for this callback.
+ * @param[in]  kind   Not used for this callback.
+ * @param[in]  key    Header key.
+ * @param[in]  value  Header value.
  *
  * @return MHD_YES is always returned.
  */
@@ -194,11 +191,9 @@ print_header (void *cls, enum MHD_ValueKind kind, const char *key,
 /**
  * @brief Sends a HTTP response.
  *
- * @param connection The connection handle.
- *
- * @param page       The HTML page content.
- *
- * @param status     The HTTP status code.
+ * @param[in]  connection   The connection handle.
+ * @param[in]  page         The HTML page content.
+ * @param[in]  status_code  The HTTP status code.
  *
  * @return The result of MHD_queue_response.
  */
@@ -219,9 +214,8 @@ send_response (struct MHD_Connection *connection, const char *page,
 /**
  * @brief Sends a HTTP redirection.
  *
- * @param connection The connection handle.
- *
- * @param location   The URL where to redirect.
+ * @param[in]  connection  The connection handle.
+ * @param[in]  location    The URL to redirect to.
  *
  * @return MHD_NO in case of a problem. Else MHD_YES.
  */
@@ -251,9 +245,8 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
 /**
  * @brief Sends HTTP header requesting the browser to authenticate itself.
  *
- * @param connection The connection object.
- *
- * @param realm Name of the realm that was authenticated for.
+ * @param[in]  connection  The connection object.
+ * @param[in]  realm       Name of the realm that was authenticated for.
  *
  * @return MHD_NO in case of an error. Else the result of queueing
  *         the response.
@@ -293,6 +286,8 @@ send_http_authenticate_header (struct MHD_Connection *connection,
 /**
  * @brief HTTP request handler for GSAD.
  *
+ * This routine is the callback request handler for microhttpd.
+ *
  * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
  * @param[in]  url              The URL requested.
@@ -300,12 +295,10 @@ send_http_authenticate_header (struct MHD_Connection *connection,
  * @param[in]  version          Not used for this callback.
  * @param[in]  upload_data      Data used for POST requests.
  * @param[in]  upload_data_size Size of upload_data.
- * @param[out] con_cls          For exhange of connection-related data
+ * @param[out] con_cls          For exchange of connection-related data
  *                              (here a struct gsad_connection_info).
  *
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
- *
- * This routine is the callback request handler for microhttpd.
  */
 int
 request_handler (void *cls, struct MHD_Connection *connection,
@@ -313,8 +306,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                  const char *version, const char *upload_data,
                  size_t * upload_data_size, void **con_cls)
 {
-  char *url_base = "/";
-  char *cgi_base = "/omp";
+  const char *url_base = "/";
+  const char *omp_cgi_base = "/omp";
+  const char *oap_cgi_base = "/oap";
   char *default_file = "/login/login.html";
 
   struct MHD_Response *response;
@@ -329,6 +323,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
     {
       struct gsad_connection_info *con_info;
 
+      // @todo what frees this?
       con_info = calloc (1, sizeof (struct gsad_connection_info));
       if (NULL == con_info)
         return MHD_NO;
@@ -344,20 +339,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
     return MHD_NO;
 
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
-  if ((0 != strcmp (method, "GET")) && (0 != strcmp (method, "POST")))
+  if (strcmp (method, "GET") && strcmp (method, "POST"))
+    /** @todo return MHD_NO;? */
     send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
 
   /* Redirect any URL not matching the base to the default file. */
   if (strcmp (&url[0], url_base) == 0)
-    {
-      send_redirect_header (connection, default_file);
-      return MHD_YES;
-    }
-
-  /* Treat logging out specially. */
-  if ((!strcmp (method, "GET"))
-      && (!strncmp (&url[0], "/logout", strlen ("/logout")))) /* flawfinder: ignore,
-                                                                 it is a const str */
     {
       if (is_http_authenticated (connection))
         {
@@ -368,6 +355,37 @@ request_handler (void *cls, struct MHD_Connection *connection,
           send_redirect_header (connection, default_file);
           return MHD_YES;
         }
+    }
+
+  /* Treat logging out specially. */
+  if ((!strcmp (method, "GET"))
+      && (!strncmp (&url[0], "/logout", strlen ("/logout")))) /* flawfinder: ignore,
+                                                                 it is a const str */
+    {
+      /**
+       * @todo The problem is the URL is still "/logout" after the
+       *       authentication, so this just keeps sending the auth header.
+       *       All the user can do is cancel so the browser clears the
+       *       credentials.  Perhaps the only way to do this is to keep
+       *       state across requests. */
+      if (is_http_authenticated (connection))
+        {
+          return send_http_authenticate_header (connection, REALM);
+        }
+      else
+        {
+          send_redirect_header (connection, default_file);
+          return MHD_YES;
+        }
+    }
+
+  if ((!strcmp (method, "GET"))
+        && (! strncmp (&url[0], "/login/", strlen ("/login/"))) /* flawfinder: ignore,
+                                                                    it is a const str */
+        && ! url[strlen ("/login/")])
+    {
+      send_redirect_header (connection, default_file);
+      return MHD_YES;
     }
 
   /* Check for authentication. */
@@ -385,10 +403,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
     {
       /* This is a GET request. */
 
-      if (!strncmp (&url[0], cgi_base, strlen (cgi_base))) /* flawfinder: ignore,
-                                                              it is a const str */
+      if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base))
+          || !strncmp (&url[0], oap_cgi_base, strlen (oap_cgi_base)))
         {
-          /* URL requests to run OMP command. */
+          /* URL requests to run OMP or OAP command. */
 
           unsigned int res_len = 0;
           res = exec_omp_get (connection);
@@ -398,7 +416,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
               response_size = 0;
             }
           else
-            res_len = strlen (res);
+            {
+              res_len = strlen (res);
+            }
 
           response = MHD_create_response_from_data (res_len,
                                                     (void *) res,
@@ -438,16 +458,23 @@ request_handler (void *cls, struct MHD_Connection *connection,
       /* URL requests neither an OMP command nor a special GSAD command,
        * so it is a simple file. */
 
-      /* FIXME: validation, URL length restriction */
+      /* @todo: validation, URL length restriction */
       path = g_strconcat (GSA_STATE_DIR, url, NULL);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                    read and sent */
 
-      /* In case the file is not found, always serve the default file. */
+      /* In case the file is not found, logout if logged in, else always
+       * the default file. */
       if (file == NULL)
         {
           tracef ("File %s failed, ", path);
           g_free (path);
+
+          if (is_http_authenticated (connection))
+            {
+              return send_http_authenticate_header (connection, REALM);
+            }
+
           path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
           tracef ("trying default file <%s>.\n", path);
           file = fopen (path, "r"); /* flawfinder: ignore, this file is just
@@ -459,6 +486,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* Even the default file failed. */
           tracef ("Default file failed.\n");
           send_response (connection, FILE_NOT_FOUND, MHD_HTTP_NOT_FOUND);
+          g_free (path);
         }
       else
         {
@@ -493,12 +521,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           struct gsad_connection_info *con_info;
 
+          // @todo what frees this?
           con_info = calloc (1, sizeof (struct gsad_connection_info));
           if (NULL == con_info)
             return MHD_NO;
 
           con_info->postprocessor =
-            MHD_create_post_processor (connection, POSTBUFFERSIZE,
+            MHD_create_post_processor (connection, POST_BUFFER_SIZE,
                                        serve_post, (void *) con_info);
           if (NULL == con_info->postprocessor)
             return MHD_NO;
@@ -527,10 +556,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
 /**
  * @brief Initialization routine for GSAD.
  *
- * @return MHD_NO in case of problems. MHD_YES if all is OK.
- *
- * This routine checks or required files and initializes the gcrypt
+ * This routine checks for required files and initializes the gcrypt
  * library.
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
 int
 gsad_init (void)
@@ -586,6 +615,9 @@ gsad_init (void)
       g_critical ("%s: Failed to initialize GNUTLS.\n", __FUNCTION__);
       return MHD_NO;
     }
+
+  /* Init the validator. */
+  init_validator ();
 
   tracef ("Initialization of GSA successful.\n");
   return MHD_YES;
