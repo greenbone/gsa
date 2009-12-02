@@ -500,6 +500,433 @@ free_resources (void *cls, struct MHD_Connection *connection,
 }
 
 /**
+ * @brief Called once the post request handler has collected the multiple
+ * @brief parts of a post request. Fills the req_params of an
+ * @brief gsad_connection_info.
+ *
+ * Implements a MHD_PostDataIterator, returning MHD_NO if iteration should
+ * stop, MHD_YES if further key/value pairs should be looked at.
+ *
+ * After serve_post, the connection info is free'd.
+ *
+ * @todo Parameter documentation from microhttpd's documentation.
+ *
+ * @param[in,out]  coninfo_cls  User-specified closure (here: gsad_connection_info).
+ * @param[in]      kind  Type of the value
+ * @param[in]      key   0-terminated key for the value
+ * @param[in]      filename     Name of the uploaded file, NULL if not known.
+ * @param[in]      contenttype  Mime-type of the data, NULL if not known.
+ * @param[in]      transfer_encoding Encoding of the data, NULL if not known.
+ * @param[in]      data  Pointer to size bytes of data at the specified offset.
+ * @param[in]      off   Offset of data in the overall value.
+ * @param[in]      size  Number of bytes in data available.
+ *
+ * @return MHD_YES to continue iterating over post data, MHD_NO to stop.
+ */
+int
+serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
+            const char *filename, const char *contenttype,
+            const char *transfer_encoding, const char *data, uint64_t off,
+            size_t size)
+{
+  struct gsad_connection_info *con_info =
+    (struct gsad_connection_info *) coninfo_cls;
+  gboolean abort_on_insane = FALSE;
+
+  con_info->answercode = MHD_HTTP_INTERNAL_SERVER_ERROR;
+  con_info->response   = SERVER_ERROR;
+
+  if (NULL != key)
+    {
+      if (!strcmp (key, "base"))
+        {
+          con_info->req_parms.base = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.base, (char *) data, size);
+          con_info->req_parms.base[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "base",
+                                   con_info->req_parms.base))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "cmd"))
+        {
+          con_info->req_parms.cmd = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.cmd, (char *) data, size);
+          con_info->req_parms.cmd[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator, "cmd", con_info->req_parms.cmd))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "name"))
+        {
+          con_info->req_parms.name = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.name, (char *) data, size);
+          con_info->req_parms.name[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator, "name", con_info->req_parms.name))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "login"))
+        {
+          con_info->req_parms.login = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.login, (char *) data, size);
+          con_info->req_parms.login[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "login",
+                                   con_info->req_parms.login))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "pw"))
+        {
+          con_info->req_parms.pw = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.pw, (char *) data, size);
+          con_info->req_parms.pw[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator, "pw", con_info->req_parms.pw))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "family"))
+        {
+          con_info->req_parms.family = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.family, (char *) data, size);
+          con_info->req_parms.family[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "family",
+                                   con_info->req_parms.family))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "scanconfig"))
+        {
+          con_info->req_parms.scanconfig = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.scanconfig, (char *) data, size);
+          con_info->req_parms.scanconfig[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "scanconfig",
+                                   con_info->req_parms.scanconfig))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "scantarget"))
+        {
+          con_info->req_parms.scantarget = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.scantarget, (char *) data, size);
+          con_info->req_parms.scantarget[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "scantarget",
+                                   con_info->req_parms.scantarget))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "hosts"))
+        {
+          con_info->req_parms.hosts = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.hosts, (char *) data, size);
+          con_info->req_parms.hosts[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "hosts",
+                                   con_info->req_parms.hosts))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "comment"))
+        {
+          con_info->req_parms.comment = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.comment, (char *) data, size);
+          con_info->req_parms.comment[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "comment",
+                                   con_info->req_parms.comment))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "rcfile"))
+        {
+          if (con_info->req_parms.rcfile)
+            {
+              int prevsize = strlen (con_info->req_parms.rcfile);
+              con_info->req_parms.rcfile =
+                realloc (con_info->req_parms.rcfile, prevsize + size + 1);
+              memcpy (&con_info->req_parms.rcfile[prevsize], (char *) data,
+                      size);
+              con_info->req_parms.rcfile[size + prevsize] = 0;
+              con_info->answercode = MHD_HTTP_OK;
+              return MHD_YES;
+            }
+          else
+            {
+              con_info->req_parms.rcfile = malloc (size + 1);
+              memcpy ((char *) con_info->req_parms.rcfile, (char *) data, size);
+              con_info->req_parms.rcfile[size] = 0;
+              con_info->answercode = MHD_HTTP_OK;
+              return MHD_YES;
+            }
+        }
+      if (!strcmp (key, "oid"))
+        {
+          con_info->req_parms.oid = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.oid, (char *) data, size);
+          con_info->req_parms.oid[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "oid",
+                                   con_info->req_parms.oid))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "password"))
+        {
+          con_info->req_parms.password = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.password, (char *) data, size);
+          con_info->req_parms.password[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "password",
+                                   con_info->req_parms.password))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "role"))
+        {
+          con_info->req_parms.role = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.role, (char *) data, size);
+          con_info->req_parms.role[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator, "role", con_info->req_parms.role))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "submit"))
+        {
+          con_info->req_parms.submit = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.submit, (char *) data, size);
+          con_info->req_parms.submit[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "page",
+                                   con_info->req_parms.submit))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "timeout"))
+        {
+          con_info->req_parms.timeout = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.timeout, (char *) data, size);
+          con_info->req_parms.timeout[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "boolean",
+                                   con_info->req_parms.timeout))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "nvt:", strlen ("nvt:")))
+        {
+          gchar *nvt = g_strdup (key + strlen ("nvt:"));
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "uuid",
+                                   nvt))
+            {
+              g_free (nvt);
+              return MHD_NO;
+            }
+
+          if (con_info->req_parms.nvts == NULL)
+            con_info->req_parms.nvts
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.nvts, nvt);
+
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "preference:", strlen ("preference:")))
+        {
+          int uuid_start = -1, uuid_end = -1, count;
+          count = sscanf (key,
+                          "preference:%*[^[][%n%*[^]]%n]:%*s",
+                          &uuid_start,
+                          &uuid_end);
+          if (count == 0 && uuid_start > 0 && uuid_end > 0)
+            {
+              preference_t preference;
+
+              /* Just put the type in the nvt field for now, so that there
+               * is something to free. */
+              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
+              if (abort_on_insane
+                  && openvas_validate (validator, "uuid", preference.nvt))
+                {
+                  g_free (preference.nvt);
+                  return MHD_NO;
+                }
+
+              preference.name = g_strdup (key + strlen ("preference:"));
+              if (abort_on_insane
+                  && openvas_validate (validator,
+                                       "preference_name",
+                                       preference.name))
+                {
+                  g_free (preference.nvt);
+                  g_free (preference.name);
+                  return MHD_NO;
+                }
+
+              preference.value = g_memdup (data, size);
+              preference.value_size = size;
+
+              if (con_info->req_parms.preferences == NULL)
+                con_info->req_parms.preferences
+                 = g_array_new (TRUE,
+                                FALSE,
+                                sizeof (preference_t*));
+
+              {
+                gconstpointer p = g_memdup (&preference, sizeof (preference));
+                g_array_append_vals (con_info->req_parms.preferences,
+                                     &p,
+                                     1);
+              }
+
+              con_info->answercode = MHD_HTTP_OK;
+              return MHD_YES;
+            }
+          return MHD_NO;
+        }
+      if (!strncmp (key, "password:", strlen ("password:")))
+        {
+          int uuid_start = -1, uuid_end = -1, count;
+          count = sscanf (key,
+                          "password:%*[^[][%n%*[^]]%n]:%*s",
+                          &uuid_start,
+                          &uuid_end);
+          if (count == 0 && uuid_start > 0 && uuid_end > 0)
+            {
+              preference_t preference;
+
+              /* Just put the type in the nvt field for now, so that there
+               * is something to free. */
+              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
+              if (abort_on_insane
+                  && openvas_validate (validator, "uuid", preference.nvt))
+                {
+                  g_free (preference.nvt);
+                  return MHD_NO;
+                }
+
+              preference.name = g_strdup (key + strlen ("password:"));
+              if (abort_on_insane
+                  && openvas_validate (validator,
+                                       "preference_name",
+                                       preference.name))
+                {
+                  g_free (preference.nvt);
+                  g_free (preference.name);
+                  return MHD_NO;
+                }
+
+              preference.value = g_memdup (data, size);
+              preference.value_size = size;
+
+              if (con_info->req_parms.passwords == NULL)
+                con_info->req_parms.passwords
+                 = g_array_new (TRUE,
+                                FALSE,
+                                sizeof (preference_t*));
+
+              {
+                gconstpointer p = g_memdup (&preference, sizeof (preference));
+                g_array_append_vals (con_info->req_parms.passwords,
+                                     &p,
+                                     1);
+              }
+
+              con_info->answercode = MHD_HTTP_OK;
+              return MHD_YES;
+            }
+          return MHD_NO;
+        }
+      if (!strncmp (key, "select:", strlen ("select:")))
+        {
+          gchar *select = g_strdup (key + strlen ("select:"));
+          if (abort_on_insane
+              && openvas_validate (validator, "name", select))
+            {
+              g_free (select);
+              return MHD_NO;
+            }
+
+          if (con_info->req_parms.selects == NULL)
+            con_info->req_parms.selects
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.selects, select);
+
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "trend:", strlen ("trend:"))
+          && size > 0
+          && data[0] == '1')
+        {
+          gchar *trend = g_strdup (key + strlen ("trend:"));
+          if (abort_on_insane
+              && openvas_validate (validator, "name", trend))
+            {
+              g_free (trend);
+              return MHD_NO;
+            }
+
+          if (con_info->req_parms.trends == NULL)
+            con_info->req_parms.trends
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.trends, trend);
+
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      con_info->answercode = MHD_HTTP_OK;
+      return MHD_YES;
+    }
+  return MHD_NO;
+}
+
+/**
  * @brief Checks whether a file is a directory or not.
  *
  * @todo Handle symbolic links.
