@@ -1,5 +1,9 @@
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (free_resources, check_is_dir): New.
+
+2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c (gsad_connection_info, get_header_credentials,
 	is_http_authenticated, file_reader, get_file_size): New.
 

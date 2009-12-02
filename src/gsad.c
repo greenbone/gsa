@@ -324,6 +324,207 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
 }
 
 /**
+ * @brief Free resources.
+ *
+ * Used as free callback for HTTP daemon.
+ *
+ * @param[in]  cls         Dummy parameter.
+ * @param[in]  connection  Connection.
+ * @param[in]  con_cls     Connection information.
+ * @param[in]  toe         Dummy parameter.
+ */
+void
+free_resources (void *cls, struct MHD_Connection *connection,
+                void **con_cls, enum MHD_RequestTerminationCode toe)
+{
+  struct gsad_connection_info *con_info =
+    (struct gsad_connection_info *) *con_cls;
+
+  if (NULL == con_info)
+    {
+      tracef ("con_info was NULL!\n");
+      return;
+    }
+
+  tracef ("connectiontype=%d\n", con_info->connectiontype);
+
+  if (con_info->connectiontype == 1)
+    {
+      if (NULL != con_info->postprocessor)
+        {
+          MHD_destroy_post_processor (con_info->postprocessor);
+        }
+    }
+  if (con_info->req_parms.base)
+    {
+      free (con_info->req_parms.base);
+    }
+  if (con_info->req_parms.cmd)
+    {
+      free (con_info->req_parms.cmd);
+    }
+  if (con_info->req_parms.name)
+    {
+      free (con_info->req_parms.name);
+    }
+  if (con_info->req_parms.comment)
+    {
+      free (con_info->req_parms.comment);
+    }
+  if (con_info->req_parms.family)
+    {
+      free (con_info->req_parms.family);
+    }
+  if (con_info->req_parms.scanconfig)
+    {
+      free (con_info->req_parms.scanconfig);
+    }
+  if (con_info->req_parms.scantarget)
+    {
+      free (con_info->req_parms.scantarget);
+    }
+  if (con_info->req_parms.rcfile)
+    {
+      free (con_info->req_parms.rcfile);
+    }
+  if (con_info->req_parms.role)
+    {
+      free (con_info->req_parms.role);
+    }
+  if (con_info->req_parms.submit)
+    {
+      free (con_info->req_parms.submit);
+    }
+  if (con_info->req_parms.hosts)
+    {
+      free (con_info->req_parms.hosts);
+    }
+  if (con_info->req_parms.login)
+    {
+      free (con_info->req_parms.login);
+    }
+  if (con_info->req_parms.pw)
+    {
+      free (con_info->req_parms.pw);
+    }
+  if (con_info->req_parms.password)
+    {
+      free (con_info->req_parms.password);
+    }
+  if (con_info->req_parms.oid)
+    {
+      free (con_info->req_parms.oid);
+    }
+  if (con_info->req_parms.sort_field)
+    {
+      free (con_info->req_parms.sort_field);
+    }
+  if (con_info->req_parms.sort_order)
+    {
+      free (con_info->req_parms.sort_order);
+    }
+  if (con_info->req_parms.timeout)
+    {
+      free (con_info->req_parms.timeout);
+    }
+  if (con_info->req_parms.preferences)
+    {
+      preference_t *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.preferences,
+                                    preference_t*,
+                                    index++)))
+        {
+          g_free (item->name);
+          g_free (item->nvt);
+          g_free (item->value);
+          g_free (item);
+        }
+
+      g_array_free (con_info->req_parms.preferences, TRUE);
+    }
+  if (con_info->req_parms.passwords)
+    {
+      preference_t *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.passwords,
+                                    preference_t*,
+                                    index++)))
+        {
+          g_free (item->name);
+          g_free (item->nvt);
+          g_free (item->value);
+          g_free (item);
+        }
+
+      g_array_free (con_info->req_parms.passwords, TRUE);
+    }
+  if (con_info->req_parms.nvts)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.nvts, gchar*, index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.nvts, TRUE);
+    }
+  if (con_info->req_parms.selects)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.selects,
+                                    gchar*,
+                                    index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.selects, TRUE);
+    }
+  if (con_info->req_parms.trends)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.trends,
+                                    gchar*,
+                                    index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.trends, TRUE);
+    }
+  free (con_info);
+  *con_cls = NULL;
+}
+
+/**
+ * @brief Checks whether a file is a directory or not.
+ *
+ * @todo Handle symbolic links.
+ *
+ * @param[in]  name  Name of directory.
+ *
+ * @return 1 if parameter is directory, 0 if it is not, -1 if it does
+ *         not exist or could not be accessed.
+ */
+int
+check_is_dir (const char *name)
+{
+  struct stat sb;
+
+  if (stat (name, &sb))
+    {
+      return -1;
+    }
+  else
+    {
+      return (S_ISDIR (sb.st_mode));
+    }
+}
+
+/**
  * @brief Determines the size of a given file.
  *
  * @param[in]  filename  Path to file.
