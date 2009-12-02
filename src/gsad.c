@@ -1,6 +1,6 @@
 /* Greenbone Security Assistant
  * $Id$
- * Description: Main module of Greenbone Security Assistant daemon
+ * Description: Main module of Greenbone Security Assistant daemon.
  *
  * Authors:
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
@@ -31,7 +31,7 @@
  * @brief Main module of Greenbone Security Assistant daemon
  *
  * This file contains the core of the GSA server process that
- * handles HTTPS requests, communication with OpenVAS-Manager via
+ * handles HTTPS requests and communicates with OpenVAS-Manager via the
  * OMP protocol.
  */
 
@@ -41,7 +41,133 @@
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
+#include <errno.h>
+#include <gcrypt.h>
+#include <glib.h>
+#include <gnutls/gnutls.h>
+#include <openvas_logging.h>
 #include <openvas/base/pidfile.h>
+#include <pthread.h>
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+/* This must follow the system includes. */
+#include <microhttpd.h>
+
+#include "gsad_omp.h"
+#include "gsad_oap.h" /* for create_user_oap */
+#include "tracef.h"
+#include "validator.h"
+
+/**
+ * @brief Fallback GSAD port.
+ */
+#define DEFAULT_GSAD_PORT 443
+
+/**
+ * @brief Fallback Administrator port.
+ */
+#define DEFAULT_OPENVAS_ADMINISTRATOR_PORT 9393
+
+/**
+ * @brief Fallback Manager port.
+ */
+#define DEFAULT_OPENVAS_MANAGER_PORT 9390
+
+/**
+ * @brief Libgcrypt thread callback definition.
+ */
+GCRY_THREAD_OPTION_PTHREAD_IMPL;
+
+/**
+ * @brief The handle on the embedded HTTP daemon.
+ */
+struct MHD_Daemon *gsad_daemon;
+
+/**
+ * @brief Parameter validator.
+ */
+validator_t validator;
+
+/**
+ * @brief Initialise the parameter validator.
+ */
+void
+init_validator ()
+{
+  validator = openvas_validator_new ();
+
+  openvas_validator_add (validator,
+                         "cmd",
+                         "^(abort_task)"
+                         "|(create_config)"
+                         "|(create_lsc_credential)"
+                         "|(create_target)"
+                         "|(create_task)"
+                         "|(create_user)"
+                         "|(delete_config)"
+                         "|(delete_lsc_credential)"
+                         "|(delete_report)"
+                         "|(delete_target)"
+                         "|(delete_task)"
+                         "|(delete_user)"
+                         "|(edit_config)"
+                         "|(edit_config_family)"
+                         "|(edit_config_nvt)"
+                         "|(get_config)"
+                         "|(get_config_family)"
+                         "|(get_config_nvt)"
+                         "|(get_configs)"
+                         "|(get_lsc_credentials)"
+                         "|(get_nvt_details)"
+                         "|(get_report)"
+                         "|(get_status)"
+                         "|(get_targets)"
+                         "|(get_users)"
+                         "|(save_config)"
+                         "|(save_config_family)"
+                         "|(save_config_nvt)"
+                         "|(start_task)$");
+
+  openvas_validator_add (validator, "boolean",    "^0|1$");
+  openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
+  openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
+  openvas_validator_add (validator, "family",     "^[-_[:alnum:] ]{1,200}$");
+  openvas_validator_add (validator, "first_result", "^[0-9]+$");
+  openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
+  openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
+  openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
+  openvas_validator_add (validator, "max_result", "^[0-9]+$");
+  openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
+  openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
+  openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
+  /** @todo Better regex. */
+  openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
+  openvas_validator_add (validator, "rcfile",     NULL);
+  openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "sort_field", "^[[:alnum:] ]{1,20}$");
+  openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
+
+  openvas_validator_alias (validator, "scanconfig",   "name");
+  openvas_validator_alias (validator, "scantarget",   "name");
+  openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "level_high",   "boolean");
+  openvas_validator_alias (validator, "level_medium", "boolean");
+  openvas_validator_alias (validator, "level_low",    "boolean");
+  openvas_validator_alias (validator, "level_log",    "boolean");
+}
 
 /**
  * @brief Callback iterator for MHD_get_connection_values
@@ -519,6 +645,8 @@ handle_sigint (int signal)
  *
  * @param[in]  argc  Argument counter
  * @param[in]  argv  Argument vector
+ *
+ * @return EXIT_SUCCESS on success, else EXIT_FAILURE.
  */
 int
 main (int argc, char **argv)
@@ -727,7 +855,7 @@ main (int argc, char **argv)
   if (gsad_daemon == NULL)
     {
       g_critical ("%s: MHD_start_daemon failed!\n", __FUNCTION__);
-      return 1;
+      return EXIT_FAILURE;
     }
   else
     {
@@ -737,12 +865,11 @@ main (int argc, char **argv)
               gsad_port);
     }
 
-  /* wait forever for input or interrupts */
+  /* Wait forever for input or interrupts. */
 
   while (1)
     {
       select (0, NULL, NULL, NULL, NULL);
     }
-  return 0;
+  return EXIT_SUCCESS;
 }
-

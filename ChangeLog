@@ -1,5 +1,13 @@
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c: Fixed some comments. Added list of includes.
+	(DEFAULT_GSAD_PORT, DEFAULT_OPENVAS_ADMINISTRATOR_PORT,
+	DEFAULT_OPENVAS_MANAGER_PORT, GCRY_THREAD_OPTION_PTHREAD_IMPL,
+	gsad_daemon, validator, init_validator): New.
+	(main): Use unified exit code. Improved comments.
+
+2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad_oap.h: Fixed comment.
 
 	* src/CMakeLists.txt: Reformatted.
