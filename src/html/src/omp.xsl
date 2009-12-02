@@ -1514,6 +1514,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </td>
                 </tr>
                 <tr>
+                  <td colspan="2">
+                    <input type="radio" name="base" value="Full and fast"/>
+                    Full and fast
+                  </td>
+                </tr>
+                <tr>
                   <td>
                     <input type="radio" name="base" value="file"/>
                     Import config file
