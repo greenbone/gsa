@@ -927,6 +927,593 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 }
 
 /**
+ * @brief Handle a complete POST request.
+ *
+ * Ensures there is a command, then depending on the command validates
+ * parameters and calls the appropriate OAP or OMP function (like
+ * create_task_omp).
+ *
+ * @param[in]  credentials  User credentials sent by client.
+ * @param[in]  con_info     Connection info.
+ *
+ * @return MHD_YES.
+ */
+int
+exec_omp_post (credentials_t * credentials,
+               struct gsad_connection_info *con_info)
+{
+  if (!con_info->req_parms.cmd)
+    {
+      con_info->response = gsad_message ("Internal error",
+                                         __FUNCTION__,
+                                         __LINE__,
+                                         "An internal error occured inside GSA daemon. "
+                                         "Diagnostics: Empty command.",
+                                         "/omp?cmd=get_status");
+    }
+  else if (0 == strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      if (openvas_validate (validator,
+                            "password",
+                            con_info->req_parms.password))
+        {
+          free (con_info->req_parms.password);
+          con_info->req_parms.password = NULL;
+        }
+      if (openvas_validate (validator,
+                            "create_credentials_type",
+                            con_info->req_parms.base))
+        {
+          free (con_info->req_parms.base);
+          con_info->req_parms.base = NULL;
+        }
+      con_info->response =
+        create_lsc_credential_omp (credentials,
+                                   con_info->req_parms.name,
+                                   con_info->req_parms.comment,
+                                   con_info->req_parms.base,
+                                   con_info->req_parms.password);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_task"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator,
+                            "scantarget",
+                            con_info->req_parms.scantarget))
+        {
+          free (con_info->req_parms.scantarget);
+          con_info->req_parms.scantarget  = NULL;
+        }
+      if (openvas_validate (validator,
+                            "scanconfig",
+                            con_info->req_parms.scanconfig))
+        {
+          free (con_info->req_parms.scanconfig);
+          con_info->req_parms.scanconfig  = NULL;
+        }
+      if ((con_info->req_parms.name == NULL) ||
+          (con_info->req_parms.scanconfig == NULL) ||
+          (con_info->req_parms.scantarget == NULL))
+        con_info->response = gsad_newtask (credentials, "Invalid parameter");
+      else
+        con_info->response =
+          create_task_omp (credentials, con_info->req_parms.name, "comment",
+                           con_info->req_parms.scantarget,
+                           con_info->req_parms.scanconfig);
+    }
+  else if (0 == strcmp (con_info->req_parms.cmd, "create_user"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator,
+                            "password",
+                            con_info->req_parms.password))
+        {
+          /** @todo Free con_info->req_parms.password? */
+          con_info->req_parms.password = NULL;
+        }
+      if (openvas_validate (validator, "role", con_info->req_parms.role))
+        {
+          free (con_info->req_parms.role);
+          con_info->req_parms.role = NULL;
+        }
+      con_info->response =
+        create_user_oap (credentials,
+                         con_info->req_parms.name,
+                         con_info->req_parms.password,
+                         con_info->req_parms.role);
+    }
+  else if (0 == strcmp (con_info->req_parms.cmd, "create_target"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "hosts", con_info->req_parms.hosts))
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      if (openvas_validate (validator, "name", con_info->req_parms.password))
+        {
+          free (con_info->req_parms.password);
+          con_info->req_parms.password = NULL;
+        }
+      con_info->response =
+        create_target_omp (credentials, con_info->req_parms.name,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.comment,
+                           con_info->req_parms.password);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_config"))
+    {
+      if (openvas_validate (validator, "base", con_info->req_parms.base))
+        {
+          free (con_info->req_parms.base);
+          con_info->req_parms.base  = NULL;
+        }
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      con_info->response =
+        create_config_omp (credentials, con_info->req_parms.name,
+                           con_info->req_parms.comment,
+                           con_info->req_parms.rcfile,
+                           con_info->req_parms.base);
+    }
+  else if (0 == strcmp (con_info->req_parms.cmd, "get_status"))
+    {
+      con_info->response = get_status_omp (credentials, NULL, NULL, NULL);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "save_config"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "page", con_info->req_parms.submit))
+        {
+          free (con_info->req_parms.submit);
+          con_info->req_parms.name = NULL;
+        }
+      con_info->response =
+        save_config_omp (credentials,
+                         con_info->req_parms.name,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.selects,
+                         con_info->req_parms.trends,
+                         con_info->req_parms.preferences,
+                         con_info->req_parms.submit);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "family", con_info->req_parms.family))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      con_info->response =
+        save_config_family_omp (credentials,
+                                con_info->req_parms.name,
+                                con_info->req_parms.family,
+                                con_info->req_parms.sort_field,
+                                con_info->req_parms.sort_order,
+                                con_info->req_parms.nvts);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "save_config_nvt"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "family", con_info->req_parms.family))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "oid", con_info->req_parms.oid))
+        {
+          free (con_info->req_parms.oid);
+          con_info->req_parms.oid = NULL;
+        }
+      con_info->response =
+        save_config_nvt_omp (credentials,
+                             con_info->req_parms.name,
+                             con_info->req_parms.family,
+                             con_info->req_parms.oid,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.preferences,
+                             con_info->req_parms.passwords,
+                             con_info->req_parms.timeout);
+    }
+  else
+    {
+      con_info->response = gsad_message ("Internal error",
+                                         __FUNCTION__,
+                                         __LINE__,
+                                         "An internal error occured inside GSA daemon. "
+                                         "Diagnostics: Unknown command.",
+                                         "/omp?cmd=get_status");
+    }
+
+  con_info->answercode = MHD_HTTP_OK;
+  return MHD_YES;
+}
+
+/**
+ * @brief Handle a complete GET request.
+ *
+ * After some input checking, depending on the cmd parameter of the connection,
+ * issue an omp command (via *_omp functions).
+ *
+ * @param[in]  connection  Connection.
+ *
+ * @return Newly allocated response string.
+ */
+char *
+exec_omp_get (struct MHD_Connection *connection)
+{
+  char *cmd = NULL;
+  const char *task_id = NULL;
+  const char *report_id = NULL;
+  const char *format = NULL;
+  const char *package_format = NULL;
+  const char *name = NULL;
+  const char *family = NULL;
+  const char *first_result = NULL;
+  const char *max_results = NULL;
+  const char *oid = NULL;
+  const char *sort_field = NULL;
+  const char *sort_order = NULL;
+  const char *levels = NULL;
+  int high = 0, medium = 0, low = 0, log = 0;
+  credentials_t *credentials = NULL;
+
+  const int CMD_MAX_SIZE = 22;
+  const int VAL_MAX_SIZE = 100;
+
+  credentials = get_header_credentials (connection);
+  if (credentials == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occured inside GSA daemon. "
+                         "Diagnostics: Missing credentials for OMP request.",
+                         "/login.html");
+
+  cmd =
+    (char *) MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
+                                          "cmd");
+  if (openvas_validate (validator, "cmd", cmd))
+    cmd = NULL;
+
+  if ((cmd != NULL) && (strlen (cmd) < CMD_MAX_SIZE))
+    {
+      tracef ("cmd: [%s]\n", cmd);
+      task_id = MHD_lookup_connection_value (connection,
+                                             MHD_GET_ARGUMENT_KIND,
+                                             "task_id");
+      if (openvas_validate (validator, "task_id", task_id))
+        task_id = NULL;
+
+      report_id = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "report_id");
+      if (openvas_validate (validator, "report_id", report_id))
+        report_id = NULL;
+
+      oid = MHD_lookup_connection_value (connection,
+                                         MHD_GET_ARGUMENT_KIND,
+                                         "oid");
+      if (openvas_validate (validator, "oid", oid))
+        oid = NULL;
+
+      format = MHD_lookup_connection_value (connection,
+                                            MHD_GET_ARGUMENT_KIND,
+                                            "format");
+      if (openvas_validate (validator, "format", format))
+        format = NULL;
+
+      package_format = MHD_lookup_connection_value
+                        (connection,
+                         MHD_GET_ARGUMENT_KIND,
+                         "package_format");
+      if (openvas_validate (validator, "package_format", package_format))
+        package_format = NULL;
+
+      name = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "name");
+      if (openvas_validate (validator, "name", name))
+        name = NULL;
+
+      family = MHD_lookup_connection_value (connection,
+                                            MHD_GET_ARGUMENT_KIND,
+                                            "family");
+      if (openvas_validate (validator, "family", name))
+        family = NULL;
+
+      first_result = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "first_result");
+      if (openvas_validate (validator, "first_result", first_result))
+        first_result = NULL;
+
+      max_results = MHD_lookup_connection_value (connection,
+                                                 MHD_GET_ARGUMENT_KIND,
+                                                 "max_results");
+      if (openvas_validate (validator, "max_results", max_results))
+        max_results = NULL;
+
+      sort_field = MHD_lookup_connection_value (connection,
+                                                MHD_GET_ARGUMENT_KIND,
+                                                "sort_field");
+      if (openvas_validate (validator, "sort_field", sort_field))
+        sort_field = NULL;
+
+      sort_order = MHD_lookup_connection_value (connection,
+                                                MHD_GET_ARGUMENT_KIND,
+                                                "sort_order");
+      if (openvas_validate (validator, "sort_order", sort_order))
+        sort_order = NULL;
+
+      levels = MHD_lookup_connection_value (connection,
+                                            MHD_GET_ARGUMENT_KIND,
+                                            "levels");
+      if (levels)
+        {
+          /* "levels" overrides "level_*". */
+          if (openvas_validate (validator, "levels", levels))
+            levels = NULL;
+        }
+      else
+        {
+          const char *level;
+
+          level = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "level_high");
+          if (openvas_validate (validator, "level_high", level))
+            high = 0;
+          else
+            high = atoi (level);
+
+          level = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "level_medium");
+          if (openvas_validate (validator, "level_medium", level))
+            medium = 0;
+          else
+            medium = atoi (level);
+
+          level = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "level_low");
+          if (openvas_validate (validator, "level_low", level))
+            low = 0;
+          else
+            low = atoi (level);
+
+          level = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "level_log");
+          if (openvas_validate (validator, "level_log", level))
+            log = 0;
+          else
+            log = atoi (level);
+        }
+    }
+  else
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occured inside GSA daemon. "
+                         "Diagnostics: No valid command for omp.",
+                         "/omp?cmd=get_status");
+
+  /** @todo Pass sort_order and sort_field to all page handlers. */
+  /** @todo Ensure that XSL passes on sort_order and sort_field. */
+
+  /* Check cmd and precondition, start respective omp command(s) */
+  if ((0 == strcmp (cmd, "delete_task")) && (task_id != NULL)
+      && (strlen (task_id) < VAL_MAX_SIZE))
+    return delete_task_omp (credentials, task_id);
+
+  else if ((0 == strcmp (cmd, "abort_task")) && (task_id != NULL)
+           && (strlen (task_id) < VAL_MAX_SIZE))
+    return abort_task_omp (credentials, task_id);
+
+  else if ((0 == strcmp (cmd, "start_task")) && (task_id != NULL)
+           && (strlen (task_id) < VAL_MAX_SIZE))
+    return start_task_omp (credentials, task_id);
+
+  else if ((0 == strcmp (cmd, "get_status")) && (task_id != NULL)
+           && (strlen (task_id) < VAL_MAX_SIZE))
+    return get_status_omp (credentials, task_id, sort_field, sort_order);
+
+  else if ((0 == strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
+    return delete_lsc_credential_omp (credentials, name);
+
+  else if ((0 == strcmp (cmd, "delete_report")) && (report_id != NULL)
+           && (strlen (report_id) < VAL_MAX_SIZE))
+    return delete_report_omp (credentials, report_id, task_id);
+
+  else if ((0 == strcmp (cmd, "delete_user")) && (name != NULL))
+    return delete_user_oap (credentials, name);
+
+  else if ((0 == strcmp (cmd, "delete_target")) && (name != NULL))
+    return delete_target_omp (credentials, name);
+
+  else if ((0 == strcmp (cmd, "delete_config")) && (name != NULL))
+    return delete_config_omp (credentials, name);
+
+  else if (0 == strcmp (cmd, "edit_config"))
+    return get_config_omp (credentials, name, 1);
+
+  else if (0 == strcmp (cmd, "edit_config_family"))
+    return get_config_family_omp (credentials, name, family, sort_field,
+                                  sort_order, 1);
+
+  else if (0 == strcmp (cmd, "edit_config_nvt"))
+    return get_config_nvt_omp (credentials, name, family, oid, sort_field,
+                               sort_order, 1);
+
+  else if (0 == strcmp (cmd, "get_lsc_credentials")
+           && ((name == NULL && package_format == NULL)
+               || (name && package_format)))
+    {
+      if (name == NULL)
+        return get_lsc_credentials_omp (credentials,
+                                        name,
+                                        package_format,
+                                        &response_size,
+                                        sort_field,
+                                        sort_order);
+
+      /**
+       * @todo
+       * Get these sizes from constants that are also used by gsad_params.
+       */
+      content_type = calloc (16, sizeof (char));
+      snprintf (content_type, 16, "application/%s", package_format);
+      content_disposition = calloc (250, sizeof (char));
+      snprintf (content_disposition, 250,
+                "attachment; filename=openvas-lsc-target-%s_0.5-1.%s",
+                name,
+                (strcmp (package_format, "key") == 0 ? "pub" : package_format));
+
+      /** @todo On fail, HTML ends up in file. */
+      return get_lsc_credentials_omp (credentials,
+                                      name,
+                                      package_format,
+                                      &response_size,
+                                      NULL,
+                                      NULL);
+    }
+
+  else if ((0 == strcmp (cmd, "get_report")) && (report_id != NULL)
+           && (strlen (report_id) < VAL_MAX_SIZE))
+    {
+      unsigned int first;
+      unsigned int max;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
+      if (format != NULL)
+        {
+          /**
+           * @todo
+           * Get these sizes from constants that are also used by
+           * gsad_params.
+           */
+          /* @todo name is now 80 */
+          content_type = calloc (16, sizeof (char));
+          snprintf (content_type, 16, "application/%s", format);
+          content_disposition = calloc (70, sizeof (char));
+          snprintf (content_disposition, 70,
+                    "attachment; filename=report-%s.%s", report_id, format);
+        }
+
+      if (levels)
+        return get_report_omp (credentials, report_id, format, &response_size,
+                               (const unsigned int) first,
+                               (const unsigned int) max,
+                               sort_field,
+                               sort_order,
+                               levels);
+
+      {
+        char *ret;
+        GString *string = g_string_new ("");
+        if (high) g_string_append (string, "h");
+        if (medium) g_string_append (string, "m");
+        if (low) g_string_append (string, "l");
+        if (log) g_string_append (string, "g");
+        ret = get_report_omp (credentials, report_id, format, &response_size,
+                              (const unsigned int) first,
+                              (const unsigned int) max,
+                              sort_field,
+                              sort_order,
+                              string->str);
+        g_string_free (string, TRUE);
+        return ret;
+      }
+    }
+
+  else if (0 == strcmp (cmd, "get_status"))
+    return get_status_omp (credentials, NULL, sort_field, sort_order);
+
+  else if (0 == strcmp (cmd, "get_targets"))
+    return get_targets_omp (credentials, sort_field, sort_order);
+
+  else if (0 == strcmp (cmd, "get_users"))
+    return get_users_oap (credentials, sort_field, sort_order);
+
+  else if (0 == strcmp (cmd, "get_config"))
+    return get_config_omp (credentials, name, 0);
+
+  else if (0 == strcmp (cmd, "get_configs"))
+    return get_configs_omp (credentials, sort_field, sort_order);
+
+  else if (0 == strcmp (cmd, "get_config_family"))
+    return get_config_family_omp (credentials, name, family, sort_field,
+                                  sort_order, 0);
+
+  else if (0 == strcmp (cmd, "get_config_nvt"))
+    return get_config_nvt_omp (credentials, name, family, oid, sort_field,
+                               sort_order, 0);
+
+  else if ((0 == strcmp (cmd, "get_nvt_details")) && (oid != NULL))
+    {
+      return get_nvt_details_omp (credentials, oid);
+    }
+
+  else
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occured inside GSA daemon. "
+                         "Diagnostics: Unknown command.",
+                         "/omp?cmd=get_status");
+}
+
+/**
  * @brief Checks whether a file is a directory or not.
  *
  * @todo Handle symbolic links.

@@ -1,5 +1,9 @@
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c (exec_omp_post, exec_omp_get): New.
+
+2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c (serve_post): New.
 
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
