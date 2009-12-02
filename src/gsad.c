@@ -172,6 +172,185 @@ init_validator ()
 /**
  * @brief Callback iterator for MHD_get_connection_values
  *
+ * These objects are used to hold connection information
+ * during the multiple calls of the request handler that
+ * refer to the same request.
+ *
+ * Once a request is finished, the object will be free'd.
+ */
+struct gsad_connection_info
+{
+  int connectiontype;                      ///< 1=POST, 2=GET.
+  struct MHD_PostProcessor *postprocessor; ///< POST processor.
+  char *response;                          ///< HTTP response text.
+  int answercode;                          ///< HTTP response code.
+
+  /**
+   * @brief create_task / create_target / create_config POST request info
+   * @todo This should eventually be a dynamic key-based structure.
+   * @todo Combine POST and GET parameter handling.
+   */
+  struct req_parms
+  {
+    char *base;          ///< Value of "base" parameter.
+    char *cmd;           ///< Value of "cmd" parameter.
+    char *name;          ///< Value of "name" parameter.
+    char *comment;       ///< Value of "comment" parameter.
+    char *family;        ///< Value of "family" parameter.
+    char *scanconfig;    ///< Value of "scanconfig" parameter.
+    char *scantarget;    ///< Value of "scantarget" parameter.
+    char *sort_field;    ///< Value of "sort_field" parameter.
+    char *sort_order;    ///< Value of "sort_order" parameter.
+    char *levels;        ///< Value of "levels" parameter.
+    char *rcfile;        ///< Value of "rcfile" parameter.
+    char *role;          ///< Value of "role" parameter.
+    char *submit;        ///< Value of "submit" parameter.
+    char *hosts;         ///< Value of "hosts" parameter.
+    char *login;         ///< Value of "login" parameter.
+    char *oid;           ///< Value of "oid" parameter.
+    char *pw;            ///< Value of "pw" parameter.
+    char *password;      ///< Value of "password" parameter.
+    char *timeout;       ///< Value of "timeout" parameter.
+    GArray *passwords;   ///< Collection of "password:*" parameters.
+    GArray *preferences; ///< Collection of "preference:*" parameters.
+    GArray *nvts;        ///< Collection of "nvt:*" parameters.
+    GArray *trends;      ///< Collection of "trend:*" parameters.
+    GArray *selects;     ///< Collection of "select:*" parameters.
+  } req_parms;
+};
+
+/**
+ * @brief Parse name and password from Base64 HTTP Basic Auth string.
+ * @param[in]  connection  Connection.
+ *
+ * @return Credentials on success, else NULL.
+ */
+credentials_t *
+get_header_credentials (struct MHD_Connection * connection)
+{
+  const char *header_auth;
+  guchar *header_auth_decoded = NULL;
+  const char *strbase = "Basic ";
+  unsigned int header_auth_decoded_len;
+  gchar **auth_split;
+
+  header_auth = MHD_lookup_connection_value (connection,
+                                             MHD_HEADER_KIND, "Authorization");
+  if (header_auth == NULL)
+    return NULL;
+
+  if (strncmp (header_auth, strbase, strlen (strbase)) != 0)
+    return NULL;
+
+  header_auth_decoded = g_base64_decode (header_auth + strlen (strbase),
+                                         &header_auth_decoded_len);
+  /* g_base64_decode can return NULL (Glib 2.12.4-2), at least
+   * when header_auth_decoded_len is zero. */
+  if (header_auth_decoded == NULL)
+    {
+      header_auth_decoded = (guchar *) g_strdup ("");
+      header_auth_decoded_len = 0;
+    }
+
+#if 0
+  /* for debug purposes */
+  tracef ("Somebody is trying to authenticate with:"
+          " %s, which is %s decoded\n",
+          header_auth + strlen (strbase),
+          header_auth_decoded);
+#endif
+
+  auth_split = g_strsplit ((gchar *) header_auth_decoded, ":", 0);
+  g_free (header_auth_decoded);
+
+  if (g_strv_length (auth_split) != 2)
+    {
+      g_warning ("%s: Could not get credentials from header! (Colons in credentials?)\n",
+                 __FUNCTION__);
+      g_strfreev (auth_split);
+      return NULL;
+    }
+  else
+    {
+      credentials_t *creds = malloc (sizeof (credentials_t));
+      if (creds == NULL) abort ();
+      creds->username = strdup (auth_split[0]);
+      creds->password = strdup (auth_split[1]);
+      g_strfreev (auth_split);
+      return creds;
+    }
+}
+
+/**
+ * @brief Checks whether an HTTP client is authenticated.
+ *
+ * @todo: Checks with the manager _every_ time, which makes it quite slow.
+ *
+ * @param[in]  connection  Connection.
+ *
+ * @return MHD_YES if authenticated, else MHD_NO.
+ */
+int
+is_http_authenticated (struct MHD_Connection *connection)
+{
+  credentials_t *creds = get_header_credentials (connection);
+
+  if (creds == NULL)
+    return MHD_NO;
+
+  if (is_omp_authenticated (creds->username, creds->password))
+    return MHD_YES;
+
+  return MHD_NO;
+}
+
+/**
+ * @brief Reads from a file.
+ *
+ * @param[in]  cls  File.
+ * @param[in]  pos  Position in file to start reading.
+ * @param[out] buf  Buffer to read into.
+ * @param[in]  max  Maximum number of bytes to read.
+ *
+ * @return The number of bytes read.
+ */
+static int
+file_reader (void *cls, uint64_t pos, char *buf, int max)
+{
+  FILE *file = cls;
+
+  fseek (file, pos, SEEK_SET);
+  return fread (buf, 1, max, file);
+}
+
+/**
+ * @brief Determines the size of a given file.
+ *
+ * @param[in]  filename  Path to file.
+ *
+ * @return Size of file \arg filename, or 0 if the file could not be opened.
+ */
+long
+get_file_size (const char *filename)
+{
+  FILE *fp;
+  fp = fopen (filename, "rb");
+  if (fp)
+    {
+      long size;
+      if ((0 != fseek (fp, 0, SEEK_END)) || (-1 == (size = ftell (fp))))
+        size = 0;
+      fclose (fp);
+
+      return size;
+    }
+  else
+    return 0;
+}
+
+/**
+ * @brief Callback iterator for MHD_get_connection_values
+ *
  * The current implementation is empty.
  *
  * @param[in]  cls    Not used for this callback.
