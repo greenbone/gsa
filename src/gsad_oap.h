@@ -1,6 +1,6 @@
 /* Greenbone Security Assistant
  * $Id$
- * Description: Headers for GSA's OAP communication module
+ * Description: Headers for GSA's OAP communication module.
  *
  * Authors:
  * Matthew Mundell <matthew.mundell@intevation.de>

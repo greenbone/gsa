@@ -29,24 +29,24 @@ add_definitions (-Werror)
 
 exec_program (pkg-config
               ARGS --cflags gthread-2.0
-			  OUTPUT_VARIABLE GLIB_THREAD_CFLAGS)
+              OUTPUT_VARIABLE GLIB_THREAD_CFLAGS)
 exec_program (pkg-config
               ARGS --libs gthread-2.0
-			  OUTPUT_VARIABLE GLIB_THREAD_LDFLAGS)
+              OUTPUT_VARIABLE GLIB_THREAD_LDFLAGS)
 
 exec_program (pkg-config
               ARGS --cflags glib-2.0
-			  OUTPUT_VARIABLE GLIB_CFLAGS)
+              OUTPUT_VARIABLE GLIB_CFLAGS)
 exec_program (pkg-config
               ARGS --libs glib-2.0
-			  OUTPUT_VARIABLE GLIB_LDFLAGS)
+              OUTPUT_VARIABLE GLIB_LDFLAGS)
 
 exec_program (pkg-config
               ARGS --cflags libxml-2.0
-			  OUTPUT_VARIABLE LIBXML_CFLAGS)
+              OUTPUT_VARIABLE LIBXML_CFLAGS)
 exec_program (pkg-config
               ARGS --libs libxml-2.0
-			  OUTPUT_VARIABLE LIBXML_LDFLAGS)
+              OUTPUT_VARIABLE LIBXML_LDFLAGS)
 
 exec_program (libopenvas-config
               ARGS --cflags
