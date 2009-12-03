@@ -80,14 +80,69 @@
 #define DEFAULT_OPENVAS_MANAGER_PORT 9390
 
 /**
+ * @brief HTTP basic authentication realm.
+ */
+#define REALM "\"Greenbone Security Assistant\""
+
+/**
+ * @brief Buffer size for POST processor.
+ */
+#define POST_BUFFER_SIZE 500000
+
+/**
  * @brief Libgcrypt thread callback definition.
  */
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
 
 /**
+ * @brief Last resort HTML on failure to open "default_file".
+ */
+const char *FILE_NOT_FOUND =
+  "<html><head><title>File not found</title></head><body>File not found</body></html>";
+
+/**
+ * @brief Error page HTML.
+ */
+const char *ERROR_PAGE = "<html><body>HTTP Method not supported</body></html>";
+
+/**
+ * @brief Server error HTML.
+ */
+char *SERVER_ERROR =
+  "<html><body>An internal server error has occured.</body></html>";
+
+/**
  * @brief The handle on the embedded HTTP daemon.
  */
 struct MHD_Daemon *gsad_daemon;
+
+/** @todo Ensure the accesses to these are thread safe. */
+
+/**
+ * @brief Content-Type passed between callbacks when sending files.
+ */
+char *content_type = NULL;
+
+/**
+ * @brief Content-Disposition passed between callbacks when sending files.
+ */
+char *content_disposition = NULL;
+
+/**
+ * @brief Response size passed between callbacks when sending files.
+ */
+unsigned int response_size = 0;
+
+/**
+ * @brief Logging parameters, as passed to setup_log_handlers.
+ */
+GSList *log_config = NULL;
+
+// @todo This is the definition for the entire program.
+/**
+ * @brief Verbose output flag.
+ */
+int verbose = 0;
 
 /**
  * @brief Parameter validator.
