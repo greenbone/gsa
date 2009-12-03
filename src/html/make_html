@@ -30,7 +30,7 @@ BUILDDIR=build
 SRCDIR=src
 
 HTM4_LIST=`cd $(SRCDIR) ; find . -name "*.htm4"`
-STATIC_LIST=`find . -type f | grep -v "htm4$$"`
+STATIC_LIST=`find . -type f | grep -v "htm4$$" | grep -v "\/\.svn\/"`
 PUBLIC_LIST=gsa-style.css favicon.gif img/gsa_splash.png \
             img/style/window_dec_a.png img/style/window_dec_b.png \
             img/style/window_dec_c.png

@@ -1,5 +1,10 @@
 2009-12-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/make_html: Fix grep for static files to exclude
+	SVN elements.
+
+2009-12-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c (REALM, POST_BUFFER_SIZE, FILE_NOT_FOUND,
 	ERROR_PAGE, SERVER_ERROR, content_type, content_disposition,
 	response_size, log_config, verbose): New.
