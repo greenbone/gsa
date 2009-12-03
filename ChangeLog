@@ -1,3 +1,25 @@
+2009-12-03  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Added initial NVT feed synchronization support.
+
+	* src/gsad.c (init_validator): Mark get_feed and sync_feed as valid
+	commands.
+	(exec_omp_post): Add handling of sync_feed command.
+	(exec_omp_get): Add handling of get_feed command.
+
+	* src/gsad_oap.c: Added functions for getting the description of a feed
+	and for synchronization with a feed.
+	(get_feed_oap, sync_feed_oap): New.
+
+	* src/gsad_oap.h: Updated header.
+
+	* src/html/src/gsad.xsl, src/html/src/help/contents.htm4,
+	src/html/header.m4: Add menu item for feed management.
+
+	* src/html/src/oap.xsl: Add support for new response types.
+
+	* src/html/src/help/feed_management.htm4: New.
+
 2009-12-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/make_html: Fix grep for static files to exclude

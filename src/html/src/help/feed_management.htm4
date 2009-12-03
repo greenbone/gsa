@@ -1,0 +1,38 @@
+m4_define(`PAGE_TITLE', `Help: NVT Feed Management')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_feed">Jump to dialog</a></div>
+&nbsp;<br />
+
+<h1>NVT Feed Management</h1>
+
+<p>
+The management of NVT feeds is only accessible for users that own
+the "Administrator" role.
+</p>
+
+<a name="feed_synchronization"></a>
+<h2>Synchronization with an NVT Feed</h2>
+
+<p>
+This dialog allows you synchronize your NVT collection with an NVT feed. It
+shows the name of the NVT Feed Service your installation is configured to use
+and a short description of the tool which will be used to synchronize your NVT
+collection with the Feed Service. Hit the "Synchronize with Feed now" button to
+start the synchronization.
+</p>
+
+<a name="consequences"></a>
+<h2>Consequences of an NVT Synchronization</h2>
+
+<p>
+The synchronization with an NVT Feed Service will take a short amount of time,
+depending on the time of your last synchronization and the amount of changes in
+the Feed Service. While synchronizing, the interface might seem slow to react.
+At the end of the synchronization, some components of your installation will
+need to be reloaded to make full use of your updated NVT collection. This may
+cause the interface to be unresponsive for a short amount of time.
+</p>
+
+m4_include(`footer.m4')

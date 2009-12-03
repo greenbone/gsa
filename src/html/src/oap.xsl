@@ -180,4 +180,75 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END USERS MANAGEMENT -->
 
+<!-- BEGIN FEED MANAGEMENT -->
+
+<!-- DESCRIBE FEED RESPONSE    -->
+
+<xsl:template match="describe_feed_response">
+  <xsl:call-template name="html-feed-form"/>
+</xsl:template>
+
+<xsl:template name="html-feed-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">NVT Feed Management
+      <a href="/help/feed_management.html"
+         title="Help: NVT Feed Management">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="sync_feed"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name</td>
+            <td>
+              <b><xsl:value-of select="feed/name"/></b><br/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Description</td>
+            <td>
+              <xsl:value-of select="feed/description"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="currently_syncing">
+                  <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="Synchronize with Feed now"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <p>
+                <a href="/help/feed_management.html#consequences" title="Help: Feed Management">Learn about the consequences of feed synchronization</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<!--   SYNC_FEED_RESPONSE -->
+
+<xsl:template match="sync_feed_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Synchronization with NVT Feed</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- END FEED MANAGEMENT -->
+
 </xsl:stylesheet>

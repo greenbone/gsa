@@ -363,3 +363,137 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
   fflush (stderr);
   return xsl_transform_oap (credentials, text);
 }
+
+/**
+ * @brief Get descriptions of the feed(s) connected to the administrator.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_feed_oap (credentials_t * credentials, const char * sort_field,
+               const char * sort_order)
+{
+  tracef ("In get_feed_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the user list. "
+                             "The current list of feeds is not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_status");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_feed/>"
+                            "</commands>")
+      == -1)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the feed list. "
+                           "The current list of feeds is not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user list. "
+                           "The current list of feeds is not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  tracef ("get_feed_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
+ * @brief Synchronize with an NVT feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_feed_oap (credentials_t * credentials)
+{
+  tracef ("In sync_feed_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the NVT feed. "
+                             "Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_status");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_feed/>"
+                            "</commands>")
+      == -1)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the NVT feed. "
+                           "Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the NVT feed. "
+                           "Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  tracef ("sync_feed_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+

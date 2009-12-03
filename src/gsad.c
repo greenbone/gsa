@@ -184,6 +184,8 @@ init_validator ()
                          "|(get_status)"
                          "|(get_targets)"
                          "|(get_users)"
+                         "|(get_feed)"
+                         "|(sync_feed)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -1220,6 +1222,10 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
+  else if (0 == strcmp (con_info->req_parms.cmd, "sync_feed"))
+    {
+      con_info->response = sync_feed_oap (credentials);
+    }
   else
     {
       con_info->response = gsad_message ("Internal error",
@@ -1541,6 +1547,9 @@ exec_omp_get (struct MHD_Connection *connection)
 
   else if (0 == strcmp (cmd, "get_users"))
     return get_users_oap (credentials, sort_field, sort_order);
+
+  else if (0 == strcmp (cmd, "get_feed"))
+    return get_feed_oap (credentials, sort_field, sort_order);
 
   else if (0 == strcmp (cmd, "get_config"))
     return get_config_omp (credentials, name, 0);

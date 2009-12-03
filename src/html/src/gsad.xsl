@@ -105,6 +105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Administration
             <ul>
               <li><a href="/oap?cmd=get_users">Users</a></li>
+              <li><a href="/oap?cmd=get_feed">NVT Feed</a></li>
             </ul>
           </li>
           <li>
