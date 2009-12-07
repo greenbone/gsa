@@ -35,6 +35,41 @@ endif (POLICY CMP0005)
 
 SET (CMAKE_BUILD_TYPE debug)
 
+## Check existence required tools
+
+SET (MANDATORY_TOOL_MISSING FALSE)
+
+FIND_PROGRAM(PATH_TO_PKGCONFIG pkgo-config DOC "pkg-config program to retrieve "
+                        "information about installed libraries in the system.")
+
+FIND_PROGRAM(PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
+                        " to retrieve information about installed"
+                        " openvas-libraries in the system.")
+
+MESSAGE(STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
+IF(NOT PATH_TO_PKGCONFIG)
+  SET(MANDATORY_TOOL_MISSING TRUE)
+ENDIF(NOT PATH_TO_PKGCONFIG)
+
+MESSAGE(STATUS "Looking for libopenvas-config... ${PATH_TO_LIBOPENVASCONFIG}")
+IF(NOT PATH_TO_LIBOPENVASCONFIG)
+  SET(MANDATORY_TOOL_MISSING TRUE)
+ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
+
+IF(MANDATORY_TOOL_MISSING)
+  MESSAGE("One or more tools or libraries could not be found on your system:")
+  IF(NOT PATH_TO_PKGCONFIG)
+    MESSAGE(FATAL_ERROR "  - The pkg-config tool is required.")
+  ENDIF(NOT PATH_TO_PKGCONFIG)
+  IF(NOT PATH_TO_LIBOPENVASCONFIG)
+     MESSAGE(FATAL_ERROR "  - The libopenvas-config tool is required (part of "
+                         "openvas-libraries).")
+  ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
+ENDIF(MANDATORY_TOOL_MISSING)
+
+# TODO: Check for libmicrohttpd, rats, flawfinder, splint, doxygen.
+#       (with the later 4 being optional)
+
 ## CPack configuration
 
 SET(CPACK_CMAKE_GENERATOR "Unix Makefiles")

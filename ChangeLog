@@ -1,3 +1,7 @@
+2009-12-07  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt: Added checks for pkg-config and libopenvas-config.
+
 2009-12-03  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Added initial NVT feed synchronization support.
