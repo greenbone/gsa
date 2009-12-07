@@ -1,3 +1,12 @@
+2009-12-07  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Fixed a bug which caused the GSA to hang or crash when editing the
+	configuration for a family containing ":".
+
+	* src/gsad.c (init_validator): Added / fixed regular expressions for
+	family names.
+	(exec_omp_post): Repaired validator usage.
+
 2009-12-07  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* CMakeLists.txt: Improved checks for pkg-config and libopenvas-config,

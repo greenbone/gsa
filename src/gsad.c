@@ -194,7 +194,7 @@ init_validator ()
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
-  openvas_validator_add (validator, "family",     "^[-_[:alnum:] ]{1,200}$");
+  openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
@@ -204,6 +204,7 @@ init_validator ()
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
   /** @todo Better regex. */
@@ -1159,10 +1160,10 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.name);
           con_info->req_parms.name = NULL;
         }
-      if (openvas_validate (validator, "page", con_info->req_parms.submit))
+      if (openvas_validate (validator, "family_page", con_info->req_parms.submit))
         {
           free (con_info->req_parms.submit);
-          con_info->req_parms.name = NULL;
+          con_info->req_parms.submit = NULL;
         }
       con_info->response =
         save_config_omp (credentials,
@@ -1183,8 +1184,8 @@ exec_omp_post (credentials_t * credentials,
         }
       if (openvas_validate (validator, "family", con_info->req_parms.family))
         {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
+          free (con_info->req_parms.family);
+          con_info->req_parms.family = NULL;
         }
       con_info->response =
         save_config_family_omp (credentials,
@@ -1203,8 +1204,8 @@ exec_omp_post (credentials_t * credentials,
         }
       if (openvas_validate (validator, "family", con_info->req_parms.family))
         {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
+          free (con_info->req_parms.family);
+          con_info->req_parms.family = NULL;
         }
       if (openvas_validate (validator, "oid", con_info->req_parms.oid))
         {
