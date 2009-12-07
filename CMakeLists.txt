@@ -39,7 +39,7 @@ SET (CMAKE_BUILD_TYPE debug)
 
 SET (MANDATORY_TOOL_MISSING FALSE)
 
-FIND_PROGRAM(PATH_TO_PKGCONFIG pkgo-config DOC "pkg-config program to retrieve "
+FIND_PROGRAM(PATH_TO_PKGCONFIG pkg-config DOC "pkg-config program to retrieve "
                         "information about installed libraries in the system.")
 
 FIND_PROGRAM(PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
@@ -57,14 +57,14 @@ IF(NOT PATH_TO_LIBOPENVASCONFIG)
 ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
 
 IF(MANDATORY_TOOL_MISSING)
-  MESSAGE("One or more tools or libraries could not be found on your system:")
   IF(NOT PATH_TO_PKGCONFIG)
-    MESSAGE(FATAL_ERROR "  - The pkg-config tool is required.")
+    MESSAGE("The pkg-config tool is required.")
   ENDIF(NOT PATH_TO_PKGCONFIG)
   IF(NOT PATH_TO_LIBOPENVASCONFIG)
-     MESSAGE(FATAL_ERROR "  - The libopenvas-config tool is required (part of "
-                         "openvas-libraries).")
+     MESSAGE("The libopenvas-config tool is required (part of openvas-libraries).")
   ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
+  MESSAGE(FATAL_ERROR "One or more tools or libraries could not be found on "
+                      "your system. Please check the logs above.")
 ENDIF(MANDATORY_TOOL_MISSING)
 
 # TODO: Check for libmicrohttpd, rats, flawfinder, splint, doxygen.
