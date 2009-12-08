@@ -1,3 +1,13 @@
+2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Preparing the gsa 0.8.2 release.
+
+	* VERSION: Set to 0.8.2.
+
+	* CMakeLists.txt: Updated CPACK_PACKAGE_VERSION_PATCH.
+
+	* src/html/src/about.htm4: Updated.
+
 2009-12-07  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Fixed a bug which caused the GSA to hang or crash when editing the
