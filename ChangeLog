@@ -1,5 +1,15 @@
 2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
 
+	Post release version bump.
+
+	* VERSION: Set to 0.8.3.SVN.
+
+	* CMakeLists.txt: Updated CPACK_PACKAGE_VERSION_PATCH.
+
+	* src/html/src/about.htm4: Updated.
+
+2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
+
 	Preparing the gsa 0.8.2 release.
 
 	* VERSION: Set to 0.8.2.
