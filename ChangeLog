@@ -1,3 +1,8 @@
+2009-12-09  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/html/header.m4: Adjusted menu to dynamic pages. (use plural
+	"Scan Configs").
+
 2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Post release version bump.
