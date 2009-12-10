@@ -1,3 +1,7 @@
+2009-12-10  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/gsad.c (exec_omp_get): Increased maximum result count.
+
 2009-12-09  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/html/header.m4: Adjusted menu to dynamic pages. (use plural

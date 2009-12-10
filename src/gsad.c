@@ -1497,7 +1497,7 @@ exec_omp_get (struct MHD_Connection *connection)
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = 10000;
 
       if (format != NULL)
         {
