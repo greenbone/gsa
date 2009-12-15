@@ -228,7 +228,7 @@ init_validator ()
 }
 
 /**
- * @brief Callback iterator for MHD_get_connection_values
+ * @brief Connection information.
  *
  * These objects are used to hold connection information
  * during the multiple calls of the request handler that
@@ -279,6 +279,7 @@ struct gsad_connection_info
 
 /**
  * @brief Parse name and password from Base64 HTTP Basic Auth string.
+ *
  * @param[in]  connection  Connection.
  *
  * @return Credentials on success, else NULL.
@@ -311,7 +312,7 @@ get_header_credentials (struct MHD_Connection * connection)
     }
 
 #if 0
-  /* for debug purposes */
+  /* For debug purposes. */
   tracef ("Somebody is trying to authenticate with:"
           " %s, which is %s decoded\n",
           header_auth + strlen (strbase),
@@ -1009,7 +1010,7 @@ exec_omp_post (credentials_t * credentials,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_status");
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
+  else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
         {
@@ -1073,7 +1074,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.scantarget,
                            con_info->req_parms.scanconfig);
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "create_user"))
+  else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
         {
@@ -1098,7 +1099,7 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.password,
                          con_info->req_parms.role);
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "create_target"))
+  else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
         {
@@ -1149,7 +1150,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.rcfile,
                            con_info->req_parms.base);
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "get_status"))
+  else if (!strcmp (con_info->req_parms.cmd, "get_status"))
     {
       con_info->response = get_status_omp (credentials, NULL, NULL, NULL);
     }
@@ -1223,7 +1224,7 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "sync_feed"))
+  else if (!strcmp (con_info->req_parms.cmd, "sync_feed"))
     {
       con_info->response = sync_feed_oap (credentials);
     }
@@ -1412,50 +1413,50 @@ exec_omp_get (struct MHD_Connection *connection)
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
   /* Check cmd and precondition, start respective omp command(s) */
-  if ((0 == strcmp (cmd, "delete_task")) && (task_id != NULL)
+  if ((!strcmp (cmd, "delete_task")) && (task_id != NULL)
       && (strlen (task_id) < VAL_MAX_SIZE))
     return delete_task_omp (credentials, task_id);
 
-  else if ((0 == strcmp (cmd, "abort_task")) && (task_id != NULL)
+  else if ((!strcmp (cmd, "abort_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
     return abort_task_omp (credentials, task_id);
 
-  else if ((0 == strcmp (cmd, "start_task")) && (task_id != NULL)
+  else if ((!strcmp (cmd, "start_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
     return start_task_omp (credentials, task_id);
 
-  else if ((0 == strcmp (cmd, "get_status")) && (task_id != NULL)
+  else if ((!strcmp (cmd, "get_status")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
     return get_status_omp (credentials, task_id, sort_field, sort_order);
 
-  else if ((0 == strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
+  else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
     return delete_lsc_credential_omp (credentials, name);
 
-  else if ((0 == strcmp (cmd, "delete_report")) && (report_id != NULL)
+  else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))
     return delete_report_omp (credentials, report_id, task_id);
 
-  else if ((0 == strcmp (cmd, "delete_user")) && (name != NULL))
+  else if ((!strcmp (cmd, "delete_user")) && (name != NULL))
     return delete_user_oap (credentials, name);
 
-  else if ((0 == strcmp (cmd, "delete_target")) && (name != NULL))
+  else if ((!strcmp (cmd, "delete_target")) && (name != NULL))
     return delete_target_omp (credentials, name);
 
-  else if ((0 == strcmp (cmd, "delete_config")) && (name != NULL))
+  else if ((!strcmp (cmd, "delete_config")) && (name != NULL))
     return delete_config_omp (credentials, name);
 
-  else if (0 == strcmp (cmd, "edit_config"))
+  else if (!strcmp (cmd, "edit_config"))
     return get_config_omp (credentials, name, 1);
 
-  else if (0 == strcmp (cmd, "edit_config_family"))
+  else if (!strcmp (cmd, "edit_config_family"))
     return get_config_family_omp (credentials, name, family, sort_field,
                                   sort_order, 1);
 
-  else if (0 == strcmp (cmd, "edit_config_nvt"))
+  else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 1);
 
-  else if (0 == strcmp (cmd, "get_lsc_credentials")
+  else if (!strcmp (cmd, "get_lsc_credentials")
            && ((name == NULL && package_format == NULL)
                || (name && package_format)))
     {
@@ -1488,7 +1489,7 @@ exec_omp_get (struct MHD_Connection *connection)
                                       NULL);
     }
 
-  else if ((0 == strcmp (cmd, "get_report")) && (report_id != NULL)
+  else if ((!strcmp (cmd, "get_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))
     {
       unsigned int first;
@@ -1540,33 +1541,33 @@ exec_omp_get (struct MHD_Connection *connection)
       }
     }
 
-  else if (0 == strcmp (cmd, "get_status"))
+  else if (!strcmp (cmd, "get_status"))
     return get_status_omp (credentials, NULL, sort_field, sort_order);
 
-  else if (0 == strcmp (cmd, "get_targets"))
+  else if (!strcmp (cmd, "get_targets"))
     return get_targets_omp (credentials, sort_field, sort_order);
 
-  else if (0 == strcmp (cmd, "get_users"))
+  else if (!strcmp (cmd, "get_users"))
     return get_users_oap (credentials, sort_field, sort_order);
 
-  else if (0 == strcmp (cmd, "get_feed"))
+  else if (!strcmp (cmd, "get_feed"))
     return get_feed_oap (credentials, sort_field, sort_order);
 
-  else if (0 == strcmp (cmd, "get_config"))
+  else if (!strcmp (cmd, "get_config"))
     return get_config_omp (credentials, name, 0);
 
-  else if (0 == strcmp (cmd, "get_configs"))
+  else if (!strcmp (cmd, "get_configs"))
     return get_configs_omp (credentials, sort_field, sort_order);
 
-  else if (0 == strcmp (cmd, "get_config_family"))
+  else if (!strcmp (cmd, "get_config_family"))
     return get_config_family_omp (credentials, name, family, sort_field,
                                   sort_order, 0);
 
-  else if (0 == strcmp (cmd, "get_config_nvt"))
+  else if (!strcmp (cmd, "get_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 0);
 
-  else if ((0 == strcmp (cmd, "get_nvt_details")) && (oid != NULL))
+  else if ((!strcmp (cmd, "get_nvt_details")) && (oid != NULL))
     {
       return get_nvt_details_omp (credentials, oid);
     }
@@ -1803,7 +1804,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
     send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
 
   /* Redirect any URL not matching the base to the default file. */
-  if (strcmp (&url[0], url_base) == 0)
+  if (!strcmp (&url[0], url_base))
     {
       if (is_http_authenticated (connection))
         {
@@ -1974,7 +1975,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
     }
 
-  if (0 == strcmp (method, "POST"))
+  if (!strcmp (method, "POST"))
     {
       if (NULL == *con_cls)
         {
