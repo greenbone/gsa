@@ -1,5 +1,11 @@
 2009-12-15  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c: Order authors alphabetically by surname.
+
+	* ChangeLog: Improve formatting.
+
+2009-12-15  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c: Correct doc.  Neaten comments.  Format strcmp conditionals
 	consistently.
 
@@ -98,13 +104,13 @@
 
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	* src/gsad.c (gsad_connection_info, get_header_credentials,
-	is_http_authenticated, file_reader, get_file_size): New.
+	* src/gsad.c (gsad_connection_info, get_header_credentials)
+	(is_http_authenticated, file_reader, get_file_size): New.
 
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	* src/gsad.c (print_header, send_response,
-	send_http_authenticate_header, request_handler): Improve documentation.
+	* src/gsad.c (print_header, send_response)
+	(send_http_authenticate_header, request_handler): Improve documentation.
 	(request_handler): Use "const" where possible. Introduce
 	oap_cgi_base. Improve redirect for non-base URLs. Redirect
 	"/login/". Fix memleak.
@@ -113,9 +119,9 @@
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c: Fixed some comments. Added list of includes.
-	(DEFAULT_GSAD_PORT, DEFAULT_OPENVAS_ADMINISTRATOR_PORT,
-	DEFAULT_OPENVAS_MANAGER_PORT, GCRY_THREAD_OPTION_PTHREAD_IMPL,
-	gsad_daemon, validator, init_validator): New.
+	(DEFAULT_GSAD_PORT, DEFAULT_OPENVAS_ADMINISTRATOR_PORT)
+	(DEFAULT_OPENVAS_MANAGER_PORT, GCRY_THREAD_OPTION_PTHREAD_IMPL)
+	(gsad_daemon, validator, init_validator): New.
 	(main): Use unified exit code. Improved comments.
 
 2009-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
