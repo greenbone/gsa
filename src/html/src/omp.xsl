@@ -92,283 +92,302 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-report-details">
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">
-    Scan report for task "<xsl:value-of select="report/task/name"/>"
-    <a href="/help/view_report.html#viewreport"
-       title="Help: View Report (View Report)">
-      <img src="/img/help.png"/>
-    </a>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report Summary
+      <a href="/help/view_report.html#viewreport"
+         title="Help: View Report (View Report)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_status&amp;task_id={report/task/@id}">Back to Task</a>
+      </div>
+
+      <a name="summary"/>
+      <table>
+      <tr>
+        <td><b>Result of Task:</b></td>
+        <td><b><xsl:value-of select="report/task/name"/></b></td>
+      </tr>
+      <tr>
+        <td>Order of results:</td>
+        <td>by host</td>
+      </tr>
+      <tr>
+        <td><b>Scan started:</b></td>
+        <td><b><xsl:value-of select="report/scan_start"/></b></td>
+      </tr>
+      <tr>
+        <td>Scan ended:</td>
+        <td><xsl:value-of select="report/scan_end"/></td>
+      </tr>
+      <tr>
+        <td>Final scan run status:</td>
+        <td><xsl:value-of select="report/scan_run_status"/></td>
+      </tr>
+      </table>
+
+      <h1>Result Summary</h1>
+      <xsl:apply-templates select="../all/get_report_response/report"
+                           mode="overview"/>
+    </div>
   </div>
-  <div class="gb_window_part_content">
-    <xsl:variable name="levels">
-      <xsl:value-of select="report/filters/text()"/>
-    </xsl:variable>
-    <div style="float:left;">
-<!-- TODO: activate properly
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - 20}">
-        &lt;&lt;
+  <br/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Result Filtering
+      <!--
+      <a href="/help/view_report.html#viewreport"
+         title="Help: View Report (Result Filtering)">
+        <img src="/img/help.png"/>
       </a>
--->
-      Results <xsl:value-of select="report/results/@start"/> -
-      <xsl:value-of select="count(report/results/result)"/>
-      of <xsl:value-of select="report/scan_result_count"/>
-<!-- TODO: activate properly
-      <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + 20}">
-        &gt;&gt;
-      </a>
--->
+      -->
     </div>
-    <div style="float:right;">
-      <a href="?cmd=get_status&amp;task_id={report/task/@id}">Back to Task</a>
-    </div>
-    <br/>
-    <div id="small_form" style="float:right;">
-      <form action="" method="get">
-        This report as:
-        <input type="hidden" name="cmd" value="get_report"/>
-        <input type="hidden" name="report_id" value="{report/@id}"/>
-        <input type="hidden" name="levels" value="{$levels}"/>
-        <input type="hidden"
-               name="sort_field"
-               value="{report/sort/field/text()}"/>
-        <input type="hidden"
-               name="sort_order"
-               value="{report/sort/field/order}"/>
-        <select name="format" style="margin-right:3px;" title="Download Format">
-          <option value="pdf">PDF</option>
-          <option value="html">HTML</option>
-          <option value="xml">XML</option>
-          <option value="nbe">NBE</option>
-        </select>
-        <input type="submit" value="Download" title="Download"/>
-      </form>
-    </div>
+    <div class="gb_window_part_content">
+      <xsl:variable name="levels">
+        <xsl:value-of select="report/filters/text()"/>
+      </xsl:variable>
+      <!-- This must match the max value in exec_omp_get in gsad.c. -->
+      <xsl:variable name="increment">10</xsl:variable>
+      <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
+      <div style="float:left;">
+        <xsl:if test = "report/results/@start &gt; 1">
+          <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&lt;&lt;</a>
+        </xsl:if>
+        Results <xsl:value-of select="report/results/@start"/> -
+        <xsl:value-of select="$last"/>
+        of <xsl:value-of select="report/scan_result_count/filtered"/>
+        <xsl:if test = "$last &lt; report/scan_result_count/filtered">
+          <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&gt;&gt;</a>
+        </xsl:if>
+      </div>
+      <div id="small_form" style="float:right;">
+        <form action="" method="get">
+          This report as:
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="levels" value="{$levels}"/>
+          <input type="hidden"
+                 name="sort_field"
+                 value="{report/sort/field/text()}"/>
+          <input type="hidden"
+                 name="sort_order"
+                 value="{report/sort/field/order}"/>
+          <select name="format" style="margin-right:3px;" title="Download Format">
+            <option value="pdf">PDF</option>
+            <option value="html">HTML</option>
+            <option value="xml">XML</option>
+            <option value="nbe">NBE</option>
+          </select>
+          <input type="submit" value="Download" title="Download"/>
+        </form>
+      </div>
 
-    <a name="summary"/>
-    <h1>Report Summary</h1>
-
-    <table>
-    <tr>
-      <td>Result of Task:</td>
-      <td><xsl:value-of select="report/task/name"/></td>
-    </tr>
-    <tr>
-      <td>Order of results:</td>
-      <td>by host</td>
-    </tr>
-    <tr>
-      <td>Scan started:</td>
-      <td><xsl:value-of select="report/scan_start"/></td>
-    </tr>
-    <tr>
-      <td>Scan ended:</td>
-      <td><xsl:value-of select="report/scan_end"/></td>
-    </tr>
-    <tr>
-      <td>Final scan run status:</td>
-      <td><xsl:value-of select="report/scan_run_status"/></td>
-    </tr>
-    </table>
-
-    <h1>Host Summary</h1>
-    <xsl:apply-templates select="../all/get_report_response/report"
-                         mode="overview"/>
-
-    <h1>Results per Host</h1>
-
-    <!-- TODO: Move to template. -->
-    <table>
-      <tr>
-        <td colspan="2">
-          Sorting:
-        </td>
-        <td colspan="4">
-          <xsl:choose>
-            <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='ascending'">
-              port ascending
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}">
+      <!-- TODO: Move to template. -->
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td colspan="2">
+            Sorting:
+          </td>
+          <td colspan="4">
+            <xsl:choose>
+              <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='ascending'">
                 port ascending
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-          |
-          <xsl:choose>
-            <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='descending'">
-              port descending
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}">
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}">port ascending</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='descending'">
                 port descending
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-          |
-          <xsl:choose>
-            <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='ascending'">
-              threat ascending
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}">
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}">port descending</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='ascending'">
                 threat ascending
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-          |
-          <xsl:choose>
-            <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='descending'">
-              threat descending
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}">
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}">threat ascending</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='descending'">
                 threat descending
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
-    </table>
-    <br/>
-    <table>
-      <xsl:variable name="sort_field">
-        <xsl:value-of select="report/sort/field/text()"/>
-      </xsl:variable>
-      <xsl:variable name="sort_order">
-        <xsl:value-of select="report/sort/field/order"/>
-      </xsl:variable>
-      <tr>
-        <td>Current View:</td>
-        <td>
-          <div id="small_form">
-            <form action="" method="get">
-              <table>
-                <tr>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='High']">
-                        <input type="checkbox" disabled="1" checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" disabled="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/high.png" alt="High" title="High"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Medium']">
-                        <input type="checkbox" disabled="1" checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" disabled="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Low']">
-                        <input type="checkbox" disabled="1" checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" disabled="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/low.png" alt="Low" title="Low"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Log']">
-                        <input type="checkbox" disabled="1" checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" disabled="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/log.png" alt="Log" title="Log"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                  </td>
-                </tr>
-              </table>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>New Filter:</td>
-        <td>
-          <div id="small_form">
-            <form action="" method="get">
-              <input type="hidden" name="cmd" value="get_report"/>
-              <input type="hidden" name="report_id" value="{report/@id}"/>
-              <input type="hidden" name="sort_field" value="{$sort_field}"/>
-              <input type="hidden" name="sort_order" value="{$sort_order}"/>
-              <table>
-                <tr>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='High']">
-                        <input type="checkbox" name="level_high" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_high" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/high.png" alt="High" title="High"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Medium']">
-                        <input type="checkbox" name="level_medium" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_medium" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Low']">
-                        <input type="checkbox" name="level_low" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_low" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/low.png" alt="Low" title="Low"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Log']">
-                        <input type="checkbox" name="level_log" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_log" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/log.png" alt="Log" title="Log"/>
-                  </td>
-                  <td class="threat_info_table_h">
-                    <input type="submit" value="Apply" title="Apply"/>
-                  </td>
-                </tr>
-              </table>
-            </form>
-          </div>
-        </td>
-      </tr>
-    </table>
-
-    <xsl:apply-templates select="report" mode="details"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}">threat descending</a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+      <br/>
+      <table>
+        <xsl:variable name="sort_field">
+          <xsl:value-of select="report/sort/field/text()"/>
+        </xsl:variable>
+        <xsl:variable name="sort_order">
+          <xsl:value-of select="report/sort/field/order"/>
+        </xsl:variable>
+        <tr>
+          <td>Current View:</td>
+          <td>
+            <div id="small_form">
+              <form action="" method="get">
+                <table>
+                  <tr>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='High']">
+                          <input type="checkbox" disabled="1" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" disabled="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/high.png" alt="High" title="High"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Medium']">
+                          <input type="checkbox" disabled="1" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" disabled="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Low']">
+                          <input type="checkbox" disabled="1" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" disabled="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/low.png" alt="Low" title="Low"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Log']">
+                          <input type="checkbox" disabled="1" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" disabled="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/log.png" alt="Log" title="Log"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>New Filter:</td>
+          <td>
+            <div id="small_form">
+              <form action="" method="get">
+                <input type="hidden" name="cmd" value="get_report"/>
+                <input type="hidden" name="report_id" value="{report/@id}"/>
+                <input type="hidden" name="sort_field" value="{$sort_field}"/>
+                <input type="hidden" name="sort_order" value="{$sort_order}"/>
+                <table>
+                  <tr>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='High']">
+                          <input type="checkbox" name="level_high" value="1"
+                                 checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" name="level_high" value="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/high.png" alt="High" title="High"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Medium']">
+                          <input type="checkbox" name="level_medium" value="1"
+                                 checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" name="level_medium" value="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Low']">
+                          <input type="checkbox" name="level_low" value="1"
+                                 checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" name="level_low" value="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/low.png" alt="Low" title="Low"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='Log']">
+                          <input type="checkbox" name="level_log" value="1"
+                                 checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox" name="level_log" value="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/log.png" alt="Log" title="Log"/>
+                    </td>
+                    <td class="threat_info_table_h">
+                      <input type="submit" value="Apply" title="Apply"/>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <br/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Results per Host
+      <!--
+      <a href="/help/view_report.html#viewreport"
+         title="Help: View Report (Results per Host)">
+        <img src="/img/help.png"/>
+      </a>
+      -->
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="details"/>
+    </div>
   </div>
 </xsl:template>
 
@@ -2861,6 +2880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
       <td><img src="/img/low.png" alt="Low" title="Low"/></td>
       <td><img src="/img/log.png" alt="Log" title="Log"/></td>
+      <td>Total</td>
     </tr>
     <xsl:for-each select="host_start" >
       <xsl:variable name="current_host" select="host/text()"/>
@@ -2880,6 +2900,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
         </td>
+        <td>
+          <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+        </td>
       </tr>
     </xsl:for-each>
     <tr>
@@ -2895,6 +2918,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:value-of select="count(results/result[threat/text() = 'Log'])"/>
+      </td>
+      <td>
+        <xsl:value-of select="count(results/result)"/>
       </td>
     </tr>
   </table>

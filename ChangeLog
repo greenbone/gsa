@@ -1,5 +1,11 @@
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-report-details): Enable result pagination.
+	Split result page into three windows.
+	(get_report_response/report) [overview]: Add total column.
+
+2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Separate credential name from credential login name.
 
 	* src/gsad.c (init_validator): Add credential_login.
@@ -12,7 +18,7 @@
 	* src/gsad_omp.c (create_lsc_credential_omp): Add login arg.  Send to
 	manager as login entity.
 
-	* src/gsad_omp.c: Update header.
+	* src/gsad_omp.h: Update header.
 
 	* src/html/src/omp.xsl (html-create-lsc-credential-form): Add Login field.
 	(html-lsc-credentials-table): Add Login heading.
