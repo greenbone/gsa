@@ -645,6 +645,7 @@ get_status_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  name         Credential name.
  * @param[in]  comment      Comment on credential.
  * @param[in]  type         Either "gen" or "pass".
+ * @param[in]  login        Credential user name.
  * @param[in]  password     Password, for type "pass".
  *
  * @return Result of XSL transformation.
@@ -654,6 +655,7 @@ create_lsc_credential_omp (credentials_t * credentials,
                            char *name,
                            char *comment,
                            const char *type,
+                           const char *login,
                            const char *password)
 {
   entity_t entity;
@@ -670,7 +672,7 @@ create_lsc_credential_omp (credentials_t * credentials,
 
   xml = g_string_new ("<commands_response>");
 
-  if (name == NULL || comment == NULL)
+  if (name == NULL || comment == NULL || login == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
   else
     {
@@ -683,20 +685,26 @@ create_lsc_credential_omp (credentials_t * credentials,
                                     "<create_lsc_credential>"
                                     "<name>%s</name>"
                                     "%s%s%s"
+                                    "<login>%s</login>"
                                     "</create_lsc_credential>",
-                                    name, comment ? "<comment>" : "",
+                                    name,
+                                    comment ? "<comment>" : "",
                                     comment ? comment : "",
-                                    comment ? "</comment>" : "");
+                                    comment ? "</comment>" : "",
+                                    login);
       else
         ret = openvas_server_sendf (&session,
                                     "<create_lsc_credential>"
                                     "<name>%s</name>"
                                     "%s%s%s"
+                                    "<login>%s</login>"
                                     "<password>%s</password>"
                                     "</create_lsc_credential>",
-                                    name, comment ? "<comment>" : "",
+                                    name,
+                                    comment ? "<comment>" : "",
                                     comment ? comment : "",
                                     comment ? "</comment>" : "",
+                                    login,
                                     password ? password : "");
 
       if (ret == -1)

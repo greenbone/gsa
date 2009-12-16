@@ -194,6 +194,7 @@ init_validator ()
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
+  openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
@@ -254,6 +255,7 @@ struct gsad_connection_info
     char *cmd;           ///< Value of "cmd" parameter.
     char *name;          ///< Value of "name" parameter.
     char *comment;       ///< Value of "comment" parameter.
+    char *credential_login; ///< Value of "credential_login" parameter.
     char *family;        ///< Value of "family" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *scantarget;    ///< Value of "scantarget" parameter.
@@ -429,6 +431,10 @@ free_resources (void *cls, struct MHD_Connection *connection,
   if (con_info->req_parms.comment)
     {
       free (con_info->req_parms.comment);
+    }
+  if (con_info->req_parms.credential_login)
+    {
+      free (con_info->req_parms.credential_login);
     }
   if (con_info->req_parms.family)
     {
@@ -617,6 +623,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->req_parms.cmd[size] = 0;
           if (abort_on_insane
               && openvas_validate (validator, "cmd", con_info->req_parms.cmd))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "credential_login"))
+        {
+          con_info->req_parms.credential_login = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.credential_login,
+                  (char *) data,
+                  size);
+          con_info->req_parms.credential_login[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "credential_login",
+                                   con_info->req_parms.credential_login))
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
@@ -1023,6 +1044,13 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.comment = NULL;
         }
       if (openvas_validate (validator,
+                            "credential_login",
+                            con_info->req_parms.credential_login))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator,
                             "password",
                             con_info->req_parms.password))
         {
@@ -1041,6 +1069,7 @@ exec_omp_post (credentials_t * credentials,
                                    con_info->req_parms.name,
                                    con_info->req_parms.comment,
                                    con_info->req_parms.base,
+                                   con_info->req_parms.credential_login,
                                    con_info->req_parms.password);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_task"))

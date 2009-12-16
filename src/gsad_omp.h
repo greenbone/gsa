@@ -58,7 +58,7 @@ char * get_report_omp (credentials_t *, const char *, const char *,
 char * get_lsc_credentials_omp (credentials_t *, const char *, const char *,
                                 unsigned int *, const char *, const char *);
 char * create_lsc_credential_omp (credentials_t *, char *, char *,
-                                  const char *, const char *);
+                                  const char *, const char *, const char *);
 char * delete_lsc_credential_omp (credentials_t *, const char *);
 
 char * get_targets_omp (credentials_t *, const char *, const char *);

@@ -1,3 +1,23 @@
+2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Separate credential name from credential login name.
+
+	* src/gsad.c (init_validator): Add credential_login.
+	(struct gsad_connection_info): Add req_parms.credential_login.
+	(free_resources): Free credential login.
+	(serve_post): Check for credential_login key.
+	(exec_omp_post): In create_lsc_credential case pass credential_login to
+	create_lsc_credential_omp.
+
+	* src/gsad_omp.c (create_lsc_credential_omp): Add login arg.  Send to
+	manager as login entity.
+
+	* src/gsad_omp.c: Update header.
+
+	* src/html/src/omp.xsl (html-create-lsc-credential-form): Add Login field.
+	(html-lsc-credentials-table): Add Login heading.
+	(lsc_credential): Add Login column.
+
 2009-12-15  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c: Order authors alphabetically by surname.

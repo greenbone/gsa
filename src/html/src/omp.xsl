@@ -1135,6 +1135,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="125">Login</td>
+            <td>
+              <input type="text" name="credential_login" value="" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="125">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
@@ -1190,6 +1197,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <td>Name</td>
+            <td>Login</td>
             <td>Comment</td>
             <td width="100">Actions</td>
           </tr>
@@ -1242,6 +1250,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b><xsl:value-of select="name"/></b>
+    </td>
+    <td>
+      <xsl:value-of select="login"/>
     </td>
     <td>
       <xsl:value-of select="comment"/>
