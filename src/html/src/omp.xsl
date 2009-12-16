@@ -153,25 +153,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="levels">
         <xsl:value-of select="report/filters/text()"/>
       </xsl:variable>
-      <!-- This must match the max value in exec_omp_get in gsad.c. -->
-      <xsl:variable name="increment">10</xsl:variable>
-      <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
       <div style="float:left;">
-        <xsl:if test = "report/results/@start &gt; 1">
-          <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&lt;&lt;</a>
-        </xsl:if>
-        Results <xsl:value-of select="report/results/@start"/> -
-        <xsl:value-of select="$last"/>
-        of <xsl:value-of select="report/scan_result_count/filtered"/>
-        <xsl:if test = "$last &lt; report/scan_result_count/filtered">
-          <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&gt;&gt;</a>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="count(report/results/result) &gt; 0">
+            <!-- This must match the max value in exec_omp_get in gsad.c. -->
+            <xsl:variable name="increment">10</xsl:variable>
+            <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
+            <xsl:if test = "report/results/@start &gt; 1">
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&lt;&lt;</a>
+            </xsl:if>
+            Results <xsl:value-of select="report/results/@start"/> -
+            <xsl:value-of select="$last"/>
+            of <xsl:value-of select="report/scan_result_count/filtered"/>
+            <xsl:if test = "$last &lt; report/scan_result_count/filtered">
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&gt;&gt;</a>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
       <div id="small_form" style="float:right;">
         <form action="" method="get">
           This report as:
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="first_result" value="{report/results/@start}"/>
           <input type="hidden" name="levels" value="{$levels}"/>
           <input type="hidden"
                  name="sort_field"
@@ -386,7 +393,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       -->
     </div>
     <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="details"/>
+      <xsl:choose>
+        <xsl:when test="count(report/results/result) &gt; 0">
+          <xsl:apply-templates select="report" mode="details"/>
+        </xsl:when>
+        <xsl:otherwise>
+          0 results
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>

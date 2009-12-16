@@ -1,8 +1,8 @@
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
-	* src/html/src/omp.xsl (html-report-details): Enable result pagination.
-	Split result page into three windows.
-	(get_report_response/report) [overview]: Add total column.
+	* src/html/src/omp.xsl (html-report-details): Only display result range
+	and result headings when there are results.  Add first_result to download
+	URL.
 
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
