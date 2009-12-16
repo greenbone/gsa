@@ -1,5 +1,11 @@
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-report-details): Align table better.  Move
+	per-host summary into filtered results.  Add a summary of total threat
+	counts.  Rename the "Results per Host" window "Filtered Results".
+
+2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-report-details): Only display result range
 	and result headings when there are results.  Add first_result to download
 	URL.

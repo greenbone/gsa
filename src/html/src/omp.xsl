@@ -108,32 +108,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
 
       <a name="summary"/>
-      <table>
-      <tr>
-        <td><b>Result of Task:</b></td>
-        <td><b><xsl:value-of select="report/task/name"/></b></td>
-      </tr>
-      <tr>
-        <td>Order of results:</td>
-        <td>by host</td>
-      </tr>
-      <tr>
-        <td><b>Scan started:</b></td>
-        <td><b><xsl:value-of select="report/scan_start"/></b></td>
-      </tr>
-      <tr>
-        <td>Scan ended:</td>
-        <td><xsl:value-of select="report/scan_end"/></td>
-      </tr>
-      <tr>
-        <td>Final scan run status:</td>
-        <td><xsl:value-of select="report/scan_run_status"/></td>
-      </tr>
+      <table border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td><b>Result of Task:</b></td>
+          <td><b><xsl:value-of select="report/task/name"/></b></td>
+        </tr>
+        <tr>
+          <td>Order of results:</td>
+          <td>by host</td>
+        </tr>
+        <tr>
+          <td><b>Scan started:</b></td>
+          <td><b><xsl:value-of select="report/scan_start"/></b></td>
+        </tr>
+        <tr>
+          <td>Scan ended:</td>
+          <td><xsl:value-of select="report/scan_end"/></td>
+        </tr>
+        <tr>
+          <td>Final scan run status:</td>
+          <td><xsl:value-of select="report/scan_run_status"/></td>
+        </tr>
       </table>
-
-      <h1>Result Summary</h1>
-      <xsl:apply-templates select="../all/get_report_response/report"
-                           mode="overview"/>
+      <br/>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td><img src="/img/high.png" alt="High" title="High"/></td>
+          <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
+          <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+          <td><img src="/img/log.png" alt="Log" title="Log"/></td>
+          <td>Total</td>
+        </tr>
+        <tr>
+          <td>Threat Counts:</td>
+          <td>
+            <xsl:value-of select="report/messages/hole"/>
+          </td>
+          <td>
+            <xsl:value-of select="report/messages/warning"/>
+          </td>
+          <td>
+            <xsl:value-of select="report/messages/info"/>
+          </td>
+          <td>
+            <xsl:value-of select="report/messages/log"/>
+          </td>
+          <td>
+            <xsl:value-of select="report/messages/hole + report/messages/warning + report/messages/info + report/messages/log"/>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
   <br/>
@@ -384,7 +409,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Results per Host
+      Filtered Results
       <!--
       <a href="/help/view_report.html#viewreport"
          title="Help: View Report (Results per Host)">
@@ -395,6 +420,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
+          <xsl:apply-templates select="report" mode="overview"/>
+
           <xsl:apply-templates select="report" mode="details"/>
         </xsl:when>
         <xsl:otherwise>
