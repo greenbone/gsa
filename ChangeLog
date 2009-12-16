@@ -1,5 +1,9 @@
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (init_validator): Increase credential_login max size to 40.
+
+2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-report-details): Align table better.  Move
 	per-host summary into filtered results.  Add a summary of total threat
 	counts.  Rename the "Results per Host" window "Filtered Results".

@@ -194,7 +194,7 @@ init_validator ()
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
-  openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,10}$");
+  openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,40}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
