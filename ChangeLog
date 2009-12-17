@@ -1,3 +1,8 @@
+2009-12-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c (exec_omp_get): Maximum result count back down
+	to 1000 as we have pagination acticated.
+
 2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* CMakeLists.txt: Use pkg-config module to check for correct
