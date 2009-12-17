@@ -222,12 +222,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
 
       <!-- TODO: Move to template. -->
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+      <br/>
+      <p><table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
-          <td colspan="2">
+          <td>
             Sorting:
           </td>
-          <td colspan="4">
+          <td>
             <xsl:choose>
               <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='ascending'">
                 port ascending
@@ -265,7 +266,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </td>
         </tr>
-      </table>
+      </table></p>
       <br/>
       <table>
         <xsl:variable name="sort_field">
