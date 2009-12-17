@@ -85,6 +85,27 @@ if (NOT MHD_FOUND)
                        "libmicrohttpd.pc can be found.")
 endif (NOT MHD_FOUND)
 
+## Retrieve svn revision (at configure time)
+#  Not using Subversion_WC_INFO, as it would have to connect to the repo
+FIND_PROGRAM(SVN_EXECUTABLE svn DOC "subversion command line client")
+
+MACRO(Subversion_GET_REVISION dir variable)
+  EXECUTE_PROCESS(COMMAND ${SVN_EXECUTABLE} info ${dir}
+    OUTPUT_VARIABLE ${variable}
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  STRING(REGEX REPLACE "^(.*\n)?Revision: ([^\n]+).*"
+    "\\2" ${variable} "${${variable}}")
+ENDMACRO(Subversion_GET_REVISION)
+
+IF(NOT PREPARE_RELEASE)
+  IF(SVN_EXECUTABLE)
+    Subversion_GET_REVISION(. ProjectRevision)
+    SET (SVN_REVISION ".SVN.r${ProjectRevision}")
+  ELSE(SVN_EXECUTABLE)
+    SET (SVN_REVISION ".SVN")
+  ENDIF(SVN_EXECUTABLE)
+ENDIF(NOT PREPARE_RELEASE)
+
 ## CPack configuration
 
 SET(CPACK_CMAKE_GENERATOR "Unix Makefiles")
@@ -98,10 +119,9 @@ SET(CPACK_SOURCE_GENERATOR "TGZ")
 SET(CPACK_SOURCE_TOPLEVEL_TAG "")
 SET(CPACK_SYSTEM_NAME "")
 SET(CPACK_TOPLEVEL_TAG "")
-# TODO: Parse version numbers from file VERSION (see also below)
 SET(CPACK_PACKAGE_VERSION_MAJOR "0")
 SET(CPACK_PACKAGE_VERSION_MINOR "8")
-SET(CPACK_PACKAGE_VERSION_PATCH "3.SVN")
+SET(CPACK_PACKAGE_VERSION_PATCH "3${SVN_REVISION}")
 SET(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 SET(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
@@ -116,6 +136,10 @@ SET(CPACK_SOURCE_IGNORE_FILES
 ".tar.gz"
 "install_manifest.txt"
 "Makefile"
+"/doc/generated/"
+"/doc/Doxyfile.in"
+"/doc/Doxyfile_full.in"
+".in"
 )
 
 INCLUDE(CPack)
@@ -173,9 +197,14 @@ message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 ## Version
 
-file (READ VERSION _GSAD_VERSION)
-STRING (REPLACE "
-" "" GSAD_VERSION ${_GSAD_VERSION})
+string (REPLACE "
+" "" GSAD_VERSION ${CPACK_PACKAGE_VERSION})
+
+# Configure Doxyfile with version number
+configure_file (doc/Doxyfile.in doc/Doxyfile)
+configure_file (doc/Doxyfile_full.in doc/Doxyfile_full)
+configure_file (VERSION.in VERSION)
+
 
 ## Program
 
@@ -186,6 +215,6 @@ add_subdirectory (src)
 
 ## Documentation
 
-# add_subdirectory (doc)
+add_subdirectory (doc)
 
 ## End
