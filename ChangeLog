@@ -1,3 +1,12 @@
+2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Improve cross referencing.
+
+	* src/html/src/omp.xsl (html-report-table): Add config and target to
+	summary.
+	(target): Link credential to credentials page.
+	(html-config-table): Add section "Tasks using this Config".
+
 2009-12-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Added support for retrieving settings from the openvas-admininistrator.

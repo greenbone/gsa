@@ -545,6 +545,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b><xsl:value-of select="task/name"/></b></td>
         </tr>
         <tr>
+          <td>Config:</td>
+          <td>
+            <a href="/omp?cmd=get_config&amp;name={task/config/name}">
+              <xsl:value-of select="task/config/name"/>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>Target:</td>
+          <td>
+            <a href="/omp?cmd=get_targets">
+              <xsl:value-of select="task/target/name"/>
+            </a>
+          </td>
+        </tr>
+        <tr>
           <td>Status:</td>
           <td>
             <xsl:call-template name="status_bar">
@@ -1594,7 +1610,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
-    <td><xsl:value-of select="lsc_credential/name"/></td>
+    <td>
+      <a href="/omp?cmd=get_lsc_credentials">
+        <xsl:value-of select="lsc_credential/name"/>
+      </a>
+    </td>
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
@@ -2696,6 +2716,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:choose>
+      <xsl:when test="count($config/tasks/task) = 0">
+        <h1>Tasks using this Config: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>Tasks using this Config</h1>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Actions</td>
+          </tr>
+          <xsl:for-each select="$config/tasks/task">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                <xsl:otherwise>odd</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <tr class="{$class}">
+              <td><xsl:value-of select="name"/></td>
+              <td width="100">
+                <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
+                  <img src="/img/list.png"
+                       border="0"
+                       alt="Reports"
+                       style="margin-left:3px;"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
       </xsl:otherwise>
     </xsl:choose>
   </div>
