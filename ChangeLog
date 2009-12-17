@@ -1,3 +1,26 @@
+2009-12-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Added support for retrieving settings from the openvas-admininistrator.
+
+	* src/gsad.c (init_validator): Added get_settings to the list of
+	valid commands, fixed sorting of commands.
+	(exec_omp_get): Added handling of get_settings command.
+
+	* src/gsad_oap.c (get_settings_oap): New function to handle
+	get_settings.
+
+	* src/gsad_oap.h: Updated.
+
+	* src/html/src/oap.xsl: Added handling of get_settings_response.
+
+	* src/html/src/gsad.xsl: Added new menu item.
+
+	* src/html/src/help/contents.htm4: Added new list item.
+
+	* src/html/src/help/settings.htm4: New.
+
+	* src/html/header.m4: Added new menu item.
+
 2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add sort buttons for task and status to the get_status page.

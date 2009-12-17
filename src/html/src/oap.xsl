@@ -251,4 +251,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END FEED MANAGEMENT -->
 
+<!-- BEGIN SETTINGS MANAGEMENT -->
+
+<xsl:template name="html-settings-table">
+  <xsl:apply-templates select="scanner_settings"/>
+</xsl:template>
+
+<!--     SCANNER_SETTINGS -->
+
+<xsl:template match="scanner_settings">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Scanner Settings
+      <a href="/help/settings.html"
+         title="Help: Settings">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div>From file: <xsl:value-of select="@sourcefile"/></div>
+      <div id="settings">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Setting</td>
+            <td>Value</td>
+          </tr>
+          <xsl:apply-templates select="setting"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     SETTING -->
+
+<xsl:template match="setting">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="@name"/></b>
+    </td>
+    <td><xsl:value-of select="text()"/></td>
+  </tr>
+</xsl:template>
+
+<!--     GET_SETTINGS_RESPONSE -->
+
+<xsl:template match="get_settings_response">
+  <xsl:call-template name="html-settings-table"/>
+</xsl:template>
+
+<!-- END SETTINGS MANAGEMENT -->
+
 </xsl:stylesheet>

@@ -43,5 +43,6 @@ char * create_user_oap (credentials_t *,
 char * delete_user_oap (credentials_t *, const char *);
 char * get_feed_oap (credentials_t *, const char *, const char *);
 char * sync_feed_oap (credentials_t *);
+char * get_settings_oap (credentials_t *, const char *, const char *);
 
 #endif /* not _GSAD_OAP_H */

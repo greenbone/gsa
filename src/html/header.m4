@@ -52,6 +52,7 @@
       <ul>
         <li><a href="/omp?cmd=get_users">Users</a></li>
         <li><a href="/omp?cmd=get_feed">NVT Feed</a></li>
+        <li><a href="/omp?cmd=get_settings">Settings</a></li>
       </ul>
       </li>
       <li>Help

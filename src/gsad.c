@@ -178,18 +178,19 @@ init_validator ()
                          "|(get_config_family)"
                          "|(get_config_nvt)"
                          "|(get_configs)"
+                         "|(get_feed)"
                          "|(get_lsc_credentials)"
                          "|(get_nvt_details)"
                          "|(get_report)"
+                         "|(get_settings)"
                          "|(get_status)"
                          "|(get_targets)"
                          "|(get_users)"
-                         "|(get_feed)"
-                         "|(sync_feed)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
-                         "|(start_task)$");
+                         "|(start_task)"
+                         "|(sync_feed)$");
 
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
@@ -1603,6 +1604,9 @@ exec_omp_get (struct MHD_Connection *connection)
     {
       return get_nvt_details_omp (credentials, oid);
     }
+
+  else if (!strcmp (cmd, "get_settings"))
+    return get_settings_oap (credentials, sort_field, sort_order);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
