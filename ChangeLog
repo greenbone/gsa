@@ -1,3 +1,13 @@
+2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add sort buttons for task and status to the get_status page.
+
+	* src/html/src/omp.xsl (sort): New template.
+	(html-task-table): Add task and status sort buttons.
+
+	* src/gsad.c (init_validator): Add '_' to sort_field.
+	(exec_omp_post): Pass sort field and order to get_status_omp.
+
 2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Use versioning mechanism as in the other OpenVAS CMake-based projects,

@@ -38,6 +38,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<xsl:template match="sort">
+</xsl:template>
+
 <xsl:template name="html-task-table">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -57,8 +60,94 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td rowspan="2">Task</td>
-            <td width="1" rowspan="2">Status</td>
+            <td rowspan="2">
+              Task
+              <xsl:choose>
+                <xsl:when test="sort/field/text()='name'">
+                  <xsl:choose>
+                    <xsl:when test="sort/field/order/text()='ascending'">
+                      <img src="/img/ascending_inactive.png"
+                           border="0"
+                           style="margin-left:3px;"/>
+                      <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=descending"
+                         title="Sort Descending">
+                        <img src="/img/descending.png"
+                             border="0"
+                             style="margin-left:3px;"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=ascending"
+                         title="Sort Ascending">
+                        <img src="/img/ascending.png"
+                             border="0"
+                             style="margin-left:3px;"/>
+                      </a>
+                      <img src="/img/descending_inactive.png" border="0" style="margin-left:3px;"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=ascending"
+                     title="Sort Ascending">
+                    <img src="/img/ascending.png"
+                         border="0"
+                         style="margin-left:3px;"/>
+                  </a>
+                  <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=descending"
+                     title="Sort Descending">
+                    <img src="/img/descending.png"
+                         border="0"
+                         style="margin-left:3px;"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td width="1" rowspan="2">
+              Status
+              <xsl:choose>
+                <xsl:when test="sort/field/text()='run_status'">
+                  <xsl:choose>
+                    <xsl:when test="sort/field/order/text()='ascending'">
+                      <img src="/img/ascending_inactive.png"
+                           border="0"
+                           style="margin-left:3px;"/>
+                      <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=descending"
+                         title="Sort Descending">
+                        <img src="/img/descending.png"
+                             border="0"
+                             style="margin-left:3px;"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=ascending"
+                         title="Sort Ascending">
+                        <img src="/img/ascending.png"
+                             border="0"
+                             style="margin-left:3px;"/>
+                      </a>
+                      <img src="/img/descending_inactive.png"
+                           border="0"
+                           style="margin-left:3px;"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=ascending"
+                     title="Sort Ascending">
+                    <img src="/img/ascending.png"
+                         border="0"
+                         style="margin-left:3px;"/>
+                  </a>
+                  <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=descending"
+                     title="Sort Descending">
+                    <img src="/img/descending.png"
+                         border="0"
+                         style="margin-left:3px;"/>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
             <td colspan="3">Reports</td>
             <td rowspan="2">Threat</td>
             <td rowspan="2">Trend</td>

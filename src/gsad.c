@@ -215,7 +215,7 @@ init_validator ()
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "sort_field", "^[[:alnum:] ]{1,20}$");
+  openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
 
@@ -1181,7 +1181,10 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
     {
-      con_info->response = get_status_omp (credentials, NULL, NULL, NULL);
+      con_info->response = get_status_omp (credentials,
+                                           NULL,
+                                           con_info->req_parms.sort_field,
+                                           con_info->req_parms.sort_order);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
