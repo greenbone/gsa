@@ -2648,7 +2648,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <table>
       <tr>
-        <td>Name:</td><td><xsl:value-of select="$config/name"/></td>
+        <td><b>Name:</b></td>
+        <td><b><xsl:value-of select="$config/name"/></b></td>
       </tr>
       <tr>
         <td>Comment:</td><td><xsl:value-of select="$config/comment"/></td>

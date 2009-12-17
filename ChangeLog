@@ -1,5 +1,9 @@
 2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-config-table): Bold name.
+
+2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Improve cross referencing.
 
 	* src/html/src/omp.xsl (html-report-table): Add config and target to
