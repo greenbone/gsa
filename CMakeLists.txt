@@ -78,8 +78,8 @@ pkg_check_modules (MHD libmicrohttpd>=0.4.2)
 
 if (NOT MHD_FOUND)
   message (FATAL_ERROR "libmicrohttpd>=0.4.2 could not be found on "
-                       "your system but is required. This library was searched
-                       "for using the pkg-config tool. If you have
+                       "your system but is required. This library was searched "
+                       "for using the pkg-config tool. If you have "
                        "libmicrohttpd installed, make sure that "
                        "PKG_CONFIG_PATH points to a path where "
                        "libmicrohttpd.pc can be found.")
