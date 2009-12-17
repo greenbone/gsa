@@ -23,6 +23,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# Needed for 'pkg_check_modules' function
+include (FindPkgConfig)
+
 message ("-- Configuring greenbone-security-assistant...")
 
 project (greenbone-security-assistant C)
@@ -69,6 +72,18 @@ ENDIF(MANDATORY_TOOL_MISSING)
 
 # TODO: Check for libmicrohttpd, rats, flawfinder, splint, doxygen.
 #       (with the later 4 being optional)
+
+## Check for existance of required libraries
+pkg_check_modules (MHD libmicrohttpd>=0.4.2)
+
+if (NOT MHD_FOUND)
+  message (FATAL_ERROR "libmicrohttpd>=0.4.2 could not be found on "
+                       "your system but is required. This library was searched
+                       "for using the pkg-config tool. If you have
+                       "libmicrohttpd installed, make sure that "
+                       "PKG_CONFIG_PATH points to a path where "
+                       "libmicrohttpd.pc can be found.")
+endif (NOT MHD_FOUND)
 
 ## CPack configuration
 

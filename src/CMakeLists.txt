@@ -27,6 +27,8 @@
 
 add_definitions (-Werror)
 
+## TODO use pkg_check_modules instead of manual invocation (as in top-level
+## CMakeLists.txt)
 exec_program (pkg-config
               ARGS --cflags gthread-2.0
               OUTPUT_VARIABLE GLIB_THREAD_CFLAGS)
@@ -125,6 +127,9 @@ endif (GSA_CONFIG_DIR)
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
+## In the top-level CMakeLists.txt, microhttpd is searched for using
+## pkg_check_modules. Use variables set by this function as linker and compiler
+## flags.
 set_target_properties (gsad PROPERTIES LINK_FLAGS
                        "${LIB_TEMP} -lgnutls ${GLIB_THREAD_LDFLAGS} ${GLIB_LDFLAGS} ${OPENVAS_LDFLAGS} -lmicrohttpd -pthread -lxslt ${LIBXML_LDFLAGS}")
 

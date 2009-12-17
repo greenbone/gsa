@@ -1,3 +1,12 @@
+2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt: Use pkg-config module to check for correct
+	libmicrohttpd version.
+
+	* src/CMakeLists.txt: Added TODOs to check for other libraries using
+	the same mechanism as in the top-level CMakeLists.txt and to use
+	the proper variables at compiling and linking step.
+
 2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (init_validator): Increase credential_login max size to 40.
