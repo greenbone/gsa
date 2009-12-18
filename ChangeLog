@@ -1,3 +1,9 @@
+2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/CMakeLists.txt: Remove HEADERS_TEMP and LIBS_TEMP as the OpenVAS
+	flags are provided by other variables.  Set OpenVAS compile flags on
+	gsad_omp and gsad_oap.
+
 2009-12-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Add an agents page.

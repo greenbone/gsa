@@ -40,19 +40,6 @@ exec_program (libopenvas-config
               ARGS --libs
               OUTPUT_VARIABLE OPENVAS_LDFLAGS)
 
-
-if (OPENVAS_HEADER_INSTALL_DIR)
-  set (HEADER_TEMP "-I${OPENVAS_HEADER_INSTALL_DIR}")
-else (OPENVAS_HEADER_INSTALL_DIR)
-  set (HEADER_TEMP "")
-endif (OPENVAS_HEADER_INSTALL_DIR)
-
-if (OPENVAS_LIB_INSTALL_DIR)
-  set (LIB_TEMP "-L${OPENVAS_LIB_INSTALL_DIR}")
-else (OPENVAS_LIB_INSTALL_DIR)
-  set (LIB_TEMP "")
-endif (OPENVAS_LIB_INSTALL_DIR)
-
 ## Libraries
 
 add_library (gsad_base STATIC gsad_base.c)
@@ -60,9 +47,11 @@ target_link_libraries (gsad_base ${LIBS_LIBRARIES})
 
 add_library (gsad_omp STATIC gsad_omp.c)
 target_link_libraries (gsad_omp ${LIBS_LIBRARIES})
+set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 
 add_library (gsad_oap STATIC gsad_oap.c)
 target_link_libraries (gsad_oap ${LIBS_LIBRARIES})
+set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 
 ## Program
 
@@ -114,15 +103,10 @@ add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 ## flags. Unfortunately it boils down to this problem:
 ## http://www.cmake.org/pipermail/cmake/2009-June/030108.html
 set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${LIBS_TEMP} ${OPENVAS_LDFLAGS} -pthread ")
+                       "${OPENVAS_LDFLAGS} -pthread ")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-                       "${HEADER_TEMP} ${OPENVAS_CFLAGS}")
-
-MARK_AS_ADVANCED (LIB_TEMP)
-MARK_AS_ADVANCED (HEADER_TEMP)
-
-MARK_AS_ADVANCED (TEMP)
+                       "${OPENVAS_CFLAGS}")
 
 add_custom_target (genhtml ALL
                    COMMAND make -C html -f make_html)
