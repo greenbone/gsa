@@ -1613,20 +1613,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <xsl:if test="type='gen'">
-        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=installer"
-           title="Download installer package" style="margin-left:3px;">
-          <img src="/img/agent.png" border="0" alt="Download Installer"/>
-        </a>
-        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=howto_install"
-           title="Download Howto on Installtion" style="margin-left:3px;">
-          <img src="/img/rpm.png" border="0" alt="Download Howto Install"/>
-        </a>
-        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=howto_use"
-           title="Download Howto on Using" style="margin-left:3px;">
-          <img src="/img/rpm.png" border="0" alt="Download Howto Use"/>
-        </a>
-      </xsl:if>
+      <a href="/omp?cmd=get_agents&amp;name={name}&amp;agent_format=installer"
+         title="Download installer package" style="margin-left:3px;">
+        <img src="/img/agent.png" border="0" alt="Download Installer"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

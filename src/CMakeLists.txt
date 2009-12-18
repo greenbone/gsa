@@ -1,6 +1,6 @@
 # Greenbone Security Assistant
 # $Id$
-# Description: CMakefile for gsad sources
+# Description: CMakefile for GSAD sources.
 #
 # Authors:
 # Matthew Mundell <matthew.mundell@intevation.de>

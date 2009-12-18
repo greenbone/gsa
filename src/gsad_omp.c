@@ -1020,16 +1020,21 @@ get_lsc_credentials_omp (credentials_t * credentials,
 /**
  * @brief Create an agent, get all agents, XSL transform result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Agent name.
- * @param[in]  comment      Comment on agent.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  name           Agent name.
+ * @param[in]  comment        Comment on agent.
+ * @param[in]  installer      Installer, in base64.
+ * @param[in]  howto_install  Install HOWTO, in base64.
+ * @param[in]  howto_use      Usage HOWTO, in base64.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (credentials_t * credentials,
-                  char *name,
-                  char *comment)
+create_agent_omp (credentials_t * credentials, const char *name,
+                  const char *comment,
+                  const char *installer, int installer_size,
+                  const char *howto_install, int howto_install_size,
+                  const char *howto_use, int howto_use_size)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -1050,17 +1055,43 @@ create_agent_omp (credentials_t * credentials,
   else
     {
       int ret;
+      gchar *installer_64, *howto_install_64, *howto_use_64;
 
       /* Create the agent. */
+
+      installer_64 = installer_size
+                     ? g_base64_encode ((guchar *) installer,
+                                        installer_size)
+                     : g_strdup ("");
+
+      howto_install_64 = howto_install_size
+                         ? g_base64_encode ((guchar *) howto_install,
+                                            howto_install_size)
+                         : g_strdup ("");
+
+      howto_use_64 = howto_use_size
+                     ? g_base64_encode ((guchar *) howto_use,
+                                        howto_use_size)
+                     : g_strdup ("");
 
       ret = openvas_server_sendf (&session,
                                   "<create_agent>"
                                   "<name>%s</name>"
                                   "%s%s%s"
+                                  "<installer>%s</installer>"
+                                  "<howto_install>%s</howto_install>"
+                                  "<howto_use>%s</howto_use>"
                                   "</create_agent>",
                                   name, comment ? "<comment>" : "",
                                   comment ? comment : "",
-                                  comment ? "</comment>" : "");
+                                  comment ? "</comment>" : "",
+                                  installer_64,
+                                  howto_install_64,
+                                  howto_use_64);
+
+      g_free (installer_64);
+      g_free (howto_install_64);
+      g_free (howto_use_64);
 
       if (ret == -1)
         {

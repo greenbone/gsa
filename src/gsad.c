@@ -195,6 +195,7 @@ init_validator ()
                          "|(start_task)"
                          "|(sync_feed)$");
 
+  openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
@@ -275,6 +276,12 @@ struct gsad_connection_info
     char *pw;            ///< Value of "pw" parameter.
     char *password;      ///< Value of "password" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
+    char *installer;     ///< Value of "installer" parameter.
+    int installer_size;  ///< Size of "installer" parameter.
+    char *howto_install; ///< Value of "howto_install" parameter.
+    int howto_install_size; ///< Size of "howto_install" parameter.
+    char *howto_use;     ///< Value of "howto_use" parameter.
+    int howto_use_size;  ///< Size of "howto_use" parameter.
     GArray *passwords;   ///< Collection of "password:*" parameters.
     GArray *preferences; ///< Collection of "preference:*" parameters.
     GArray *nvts;        ///< Collection of "nvt:*" parameters.
@@ -495,6 +502,18 @@ free_resources (void *cls, struct MHD_Connection *connection,
   if (con_info->req_parms.timeout)
     {
       free (con_info->req_parms.timeout);
+    }
+  if (con_info->req_parms.installer)
+    {
+      free (con_info->req_parms.installer);
+    }
+  if (con_info->req_parms.howto_install)
+    {
+      free (con_info->req_parms.howto_install);
+    }
+  if (con_info->req_parms.howto_use)
+    {
+      free (con_info->req_parms.howto_use);
     }
   if (con_info->req_parms.preferences)
     {
@@ -831,6 +850,34 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
+      if (!strcmp (key, "installer"))
+        {
+          con_info->req_parms.installer = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.installer, (char *) data, size);
+          con_info->req_parms.installer_size = size;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "howto_install"))
+        {
+          con_info->req_parms.howto_install = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.howto_install,
+                  (char *) data,
+                  size);
+          con_info->req_parms.howto_install_size = size;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "howto_use"))
+        {
+          con_info->req_parms.howto_use = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.howto_use,
+                  (char *) data,
+                  size);
+          con_info->req_parms.howto_use_size = size;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
       if (!strncmp (key, "nvt:", strlen ("nvt:")))
         {
           gchar *nvt = g_strdup (key + strlen ("nvt:"));
@@ -1050,7 +1097,13 @@ exec_omp_post (credentials_t * credentials,
       con_info->response =
         create_agent_omp (credentials,
                           con_info->req_parms.name,
-                          con_info->req_parms.comment);
+                          con_info->req_parms.comment,
+                          con_info->req_parms.installer,
+                          con_info->req_parms.installer_size,
+                          con_info->req_parms.howto_install,
+                          con_info->req_parms.howto_install_size,
+                          con_info->req_parms.howto_use,
+                          con_info->req_parms.howto_use_size);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
@@ -1309,6 +1362,7 @@ char *
 exec_omp_get (struct MHD_Connection *connection)
 {
   char *cmd = NULL;
+  const char *agent_format = NULL;
   const char *task_id = NULL;
   const char *report_id = NULL;
   const char *format = NULL;
@@ -1360,6 +1414,13 @@ exec_omp_get (struct MHD_Connection *connection)
                                          "oid");
       if (openvas_validate (validator, "oid", oid))
         oid = NULL;
+
+      agent_format = MHD_lookup_connection_value
+                      (connection,
+                       MHD_GET_ARGUMENT_KIND,
+                       "agent_format");
+      if (openvas_validate (validator, "agent_format", agent_format))
+        agent_format = NULL;
 
       format = MHD_lookup_connection_value (connection,
                                             MHD_GET_ARGUMENT_KIND,
@@ -1513,13 +1574,13 @@ exec_omp_get (struct MHD_Connection *connection)
                                sort_order, 1);
 
   else if (0 == strcmp (cmd, "get_agents")
-           && ((name == NULL && package_format == NULL)
-               || (name && package_format)))
+           && ((name == NULL && agent_format == NULL)
+               || (name && agent_format)))
     {
       if (name == NULL)
         return get_agents_omp (credentials,
                                name,
-                               package_format,
+                               agent_format,
                                &response_size,
                                sort_field,
                                sort_order);
@@ -1528,17 +1589,15 @@ exec_omp_get (struct MHD_Connection *connection)
        * @todo
        * Get these sizes from constants that are also used by gsad_params.
        */
-      content_type = calloc (16, sizeof (char));
-      snprintf (content_type, 16, "application/%s", package_format);
+      content_type = calloc (25, sizeof (char));
+      snprintf (content_type, 25, "application/octet-stream");
       content_disposition = calloc (250, sizeof (char));
-      snprintf (content_disposition, 250,
-                "attachment; filename=%s",  // FIXME
-                name);
+      snprintf (content_disposition, 250, "attachment; filename=agent.bin");
 
       /** @todo On fail, HTML ends up in file. */
       return get_agents_omp (credentials,
                              name,
-                             package_format,
+                             agent_format,
                              &response_size,
                              NULL,
                              NULL);

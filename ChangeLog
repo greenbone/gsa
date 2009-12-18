@@ -1,5 +1,30 @@
 2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Enable agent download button.
+
+	* src/gsad.c (init_validator): Add "agent_format".
+	(struct req_parms): Add fields for agent installer and HOWTO.
+	(free_resources): Free installer and HOWTO fields.
+	(serve_post): Fill installer and HOWTO fields.
+	(exec_omp_post): Pass installer and HOWTO fields to create_agent_omp.
+	(exec_omp_get): Expect format in request parameter "agent_format"
+	instead of in "package_format".  Switch MIME type to
+	application/octet-stream.
+
+	* src/gsad_omp.c (create_agent_omp): Add installer and HOWTO args.  Encode
+	installer and HOWTO before sending.
+
+	* src/gsad_omp.h: Update header.
+
+	* src/html/src/omp.xsl (agent): Enable single download button.
+
+	* src/html/src/help/configure_agents.htm4: Correct typo.  Use agent.png.
+	Close comment.
+
+	* src/CMakeLists.txt: Neaten heading description.
+
+2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/CMakeLists.txt: Remove HEADERS_TEMP and LIBS_TEMP as the OpenVAS
 	flags are provided by other variables.  Set OpenVAS compile flags on
 	gsad_omp and gsad_oap.

@@ -16,7 +16,7 @@ respective documentation on how to install and use them.
 <h2>New Agent</h2>
 
 <p>
-For creating a agent the dialog offers these entries.
+For creating an agent the dialog offers these entries.
 Hit the button "Create Agent" to submit the new agent.
 The list of agents will be updated.
 </p>
@@ -84,10 +84,10 @@ will immedialy remove the entry and update the list.
 
 <p>
 Pressing the download icon
-<img src="/img/rpm.png" alt="Download Installer Package" title="Download Installer Package" />
+<img src="/img/agent.png" alt="Download Installer Package" title="Download Installer Package" />
 will download a installation package for this agent.
 </p>
 
-<!-- TODO: Description for howto's.
+<!-- TODO: Description for howto's. -->
 
 m4_include(`footer.m4')
