@@ -1,3 +1,10 @@
+2009-12-18  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt, src/CMakeLists.txt: Added checks for gnutls, libxml
+	and libxslt. Tried to use "elegant" cmake mechanisms to add the
+	respective linker and compiler flags, but failed.
+	Todo with link to workaround added.
+
 2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (html-config-table): Bold name.

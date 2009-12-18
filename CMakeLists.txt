@@ -49,6 +49,8 @@ FIND_PROGRAM(PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config p
                         " to retrieve information about installed"
                         " openvas-libraries in the system.")
 
+## TODO this check is obsolete with the FindPkgConfig module (see below,
+## pkg_check_module sets OKG_CONFIG_FOUND)
 MESSAGE(STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
 IF(NOT PATH_TO_PKGCONFIG)
   SET(MANDATORY_TOOL_MISSING TRUE)
@@ -74,16 +76,16 @@ ENDIF(MANDATORY_TOOL_MISSING)
 #       (with the later 4 being optional)
 
 ## Check for existance of required libraries
-pkg_check_modules (MHD libmicrohttpd>=0.4.2)
+pkg_check_modules (LIBS REQUIRED libmicrohttpd>=0.4.2 libxml-2.0 glib-2.0 
+                   gthread-2.0)
 
-if (NOT MHD_FOUND)
-  message (FATAL_ERROR "libmicrohttpd>=0.4.2 could not be found on "
-                       "your system but is required. This library was searched "
-                       "for using the pkg-config tool. If you have "
-                       "libmicrohttpd installed, make sure that "
-                       "PKG_CONFIG_PATH points to a path where "
-                       "libmicrohttpd.pc can be found.")
-endif (NOT MHD_FOUND)
+pkg_check_modules (GSAD_LIBS REQUIRED libxslt gnutls)
+
+if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
+  message (FATAL_ERROR "One or more reguired libraries was not found "
+                       "(see message above), please install the missing "
+                       "libraries and run cmake again.")
+endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo

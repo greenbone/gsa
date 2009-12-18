@@ -27,28 +27,11 @@
 
 add_definitions (-Werror)
 
+include_directories (${LIBS_INCLUDE_DIRS} ${GSAD_LIBS_INCLUDE_DIRS})
+link_directories    (${LIBS_LIBRARY_DIRS} ${GSAD_LIBS_LIBRARY_DIRS})
+
 ## TODO use pkg_check_modules instead of manual invocation (as in top-level
 ## CMakeLists.txt)
-exec_program (pkg-config
-              ARGS --cflags gthread-2.0
-              OUTPUT_VARIABLE GLIB_THREAD_CFLAGS)
-exec_program (pkg-config
-              ARGS --libs gthread-2.0
-              OUTPUT_VARIABLE GLIB_THREAD_LDFLAGS)
-
-exec_program (pkg-config
-              ARGS --cflags glib-2.0
-              OUTPUT_VARIABLE GLIB_CFLAGS)
-exec_program (pkg-config
-              ARGS --libs glib-2.0
-              OUTPUT_VARIABLE GLIB_LDFLAGS)
-
-exec_program (pkg-config
-              ARGS --cflags libxml-2.0
-              OUTPUT_VARIABLE LIBXML_CFLAGS)
-exec_program (pkg-config
-              ARGS --libs libxml-2.0
-              OUTPUT_VARIABLE LIBXML_LDFLAGS)
 
 exec_program (libopenvas-config
               ARGS --cflags
@@ -73,19 +56,18 @@ endif (OPENVAS_LIB_INSTALL_DIR)
 ## Libraries
 
 add_library (gsad_base STATIC gsad_base.c)
-set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+target_link_libraries (gsad_base ${LIBS_LIBRARIES})
 
 add_library (gsad_omp STATIC gsad_omp.c)
-set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+target_link_libraries (gsad_omp ${LIBS_LIBRARIES})
 
 add_library (gsad_oap STATIC gsad_oap.c)
-set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${HEADER_TEMP} ${TASKS_CFLAG} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+target_link_libraries (gsad_oap ${LIBS_LIBRARIES})
 
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_oap gsad_base)
-
+target_link_libraries (gsad gsad_omp gsad_oap gsad_base ${GSAD_LIBS_LIBRARIES})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (GSAD_VERSION)
@@ -127,14 +109,15 @@ endif (GSA_CONFIG_DIR)
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
-## In the top-level CMakeLists.txt, microhttpd is searched for using
+## TODO In the top-level CMakeLists.txt, microhttpd is searched for using
 ## pkg_check_modules. Use variables set by this function as linker and compiler
-## flags.
+## flags. Unfortunately it boils down to this problem:
+## http://www.cmake.org/pipermail/cmake/2009-June/030108.html
 set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${LIB_TEMP} -lgnutls ${GLIB_THREAD_LDFLAGS} ${GLIB_LDFLAGS} ${OPENVAS_LDFLAGS} -lmicrohttpd -pthread -lxslt ${LIBXML_LDFLAGS}")
+                       "${LIBS_TEMP} ${OPENVAS_LDFLAGS} -pthread ")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-                       "${HEADER_TEMP} ${OPENVAS_CFLAGS} ${GLIB_THREAD_CFLAGS} ${GLIB_CFLAGS} ${LIBXML_CFLAGS}")
+                       "${HEADER_TEMP} ${OPENVAS_CFLAGS}")
 
 MARK_AS_ADVANCED (LIB_TEMP)
 MARK_AS_ADVANCED (HEADER_TEMP)
