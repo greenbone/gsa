@@ -46,6 +46,7 @@
        <li><a href="/omp?cmd=get_configs">Scan Configs</a></li>
        <li><a href="/omp?cmd=get_targets">Targets</a></li>
        <li><a href="/omp?cmd=get_lsc_credentials">Credentials</a></li>
+       <li><a href="/omp?cmd=get_agents">Agents</a></li>
       </ul>
       </li>
       <li>Administration

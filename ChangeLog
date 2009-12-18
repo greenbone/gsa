@@ -1,3 +1,23 @@
+2009-12-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Add an agents page.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Added
+	handling for agents.
+
+	* src/gsad_omp.c (create_agent_omp, delete_agent_omp)
+	(get_agents_omp): New functions.
+
+	* src/gsad_omp.h: Added according protos.
+
+	* src/html/src/omp.xsl (html-create-agent-form, html-agents-table)
+	(create_agent_response, delete_agent_response, agent, get_agents_response)
+	(agents_response): New templates.
+
+	* src/html/src/gsad.xsl, src/html/header.m4: Added link to agents.
+
+	* src/html/src/help/configure_agents.htm4: New.
+
 2009-12-18  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* CMakeLists.txt, src/CMakeLists.txt: Added checks for gnutls, libxml

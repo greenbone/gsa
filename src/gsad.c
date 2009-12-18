@@ -160,11 +160,13 @@ init_validator ()
   openvas_validator_add (validator,
                          "cmd",
                          "^(abort_task)"
+                         "|(create_agent)"
                          "|(create_config)"
                          "|(create_lsc_credential)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(create_user)"
+                         "|(delete_agent)"
                          "|(delete_config)"
                          "|(delete_lsc_credential)"
                          "|(delete_report)"
@@ -174,6 +176,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -1032,6 +1035,23 @@ exec_omp_post (credentials_t * credentials,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_status");
     }
+  else if (0 == strcmp (con_info->req_parms.cmd, "create_agent"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      con_info->response =
+        create_agent_omp (credentials,
+                          con_info->req_parms.name,
+                          con_info->req_parms.comment);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
@@ -1462,6 +1482,9 @@ exec_omp_get (struct MHD_Connection *connection)
            && (strlen (task_id) < VAL_MAX_SIZE))
     return get_status_omp (credentials, task_id, sort_field, sort_order);
 
+  else if ((0 == strcmp (cmd, "delete_agent")) && (name != NULL))
+    return delete_agent_omp (credentials, name);
+
   else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
     return delete_lsc_credential_omp (credentials, name);
 
@@ -1488,6 +1511,38 @@ exec_omp_get (struct MHD_Connection *connection)
   else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 1);
+
+  else if (0 == strcmp (cmd, "get_agents")
+           && ((name == NULL && package_format == NULL)
+               || (name && package_format)))
+    {
+      if (name == NULL)
+        return get_agents_omp (credentials,
+                               name,
+                               package_format,
+                               &response_size,
+                               sort_field,
+                               sort_order);
+
+      /**
+       * @todo
+       * Get these sizes from constants that are also used by gsad_params.
+       */
+      content_type = calloc (16, sizeof (char));
+      snprintf (content_type, 16, "application/%s", package_format);
+      content_disposition = calloc (250, sizeof (char));
+      snprintf (content_disposition, 250,
+                "attachment; filename=%s",  // FIXME
+                name);
+
+      /** @todo On fail, HTML ends up in file. */
+      return get_agents_omp (credentials,
+                             name,
+                             package_format,
+                             &response_size,
+                             NULL,
+                             NULL);
+    }
 
   else if (!strcmp (cmd, "get_lsc_credentials")
            && ((name == NULL && package_format == NULL)

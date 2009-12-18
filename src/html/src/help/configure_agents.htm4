@@ -1,0 +1,93 @@
+m4_define(`PAGE_TITLE', `Help: Configure Agents')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_agents">Jump to dialog</a></div>
+&nbsp;<br />
+
+<h1>Configure Agents</h1>
+
+<p>
+This feature allows to store agent tools accompanied with
+respective documentation on how to install and use them.
+</p>
+
+<a name="new_agent"></a>
+<h2>New Agent</h2>
+
+<p>
+For creating a agent the dialog offers these entries.
+Hit the button "Create Agent" to submit the new agent.
+The list of agents will be updated.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td></td>
+  <td>Mandatory</td>
+  <td>Max Length</td>
+  <td>Syntax</td>
+  <td>Example</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>yes</td>
+  <td>80</td>
+  <td>Alphanumeric</td>
+  <td>WinSLAD</td>
+</tr>
+<tr class="odd">
+  <td>Comment</td>
+  <td>no</td>
+  <td>40</td>
+  <td>Alphanumeric</td>
+  <td>This agent collects several plugins.</td>
+</tr>
+<!-- TODO: installer, howto_install, howto_us -->
+</table>
+
+<a name="agents"></a>
+<h2>Agents</h2>
+
+<p>
+This table provides on overview on all stored
+agents.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>Shows name of the agent.</td>
+</tr>
+<tr>
+  <td>Comment</td>
+  <td>Shows the comment that was provided for this agent.</td>
+</tr>
+</table>
+
+<a name="actions"></a>
+<h3>Actions</h3>
+
+<h4>Delete Agent</h4>
+
+<p>
+Pressing the delete icon
+<img src="/img/delete.png" alt="Delete" title="Delete" />
+will immedialy remove the entry and update the list.
+</p>
+
+<h4>Download Installer Package</h4>
+
+<p>
+Pressing the download icon
+<img src="/img/rpm.png" alt="Download Installer Package" title="Download Installer Package" />
+will download a installation package for this agent.
+</p>
+
+<!-- TODO: Description for howto's.
+
+m4_include(`footer.m4')

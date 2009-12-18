@@ -61,6 +61,11 @@ char * create_lsc_credential_omp (credentials_t *, char *, char *,
                                   const char *, const char *, const char *);
 char * delete_lsc_credential_omp (credentials_t *, const char *);
 
+char * get_agents_omp (credentials_t *, const char *, const char *,
+                       unsigned int *, const char *, const char *);
+char * create_agent_omp (credentials_t *, char *, char *);
+char * delete_agent_omp (credentials_t *, const char *);
+
 char * get_targets_omp (credentials_t *, const char *, const char *);
 char * create_target_omp (credentials_t *, char *, char *, char *,
                           const char *);

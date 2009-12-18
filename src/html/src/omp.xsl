@@ -1475,6 +1475,179 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END LSC_CREDENTIALS MANAGEMENT -->
 
+<!-- BEGIN AGENTS MANAGEMENT -->
+
+<xsl:template name="html-create-agent-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      New Agent
+      <a href="/help/configure_agents.html#new_agent"
+         title="Help: Configure Agents (New Agent)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_agent"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name</td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Installer</td>
+            <td><input type="file" name="installer"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Howto Install</td>
+            <td><input type="file" name="howto_install"/></td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Howto Use</td>
+            <td><input type="file" name="howto_use"/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Agent"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-agents-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Agents
+      <a href="/help/configure_agents.html#agents"
+         title="Help: Configure Agents (Agents)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Comment</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="agent"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     CREATE_AGENT_RESPONSE -->
+
+<xsl:template match="create_agent_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Agent</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_AGENT_RESPONSE -->
+
+<xsl:template match="delete_agent_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Agent
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     AGENT -->
+
+<xsl:template match="agent">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+    </td>
+    <td>
+      <xsl:value-of select="comment"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_agent&amp;name={name}"
+             title="Delete Agent" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="type='gen'">
+        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=installer"
+           title="Download installer package" style="margin-left:3px;">
+          <img src="/img/agent.png" border="0" alt="Download Installer"/>
+        </a>
+        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=howto_install"
+           title="Download Howto on Installtion" style="margin-left:3px;">
+          <img src="/img/rpm.png" border="0" alt="Download Howto Install"/>
+        </a>
+        <a href="/omp?cmd=get_agents&amp;name={name}&amp;package_format=howto_use"
+           title="Download Howto on Using" style="margin-left:3px;">
+          <img src="/img/rpm.png" border="0" alt="Download Howto Use"/>
+        </a>
+      </xsl:if>
+    </td>
+  </tr>
+</xsl:template>
+
+<!--     GET_AGENTS_RESPONSE -->
+
+<xsl:template match="get_agents_response">
+  <xsl:call-template name="html-create-agent-form"/>
+  <xsl:call-template name="html-agents-table"/>
+</xsl:template>
+
+<xsl:template match="agent" mode="select">
+  <option value="{name}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template match="agents_response" mode="select">
+  <xsl:apply-templates select="agent" mode="select"/>
+</xsl:template>
+
+<!-- END AGENTS MANAGEMENT -->
+
 <!-- BEGIN TARGETS MANAGEMENT -->
 
 <xsl:template name="html-create-target-form">
