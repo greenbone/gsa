@@ -1,3 +1,7 @@
+2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/help/contents.htm4: Added agent help to help contents.
+
 2009-12-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/img/agent.png: New.
