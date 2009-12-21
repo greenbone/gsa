@@ -18,6 +18,15 @@
 
 2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (append_chunk_binary): New function.
+	(serve_post): Use append_chunk_binary for binary keys.
+	(request_handler): Move authentication check down into GET and POST cases.
+	Only authentication for the first chunk of a POST request.
+
+	* src/html/src/omp.xsl (html-create-agent-form): Comment out the HOWTOs.
+
+2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Enable agent download button.
 
 	* src/gsad.c (init_validator): Add "agent_format".

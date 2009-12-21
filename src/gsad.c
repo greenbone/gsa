@@ -588,6 +588,51 @@ free_resources (void *cls, struct MHD_Connection *connection,
 }
 
 /**
+ * @brief Append a chunk to a binary parameter.
+ *
+ * @param[in]   chunk         Incoming chunk data.
+ * @param[out]  chunk_size    Size of chunk.
+ * @param[out]  chunk_offset  Offset into all data.
+ * @param[out]  param         Parameter.
+ * @param[out]  param_size    Parameter size.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static int
+append_chunk_binary (const char *chunk_data,
+                     int chunk_size,
+                     int chunk_offset,
+                     char **param,
+                     int *param_size)
+{
+  if (chunk_size)
+    {
+      if (chunk_offset == 0)
+        {
+          if (*param)
+            return -1;
+          *param = malloc (chunk_size);
+          *param_size = chunk_size;
+        }
+      else
+        {
+          void *new_param;
+          if (*param == NULL)
+            return -1;
+          new_param = realloc (*param, *param_size + chunk_size);
+          if (new_param == NULL)
+            return -1;
+          *param = new_param;
+          *param_size += chunk_size;
+        }
+      memcpy (*param + chunk_offset,
+              chunk_data,
+              chunk_size);
+    }
+  return 0;
+}
+
+/**
  * @brief Called once the post request handler has collected the multiple
  * @brief parts of a post request. Fills the req_params of an
  * @brief gsad_connection_info.
@@ -852,29 +897,34 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
         }
       if (!strcmp (key, "installer"))
         {
-          con_info->req_parms.installer = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.installer, (char *) data, size);
-          con_info->req_parms.installer_size = size;
+          if (append_chunk_binary (data,
+                                   size,
+                                   off,
+                                   &con_info->req_parms.installer,
+                                   &con_info->req_parms.installer_size))
+            return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
       if (!strcmp (key, "howto_install"))
         {
-          con_info->req_parms.howto_install = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.howto_install,
-                  (char *) data,
-                  size);
-          con_info->req_parms.howto_install_size = size;
+          if (append_chunk_binary (data,
+                                   size,
+                                   off,
+                                   &con_info->req_parms.howto_install,
+                                   &con_info->req_parms.howto_install_size))
+            return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
       if (!strcmp (key, "howto_use"))
         {
-          con_info->req_parms.howto_use = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.howto_use,
-                  (char *) data,
-                  size);
-          con_info->req_parms.howto_use_size = size;
+          if (append_chunk_binary (data,
+                                   size,
+                                   off,
+                                   &con_info->req_parms.howto_use,
+                                   &con_info->req_parms.howto_use_size))
+            return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
@@ -1998,12 +2048,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
       return MHD_YES;
     }
 
-  /* Check for authentication. */
-  if ((!is_http_authenticated (connection))
-      && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
-                                                                it is a const str */
-    return send_http_authenticate_header (connection, REALM);
-
   credentials = get_header_credentials (connection);
 
   /* Set HTTP Header values. */
@@ -2012,6 +2056,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "GET"))
     {
       /* This is a GET request. */
+
+      /* Check for authentication. */
+      if ((!is_http_authenticated (connection))
+          && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
+                                                                    it is a const str */
+        return send_http_authenticate_header (connection, REALM);
 
       if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base))
           || !strncmp (&url[0], oap_cgi_base, strlen (oap_cgi_base)))
@@ -2130,6 +2180,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (NULL == *con_cls)
         {
           struct gsad_connection_info *con_info;
+
+          /* Check for authentication. */
+          if ((!is_http_authenticated (connection))
+              && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
+                                                                        it is a const str */
+            return send_http_authenticate_header (connection, REALM);
 
           // @todo what frees this?
           con_info = calloc (1, sizeof (struct gsad_connection_info));

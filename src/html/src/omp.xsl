@@ -1509,6 +1509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Installer</td>
             <td><input type="file" name="installer"/></td>
           </tr>
+          <!--
           <tr>
             <td valign="top" width="125">Howto Install</td>
             <td><input type="file" name="howto_install"/></td>
@@ -1517,6 +1518,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Howto Use</td>
             <td><input type="file" name="howto_use"/></td>
           </tr>
+          -->
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Agent"/>
