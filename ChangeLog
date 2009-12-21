@@ -1,5 +1,11 @@
 2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
 
+	Preparing the gsa 0.8.3 release.
+
+	* src/html/src/about.htm4: Updated.
+
+2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+
 	* CMakeLists.txt: Don't ignore necessary files when creating the source
 	tarball.
 
