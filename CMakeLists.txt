@@ -139,9 +139,6 @@ SET(CPACK_SOURCE_IGNORE_FILES
 "install_manifest.txt"
 "Makefile"
 "/doc/generated/"
-"/doc/Doxyfile.in"
-"/doc/Doxyfile_full.in"
-".in"
 )
 
 INCLUDE(CPack)
