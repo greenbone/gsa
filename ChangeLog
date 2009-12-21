@@ -1,3 +1,8 @@
+2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/oap.xsl: Include settings error message if there is one.
+	Make sure filename is correctly aligned, even in Konqueror.
+
 2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Enable agent download button.

@@ -270,7 +270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">
-      <div>From file: <xsl:value-of select="@sourcefile"/></div>
+      <div style="text-align:left">From file: <xsl:value-of select="@sourcefile"/></div>
       <div id="settings">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
@@ -304,7 +304,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_SETTINGS_RESPONSE -->
 
 <xsl:template match="get_settings_response">
-  <xsl:call-template name="html-settings-table"/>
+    <xsl:choose>
+      <xsl:when test="@status = '200' or @status = '201' or @status = '202'">
+        <xsl:call-template name="html-settings-table"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">List Settings</xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- END SETTINGS MANAGEMENT -->
