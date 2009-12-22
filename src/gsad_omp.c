@@ -843,7 +843,7 @@ char *
 get_lsc_credentials_omp (credentials_t * credentials,
                          const char * name,
                          const char * format,
-                         unsigned int *result_len,
+                         gsize *result_len,
                          const char * sort_field,
                          const char * sort_order)
 {
@@ -2809,7 +2809,7 @@ delete_report_omp (credentials_t * credentials,
  */
 char *
 get_report_omp (credentials_t * credentials, const char *report_id,
-                const char *format, unsigned int *report_len,
+                const char *format, gsize *report_len,
                 const unsigned int first_result,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,

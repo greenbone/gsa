@@ -131,7 +131,7 @@ char *content_disposition = NULL;
 /**
  * @brief Response size passed between callbacks when sending files.
  */
-unsigned int response_size = 0;
+gsize response_size = 0;
 
 /**
  * @brief Logging parameters, as passed to setup_log_handlers.
@@ -303,7 +303,7 @@ get_header_credentials (struct MHD_Connection * connection)
   const char *header_auth;
   guchar *header_auth_decoded = NULL;
   const char *strbase = "Basic ";
-  unsigned int header_auth_decoded_len;
+  gsize header_auth_decoded_len;
   gchar **auth_split;
 
   header_auth = MHD_lookup_connection_value (connection,

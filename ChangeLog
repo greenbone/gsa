@@ -1,3 +1,15 @@
+2009-12-22  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Fixed variable types for 64bit compatibility in Base64 decoding.
+
+	* src/gsad_omp.c (get_lsc_credentials_omp): Changed result_len to gsize.
+	(get_report_omp): Changed report_len to gsize.
+
+	* src/gsad_omp.h: Updated.
+
+	* src/gsad.c: Changed response_size and header_auth_decoded_len to
+	gsize.
+
 2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Post release version bump.
