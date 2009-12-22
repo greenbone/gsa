@@ -1,3 +1,7 @@
+2009-12-22  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad_omp.c (get_agents_omp): Change result_len to gsize.
+
 2009-12-22  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Fixed variable types for 64bit compatibility in Base64 decoding.
@@ -42,7 +46,7 @@
 	* src/html/src/oap.xsl: Include settings error message if there is one.
 	Make sure filename is correctly aligned, even in Konqueror.
 
-2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-21  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (append_chunk_binary): New function.
 	(serve_post): Use append_chunk_binary for binary keys.

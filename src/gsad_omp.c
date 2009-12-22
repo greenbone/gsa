@@ -1229,7 +1229,7 @@ char *
 get_agents_omp (credentials_t * credentials,
                          const char * name,
                          const char * format,
-                         unsigned int *result_len,
+                         gsize *result_len,
                          const char * sort_field,
                          const char * sort_order)
 {
