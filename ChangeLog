@@ -1,3 +1,7 @@
+2009-12-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_omp.h: Updated according to last commit.
+
 2009-12-22  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (get_agents_omp): Change result_len to gsize.
