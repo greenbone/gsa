@@ -553,6 +553,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Escalator:</td>
+          <td>
+            <xsl:if test="task/escalator">
+              <a href="/omp?cmd=get_escalators">
+                <xsl:value-of select="task/escalator/name"/>
+              </a>
+            </xsl:if>
+          </td>
+        </tr>
+        <tr>
           <td>Target:</td>
           <td>
             <a href="/omp?cmd=get_targets">
@@ -778,6 +788,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="config" mode="newtask">
+  <option value="{name}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template match="escalator" mode="newtask">
   <option value="{name}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
@@ -1639,6 +1653,253 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END AGENTS MANAGEMENT -->
+
+<!-- BEGIN ESCALATORS MANAGEMENT -->
+
+<xsl:template name="html-create-escalator-form">
+  <xsl:param name="lsc-credentials"></xsl:param>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Escalator
+      <a href="/help/configure_escalators.html#newescalator"
+         title="Help: Configure Escalators (New Escalator)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_escalator"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name</td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Event</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="2" valign="top">
+                    <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                    Task run status changed to
+                    <select name="event_data:status">
+                      <option value="Delete Requested">Delete Requested</option>
+                      <option value="Done" selected="1">Done</option>
+                      <option value="New">New</option>
+                      <option value="Requested">Requested</option>
+                      <option value="Running">Running</option>
+                      <option value="Stop Requested">Stop Requested</option>
+                      <option value="Stopped">Stopped</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Condition</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="2" valign="top">
+                    <input type="radio" name="condition" value="Always" checked="1"/>
+                    Always
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Method</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr class="odd">
+                  <td colspan="3" valign="top">
+                    <input type="radio" name="method" value="Email" checked="1"/>
+                    Email
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="100">Address</td>
+                  <td>
+                    <input type="text" name="method_data:address" size="30" maxlength="400"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="100">Message</td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td colspan="3" valign="top">
+                          <input type="radio" name="method_data:notice" value="1" checked="1"/>
+                          Simple notice
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" valign="top">
+                          <input type="radio" name="method_data:notice" value="0"/>
+                          Summary (can include vulnerability details)
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Escalator"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-escalators-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Escalators
+      <a href="/help/configure_escalators.html#escalators"
+         title="Help: Configure Escalators (Escalators)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Event</td>
+            <td>Condition</td>
+            <td>Method</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="escalator"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     CREATE_ESCALATOR_RESPONSE -->
+
+<xsl:template match="create_escalator_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Escalator</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_ESCALATOR_RESPONSE -->
+
+<xsl:template match="delete_escalator_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Escalator
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     ESCALATOR -->
+
+<xsl:template match="escalator">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="event/text()"/>
+      <xsl:choose>
+        <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
+          <br/>(to <xsl:value-of select=" event/data[name='status']/text()"/>)
+        </xsl:when>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="condition/text()"/></td>
+    <td>
+      <xsl:value-of select="method/text()"/>
+      <xsl:choose>
+        <xsl:when test="method/text()='Email' and string-length(method/data[name='address']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="method/data[name='address']/text()"/>)
+        </xsl:when>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_escalator&amp;name={name}"
+             title="Delete Escalator" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<!--     GET_ESCALATORS_RESPONSE -->
+
+<xsl:template match="get_escalators">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_escalator_response"/>
+  <xsl:apply-templates select="create_escalator_response"/>
+  <xsl:call-template name="html-create-escalator-form">
+    <xsl:with-param
+      name="lsc-credentials"
+      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+  </xsl:call-template>
+  <!-- The for-each makes the get_escalators_response the current node. -->
+  <xsl:for-each select="get_escalators_response | commands_response/get_escalators_response">
+    <xsl:call-template name="html-escalators-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END ESCALATORS MANAGEMENT -->
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
@@ -3370,6 +3631,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <select name="scantarget">
               <xsl:apply-templates select="get_targets_response/target"
+                                   mode="newtask"/>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Escalator (optional)</td>
+          <td>
+            <select name="escalator">
+              <option value="--">--</option>
+              <xsl:apply-templates select="get_escalators_response/escalator"
                                    mode="newtask"/>
             </select>
           </td>

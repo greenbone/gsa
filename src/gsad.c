@@ -162,12 +162,14 @@ init_validator ()
                          "^(abort_task)"
                          "|(create_agent)"
                          "|(create_config)"
+                         "|(create_escalator)"
                          "|(create_lsc_credential)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(create_user)"
                          "|(delete_agent)"
                          "|(delete_config)"
+                         "|(delete_escalator)"
                          "|(delete_lsc_credential)"
                          "|(delete_report)"
                          "|(delete_target)"
@@ -182,6 +184,7 @@ init_validator ()
                          "|(get_config_nvt)"
                          "|(get_configs)"
                          "|(get_feed)"
+                         "|(get_escalators)"
                          "|(get_lsc_credentials)"
                          "|(get_nvt_details)"
                          "|(get_report)"
@@ -198,6 +201,7 @@ init_validator ()
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
+  openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,40}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
@@ -227,6 +231,9 @@ init_validator ()
   openvas_validator_alias (validator, "scanconfig",   "name");
   openvas_validator_alias (validator, "scantarget",   "name");
   openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "escalator",    "name");
+  openvas_validator_alias (validator, "event",        "condition");
+  openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "level_high",   "boolean");
   openvas_validator_alias (validator, "level_medium", "boolean");
   openvas_validator_alias (validator, "level_low",    "boolean");
@@ -260,8 +267,12 @@ struct gsad_connection_info
     char *cmd;           ///< Value of "cmd" parameter.
     char *name;          ///< Value of "name" parameter.
     char *comment;       ///< Value of "comment" parameter.
+    char *condition;     ///< Value of "condition" parameter.
     char *credential_login; ///< Value of "credential_login" parameter.
+    char *escalator;     ///< Value of "escalator" parameter.
+    char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
+    char *method;        ///< Value of "event" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *scantarget;    ///< Value of "scantarget" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
@@ -282,6 +293,9 @@ struct gsad_connection_info
     int howto_install_size; ///< Size of "howto_install" parameter.
     char *howto_use;     ///< Value of "howto_use" parameter.
     int howto_use_size;  ///< Size of "howto_use" parameter.
+    GArray *condition_data; ///< Collection of "condition_data:*" parameters.
+    GArray *event_data;  ///< Collection of "event_data:*" parameters.
+    GArray *method_data; ///< Collection of "method_data:*" parameters.
     GArray *passwords;   ///< Collection of "password:*" parameters.
     GArray *preferences; ///< Collection of "preference:*" parameters.
     GArray *nvts;        ///< Collection of "nvt:*" parameters.
@@ -427,6 +441,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
+  /** @todo Remove the checks, as it is safe to pass NULL to free. */
   if (con_info->req_parms.base)
     {
       free (con_info->req_parms.base);
@@ -443,13 +458,29 @@ free_resources (void *cls, struct MHD_Connection *connection,
     {
       free (con_info->req_parms.comment);
     }
+  if (con_info->req_parms.condition)
+    {
+      free (con_info->req_parms.condition);
+    }
   if (con_info->req_parms.credential_login)
     {
       free (con_info->req_parms.credential_login);
     }
+  if (con_info->req_parms.escalator)
+    {
+      free (con_info->req_parms.escalator);
+    }
+  if (con_info->req_parms.event)
+    {
+      free (con_info->req_parms.event);
+    }
   if (con_info->req_parms.family)
     {
       free (con_info->req_parms.family);
+    }
+  if (con_info->req_parms.method)
+    {
+      free (con_info->req_parms.method);
     }
   if (con_info->req_parms.scanconfig)
     {
@@ -514,6 +545,36 @@ free_resources (void *cls, struct MHD_Connection *connection,
   if (con_info->req_parms.howto_use)
     {
       free (con_info->req_parms.howto_use);
+    }
+  if (con_info->req_parms.condition_data)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.condition_data, gchar*, index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.condition_data, TRUE);
+    }
+  if (con_info->req_parms.event_data)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.event_data, gchar*, index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.event_data, TRUE);
+    }
+  if (con_info->req_parms.method_data)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.method_data, gchar*, index++)))
+        g_free (item);
+
+      g_array_free (con_info->req_parms.method_data, TRUE);
     }
   if (con_info->req_parms.preferences)
     {
@@ -695,6 +756,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
+      if (!strcmp (key, "condition"))
+        {
+          con_info->req_parms.condition = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.condition,
+                  (char *) data,
+                  size);
+          con_info->req_parms.condition[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "condition",
+                                   con_info->req_parms.condition))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
       if (!strcmp (key, "credential_login"))
         {
           con_info->req_parms.credential_login = malloc (size + 1);
@@ -706,6 +782,49 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
               && openvas_validate (validator,
                                    "credential_login",
                                    con_info->req_parms.credential_login))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "escalator"))
+        {
+          con_info->req_parms.escalator = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.escalator, (char *) data, size);
+          con_info->req_parms.escalator[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "escalator",
+                                   con_info->req_parms.escalator))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "event"))
+        {
+          con_info->req_parms.event = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.event,
+                  (char *) data,
+                  size);
+          con_info->req_parms.event[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "event",
+                                   con_info->req_parms.event))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "method"))
+        {
+          con_info->req_parms.method = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.method,
+                  (char *) data,
+                  size);
+          con_info->req_parms.method[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "method",
+                                   con_info->req_parms.method))
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
@@ -925,6 +1044,69 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
                                    &con_info->req_parms.howto_use,
                                    &con_info->req_parms.howto_use_size))
             return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "condition_data:", strlen ("condition_data:")))
+        {
+          gchar *condition_data;
+
+          condition_data = g_strdup_printf ("%s0%.*s",
+                                            key + strlen ("condition_data:"),
+                                            size,
+                                            data);
+          condition_data[strlen (key + strlen ("condition_data:"))] = '\0';
+
+          if (con_info->req_parms.condition_data == NULL)
+            con_info->req_parms.condition_data
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.condition_data, condition_data);
+
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "event_data:", strlen ("event_data:")))
+        {
+          gchar *event_data;
+
+          event_data = g_strdup_printf ("%s0%.*s",
+                                        key + strlen ("event_data:"),
+                                        size,
+                                        data);
+          event_data[strlen (key + strlen ("event_data:"))] = '\0';
+
+          if (con_info->req_parms.event_data == NULL)
+            con_info->req_parms.event_data
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.event_data, event_data);
+
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strncmp (key, "method_data:", strlen ("method_data:")))
+        {
+          gchar *method_data;
+
+          method_data = g_strdup_printf ("%s0%.*s",
+                                         key + strlen ("method_data:"),
+                                         size,
+                                         data);
+          method_data[strlen (key + strlen ("method_data:"))] = '\0';
+
+          if (con_info->req_parms.method_data == NULL)
+            con_info->req_parms.method_data
+             = g_array_new (TRUE,
+                            FALSE,
+                            sizeof (gchar*));
+
+          g_array_append_val (con_info->req_parms.method_data, method_data);
+
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
@@ -1155,6 +1337,45 @@ exec_omp_post (credentials_t * credentials,
                           con_info->req_parms.howto_use,
                           con_info->req_parms.howto_use_size);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "create_escalator"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      if (openvas_validate (validator,
+                            "condition",
+                            con_info->req_parms.condition))
+        {
+          free (con_info->req_parms.condition);
+          con_info->req_parms.condition = NULL;
+        }
+      if (openvas_validate (validator, "event", con_info->req_parms.event))
+        {
+          free (con_info->req_parms.event);
+          con_info->req_parms.event = NULL;
+        }
+      if (openvas_validate (validator, "method", con_info->req_parms.method))
+        {
+          free (con_info->req_parms.method);
+          con_info->req_parms.method = NULL;
+        }
+      con_info->response =
+        create_escalator_omp (credentials, con_info->req_parms.name,
+                              con_info->req_parms.comment,
+                              con_info->req_parms.condition,
+                              con_info->req_parms.condition_data,
+                              con_info->req_parms.event,
+                              con_info->req_parms.event_data,
+                              con_info->req_parms.method,
+                              con_info->req_parms.method_data);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
@@ -1204,6 +1425,13 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.name = NULL;
         }
       if (openvas_validate (validator,
+                            "escalator",
+                            con_info->req_parms.escalator))
+        {
+          free (con_info->req_parms.escalator);
+          con_info->req_parms.escalator  = NULL;
+        }
+      if (openvas_validate (validator,
                             "scantarget",
                             con_info->req_parms.scantarget))
         {
@@ -1225,7 +1453,8 @@ exec_omp_post (credentials_t * credentials,
         con_info->response =
           create_task_omp (credentials, con_info->req_parms.name, "comment",
                            con_info->req_parms.scantarget,
-                           con_info->req_parms.scanconfig);
+                           con_info->req_parms.scanconfig,
+                           con_info->req_parms.escalator);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
@@ -1596,6 +1825,9 @@ exec_omp_get (struct MHD_Connection *connection)
   else if ((0 == strcmp (cmd, "delete_agent")) && (name != NULL))
     return delete_agent_omp (credentials, name);
 
+  else if ((!strcmp (cmd, "delete_escalator")) && (name != NULL))
+    return delete_escalator_omp (credentials, name);
+
   else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
     return delete_lsc_credential_omp (credentials, name);
 
@@ -1652,6 +1884,9 @@ exec_omp_get (struct MHD_Connection *connection)
                              NULL,
                              NULL);
     }
+
+  else if (!strcmp (cmd, "get_escalators"))
+    return get_escalators_omp (credentials, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_lsc_credentials")
            && ((name == NULL && package_format == NULL)

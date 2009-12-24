@@ -47,6 +47,7 @@
        <li><a href="/omp?cmd=get_targets">Targets</a></li>
        <li><a href="/omp?cmd=get_lsc_credentials">Credentials</a></li>
        <li><a href="/omp?cmd=get_agents">Agents</a></li>
+       <li><a href="/omp?cmd=get_escalators">Escalators</a></li>
       </ul>
       </li>
       <li>Administration

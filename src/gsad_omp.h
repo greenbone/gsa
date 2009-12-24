@@ -41,7 +41,8 @@ void omp_init (int);
 
 char * gsad_newtask (credentials_t *, const char *);
 
-char * create_task_omp (credentials_t *, char *, char *, char *, char *);
+char * create_task_omp (credentials_t *, char *, char *, char *, char *,
+                        const char *);
 char * delete_task_omp (credentials_t *, const char *);
 char * abort_task_omp (credentials_t *, const char *);
 char * start_task_omp (credentials_t *, const char *);
@@ -54,6 +55,12 @@ char * get_report_omp (credentials_t *, const char *, const char *,
                        gsize *, const unsigned int,
                        const unsigned int, const char *, const char *,
                        const char *);
+
+char * create_escalator_omp (credentials_t *, char *, char *, const char *,
+                             GArray *, const char *, GArray *, const char *,
+                             GArray *);
+char * delete_escalator_omp (credentials_t *, const char *);
+char * get_escalators_omp (credentials_t *, const char *, const char *);
 
 char * get_lsc_credentials_omp (credentials_t *, const char *, const char *,
                                 gsize *, const char *, const char *);

@@ -118,7 +118,6 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   return html;
 }
 
-/** @todo Duplicated in openvas-manager. */
 /**
  * @brief Test whether a string equal to a given string exists in an array.
  *
@@ -241,8 +240,8 @@ gsad_newtask (credentials_t * credentials, const char* message)
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
+                           "An internal error occurred while getting config list. "
+                           "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_status");
     }
@@ -253,8 +252,36 @@ gsad_newtask (credentials_t * credentials, const char* message)
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
+                           "An internal error occurred while getting config list. "
+                           "The current list of configs is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  if (openvas_server_send (&session,
+                           "<get_escalators"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalator list. "
+                           "The current list of escalators is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalator list. "
+                           "The current list of escalators is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
@@ -278,17 +305,18 @@ gsad_newtask (credentials_t * credentials, const char* message)
  * @param[in]  comment      Comment on task.
  * @param[in]  scantarget   Target for task.
  * @param[in]  scanconfig   Config for task.
+ * @param[in]  escalator    Escalator for task.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *scantarget, char *scanconfig)
+                 char *scantarget, char *scanconfig, const char *escalator)
 {
   entity_t entity;
   gnutls_session_t session;
   char *text = NULL;
-  int socket;
+  int socket, ret;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -297,20 +325,44 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<create_task>"
-                            "<config>%s</config>"
-                            "<target>%s</target>"
-                            "<name>%s</name>"
-                            "<comment>%s</comment>"
-                            "</create_task>"
-                            "<get_status"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
-                            scanconfig, scantarget, name, comment)
-      == -1)
+  if (strcmp (escalator, "--") == 0)
+    ret = openvas_server_sendf (&session,
+                                "<commands>"
+                                "<create_task>"
+                                "<config>%s</config>"
+                                "<target>%s</target>"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "</create_task>"
+                                "<get_status"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
+                                "</commands>",
+                                scanconfig,
+                                scantarget,
+                                name,
+                                comment);
+  else
+    ret = openvas_server_sendf (&session,
+                                "<commands>"
+                                "<create_task>"
+                                "<config>%s</config>"
+                                "<escalator>%s</escalator>"
+                                "<target>%s</target>"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "</create_task>"
+                                "<get_status"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
+                                "</commands>",
+                                scanconfig,
+                                escalator,
+                                scantarget,
+                                name,
+                                comment);
+
+  if (ret == -1)
     {
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -1396,6 +1448,284 @@ get_agents_omp (credentials_t * credentials,
 }
 
 /**
+ * @brief Send data for an escalator.
+ *
+ * @param[out]  data  Data.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static int
+send_escalator_data (gnutls_session_t *session, GArray *data)
+{
+  int index = 0;
+  gchar *element;
+
+  if (data)
+    while ((element = g_array_index (data, gchar*, index++)))
+      if (openvas_server_sendf (session,
+                                "<data><name>%s</name>%s</data>",
+                                element,
+                                element + strlen (element) + 1))
+        return -1;
+
+  return 0;
+}
+
+/**
+ * @brief Create an escalator, get all escalators, XSL transform the result.
+ *
+ * @param[in]   credentials     Username and password for authentication.
+ * @param[in]   name            Name of new escalator.
+ * @param[out]  comment         Comment on escalator.
+ * @param[out]  condition       Condition.
+ * @param[out]  condition_data  Condition data.
+ * @param[out]  event           Event.
+ * @param[out]  event_data      Event data.
+ * @param[out]  method          Method.
+ * @param[out]  method_data     Method data.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_escalator_omp (credentials_t * credentials, char *name, char *comment,
+                      const char *condition, GArray *condition_data,
+                      const char *event, GArray *event_data,
+                      const char *method, GArray *method_data)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new target. "
+                         "No new target was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_targets");
+
+  xml = g_string_new ("<get_escalators>");
+
+  if (name == NULL || comment == NULL || condition == NULL || event == NULL
+      || method == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Escalator"));
+  else
+    {
+      /* Create the escalator. */
+
+      if (openvas_server_sendf (&session,
+                                "<create_escalator>"
+                                "<name>%s</name>"
+                                "%s%s%s",
+                                name,
+                                comment ? "<comment>" : "",
+                                comment ? comment : "",
+                                comment ? "</comment>" : "")
+          || openvas_server_sendf (&session, "<event>%s", event)
+          || send_escalator_data (&session, event_data)
+          || openvas_server_send (&session, "</event>")
+          || openvas_server_sendf (&session, "<method>%s", method)
+          || send_escalator_data (&session, method_data)
+          || openvas_server_send (&session, "</method>")
+          || openvas_server_sendf (&session, "<condition>%s", condition)
+          || send_escalator_data (&session, condition_data)
+          || openvas_server_send (&session,
+                                  "</condition>"
+                                  "</create_escalator>"))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new escalator. "
+                               "No new escalator was created. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_escalators");
+        }
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new escalator. "
+                               "It is unclear whether the escalator has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_escalators");
+        }
+      free_entity (entity);
+    }
+
+  /* Get all the escalators. */
+
+  if (openvas_server_send (&session,
+                           "<get_escalators"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalator. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalators. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_escalators>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Delete an escalator, get all escalators, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  escalator_name  Name of escalator.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
+{
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a escalator. "
+                         "The escalator is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_escalators");
+
+  xml = g_string_new ("<get_escalators>");
+
+  /* Delete escalator and get all escalators. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<delete_escalator><name>%s</name></delete_escalator>"
+                            "<get_escalators"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            escalator_name)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an escalator. "
+                           "The escalator was not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an escalator. "
+                           "It is unclear whether the escalator has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_escalators>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all escalators, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_escalators_omp (credentials_t * credentials, const char * sort_field,
+                    const char * sort_order)
+{
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting esalator list. "
+                         "The current list of escalators is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_escalators>");
+
+  /* Get the escalators. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_escalators"
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalators list. "
+                           "The current list of escalators is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalators list. "
+                           "The current list of escalators is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_escalators>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Create a target, get all targets, XSL transform the result.
  *
  * @param[in]   credentials  Username and password for authentication.
@@ -1573,7 +1903,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
 
   xml = g_string_new ("<get_targets>");
 
-  /* Get the targets. */
+  /* Delete the target and get all targets. */
 
   if (openvas_server_sendf (&session,
                             "<commands>"

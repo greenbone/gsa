@@ -1,3 +1,36 @@
+2009-12-24  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add Escalators.
+
+	* src/gsad.c (init_validator): Add escalator commands.  Add "condition",
+	"escalator", "event" and "method" validators.
+	(struct req_parms): Add fields for escalator commands.
+	(free_resources): Init escalator resources.
+	(serve_post): Check and setup escalator keys.
+	(exec_omp_post): Handle command "create_escalator".  Pass escalator to
+	create_task_omp.
+	(exec_omp_get): Handle commands "delete_escalator" and "get_escalators".
+
+	* src/gsad_omp.c (gsad_newtask): Also get escalators.  Correct two error
+	message strings.
+	(create_task_omp): Add escalator arg.
+	(send_escalator_data, create_escalator_omp, delete_escalator_omp)
+	(get_escalators_omp): New functions.
+
+	* src/gsad_omp.h: Add and update headers accordingly.
+
+	* src/omp.xsl (html-report-table): Add escalator link.
+	(escalator, html-create-escalator-form, html-escalators-table)
+	(create_escalator_response, delete_escalator_response)
+	(escalator, get_escalator): New templates.
+	(gsad_newtask): Add escalator selector.
+
+	* src/html/src/gsad.xsl (html-gsa-navigation): Add Escalators menu item.
+
+	* src/html/src/help/contents.htm4: Add Escalators menu item.
+
+	* src/html/headers.m4: Add Escalators menu item.
+
 2009-12-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad_omp.h: Updated according to last commit.
