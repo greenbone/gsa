@@ -1,13 +1,10 @@
 2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
 
-	Add a target details page.
+	* src/html/src/omp.xsl (html-create-escalator-form): Add 'Threat level
+	at least' condition.
+	(escalator): Print level with 'Threat level at least' condition.
 
-	* src/gsad_omp.c (get_target_omp): New function.
-
-	* src/gsad_omp.h: Add header.
-
-	* src/gsad.c (init_validator): Add get_target command.
-	(exec_omp_get): Handle command get_target.
+2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (html-report-table): Link target to details.
 	(target): Add details button.

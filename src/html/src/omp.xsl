@@ -1716,6 +1716,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Always
                   </td>
                 </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <input type="radio" name="condition" value="Threat level at least"/>
+                    Threat level is at least
+                    <select name="condition_data:level">
+                      <option value="High" selected="1">High</option>
+                      <option value="Medium">Medium</option>
+                      <option value="Low">Low</option>
+                      <option value="Log">Log</option>
+                    </select>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -1854,7 +1866,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
       </xsl:choose>
     </td>
-    <td><xsl:value-of select="condition/text()"/></td>
+    <td>
+      <xsl:value-of select="condition/text()"/>
+      <xsl:choose>
+        <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='level']/text()"/>)
+        </xsl:when>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:value-of select="method/text()"/>
       <xsl:choose>
