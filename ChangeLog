@@ -1,3 +1,18 @@
+2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add a target details page.
+
+	* src/gsad_omp.c (get_target_omp): New function.
+
+	* src/gsad_omp.h: Add header.
+
+	* src/gsad.c (init_validator): Add get_target command.
+	(exec_omp_get): Handle command get_target.
+
+	* src/html/src/omp.xsl (html-report-table): Link target to details.
+	(target): Add details button.
+	(target mode=details, get_target): New templates.
+
 2009-12-24  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add Escalators.

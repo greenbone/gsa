@@ -1948,6 +1948,75 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
 }
 
 /**
+ * @brief Get one target, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  name         Name of target.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_target_omp (credentials_t * credentials, const char * name,
+                const char * sort_field, const char * sort_order)
+{
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting targets list. "
+                         "The current list of targets is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_targets");
+
+  xml = g_string_new ("<get_target>");
+
+  /* Get the target. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_targets"
+                            " name=\"%s\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            name,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_target>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

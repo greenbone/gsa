@@ -565,7 +565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Target:</td>
           <td>
-            <a href="/omp?cmd=get_targets">
+            <a href="/omp?cmd=get_target&amp;name={task/target/name}">
               <xsl:value-of select="task/target/name"/>
             </a>
           </td>
@@ -2056,11 +2056,96 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
+      <a href="/omp?cmd=get_target&amp;name={name}"
+         title="Target Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
 
-<!--     GET_TARGETS_RESPONSE -->
+<xsl:template match="target" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Target Details</div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_targets">Back to Targets</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="summary"/></td>
+        </tr>
+        <tr>
+          <td>Hosts:</td>
+          <td><xsl:value-of select="hosts"/></td>
+        </tr>
+        <tr>
+          <td>Maximum number of hosts:</td>
+          <td><xsl:value-of select="max_hosts"/></td>
+        </tr>
+        <tr>
+          <td>Credential:</td>
+          <td>
+            <a href="/omp?cmd=get_lsc_credentials">
+              <xsl:value-of select="lsc_credential/name"/>
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1>Tasks using this Target: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks using this Target</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
+                    <img src="/img/list.png"
+                         border="0"
+                         alt="Reports"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_TARGET -->
+
+<xsl:template match="get_target">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="get_targets_response/target" mode="details"/>
+</xsl:template>
+
+<!--     GET_TARGETS -->
 
 <xsl:template match="get_targets">
   <xsl:apply-templates select="gsad_msg"/>

@@ -190,6 +190,7 @@ init_validator ()
                          "|(get_report)"
                          "|(get_settings)"
                          "|(get_status)"
+                         "|(get_target)"
                          "|(get_targets)"
                          "|(get_users)"
                          "|(save_config)"
@@ -1976,6 +1977,9 @@ exec_omp_get (struct MHD_Connection *connection)
   else if (!strcmp (cmd, "get_status"))
     return get_status_omp (credentials, NULL, sort_field, sort_order);
 
+  else if ((!strcmp (cmd, "get_target")) && (name != NULL))
+    return get_target_omp (credentials, name, sort_field, sort_order);
+
   else if (!strcmp (cmd, "get_targets"))
     return get_targets_omp (credentials, sort_field, sort_order);
 
@@ -2000,9 +2004,7 @@ exec_omp_get (struct MHD_Connection *connection)
                                sort_order, 0);
 
   else if ((!strcmp (cmd, "get_nvt_details")) && (oid != NULL))
-    {
-      return get_nvt_details_omp (credentials, oid);
-    }
+    return get_nvt_details_omp (credentials, oid);
 
   else if (!strcmp (cmd, "get_settings"))
     return get_settings_oap (credentials, sort_field, sort_order);
