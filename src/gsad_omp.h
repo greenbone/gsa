@@ -62,6 +62,8 @@ char * create_escalator_omp (credentials_t *, char *, char *, const char *,
 char * delete_escalator_omp (credentials_t *, const char *);
 char * get_escalators_omp (credentials_t *, const char *, const char *);
 
+char * get_lsc_credential_omp (credentials_t *, const char *, const char *,
+                               const char *);
 char * get_lsc_credentials_omp (credentials_t *, const char *, const char *,
                                 gsize *, const char *, const char *);
 char * create_lsc_credential_omp (credentials_t *, char *, char *,

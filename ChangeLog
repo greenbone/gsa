@@ -1,5 +1,21 @@
 2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add a credential details page.
+
+	* src/gsad_omp.c (get_lsc_credential_omp): New function.
+
+	* src/gsad_omp.h: Add header.
+
+	* src/gsad.c (init_validator): Add get_lsc_credential command.
+	(exec_omp_get): Handle command get_lsc_credential.
+
+	* src/html/src/omp.xsl (target): Link credential to details.
+	(target mode=details): Correct element name.  Link credential to details.
+	(lsc_credential): Add details button.
+	(lsc_credential mode=details, get_lsc_credential): New templates.
+
+2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* ChangeLog: Repair after last commit.
 
 2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
