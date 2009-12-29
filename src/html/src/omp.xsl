@@ -3661,48 +3661,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
-  <div id="nvtdetail">
-    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-      <tr><td>Name:</td><td><xsl:value-of select="name"/></td></tr>
-      <tr><td>Summary:</td><td><xsl:value-of select="summary"/></td></tr>
-      <tr><td>Family:</td><td><xsl:value-of select="family"/></td></tr>
-      <tr><td>OID:</td><td><xsl:value-of select="@oid"/></td></tr>
-      <!-- "NOCVE" means no CVE ID, skip. -->
-      <xsl:choose>
-        <xsl:when test="cve_id = 'NOCVE'">
-        </xsl:when>
-        <xsl:otherwise>
-          <tr><td>CVE:</td><td><xsl:value-of select="cve_id"/></td></tr>
-        </xsl:otherwise>
-      </xsl:choose>
-      <!-- "NOBID" means no Bugtraq ID, skip. -->
-      <xsl:choose>
-        <xsl:when test="bugtraq_id = 'NOBID'">
-        </xsl:when>
-        <xsl:otherwise>
-          <tr>
-            <td>Bugtraq ID:</td><td><xsl:value-of select="bugtraq_id"/></td>
-          </tr>
-        </xsl:otherwise>
-      </xsl:choose>
-      <!-- "NOXREF" means no xrefs, skip. -->
-      <xsl:choose>
-        <xsl:when test="xrefs = 'NOXREF'">
-        </xsl:when>
-        <xsl:otherwise>
-          <tr>
-            <td>Other references:</td><td><xsl:value-of select="xrefs"/></td>
-          </tr>
-        </xsl:otherwise>
-      </xsl:choose>
-      <tr>
-        <td colspan="2">
-          <h3>Description</h3>
-          <pre><xsl:value-of select="description"/></pre>
-        </td>
-      </tr>
-    </table>
-  </div>
+  <table>
+    <tr><td><b>Name:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
+    <tr><td>Summary:</td><td><xsl:value-of select="summary"/></td></tr>
+    <tr><td>Family:</td><td><xsl:value-of select="family"/></td></tr>
+    <tr><td>OID:</td><td><xsl:value-of select="@oid"/></td></tr>
+    <tr>
+      <td>CVE:</td>
+      <td>
+        <!-- "NOCVE" means no CVE ID, skip. -->
+        <xsl:choose>
+          <xsl:when test="cve_id = 'NOCVE'">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="cve_id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Bugtraq ID:</td>
+      <td>
+        <!-- "NOBID" means no Bugtraq ID, skip. -->
+        <xsl:choose>
+          <xsl:when test="bugtraq_id = 'NOBID'">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="bugtraq_id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+    <tr>
+      <td>Other references:</td>
+      <td>
+        <!-- "NOXREF" means no xrefs, skip. -->
+        <xsl:choose>
+          <xsl:when test="xrefs = 'NOXREF'">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="xrefs"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+  </table>
+
+  <h1>Description</h1>
+  <pre><xsl:value-of select="description"/></pre>
 </xsl:template>
 
 <xsl:template match="get_nvt_details_response">
@@ -3710,7 +3716,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">NVT Details</div>
-    <div class="gb_window_part_content_no_pad">
+    <div class="gb_window_part_content">
       <xsl:apply-templates select="nvt"/>
     </div>
   </div>

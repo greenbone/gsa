@@ -1,5 +1,10 @@
 2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (nvt, get_nvt_details_response): Match to other
+	details pages.
+
+2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add a escalator details page.
 
 	* src/gsad_omp.c (get_escalator_omp): New function.
