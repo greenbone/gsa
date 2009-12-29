@@ -6,7 +6,7 @@ m4_include(`header.m4')
 <p>
 This is the help system of Greenbone Security Assistant.
 Small <a href="/help/contents.html" title="Help"><img src="/img/help.png"></a>
-icons all over the web interface will jump into the respective contents.
+icons all over the web interface will jump you into the respective contents.
 Alternatively you can browse the following structure.
 </p>
 

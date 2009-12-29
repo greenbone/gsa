@@ -11,7 +11,7 @@ m4_include(`header.m4')
 <p>
 This table provides on overview on all configured
 <a href="glossary.html#task">tasks</a> and summarizes
-the essential aspects for each.
+the essential aspects of each.
 </p>
 
 <table class="gbntable">
@@ -94,8 +94,8 @@ the essential aspects for each.
           <div class="progressbar_text">Internal Error</div>
         </div>
       </td><td>
-        The last scan for this task resulted in a error. The newest
-        report might be imcomplete or entirely missing. In the latter case
+        The last scan for this task resulted in an error. The newest
+        report might be incomplete or entirely missing. In the latter case
         the newest visible report is in fact one from an earlier scan.
       </td></tr>
       <tr><td valign="top">
