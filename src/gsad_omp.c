@@ -136,6 +136,75 @@ member (GArray *array, const char *string)
   return 0;
 }
 
+/**
+ * @brief Check a modify_config response.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  session      Session with manager.
+ * @param[in]  function     Function for error message.
+ * @param[in]  line         Line number for error message.
+ *
+ * @return XSL transformed error message on failure, NULL on success.
+ */
+static char *
+check_modify_config (credentials_t *credentials, gnutls_session_t *session,
+                     const char *function, int line)
+{
+  entity_t entity;
+  const char *status_text;
+
+  /** @todo This would be much easier with real error codes. */
+
+  /* Read the response. */
+
+  entity = NULL;
+  if (read_entity (session, &entity))
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a config. "
+                           "It is unclear whether the entire config has been saved. "
+                           "Diagnostics: Failure to read command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  /* Check the response. */
+
+  status_text = entity_attribute (entity, "status_text");
+  if (status_text == NULL)
+    {
+      free_entity (entity);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a config. "
+                           "It is unclear whether the entire config has been saved. "
+                           "Diagnostics: Failure to parse status_text from response.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (strcmp (status_text, "Config is in use") == 0)
+    {
+      free_entity (entity);
+      return xsl_transform_omp
+              (credentials,
+               g_strdup ("<gsad_msg status_text=\"Config is in use.\""
+                         " operation=\"Save Config\">"
+                         "The config is now in use by a task,"
+                         " so modification of the config is forbidden."
+                         "</gsad_msg>"));
+    }
+  else if (strcmp (status_text, "OK"))
+    {
+      free_entity (entity);
+      /** @todo Put in XML for "result of previous..." window. */
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a config. "
+                           "It is unclear whether the entire config has been saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  return NULL;
+}
+
 
 /* Page handlers. */
 
@@ -2519,6 +2588,7 @@ save_config_omp (credentials_t * credentials,
 {
   gnutls_session_t session;
   int socket;
+  char *ret;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2568,15 +2638,13 @@ save_config_omp (credentials_t * credentials,
             }
           g_free (value);
 
-          /** @todo Put in XML for "result of previous operation" window. */
-          if (check_response (&session))
+
+          ret = check_modify_config (credentials, &session, __FUNCTION__,
+                                     __LINE__);
+          if (ret)
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while saving a config. "
-                                   "It is unclear whether the entire config has been saved. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs");
+              return ret;
             }
         }
     }
@@ -2665,15 +2733,11 @@ save_config_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
-  /** @todo Put in XML for "result of previous operation" window. */
-  if (check_response (&session))
+  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  if (ret)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a config. "
-                           "It is unclear whether the entire config has been saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs");
+      return ret;
     }
 
   openvas_server_close (socket, session);
@@ -2828,6 +2892,7 @@ save_config_family_omp (credentials_t * credentials,
   gnutls_session_t session;
   gchar *nvt;
   int socket, index = 0;
+  char *ret;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2883,15 +2948,11 @@ save_config_family_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
-  /** @todo Put in XML for "result of previous operation" window. */
-  if (check_response (&session))
+  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  if (ret)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a config. "
-                           "It is unclear whether the entire config has been saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
+      return ret;
     }
 
   openvas_server_close (socket, session);
@@ -3030,6 +3091,7 @@ save_config_nvt_omp (credentials_t * credentials,
         {
           int type_start, type_end, count, ret, is_timeout = 0;
           gchar *value;
+          char *modify_config_ret;
 
           /* Passwords have a radio to control whether they must be reset.
            * This works around the need for the Manager to send the actual
@@ -3130,15 +3192,12 @@ save_config_nvt_omp (credentials_t * credentials,
             }
           g_free (value);
 
-          /** @todo Put in XML for "result of previous operation" window. */
-          if (check_response (&session))
+          modify_config_ret = check_modify_config (credentials, &session,
+                                                   __FUNCTION__, __LINE__);
+          if (modify_config_ret)
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while saving a config. "
-                                   "It is unclear whether the entire config has been saved. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_configs");
+              return modify_config_ret;
             }
         }
 

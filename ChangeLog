@@ -1,3 +1,12 @@
+2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Handle the OMP MODIFY_CONFIG "config in use" error with a small error
+	dialog instead of a generic big dialog.
+
+	* src/gsad_omp.c (check_modify_config): New function.
+	(save_config_omp, save_config_family_omp, save_config_nvt_omp): Call
+	check_modify_config instead of check_response to check response.
+
 2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add a credential details page.
