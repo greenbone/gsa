@@ -1,5 +1,20 @@
 2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add a escalator details page.
+
+	* src/gsad_omp.c (get_escalator_omp): New function.
+
+	* src/gsad_omp.h: Add header.
+
+	* src/gsad.c (init_validator): Add get_escalator command.
+	(exec_omp_get): Handle command get_escalator.
+
+	* src/html/src/omp.xsl (html-report-table): Link escalator to details.
+	(escalator): Add details button.
+	(escalator mode=details, get_escalator): New templates.
+
+2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Handle the OMP MODIFY_CONFIG "config in use" error with a small error
 	dialog instead of a generic big dialog.
 

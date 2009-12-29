@@ -184,6 +184,7 @@ init_validator ()
                          "|(get_config_nvt)"
                          "|(get_configs)"
                          "|(get_feed)"
+                         "|(get_escalator)"
                          "|(get_escalators)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
@@ -1886,6 +1887,9 @@ exec_omp_get (struct MHD_Connection *connection)
                              NULL,
                              NULL);
     }
+
+  else if ((!strcmp (cmd, "get_escalator")) && (name != NULL))
+    return get_escalator_omp (credentials, name, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

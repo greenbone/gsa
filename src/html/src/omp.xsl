@@ -556,7 +556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Escalator:</td>
           <td>
             <xsl:if test="task/escalator">
-              <a href="/omp?cmd=get_escalators">
+              <a href="/omp?cmd=get_escalator&amp;name={task/escalator/name}">
                 <xsl:value-of select="task/escalator/name"/>
               </a>
             </xsl:if>
@@ -1970,8 +1970,110 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
+      <a href="/omp?cmd=get_escalator&amp;name={name}"
+         title="Escalator Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template match="escalator" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Escalator Details</div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_escalators">Back to Escalators</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Condition:</td>
+          <td>
+            <xsl:value-of select="condition/text()"/>
+            <xsl:choose>
+              <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
+                (<xsl:value-of select="condition/data[name='level']/text()"/>)
+              </xsl:when>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Event:</td>
+          <td>
+            <xsl:value-of select="event/text()"/>
+            <xsl:choose>
+              <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
+                (to <xsl:value-of select=" event/data[name='status']/text()"/>)
+              </xsl:when>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Method:</td>
+          <td>
+            <xsl:value-of select="method/text()"/>
+            <xsl:choose>
+              <xsl:when test="method/text()='Email' and string-length(method/data[name='address']/text()) &gt; 0">
+                (<xsl:value-of select="method/data[name='address']/text()"/>)
+              </xsl:when>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1>Tasks using this Escalator: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks using this Escalator</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
+                    <img src="/img/list.png"
+                         border="0"
+                         alt="Reports"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_ESCALATOR -->
+
+<xsl:template match="get_escalator">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_escalator_response"/>
+  <xsl:apply-templates select="get_escalators_response/escalator" mode="details"/>
 </xsl:template>
 
 <!--     GET_ESCALATORS_RESPONSE -->
