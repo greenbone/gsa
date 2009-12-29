@@ -1,5 +1,11 @@
 2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c: Clean and add some todos and comments.
+	(exec_omp_post): Format strcmp like others.
+	(free_resources): Remove NULL checks from around frees.
+
+2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (nvt, get_nvt_details_response): Match to other
 	details pages.
 

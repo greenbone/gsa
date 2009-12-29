@@ -261,7 +261,9 @@ struct gsad_connection_info
 
   /**
    * @brief create_task / create_target / create_config POST request info
-   * @todo This should eventually be a dynamic key-based structure.
+   * @todo This should eventually be a dynamic key-based structure.  (The
+   *       names and number of request parameters are static, so a static
+   *       structure is more appropriate. -- mamu)
    * @todo Combine POST and GET parameter handling.
    */
   struct req_parms
@@ -444,111 +446,32 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
-  /** @todo Remove the checks, as it is safe to pass NULL to free. */
-  if (con_info->req_parms.base)
-    {
-      free (con_info->req_parms.base);
-    }
-  if (con_info->req_parms.cmd)
-    {
-      free (con_info->req_parms.cmd);
-    }
-  if (con_info->req_parms.name)
-    {
-      free (con_info->req_parms.name);
-    }
-  if (con_info->req_parms.comment)
-    {
-      free (con_info->req_parms.comment);
-    }
-  if (con_info->req_parms.condition)
-    {
-      free (con_info->req_parms.condition);
-    }
-  if (con_info->req_parms.credential_login)
-    {
-      free (con_info->req_parms.credential_login);
-    }
-  if (con_info->req_parms.escalator)
-    {
-      free (con_info->req_parms.escalator);
-    }
-  if (con_info->req_parms.event)
-    {
-      free (con_info->req_parms.event);
-    }
-  if (con_info->req_parms.family)
-    {
-      free (con_info->req_parms.family);
-    }
-  if (con_info->req_parms.method)
-    {
-      free (con_info->req_parms.method);
-    }
-  if (con_info->req_parms.scanconfig)
-    {
-      free (con_info->req_parms.scanconfig);
-    }
-  if (con_info->req_parms.scantarget)
-    {
-      free (con_info->req_parms.scantarget);
-    }
-  if (con_info->req_parms.rcfile)
-    {
-      free (con_info->req_parms.rcfile);
-    }
-  if (con_info->req_parms.role)
-    {
-      free (con_info->req_parms.role);
-    }
-  if (con_info->req_parms.submit)
-    {
-      free (con_info->req_parms.submit);
-    }
-  if (con_info->req_parms.hosts)
-    {
-      free (con_info->req_parms.hosts);
-    }
-  if (con_info->req_parms.login)
-    {
-      free (con_info->req_parms.login);
-    }
-  if (con_info->req_parms.pw)
-    {
-      free (con_info->req_parms.pw);
-    }
-  if (con_info->req_parms.password)
-    {
-      free (con_info->req_parms.password);
-    }
-  if (con_info->req_parms.oid)
-    {
-      free (con_info->req_parms.oid);
-    }
-  if (con_info->req_parms.sort_field)
-    {
-      free (con_info->req_parms.sort_field);
-    }
-  if (con_info->req_parms.sort_order)
-    {
-      free (con_info->req_parms.sort_order);
-    }
-  if (con_info->req_parms.timeout)
-    {
-      free (con_info->req_parms.timeout);
-    }
-  if (con_info->req_parms.installer)
-    {
-      free (con_info->req_parms.installer);
-    }
-  if (con_info->req_parms.howto_install)
-    {
-      free (con_info->req_parms.howto_install);
-    }
-  if (con_info->req_parms.howto_use)
-    {
-      free (con_info->req_parms.howto_use);
-    }
+  free (con_info->req_parms.base);
+  free (con_info->req_parms.cmd);
+  free (con_info->req_parms.name);
+  free (con_info->req_parms.comment);
+  free (con_info->req_parms.condition);
+  free (con_info->req_parms.credential_login);
+  free (con_info->req_parms.escalator);
+  free (con_info->req_parms.event);
+  free (con_info->req_parms.family);
+  free (con_info->req_parms.method);
+  free (con_info->req_parms.scanconfig);
+  free (con_info->req_parms.scantarget);
+  free (con_info->req_parms.rcfile);
+  free (con_info->req_parms.role);
+  free (con_info->req_parms.submit);
+  free (con_info->req_parms.hosts);
+  free (con_info->req_parms.login);
+  free (con_info->req_parms.pw);
+  free (con_info->req_parms.password);
+  free (con_info->req_parms.oid);
+  free (con_info->req_parms.sort_field);
+  free (con_info->req_parms.sort_order);
+  free (con_info->req_parms.timeout);
+  free (con_info->req_parms.installer);
+  free (con_info->req_parms.howto_install);
+  free (con_info->req_parms.howto_use);
   if (con_info->req_parms.condition_data)
     {
       gchar *item;
@@ -735,6 +658,20 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
+      /**
+       * @todo Accept only the parameters that the command uses.
+       *
+       * That way req_params can be reduced to something more manageable,
+       * and any extra parameters would be caught as errors.
+       *
+       * A problem is that the command is determined by a parameter.
+       * So how about we represent the command in the filename instead?
+       *
+       *     http://xxx/omp/get_targets?sort_field=name
+       */
+
+      /** @todo Why validate these here and in exec_omp_post? */
+
       if (!strcmp (key, "base"))
         {
           con_info->req_parms.base = malloc (size + 1);
@@ -1317,7 +1254,7 @@ exec_omp_post (credentials_t * credentials,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_status");
     }
-  else if (0 == strcmp (con_info->req_parms.cmd, "create_agent"))
+  else if (!strcmp (con_info->req_parms.cmd, "create_agent"))
     {
       if (openvas_validate (validator, "name", con_info->req_parms.name))
         {
@@ -1678,6 +1615,8 @@ exec_omp_get (struct MHD_Connection *connection)
 
   if ((cmd != NULL) && (strlen (cmd) < CMD_MAX_SIZE))
     {
+      /** @todo Why lookup all parameters when each handler only uses some? */
+
       tracef ("cmd: [%s]\n", cmd);
       task_id = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -1808,7 +1747,7 @@ exec_omp_get (struct MHD_Connection *connection)
   /** @todo Pass sort_order and sort_field to all page handlers. */
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
-  /* Check cmd and precondition, start respective omp command(s) */
+  /* Check cmd and precondition, start respective OMP command(s). */
   if ((!strcmp (cmd, "delete_task")) && (task_id != NULL)
       && (strlen (task_id) < VAL_MAX_SIZE))
     return delete_task_omp (credentials, task_id);
@@ -1871,8 +1810,7 @@ exec_omp_get (struct MHD_Connection *connection)
                                sort_order);
 
       /**
-       * @todo
-       * Get these sizes from constants that are also used by gsad_params.
+       * @todo Get sizes from constants that are also used by gsad_params.
        */
       content_type = calloc (25, sizeof (char));
       snprintf (content_type, 25, "application/octet-stream");
@@ -1910,8 +1848,7 @@ exec_omp_get (struct MHD_Connection *connection)
                                         sort_order);
 
       /**
-       * @todo
-       * Get these sizes from constants that are also used by gsad_params.
+       * @todo Get sizes from constants that are also used by gsad_params.
        */
       content_type = calloc (16, sizeof (char));
       snprintf (content_type, 16, "application/%s", package_format);
@@ -1944,9 +1881,7 @@ exec_omp_get (struct MHD_Connection *connection)
       if (format != NULL)
         {
           /**
-           * @todo
-           * Get these sizes from constants that are also used by
-           * gsad_params.
+           * @todo Get sizes from constants that are also used by gsad_params.
            */
           /* @todo name is now 80 */
           content_type = calloc (16, sizeof (char));
@@ -2599,7 +2534,7 @@ main (int argc, char **argv)
   int gsad_administrator_port = DEFAULT_OPENVAS_ADMINISTRATOR_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
 
-  /* Initialise */
+  /* Initialise. */
 
   if (gsad_init () == MHD_NO)
     {
@@ -2607,7 +2542,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  /* Process command line options */
+  /* Process command line options. */
 
   static gboolean foreground = FALSE;
   static gboolean print_version = FALSE;
@@ -2662,7 +2597,7 @@ main (int argc, char **argv)
       exit (EXIT_SUCCESS);
     }
 
-  /* Setup logging */
+  /* Setup logging. */
 
   rc_name = g_build_filename (GSA_CONFIG_DIR, "gsad_log.conf", NULL);
   if (g_file_test (rc_name, G_FILE_TEST_EXISTS))
@@ -2673,7 +2608,7 @@ main (int argc, char **argv)
    * concurrently. */
   g_log_set_always_fatal (G_LOG_FATAL_MASK);
 
-  /* Finish processing the command line options */
+  /* Finish processing the command line options. */
 
   if (gsad_port_string)
     {
@@ -2734,7 +2669,7 @@ main (int argc, char **argv)
         }
     }
 
-  /* Register the cleanup function */
+  /* Register the cleanup function. */
 
   if (atexit (&gsad_cleanup))
     {
@@ -2742,7 +2677,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  /* Register the signal handlers */
+  /* Register the signal handlers. */
 
   if (signal (SIGTERM, handle_sigterm) == SIG_ERR   /* RATS: ignore, only one function per signal */
       || signal (SIGINT, handle_sigint) == SIG_ERR  /* RATS: ignore, only one function per signal */
