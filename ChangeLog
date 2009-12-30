@@ -1,3 +1,8 @@
+2009-12-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/help/tasks.htm4: Added information to
+	status "Stopped".
+
 2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/html/help/configure_agents.htm4,

@@ -86,7 +86,9 @@ the essential aspects of each.
         </div>
       </td><td>
         The last scan for this task was aborted by the user. The newest
-        report might be incomplete.
+        report might be incomplete. Also, this status is set in cases
+        where the task was aborted due to other arbitrary circumstances
+        such as power outage. 
       </td></tr>
       <tr><td valign="top">
         <div class="progressbar_box" title="Internal Error">
