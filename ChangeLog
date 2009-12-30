@@ -1,3 +1,10 @@
+2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt: Adjusted todo, as check for libmicrohttpd is already
+	done.
+
+	* src/CMakeLists.txt: Declared libraries as static.
+
 2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/help/contents.htm4: Add a "you".

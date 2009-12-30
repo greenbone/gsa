@@ -46,10 +46,12 @@ add_library (gsad_base STATIC gsad_base.c)
 target_link_libraries (gsad_base ${LIBS_LIBRARIES})
 
 add_library (gsad_omp STATIC gsad_omp.c)
+set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 target_link_libraries (gsad_omp ${LIBS_LIBRARIES})
 set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 
 add_library (gsad_oap STATIC gsad_oap.c)
+set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 target_link_libraries (gsad_oap ${LIBS_LIBRARIES})
 set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
 
