@@ -64,7 +64,7 @@ only correct entries will be used and the rest will be ignored.
 <h2>Targets</h2>
 
 <p>
-This table provides on overview on all configured
+This table provides an overview of all configured
 targets. The complete contents of the target entries
 are shown (name, comment and hosts).
 </p>

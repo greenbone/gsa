@@ -9,7 +9,7 @@ m4_include(`header.m4')
 <h1>Tasks</h1>
 
 <p>
-This table provides on overview on all configured
+This table provides an overview of all configured
 <a href="glossary.html#task">tasks</a> and summarizes
 the essential aspects of each.
 </p>

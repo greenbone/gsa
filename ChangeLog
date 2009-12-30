@@ -1,5 +1,13 @@
 2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/html/help/configure_agents.htm4,
+	src/html/help/configure_credentials.htm4,
+	src/html/help/configure_targets.htm4,
+	src/html/help/configure_users.htm4,
+	src/html/help/tasks.htm4: Fixed typo.
+
+2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* CMakeLists.txt: Adjusted todo, as check for libmicrohttpd is already
 	done.
 
