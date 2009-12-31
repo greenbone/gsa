@@ -195,6 +195,7 @@ init_validator ()
                          "|(get_target)"
                          "|(get_targets)"
                          "|(get_users)"
+                         "|(test_escalator)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -1951,6 +1952,9 @@ exec_omp_get (struct MHD_Connection *connection)
 
   else if (!strcmp (cmd, "get_settings"))
     return get_settings_oap (credentials, sort_field, sort_order);
+
+  else if ((!strcmp (cmd, "test_escalator")) && (name != NULL))
+    return test_escalator_omp (credentials, name, sort_field, sort_order);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,

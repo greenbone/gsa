@@ -1816,14 +1816,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">Address</td>
+                  <td width="100">To Address</td>
                   <td>
-                    <input type="text" name="method_data:address" size="30" maxlength="400"/>
+                    <input type="text" name="method_data:to_address" size="30" maxlength="400"/>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">Message</td>
+                  <td width="100">From Address</td>
+                  <td>
+                    <input type="text" name="method_data:from_address" size="30" maxlength="400"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="100">Format</td>
                   <td>
                     <table>
                       <tr>
@@ -1912,6 +1919,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     TEST_ESCALATOR_RESPONSE -->
+
+<xsl:template match="test_escalator_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Test Escalator</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     ESCALATOR -->
 
 <xsl:template match="escalator">
@@ -1950,8 +1971,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="method/text()"/>
       <xsl:choose>
-        <xsl:when test="method/text()='Email' and string-length(method/data[name='address']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="method/data[name='address']/text()"/>)
+        <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
+          <br/>(To <xsl:value-of select="method/data[name='to_address']/text()"/>)
         </xsl:when>
       </xsl:choose>
     </td>
@@ -1973,6 +1994,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_escalator&amp;name={name}"
          title="Escalator Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/omp?cmd=test_escalator&amp;name={name}"
+         title="Test Escalator" style="margin-left:3px;">
+        <img src="/img/start.png" border="0" alt="Test"/>
       </a>
     </td>
   </tr>
@@ -2019,14 +2044,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Method:</td>
+          <td valign="top">Method:</td>
           <td>
-            <xsl:value-of select="method/text()"/>
-            <xsl:choose>
-              <xsl:when test="method/text()='Email' and string-length(method/data[name='address']/text()) &gt; 0">
-                (<xsl:value-of select="method/data[name='address']/text()"/>)
-              </xsl:when>
-            </xsl:choose>
+            <table>
+              <tr class="odd">
+                <td colspan="3">
+                  <xsl:value-of select="method/text()"/>
+                </td>
+              </tr>
+              <xsl:choose>
+                <xsl:when test="method/text()='Email'">
+                  <tr>
+                    <td width="45"></td>
+                    <td>To address:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='to_address']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='to_address']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>From address:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='from_address']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='from_address']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>Format:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="method/data[name='notice']/text() = '0'">
+                          Summary (can include vulnerability details)
+                        </xsl:when>
+                        <xsl:otherwise>
+                          Simple notice
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
+              </xsl:choose>
+            </table>
           </td>
         </tr>
       </table>
@@ -2082,6 +2148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_escalator_response"/>
   <xsl:apply-templates select="create_escalator_response"/>
+  <xsl:apply-templates select="test_escalator_response"/>
   <xsl:call-template name="html-create-escalator-form">
     <xsl:with-param
       name="lsc-credentials"

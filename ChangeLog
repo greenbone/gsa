@@ -1,3 +1,23 @@
+2009-12-31  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add test escalator buttons to the escalators page.  Add "From
+	Address" to escalator email input.
+
+	* src/gsad_omp.c (get_escalators_xml, test_escalator_omp): New functions.
+	(get_escalators_omp): Call get_escalators_xml.
+
+	* src/gsad_omp.h: Add header.
+
+	* src/gsad.c (init_validator): Add test_escalator command.
+	(exec_omp_get): Handle command test_escalator.
+
+	* src/html/src/omp.xsl (html-create-escalator-form): Add "From
+	Address" field.  Rename "Message" to "Format".
+	(escalator): Add test button.  Add "To" to before address.
+	(test_escalator_response): New template.
+	(escalator mode=details): Add from address.
+	(get_escalators): Apply test_escalator_response.
+
 2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Updated help texts.

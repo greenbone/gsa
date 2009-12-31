@@ -1868,6 +1868,47 @@ get_escalator_omp (credentials_t * credentials, const char * name,
 }
 
 /**
+ * @brief Get all escalators, reading the result into a string.
+ *
+ * @param[in]   session      GNUTLS session on success.
+ * @param[out]  xml          String.
+ * @param[in]   sort_field   Field to sort on, or NULL.
+ * @param[in]   sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation on error, NULL on success.
+ */
+char *
+get_escalators_xml (gnutls_session_t *session, GString *xml,
+                    const char *sort_field, const char *sort_order)
+{
+  entity_t entity;
+
+  if (openvas_server_sendf (session,
+                            "<get_escalators"
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting escalators list. "
+                         "The current list of escalators is not available. "
+                         "Diagnostics: Failure to send command to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  entity = NULL;
+  if (read_entity_and_string (session, &entity, &xml))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting escalators list. "
+                         "The current list of escalators is not available. "
+                         "Diagnostics: Failure to receive response from manager daemon.",
+                         "/omp?cmd=get_status");
+  free_entity (entity);
+
+  return NULL;
+}
+
+/**
  * @brief Get all escalators, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -1880,37 +1921,74 @@ char *
 get_escalators_omp (credentials_t * credentials, const char * sort_field,
                     const char * sort_order)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
+  char *ret;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting esalator list. "
+                         "An internal error occurred while getting escalator list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
 
   xml = g_string_new ("<get_escalators>");
 
-  /* Get the escalators. */
+  ret = get_escalators_xml (&session, xml, sort_field, sort_order);
+  if (ret)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return ret;
+    }
+
+  g_string_append (xml, "</get_escalators>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Test an escalator, get all escalators XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  name         Name of escalator.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+test_escalator_omp (credentials_t * credentials, const char * name,
+                    const char * sort_field, const char * sort_order)
+{
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  char *ret;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while testing an escalator. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_escalators");
+
+  xml = g_string_new ("<get_escalators>");
+
+  /* Test the escalator. */
 
   if (openvas_server_sendf (&session,
-                            "<get_escalators"
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
+                            "<test_escalator name=\"%s\"/>",
+                            name)
       == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalators list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while testing an escalator. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_targets");
     }
 
   entity = NULL;
@@ -1919,12 +1997,21 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalators list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while testing an escalator. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_targets");
     }
   free_entity (entity);
+
+  /* Get all escalators. */
+
+  ret = get_escalators_xml (&session, xml, sort_field, sort_order);
+  if (ret)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return ret;
+    }
 
   /* Cleanup, and return transformed XML. */
 
