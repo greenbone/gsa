@@ -1,5 +1,14 @@
 2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/html/src/omp.xsl: Link help from scanconfig details page.
+
+	* src/html/src/help/scanconfig_details.htm4: New.
+
+	* src/html/src/help/configure_scanconfigs.htm4: Slightly improved, link
+	to new help page.
+
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* ChangeLog: Corrected paths.
 
 	* src/html/src/help/configure_escalators.htm4: New.

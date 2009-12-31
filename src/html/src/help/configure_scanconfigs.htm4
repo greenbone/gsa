@@ -120,7 +120,7 @@ scan configurations.
 <h3>Actions</h3>
 
 <p>
-For Scan Configurations these are available.
+For Scan Configurations the following actions are available.
 </p>
 
 <h4>Delete Scan Config</h4>
@@ -152,7 +152,7 @@ such as the selected NVTs and applied settings.
 A Scan Config can be modified if it is not currently in use by a task.
 A click on the edit icon
 <img src="/img/edit.png" alt="Edit" title="Edit" />
-will open the Scan Config Details dialog with details on the configuration
+will open the <a href="scanconfig_details.html">Scan Config Details</a> dialog with details on the configuration
 such as the selected NVTs and applied settings and allow modifications of it.
 If the Scan Config is currently in use by a task, the icon will appear greyed
 out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.

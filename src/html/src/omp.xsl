@@ -3336,14 +3336,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-config-table">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">
   <xsl:choose>
     <xsl:when test="edit">
-      <div class="gb_window_part_center">Edit Scan Config Details</div>
+      Edit Scan Config Details
     </xsl:when>
     <xsl:otherwise>
-      <div class="gb_window_part_center">Scan Config Details</div>
+      Scan Config Details
+      <a href="/help/scanconfig_details.html"
+         title="Help: Scan Configs Details (Scan Configs)">
+      <img src="/img/help.png"/>
+      </a>
     </xsl:otherwise>
   </xsl:choose>
+  </div>
   <div class="gb_window_part_content">
     <xsl:variable name="config" select="get_configs_response/config"/>
     <div style="float:right;">
