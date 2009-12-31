@@ -1,5 +1,13 @@
 2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Updated help texts.
+
+	* src/html/src/configure_agents.htm4,
+	src/html/src/configure_credentials.htm4,
+	src/html/src/configure_targets.htm4: Updated.
+
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* src/html/src/omp.xsl: Link help from scanconfig details page.
 
 	* src/html/src/help/scanconfig_details.htm4: New.

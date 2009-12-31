@@ -36,12 +36,19 @@ The list of agents will be updated.
   <td>Alphanumeric</td>
   <td>WinSLAD</td>
 </tr>
-<tr class="odd">
+<tr class="even">
   <td>Comment</td>
   <td>no</td>
   <td>40</td>
   <td>Alphanumeric</td>
   <td>This agent collects several plugins.</td>
+</tr>
+<tr class="odd">
+  <td>Installer</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>File</td>
+  <td>Upload the agent tool.</td>
 </tr>
 <!-- TODO: installer, howto_install, howto_us -->
 </table>
