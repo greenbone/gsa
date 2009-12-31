@@ -24,4 +24,29 @@ that result from the same
 <a href="/help/glossary.html#task">task</a>.
 </p>
 
+<h2>Download a report</h2>
+
+<p>
+To download the currently shown report, the format can be chosen.
+The download will start shortly after a click on the "Download" button.
+</p>
+
+<h2>Result Sorting</h2>
+
+<p>
+Results shown on the page can be sorted either by the port number or by threat
+level, and ascending or descending.
+The sort oder is changed by clicking on the respective text (e.g.
+"threat ascending").
+</p>
+
+<h2>Result Filtering</h2>
+
+<p>
+A checkbox for each threat level (High, Medium, Low and Log) can be ticked to
+include results of the respective thread level in the shown report or unticked
+to exclude these issues from the shown report.
+The list of results is updated after a click on the "Apply" button.
+</p>
+
 m4_include(`footer.m4')

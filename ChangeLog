@@ -1,3 +1,15 @@
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* ChangeLog: Corrected paths.
+
+	* src/html/src/help/configure_escalators.htm4: New.
+
+	* src/html/src/help/configure_scanconfigs.htm4,
+	src/html/src/help/glossary.htm4,
+	src/html/src/help/new_task.htm4,
+	src/html/src/help/tasks.htm4,
+	src/html/src/help/view_report.htm4: Updated new and changed options.
+
 2009-12-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/help/tasks.htm4: Added information to
@@ -5,11 +17,11 @@
 
 2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
-	* src/html/help/configure_agents.htm4,
-	src/html/help/configure_credentials.htm4,
-	src/html/help/configure_targets.htm4,
-	src/html/help/configure_users.htm4,
-	src/html/help/tasks.htm4: Fixed typo.
+	* src/html/src/help/configure_agents.htm4,
+	src/html/src/help/configure_credentials.htm4,
+	src/html/src/help/configure_targets.htm4,
+	src/html/src/help/configure_users.htm4,
+	src/html/src/help/tasks.htm4: Fixed typo.
 
 2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 

@@ -8,7 +8,7 @@ m4_include(`header.m4')
 <h1>New task</h1>
 <a name="newtask"></a>
 <p>
-For creating a new <a href="/help/glossary.html#task">task</a>
+To create a new <a href="/help/glossary.html#task">task</a>
 you have to provide the following elements:
 </p>
 
@@ -27,7 +27,7 @@ you have to provide the following elements:
   <td>Alphanumeric</td>
   <td>All Windows desktops in-depth</td>
 </tr>
-<tr>
+<tr class="even">
   <td>Scan Type</td>
   <td>yes</td>
   <td>---</td>
@@ -43,6 +43,15 @@ you have to provide the following elements:
   <td>One of the
       <a href="/help/configure_targets.html">configured targets</a>.</td>
   <td>The Windows Desktops</td>
+</tr>
+<tr class="even">
+  <td>Escalator (optional)</td>
+  <td>no</td>
+  <td>---</td>
+  <td>One of the
+      <a href="/help/configure_escalators.html">configured escalators</a>.
+  </td>
+  <td>EmailFinished</td>
 </tr>
 </table>
 

@@ -11,6 +11,11 @@ m4_include(`header.m4')
 <p>
 This information dialog lists name, status and number of reports for
 the task for which the report list is shown below.
+It also lists the <a href="glossary.html#scanconfig">Scan Config</a>,
+<a href="glossary.html#escalator">Escalator</a> and <a href="glossary.html#target">Target</a> for the shown report, if
+any were chosen. Information about the chosen Scan Config, Escalator or
+Target is accessible by clicking on the respective items name.
+
 </p>
 
 <a name="reports"></a>

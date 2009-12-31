@@ -19,6 +19,17 @@ definitions of these
 terms as they are used in GSA.
 </p>
 
+
+<a name="escalator"></a>
+<h2>Escalator</h2>
+
+<p>
+An escalator is an action that can be triggered at certain events.
+Usually this means notification, e.g. via e-mail in case of
+new found vulnerabilities.
+</p>
+
+
 <a name="nvt"></a>
 <h2>Network Vulnerability Test (NVT)</h2>
 

@@ -52,11 +52,13 @@ only correct entries will be used and the rest will be ignored.
   <td>All-inclusive scan which might consume quite some time.</td>
 </tr>
 <tr class="odd">
-  <td>Import config file</td>
+  <td>Base</td>
   <td>yes</td>
   <td>---</td>
-  <td>A openvasrc scope configuration file of OpenVAS-Client</td>
-  <td>~/.openvas/mytask/myscope/openvasrc<br>
+  <td>A predefined base scan configuration or <br>
+      an scope configuration file of OpenVAS-Client (openvasrc)</td>
+  <td>Full and Fast<br>
+      ~/.openvas/mytask/myscope/openvasrc<br>
       ~/.openvas/.Servers/myserver/mytask/openvasrc</td>
 </tr>
 </table>
@@ -142,6 +144,18 @@ Issueing the details icon
 <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
 will open the Scan Config Details dialog to provide details on the configuration
 such as the selected NVTs and applied settings.
+</p>
+
+<h4>Edit Scan Config</h4>
+
+<p>
+A Scan Config can be modified if it is not currently in use by a task.
+A click on the edit icon
+<img src="/img/edit.png" alt="Edit" title="Edit" />
+will open the Scan Config Details dialog with details on the configuration
+such as the selected NVTs and applied settings and allow modifications of it.
+If the Scan Config is currently in use by a task, the icon will appear greyed
+out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.
 </p>
 
 m4_include(`footer.m4')

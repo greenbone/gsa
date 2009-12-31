@@ -211,6 +211,15 @@ the essential aspects of each.
 </tr>
 </table>
 
+<a name="sorting"></a>
+<h3>Sorting</h3>
+
+The table can be sorted either by the Task name or by the Status column.
+Therefore click on the descending <img src="/img/descending.png" alt="Sort descending" title="Sort descending" />
+or ascending <img src="/img/ascending.png" alt="Sort ascending" title="Sort ascending" /> icon.
+The icon of the current choice will appear greyed out <img src="/img/ascending_inactive.png" alt="Current sort ascending" title="Current sort ascending" />, <img src="/img/descending_inactive.png" alt="Current sort descending" title="Current sort descending" />.
+The list will be updated immediately.
+
 <a name="actions"></a>
 <h3>Actions</h3>
 
