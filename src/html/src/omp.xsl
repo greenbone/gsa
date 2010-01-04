@@ -3700,6 +3700,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
+      <a href="/omp?cmd=export_config&amp;name={name}"
+         title="Export Scan Config XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

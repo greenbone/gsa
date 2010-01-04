@@ -178,6 +178,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(export_config)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -1842,6 +1843,10 @@ exec_omp_get (struct MHD_Connection *connection)
   else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 1);
+
+  else if ((!strcmp (cmd, "export_config")) && (name != NULL))
+    return export_config_omp (credentials, name, &content_type,
+                              &content_disposition, &response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
            && ((name == NULL && agent_format == NULL)

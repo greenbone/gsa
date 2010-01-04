@@ -3421,6 +3421,105 @@ delete_config_omp (credentials_t * credentials, const char *config_name)
 }
 
 /**
+ * @brief Export a config.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   name                 Name of report.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content dispositions return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Config XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_config_omp (credentials_t * credentials, const char *name,
+                   char **content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  GString *xml;
+  entity_t entity;
+  entity_t config_entity;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL;
+
+  *content_length = 0;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a config. "
+                         "The config could not be delivered. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_configs_response>");
+
+  if (name == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Scan Config"));
+  else
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_configs"
+                                " name=\"%s\""
+                                //" nvts=\"1\""
+                                " families=\"1\""
+                                " preferences=\"1\"/>",
+                                name)
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a config. "
+                               "The config could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &content))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a config. "
+                               "The config could not be delivered. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+
+      config_entity = entity_child (entity, "config");
+      if (config_entity != NULL)
+        {
+          *content_type = g_strdup ("application/xml");
+          *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
+                                                  name);
+          *content_length = strlen (content);
+          free_entity (entity);
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return content;
+        }
+      else
+        {
+          free (content);
+          free_entity (entity);
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a config. "
+                               "The config could not be delivered. "
+                               "Diagnostics: Failure to receive config from manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+    }
+
+  g_string_append (xml, "</get_configs_response>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Delete report, get task status, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
