@@ -208,6 +208,7 @@ init_validator ()
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,40}$");
+  openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
@@ -242,6 +243,28 @@ init_validator ()
   openvas_validator_alias (validator, "level_medium", "boolean");
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
+}
+
+/**
+ * @brief Get data for an escalator.
+ *
+ * @param[out]  data  Data.
+ * @param[out]  name  Name of element.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static gchar *
+escalator_data (GArray *data, const char *name)
+{
+  int index = 0;
+  gchar *element;
+
+  if (data)
+    while ((element = g_array_index (data, gchar*, index++)))
+      if (strcmp (element, name) == 0)
+        return element + strlen (element) + 1;
+
+  return 0;
 }
 
 /**
@@ -1306,6 +1329,28 @@ exec_omp_post (credentials_t * credentials,
         {
           free (con_info->req_parms.method);
           con_info->req_parms.method = NULL;
+        }
+      else if (strcasecmp (con_info->req_parms.method, "Email") == 0)
+        {
+          char *to_address;
+          to_address = escalator_data (con_info->req_parms.method_data,
+                                       "to_address");
+          if (openvas_validate (validator, "email", to_address))
+            {
+              free (con_info->req_parms.method);
+              con_info->req_parms.method = NULL;
+            }
+          else
+            {
+              gchar *from_address;
+              from_address = escalator_data (con_info->req_parms.method_data,
+                                             "from_address");
+              if (openvas_validate (validator, "email", from_address))
+                {
+                  free (con_info->req_parms.method);
+                  con_info->req_parms.method = NULL;
+                }
+            }
         }
       con_info->response =
         create_escalator_omp (credentials, con_info->req_parms.name,

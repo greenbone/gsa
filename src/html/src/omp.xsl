@@ -1818,14 +1818,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td width="45"></td>
                   <td width="100">To Address</td>
                   <td>
-                    <input type="text" name="method_data:to_address" size="30" maxlength="400"/>
+                    <input type="text" name="method_data:to_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
                   <td width="100">From Address</td>
                   <td>
-                    <input type="text" name="method_data:from_address" size="30" maxlength="400"/>
+                    <input type="text" name="method_data:from_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr>

@@ -1,3 +1,12 @@
+2009-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (init_validator): Add email rule.
+	(escalator_data): New function.
+	(exec_omp_post): Check email addresses.
+
+	* src/html/src/omp.xsl (html-create-escalator-form): Match email length to
+	validator.
+
 2009-12-31  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add test escalator buttons to the escalators page.  Add "From
