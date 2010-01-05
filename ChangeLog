@@ -1,5 +1,10 @@
 2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* CMakeLists.txt: Corrected version check for libopenvas, required
+	version is now 3.0.1.
+
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* CMakeLists.txt: Added clumsy libopenvas required version check and
 	TODO regarding possible improvements.
 
