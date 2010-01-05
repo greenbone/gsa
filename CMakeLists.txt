@@ -36,41 +36,41 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 OLD)
 endif (POLICY CMP0005)
 
-SET (CMAKE_BUILD_TYPE debug)
+set (CMAKE_BUILD_TYPE debug)
 
 ## Check existence required tools
 
-SET (MANDATORY_TOOL_MISSING FALSE)
+set (MANDATORY_TOOL_MISSING FALSE)
 
-FIND_PROGRAM(PATH_TO_PKGCONFIG pkg-config DOC "pkg-config program to retrieve "
+find_program (PATH_TO_PKGCONFIG pkg-config DOC "pkg-config program to retrieve "
                         "information about installed libraries in the system.")
 
-FIND_PROGRAM(PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
+find_program (PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
                         " to retrieve information about installed"
                         " openvas-libraries in the system.")
 
 ## TODO this check is obsolete with the FindPkgConfig module (see below,
 ## pkg_check_module sets OKG_CONFIG_FOUND)
-MESSAGE(STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
-IF(NOT PATH_TO_PKGCONFIG)
-  SET(MANDATORY_TOOL_MISSING TRUE)
-ENDIF(NOT PATH_TO_PKGCONFIG)
+message (STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
+if (NOT PATH_TO_PKGCONFIG)
+  set (MANDATORY_TOOL_MISSING TRUE)
+endif (NOT PATH_TO_PKGCONFIG)
 
-MESSAGE(STATUS "Looking for libopenvas-config... ${PATH_TO_LIBOPENVASCONFIG}")
-IF(NOT PATH_TO_LIBOPENVASCONFIG)
-  SET(MANDATORY_TOOL_MISSING TRUE)
-ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
+message (STATUS "Looking for libopenvas-config... ${PATH_TO_LIBOPENVASCONFIG}")
+if (NOT PATH_TO_LIBOPENVASCONFIG)
+  set (MANDATORY_TOOL_MISSING TRUE)
+endif (NOT PATH_TO_LIBOPENVASCONFIG)
 
-IF(MANDATORY_TOOL_MISSING)
-  IF(NOT PATH_TO_PKGCONFIG)
-    MESSAGE("The pkg-config tool is required.")
-  ENDIF(NOT PATH_TO_PKGCONFIG)
-  IF(NOT PATH_TO_LIBOPENVASCONFIG)
-     MESSAGE("The libopenvas-config tool is required (part of openvas-libraries).")
-  ENDIF(NOT PATH_TO_LIBOPENVASCONFIG)
-  MESSAGE(FATAL_ERROR "One or more tools or libraries could not be found on "
+if (MANDATORY_TOOL_MISSING)
+  if (NOT PATH_TO_PKGCONFIG)
+    message ("The pkg-config tool is required.")
+  endif (NOT PATH_TO_PKGCONFIG)
+  if (NOT PATH_TO_LIBOPENVASCONFIG)
+     message ("The libopenvas-config tool is required (part of openvas-libraries).")
+  endif (NOT PATH_TO_LIBOPENVASCONFIG)
+  message (FATAL_ERROR "One or more tools or libraries could not be found on "
                       "your system. Please check the logs above.")
-ENDIF(MANDATORY_TOOL_MISSING)
+endif (MANDATORY_TOOL_MISSING)
 
 # TODO: Check for (optional) rats, flawfinder, splint, doxygen.
 
