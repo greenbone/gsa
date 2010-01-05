@@ -196,6 +196,7 @@ init_validator ()
                          "|(get_target)"
                          "|(get_targets)"
                          "|(get_users)"
+                         "|(import_config)"
                          "|(test_escalator)"
                          "|(save_config)"
                          "|(save_config_family)"
@@ -227,7 +228,7 @@ init_validator ()
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  openvas_validator_add (validator, "rcfile",     NULL);
+  openvas_validator_add (validator, "xml_file",   NULL);
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
@@ -311,7 +312,7 @@ struct gsad_connection_info
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
     char *levels;        ///< Value of "levels" parameter.
-    char *rcfile;        ///< Value of "rcfile" parameter.
+    char *xml_file;      ///< Value of "xml_file" parameter.
     char *role;          ///< Value of "role" parameter.
     char *submit;        ///< Value of "submit" parameter.
     char *hosts;         ///< Value of "hosts" parameter.
@@ -486,7 +487,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.method);
   free (con_info->req_parms.scanconfig);
   free (con_info->req_parms.scantarget);
-  free (con_info->req_parms.rcfile);
+  free (con_info->req_parms.xml_file);
   free (con_info->req_parms.role);
   free (con_info->req_parms.submit);
   free (con_info->req_parms.hosts);
@@ -897,24 +898,24 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
-      if (!strcmp (key, "rcfile"))
+      if (!strcmp (key, "xml_file"))
         {
-          if (con_info->req_parms.rcfile)
+          if (con_info->req_parms.xml_file)
             {
-              int prevsize = strlen (con_info->req_parms.rcfile);
-              con_info->req_parms.rcfile =
-                realloc (con_info->req_parms.rcfile, prevsize + size + 1);
-              memcpy (&con_info->req_parms.rcfile[prevsize], (char *) data,
+              int prevsize = strlen (con_info->req_parms.xml_file);
+              con_info->req_parms.xml_file =
+                realloc (con_info->req_parms.xml_file, prevsize + size + 1);
+              memcpy (&con_info->req_parms.xml_file[prevsize], (char *) data,
                       size);
-              con_info->req_parms.rcfile[size + prevsize] = 0;
+              con_info->req_parms.xml_file[size + prevsize] = 0;
               con_info->answercode = MHD_HTTP_OK;
               return MHD_YES;
             }
           else
             {
-              con_info->req_parms.rcfile = malloc (size + 1);
-              memcpy ((char *) con_info->req_parms.rcfile, (char *) data, size);
-              con_info->req_parms.rcfile[size] = 0;
+              con_info->req_parms.xml_file = malloc (size + 1);
+              memcpy ((char *) con_info->req_parms.xml_file, (char *) data, size);
+              con_info->req_parms.xml_file[size] = 0;
               con_info->answercode = MHD_HTTP_OK;
               return MHD_YES;
             }
@@ -1519,7 +1520,6 @@ exec_omp_post (credentials_t * credentials,
       con_info->response =
         create_config_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.comment,
-                           con_info->req_parms.rcfile,
                            con_info->req_parms.base);
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
@@ -1529,6 +1529,11 @@ exec_omp_post (credentials_t * credentials,
                                            con_info->req_parms.sort_field,
                                            con_info->req_parms.sort_order,
                                            "");
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "import_config"))
+    {
+      con_info->response =
+        import_config_omp (credentials, con_info->req_parms.xml_file);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {

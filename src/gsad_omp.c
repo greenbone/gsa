@@ -2422,21 +2422,18 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  name         Name of new config.
  * @param[in]  comment      Comment on new config.
- * @param[in]  rcfile       RC for new config as a string.
- * @param[in]  base         What to use as base for new config: "file" for
- *                          rcfile, "full" for "Full and fast".
+ * @param[in]  base         Name of config to use as base for new config.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_config_omp (credentials_t * credentials, char *name, char *comment,
-                   char *rcfile, const char *base)
+                   const char *base)
 {
   entity_t entity;
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
-  gchar *rc_encoded = NULL;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2449,52 +2446,10 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
 
   if (name == NULL || comment == NULL || base == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Scan Config"));
-  else if (strcmp (base, "file") == 0)
-    {
-      /* Create the config. */
-
-      rc_encoded = g_base64_encode ((guchar *) rcfile, strlen (rcfile));
-      if (openvas_server_sendf (&session,
-                                "<create_config>"
-                                "<name>%s</name>"
-                                "<rcfile>%s</rcfile>"
-                                "%s%s%s"
-                                "</create_config>",
-                                name,
-                                rc_encoded,
-                                comment ? "<comment>" : "",
-                                comment ? comment : "",
-                                comment ? "</comment>" : "") == -1)
-        {
-          g_free (rc_encoded);
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new config. "
-                               "No new config was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs");
-        }
-      g_free (rc_encoded);
-
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new config. "
-                               "It is unclear whether the config has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_configs");
-        }
-      free_entity (entity);
-    }
   else
     {
       /* Create the config. */
 
-      rc_encoded = g_base64_encode ((guchar *) rcfile, strlen (rcfile));
       if (openvas_server_sendf (&session,
                                 "<create_config>"
                                 "<name>%s</name>"
@@ -2507,7 +2462,6 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                                 comment ? comment : "",
                                 comment ? "</comment>" : "") == -1)
         {
-          g_free (rc_encoded);
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2516,7 +2470,6 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                                "Diagnostics: Failure to send command to manager daemon.",
                                "/omp?cmd=get_configs");
         }
-      g_free (rc_encoded);
 
       entity = NULL;
       if (read_entity_and_string (&session, &entity, &xml))
@@ -2556,6 +2509,99 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new config. "
+                           "The new config was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</commands_response>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Import config, get all configs, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  xml_file     Config XML for new config.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+import_config_omp (credentials_t * credentials, char *xml_file)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  GString *xml = NULL;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while importing a config. "
+                         "No new config was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_configs");
+
+  xml = g_string_new ("<commands_response>");
+
+  /* Create the config. */
+
+  if (openvas_server_sendf (&session,
+                            "<create_config>"
+                            "%s"
+                            "</create_config>",
+                            xml_file)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a config. "
+                           "No new config was created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a config. "
+                           "It is unclear whether the config has been created or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+  free_entity (entity);
+
+  /* Get all the configs. */
+
+  if (openvas_server_send (&session,
+                           "<get_configs"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a config. "
+                           "The new config was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a config. "
                            "The new config was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
@@ -3470,9 +3516,7 @@ export_config_omp (credentials_t * credentials, const char *name,
       if (openvas_server_sendf (&session,
                                 "<get_configs"
                                 " name=\"%s\""
-                                //" nvts=\"1\""
-                                " families=\"1\""
-                                " preferences=\"1\"/>",
+                                " export=\"1\"/>",
                                 name)
           == -1)
         {

@@ -1,3 +1,24 @@
+2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add XML config importing.  Remove RC file importing.
+
+	* src/gsad_omp.c (create_config_omp): Remove RC file handling.
+	(import_config_omp): New function.
+	(export_config_omp): Use GET_CONFIGS export attribute.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/gsad.c (init_validator): Add import_config command.  Remove rule
+	"rcfile".  Add rule "xml_file".
+	(struct req_parms): Remove rcfile.  Add xml_file.
+	(free_resources, serve_post, exec_omp_post): Remove rcfile handling.  Add
+	xml_file handling.
+	(exec_omp_get): Handle command import_config.
+
+	* src/html/src/omp.xsl (html-create-config-form): Remove RC import option.
+	(html-import-config-form): New template.
+	(get_configs_response): Call html-import-config-form.
+
 2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Added basic auto-refresh functionality for the tasks table.
@@ -33,11 +54,11 @@
 	* CMakeLists.txt: Added clumsy libopenvas required version check and
 	TODO regarding possible improvements.
 
-2009-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* CMakeLists.txt: Lowercased some cmake commands.
 
-2009-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add config exporting.
 
@@ -50,7 +71,7 @@
 
 	* src/html/src/omp.xsl (config): Add an export button.
 
-2009-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (init_validator): Add email rule.
 	(escalator_data): New function.

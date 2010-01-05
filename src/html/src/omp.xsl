@@ -2486,19 +2486,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Full and fast
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <input type="radio" name="base" value="file"/>
-                    Import config file
-                  </td>
-                  <td><input type="file" name="rcfile"/></td>
-                </tr>
               </table>
             </td>
           </tr>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Scan Config"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-import-config-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Import Scan Config
+      <a href="/help/configure_scanconfigs.html#newconfig"
+         title="Help: Configure Scan Configs (Import Scan Config)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="import_config"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">
+              Import XML config
+            </td>
+            <td><input type="file" name="xml_file"/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Import Scan Config"/>
             </td>
           </tr>
         </table>
@@ -3727,6 +3753,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_configs_response">
   <xsl:call-template name="html-create-config-form"/>
+  <xsl:call-template name="html-import-config-form"/>
   <xsl:call-template name="html-configs-table"/>
 </xsl:template>
 
