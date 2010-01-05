@@ -1,5 +1,30 @@
 2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Added basic auto-refresh functionality for the tasks table.
+
+	* src/gsad.c (init_validator): Added new "number" and refresh_interval
+	entries, sorted.
+	(exec_omp_post): Pass new parameter to get_status_omp.
+	(exec_omp_get): Minor formatting, read passed refresh_interval request
+	parameter, validate and pass it to get_status_omp.
+
+	* src/gsad_omp.c (get_nvt_details_omp): Added parameter and pass new
+	<autorefresh> element to the xsl transformation.
+	(create_lsc_credential_omp): Analogous to get_nvt_details_omp, allocate
+	GString only when needed.
+
+	* src/gsad_omp.h (get_nvt_details_omp): Adjusted header.
+
+	* src/html/src/gsad.xsl: Added handling of new <auto_refresh> element.
+
+	* src/html/src/omp.xsl: For the tasks table case, added a form to chose
+	the refresh interval. Added TODO about pre-selecting the selected value
+	after a refresh happened.
+
+	* src/html/make_html: Removed second newline at end of file.
+
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* CMakeLists.txt: Corrected version check for libopenvas, required
 	version is now 3.0.1.
 

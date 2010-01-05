@@ -686,15 +686,17 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
  * @param[in]  task_id      ID of task.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  refresh_interval Refresh interval (parsed to int).
  *
  * @return Result of XSL transformation.
  */
 char *
 get_status_omp (credentials_t * credentials, const char *task_id,
-                const char *sort_field, const char *sort_order)
+                const char *sort_field, const char *sort_order,
+                const char *refresh_interval)
 {
   entity_t entity;
-  char *text = NULL;
+  GString *xml = NULL;
   gnutls_session_t session;
   int socket;
 
@@ -744,9 +746,11 @@ get_status_omp (credentials_t * credentials, const char *task_id,
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
+  xml = g_string_new ("<get_status>");
+  if (read_entity_and_string (&session, &entity, &xml))
     {
       openvas_server_close (socket, session);
+      g_string_free (xml, TRUE);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
@@ -755,8 +759,14 @@ get_status_omp (credentials_t * credentials, const char *task_id,
     }
   free_entity (entity);
 
+  g_string_append (xml, "</get_status>");
+  if (refresh_interval && strcmp (refresh_interval, "")
+      && strcmp (refresh_interval, "0"))
+    g_string_append_printf (xml, "<autorefresh interval=\"%s\" />",
+                            refresh_interval);
+
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
@@ -966,7 +976,7 @@ get_lsc_credential_omp (credentials_t * credentials,
                         const char * sort_order)
 {
   entity_t entity;
-  GString *xml;
+  GString *xml = NULL;
   gnutls_session_t session;
   int socket;
 
@@ -976,8 +986,6 @@ get_lsc_credential_omp (credentials_t * credentials,
                          "The credential is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_lsc_credentials");
-
-  xml = g_string_new ("<get_lsc_credential>");
 
   /* Get the target. */
 
@@ -991,7 +999,6 @@ get_lsc_credential_omp (credentials_t * credentials,
                             sort_order ? sort_order : "ascending")
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a credential. "
@@ -1001,6 +1008,8 @@ get_lsc_credential_omp (credentials_t * credentials,
     }
 
   entity = NULL;
+  xml = g_string_new ("<get_lsc_credential>");
+
   if (read_entity_and_string (&session, &entity, &xml))
     {
       g_string_free (xml, TRUE);

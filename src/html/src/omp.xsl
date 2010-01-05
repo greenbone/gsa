@@ -42,6 +42,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-task-table">
+  <!-- TODO Access the chosen refresh interval and select that item in the
+       select box below by adding a "selected" parameter to the <option>
+       element.
+     <xsl:param name="manual_refresh_selected"></xsl:param> -->
+
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -52,9 +57,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <a href="/new_task.html" title="New Task">
        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
      </a>
-     <a href="/omp?cmd=get_status" title="Refresh">
-       <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
-     </a>
+     <!--div style="height:12px;"-->
+     <form style="display: inline" method="get" action="">
+       <input type="image" src="/img/refresh.png" alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
+       <input type="hidden" name="cmd" value="get_status"/>
+       <select style="font-size:12px;" name="refresh_interval" size="1">
+         <option value="0">Manual</option>
+         <option value="10">10 Sec.</option>
+         <option value="30">30 Sec.</option>
+         <option value="60">60 Sec.</option>
+       </select>
+     </form>
+     <!--/div-->
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">

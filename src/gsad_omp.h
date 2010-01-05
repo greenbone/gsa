@@ -48,7 +48,7 @@ char * abort_task_omp (credentials_t *, const char *);
 char * start_task_omp (credentials_t *, const char *);
 
 char * get_status_omp (credentials_t *, const char *, const char *,
-                       const char *);
+                       const char *, const char*);
 
 char * delete_report_omp (credentials_t *, const char *, const char *);
 char * get_report_omp (credentials_t *, const char *, const char *,

@@ -211,6 +211,7 @@ init_validator ()
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,40}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
+  openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
@@ -218,9 +219,9 @@ init_validator ()
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
   /** @todo Better regex. */
@@ -234,10 +235,12 @@ init_validator ()
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
 
-  openvas_validator_alias (validator, "scanconfig",   "name");
-  openvas_validator_alias (validator, "scantarget",   "name");
+
   openvas_validator_alias (validator, "base",         "name");
   openvas_validator_alias (validator, "escalator",    "name");
+  openvas_validator_alias (validator, "scanconfig",   "name");
+  openvas_validator_alias (validator, "scantarget",   "name");
+  openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "level_high",   "boolean");
@@ -1524,7 +1527,8 @@ exec_omp_post (credentials_t * credentials,
       con_info->response = get_status_omp (credentials,
                                            NULL,
                                            con_info->req_parms.sort_field,
-                                           con_info->req_parms.sort_order);
+                                           con_info->req_parms.sort_order,
+                                           "");
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
@@ -1629,18 +1633,19 @@ exec_omp_get (struct MHD_Connection *connection)
 {
   char *cmd = NULL;
   const char *agent_format = NULL;
-  const char *task_id = NULL;
-  const char *report_id = NULL;
-  const char *format = NULL;
+  const char *task_id      = NULL;
+  const char *report_id    = NULL;
+  const char *format       = NULL;
   const char *package_format = NULL;
-  const char *name = NULL;
-  const char *family = NULL;
+  const char *name         = NULL;
+  const char *family       = NULL;
   const char *first_result = NULL;
-  const char *max_results = NULL;
-  const char *oid = NULL;
-  const char *sort_field = NULL;
-  const char *sort_order = NULL;
-  const char *levels = NULL;
+  const char *max_results  = NULL;
+  const char *oid          = NULL;
+  const char *sort_field   = NULL;
+  const char *sort_order   = NULL;
+  const char *levels       = NULL;
+  const char *refresh_interval = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
   credentials_t *credentials = NULL;
 
@@ -1733,6 +1738,12 @@ exec_omp_get (struct MHD_Connection *connection)
       if (openvas_validate (validator, "sort_field", sort_field))
         sort_field = NULL;
 
+      refresh_interval = MHD_lookup_connection_value (connection,
+                                                MHD_GET_ARGUMENT_KIND,
+                                                "refresh_interval");
+      if (openvas_validate (validator, "refresh_interval", refresh_interval))
+        refresh_interval = NULL;
+
       sort_order = MHD_lookup_connection_value (connection,
                                                 MHD_GET_ARGUMENT_KIND,
                                                 "sort_order");
@@ -1809,7 +1820,7 @@ exec_omp_get (struct MHD_Connection *connection)
 
   else if ((!strcmp (cmd, "get_status")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
-    return get_status_omp (credentials, task_id, sort_field, sort_order);
+    return get_status_omp (credentials, task_id, sort_field, sort_order, refresh_interval);
 
   else if ((0 == strcmp (cmd, "delete_agent")) && (name != NULL))
     return delete_agent_omp (credentials, name);
@@ -1969,7 +1980,7 @@ exec_omp_get (struct MHD_Connection *connection)
     }
 
   else if (!strcmp (cmd, "get_status"))
-    return get_status_omp (credentials, NULL, sort_field, sort_order);
+    return get_status_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
 
   else if ((!strcmp (cmd, "get_target")) && (name != NULL))
     return get_target_omp (credentials, name, sort_field, sort_order);
