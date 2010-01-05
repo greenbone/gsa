@@ -1,3 +1,8 @@
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt: Added clumsy libopenvas required version check and
+	TODO regarding possible improvements.
+
 2009-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* CMakeLists.txt: Lowercased some cmake commands.

@@ -80,11 +80,40 @@ pkg_check_modules (LIBS REQUIRED libmicrohttpd>=0.4.2 libxml-2.0 glib-2.0
 
 pkg_check_modules (GSAD_LIBS REQUIRED libxslt gnutls)
 
-if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
+# TODO The version check of libopenvas will probably be required by other
+# modules, too (e.g. openvas-manager). Either
+# 1) Move to the next CMake version with built-in version comparison functions
+# 2) Use the pkg-config configuration file that kost provided when installing
+#    openvas-libraries
+# 3) Move following checks in an own CMake- module to reuse. Other parts of
+#    the various CMakeLists.txt could be moved in a common ("openvas") module,
+#    too.
+
+## Check version of libopenvas
+# Obtain libopenvas version number
+exec_program (libopenvas-config
+              ARGS --version
+              OUTPUT_VARIABLE LIBOPENVAS_VERSION)
+# Make a (per definition: semicolon separated) list of it
+string (REGEX REPLACE "\\." ";" LO_VER ${LIBOPENVAS_VERSION})
+list (GET LO_VER 0 LO_MAJOR_VER)
+list (GET LO_VER 1 LO_MINOR_VER)
+list (GET LO_VER 2 LO_PATCH_VER)
+set (LIBOPENVAS_SUFFICIENT TRUE)
+if (   ${LO_MAJOR_VER} LESS 3
+    OR ${LO_MINOR_VER} LESS 0
+    OR ${LO_PATCH_VER} LESS 3 )
+    message ("openvas-libraries version >= 3.0.1 not found.")
+    set (LIBOPENVAS_SUFFICIENT FALSE)
+endif (   ${LO_MAJOR_VER} LESS 3
+       OR ${LO_MINOR_VER} LESS 0
+       OR ${LO_PATCH_VER} LESS 3 )
+
+if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
   message (FATAL_ERROR "One or more reguired libraries was not found "
                        "(see message above), please install the missing "
                        "libraries and run cmake again.")
-endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
+endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
