@@ -1,4 +1,10 @@
-2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* CMakeLists.txt: Corrected libopenvas version check.
+
+	* ChangeLog: Corrected date.
+
+2010-01-05  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add XML config importing.  Remove RC file importing.
 

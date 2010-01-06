@@ -100,14 +100,17 @@ list (GET LO_VER 0 LO_MAJOR_VER)
 list (GET LO_VER 1 LO_MINOR_VER)
 list (GET LO_VER 2 LO_PATCH_VER)
 set (LIBOPENVAS_SUFFICIENT TRUE)
+# TODO Would like something like set (MIN_LO_VER "3" "0" "1")
+#      which would then make it easier to modify these. However, had serious
+#      issues with the conditionals, thus this clumsy implementation.
 if (   ${LO_MAJOR_VER} LESS 3
-    OR ${LO_MINOR_VER} LESS 0
-    OR ${LO_PATCH_VER} LESS 1 )
+    OR ${LO_MAJOR_VER} EQUAL 3 AND ${LO_MINOR_VER} LESS 0
+    OR ${LO_MAJOR_VER} EQUAL 3 AND ${LO_MINOR_VER} EQUAL 0 AND ${LO_PATCH_VER} LESS 1 )
     message ("openvas-libraries version >= 3.0.1 not found.")
     set (LIBOPENVAS_SUFFICIENT FALSE)
 endif (   ${LO_MAJOR_VER} LESS 3
-       OR ${LO_MINOR_VER} LESS 0
-       OR ${LO_PATCH_VER} LESS 1 )
+       OR ${LO_MAJOR_VER} EQUAL 3 AND ${LO_MINOR_VER} LESS 0
+       OR ${LO_MAJOR_VER} EQUAL 3 AND ${LO_MINOR_VER} EQUAL 0 AND ${LO_PATCH_VER} LESS 1 )
 
 if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
   message (FATAL_ERROR "One or more reguired libraries was not found "
