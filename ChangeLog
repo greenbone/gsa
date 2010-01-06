@@ -1,5 +1,10 @@
 2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/html/src/omp.xsl: Fixed TODO: pre-select the chosen refresh
+	interval in task overview table.
+
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* CMakeLists.txt: Corrected libopenvas version check.
 
 	* ChangeLog: Corrected date.
