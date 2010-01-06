@@ -2528,7 +2528,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Import Scan Config
-      <a href="/help/configure_scanconfigs.html#newconfig"
+      <a href="/help/configure_scanconfigs.html#importconfig"
          title="Help: Configure Scan Configs (Import Scan Config)">
         <img src="/img/help.png"/>
       </a>

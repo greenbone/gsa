@@ -1,5 +1,12 @@
 2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/html/src/help/configure_scanconfigs.htm4: Added help text about
+	import and export scan configs, removed text about importing openvasrc.
+
+	* src/html/src/omp.xsl: Link to new help section.
+
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Resolved compile issues on 64bit systems.
 
 	* src/gsad.c (serve_post): Cast size_t to int (.* format expects

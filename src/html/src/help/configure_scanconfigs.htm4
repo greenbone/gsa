@@ -23,12 +23,6 @@ Hit the button "Create Scan Config" to submit the new scan configuration.
 The list of scan configurations will be updated.
 </p>
 
-<p>
-Note on Import config file: a incorrect syntax inside this file
-will not necessarily be warned. When applied for a scan,
-only correct entries will be used and the rest will be ignored.
-</p>
-
 <table class="gbntable">
 <tr class="gbntablehead2">
   <td></td>
@@ -55,13 +49,28 @@ only correct entries will be used and the rest will be ignored.
   <td>Base</td>
   <td>yes</td>
   <td>---</td>
-  <td>A predefined base scan configuration or <br>
-      an scope configuration file of OpenVAS-Client (openvasrc)</td>
-  <td>Full and Fast<br>
-      ~/.openvas/mytask/myscope/openvasrc<br>
-      ~/.openvas/.Servers/myserver/mytask/openvasrc</td>
+  <td>A predefined base scan configuration</td>
+  <td>Empty, static and fast<br>
+      Full and Fast</td>
 </tr>
 </table>
+
+<a name="importconfig"></a>
+<h2>Import Scan Config</h2>
+
+<p>
+To import a scan configuration, select the configuration file and hit the
+"Import Scan Config" to submit the scan configuration.
+The list of scan configurations will be updated.
+Note that if the name of the scan configuration already exists in your system,
+a numeric suffix will be added to the name of the imported scan configuration.
+</p>
+
+<p>
+To create a file that can be imported (e.g. if you have multiple GSA running
+on different machines), refer to the <a href="#export">export action</a>.
+</p>
+
 
 <a name="scanconfigs"></a>
 <h2>Scan Configs</h2>
@@ -156,6 +165,19 @@ will open the <a href="scanconfig_details.html">Scan Config Details</a> dialog w
 such as the selected NVTs and applied settings and allow modifications of it.
 If the Scan Config is currently in use by a task, the icon will appear greyed
 out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.
+</p>
+
+<a name="export"></a>
+<h4>Export Scan Config XML</h4>
+
+<p>
+A Scan Config can be saved to file, e.g. for sharing or backup.
+A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
+will let you download a file describing this scan config.
+</p>
+
+<p>
+The file can later be imported by chosing to <a href="#importconfig">Import a Scan Config</a>.
 </p>
 
 m4_include(`footer.m4')
