@@ -3639,6 +3639,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="msg">
       <xsl:value-of select="@status_text"/>
     </xsl:with-param>
+    <xsl:with-param name="details">
+      Name of new config is '<xsl:value-of select="config/name"/>'.
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

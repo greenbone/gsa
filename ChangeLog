@@ -1,3 +1,8 @@
+2010-01-06  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (create_config_response): Pass config name in
+	result details.
+
 2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/html/src/omp.xsl: Fixed TODO: pre-select the chosen refresh
