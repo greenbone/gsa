@@ -1022,7 +1022,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
           condition_data = g_strdup_printf ("%s0%.*s",
                                             key + strlen ("condition_data:"),
-                                            size,
+                                            (int) size,
                                             data);
           condition_data[strlen (key + strlen ("condition_data:"))] = '\0';
 
@@ -1043,7 +1043,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
           event_data = g_strdup_printf ("%s0%.*s",
                                         key + strlen ("event_data:"),
-                                        size,
+                                        (int) size,
                                         data);
           event_data[strlen (key + strlen ("event_data:"))] = '\0';
 
@@ -1064,7 +1064,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
           method_data = g_strdup_printf ("%s0%.*s",
                                          key + strlen ("method_data:"),
-                                         size,
+                                         (int) size,
                                          data);
           method_data[strlen (key + strlen ("method_data:"))] = '\0';
 
