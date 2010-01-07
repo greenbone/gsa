@@ -194,6 +194,7 @@ init_validator ()
                          "|(get_settings)"
                          "|(get_status)"
                          "|(get_target)"
+                         "|(get_system_reports)"
                          "|(get_targets)"
                          "|(get_users)"
                          "|(import_config)"
@@ -238,6 +239,7 @@ init_validator ()
 
 
   openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "duration",     "number");
   openvas_validator_alias (validator, "escalator",    "name");
   openvas_validator_alias (validator, "scanconfig",   "name");
   openvas_validator_alias (validator, "scantarget",   "name");
@@ -1651,6 +1653,7 @@ exec_omp_get (struct MHD_Connection *connection)
   const char *sort_order   = NULL;
   const char *levels       = NULL;
   const char *refresh_interval = NULL;
+  const char *duration     = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
   credentials_t *credentials = NULL;
 
@@ -1744,10 +1747,16 @@ exec_omp_get (struct MHD_Connection *connection)
         sort_field = NULL;
 
       refresh_interval = MHD_lookup_connection_value (connection,
-                                                MHD_GET_ARGUMENT_KIND,
-                                                "refresh_interval");
+                                                      MHD_GET_ARGUMENT_KIND,
+                                                      "refresh_interval");
       if (openvas_validate (validator, "refresh_interval", refresh_interval))
         refresh_interval = NULL;
+
+      duration = MHD_lookup_connection_value (connection,
+                                              MHD_GET_ARGUMENT_KIND,
+                                              "duration");
+      if (openvas_validate (validator, "duration", duration))
+        duration = NULL;
 
       sort_order = MHD_lookup_connection_value (connection,
                                                 MHD_GET_ARGUMENT_KIND,
@@ -1986,6 +1995,9 @@ exec_omp_get (struct MHD_Connection *connection)
 
   else if (!strcmp (cmd, "get_status"))
     return get_status_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
+
+  else if ((!strcmp (cmd, "get_system_reports")))
+    return get_system_reports_omp (credentials, duration);
 
   else if ((!strcmp (cmd, "get_target")) && (name != NULL))
     return get_target_omp (credentials, name, sort_field, sort_order);
@@ -2360,6 +2372,45 @@ request_handler (void *cls, struct MHD_Connection *connection,
           res = gsad_newtask (credentials, NULL);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+          MHD_destroy_response (response);
+          return MHD_YES;
+        }
+
+      if (!strncmp (&url[0], "/system_report/",
+                    strlen ("/system_report/"))) /* flawfinder: ignore,
+                                                    it is a const str */
+        {
+          unsigned int res_len;
+          const char *duration;
+
+          duration = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "duration");
+          if (openvas_validate (validator, "duration", duration))
+            duration = NULL;
+
+          res = get_system_report_omp (credentials,
+                                       &url[0] + strlen ("/system_report/"),
+                                       duration,
+                                       &content_type,
+                                       &content_disposition,
+                                       &res_len);
+          if (res == NULL) return MHD_NO;
+          response = MHD_create_response_from_data (res_len, res,
+                                                    MHD_NO, MHD_YES);
+          if (content_type != NULL)
+            {
+              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                       content_type);
+              content_type = NULL;
+            }
+          if (content_disposition != NULL)
+            {
+              MHD_add_response_header (response, "Content-Disposition",
+                                       content_disposition);
+              content_disposition = NULL;
+            }
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
           MHD_destroy_response (response);
           return MHD_YES;

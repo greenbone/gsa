@@ -1,3 +1,21 @@
+2010-01-07  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add performance reports page.
+
+	* src/gsad_omp.c (get_system_reports_omp, get_system_report_omp): New
+	function.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/gsad.c (init_validator): Add get_system_reports command.  Add rule
+	"duration".
+	(exec_omp_get): Add get_system_reports command handling.
+	(request_handler): Add system report image response.
+
+	* src/html/src/omp.xsl (system_report, get_system_reports): New templates.
+
+	* src/html/header.m4, src/html/src/gsad.xsl: Add "Performance" menu item.
+
 2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/html/src/help/configure_scanconfigs.htm4: Added help text about

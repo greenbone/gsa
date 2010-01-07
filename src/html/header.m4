@@ -39,6 +39,7 @@
       <ul>
        <li><a href="/omp?cmd=get_status">Tasks</a></li>
        <li><a href="/new_task.html">New Task</a></li>
+       <li><a href="/omp?cmd=get_system_reports">Performance</a></li>
       </ul>
       </li>
       <li>Configuration

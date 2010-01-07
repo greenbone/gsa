@@ -3819,6 +3819,163 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     }
 }
 
+/**
+ * @brief Get all system reports, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]   duration    Duration of reports, in seconds.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_system_reports_omp (credentials_t * credentials, const char * duration)
+{
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the system reports. "
+                         "The current list of system reports is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_system_reports>");
+  g_string_append_printf (xml, "<duration>%s</duration>",
+                          duration ? duration : "86400");
+
+  /* Get the system reports. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_system_reports name=\"types\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the system reports. "
+                           "The current list of system reports is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the system reports. "
+                           "The current list of system reports is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_system_reports>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return system report image.
+ *
+ * @param[in]   credentials          Credentials of user issuing the action.
+ * @param[in]   url                  URL of report image.
+ * @param[in]   duration             Duration of report, in seconds.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content dispositions return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Image, or NULL.
+ */
+char *
+get_system_report_omp (credentials_t *credentials, const char *url,
+                       const char *duration, char **content_type,
+                       char **content_disposition, gsize *content_length)
+{
+  entity_t entity;
+  entity_t report_entity;
+  gnutls_session_t session;
+  int socket;
+  char name[501];
+
+  *content_length = 0;
+
+  if (url == NULL)
+    return NULL;
+
+  /* fan/report.png */
+  if (sscanf (url, "%500[^ /]./report.png", name) == 1)
+    {
+      if (manager_connect (credentials, &socket, &session))
+        return NULL;
+
+      if (openvas_server_sendf (&session,
+                                "<get_system_reports"
+                                " name=\"%s\" duration=\"%s\"/>",
+                                name,
+                                duration ? duration : "86400")
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return NULL;
+        }
+
+      entity = NULL;
+      if (read_entity (&session, &entity))
+        {
+          openvas_server_close (socket, session);
+          return NULL;
+        }
+
+      report_entity = entity_child (entity, "system_report");
+      if (report_entity == NULL)
+        {
+          free_entity (entity);
+          openvas_server_close (socket, session);
+          return NULL;
+        }
+
+      report_entity = entity_child (report_entity, "report");
+      if (report_entity == NULL)
+        {
+          free_entity (entity);
+          openvas_server_close (socket, session);
+          return NULL;
+        }
+      else
+        {
+          char *content_64 = entity_text (report_entity);
+          char *content = NULL;
+
+          if (content_64 && strlen (content_64))
+            {
+              content = (char *) g_base64_decode (content_64,
+                                                  content_length);
+
+#if 1
+              *content_type = g_strdup ("image/png");
+              //*content_disposition = g_strdup_printf ("attachment; filename=\"xxx.png\"");
+#else
+              g_free (content);
+              content = g_strdup ("helo");
+#endif
+            }
+
+          free_entity (entity);
+          openvas_server_close (socket, session);
+          return content;
+       }
+    }
+
+  return NULL;
+}
+
 
 /* Manager communication. */
 

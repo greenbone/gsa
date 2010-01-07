@@ -4006,6 +4006,102 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END REPORT DETAILS -->
 
+<!-- BEGIN SYSTEM REPORTS MANAGEMENT -->
+
+<xsl:template match="system_report" mode="image">
+  <tr>
+	<td>
+	  <h1><xsl:value-of select="title"/></h1>
+	</td>
+  </tr>
+  <tr>
+	<td>
+	  <img src="/system_report/{name}/report.png?duration={../../../../duration}"/>
+	</td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="system_report">
+  <xsl:variable name="duration" select="../../duration"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Performance
+      <a href="/help/performance.html"
+         title="Help: Performance">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <table>
+        <tr>
+          <td>
+            Reports span the last:
+          </td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="$duration='3600'">
+                hour
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={3600}">hour</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="$duration='86400'">
+                day
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={86400}">day</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="$duration='604800'">
+                week
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={604800}">week</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="$duration='2592000'">
+                month
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}">month</a>
+              </xsl:otherwise>
+            </xsl:choose>
+            |
+            <xsl:choose>
+              <xsl:when test="$duration='31536000'">
+                year
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}">year</a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <xsl:apply-templates select="report/system_report" mode="image"/>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_SYSTEM_REPORTS -->
+
+<xsl:template match="get_system_reports">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_system_reports_response/system_report"/>
+</xsl:template>
+
+<!-- END SYSTEM REPORTS MANAGEMENT -->
+
 <!-- GSAD_RESPONSE -->
 
 <xsl:template match="gsad_response">
