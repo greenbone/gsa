@@ -229,6 +229,8 @@ init_validator ()
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
+  /** @todo Because we fear injections, we're requiring weaker passwords! */
+  openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:], ;:\\./]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
@@ -1399,7 +1401,7 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.name = NULL;
         }
       if (openvas_validate (validator,
-                            "password",
+                            "lsc_password",
                             con_info->req_parms.password))
         {
           free (con_info->req_parms.password);

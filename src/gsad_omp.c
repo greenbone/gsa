@@ -805,6 +805,8 @@ create_lsc_credential_omp (credentials_t * credentials,
 
   if (name == NULL || comment == NULL || login == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
+  else if (type && strcmp (type, "gen") && password == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
   else
     {
       int ret;
