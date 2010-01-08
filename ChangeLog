@@ -1,5 +1,9 @@
 2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/help/performance.htm4: New file.
+
+2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_omp.c (create_lsc_credential_omp): Add check for password
 	validation failure.
 

@@ -1,0 +1,22 @@
+m4_define(`PAGE_TITLE', `Help: Performance')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_system_reports">Jump to dialog</a></div>
+&nbsp;<br />
+
+<a name="performance"></a>
+<h1>Performance</h1>
+
+<p>
+This page provides a system performance overview.
+</p>
+
+<p>
+A number of graphs summarize the performance of the hardware and
+operating system.  Initially the graphs summarize the past day of
+activity.  At the top of the dialog are links to other time periods,
+like the past hour and month.
+</p>
+
+m4_include(`footer.m4')
