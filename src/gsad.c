@@ -70,6 +70,11 @@
 #define DEFAULT_GSAD_PORT 443
 
 /**
+ * @brief Fallback GSAD port.
+ */
+#define DEFAULT_GSAD_REDIRECT_PORT 80
+
+/**
  * @brief Fallback Administrator port.
  */
 #define DEFAULT_OPENVAS_ADMINISTRATOR_PORT 9393
@@ -115,6 +120,11 @@ char *SERVER_ERROR =
  * @brief The handle on the embedded HTTP daemon.
  */
 struct MHD_Daemon *gsad_daemon;
+
+/**
+ * @brief Location for redirection server.
+ */
+gchar *redirect_location = NULL;
 
 /** @todo Ensure the accesses to these are thread safe. */
 
@@ -2205,10 +2215,86 @@ send_http_authenticate_header (struct MHD_Connection *connection,
   return ret;
 }
 
+#define MAX_HOST_LEN 1000
+
 /**
  * @brief HTTP request handler for GSAD.
  *
  * This routine is the callback request handler for microhttpd.
+ *
+ * @param[in]  cls              Not used for this callback.
+ * @param[in]  connection       Connection handle, e.g. used to send response.
+ * @param[in]  url              The URL requested.
+ * @param[in]  method           "GET" or "POST", others are disregarded.
+ * @param[in]  version          Not used for this callback.
+ * @param[in]  upload_data      Data used for POST requests.
+ * @param[in]  upload_data_size Size of upload_data.
+ * @param[out] con_cls          For exchange of connection-related data
+ *                              (here a struct gsad_connection_info).
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
+ */
+int
+redirect_handler (void *cls, struct MHD_Connection *connection,
+                  const char *url, const char *method,
+                  const char *version, const char *upload_data,
+                  size_t *upload_data_size, void **con_cls)
+{
+  gchar *location;
+  const char *host;
+  char name[MAX_HOST_LEN + 1];
+
+  /* Never respond on first call of a GET. */
+  if ((!strcmp (method, "GET")) && *con_cls == NULL)
+    {
+      struct gsad_connection_info *con_info;
+
+      // @todo what frees this?
+      con_info = calloc (1, sizeof (struct gsad_connection_info));
+      if (NULL == con_info)
+        return MHD_NO;
+
+      con_info->connectiontype = 2;
+
+      *con_cls = (void *) con_info;
+      return MHD_YES;
+    }
+
+  /* If called with undefined URL, abort request handler. */
+  if (&url[0] == NULL)
+    return MHD_NO;
+
+  /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
+  if (strcmp (method, "GET") && strcmp (method, "POST"))
+    /** @todo return MHD_NO;? */
+    send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+
+  /* Redirect every URL to the default file on the HTTPS port. */
+  host = MHD_lookup_connection_value (connection,
+                                      MHD_HEADER_KIND,
+                                      "Host");
+  if (host == NULL)
+    return MHD_NO;
+  /* host.name:port */
+  if (sscanf (host, "%" G_STRINGIFY(MAX_HOST_LEN) "[^:]:%*i", name) == 1)
+    location = g_strdup_printf (redirect_location, name);
+  else
+    location = g_strdup_printf (redirect_location, host);
+  if (send_redirect_header (connection, location) == MHD_NO)
+    {
+      g_free (location);
+      return MHD_NO;
+    }
+  g_free (location);
+  return MHD_YES;
+}
+
+#undef MAX_HOST_LEN
+
+/**
+ * @brief HTTPS request handler for GSAD.
+ *
+ * This routine is the secure callback request handler for microhttpd.
  *
  * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
@@ -2652,6 +2738,7 @@ main (int argc, char **argv)
 {
   gchar *rc_name;
   int gsad_port = DEFAULT_GSAD_PORT;
+  int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_administrator_port = DEFAULT_OPENVAS_ADMINISTRATOR_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
 
@@ -2667,7 +2754,9 @@ main (int argc, char **argv)
 
   static gboolean foreground = FALSE;
   static gboolean print_version = FALSE;
+  static gboolean redirect = FALSE;
   static gchar *gsad_port_string = NULL;
+  static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_administrator_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
@@ -2687,6 +2776,12 @@ main (int argc, char **argv)
     {"mport", 'm',
      0, G_OPTION_ARG_STRING, &gsad_manager_port_string,
      "Use manager port number <number>.", "<number>"},
+    {"rport", 'r',
+     0, G_OPTION_ARG_STRING, &gsad_redirect_port_string,
+     "Redirect HTTP from this port number <number>.", "<number>"},
+    {"redirect", 'R',
+     0, G_OPTION_ARG_NONE, &redirect,
+     "Redirect HTTP to HTTPS.", NULL },
     {"verbose", 'v',
      0, G_OPTION_ARG_NONE, &verbose,
      "Print progress messages.", NULL },
@@ -2768,6 +2863,18 @@ main (int argc, char **argv)
         }
     }
 
+  if (gsad_redirect_port_string)
+    {
+      /* flawfinder: ignore, for atoi boundaries are checked properly */
+      gsad_redirect_port = atoi (gsad_redirect_port_string);
+      if (gsad_redirect_port <= 0 || gsad_redirect_port >= 65536)
+        {
+          g_critical ("%s: Redirect port must be a number between 0 and 65536\n",
+                      __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+    }
+
   if (foreground == FALSE)
     {
       /* Fork into the background. */
@@ -2790,6 +2897,31 @@ main (int argc, char **argv)
         }
     }
 
+  if (gsad_redirect_port_string)
+    {
+      /* Fork for the redirect server. */
+      tracef ("Forking for redirect...\n");
+      pid_t pid = fork ();
+      switch (pid)
+        {
+        case 0:
+          /* Child. */
+          redirect = TRUE;
+          redirect_location = g_strdup_printf ("https://%%s:%i/login/login.html",
+                                               gsad_port);
+          break;
+        case -1:
+          /* Parent when error. */
+          g_critical ("%s: Failed to fork for redirect!\n", __FUNCTION__);
+          exit (EXIT_FAILURE);
+          break;
+        default:
+          /* Parent. */
+          redirect = FALSE;
+          break;
+        }
+    }
+
   /* Register the cleanup function. */
 
   if (atexit (&gsad_cleanup))
@@ -2808,60 +2940,89 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  omp_init (gsad_manager_port);
-  oap_init (gsad_administrator_port);
-
-  int use_ssl = 1;
-  gchar *ssl_private_key = NULL;
-  gchar *ssl_certificate = NULL;
-
-  if (use_ssl == 0)
+  if (redirect)
     {
+      /* Start the HTTP to HTTPS redirect server. */
+
       gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
-                                      gsad_port, NULL, NULL, &request_handler,
+                                      gsad_redirect_port, NULL, NULL, &redirect_handler,
                                       NULL, MHD_OPTION_NOTIFY_COMPLETED,
                                       free_resources, NULL, MHD_OPTION_END);
+
+      if (gsad_daemon == NULL)
+        {
+          g_critical ("%s: MHD_start_daemon failed (redirector)!\n", __FUNCTION__);
+          return EXIT_FAILURE;
+        }
+      else
+        {
+          /** @todo Add g_critical. */
+          if (pidfile_create ("gsad")) exit (EXIT_FAILURE);
+
+          tracef ("GSAD started successfully and is redirecting on port %d.\n",
+                  gsad_redirect_port);
+        }
     }
   else
     {
-      if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
-                                NULL, NULL))
+      int use_ssl = 1;
+      gchar *ssl_private_key = NULL;
+      gchar *ssl_certificate = NULL;
+
+      /* Start the real, HTTPS server. */
+
+      omp_init (gsad_manager_port);
+      oap_init (gsad_administrator_port);
+
+      if (use_ssl == 0)
         {
-          g_critical ("%s: Could not load private SSL key from %s!\n",
-                      __FUNCTION__,
-                      ssl_private_key_filename);
-          exit (EXIT_FAILURE);
+          gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
+                                          gsad_port, NULL, NULL, &request_handler,
+                                          NULL, MHD_OPTION_NOTIFY_COMPLETED,
+                                          free_resources, NULL, MHD_OPTION_END);
+        }
+      else
+        {
+          if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
+                                    NULL, NULL))
+            {
+              g_critical ("%s: Could not load private SSL key from %s!\n",
+                          __FUNCTION__,
+                          ssl_private_key_filename);
+              exit (EXIT_FAILURE);
+            }
+
+          if (!g_file_get_contents (ssl_certificate_filename, &ssl_certificate,
+                                    NULL, NULL))
+            {
+              g_critical ("%s: Could not load SSL certificate from %s!\n",
+                          __FUNCTION__,
+                          ssl_certificate_filename);
+              exit (EXIT_FAILURE);
+            }
+
+          gsad_daemon =
+            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL | MHD_USE_DEBUG,
+                              gsad_port, NULL, NULL, &request_handler, NULL,
+                              MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
+                              MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
+                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+                              MHD_OPTION_END);
         }
 
-      if (!g_file_get_contents (ssl_certificate_filename, &ssl_certificate,
-                                NULL, NULL))
+      if (gsad_daemon == NULL)
         {
-          g_critical ("%s: Could not load SSL certificate from %s!\n",
-                      __FUNCTION__,
-                      ssl_certificate_filename);
-          exit (EXIT_FAILURE);
+          g_critical ("%s: MHD_start_daemon failed!\n", __FUNCTION__);
+          return EXIT_FAILURE;
         }
+      else
+        {
+          /** @todo Add g_critical. */
+          if (pidfile_create ("gsad")) exit (EXIT_FAILURE);
 
-      gsad_daemon =
-        MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL | MHD_USE_DEBUG,
-                          gsad_port, NULL, NULL, &request_handler, NULL,
-                          MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
-                          MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
-                          MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                          MHD_OPTION_END);
-    }
-
-  if (gsad_daemon == NULL)
-    {
-      g_critical ("%s: MHD_start_daemon failed!\n", __FUNCTION__);
-      return EXIT_FAILURE;
-    }
-  else
-    {
-      if (pidfile_create("gsad")) exit (EXIT_FAILURE);
-
-      tracef ("GSAD started successfully and is listening on port %d.\n",
-              gsad_port);
+          tracef ("GSAD started successfully and is listening on port %d.\n",
+                  gsad_port);
+        }
     }
 
   /* Wait forever for input or interrupts. */
