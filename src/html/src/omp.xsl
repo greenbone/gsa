@@ -4097,7 +4097,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_system_reports">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_system_reports_response/system_report"/>
+  <xsl:choose>
+	<xsl:when test="get_system_reports_response/@status = '500'">
+	  <xsl:call-template name="command_result_dialog">
+		<xsl:with-param name="operation">
+		  Get System Reports
+		</xsl:with-param>
+		<xsl:with-param name="status">
+		  <xsl:value-of select="500"/>
+		</xsl:with-param>
+		<xsl:with-param name="msg">
+		  <xsl:value-of select="get_system_reports_response/@status_text"/>
+		</xsl:with-param>
+		<xsl:with-param name="details">
+		  There was an error getting the performance results.  Please ensure that
+	      there is a system reporting program installed with the Manager, and that
+	      this program is configured correctly.
+		</xsl:with-param>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:apply-templates select="get_system_reports_response/system_report"/>
+	</xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- END SYSTEM REPORTS MANAGEMENT -->
