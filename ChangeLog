@@ -1,5 +1,18 @@
 2010-01-09  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/gsa-style.css (small_inline_form): New style.
+
+	* src/html/src/omp.xsl (html-task-table): Neaten indentation.  Put the
+	form inside a small_inline_form div.  Remove the font-size and display
+	styles from the form and select.
+	(html-create-escalator-form): Alternate background colours of rows.
+	(create_config_response): Only print details if a config was created and
+	there's a config/name in the response.
+
+	* src/html/src/help/reports.htm4: Correct phrase.
+
+2010-01-09  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (get_system_reports): Add failure message.
 
 2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>

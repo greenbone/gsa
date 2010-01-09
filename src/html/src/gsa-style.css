@@ -410,6 +410,14 @@ tr.odd {
  font-size:10px;
 }
 
+#small_inline_form select, #small_inline_form input {
+ font-size: 10px;
+}
+
+#small_inline_form form {
+ display: inline;
+}
+
 .threat_info_table {
 text-align:right;
 }

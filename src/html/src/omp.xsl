@@ -46,50 +46,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Tasks
-     <a href="/help/tasks.html" title="Help: Tasks">
-       <img src="/img/help.png" border="0"/>
-     </a>
-     <a href="/new_task.html" title="New Task">
-       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-     </a>
-     <form style="display: inline" method="get" action="">
-       <input type="image" src="/img/refresh.png" alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
-       <input type="hidden" name="cmd" value="get_status"/>
-       <select style="font-size:12px;" name="refresh_interval" size="1">
-         <xsl:choose>
-          <xsl:when test="/envelope/autorefresh/@interval='0'">
-            <option value="0" selected="1">Manual</option>
-          </xsl:when>
-          <xsl:otherwise>
-            <option value="0">Manual</option>
-          </xsl:otherwise>
-         </xsl:choose>
-         <xsl:choose>
-          <xsl:when test="/envelope/autorefresh/@interval='10'">
-            <option value="10" selected="1">10 Sec.</option>
-          </xsl:when>
-          <xsl:otherwise>
-            <option value="10">10 Sec.</option>
-          </xsl:otherwise>
-         </xsl:choose>
-         <xsl:choose>
-          <xsl:when test="/envelope/autorefresh/@interval='30'">
-            <option value="30" selected="1">30 Sec.</option>
-          </xsl:when>
-          <xsl:otherwise>
-            <option value="30">30 Sec.</option>
-          </xsl:otherwise>
-         </xsl:choose>
-         <xsl:choose>
-          <xsl:when test="/envelope/autorefresh/@interval='60'">
-            <option value="60" selected="1">30 Sec.</option>
-          </xsl:when>
-          <xsl:otherwise>
-            <option value="60">60 Sec.</option>
-          </xsl:otherwise>
-         </xsl:choose>
-       </select>
-     </form>
+      <a href="/help/tasks.html" title="Help: Tasks">
+        <img src="/img/help.png" border="0"/>
+      </a>
+      <a href="/new_task.html" title="New Task">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <div id="small_inline_form" style="display: inline">
+        <form method="get" action="">
+          <input type="image"
+                 src="/img/refresh.png"
+                 alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
+          <input type="hidden" name="cmd" value="get_status"/>
+          <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
+            <xsl:choose>
+              <xsl:when test="/envelope/autorefresh/@interval='0'">
+                <option value="0" selected="1">Manual</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">Manual</option>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="/envelope/autorefresh/@interval='10'">
+                <option value="10" selected="1">10 Sec.</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="10">10 Sec.</option>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="/envelope/autorefresh/@interval='30'">
+                <option value="30" selected="1">30 Sec.</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="30">30 Sec.</option>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="/envelope/autorefresh/@interval='60'">
+                <option value="60" selected="1">30 Sec.</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="60">60 Sec.</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -1779,7 +1783,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="cmd" value="create_escalator"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Name</td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -1792,7 +1796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Event</td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -1839,11 +1843,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Method</td>
             <td colspan="2">
               <table border="0" width="100%">
-                <tr class="odd">
+                <tr>
                   <td colspan="3" valign="top">
                     <input type="radio" name="method" value="Email" checked="1"/>
                     Email
@@ -3639,8 +3643,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="msg">
       <xsl:value-of select="@status_text"/>
     </xsl:with-param>
-    <xsl:with-param name="details">
-      Name of new config is '<xsl:value-of select="config/name"/>'.
+	<xsl:with-param name="details">
+      <xsl:if test="@status = '201' and config/name">
+		Name of new config is '<xsl:value-of select="config/name"/>'.
+      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
