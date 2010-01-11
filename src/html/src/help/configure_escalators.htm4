@@ -130,4 +130,20 @@ the corresponding escalator is immediately executed with some
 dummy data.
 </p>
 
+<a name="escalatordetails"></a>
+<h2>Escalator Details</h2>
+
+<p>
+Provides information about an escalator like the name, comment, condition and
+notification method.
+</p>
+
+<h3>Tasks using this Escalators</h3>
+
+<p>
+This table provides an overview of the tasks associated with this escalator.
+Details of these tasks can be seen after a click on the Details
+<img src="/img/details.png" alt="Details" title="Details" /> icon.
+</p>
+
 m4_include(`footer.m4')

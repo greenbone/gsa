@@ -137,4 +137,24 @@ Pressing the details icon
 will show details of the target specification and Tasks that use this target.
 </p>
 
+<a name="targetdetails"></a>
+<h2>Target Details</h2>
+
+<p>
+Provides detailed information about the target.
+This includes the name, comment and the maximum number of hosts to scan.
+If credentials are associated with this target, its name can be seen. A click
+on the credentials name will show more information about the associated
+credentials.
+</p>
+
+<h3>Tasks using this Target</h3>
+
+<p>
+This table provides an overview of the tasks that are associated to the target
+(if any).
+Details of these tasks can be seen after a click on the Details
+<img src="/img/details.png" alt="Details" title="Details" /> icon.
+</p>
+
 m4_include(`footer.m4')

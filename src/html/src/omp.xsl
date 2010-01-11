@@ -1519,7 +1519,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Credential Details</div>
+    <div class="gb_window_part_center">
+      Credential Details
+      <a href="/help/configure_credentials.html#credentialdetails"
+         title="Help: Configure Agents (Credential Details)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
     <div class="gb_window_part_content">
       <div style="float:right;">
         <a href="?cmd=get_lsc_credentials">Back to Credentials</a>
@@ -2046,7 +2052,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Escalator Details</div>
+    <div class="gb_window_part_center">
+      Escalator Details
+      <a href="/help/configure_escalators.html#escalatordetails"
+         title="Help: Configure Escalators (Escalator Details)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
     <div class="gb_window_part_content">
       <div style="float:right;">
         <a href="?cmd=get_escalators">Back to Escalators</a>
@@ -2368,7 +2380,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Target Details</div>
+    <div class="gb_window_part_center">
+       Target Details
+       <a href="/help/configure_targets.html#targetdetails"
+         title="Help: Configure Targets (Target Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
     <div class="gb_window_part_content">
       <div style="float:right;">
         <a href="?cmd=get_targets">Back to Targets</a>
