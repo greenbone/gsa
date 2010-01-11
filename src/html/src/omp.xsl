@@ -3903,13 +3903,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
   <div class="issue_box_head" style="{$style}">
-    <div style="float:right"><xsl:value-of select="port"/></div>
+    <div style="float:right; text-align:right">
+      <xsl:value-of select="port"/>
+    </div>
     <b><xsl:value-of select="threat"/></b>
     <div>
-      NVT OID:
-      <a href="?cmd=get_nvt_details&amp;oid={nvt}">
-        <xsl:value-of select="nvt"/>
+      NVT:
+      <xsl:variable name="max" select="80"/>
+      <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+        <xsl:choose>
+          <xsl:when test="string-length(nvt/name) &gt; $max">
+            <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="nvt/name"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </a>
+      (OID:
+       <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+         <xsl:value-of select="nvt/@oid"/>
+       </a>)
     </div>
   </div>
   <div class="issue_box_box">
