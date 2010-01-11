@@ -2469,7 +2469,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     strlen ("/system_report/"))) /* flawfinder: ignore,
                                                     it is a const str */
         {
-          unsigned int res_len;
+          gsize res_len;
           const char *duration;
 
           duration = MHD_lookup_connection_value (connection,
@@ -2485,8 +2485,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        &content_disposition,
                                        &res_len);
           if (res == NULL) return MHD_NO;
-          response = MHD_create_response_from_data (res_len, res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_data ((unsigned int) res_len,
+                                                    res, MHD_NO, MHD_YES);
           if (content_type != NULL)
             {
               MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
