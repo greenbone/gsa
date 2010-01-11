@@ -121,4 +121,13 @@ Details of an escalator can be seen by clicking on the details icon
 <img src="/img/details.png" alt="Details" title="Details" />.
 </p>
 
+<h4>Test Escalator</h4>
+
+<p>
+By clicking on the start icon
+<img src="/img/start.png" alt="Test Escalator" title="Test Escalator" />
+the corresponding escalator is immediately executed with some
+dummy data.
+</p>
+
 m4_include(`footer.m4')

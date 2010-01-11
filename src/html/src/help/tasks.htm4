@@ -220,6 +220,21 @@ or ascending <img src="/img/ascending.png" alt="Sort ascending" title="Sort asce
 The icon of the current choice will appear greyed out <img src="/img/ascending_inactive.png" alt="Current sort ascending" title="Current sort ascending" />, <img src="/img/descending_inactive.png" alt="Current sort descending" title="Current sort descending" />.
 The list will be updated immediately.
 
+<a name="autorefresh"></a>
+<h3>Auto-refresh</h3>
+
+<p>
+The tasks overview allows to set a time interval for
+an automatic page refresh. Select one of the
+intervals (10 seconds, 30 seconds or 60 seconds)
+and confirm with pressing the refresh
+<img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon.
+</p>
+
+<p>
+Note that leaving this page will reset the refresh interval to manual refresh.
+</p>
+
 <a name="actions"></a>
 <h3>Actions</h3>
 

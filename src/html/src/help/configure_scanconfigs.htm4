@@ -151,7 +151,8 @@ out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
 <p>
 Issueing the details icon
 <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
-will open the Scan Config Details dialog to provide details on the configuration
+will open the <a href="scanconfig_details.html">Scan Config Details</a>
+dialog to provide details on the configuration
 such as the selected NVTs and applied settings.
 </p>
 
@@ -161,7 +162,8 @@ such as the selected NVTs and applied settings.
 A Scan Config can be modified if it is not currently in use by a task.
 A click on the edit icon
 <img src="/img/edit.png" alt="Edit" title="Edit" />
-will open the <a href="scanconfig_details.html">Scan Config Details</a> dialog with details on the configuration
+will open the <a href="scanconfig_editor.html">Scan Config Editor</a> dialog
+with details on the configuration
 such as the selected NVTs and applied settings and allow modifications of it.
 If the Scan Config is currently in use by a task, the icon will appear greyed
 out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.

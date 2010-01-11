@@ -1,0 +1,10 @@
+m4_define(`PAGE_TITLE', `Help: Scan Config Editor')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+&nbsp;<br />
+
+<h1>Scan Config Editor</h1>
+
+
+m4_include(`footer.m4')
