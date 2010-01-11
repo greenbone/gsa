@@ -1,5 +1,25 @@
 2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add text phrase filtering to report results.
+
+	* src/html/src/gsa-style.css (table.odd): New style.
+
+	* src/gsad.c (init_validator): Add rule "search_phrase".
+	(exec_omp_get): Pass search_phrase to get_report_omp.
+
+	* src/gsad_omp.c (get_report_omp): Add argument search_phrase.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/src/omp.xsl (html-report-details): Add test phrase filter to
+	threat filter.  Grey background of both.  Remove threat filter
+	"Current View" and rename "New Filter" to "Threat".
+
+	* src/html/src/help/reports.htm4: Try improve some descriptions.  Correct
+	typos.  Describe text phrase filtering.
+
+2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (request_handler): Pass gsize to get_system_report_omp.
 
 2010-01-11  Felix Wolfsteller <felix.wolfsteller@intevation.de>

@@ -334,6 +334,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="first_result" value="{report/results/@start}"/>
           <input type="hidden" name="levels" value="{$levels}"/>
           <input type="hidden"
+                 name="search_phrase"
+                 value="{report/filters/phrase}"/>
+          <input type="hidden"
                  name="sort_field"
                  value="{report/sort/field/text()}"/>
           <input type="hidden"
@@ -396,81 +399,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table></p>
       <br/>
-      <table>
+      <table class="odd">
         <xsl:variable name="sort_field">
           <xsl:value-of select="report/sort/field/text()"/>
         </xsl:variable>
         <xsl:variable name="sort_order">
           <xsl:value-of select="report/sort/field/order"/>
         </xsl:variable>
-        <tr>
-          <td>Current View:</td>
-          <td>
-            <div id="small_form">
-              <form action="" method="get">
-                <table>
-                  <tr>
-                    <td class="threat_info_table_h">
-                      <xsl:choose>
-                        <xsl:when test="report/filters/filter[text()='High']">
-                          <input type="checkbox" disabled="1" checked="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="checkbox" disabled="1"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <img src="/img/high.png" alt="High" title="High"/>
-                    </td>
-                    <td class="threat_info_table_h">
-                      <xsl:choose>
-                        <xsl:when test="report/filters/filter[text()='Medium']">
-                          <input type="checkbox" disabled="1" checked="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="checkbox" disabled="1"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                    </td>
-                    <td class="threat_info_table_h">
-                      <xsl:choose>
-                        <xsl:when test="report/filters/filter[text()='Low']">
-                          <input type="checkbox" disabled="1" checked="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="checkbox" disabled="1"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <img src="/img/low.png" alt="Low" title="Low"/>
-                    </td>
-                    <td class="threat_info_table_h">
-                      <xsl:choose>
-                        <xsl:when test="report/filters/filter[text()='Log']">
-                          <input type="checkbox" disabled="1" checked="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="checkbox" disabled="1"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <img src="/img/log.png" alt="Log" title="Log"/>
-                    </td>
-                    <td class="threat_info_table_h">
-                    </td>
-                  </tr>
-                </table>
-              </form>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>New Filter:</td>
-          <td>
-            <div id="small_form">
-              <form action="" method="get">
-                <input type="hidden" name="cmd" value="get_report"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
-                <input type="hidden" name="sort_field" value="{$sort_field}"/>
-                <input type="hidden" name="sort_order" value="{$sort_order}"/>
+        <div id="small_form">
+          <form action="" method="get">
+            <input type="hidden" name="cmd" value="get_report"/>
+            <input type="hidden" name="report_id" value="{report/@id}"/>
+            <input type="hidden" name="sort_field" value="{$sort_field}"/>
+            <input type="hidden" name="sort_order" value="{$sort_order}"/>
+            <tr>
+              <td>
+                Text phrase:
+              </td>
+              <td>
+                <input type="text" name="search_phrase" size="60"
+                       value="{report/filters/phrase}"
+                       maxlength="400"/>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Threat:</td>
+              <td>
                 <table>
                   <tr>
                     <td class="threat_info_table_h">
@@ -521,15 +476,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:choose>
                       <img src="/img/log.png" alt="Log" title="Log"/>
                     </td>
-                    <td class="threat_info_table_h">
-                      <input type="submit" value="Apply" title="Apply"/>
-                    </td>
                   </tr>
                 </table>
-              </form>
-            </div>
-          </td>
-        </tr>
+              </td>
+              <td>
+                <input type="submit" value="Apply" title="Apply"/>
+              </td>
+            </tr>
+          </form>
+        </div>
       </table>
     </div>
   </div>

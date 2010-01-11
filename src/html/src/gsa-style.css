@@ -189,6 +189,10 @@ tr.odd {
  background-color: #EEEEEE;
 }
 
+table.odd {
+ background-color: #EEEEEE;
+}
+
 /* END Greenbone Tables */
 
 /* BEGIN Window decorations */

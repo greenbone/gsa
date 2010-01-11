@@ -11,17 +11,18 @@ m4_include(`header.m4')
 <p>
 This "View Report" page summarizes all information the selected
 <a href="/help/glossary.html#report">report</a> contains.
-This page is structured and designed similar to the
+This page is structured and designed like the
 download formats HTML and PDF.
 </p>
 
 <p>
-It is a single page, the links e.g. to the hosts
-reference to the same page further up or down.
-Exceptions are the links to the
-<a href="/help/reports.html">list of reports</a>
-that result from the same
-<a href="/help/glossary.html#task">task</a>.
+It is a single page with links that
+refer to the same page further up or down.
+For example, the host names in the "Host" table links to the hosts
+results further down the page.
+The exception is the "Back to Tasks" link that refers to the
+<a href="/help/glossary.html#task">task</a>'s
+<a href="/help/reports.html">list of reports</a>.
 </p>
 
 <h2>Download a report</h2>
@@ -36,16 +37,21 @@ The download will start shortly after a click on the "Download" button.
 <p>
 Results shown on the page can be sorted either by the port number or by threat
 level, and ascending or descending.
-The sort oder is changed by clicking on the respective text (e.g.
+The sort order is changed by clicking on the respective text (e.g.
 "threat ascending").
 </p>
 
 <h2>Result Filtering</h2>
 
 <p>
-A checkbox for each threat level (High, Medium, Low and Log) can be ticked to
-include results of the respective thread level in the shown report or unticked
-to exclude these issues from the shown report.
+A checkbox for each threat level (High, Medium, Low and Log) can be ticked
+or unticked to
+include or exclude results of the respective threat level in the shown report.
+This can be combined with a text phrase, which limits the report to all the
+results that include the entered phrase.
+</p>
+
+<p>
 The list of results is updated after a click on the "Apply" button.
 </p>
 

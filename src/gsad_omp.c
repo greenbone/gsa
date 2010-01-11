@@ -3634,14 +3634,16 @@ delete_report_omp (credentials_t * credentials,
 /**
  * @brief Get a report and XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  report_id     ID of report.
- * @param[in]  format        Format of report.
- * @param[out] report_len    Length of report.
- * @param[in]  first_result  Number of first result in report.
- * @param[in]  max_results   Number of results in report.
- * @param[in]  sort_field    Field to sort on, or NULL.
- * @param[in]  sort_order    "ascending", "descending", or NULL.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  report_id      ID of report.
+ * @param[in]  format         Format of report.
+ * @param[out] report_len     Length of report.
+ * @param[in]  first_result   Number of first result in report.
+ * @param[in]  max_results    Number of results in report.
+ * @param[in]  sort_field     Field to sort on, or NULL.
+ * @param[in]  sort_order     "ascending", "descending", or NULL.
+ * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  search_phrase  Phrase which included results must contain.
  *
  * @return Result of XSL transformation.
  */
@@ -3651,7 +3653,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const unsigned int first_result,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
-                const char * levels)
+                const char * levels, const char * search_phrase)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -3662,6 +3664,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
   int socket;
 
   *report_len = 0;
+
+  if (search_phrase == NULL)
+    {
+      xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
@@ -3684,7 +3692,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " max_results=\"%u\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
-                            " levels=\"%s\"/>",
+                            " levels=\"%s\""
+                            " search_phrase=\"%s\"/>",
                             report_id,
                             format,
                             first_result,
@@ -3696,7 +3705,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  || strcmp (sort_field, "type") == 0)
                                 ? "descending"
                                 : "ascending"),
-                            levels)
+                            levels,
+                            search_phrase)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3785,10 +3795,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                   " format=\"xml\""
                                   " first_result=\"%u\""
                                   " max_results=\"%u\""
-                                  " levels=\"hmlg\"/>",
+                                  " levels=\"hmlg\""
+                                  " search_phrase=\"%s\"/>",
                                   report_id,
                                   first_result,
-                                  max_results)
+                                  max_results,
+                                  search_phrase)
             == -1)
           {
             g_string_free (xml, TRUE);

@@ -245,6 +245,7 @@ init_validator ()
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "search_phrase", "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
@@ -1664,6 +1665,7 @@ exec_omp_get (struct MHD_Connection *connection)
   const char *sort_field   = NULL;
   const char *sort_order   = NULL;
   const char *levels       = NULL;
+  const char *search_phrase = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
@@ -1821,6 +1823,17 @@ exec_omp_get (struct MHD_Connection *connection)
           else
             log = atoi (level);
         }
+
+      search_phrase = MHD_lookup_connection_value (connection,
+                                                   MHD_GET_ARGUMENT_KIND,
+                                                   "search_phrase");
+      if (search_phrase)
+        {
+          if (openvas_validate (validator, "search_phrase", search_phrase))
+            search_phrase = NULL;
+        }
+      else
+        search_phrase = "";
     }
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -1985,7 +1998,8 @@ exec_omp_get (struct MHD_Connection *connection)
                                (const unsigned int) max,
                                sort_field,
                                sort_order,
-                               levels);
+                               levels,
+                               search_phrase);
 
       {
         char *ret;
@@ -1999,7 +2013,8 @@ exec_omp_get (struct MHD_Connection *connection)
                               (const unsigned int) max,
                               sort_field,
                               sort_order,
-                              string->str);
+                              string->str,
+                              search_phrase);
         g_string_free (string, TRUE);
         return ret;
       }
