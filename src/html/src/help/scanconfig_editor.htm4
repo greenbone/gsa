@@ -78,8 +78,8 @@ to choose which Families or individual NVTs should be included.
 
 <p>
 A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-will save the modifications and show the 
-<a href="#editscanconfigfamilydetails">Edit Scan Config Family Details</a>
+will save the modifications and show the
+<a href="scanconfig_editor_nvt_families.html">Edit Scan Config Family Details</a>
 page which shows details about NVTs within the family and allows to select or
 deselect individual NVTs.
 </p>

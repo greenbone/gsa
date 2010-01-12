@@ -1,5 +1,14 @@
 2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Minor help improvements and fixes.
+
+	* src/html/src/help/scanconfig_editor.htm4: Fixed link.
+
+	* src/html/src/help/scanconfig_editor_nvt_families.htm4: Added links
+	to glossary.
+
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Added help and some fixes.
 
 	* src/html/src/help/scanconfig_editor_nvt_families.htm4: New. Contains

@@ -8,7 +8,8 @@ m4_include(`header.m4')
 <h1>Edit Scan Config Family Details</h1>
 
 <p>
-This page gives an overview of NVTs of one family in a Scan Configuration.
+This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
+family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
 </p>
 
 <h2>Edit Network Vulnerability Tests</h2>
