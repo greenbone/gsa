@@ -6,5 +6,158 @@ m4_include(`header.m4')
 
 <h1>Scan Config Editor</h1>
 
+<p>
+The Scan Config Editor allows modification of all parameters of a
+<a href="glossary.html#scanconfig">Scan Configuration</a>.
+These include a selection of <a href="glossary.html#nvt">NVT</a>s and the
+specifications how the selection should automatically updated, NVT Preferences
+and Timeouts and advanced Scanner Preferences.
+</p>
+
+<h1>Edit Scan Config Details</h1>
+
+<p>
+This dialog shows the name and comment of a given
+<a href="glossary.html#scanconfig">Scan Configuration</a> together with the
+associated configuration parameters itself.
+It allows to adjust all parameters of the Scan Configuration.
+</p>
+
+<p>
+Note: In order to save modifications, the button labelled "Save Config" must
+be clicked. The edit action <img src="/img/edit.png" alt="Edit" title="Edit" />
+on NVT Families will save the selection.
+</p>
+
+<h2>Edit Network Vulnerability Test Families</h2>
+
+<p>
+This table provides an overview of the selected NVTs and NVT Families and allow
+to choose which Families or individual NVTs should be included.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>Family</td>
+  <td>Shows the name of the NVT Family. The trend icon in the Family column
+      header allows to specify whether new families will automaticall be
+      included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or not ("Static")
+      <img src="/img/trend_nochange.png" alt="Static" title="Static" />.</td>
+</tr>
+<tr class="even">
+  <td>NVT's selected</td>
+  <td>Shows the number of NVTs that would be considered with the current
+      selection and the total number of NVTs in this family.</td>
+</tr>
+<tr class="odd">
+  <td>Trend</td>
+  <td>Allows modification of the trend for this family. If the trend is set to
+     "Grow" <img src="/img/trend_more.png" alt="Grow" title="Grow" />, new NVTs of this family are
+      automatically added to the configuration. If it is set to "Static"
+      <img src="/img/trend_nochange.png" alt="Static" title="Static" />, the selection will not be
+      automatically changed. </td>
+</tr>
+<tr class="even">
+  <td>Select all NVT's</td>
+  <td>If this checkbox is ticked, all NVTs that are currently available in this
+      Family will be selected.</td>
+</tr>
+</table>
+
+<h3>Actions</h3>
+
+<h4>Save Config and edit Family Details<h4>
+
+<p>
+A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+will save the modifications and show the 
+<a href="#editscanconfigfamilydetails">Edit Scan Config Family Details</a>
+page which shows details about NVTs within the family and allows to select or
+deselect individual NVTs.
+</p>
+
+<h2>Edit Scanner Preferences</h2>
+
+<p>
+This table shows the preferences of the scan engine itself and allows to modify
+these. This feature is intended for advanced users only. Modifications will be
+saved after a click on the "Save Config" button below the table.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>Name</td>
+  <td>Shows the name of the Scanner Preference.</td>
+</tr>
+<tr class="even">
+  <td>Value</td>
+  <td>Shows the current value of the Scanner Preference.</td>
+</tr>
+</table>
+
+
+<h2>Network Vulnerability Test Preferences</h2>
+
+<p>
+Network Vulnerability Tests can have multiple preferences that influence the
+test behaviour.
+This table lists one preference and the current value per row.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>NVT</td>
+  <td>Shows the name of an NVT.</td>
+</tr>
+<tr class="even">
+  <td>Name</td>
+  <td>Shows the name of a prefence for an NVT.</td>
+</tr>
+<tr class="odd">
+  <td>Value</td>
+  <td>Shows current value of a prefence for an NVT.</td>
+</tr>
+</table>
+
+<h3>Actions</h3>
+
+<h4>Scan Config NVT Details<h4>
+
+<p>
+A click on the details icon
+<img src="/img/details.png" alt="Details" title="Details" /> will open the
+Scan Config NVT Details dialog with detailed information about a certain NVT
+and all its preferences.
+</p>
+
+<h4>Edit Scan Config NVT Details<h4>
+
+<p>
+A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+will open the Edit Scan Config NVT Details dialog with detailed information about a
+certain NVT and all its preferences.
+This page will provide an overview over all preferences and the currently set
+Timeout for this NVT and allow modifications.
+</p>
+
+<h2>Tasks using this Config</h2>
+
+<p>
+The tasks that use the shown config are listed.
+A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
+the <a href="reports.html#tasksummary">Task summary</a> page.
+</p>
 
 m4_include(`footer.m4')

@@ -3445,12 +3445,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="edit">
       Edit Scan Config Details
+      <a href="/help/scanconfig_editor.html"
+         title="Help: Edit Scan Configs Details (Scan Configs)">
+        <img src="/img/help.png"/>
+      </a>
     </xsl:when>
     <xsl:otherwise>
       Scan Config Details
       <a href="/help/scanconfig_details.html"
          title="Help: Scan Configs Details (Scan Configs)">
-      <img src="/img/help.png"/>
+        <img src="/img/help.png"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>

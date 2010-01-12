@@ -18,8 +18,8 @@ associated configuration parameters itself.
 <p>
 This table provides an overview of the selected NVTs and NVT Families.
 A Trend icon next to the Family column of the table indicates whether new
-families will automaticall be included ("Grow") <img src="/img/trend_more.png" />
-or not ("Static") <img src="/img/trend_nochange.png" />.
+families will automaticall be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow/>
+or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />.
 </p>
 
 <table class="gbntable">
@@ -39,8 +39,8 @@ or not ("Static") <img src="/img/trend_nochange.png" />.
 <tr class="odd">
   <td>Trend</td>
   <td>Shows the Trend, which indicates whether new NVTs of this family are
-      automatically added to the configuration ("Grow") <img src="/img/trend_more.png" /> or
-      not ("Static") <img src="/img/trend_nochange.png" />. </td>
+      automatically added to the configuration ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or
+      not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />. </td>
 </tr>
 </table>
 
@@ -49,7 +49,7 @@ or not ("Static") <img src="/img/trend_nochange.png" />.
 <h4>Scan Config Family Details<h4>
 
 <p>
-A click on the details icon <img src="/img/details.png" /> will show an
+A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> will show an
 intermediate detailled list of NVTs and its preferences.
 </p>
 
@@ -104,10 +104,11 @@ This table lists one preference and the current value per row.
 
 <h3>Actions</h3>
 
-<h4>Scan Config Family Details<h4>
+<h4>Scan Config NVT Details<h4>
 
 <p>
-A click on the details icon <img src="/img/details.png" /> will open the
+A click on the details icon
+<img src="/img/details.png" alt="Details" title="Details" /> will open the
 Scan Config NVT Details dialog with detailed information about a certain NVT
 and all its preferences.
 </p>
@@ -116,7 +117,7 @@ and all its preferences.
 
 <p>
 The tasks that use the shown config are listed.
-A click on the list icon <img src="/img/list.png" /> will open
+A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
 the <a href="reports.html#tasksummary">Task summary</a> page.
 </p>
 

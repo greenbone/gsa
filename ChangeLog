@@ -1,3 +1,15 @@
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Added help.
+
+	* src/html/src/help/scanconfig_editor.htm4: Updated with help
+	texts describing the Scan Config Editor functionality.
+
+	* src/html/src/help/scanconfig_details.htm4: Added alt and title
+	parameters to icons, corrected heading.
+
+	* src/html/src/omp.xsl: Added link to new help page.
+
 2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add text phrase filtering to report results.
@@ -24,7 +36,7 @@
 
 2010-01-11  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
-	Updated help
+	Updated help.
 
 	* src/html/src/help/configure_credentials.htm4,
 	src/html/src/help/configure_escalators.html4,
