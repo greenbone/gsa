@@ -1,3 +1,13 @@
+2010-01-12  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Preparing the gsa 1.0.0-beta1 release.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/src/about.htm4: Updated.
+
+	* CHANGES: New.
+
 2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Minor help improvements and fixes.

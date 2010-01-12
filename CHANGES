@@ -1,0 +1,9 @@
+gsa 1.0.0-beta1 (2010-01-12)
+
+This is the first beta release of the optional gsa module
+for the Open Vulnerability Assessment System (OpenVAS) leading up to the
+upcoming gsa 1.0.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Felix Wolfsteller and Michael Wiegand.
+
