@@ -2540,12 +2540,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="edit">
         Edit Scan Config Family Details
         <a href="/help/scanconfig_editor_nvt_families.html"
-         title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
+           title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config Family Details
+        <a href="/help/scanconfig_family_details.html"
+           title="Help: Configure Scan Configs (Scan Config Family Details)">
+          <img src="/img/help.png"/>
+        </a>
       </xsl:otherwise>
     </xsl:choose>
   </div>
@@ -3051,14 +3055,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-config-nvt-table">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <xsl:choose>
-    <xsl:when test="edit">
-      <div class="gb_window_part_center">Edit Scan Config NVT Details</div>
-    </xsl:when>
-    <xsl:otherwise>
-      <div class="gb_window_part_center">Scan Config NVT Details</div>
-    </xsl:otherwise>
-  </xsl:choose>
+  <div class="gb_window_part_center">  
+    <xsl:choose>
+      <xsl:when test="edit">
+        Edit Scan Config NVT Details
+        <a href="/help/scanconfig_editor_nvt.html"
+           title="Help: Configure Scan Configs (Edit Scan Config NVT Details)">
+          <img src="/img/help.png"/>
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        Scan Config NVT Details
+        <a href="/help/scanconfig_nvt_details.html"
+           title="Help: Configure Scan Configs (Scan Config NVT Details)">
+          <img src="/img/help.png"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
   <div class="gb_window_part_content">
     <xsl:variable name="family">
       <xsl:value-of select="get_nvt_details_response/nvt/family"/>

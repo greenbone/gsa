@@ -1,3 +1,15 @@
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Updated help.
+
+	* src/html/src/help/scanconfig_familiy_details.htm4: New. Contains
+	help texts regarding Family Details Viewing functionality.
+
+	* src/html/src/help/scanconfig_nvt_details.htm4: New. Contains help
+	texts regarding NVT and NVT Preference Viewing functionality
+
+	* src/html/src/omp.xsl: Added links to new help pages.
+
 2010-01-12  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Post release version bump.
