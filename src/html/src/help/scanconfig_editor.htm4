@@ -14,6 +14,10 @@ specifications how the selection should automatically updated, NVT Preferences
 and Timeouts and advanced Scanner Preferences.
 </p>
 
+<p>
+Note that only Scan Configurations that are not currently in use by a
+<a href="glossary.html#task">Task</a> allow modifications.
+
 <h1>Edit Scan Config Details</h1>
 
 <p>
@@ -70,7 +74,7 @@ to choose which Families or individual NVTs should be included.
 
 <h3>Actions</h3>
 
-<h4>Save Config and edit Family Details<h4>
+<h4>Save Config and edit Family Details</h4>
 
 <p>
 A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
@@ -133,7 +137,7 @@ This table lists one preference and the current value per row.
 
 <h3>Actions</h3>
 
-<h4>Scan Config NVT Details<h4>
+<h4>Scan Config NVT Details</h4>
 
 <p>
 A click on the details icon
@@ -142,7 +146,7 @@ Scan Config NVT Details dialog with detailed information about a certain NVT
 and all its preferences.
 </p>
 
-<h4>Edit Scan Config NVT Details<h4>
+<h4>Edit Scan Config NVT Details</h4>
 
 <p>
 A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
@@ -159,5 +163,6 @@ The tasks that use the shown config are listed.
 A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
 the <a href="reports.html#tasksummary">Task summary</a> page.
 </p>
+
 
 m4_include(`footer.m4')

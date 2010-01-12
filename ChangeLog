@@ -1,5 +1,21 @@
 2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Added help and some fixes.
+
+	* src/html/src/help/scanconfig_editor_nvt_families.htm4: New. Contains
+	help texts regarding Scan Config Editors Family Details functionality.
+
+	* src/html/src/help/scanconfig_editor.htm4: Fixed closing tags, added
+	note about non-modificatability of scan configs in use.
+
+	* src/html/src/help/scanconfig_details.htm4: Fixed/Added missing quote.
+
+	* src/html/header.m4: Added macros for details and edit icons.
+
+	* src/html/src/omp.xsl: Added link to new help page.
+
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Added help.
 
 	* src/html/src/help/scanconfig_editor.htm4: Updated with help

@@ -1,3 +1,6 @@
+m4_define(`GSAD_HTML_ICON_EDIT', `<img src="/img/edit.png" alt="Edit" title="Edit" />')
+m4_define(`GSAD_HTML_ICON_DETAILS', `<img src="/img/details.png" alt="Details" title="Details" />')
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

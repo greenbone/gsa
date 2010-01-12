@@ -18,7 +18,7 @@ associated configuration parameters itself.
 <p>
 This table provides an overview of the selected NVTs and NVT Families.
 A Trend icon next to the Family column of the table indicates whether new
-families will automaticall be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow/>
+families will automaticall be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" />
 or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />.
 </p>
 

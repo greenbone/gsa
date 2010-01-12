@@ -2535,14 +2535,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-config-family-table">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <xsl:choose>
-    <xsl:when test="edit">
-      <div class="gb_window_part_center">Edit Scan Config Family Details</div>
-    </xsl:when>
-    <xsl:otherwise>
-      <div class="gb_window_part_center">Scan Config Family Details</div>
-    </xsl:otherwise>
-  </xsl:choose>
+  <div class="gb_window_part_center">
+    <xsl:choose>
+      <xsl:when test="edit">
+        Edit Scan Config Family Details
+        <a href="/help/scanconfig_editor_nvt_families.html"
+         title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
+          <img src="/img/help.png"/>
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        Scan Config Family Details
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:right;">
       <xsl:choose>
