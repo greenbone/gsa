@@ -49,8 +49,8 @@ or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static"
 <h4>Scan Config Family Details<h4>
 
 <p>
-A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> will show an
-intermediate detailled list of NVTs and its preferences.
+A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
+will show an intermediate detailed <a href="scanconfig_family_details.html">list of NVTs</a> and its preferences.
 </p>
 
 <h2>Scanner Preferences</h2>
@@ -109,7 +109,7 @@ This table lists one preference and the current value per row.
 <p>
 A click on the details icon
 <img src="/img/details.png" alt="Details" title="Details" /> will open the
-Scan Config NVT Details dialog with detailed information about a certain NVT
+<a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
 and all its preferences.
 </p>
 

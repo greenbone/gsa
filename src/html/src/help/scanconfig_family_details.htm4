@@ -48,7 +48,7 @@ This table provides an overview of NVTs of one family in a Scan Configuration.
 
 <p>
 A click on the details icon GSAD_HTML_ICON_DETAILS
-will lead to the page listing NVT details.
+will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
 </p>
 
 m4_include(`footer.m4')

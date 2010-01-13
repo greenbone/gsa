@@ -1,3 +1,18 @@
+2010-01-13  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Updated help.
+
+	* src/html/src/help/scanconfig_familiy_details.htm4,
+	src/html/scanconfig_editor.htm4,
+	src/html/scanconfig_editor_nvt_families.htm4,
+	src/html/src/help/scanconfig_details.htm4,
+	src/html/src/help/scanconfig_family_details.htm4: Added links to other
+	help pages.
+
+	* src/html/src/help/scanconfig_editor_nvt.htm4: New. Accidentally
+	ommitted in last commits. Contains help texts regarding
+	Scan Config NVT Editor.
+
 2010-01-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/help/contents.htm4: Indention for subgroups.

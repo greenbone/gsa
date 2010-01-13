@@ -142,16 +142,16 @@ This table lists one preference and the current value per row.
 <p>
 A click on the details icon
 <img src="/img/details.png" alt="Details" title="Details" /> will open the
-Scan Config NVT Details dialog with detailed information about a certain NVT
-and all its preferences.
+<a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog
+with detailed information about a certain NVT and all its preferences.
 </p>
 
 <h4>Edit Scan Config NVT Details</h4>
 
 <p>
 A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-will open the Edit Scan Config NVT Details dialog with detailed information about a
-certain NVT and all its preferences.
+will open the <a href="scanconfig_editor_nvt.html">Edit Scan Config NVT Details</a>
+dialog with detailed information about a certain NVT and all its preferences.
 This page will provide an overview over all preferences and the currently set
 Timeout for this NVT and allow modifications.
 </p>

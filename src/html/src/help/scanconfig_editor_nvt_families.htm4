@@ -54,14 +54,14 @@ and allows to include or exclude a NVT and to modify its preferences or timeout.
 
 <p>
 A click on the details icon GSAD_HTML_ICON_DETAILS
-will lead to the page listing NVT details.
+will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
 </p>
 
 <h4>Select and Edit NVT Details</h4>
 
 <p>
 A click on the edit icon GSAD_HTML_ICON_EDIT will add the NVT to the selection
-and lead to a page that lists NVT details and allows to modify preferences and
+and lead to a page that lists <a href="scanconfig_editor_nvt.html">NVT details and allows to modify preferences</a> and
 the timeout.
 </p>
 
