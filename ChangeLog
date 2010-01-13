@@ -1,3 +1,10 @@
+2010-01-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/about.htm4: Added supporters with their logos.
+
+	* src/html/src/img/bsi-logo.png, src/html/src/img/gb-logo.png,
+	src/html/src/img/intevation-logo.png: New.
+
 2010-01-13  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_oap.c (sync_feed_oap): Add DESCRIBE_FEED to COMMANDS so that
