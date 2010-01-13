@@ -469,6 +469,7 @@ sync_feed_oap (credentials_t * credentials)
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<sync_feed/>"
+                            "<describe_feed/>"
                             "</commands>")
       == -1)
     {
@@ -564,4 +565,3 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
   fflush (stderr);
   return xsl_transform_oap (credentials, text);
 }
-

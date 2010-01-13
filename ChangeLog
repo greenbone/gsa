@@ -1,3 +1,8 @@
+2010-01-13  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad_oap.c (sync_feed_oap): Add DESCRIBE_FEED to COMMANDS so that
+	the sync result comes back on the Feed Management page.
+
 2010-01-13  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Updated help.
