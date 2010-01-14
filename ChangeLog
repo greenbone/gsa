@@ -1,3 +1,20 @@
+2010-01-14  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add editing of scanner settings.
+
+	* src/gsad.c (init_validator): Add commands "edit_settings" and
+	"save_settings".
+	(exec_omp_post): Add command "save_settings".
+	(exec_omp_get): Add command "edit_settings".
+
+	* src/gsad_oap.c (edit_settings_oap, save_settings_oap): New functions.
+
+	* src/gsad_oap.h: Add headers accordingly.
+
+	* src/html/src/omp.xsl (scanner_settings): Add edit button.
+	(scanner_settings, setting, get_settings_response) [edit]: New templates.
+	(get_settings, edit_settings): New templates.
+
 2010-01-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/about.htm4: Added supporters with their logos.

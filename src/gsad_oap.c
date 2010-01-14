@@ -565,3 +565,185 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
   fflush (stderr);
   return xsl_transform_oap (credentials, text);
 }
+
+/**
+ * @brief Get all settings and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_settings_oap (credentials_t * credentials, const char * sort_field,
+                   const char * sort_order)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the settings. "
+                             "The current list of settings is not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_status");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Edit Settings\">"
+                                    "Only users given the Administrator role"
+                                    " may edit the settings."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session, "<get_settings/>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  xml = g_string_new ("<edit_settings>");
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  g_string_append (xml, "</edit_settings>");
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Save settings.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  settings     Scanner settings.
+ *
+ * @return Following page.
+ */
+char *
+save_settings_oap (credentials_t * credentials,
+                   const char * sort_field,
+                   const char * sort_order,
+                   GArray *settings)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *text = NULL;
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving the settings. "
+                             "The settings have not been saved. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_status");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Save Settings\">"
+                                    "Only users given the Administrator role"
+                                    " may save the settings."
+                                    "</gsad_msg>"));
+    }
+
+  /* Save settings. */
+
+  if (openvas_server_send (&session, "<commands>"
+                                     "<modify_settings>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving the settings. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (settings)
+    {
+      gchar *setting;
+      int index = 0;
+
+      while ((setting = g_array_index (settings, gchar*, index++)))
+        if (openvas_server_sendf (&session,
+                                  "<setting>"
+                                  "<name>%s</name>"
+                                  "<value>%s</value>"
+                                  "</setting>",
+                                  setting,
+                                  setting + strlen (setting) + 1)
+            == -1)
+          {
+            openvas_server_close (socket, session);
+            return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving the settings. "
+                                 "Diagnostics: Failure to send command to administrator daemon.",
+                                 "/omp?cmd=get_configs");
+          }
+    }
+
+  if (openvas_server_send (&session, "</modify_settings>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving the settings. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  /* Get the settings. */
+
+  if (openvas_server_send (&session, "<get_settings/>"
+                                     "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, text);
+}

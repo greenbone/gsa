@@ -188,6 +188,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(edit_settings)"
                          "|(export_config)"
                          "|(get_agents)"
                          "|(get_config)"
@@ -212,6 +213,7 @@ init_validator ()
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
+                         "|(save_settings)"
                          "|(start_task)"
                          "|(sync_feed)$");
 
@@ -1620,6 +1622,14 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "save_settings"))
+    {
+      con_info->response =
+        save_settings_oap (credentials,
+                           con_info->req_parms.sort_field,
+                           con_info->req_parms.sort_order,
+                           con_info->req_parms.method_data);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "sync_feed"))
     {
       con_info->response = sync_feed_oap (credentials);
@@ -1893,6 +1903,9 @@ exec_omp_get (struct MHD_Connection *connection)
   else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 1);
+
+  else if (!strcmp (cmd, "edit_settings"))
+    return edit_settings_oap (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "export_config")) && (name != NULL))
     return export_config_omp (credentials, name, &content_type,
@@ -2368,7 +2381,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
     /** @todo return MHD_NO;? */
     send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
 
-  /* Redirect any URL not matching the base to the default file. */
+  /* Redirect any URL matching the base to the default file. */
   if (!strcmp (&url[0], url_base))
     {
       if (is_http_authenticated (connection))

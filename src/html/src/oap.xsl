@@ -268,6 +268,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Settings">
         <img src="/img/help.png"/>
       </a>
+      <a href="/oap?cmd=edit_settings"
+         title="Edit Settings"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
+      </a>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div style="text-align:left">From file: <xsl:value-of select="@sourcefile"/></div>
@@ -279,6 +284,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:apply-templates select="setting"/>
         </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanner_settings" mode="edit">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Scanner Settings
+      <a href="/help/settings.html"
+         title="Help: Settings">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div style="text-align:left">From file: <xsl:value-of select="@sourcefile"/></div>
+      <div id="settings">
+        <form action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="cmd" value="save_settings"/>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td>Setting</td>
+              <td>Value</td>
+            </tr>
+            <xsl:apply-templates select="setting" mode="edit"/>
+            <tr>
+              <td colspan="2" style="text-align:right;">
+                <input type="submit"
+                       name="submit"
+                       value="Save Settings"
+                       title="Save Settings"/>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
   </div>
@@ -301,6 +342,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="setting" mode="edit">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="@name"/></b>
+    </td>
+    <td>
+      <input type="text" name="method_data:{@name}" value="{text()}" size="50"
+             maxlength="400"/>
+    </td>
+  </tr>
+</xsl:template>
+
 <!--     GET_SETTINGS_RESPONSE -->
 
 <xsl:template match="get_settings_response">
@@ -320,6 +379,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="get_settings_response" mode="edit">
+  <xsl:choose>
+    <xsl:when test="@status = '200' or @status = '201' or @status = '202'">
+      <xsl:apply-templates select="scanner_settings" mode="edit"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">Edit Settings</xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- PAGE TEMPLATES -->
+
+<xsl:template match="get_settings">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="save_settings_response"/>
+  <xsl:apply-templates select="get_settings_response"/>
+</xsl:template>
+
+<xsl:template match="edit_settings">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_settings_response" mode="edit"/>
 </xsl:template>
 
 <!-- END SETTINGS MANAGEMENT -->
