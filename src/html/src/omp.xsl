@@ -1264,6 +1264,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_status_response">
   <xsl:choose>
+    <xsl:when test="substring(@status, 0, 1) = '4' or substring(@status, 0, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">Get Status</xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="task/report">
       <xsl:call-template name="html-report-table"/>
     </xsl:when>
@@ -1275,6 +1286,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="commands_response/get_status_response">
   <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">Get Status</xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="task/report">
       <xsl:call-template name="html-report-table"/>
     </xsl:when>
@@ -3055,7 +3077,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-config-nvt-table">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">  
+  <div class="gb_window_part_center">
     <xsl:choose>
       <xsl:when test="edit">
         Edit Scan Config NVT Details

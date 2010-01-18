@@ -363,22 +363,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_SETTINGS_RESPONSE -->
 
 <xsl:template match="get_settings_response">
-    <xsl:choose>
-      <xsl:when test="@status = '200' or @status = '201' or @status = '202'">
-        <xsl:call-template name="html-settings-table"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="command_result_dialog">
-          <xsl:with-param name="operation">List Settings</xsl:with-param>
-          <xsl:with-param name="status">
-            <xsl:value-of select="@status"/>
-          </xsl:with-param>
-          <xsl:with-param name="msg">
-            <xsl:value-of select="@status_text"/>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:choose>
+	<xsl:when test="@status = '200' or @status = '201' or @status = '202'">
+	  <xsl:call-template name="html-settings-table"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:call-template name="command_result_dialog">
+		<xsl:with-param name="operation">List Settings</xsl:with-param>
+		<xsl:with-param name="status">
+		  <xsl:value-of select="@status"/>
+		</xsl:with-param>
+		<xsl:with-param name="msg">
+		  <xsl:value-of select="@status_text"/>
+		</xsl:with-param>
+	  </xsl:call-template>
+	</xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_settings_response" mode="edit">
