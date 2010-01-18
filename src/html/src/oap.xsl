@@ -268,11 +268,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Settings">
         <img src="/img/help.png"/>
       </a>
-      <a href="/oap?cmd=edit_settings"
-         title="Edit Settings"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
-      </a>
+      <xsl:if test="@editable=1">
+        <a href="/oap?cmd=edit_settings"
+           title="Edit Settings"
+           style="margin-left:3px;">
+          <img src="/img/edit.png"/>
+        </a>
+      </xsl:if>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div style="text-align:left">From file: <xsl:value-of select="@sourcefile"/></div>
