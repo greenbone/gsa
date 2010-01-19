@@ -53,9 +53,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_user"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125">Login Name</td>
             <td>
-              <input type="text" name="name" value="unnamed" size="30"
+              <input type="text" name="login" value="" size="30"
                      maxlength="80"/>
             </td>
           </tr>

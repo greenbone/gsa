@@ -1466,10 +1466,10 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
+      if (openvas_validate (validator, "login", con_info->req_parms.login))
         {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
+          free (con_info->req_parms.login);
+          con_info->req_parms.login = NULL;
         }
       if (openvas_validate (validator,
                             "password",
@@ -1485,7 +1485,7 @@ exec_omp_post (credentials_t * credentials,
         }
       con_info->response =
         create_user_oap (credentials,
-                         con_info->req_parms.name,
+                         con_info->req_parms.login,
                          con_info->req_parms.password,
                          con_info->req_parms.role);
     }

@@ -1,5 +1,12 @@
 2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (exec_omp_post): Make create_user "name" a "login".
+
+	* src/html/src/oap.xsl (html-create-user-form): Relabel "Name" as
+	"Login Name", and make the input name "login".
+
+2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (init_validator): Add \ to credential_login characters.
 
 2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
