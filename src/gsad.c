@@ -260,6 +260,7 @@ init_validator ()
   openvas_validator_alias (validator, "scantarget",   "name");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
+  openvas_validator_alias (validator, "hosts_allow",  "boolean");
   openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "level_high",   "boolean");
   openvas_validator_alias (validator, "level_medium", "boolean");
@@ -333,6 +334,7 @@ struct gsad_connection_info
     char *role;          ///< Value of "role" parameter.
     char *submit;        ///< Value of "submit" parameter.
     char *hosts;         ///< Value of "hosts" parameter.
+    char *hosts_allow;   ///< Value of "hosts_allow" parameter.
     char *login;         ///< Value of "login" parameter.
     char *oid;           ///< Value of "oid" parameter.
     char *pw;            ///< Value of "pw" parameter.
@@ -508,6 +510,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.role);
   free (con_info->req_parms.submit);
   free (con_info->req_parms.hosts);
+  free (con_info->req_parms.hosts_allow);
   free (con_info->req_parms.login);
   free (con_info->req_parms.pw);
   free (con_info->req_parms.password);
@@ -898,6 +901,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
               && openvas_validate (validator,
                                    "hosts",
                                    con_info->req_parms.hosts))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "hosts_allow"))
+        {
+          con_info->req_parms.hosts_allow = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.hosts_allow,
+                  (char *) data,
+                  size);
+          con_info->req_parms.hosts_allow[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "hosts_allow",
+                                   con_info->req_parms.hosts_allow))
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
@@ -1483,11 +1501,25 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.role);
           con_info->req_parms.role = NULL;
         }
+      if (openvas_validate (validator, "hosts", con_info->req_parms.hosts))
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+      if (openvas_validate (validator,
+                            "hosts_allow",
+                            con_info->req_parms.hosts_allow))
+        {
+          free (con_info->req_parms.hosts_allow);
+          con_info->req_parms.hosts_allow = NULL;
+        }
       con_info->response =
         create_user_oap (credentials,
                          con_info->req_parms.login,
                          con_info->req_parms.password,
-                         con_info->req_parms.role);
+                         con_info->req_parms.role,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.hosts_allow);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {

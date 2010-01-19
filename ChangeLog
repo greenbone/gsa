@@ -1,5 +1,21 @@
 2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add setting of user host access.
+
+	* src/gsad.c (init_validator): Add "hosts_allow" rule.
+	(struct req_parms): Add hosts_allow.
+	(free_resources, serve_post): Add hosts_allow handling.
+	(exec_omp_post): Pass hosts and hosts_allow to create_user_oap.
+
+	* src/gsad_oap.c (create_user_oap): Add HOSTS to CREATE_USER according to
+	new args hosts and hosts_allow.
+
+	* src/gsad_oap.h: Update header accordingly.
+
+	* src/html/src/oap.xsl (html-create-user-form): Add "Host Access" input.
+
+2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (exec_omp_post): Make create_user "name" a "login".
 
 	* src/html/src/oap.xsl (html-create-user-form): Relabel "Name" as
@@ -42,7 +58,7 @@
 
 	* src/gsad_oap.h: Add headers accordingly.
 
-	* src/html/src/omp.xsl (scanner_settings): Add edit button.
+	* src/html/src/oap.xsl (scanner_settings): Add edit button.
 	(scanner_settings, setting, get_settings_response) [edit]: New templates.
 	(get_settings, edit_settings): New templates.
 

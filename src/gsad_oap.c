@@ -147,12 +147,16 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
  * @param[in]  name         New user name.
  * @param[in]  password     New user password.
  * @param[in]  role         New user role.
+ * @param[in]  hosts        List of hosts user has/lacks access rights.
+ *                          Empty string for all access, NULL on error.
+ * @param[in]  hosts_allow  Whether hosts grants (1) or forbids (0) access.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_user_oap (credentials_t * credentials,
-                 const char *name, const char *password, const char *role)
+create_user_oap (credentials_t * credentials, const char *name,
+                 const char *password, const char *role, const char *hosts,
+                 const char *hosts_allow)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -168,22 +172,40 @@ create_user_oap (credentials_t * credentials,
 
   xml = g_string_new ("<commands_response>");
 
-  if (name == NULL || password == NULL || role == NULL)
+  if (name == NULL || password == NULL || role == NULL || hosts == NULL
+      || hosts_allow == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
   else
     {
+      int ret;
+
       /* Create the user. */
 
-      if (openvas_server_sendf (&session,
-                                "<create_user>"
-                                "<name>%s</name>"
-                                "<password>%s</password>"
-                                "<role>%s</role>"
-                                "</create_user>",
-                                name,
-                                password,
-                                role)
-          == -1)
+      if (strlen (hosts))
+        ret = openvas_server_sendf (&session,
+                                    "<create_user>"
+                                    "<name>%s</name>"
+                                    "<password>%s</password>"
+                                    "<role>%s</role>"
+                                    "<hosts allow=\"%s\">%s</hosts>"
+                                    "</create_user>",
+                                    name,
+                                    password,
+                                    role,
+                                    hosts_allow,
+                                    hosts);
+      else
+        ret = openvas_server_sendf (&session,
+                                    "<create_user>"
+                                    "<name>%s</name>"
+                                    "<password>%s</password>"
+                                    "<role>%s</role>"
+                                    "</create_user>",
+                                    name,
+                                    password,
+                                    role);
+
+      if (ret == -1)
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);

@@ -52,7 +52,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/oap" method="post" enctype="multipart/form-data">
         <input type="hidden" name="cmd" value="create_user"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Login Name</td>
             <td>
               <input type="text" name="login" value="" size="30"
@@ -66,13 +66,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="40"/>
             </td>
           </tr>
-          <tr>
-            <td>Role</td>
+          <tr class="odd">
+            <td valign="top">Role</td>
             <td>
               <select name="role">
                 <option value="User">User</option>
                 <option value="Admin">Admin</option>
               </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Host Access (optional)</td>
+            <td>
+              <input type="radio" name="hosts_allow" value="1" checked="1"/>
+              Allow
+              <input type="radio" name="hosts_allow" value="0"/>
+              Deny
+              <br/>
+              <input type="text" name="hosts" value="" size="30"
+                     maxlength="500"/>
             </td>
           </tr>
           <tr>
