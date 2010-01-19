@@ -1,3 +1,7 @@
+2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (init_validator): Add \ to lsc_password characters.
+
 2010-01-18  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/oap.xsl (scanner_settings): Only enable edit button if
