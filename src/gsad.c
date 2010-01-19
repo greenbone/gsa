@@ -229,6 +229,8 @@ init_validator ()
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
+  openvas_validator_add (validator, "access_hosts", "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
@@ -260,7 +262,6 @@ init_validator ()
   openvas_validator_alias (validator, "scantarget",   "name");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
-  openvas_validator_alias (validator, "hosts_allow",  "boolean");
   openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "level_high",   "boolean");
   openvas_validator_alias (validator, "level_medium", "boolean");
@@ -315,6 +316,7 @@ struct gsad_connection_info
    */
   struct req_parms
   {
+    char *access_hosts;  ///< Value of "access_hosts" parameter.
     char *base;          ///< Value of "base" parameter.
     char *cmd;           ///< Value of "cmd" parameter.
     char *name;          ///< Value of "name" parameter.
@@ -494,6 +496,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
+  free (con_info->req_parms.access_hosts);
   free (con_info->req_parms.base);
   free (con_info->req_parms.cmd);
   free (con_info->req_parms.name);
@@ -721,6 +724,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
       /** @todo Why validate these here and in exec_omp_post? */
 
+      if (!strcmp (key, "access_hosts"))
+        {
+          con_info->req_parms.access_hosts = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.access_hosts,
+                  (char *) data,
+                  size);
+          con_info->req_parms.access_hosts[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "access_hosts",
+                                   con_info->req_parms.access_hosts))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
       if (!strcmp (key, "base"))
         {
           con_info->req_parms.base = malloc (size + 1);
@@ -1501,10 +1519,12 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.role);
           con_info->req_parms.role = NULL;
         }
-      if (openvas_validate (validator, "hosts", con_info->req_parms.hosts))
+      if (openvas_validate (validator,
+                            "access_hosts",
+                            con_info->req_parms.access_hosts))
         {
-          free (con_info->req_parms.hosts);
-          con_info->req_parms.hosts = NULL;
+          free (con_info->req_parms.access_hosts);
+          con_info->req_parms.access_hosts = NULL;
         }
       if (openvas_validate (validator,
                             "hosts_allow",
@@ -1518,7 +1538,7 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.login,
                          con_info->req_parms.password,
                          con_info->req_parms.role,
-                         con_info->req_parms.hosts,
+                         con_info->req_parms.access_hosts,
                          con_info->req_parms.hosts_allow);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
@@ -1528,7 +1548,9 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.name);
           con_info->req_parms.name = NULL;
         }
-      if (openvas_validate (validator, "hosts", con_info->req_parms.hosts))
+      if (openvas_validate (validator,
+                            "access_hosts",
+                            con_info->req_parms.access_hosts))
         {
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;

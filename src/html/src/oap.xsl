@@ -76,14 +76,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">Host Access (optional)</td>
+            <td valign="top">Host Access</td>
             <td>
-              <input type="radio" name="hosts_allow" value="1" checked="1"/>
-              Allow
-              <input type="radio" name="hosts_allow" value="0"/>
-              Deny
+              <input type="radio" name="hosts_allow" value="2" checked="1"/>
+              Allow All
               <br/>
-              <input type="text" name="hosts" value="" size="30"
+              <input type="radio" name="hosts_allow" value="1"/>
+              Allow:
+              <input type="radio" name="hosts_allow" value="0"/>
+              Deny:
+              <br/>
+              <input type="text" name="access_hosts" value="" size="30"
                      maxlength="500"/>
             </td>
           </tr>
@@ -114,6 +117,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>Name</td>
             <td>Role</td>
+            <td>Host Access</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="user"/>
@@ -164,7 +168,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <b><xsl:value-of select="name"/></b>
     </td>
-    <td><xsl:value-of select="role"/></td>
+    <td>
+      <xsl:value-of select="role"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
+          Allow All
+        </xsl:when>
+        <xsl:when test="hosts/@allow = 0">
+          Deny:
+          <xsl:value-of select="hosts/text()"/>
+        </xsl:when>
+        <xsl:when test="hosts/@allow = 1">
+          Allow:
+          <xsl:value-of select="hosts/text()"/>
+        </xsl:when>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:choose>
         <xsl:when test="name=/envelope/login/text()">

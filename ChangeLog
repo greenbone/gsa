@@ -1,3 +1,21 @@
+2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add user host access to user list.  Make "Allow All" possible when
+	creating a user.
+
+	* src/gsad.c (init_validator): Add "access_hosts" rule.  Add 2 to
+	"hosts_allow".
+	(struct req_parms): Add access_hosts.
+	(free_resources, serve_post): Add access_hosts handling.
+	(exec_omp_post): Pass access_hosts instead of hosts to create_user_oap.
+
+	* src/gsad_oap.c (create_user_oap): Leave out HOSTS if hosts_allow is 2.
+
+	* src/html/src/oap.xsl (html-create-user-form): Make "Host Access"
+	mandatory, with a "Allow All" radio.
+	(html-users-table): Add "Host Access" column.
+	(user): Add host access details.
+
 2010-01-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/gsad.xsl, src/html/src/about.htm4: Extending Copyright

@@ -149,7 +149,8 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
  * @param[in]  role         New user role.
  * @param[in]  hosts        List of hosts user has/lacks access rights.
  *                          Empty string for all access, NULL on error.
- * @param[in]  hosts_allow  Whether hosts grants (1) or forbids (0) access.
+ * @param[in]  hosts_allow  Whether hosts grants ("1") or forbids ("0") access,
+ *                          or "2" for all access.
  *
  * @return Result of XSL transformation.
  */
@@ -181,7 +182,7 @@ create_user_oap (credentials_t * credentials, const char *name,
 
       /* Create the user. */
 
-      if (strlen (hosts))
+      if (strcmp (hosts_allow, "2") && strlen (hosts))
         ret = openvas_server_sendf (&session,
                                     "<create_user>"
                                     "<name>%s</name>"
