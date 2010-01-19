@@ -19,7 +19,7 @@ Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@intevation.de>
 
 Copyright:
-Copyright (C) 2009 Greenbone Networks GmbH
+Copyright (C) 2009, 2010 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2,
@@ -79,7 +79,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-footer">
   <div class="gsa_footer">
-    Greenbone Security Assistant (GSA) Copyright 2009 by Greenbone Networks
+    Greenbone Security Assistant (GSA) Copyright 2009, 2010 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net">www.greenbone.net</a>
   </div>
 </xsl:template>
