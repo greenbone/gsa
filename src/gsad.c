@@ -222,7 +222,7 @@ init_validator ()
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
-  openvas_validator_add (validator, "credential_login", "^[[:alnum:]]{1,40}$");
+  openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\\\]{1,40}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
