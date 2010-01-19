@@ -155,7 +155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="role"/></td>
     <td>
       <xsl:choose>
-        <xsl:when test="in_use='0'">
+        <xsl:when test="name=/envelope/login/text()">
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
                style="margin-left:3px;"/>
         </xsl:when>
