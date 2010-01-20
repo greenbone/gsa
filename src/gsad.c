@@ -1570,8 +1570,8 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.name = NULL;
         }
       if (openvas_validate (validator,
-                            "access_hosts",
-                            con_info->req_parms.access_hosts))
+                            "hosts",
+                            con_info->req_parms.hosts))
         {
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;

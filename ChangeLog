@@ -1,5 +1,10 @@
 2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (exec_omp_post): Revert create_target hosts validator to
+	"hosts".
+
+2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl: Make all alt's "Details" for details buttons.
 
 2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
