@@ -1,5 +1,9 @@
 2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl: Make all alt's "Details" for details buttons.
+
+2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add user details page and editing of user details.
 
 	* src/gsad.c (init_validator): Add "edit_user", "get_user" and "save_user"

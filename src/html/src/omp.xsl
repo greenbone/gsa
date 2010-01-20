@@ -1546,7 +1546,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <a href="/omp?cmd=get_target&amp;name={name}" title="Target Details">
                     <img src="/img/details.png"
                          border="0"
-                         alt="Target"
+                         alt="Details"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -2681,7 +2681,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
                      title="Select and Edit NVT Details"
                      style="margin-left:3px;">
-                    <img src="/img/edit.png" border="0" alt="Details"/>
+                    <img src="/img/edit.png" border="0" alt="Edit"/>
                   </a>
                 </td>
               </tr>
@@ -2910,7 +2910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="$config">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={$family}"
            title="Edit NVT Details" style="margin-left:3px;">
-          <img src="/img/edit.png" border="0" alt="Details"/>
+          <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
     </td>
@@ -3260,7 +3260,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  src="/img/details.png"
                  border="0"
                  style="margin-left:3px;"
-                 alt="Edit"/>
+                 alt="Details"/>
 -->
           <input type="image"
                  name="submit"
@@ -3781,7 +3781,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=edit_config&amp;name={name}"
              title="Edit Scan Config"
              style="margin-left:3px;">
-            <img src="/img/edit.png" border="0" alt="Delete"/>
+            <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
