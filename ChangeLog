@@ -1,3 +1,25 @@
+2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add user details page and editing of user details.
+
+	* src/gsad.c (init_validator): Add "edit_user", "get_user" and "save_user"
+	commands.  Add rule "modify_password".
+	(struct req_parms): Add modify_password.
+	(free_resources, serve_post): Add modify_password handling.
+	(exec_omp_post): Add save_user command.
+	(exec_omp_get): Add edit_user and get_user commands.
+
+	* src/gsad_oap.c (save_user_oap, edit_user_oap, get_user_oap): New
+	functions.
+
+	* src/gsad_oap.h: Add headers accordingly.
+
+	* src/html/src/oap.xsl (html-create-user-form): Order options
+	alphabetically, and force selection of "User".
+	(user): Add details and edit buttons.
+	(user) [details] [edit]: New templates.
+	(edit_user, get_user): New templates.
+
 2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add user host access to user list.  Make "Allow All" possible when

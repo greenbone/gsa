@@ -34,6 +34,7 @@
  * to deliver an HTML result.
  */
 
+#include <assert.h>
 #include <gnutls/gnutls.h> /* for gnutls_session_t */
 #include <string.h> /* for strlen */
 
@@ -265,6 +266,133 @@ create_user_oap (credentials_t * credentials, const char *name,
 }
 
 /**
+ * @brief Save a user, get all users, XSL transform the result.
+ *
+ * @param[in]  credentials      Username and password for authentication
+ * @param[in]  name             User name.
+ * @param[in]  modify_password  Save password if true.
+ * @param[in]  password         New user password.
+ * @param[in]  role             New user role.
+ * @param[in]  hosts            List of hosts user has/lacks access rights.
+ *                              Empty string for all access, NULL on error.
+ * @param[in]  hosts_allow      Whether hosts grants ("1") or forbids ("0")
+ *                              access, or "2" for all access.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_user_oap (credentials_t * credentials, const char *name,
+               const char *modify_password, const char *password,
+               const char *role, const char *hosts, const char *hosts_allow)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  if (administrator_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a user. "
+                         "No saving has been done. "
+                         "Diagnostics: Failure to connect to administrator daemon.",
+                         "/oap?cmd=get_users");
+
+  xml = g_string_new ("<get_users>");
+
+  if (name == NULL || modify_password == NULL || password == NULL
+      || role == NULL || hosts == NULL || hosts_allow == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
+  else
+    {
+      int ret;
+
+      /* Create the user. */
+
+      if (strcmp (hosts_allow, "2") && strlen (hosts))
+        ret = openvas_server_sendf (&session,
+                                    "<modify_user>"
+                                    "<name>%s</name>"
+                                    "<password modify=\"%s\">%s</password>"
+                                    "<role>%s</role>"
+                                    "<hosts allow=\"%s\">%s</hosts>"
+                                    "</modify_user>",
+                                    name,
+                                    modify_password,
+                                    password,
+                                    role,
+                                    hosts_allow,
+                                    hosts);
+      else
+        ret = openvas_server_sendf (&session,
+                                    "<modify_user>"
+                                    "<name>%s</name>"
+                                    "<password modify=\"%s\">%s</password>"
+                                    "<role>%s</role>"
+                                    "</modify_user>",
+                                    name,
+                                    modify_password,
+                                    password,
+                                    role);
+
+      if (ret == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a user. "
+                               "No saving has been done. "
+                               "Diagnostics: Failure to send command to administrator daemon.",
+                               "/oap?cmd=get_users");
+        }
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a user. "
+                               "It is unclear whether the user has been modified. "
+                               "Diagnostics: Failure to receive response from administrator daemon.",
+                               "/oap?cmd=get_users");
+        }
+      free_entity (entity);
+    }
+
+  /* Get all users. */
+
+  if (openvas_server_send (&session, "<get_users/>") == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a user. "
+                           "The user has, however, been saving. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/oap?cmd=get_users");
+    }
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a user. "
+                           "The user has, however, been saved. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/oap?cmd=get_users");
+    }
+  free_entity (entity);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_users>");
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Delete a user, get all users, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
@@ -314,6 +442,138 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
 
   openvas_server_close (socket, session);
   return xsl_transform_oap (credentials, text);
+}
+
+/**
+ * @brief Get a user for editing and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  name         User name.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_user_oap (credentials_t * credentials, const char * name)
+{
+  tracef ("In get_users_oap\n");
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  assert (name);
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the user. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_users");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Get User\">"
+                                    "Only users given the Administrator role"
+                                    " may access User Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_users name=\"%s\"/>",
+                            name)
+      == -1)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_users");
+    }
+
+  xml = g_string_new ("<edit_user>");
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting user. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_users");
+    }
+  free_entity (entity);
+
+  g_string_append (xml, "</edit_user>");
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get a user and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  name         User name.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_user_oap (credentials_t * credentials, const char * name)
+{
+  tracef ("In get_users_oap\n");
+  entity_t entity;
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  assert (name);
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the user. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_users");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Get User\">"
+                                    "Only users given the Administrator role"
+                                    " may access User Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_users name=\"%s\"/>",
+                            name)
+      == -1)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_users");
+    }
+
+  xml = g_string_new ("<get_user>");
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting user. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_users");
+    }
+  free_entity (entity);
+
+  g_string_append (xml, "</get_user>");
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, g_string_free (xml, FALSE));
 }
 
 /**

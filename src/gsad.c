@@ -189,6 +189,7 @@ init_validator ()
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
                          "|(edit_settings)"
+                         "|(edit_user)"
                          "|(export_config)"
                          "|(get_agents)"
                          "|(get_config)"
@@ -207,6 +208,7 @@ init_validator ()
                          "|(get_target)"
                          "|(get_system_reports)"
                          "|(get_targets)"
+                         "|(get_user)"
                          "|(get_users)"
                          "|(import_config)"
                          "|(test_escalator)"
@@ -214,6 +216,7 @@ init_validator ()
                          "|(save_config_family)"
                          "|(save_config_nvt)"
                          "|(save_settings)"
+                         "|(save_user)"
                          "|(start_task)"
                          "|(sync_feed)$");
 
@@ -263,6 +266,7 @@ init_validator ()
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "method",       "condition");
+  openvas_validator_alias (validator, "modify_password", "boolean");
   openvas_validator_alias (validator, "level_high",   "boolean");
   openvas_validator_alias (validator, "level_medium", "boolean");
   openvas_validator_alias (validator, "level_low",    "boolean");
@@ -326,6 +330,7 @@ struct gsad_connection_info
     char *escalator;     ///< Value of "escalator" parameter.
     char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
+    char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *scantarget;    ///< Value of "scantarget" parameter.
@@ -506,6 +511,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.escalator);
   free (con_info->req_parms.event);
   free (con_info->req_parms.family);
+  free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
   free (con_info->req_parms.scanconfig);
   free (con_info->req_parms.scantarget);
@@ -817,6 +823,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
               && openvas_validate (validator,
                                    "event",
                                    con_info->req_parms.event))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
+      if (!strcmp (key, "modify_password"))
+        {
+          con_info->req_parms.modify_password = malloc (size + 1);
+          memcpy ((char *) con_info->req_parms.modify_password,
+                  (char *) data,
+                  size);
+          con_info->req_parms.modify_password[size] = 0;
+          if (abort_on_insane
+              && openvas_validate (validator,
+                                   "modify_password",
+                                   con_info->req_parms.modify_password))
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
@@ -1684,6 +1705,55 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.sort_order,
                            con_info->req_parms.method_data);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "save_user"))
+    {
+      if (openvas_validate (validator, "login", con_info->req_parms.login))
+        {
+          free (con_info->req_parms.login);
+          con_info->req_parms.login = NULL;
+        }
+      if (openvas_validate (validator,
+                            "modify_password",
+                            con_info->req_parms.modify_password))
+        {
+          free (con_info->req_parms.modify_password);
+          con_info->req_parms.modify_password = NULL;
+        }
+      if (openvas_validate (validator,
+                            "password",
+                            con_info->req_parms.password))
+        {
+          free (con_info->req_parms.password);
+          con_info->req_parms.password = NULL;
+        }
+      if (openvas_validate (validator, "role", con_info->req_parms.role))
+        {
+          free (con_info->req_parms.role);
+          con_info->req_parms.role = NULL;
+        }
+      if (openvas_validate (validator,
+                            "access_hosts",
+                            con_info->req_parms.access_hosts))
+        {
+          free (con_info->req_parms.access_hosts);
+          con_info->req_parms.access_hosts = NULL;
+        }
+      if (openvas_validate (validator,
+                            "hosts_allow",
+                            con_info->req_parms.hosts_allow))
+        {
+          free (con_info->req_parms.hosts_allow);
+          con_info->req_parms.hosts_allow = NULL;
+        }
+      con_info->response =
+        save_user_oap (credentials,
+                       con_info->req_parms.login,
+                       con_info->req_parms.modify_password,
+                       con_info->req_parms.password,
+                       con_info->req_parms.role,
+                       con_info->req_parms.access_hosts,
+                       con_info->req_parms.hosts_allow);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "sync_feed"))
     {
       con_info->response = sync_feed_oap (credentials);
@@ -1961,6 +2031,9 @@ exec_omp_get (struct MHD_Connection *connection)
   else if (!strcmp (cmd, "edit_settings"))
     return edit_settings_oap (credentials, sort_field, sort_order);
 
+  else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
+    return edit_user_oap (credentials, name);
+
   else if ((!strcmp (cmd, "export_config")) && (name != NULL))
     return export_config_omp (credentials, name, &content_type,
                               &content_disposition, &response_size);
@@ -2098,6 +2171,9 @@ exec_omp_get (struct MHD_Connection *connection)
 
   else if (!strcmp (cmd, "get_targets"))
     return get_targets_omp (credentials, sort_field, sort_order);
+
+  else if ((!strcmp (cmd, "get_user")) && (name != NULL))
+    return get_user_oap (credentials, name);
 
   else if (!strcmp (cmd, "get_users"))
     return get_users_oap (credentials, sort_field, sort_order);

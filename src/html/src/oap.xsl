@@ -70,8 +70,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Role</td>
             <td>
               <select name="role">
-                <option value="User">User</option>
                 <option value="Admin">Admin</option>
+                <option value="User" selected="1">User</option>
               </select>
             </td>
           </tr>
@@ -200,8 +200,180 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
+      <a href="/oap?cmd=get_user&amp;name={name}"
+         title="Details"
+         style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/oap?cmd=edit_user&amp;name={name}"
+         title="Edit User"
+         style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template match="user" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       User Details
+       <a href="/help/configure_users.html#userdetails"
+         title="Help: Configure Users (User Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_users">Back to Users</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Login Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Role:</td>
+          <td><xsl:value-of select="role"/></td>
+        </tr>
+        <tr>
+          <td>Host Access:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
+                Allow All
+              </xsl:when>
+              <xsl:when test="hosts/@allow = 0">
+                Deny:
+                <xsl:value-of select="hosts/text()"/>
+              </xsl:when>
+              <xsl:when test="hosts/@allow = 1">
+                Allow:
+                <xsl:value-of select="hosts/text()"/>
+              </xsl:when>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+
+<!--
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1>Tasks managed by this User: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks managed by this User</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
+                    <img src="/img/list.png"
+                         border="0"
+                         alt="Reports"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+-->
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="user" mode="edit">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Edit User
+       <a href="/help/configure_users.html#userdetails"
+         title="Help: Configure Users (Edit User)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_users">Back to Users</a>
+      </div>
+      <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="save_user"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr class="odd">
+            <td valign="top" width="125"><b>Login Name:</b></td>
+            <td>
+              <input type="hidden" name="login" value="{name}"/>
+              <b><xsl:value-of select="name"/></b>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Password</td>
+            <td>
+              <input type="radio" name="modify_password" value="1" checked="1"/>
+              Use existing value
+              <br/>
+              <input type="radio" name="modify_password" value="0"/>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top">Role</td>
+            <td>
+              <select name="role">
+                <xsl:choose>
+                  <xsl:when test="role='User'">
+                    <option value="Admin">Admin</option>
+                    <option value="User" selected="1">User</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="Admin" selected="1">Admin</option>
+                    <option value="User">User</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Host Access</td>
+            <td>
+              <input type="radio" name="hosts_allow" value="2" checked="1"/>
+              Allow All
+              <br/>
+              <input type="radio" name="hosts_allow" value="1"/>
+              Allow:
+              <input type="radio" name="hosts_allow" value="0"/>
+              Deny:
+              <br/>
+              <input type="text" name="access_hosts" value="{hosts}" size="30"
+                     maxlength="500"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save User"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
 </xsl:template>
 
 <!--     GET_USERS_RESPONSE -->
@@ -209,6 +381,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_users_response">
   <xsl:call-template name="html-create-user-form"/>
   <xsl:call-template name="html-users-table"/>
+</xsl:template>
+
+<!--     EDIT_USER -->
+
+<xsl:template match="edit_user">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_users_response/user" mode="edit"/>
+</xsl:template>
+
+<!--     GET_USER -->
+
+<xsl:template match="get_user">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_users_response/user" mode="details"/>
 </xsl:template>
 
 <!-- END USERS MANAGEMENT -->
