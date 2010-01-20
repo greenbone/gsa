@@ -353,12 +353,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top">Host Access</td>
             <td>
-              <input type="radio" name="hosts_allow" value="2" checked="1"/>
+              <xsl:choose>
+                <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
+                  <input type="radio" name="hosts_allow" value="2" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="hosts_allow" value="2"/>
+                </xsl:otherwise>
+              </xsl:choose>
               Allow All
               <br/>
-              <input type="radio" name="hosts_allow" value="1"/>
+              <xsl:choose>
+                <xsl:when test="hosts/@allow = 1">
+                  <input type="radio" name="hosts_allow" value="1" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="hosts_allow" value="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
               Allow:
-              <input type="radio" name="hosts_allow" value="0"/>
+              <xsl:choose>
+                <xsl:when test="hosts/@allow = 0">
+                  <input type="radio" name="hosts_allow" value="0" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="hosts_allow" value="0"/>
+                </xsl:otherwise>
+              </xsl:choose>
               Deny:
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
