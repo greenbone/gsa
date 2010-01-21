@@ -176,6 +176,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
           Allow All
         </xsl:when>
+        <xsl:when test="hosts/@allow = 3">
+          Custom
+        </xsl:when>
         <xsl:when test="hosts/@allow = 0">
           Deny:
           <xsl:value-of select="hosts/text()"/>
@@ -244,6 +247,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:choose>
               <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
                 Allow All
+              </xsl:when>
+              <xsl:when test="hosts/@allow = 3">
+                Custom
               </xsl:when>
               <xsl:when test="hosts/@allow = 0">
                 Deny:
@@ -354,7 +360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Host Access</td>
             <td>
               <xsl:choose>
-                <xsl:when test="count(hosts) = 0 or hosts/@allow = 2">
+                <xsl:when test="count(hosts) = 0 or hosts/@allow &gt; 1">
                   <input type="radio" name="hosts_allow" value="2" checked="1"/>
                 </xsl:when>
                 <xsl:otherwise>
