@@ -1,5 +1,12 @@
 2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (redirect_pid): New variable.
+	(gsad_cleanup): Kill redirect child in parent.
+	(main): Set redirect_pid in parent.  Set SIGCHLD to SIG_IGN.  Remove
+	pidfile creation from redirect child.
+
+2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/oap.xsl (user) [edit]: Switch the modify_password values.
 
 2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>

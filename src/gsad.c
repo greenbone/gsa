@@ -126,6 +126,11 @@ struct MHD_Daemon *gsad_daemon;
  */
 gchar *redirect_location = NULL;
 
+/**
+ * @brief PID of redirect child in parent, 0 in child.
+ */
+pid_t redirect_pid = 0;
+
 /** @todo Ensure the accesses to these are thread safe. */
 
 /**
@@ -2845,11 +2850,13 @@ gsad_init (void)
 void
 gsad_cleanup (void)
 {
+  if (redirect_pid) kill (redirect_pid, SIGTERM);
+
   MHD_stop_daemon (gsad_daemon);
 
   if (log_config) free_log_configuration (log_config);
 
-  pidfile_remove("gsad");
+  pidfile_remove ("gsad");
 }
 
 /**
@@ -3077,6 +3084,7 @@ main (int argc, char **argv)
           break;
         default:
           /* Parent. */
+          redirect_pid = pid;
           redirect = FALSE;
           break;
         }
@@ -3094,7 +3102,8 @@ main (int argc, char **argv)
 
   if (signal (SIGTERM, handle_sigterm) == SIG_ERR   /* RATS: ignore, only one function per signal */
       || signal (SIGINT, handle_sigint) == SIG_ERR  /* RATS: ignore, only one function per signal */
-      || signal (SIGHUP, handle_sighup) == SIG_ERR) /* RATS: ignore, only one function per signal */
+      || signal (SIGHUP, handle_sighup) == SIG_ERR  /* RATS: ignore, only one function per signal */
+      || signal (SIGCHLD, SIG_IGN) == SIG_ERR)      /* RATS: ignore, only one function per signal */
     {
       g_critical ("%s: Failed to register signal handlers!\n", __FUNCTION__);
       exit (EXIT_FAILURE);
@@ -3116,9 +3125,6 @@ main (int argc, char **argv)
         }
       else
         {
-          /** @todo Add g_critical. */
-          if (pidfile_create ("gsad")) exit (EXIT_FAILURE);
-
           tracef ("GSAD started successfully and is redirecting on port %d.\n",
                   gsad_redirect_port);
         }
