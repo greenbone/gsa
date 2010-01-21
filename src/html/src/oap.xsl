@@ -331,10 +331,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Password</td>
             <td>
-              <input type="radio" name="modify_password" value="1" checked="1"/>
+              <input type="radio" name="modify_password" value="0" checked="1"/>
               Use existing value
               <br/>
-              <input type="radio" name="modify_password" value="0"/>
+              <input type="radio" name="modify_password" value="1"/>
               <input type="password" name="password" value="" size="30"
                      maxlength="40"/>
             </td>

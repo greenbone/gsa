@@ -1,5 +1,9 @@
 2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/oap.xsl (user) [edit]: Switch the modify_password values.
+
+2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/oap.xsl (user): Account for "custom" access rules.
 
 2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
