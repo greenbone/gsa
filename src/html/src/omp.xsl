@@ -624,7 +624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/log.png" alt="Log" title="Log"/>
             </td>
           </tr>
-          <xsl:apply-templates/>
+          <xsl:apply-templates select="task/reports/report"/>
         </table>
       </div>
     </div>
@@ -992,29 +992,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="report">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
-    <td>
-      <a href="{@host_start/host}">
-        <xsl:value-of select="host_start/host"/>
-      </a>
-    </td>
-    <td></td>
-    <td>0</td>
-    <td>0</td>
-    <td>0</td>
-    <td></td>
-  </tr>
-</xsl:template>
-
 <!-- REPORT -->
-<xsl:template match="get_status_response/task/report">
+<xsl:template match="report">
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -1085,7 +1064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../@id}"
+      <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}"
          title="Delete"
          style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
@@ -1275,29 +1254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="task/report">
-      <xsl:call-template name="html-report-table"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="html-task-table"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template match="commands_response/get_status_response">
-  <xsl:choose>
-    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Get Status</xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="@status"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:when test="task/report">
+    <xsl:when test="task/reports">
       <xsl:call-template name="html-report-table"/>
     </xsl:when>
     <xsl:otherwise>

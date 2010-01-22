@@ -1,3 +1,16 @@
+2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Remain on the task page after deleting the task's last report.
+
+	* src/html/src/omp.xsl (html-report-table): Apply the report
+	template explicitly.
+	(report): Replace with body of get_status_response/task/report.  Go two
+	up to get to the task ID.
+	(get_status_response/task/report): Remove.
+	(get_status_response): Determine if the reports are present by checking
+	for task/reports instead of a task/report.
+	(commands_response/get_status_response): Remove, redundant.
+
 2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (redirect_pid): New variable.
