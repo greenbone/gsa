@@ -1,5 +1,11 @@
 2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/gsa-style.css (.gb_window_part_center)
+	(.gb_window_part_center_error, .logo_l, .logo_r, .logout_panel): Set
+	colours so that text shows up when images are off in the browser.
+
+2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Remain on the task page after deleting the task's last report.
 
 	* src/html/src/omp.xsl (html-report-table): Apply the report
