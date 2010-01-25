@@ -1,3 +1,8 @@
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/gsad_omp.c (get_report_omp): Just send the xml describing the
+	report if xml report is requested.
+
 2010-01-25  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (get_report_omp): If the format is XML send the plain

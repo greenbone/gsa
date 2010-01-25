@@ -3767,8 +3767,9 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       else if (strcmp (format, "xml") == 0)
         {
           /* Manager sends XML report as plain XML. */
+          /** @TODO Call g_string_sized_new with an appropriate size */
           xml = g_string_new ("");
-          if (read_entity_and_string (&session, &entity, &xml))
+          if (read_entity (&session, &entity))
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
@@ -3778,8 +3779,21 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "Diagnostics: Failure to receive response from manager daemon.",
                                    "/omp?cmd=get_status");
             }
-          free_entity (entity);
           openvas_server_close (socket, session);
+          entity_t report = entity_child (entity, "report");
+          if (report == NULL)
+            {
+              free_entity (entity);
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Response from manager daemon did not contain a report.",
+                                   "/omp?cmd=get_status");
+            }
+          print_entity_to_string (report, xml);
+          free_entity (entity);
           return g_string_free (xml, FALSE);
         }
       else
