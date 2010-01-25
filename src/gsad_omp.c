@@ -3645,7 +3645,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  search_phrase  Phrase which included results must contain.
  *
- * @return Result of XSL transformation.
+ * @return Report.
  */
 char *
 get_report_omp (credentials_t * credentials, const char *report_id,
@@ -3673,16 +3673,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
-  if (format == NULL || strlen (format) == 0) format = "xml";
-
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report. "
                          "The report could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
-
-  xml = g_string_new ("<commands_response>");
 
   if (openvas_server_sendf (&session,
                             "<get_report"
@@ -3695,7 +3691,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " levels=\"%s\""
                             " search_phrase=\"%s\"/>",
                             report_id,
-                            format,
+                            format ? format : "xml",
                             first_result,
                             max_results,
                             sort_field ? sort_field : "type",
@@ -3709,7 +3705,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             search_phrase)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -3718,60 +3713,91 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                            "/omp?cmd=get_status");
     }
 
-  if (strcmp (format, "nbe") == 0
-      || strcmp (format, "pdf") == 0
-      || strcmp (format, "html") == 0
-      || strcmp (format, "html-pdf") == 0)
+  if (format)
     {
-      entity = NULL;
-      if (read_entity (&session, &entity))
+      if (strcmp (format, "nbe") == 0
+          || strcmp (format, "pdf") == 0
+          || strcmp (format, "html") == 0
+          || strcmp (format, "html-pdf") == 0)
         {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_status");
-        }
+          xml = g_string_new ("<commands_response>");
 
-      report_entity = entity_child (entity, "report");
-      if (report_entity != NULL)
-        {
-          report_encoded = entity_text (report_entity);
-          report_decoded =
-            (gchar *) g_base64_decode (report_encoded, report_len);
-          /* g_base64_decode can return NULL (Glib 2.12.4-2), at least
-           * when *report_len is zero. */
-          if (report_decoded == NULL)
+          entity = NULL;
+          if (read_entity (&session, &entity))
             {
-              report_decoded = (gchar *) g_strdup ("");
-              *report_len = 0;
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_status");
+            }
+
+          report_entity = entity_child (entity, "report");
+          if (report_entity != NULL)
+            {
+              report_encoded = entity_text (report_entity);
+              report_decoded =
+                (gchar *) g_base64_decode (report_encoded, report_len);
+              /* g_base64_decode can return NULL (Glib 2.12.4-2), at least
+               * when *report_len is zero. */
+              if (report_decoded == NULL)
+                {
+                  report_decoded = (gchar *) g_strdup ("");
+                  *report_len = 0;
+                }
+              free_entity (entity);
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return report_decoded;
+            }
+          else
+            {
+              free_entity (entity);
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive report from manager daemon.",
+                                   "/omp?cmd=get_status");
+            }
+        }
+      else if (strcmp (format, "xml") == 0)
+        {
+          /* Manager sends XML report as plain XML. */
+          xml = g_string_new ("");
+          if (read_entity_and_string (&session, &entity, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_status");
             }
           free_entity (entity);
-          g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return report_decoded;
+          return g_string_free (xml, FALSE);
         }
       else
         {
-          free_entity (entity);
-          g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive report from manager daemon.",
-                               "/omp?cmd=get_status");
+          g_string_free (xml, TRUE);
+          xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
     }
   else
     {
-      /* Presume format XML. */
+      /* Format is NULL, send XSL transformed XML. */
+
+      xml = g_string_new ("<commands_response>");
 
       if (read_entity_and_string (&session, &entity, &xml))
         {
-          g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "

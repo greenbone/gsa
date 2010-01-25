@@ -1,3 +1,9 @@
+2010-01-25  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad_omp.c (get_report_omp): If the format is XML send the plain
+	XML, and if the format is NULL send the XSL transformed XML (that is,
+	send the HTML page).
+
 2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	Updated help.
