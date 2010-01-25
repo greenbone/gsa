@@ -1,5 +1,10 @@
 2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/gsad_omp.c (get_report_omp): Do not close the server connection
+	a second time in error case.
+
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* src/gsad_omp.c (get_report_omp): Just send the xml describing the
 	report if xml report is requested.
 

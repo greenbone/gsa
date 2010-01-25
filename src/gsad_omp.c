@@ -3785,7 +3785,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               free_entity (entity);
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
               return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
