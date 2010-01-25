@@ -112,9 +112,9 @@ of targets. These are separately specified as a
 
 <p>
 A target defines a set of systems (called "hosts")
-that are to be scanned. 
+that are to be scanned.
 The systems are identified either by
-their IP address or by their hostname.
+their IP addresses, by their hostnames, or with CIDR network notation.
 </p>
 
 <a name="task"></a>

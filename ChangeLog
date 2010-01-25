@@ -1,3 +1,12 @@
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Updated help.
+
+	* src/html/help/configure_credentials.htm4,
+	src/html/help/configure_targets.htm4,
+	src/html/help/configure_users.htm4,
+	src/html/help/glossray.htm4: Updated help.
+
 2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/gsa-style.css (.gb_window_part_center)

@@ -21,6 +21,12 @@ Hit the button "Create User" to submit the new user.
 The list of users will be updated.
 </p>
 
+<p>
+Note on <b>Host Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
+contain a list of comma-separated IPs.
+The CIDR notation (e.g. <tt>192.168.10.0/24</tt>) can be used.
+</p>
+
 <table class="gbntable">
 <tr class="gbntablehead2">
   <td></td>
@@ -50,6 +56,13 @@ The list of users will be updated.
   <td>"User" or "Administrator"</td>
   <td>User</td>
 </tr>
+<tr class="even">
+  <td>Host access</td>
+  <td>yes</td>
+  <td>---</td>
+  <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
+  <td>"Allow all", "Allow:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
+</tr>
 </table>
 
 <a name="users"></a>
@@ -69,9 +82,13 @@ users.
   <td>Name</td>
   <td>Login name of the user.</td>
 </tr>
-<tr>
+<tr class="even">
   <td>Role</td>
   <td>Shows the role of the user.</td>
+</tr>
+<tr class="odd">
+  <td>Host Access</td>
+  <td>Host access rules of the user.</td>
 </tr>
 </table>
 
@@ -89,6 +106,20 @@ will immedialy remove the user and update the list.
 <p>
 It is not possible to remove the last Administrator, which
 is the same as removing the currently used account.
+</p>
+
+<h4>Details<h4>
+
+<p>
+Pressing the details icon GSAD_HTML_ICON_DETAILS will lead to a page
+dispalying user details.
+</p>
+
+<h4>Edit<h4>
+
+<p>
+Pressing the edit icon GSAD_HTML_ICON_EDIT will lead to a page where the
+password, role and Host Access rules can be changed.
 </p>
 
 m4_include(`footer.m4')
