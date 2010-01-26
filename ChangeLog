@@ -1,5 +1,10 @@
 2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/html/src/help/configure_targets.htm4: Removed part about
+	definition of ip-ranges and noted the cidr-netmask limit.
+
+2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* src/gsad_omp.c (serve_post): Own conditional for host parameter
 	validation.
 	(exec_omp_post): Validate host parameter
