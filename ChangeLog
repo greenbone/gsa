@@ -1,3 +1,7 @@
+2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (main): Neaten MHD_start_daemon calls.
+
 2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/html/src/help/configure_targets.htm4: Removed part about

@@ -3194,10 +3194,18 @@ main (int argc, char **argv)
 
       if (http_only)
         {
-          gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
-                                          gsad_port, NULL, NULL, &request_handler,
-                                          NULL, MHD_OPTION_NOTIFY_COMPLETED,
-                                          free_resources, NULL, MHD_OPTION_END);
+          gsad_daemon =
+            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
+                              | MHD_USE_DEBUG,
+                              gsad_port,
+                              NULL, /* Policy callback. */
+                              NULL, /* Policy callback arg. */
+                              &request_handler,
+                              NULL, /* Access callback arg. */
+                              /* Option value pairs. */
+                              MHD_OPTION_NOTIFY_COMPLETED, free_resources,
+                              /* End marker option. */
+                              NULL, MHD_OPTION_END);
         }
       else
         {
@@ -3220,12 +3228,20 @@ main (int argc, char **argv)
             }
 
           gsad_daemon =
-            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL | MHD_USE_DEBUG,
-                              gsad_port, NULL, NULL, &request_handler, NULL,
+            MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
+                              | MHD_USE_DEBUG
+                              | MHD_USE_SSL,
+                              gsad_port,
+                              NULL, /* Policy callback. */
+                              NULL, /* Policy callback arg. */
+                              &request_handler,
+                              NULL, /* Access callback arg. */
+                              /* Option value pairs. */
                               MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
                               MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
-                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
-                              MHD_OPTION_END);
+                              MHD_OPTION_NOTIFY_COMPLETED, free_resources,
+                              /* End marker option. */
+                              NULL, MHD_OPTION_END);
         }
 
       if (gsad_daemon == NULL)
