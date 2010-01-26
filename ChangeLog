@@ -1,5 +1,22 @@
 2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (main): Add options --alisten and --mlisten.
+
+	* src/gsad_omp.c (manager_address): New variable.
+	(omp_init): Add address argument.
+	(is_omp_authenticated, manager_connect): Pass address to
+	openvas_server_open.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/gsad_oap.c (administrator_address): New variable.
+	(oap_init): Add address argument.
+	(administrator_connect): Pass address to openvas_server_open.
+
+	* src/gsad_oap.h: Update header accordingly.
+
+2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (gsad_address): New variable.
 	(main): Add --listen option.  Pass address to MHD_start_daemon.
 

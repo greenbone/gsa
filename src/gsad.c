@@ -2974,6 +2974,8 @@ main (int argc, char **argv)
   static gboolean print_version = FALSE;
   static gboolean redirect = FALSE;
   static gchar *gsad_address_string = NULL;
+  static gchar *gsad_manager_address_string = NULL;
+  static gchar *gsad_administrator_address_string = NULL;
   static gchar *gsad_port_string = NULL;
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_administrator_port_string = NULL;
@@ -2993,6 +2995,12 @@ main (int argc, char **argv)
     {"listen", '\0',
      0, G_OPTION_ARG_STRING, &gsad_address_string,
      "Listen on <address>.", "<address>" },
+    {"alisten", '\0',
+     0, G_OPTION_ARG_STRING, &gsad_administrator_address_string,
+     "Administrator address.", "<address>" },
+    {"mlisten", '\0',
+     0, G_OPTION_ARG_STRING, &gsad_manager_address_string,
+     "Manager address.", "<address>" },
     {"port", 'p',
      0, G_OPTION_ARG_STRING, &gsad_port_string,
      "Use port number <number>.", "<number>"},
@@ -3202,8 +3210,8 @@ main (int argc, char **argv)
 
       /* Start the real, HTTPS server. */
 
-      omp_init (gsad_manager_port);
-      oap_init (gsad_administrator_port);
+      omp_init (gsad_manager_address_string, gsad_manager_port);
+      oap_init (gsad_administrator_address_string, gsad_administrator_port);
 
       gsad_address.sin_family = AF_INET;
       gsad_address.sin_port = htons (gsad_port);

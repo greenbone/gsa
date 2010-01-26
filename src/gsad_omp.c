@@ -78,6 +78,11 @@
 #define OPENVASMD_ADDRESS "127.0.0.1"
 
 /**
+ * @brief The address the manager is on.
+ */
+gchar *manager_address = NULL;
+
+/**
  * @brief The port the manager is on.
  */
 int manager_port = 9390;
@@ -90,11 +95,14 @@ int manager_connect (credentials_t *, int *, gnutls_session_t *);
 /**
  * @brief Init the GSA OMP library.
  *
- * @param[in]  port_manager  Manager port.
+ * @param[in]  address_manager  Manager address (copied).
+ * @param[in]  port_manager     Manager port.
  */
 void
-omp_init (int port_manager)
+omp_init (const gchar *address_manager, int port_manager)
 {
+  if (address_manager)
+    manager_address = g_strdup (address_manager);
   manager_port = port_manager;
 }
 
@@ -4047,7 +4055,11 @@ is_omp_authenticated (gchar * username, gchar * password)
   int socket;
   int auth;
 
-  socket = openvas_server_open (&session, OPENVASMD_ADDRESS, manager_port);
+  socket = openvas_server_open (&session,
+                                manager_address
+                                 ? manager_address
+                                 : OPENVASMD_ADDRESS,
+                                manager_port);
   if (socket == -1)
     {
       tracef ("is_omp_authenticated failed to acquire socket!\n");
@@ -4092,7 +4104,11 @@ int
 manager_connect (credentials_t *credentials, int *socket,
                  gnutls_session_t *session)
 {
-  *socket = openvas_server_open (session, OPENVASMD_ADDRESS, manager_port);
+  *socket = openvas_server_open (session,
+                                 manager_address
+                                  ? manager_address
+                                  : OPENVASMD_ADDRESS,
+                                 manager_port);
   if (*socket == -1)
     return -1;
 

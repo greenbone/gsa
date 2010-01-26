@@ -35,7 +35,7 @@
 
 #include "gsad_base.h" /* for credentials_t */
 
-void oap_init (int);
+void oap_init (const gchar *, int);
 
 char * edit_user_oap (credentials_t *, const char *);
 char * get_user_oap (credentials_t *, const char *);

@@ -37,7 +37,7 @@
 
 #include "gsad_base.h" /* for credentials_t */
 
-void omp_init (int);
+void omp_init (const gchar *, int);
 
 char * gsad_newtask (credentials_t *, const char *);
 

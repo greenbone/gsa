@@ -56,6 +56,11 @@
 #define OPENVASAD_ADDRESS "127.0.0.1"
 
 /**
+ * @brief The address the administrator is on.
+ */
+gchar *administrator_address = NULL;
+
+/**
  * @brief The default port the administrator is on.
  */
 int administrator_port = 9393;
@@ -74,7 +79,9 @@ administrator_connect (credentials_t *credentials, int *socket,
                        gnutls_session_t *session)
 {
   *socket = openvas_server_open (session,
-                                 OPENVASAD_ADDRESS,
+                                 administrator_address
+                                  ? administrator_address
+                                  : OPENVASAD_ADDRESS,
                                  administrator_port);
   if (*socket == -1)
     {
@@ -112,12 +119,15 @@ administrator_connect (credentials_t *credentials, int *socket,
 /**
  * @brief Init the GSA OAP library.
  *
- * @param[in]  port_administrator  Port number where the OpenVAS Admnistrator
- *                                 Daemon is listening
+ * @param[in]  address_administrator  Administrator address (copied).
+ * @param[in]  port_administrator     Port number where the OpenVAS Admnistrator
+ *                                    Daemon is listening
  */
 void
-oap_init (int port_administrator)
+oap_init (const gchar *address_administrator, int port_administrator)
 {
+  if (address_administrator)
+    administrator_address = g_strdup (address_administrator);
   administrator_port = port_administrator;
 }
 
