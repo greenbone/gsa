@@ -292,7 +292,7 @@ validate_hosts_parameter (const char* hosts_parameter)
 {
   char* slashpos = NULL;
   char* commapos = NULL;
-  char* copy     = strdup (hosts_parameter);
+  char* copy     = g_strdup (hosts_parameter);
   int cidr_mask = 32;
 
   slashpos = strchr (copy, '/');
@@ -307,13 +307,13 @@ validate_hosts_parameter (const char* hosts_parameter)
         return TRUE;
       if (cidr_mask < 16)
         {
-          free (copy);
+          g_free (copy);
           return FALSE;
         }
       slashpos = strchr (slashpos + 1, '/');
     }
 
-  free (copy);
+  g_free (copy);
   return TRUE;
 }
 
@@ -983,8 +983,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           if (abort_on_insane
               && openvas_validate (validator,
                                    "hosts",
-                                   con_info->req_parms.hosts)
-             || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
+                                   con_info->req_parms.hosts))
+            return MHD_NO;
+          if (validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
@@ -1616,7 +1617,8 @@ exec_omp_post (credentials_t * credentials,
         }
       if (openvas_validate (validator,
                             "hosts",
-                            con_info->req_parms.hosts))
+                            con_info->req_parms.hosts)
+          || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
         {
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;
