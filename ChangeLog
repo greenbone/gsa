@@ -1,3 +1,9 @@
+2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/gsad_omp.c (validate_hosts_parameter): New function, checks cidr
+	netmasks.
+	(serve_post): Call new validation function for hosts parameter.
+
 2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (main): Add option --http-only.

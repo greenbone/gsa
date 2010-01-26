@@ -278,6 +278,45 @@ init_validator ()
   openvas_validator_alias (validator, "level_log",    "boolean");
 }
 
+
+/**
+ * @brief Returns TRUE no netmask in cidr notation < 16 is given.
+ *
+ * @param host_parameter String containing hostnames, IPs etc.
+ *
+ * @return TRUE if no netmask in cidr notation < 16 was found in the
+ *         input string.
+ */
+static gboolean
+validate_hosts_parameter (const char* hosts_parameter)
+{
+  char* slashpos = NULL;
+  char* commapos = NULL;
+  char* copy     = strdup (hosts_parameter);
+  int cidr_mask = 32;
+
+  slashpos = strchr (copy, '/');
+  while (slashpos)
+    {
+      commapos = strchr (slashpos, ',');
+      if (commapos != NULL)
+        commapos[0] = '\0';
+      if (slashpos[1] != '\0')
+        cidr_mask = atoi (slashpos + 1);
+      else
+        return TRUE;
+      if (cidr_mask < 16)
+        {
+          free (copy);
+          return FALSE;
+        }
+      slashpos = strchr (slashpos + 1, '/');
+    }
+
+  free (copy);
+  return TRUE;
+}
+
 /**
  * @brief Get data for an escalator.
  *
@@ -944,7 +983,8 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           if (abort_on_insane
               && openvas_validate (validator,
                                    "hosts",
-                                   con_info->req_parms.hosts))
+                                   con_info->req_parms.hosts)
+             || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
             return MHD_NO;
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
