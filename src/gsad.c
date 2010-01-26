@@ -41,10 +41,12 @@
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
+#include <arpa/inet.h>
 #include <errno.h>
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
+#include <netinet/in.h>
 #include <openvas_logging.h>
 #include <openvas/base/pidfile.h>
 #include <pthread.h>
@@ -53,6 +55,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -120,6 +123,11 @@ char *SERVER_ERROR =
  * @brief The handle on the embedded HTTP daemon.
  */
 struct MHD_Daemon *gsad_daemon;
+
+/**
+ * @brief The IP address of this program, "the GSAD".
+ */
+struct sockaddr_in gsad_address;
 
 /**
  * @brief Location for redirection server.
@@ -2965,6 +2973,7 @@ main (int argc, char **argv)
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
   static gboolean redirect = FALSE;
+  static gchar *gsad_address_string = NULL;
   static gchar *gsad_port_string = NULL;
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_administrator_port_string = NULL;
@@ -2980,6 +2989,10 @@ main (int argc, char **argv)
     {"http-only", '\0',
      0, G_OPTION_ARG_NONE, &http_only,
      "Serve HTTP only, without SSL.", NULL},
+    /** @todo This is 'a' in Manager. */
+    {"listen", '\0',
+     0, G_OPTION_ARG_STRING, &gsad_address_string,
+     "Listen on <address>.", "<address>" },
     {"port", 'p',
      0, G_OPTION_ARG_STRING, &gsad_port_string,
      "Use port number <number>.", "<number>"},
@@ -3192,6 +3205,25 @@ main (int argc, char **argv)
       omp_init (gsad_manager_port);
       oap_init (gsad_administrator_port);
 
+      gsad_address.sin_family = AF_INET;
+      gsad_address.sin_port = htons (gsad_port);
+      if (gsad_address_string)
+        {
+          if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
+            {
+              g_critical ("%s: failed to create GSAD address %s\n",
+                          __FUNCTION__,
+                          gsad_address_string);
+              exit (EXIT_FAILURE);
+            }
+        }
+      else
+        gsad_address.sin_addr.s_addr = INADDR_ANY;
+
+      tracef ("   GSAD will bind to address %s port %i\n",
+              gsad_address_string ? gsad_address_string : "*",
+              ntohs (gsad_address.sin_port));
+
       if (http_only)
         {
           gsad_daemon =
@@ -3202,10 +3234,11 @@ main (int argc, char **argv)
                               NULL, /* Policy callback arg. */
                               &request_handler,
                               NULL, /* Access callback arg. */
-                              /* Option value pairs. */
-                              MHD_OPTION_NOTIFY_COMPLETED, free_resources,
+                              /* Option value(s) pairs. */
+                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+                              MHD_OPTION_SOCK_ADDR, &gsad_address,
                               /* End marker option. */
-                              NULL, MHD_OPTION_END);
+                              MHD_OPTION_END);
         }
       else
         {
@@ -3236,12 +3269,13 @@ main (int argc, char **argv)
                               NULL, /* Policy callback arg. */
                               &request_handler,
                               NULL, /* Access callback arg. */
-                              /* Option value pairs. */
+                              /* Option value(s) pairs. */
                               MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
                               MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
-                              MHD_OPTION_NOTIFY_COMPLETED, free_resources,
+                              MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+                              MHD_OPTION_SOCK_ADDR, &gsad_address,
                               /* End marker option. */
-                              NULL, MHD_OPTION_END);
+                              MHD_OPTION_END);
         }
 
       if (gsad_daemon == NULL)

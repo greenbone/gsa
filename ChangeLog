@@ -1,5 +1,10 @@
 2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (gsad_address): New variable.
+	(main): Add --listen option.  Pass address to MHD_start_daemon.
+
+2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (main): Neaten MHD_start_daemon calls.
 
 2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
