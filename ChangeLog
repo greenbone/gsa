@@ -1,3 +1,7 @@
+2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (main): Add option --http-only.
+
 2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/gsad_omp.c (get_report_omp): Do not close the server connection

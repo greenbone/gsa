@@ -2920,6 +2920,7 @@ main (int argc, char **argv)
   /* Process command line options. */
 
   static gboolean foreground = FALSE;
+  static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
   static gboolean redirect = FALSE;
   static gchar *gsad_port_string = NULL;
@@ -2934,6 +2935,9 @@ main (int argc, char **argv)
     {"foreground", 'f',
      0, G_OPTION_ARG_NONE, &foreground,
      "Run in foreground.", NULL},
+    {"http-only", '\0',
+     0, G_OPTION_ARG_NONE, &http_only,
+     "Serve HTTP only, without SSL.", NULL},
     {"port", 'p',
      0, G_OPTION_ARG_STRING, &gsad_port_string,
      "Use port number <number>.", "<number>"},
@@ -2978,6 +2982,13 @@ main (int argc, char **argv)
       printf ("gsad %s\n", GSAD_VERSION);
       printf ("Copyright (C) 2009 Greenbone Networks GmbH\n\n");
       exit (EXIT_SUCCESS);
+    }
+
+  if ((redirect || gsad_redirect_port_string) && http_only)
+    {
+      g_critical ("%s: redirect options given with HTTP only option\n",
+                  __FUNCTION__);
+      exit (EXIT_FAILURE);
     }
 
   /* Setup logging. */
@@ -3131,7 +3142,6 @@ main (int argc, char **argv)
     }
   else
     {
-      int use_ssl = 1;
       gchar *ssl_private_key = NULL;
       gchar *ssl_certificate = NULL;
 
@@ -3140,7 +3150,7 @@ main (int argc, char **argv)
       omp_init (gsad_manager_port);
       oap_init (gsad_administrator_port);
 
-      if (use_ssl == 0)
+      if (http_only)
         {
           gsad_daemon = MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG,
                                           gsad_port, NULL, NULL, &request_handler,
