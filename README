@@ -33,9 +33,17 @@ The program usage message follows.
 
     Application Options:
       -f, --foreground                 Run in foreground.
+      --http-only                      Serve HTTP only, without SSL.
+      --listen=<address>               Listen on <address>.
+      --alisten=<address>              Administrator address.
+      --mlisten=<address>              Manager address.
       -p, --port=<number>              Use port number <number>.
+      -a, --aport=<number>             Use administrator port number <number>.
       -m, --mport=<number>             Use manager port number <number>.
+      -r, --rport=<number>             Redirect HTTP from this port number <number>.
+      -R, --redirect                   Redirect HTTP to HTTPS.
       -v, --verbose                    Print progress messages.
-      --version                        Print version and exit.
+      -V, --version                    Print version and exit.
       -k, --ssl-private-key=<file>     Use <file> as the private key for HTTPS
       -c, --ssl-certificate=<file>     Use <file> as the certificate for HTTPS
+      --do-chroot                      Do chroot and drop privileges.

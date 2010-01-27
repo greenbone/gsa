@@ -1,3 +1,7 @@
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* README: Updated.
+
 2010-01-27  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add option to run in chroot.  Most of work by Felix Wolfsteller.
