@@ -2619,6 +2619,10 @@ gsad_add_content_type_header (struct MHD_Response *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "application/octet-stream");
         break;
+      case GSAD_CONTENT_TYPE_TEXT_CSS:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/css");
+        break;
       case GSAD_CONTENT_TYPE_TEXT_HTML:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/html; charset=utf-8");
@@ -2640,16 +2644,19 @@ gsad_add_content_type_header (struct MHD_Response *response,
  * If the file does not exist, but user is logged in, refuse credentials
  * ("logout"). Otherwise, serve the default (login) page.
  *
- * @param[in]   connection          Connection.
- * @param[in]   url                 Requested URL.
- * @param[out]  http_response_code  Return location for response code.
+ * @param[in]   connection           Connection.
+ * @param[in]   url                  Requested URL.
+ * @param[out]  http_response_code   Return location for response code.
+ * @param[out]  content_type         Return location for content type.
+ * @param[out]  content_disposition  Return location for content disposition.
  *
  * @return Response to send in combination with the response code. NULL only
  *         if file information could not be retrieved.
  */
 static struct MHD_Response*
 file_content_response (struct MHD_Connection *connection, const char* url,
-                      int* http_response_code)
+                      int* http_response_code, enum content_type* content_type,
+                      char** content_disposition)
 {
   FILE* file;
   gchar* path;
@@ -2659,7 +2666,11 @@ file_content_response (struct MHD_Connection *connection, const char* url,
   /** @TODO: validation, URL length restriction (allows you to view ANY
     *        file that the user running the gsad might look at!) */
   /** @TODO use glibs path functions */
-  path = g_strconcat (GSA_STATE_DIR, url, NULL);
+  /* Attempt to prevent disclosing non-gsa content. */
+  if (strstr (url, ".."))
+    path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
+  else
+    path = g_strconcat (GSA_STATE_DIR, url, NULL);
   file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                 read and sent */
 
@@ -2695,6 +2706,15 @@ file_content_response (struct MHD_Connection *connection, const char* url,
     }
   else
     {
+      /* Guess content type. */
+      if (strstr (path, ".png"))
+        *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
+      else if (strstr (path, ".html"))
+        *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
+      else if (strstr (path, ".css"))
+        *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
+      /** @todo Set content disposition? */
+
       struct stat buf;
       tracef ("Default file successful.\n");
       if (stat (path, &buf))
@@ -2712,8 +2732,6 @@ file_content_response (struct MHD_Connection *connection, const char* url,
                                                     file,
                                                     (MHD_ContentReaderFreeCallback)
                                                     &fclose);
-      /** @TODO Set disposition and content type (therefore we need to
-        *        know what kind of file we serve). */
       g_free (path);
       *http_response_code = MHD_HTTP_OK;
       return response;
@@ -2905,7 +2923,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
            * so it is a simple file. */
           /* Serve a file. */
           response = file_content_response (connection, url,
-                                            &http_response_code);
+                                            &http_response_code,
+                                            &content_type,
+                                            &content_disposition);
         }
 
       if (response)

@@ -1,5 +1,18 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Basic input checking when serving files. Set content type for images.
+
+	* src/gsad_base.h: Added new content type (text/css).
+
+	* src/gsad.c (gsad_add_content_type_header): Added new text/css
+	content type.
+	(file_content_response): Set content type and disposition, check url
+	parameter to not contain "..".
+	(request_handler): Pass content type and disposition to
+	file_content_response.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* src/gsad.c (create_http_authenticate_response): New, extracted from
 	(send_http_authenticate_header).
 	(file_content_response): New, extracted from request_handler
