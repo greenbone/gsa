@@ -2800,23 +2800,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
     /** @todo return MHD_NO;? */
     send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
 
-  /* Redirect any URL matching the base to the default file. */
-  if (!strcmp (&url[0], url_base))
-    {
-      if (is_http_authenticated (connection))
-        {
-          return send_http_authenticate_header (connection, REALM);
-        }
-      else
-        {
-          send_redirect_header (connection, default_file);
-          return MHD_YES;
-        }
-    }
-
-  /* Treat logging out specially. */
-  if ((!strcmp (method, "GET"))
-      && (!strncmp (&url[0], "/logout", strlen ("/logout")))) /* flawfinder: ignore,
+  /* Redirect any URL matching the base to the default file and
+   * Treat logging out specially. */
+  if ((!strcmp (&url[0], url_base))
+      || ((!strcmp (method, "GET"))
+           && (!strncmp (&url[0], "/logout", strlen ("/logout"))))) /* flawfinder: ignore,
                                                                  it is a const str */
     {
       /**

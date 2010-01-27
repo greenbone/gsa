@@ -1,5 +1,10 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/gsad.c (request_handler): Collapse two conditionals with
+	identical body.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Basic input checking when serving files. Set content type for images.
 
 	* src/gsad_base.h: Added new content type (text/css).
