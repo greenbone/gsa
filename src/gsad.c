@@ -2322,6 +2322,8 @@ check_is_dir (const char *name)
     }
 }
 
+
+/** @TODO This function is never called, remove it? */
 /**
  * @brief Determines the size of a given file.
  *
@@ -2811,7 +2813,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
       /* URL requests neither an OMP command nor a special GSAD command,
        * so it is a simple file. */
 
-      /* @todo: validation, URL length restriction */
+
+      /** @TODO: validation, URL length restriction (allows you to view ANY
+       *        file that the user running the gsad might look at!) */
+      /** @TODO use glibs path functions */
       path = g_strconcat (GSA_STATE_DIR, url, NULL);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                    read and sent */
@@ -2828,6 +2833,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               return send_http_authenticate_header (connection, REALM);
             }
 
+          /** @TODO use glibs path functions */
           path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
           tracef ("trying default file <%s>.\n", path);
           file = fopen (path, "r"); /* flawfinder: ignore, this file is just
@@ -2859,7 +2865,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                         &file_reader,
                                                         file,
                                                         (MHD_ContentReaderFreeCallback)
-                                                        & fclose);
+                                                        &fclose);
+          /** @TODO Set disposition and content type (therefore we need to
+           *        know what kind of file we serve). */
+
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
 
           MHD_destroy_response (response);

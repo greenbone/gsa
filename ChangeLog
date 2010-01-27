@@ -1,5 +1,9 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/gsad.c: Added TODOs.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Set content-type header for error pages.
 
 	* src/gsad.c (send_response): Add content type header to response.
