@@ -50,6 +50,7 @@
 #include <openvas_logging.h>
 #include <openvas/base/pidfile.h>
 #include <pthread.h>
+#include <pwd.h> /* for getpwnam */
 #include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -156,8 +157,6 @@ int verbose = 0;
  * @brief Parameter validator.
  */
 validator_t validator;
-
-
 
 /**
  * @brief Initialise the parameter validator.
@@ -2660,7 +2659,7 @@ file_content_response (struct MHD_Connection *connection, const char* url,
 {
   FILE* file;
   gchar* path;
-  char *default_file = "/login/login.html";
+  char *default_file = "login/login.html";
   struct MHD_Response* response;
 
   /** @TODO: validation, URL length restriction (allows you to view ANY
@@ -2668,9 +2667,14 @@ file_content_response (struct MHD_Connection *connection, const char* url,
   /** @TODO use glibs path functions */
   /* Attempt to prevent disclosing non-gsa content. */
   if (strstr (url, ".."))
-    path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
+    path = g_strconcat (default_file, NULL);
   else
-    path = g_strconcat (GSA_STATE_DIR, url, NULL);
+    {
+      /* Ensure that url is relative. */
+      const char* relative_url = url;
+      if (*url == '/') relative_url = url + 1;
+      path = g_strconcat (relative_url, NULL);
+    }
   file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                 read and sent */
 
@@ -2688,7 +2692,7 @@ file_content_response (struct MHD_Connection *connection, const char* url,
         }
 
       /** @TODO use glibs path functions */
-      path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
+      path = g_strconcat (default_file, NULL);
       tracef ("trying default file <%s>.\n", path);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                     read and sent */
@@ -2980,6 +2984,39 @@ request_handler (void *cls, struct MHD_Connection *connection,
   return MHD_NO;
 }
 
+
+/**
+ * @brief Attempt to drop privileges (become user "nobody").
+ *
+ * @param[in]  nobody_pw  User details of "nobody".
+ *
+ * @return TRUE if successfull, FALSE if failed (will g_critical in fail case).
+ */
+static gboolean
+drop_privileges (struct passwd * nobody_pw)
+{
+  if (setgid (nobody_pw->pw_gid) == 0)
+    {
+      // Success.
+    }
+  else
+    {
+      g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
+      return FALSE;
+    }
+  if (setuid (nobody_pw->pw_uid) == 0)
+    {
+      // Success.
+    }
+  else
+    {
+      g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 /**
  * @brief Initialization routine for GSAD.
  *
@@ -3128,6 +3165,7 @@ main (int argc, char **argv)
 
   /* Process command line options. */
 
+  static gboolean do_chroot = FALSE;
   static gboolean foreground = FALSE;
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
@@ -3187,6 +3225,9 @@ main (int argc, char **argv)
     {"ssl-certificate", 'c',
      0, G_OPTION_ARG_FILENAME, &ssl_certificate_filename,
      "Use <file> as the certificate for HTTPS", "<file>"},
+    {"do-chroot", '\0',
+     0, G_OPTION_ARG_NONE, &do_chroot,
+     "Do chroot and drop privileges.", NULL},
     {NULL}
   };
 
@@ -3342,6 +3383,52 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
+  /* Write pidfile. */
+
+  if (pidfile_create ("gsad"))
+    {
+      g_critical ("%s: Could not write PID file.\n", __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
+
+  if (do_chroot)
+    {
+      /* Chroot into state dir and drop privileges. */
+
+      struct passwd * nobody_pw = getpwnam ("nobody");
+      if (nobody_pw == NULL)
+        {
+          g_critical ("%s: Failed to drop privileges."
+                      "  Could not determine UID and GID for user \"nobody\"!\n",
+                      __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+
+      if (chroot (GSA_STATE_DIR))
+        {
+          g_critical ("%s: Failed to chroot: %s\n",
+                      __FUNCTION__,
+                      strerror (errno));
+          exit (EXIT_FAILURE);
+        }
+
+      if (drop_privileges (nobody_pw) == FALSE)
+        exit (EXIT_FAILURE);
+
+      if (chdir ("/"))
+        {
+          g_critical ("%s: failed change to chroot root directory\n",
+                      __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+    }
+  else if (chdir (GSA_STATE_DIR))
+    {
+      g_critical ("%s: failed change to state dir (" GSA_STATE_DIR ")\n",
+                  __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
+
   if (redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
@@ -3452,7 +3539,6 @@ main (int argc, char **argv)
       else
         {
           /** @todo Add g_critical. */
-          if (pidfile_create ("gsad")) exit (EXIT_FAILURE);
 
           tracef ("GSAD started successfully and is listening on port %d.\n",
                   gsad_port);

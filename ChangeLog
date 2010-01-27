@@ -1,3 +1,16 @@
+2010-01-27  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add option to run in chroot.  Most of work by Felix Wolfsteller.
+
+	* src/gsad.c (file_content_response): Make file path relative.
+	(drop_privileges): New function.
+	(main): Add option --do-chroot.  Change into the state directory
+	before starting the HTTP daemon, so that all paths can be relative.
+	If --do-chroot is given, chroot into the state dir and drop
+	privileges.  Move PID file creation to come before the chroot.
+
+	* src/gsad_base.c (XSL_PATH): Make relative.
+
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* src/gsad.c (request_handler): Collapse two conditionals with

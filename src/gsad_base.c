@@ -32,7 +32,7 @@
 /**
  * @brief Location of XSL file.
  */
-#define XSL_PATH GSA_STATE_DIR "/gsad.xsl"
+#define XSL_PATH "gsad.xsl"
 
 #include "gsad_base.h"
 #include "tracef.h"
