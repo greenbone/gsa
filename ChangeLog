@@ -1,5 +1,15 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Further removal of global variables, closing mem leaks.
+
+	* gsad.c: Removed global variable content_disposition and
+	response_size.
+	(exec_omp_get): Added new parameter.
+	(request_handler): Added local variables as replacements for the global
+	ones, pass as new parameter to functions.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Switched from using dynamic strings as http header content-type field
 	to static strings, resolving a mem leak and possible contention issues.
 	Set the content-type header field for more responses, minor consistency

@@ -142,16 +142,6 @@ pid_t redirect_pid = 0;
 /** @todo Ensure the accesses to these are thread safe. */
 
 /**
- * @brief Content-Disposition passed between callbacks when sending files.
- */
-char *content_disposition = NULL;
-
-/**
- * @brief Response size passed between callbacks when sending files.
- */
-gsize response_size = 0;
-
-/**
  * @brief Logging parameters, as passed to setup_log_handlers.
  */
 GSList *log_config = NULL;
@@ -1867,15 +1857,20 @@ exec_omp_post (credentials_t * credentials,
  * After some input checking, depending on the cmd parameter of the connection,
  * issue an omp command (via *_omp functions).
  *
- * @param[in]   connection    Connection.
- * @param[out]  content_type  Return location for the content type of the
- *                            response.
+ * @param[in]   connection           Connection.
+ * @param[out]  content_type         Return location for the content type of
+ *                                   the response.
+ * @param[out]  content_disposition  Return location for the
+ *                                   content_disposition, if any.
+ * @param[out]  response_size        Return location for response size, if any.
  *
  * @return Newly allocated response string.
  */
 char *
 exec_omp_get (struct MHD_Connection *connection,
-              enum content_type* content_type)
+              enum content_type* content_type,
+              char** content_disposition,
+              gsize* response_size)
 {
   char *cmd = NULL;
   const char *agent_format = NULL;
@@ -2128,7 +2123,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "export_config")) && (name != NULL))
     return export_config_omp (credentials, name, content_type,
-                              &content_disposition, &response_size);
+                              content_disposition, response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
            && ((name == NULL && agent_format == NULL)
@@ -2138,7 +2133,7 @@ exec_omp_get (struct MHD_Connection *connection,
         return get_agents_omp (credentials,
                                name,
                                agent_format,
-                               &response_size,
+                               response_size,
                                sort_field,
                                sort_order);
 
@@ -2146,14 +2141,15 @@ exec_omp_get (struct MHD_Connection *connection,
        * @todo Get sizes from constants that are also used by gsad_params.
        */
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
-      content_disposition = calloc (250, sizeof (char));
-      snprintf (content_disposition, 250, "attachment; filename=agent.bin");
+      free (*content_disposition);
+      *content_disposition = calloc (250, sizeof (char));
+      snprintf (*content_disposition, 250, "attachment; filename=agent.bin");
 
       /** @todo On fail, HTML ends up in file. */
       return get_agents_omp (credentials,
                              name,
                              agent_format,
-                             &response_size,
+                             response_size,
                              NULL,
                              NULL);
     }
@@ -2175,16 +2171,16 @@ exec_omp_get (struct MHD_Connection *connection,
         return get_lsc_credentials_omp (credentials,
                                         name,
                                         package_format,
-                                        &response_size,
+                                        response_size,
                                         sort_field,
                                         sort_order);
 
       /**
        * @todo Get sizes from constants that are also used by gsad_params. */
       content_type_from_format_string (content_type, package_format);
-
-      content_disposition = calloc (250, sizeof (char));
-      snprintf (content_disposition, 250,
+      free (*content_disposition);
+      *content_disposition = calloc (250, sizeof (char));
+      snprintf (*content_disposition, 250,
                 "attachment; filename=openvas-lsc-target-%s_0.5-1.%s",
                 name,
                 (strcmp (package_format, "key") == 0 ? "pub" : package_format));
@@ -2193,7 +2189,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return get_lsc_credentials_omp (credentials,
                                       name,
                                       package_format,
-                                      &response_size,
+                                      response_size,
                                       NULL,
                                       NULL);
     }
@@ -2216,13 +2212,14 @@ exec_omp_get (struct MHD_Connection *connection,
            */
           /* @todo name is now 80 */
           content_type_from_format_string (content_type, format);
-          content_disposition = calloc (70, sizeof (char));
-          snprintf (content_disposition, 70,
+          free (*content_disposition);
+          *content_disposition = calloc (70, sizeof (char));
+          snprintf (*content_disposition, 70,
                     "attachment; filename=report-%s.%s", report_id, format);
         }
 
       if (levels)
-        return get_report_omp (credentials, report_id, format, &response_size,
+        return get_report_omp (credentials, report_id, format, response_size,
                                (const unsigned int) first,
                                (const unsigned int) max,
                                sort_field,
@@ -2237,7 +2234,7 @@ exec_omp_get (struct MHD_Connection *connection,
         if (medium) g_string_append (string, "m");
         if (low) g_string_append (string, "l");
         if (log) g_string_append (string, "g");
-        ret = get_report_omp (credentials, report_id, format, &response_size,
+        ret = get_report_omp (credentials, report_id, format, response_size,
                               (const unsigned int) first,
                               (const unsigned int) max,
                               sort_field,
@@ -2641,6 +2638,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
   const char *oap_cgi_base = "/oap";
   char *default_file = "/login/login.html";
   enum content_type content_type;
+  char *content_disposition = NULL;
+  gsize response_size = 0;
 
   struct MHD_Response *response = NULL;
   int ret;
@@ -2742,7 +2741,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* URL requests to run OMP or OAP command. */
 
           unsigned int res_len = 0;
-          res = exec_omp_get (connection, &content_type);
+          res = exec_omp_get (connection, &content_type, &content_disposition,
+                              &response_size);
           if (response_size > 0)
             {
               res_len = response_size;
@@ -2757,13 +2757,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                     (void *) res,
                                                     MHD_NO, MHD_YES);
           free (res);
-
-          if (content_disposition != NULL)
-            {
-              MHD_add_response_header (response, "Content-Disposition",
-                                       content_disposition);
-              content_disposition = NULL;
-            }
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
       else if (!strncmp (&url[0], "/new_task.html",
@@ -2796,17 +2789,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (res == NULL) return MHD_NO;
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
-          if (content_disposition != NULL)
-            {
-              MHD_add_response_header (response, "Content-Disposition",
-                                       content_disposition);
-              content_disposition = NULL;
-            }
         }
 
       if (response)
         {
           gsad_add_content_type_header (response, &content_type);
+          if (content_disposition != NULL)
+            {
+              MHD_add_response_header (response, "Content-Disposition",
+                                       content_disposition);
+              free (content_disposition);
+            }
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
           MHD_destroy_response (response);
           return MHD_YES;
