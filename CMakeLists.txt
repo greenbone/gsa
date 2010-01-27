@@ -167,8 +167,13 @@ SET(CPACK_SOURCE_IGNORE_FILES
 "swp$"
 "Cache.txt$"
 ".tar.gz"
+"src/libgsad_omp.a$"
+"src/libgsad_oap.a$"
+"src/libgsad_base.a$"
+"src/gsad$"
 "install_manifest.txt"
 "Makefile"
+"src/html/build/"
 "/doc/generated/"
 )
 
