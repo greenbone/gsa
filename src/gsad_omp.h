@@ -106,11 +106,12 @@ char * save_config_nvt_omp (credentials_t *, const char *, const char *,
 char * create_config_omp (credentials_t *, char *, char *, const char *);
 char * import_config_omp (credentials_t *, char *);
 char * delete_config_omp (credentials_t *, const char *);
-char * export_config_omp (credentials_t *, const char *, char **, char **, gsize *);
+char * export_config_omp (credentials_t *, const char *, enum content_type*,
+                          char **, gsize *);
 
 char * get_system_reports_omp (credentials_t *, const char *);
-char * get_system_report_omp (credentials_t *, const char *, const char *, char **,
-                              char **, gsize *);
+char * get_system_report_omp (credentials_t *, const char *, const char *,
+                              enum content_type*, char **, gsize *);
 
 gboolean is_omp_authenticated (gchar *, gchar *);
 

@@ -1,3 +1,33 @@
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	Switched from using dynamic strings as http header content-type field
+	to static strings, resolving a mem leak and possible contention issues.
+	Set the content-type header field for more responses, minor consistency
+	improvements of response-building.
+
+	* src/gsad_base.h: Introduced new enum "content_type".
+
+	* src/gsad.c: Removed global content_type variable.
+	(content_type_from_format_string): New function.
+	(exec_omp_get): Added content type return parameter instead of
+	modification of global variable from within function, updated call to
+	export_config_omp.
+	(gsad_add_content_type_header): New function to add content type
+	header to responses.
+	(request_handler): Adjusted doc, added TODO about weird
+	function/comment, use new content_type, minor refactoring of response-
+	building code blocks.
+	(main): Adjusted comment, moved pointers to certificate and key into
+	single block where they are used.
+
+	* src/gsad_omp.c (delete_lsc_crendential_omp)
+	(get_lsc_crendential_omp, save_config_family_omp, save_config_nvt_omp):
+	Repaired doc.
+	(export_config_omp, get_system_reports_omp, get_system_report_omp): Use
+	new content_type.
+
+	* src/gsad_omp.h: Adjusted protos.
+
 2010-01-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post release version bump.

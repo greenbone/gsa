@@ -67,4 +67,20 @@ char * xsl_transform (const char *);
 char * gsad_message (const char *, const char *, int, const char *,
                      const char *);
 
+enum content_type
+{
+  GSAD_CONTENT_TYPE_APP_DEB,
+  GSAD_CONTENT_TYPE_APP_EXE,
+  GSAD_CONTENT_TYPE_APP_HTML,
+  GSAD_CONTENT_TYPE_APP_KEY,
+  GSAD_CONTENT_TYPE_APP_NBE,
+  GSAD_CONTENT_TYPE_APP_PDF,
+  GSAD_CONTENT_TYPE_APP_RPM,
+  GSAD_CONTENT_TYPE_APP_XML,
+  GSAD_CONTENT_TYPE_IMAGE_PNG,
+  GSAD_CONTENT_TYPE_TEXT_HTML,
+  GSAD_CONTENT_TYPE_TEXT_PLAIN,
+  GSAD_CONTENT_TYPE_OCTET_STREAM
+} ;
+
 #endif /* not _GSAD_BASE_H */

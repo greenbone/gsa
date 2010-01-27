@@ -142,11 +142,6 @@ pid_t redirect_pid = 0;
 /** @todo Ensure the accesses to these are thread safe. */
 
 /**
- * @brief Content-Type passed between callbacks when sending files.
- */
-char *content_type = NULL;
-
-/**
  * @brief Content-Disposition passed between callbacks when sending files.
  */
 char *content_disposition = NULL;
@@ -171,6 +166,8 @@ int verbose = 0;
  * @brief Parameter validator.
  */
 validator_t validator;
+
+
 
 /**
  * @brief Initialise the parameter validator.
@@ -323,6 +320,43 @@ validate_hosts_parameter (const char* hosts_parameter)
 
   g_free (copy);
   return TRUE;
+}
+
+/**
+ * @param From a format string (like "exe"), set a content_type (like
+ * @param GSAD_CONTENT_TYPE_APP_EXE).
+ *
+ * @param[out]  content_type  Return location for the newly set content type,
+ *                            defaults to GSAD_CONTENT_TYPE_APP_HTML.
+ * @param[in]   format        Lowercase format string as in the respective
+ *                            OMP commands.
+ */
+static void
+content_type_from_format_string (enum content_type* content_type,
+                                 const char* format)
+{
+  if (!format)
+    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
+
+  else if (strcmp (format, "deb") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_DEB;
+  else if (strcmp (format, "exe") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_EXE;
+  else if (strcmp (format, "html") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
+  else if (strcmp (format, "key") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_KEY;
+  else if (strcmp (format, "nbe") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_NBE;
+  else if (strcmp (format, "pdf") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_PDF;
+  else if (strcmp (format, "rpm") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_RPM;
+  else if (strcmp (format, "xml") == 0)
+    *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  // Defaults to GSAD_CONTENT_TYPE_APP_HTML
+  else
+    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
 }
 
 /**
@@ -1833,12 +1867,15 @@ exec_omp_post (credentials_t * credentials,
  * After some input checking, depending on the cmd parameter of the connection,
  * issue an omp command (via *_omp functions).
  *
- * @param[in]  connection  Connection.
+ * @param[in]   connection    Connection.
+ * @param[out]  content_type  Return location for the content type of the
+ *                            response.
  *
  * @return Newly allocated response string.
  */
 char *
-exec_omp_get (struct MHD_Connection *connection)
+exec_omp_get (struct MHD_Connection *connection,
+              enum content_type* content_type)
 {
   char *cmd = NULL;
   const char *agent_format = NULL;
@@ -2090,7 +2127,7 @@ exec_omp_get (struct MHD_Connection *connection)
     return edit_user_oap (credentials, name);
 
   else if ((!strcmp (cmd, "export_config")) && (name != NULL))
-    return export_config_omp (credentials, name, &content_type,
+    return export_config_omp (credentials, name, content_type,
                               &content_disposition, &response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
@@ -2108,8 +2145,7 @@ exec_omp_get (struct MHD_Connection *connection)
       /**
        * @todo Get sizes from constants that are also used by gsad_params.
        */
-      content_type = calloc (25, sizeof (char));
-      snprintf (content_type, 25, "application/octet-stream");
+      *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
       content_disposition = calloc (250, sizeof (char));
       snprintf (content_disposition, 250, "attachment; filename=agent.bin");
 
@@ -2144,10 +2180,9 @@ exec_omp_get (struct MHD_Connection *connection)
                                         sort_order);
 
       /**
-       * @todo Get sizes from constants that are also used by gsad_params.
-       */
-      content_type = calloc (16, sizeof (char));
-      snprintf (content_type, 16, "application/%s", package_format);
+       * @todo Get sizes from constants that are also used by gsad_params. */
+      content_type_from_format_string (content_type, package_format);
+
       content_disposition = calloc (250, sizeof (char));
       snprintf (content_disposition, 250,
                 "attachment; filename=openvas-lsc-target-%s_0.5-1.%s",
@@ -2180,8 +2215,7 @@ exec_omp_get (struct MHD_Connection *connection)
            * @todo Get sizes from constants that are also used by gsad_params.
            */
           /* @todo name is now 80 */
-          content_type = calloc (16, sizeof (char));
-          snprintf (content_type, 16, "application/%s", format);
+          content_type_from_format_string (content_type, format);
           content_disposition = calloc (70, sizeof (char));
           snprintf (content_disposition, 70,
                     "attachment; filename=report-%s.%s", report_id, format);
@@ -2507,9 +2541,82 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
 #undef MAX_HOST_LEN
 
 /**
- * @brief HTTPS request handler for GSAD.
+ * @brief Adds content-type header fields to a response.
  *
- * This routine is the secure callback request handler for microhttpd.
+ * This function should be called only once per response and is the only
+ * function where values of enum content_types are translated into strings.
+ *
+ * @param[in,out]  response  Response to add header to.
+ * @param[in]      ct        Content Type to set.
+ */
+static void
+gsad_add_content_type_header (struct MHD_Response *response,
+                              enum content_type* ct)
+{
+  if (!response)
+    return;
+
+  switch (*ct)
+    {
+      case GSAD_CONTENT_TYPE_APP_DEB:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/deb");
+        break;
+      case GSAD_CONTENT_TYPE_APP_EXE:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/exe");
+        break;
+      case GSAD_CONTENT_TYPE_APP_HTML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/html");
+        break;
+      case GSAD_CONTENT_TYPE_APP_KEY:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/key");
+        break;
+      case GSAD_CONTENT_TYPE_APP_NBE:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/nbe");
+        break;
+      case GSAD_CONTENT_TYPE_APP_PDF:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/pdf");
+        break;
+      case GSAD_CONTENT_TYPE_APP_RPM:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/rpm");
+        break;
+      case GSAD_CONTENT_TYPE_APP_XML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/xml; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_IMAGE_PNG:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "image/png");
+        break;
+      case GSAD_CONTENT_TYPE_OCTET_STREAM:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/octet-stream");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_HTML:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/html; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_TEXT_PLAIN:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/plain; charset=utf-8");
+        break;
+      default:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "text/plain; charset=utf-8");
+        break;
+    }
+}
+
+/**
+ * @brief HTTP request handler for GSAD.
+ *
+ * This routine is the callback request handler for microhttpd.
  *
  * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
@@ -2533,8 +2640,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
   const char *omp_cgi_base = "/omp";
   const char *oap_cgi_base = "/oap";
   char *default_file = "/login/login.html";
+  enum content_type content_type;
 
-  struct MHD_Response *response;
+  struct MHD_Response *response = NULL;
   int ret;
   FILE *file;
   char *path;
@@ -2614,11 +2722,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
   credentials = get_header_credentials (connection);
 
   /* Set HTTP Header values. */
+  /** @TODO What is that good for? */
   MHD_get_connection_values (connection, MHD_HEADER_KIND, print_header, NULL);
 
   if (!strcmp (method, "GET"))
     {
       /* This is a GET request. */
+      content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
 
       /* Check for authentication. */
       if ((!is_http_authenticated (connection))
@@ -2632,7 +2742,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* URL requests to run OMP or OAP command. */
 
           unsigned int res_len = 0;
-          res = exec_omp_get (connection);
+          res = exec_omp_get (connection, &content_type);
           if (response_size > 0)
             {
               res_len = response_size;
@@ -2648,37 +2758,23 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                     MHD_NO, MHD_YES);
           free (res);
 
-          if (content_type != NULL)
-            {
-              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                       content_type);
-              content_type = NULL;
-            }
           if (content_disposition != NULL)
             {
               MHD_add_response_header (response, "Content-Disposition",
                                        content_disposition);
               content_disposition = NULL;
             }
-          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
-          MHD_destroy_response (response);
-          return MHD_YES;
         }
-
       /* URL does not request OMP command but perhaps a special GSAD command? */
-      if (!strncmp (&url[0], "/new_task.html",
+      else if (!strncmp (&url[0], "/new_task.html",
                     strlen ("/new_task.html"))) /* flawfinder: ignore,
                                                    it is a const str */
         {
           res = gsad_newtask (credentials, NULL);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
-          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
-          MHD_destroy_response (response);
-          return MHD_YES;
         }
-
-      if (!strncmp (&url[0], "/system_report/",
+      else if (!strncmp (&url[0], "/system_report/",
                     strlen ("/system_report/"))) /* flawfinder: ignore,
                                                     it is a const str */
         {
@@ -2700,18 +2796,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (res == NULL) return MHD_NO;
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
-          if (content_type != NULL)
-            {
-              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                       content_type);
-              content_type = NULL;
-            }
           if (content_disposition != NULL)
             {
               MHD_add_response_header (response, "Content-Disposition",
                                        content_disposition);
               content_disposition = NULL;
             }
+        }
+
+      if (response)
+        {
+          gsad_add_content_type_header (response, &content_type);
           ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
           MHD_destroy_response (response);
           return MHD_YES;
@@ -3205,11 +3300,6 @@ main (int argc, char **argv)
     }
   else
     {
-      gchar *ssl_private_key = NULL;
-      gchar *ssl_certificate = NULL;
-
-      /* Start the real, HTTPS server. */
-
       omp_init (gsad_manager_address_string, gsad_manager_port);
       oap_init (gsad_administrator_address_string, gsad_administrator_port);
 
@@ -3232,6 +3322,7 @@ main (int argc, char **argv)
               gsad_address_string ? gsad_address_string : "*",
               ntohs (gsad_address.sin_port));
 
+      /* Start the real server. */
       if (http_only)
         {
           gsad_daemon =
@@ -3250,6 +3341,9 @@ main (int argc, char **argv)
         }
       else
         {
+          gchar *ssl_private_key = NULL;
+          gchar *ssl_certificate = NULL;
+
           if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
                                     NULL, NULL))
             {

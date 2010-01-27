@@ -256,7 +256,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 /**
  * @brief Returns page to create a new task.
  *
- * @todo Display actual text given in \param message.
+ * @todo Display actual text given in \param message .
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  message      If not NULL, display message.
@@ -972,8 +972,6 @@ delete_lsc_credential_omp (credentials_t * credentials, const char *name)
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   name         Name of LSC credential.
- * @param[in]   format       Format of result
- * @param[out]  result_len   Length of result.
  * @param[in]   sort_field   Field to sort on, or NULL.
  * @param[in]   sort_order   "ascending", "descending", or NULL.
  *
@@ -1233,12 +1231,15 @@ get_lsc_credentials_omp (credentials_t * credentials,
 /**
  * @brief Create an agent, get all agents, XSL transform result.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  name           Agent name.
- * @param[in]  comment        Comment on agent.
- * @param[in]  installer      Installer, in base64.
- * @param[in]  howto_install  Install HOWTO, in base64.
- * @param[in]  howto_use      Usage HOWTO, in base64.
+ * @param[in]  credentials          Username and password for authentication.
+ * @param[in]  name                 Agent name.
+ * @param[in]  comment              Comment on agent.
+ * @param[in]  installer            Installer, in base64.
+ * @param[in]  installer_size       Size of \param installer .
+ * @param[in]  howto_install        Install HOWTO, in base64.
+ * @param[in]  howto_install_size   Size of \param howto_install .
+ * @param[in]  howto_use            Usage HOWTO, in base64.
+ * @param[in]  howto_use_size       Size of \param howto_use .
  *
  * @return Result of XSL transformation.
  */
@@ -3187,7 +3188,7 @@ save_config_family_omp (credentials_t * credentials,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config       Name of config.
  * @param[in]  family       Name of family.
- * @param[in]  NVT          OID of NVT.
+ * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  edit         0 for config view page, else config edit page.
@@ -3268,7 +3269,7 @@ get_config_nvt_omp (credentials_t * credentials,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config       Name of config.
  * @param[in]  family       Name of family.
- * @param[in]  NVT          OID of NVT.
+ * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  preferences  Preferences.
@@ -3498,7 +3499,7 @@ delete_config_omp (credentials_t * credentials, const char *config_name)
  */
 char *
 export_config_omp (credentials_t * credentials, const char *name,
-                   char **content_type, char **content_disposition,
+                   enum content_type * content_type, char **content_disposition,
                    gsize *content_length)
 {
   GString *xml;
@@ -3554,7 +3555,7 @@ export_config_omp (credentials_t * credentials, const char *name,
       config_entity = entity_child (entity, "config");
       if (config_entity != NULL)
         {
-          *content_type = g_strdup ("application/xml");
+          *content_type = GSAD_CONTENT_TYPE_APP_XML;
           *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
                                                   name);
           *content_length = strlen (content);
@@ -3956,7 +3957,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
  */
 char *
 get_system_report_omp (credentials_t *credentials, const char *url,
-                       const char *duration, char **content_type,
+                       const char *duration, enum content_type *content_type,
                        char **content_disposition, gsize *content_length)
 {
   entity_t entity;
@@ -4020,7 +4021,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
                                                   content_length);
 
 #if 1
-              *content_type = g_strdup ("image/png");
+              *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
               //*content_disposition = g_strdup_printf ("attachment; filename=\"xxx.png\"");
 #else
               g_free (content);
