@@ -1,5 +1,13 @@
 2010-01-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	Post release version bump.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/src/about.htm4: Updated version number.
+
+2010-01-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* CMakeLists.txt: Added files to ignore for source packaging.
 
 2010-01-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

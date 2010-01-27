@@ -4,7 +4,7 @@ m4_include(`header.m4')
 <img align="right" src="/img/gsa_splash.png"/>
 
 <!-- TODO: Get the version in here dynamically -->
-<h1>Greenbone Security Assistant Version 1.0.0-beta2</h1>
+<h1>Greenbone Security Assistant Version 1.0.0-beta3.SVN</h1>
 
 <p>
 The Greenbone Security Assistant is a web-based graphical
