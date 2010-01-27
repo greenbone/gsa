@@ -1,5 +1,14 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	* src/gsad.c (create_http_authenticate_response): New, extracted from
+	(send_http_authenticate_header).
+	(file_content_response): New, extracted from request_handler
+	(request_handler): Call extracted function, use http_response code
+	variable to store the response code instead of immediate sending
+	responses.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	* src/gsad.c: Added TODOs.
 
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>

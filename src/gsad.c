@@ -2425,6 +2425,43 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
 }
 
 /**
+ * @brief Creates an empty response with basic http auth header.
+ *
+ * @param[in]  realm  Realm for which to authenticate.
+ *
+ * @return Response (send with MHD_HTTP_UNAUTHORIZED to force
+ *         reauthentification), NULL in case of errors.
+ */
+static struct MHD_Response*
+create_http_authenticate_response (const char *realm)
+{
+int ret;
+  gchar *headervalue;
+  struct MHD_Response *response =
+    MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
+
+  if (!response)
+    return NULL;
+
+  headervalue = g_strconcat ("Basic realm=", realm, NULL);
+  if (!headervalue)
+    {
+      MHD_destroy_response (response);
+      return NULL;
+    }
+
+  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_WWW_AUTHENTICATE,
+                                 headervalue);
+  g_free (headervalue);
+  if (!ret)
+    {
+      MHD_destroy_response (response);
+      return NULL;
+    }
+  return response;
+}
+
+/**
  * @brief Sends HTTP header requesting the browser to authenticate itself.
  *
  * @param[in]  connection  The connection object.
@@ -2438,28 +2475,10 @@ send_http_authenticate_header (struct MHD_Connection *connection,
                                const char *realm)
 {
   int ret;
-  gchar *headervalue;
-  struct MHD_Response *response =
-    MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
+  struct MHD_Response *response = create_http_authenticate_response (realm);
 
-  if (!response)
+  if (response == NULL)
     return MHD_NO;
-
-  headervalue = g_strconcat ("Basic realm=", realm, NULL);
-  if (!headervalue)
-    {
-      MHD_destroy_response (response);
-      return MHD_NO;
-    }
-
-  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_WWW_AUTHENTICATE,
-                                 headervalue);
-  g_free (headervalue);
-  if (!ret)
-    {
-      MHD_destroy_response (response);
-      return MHD_NO;
-    }
 
   ret = MHD_queue_response (connection, MHD_HTTP_UNAUTHORIZED, response);
   MHD_destroy_response (response);
@@ -2616,6 +2635,92 @@ gsad_add_content_type_header (struct MHD_Response *response,
 }
 
 /**
+ * @brief Create a response to serve a file.
+ *
+ * If the file does not exist, but user is logged in, refuse credentials
+ * ("logout"). Otherwise, serve the default (login) page.
+ *
+ * @param[in]   connection          Connection.
+ * @param[in]   url                 Requested URL.
+ * @param[out]  http_response_code  Return location for response code.
+ *
+ * @return Response to send in combination with the response code. NULL only
+ *         if file information could not be retrieved.
+ */
+static struct MHD_Response*
+file_content_response (struct MHD_Connection *connection, const char* url,
+                      int* http_response_code)
+{
+  FILE* file;
+  gchar* path;
+  char *default_file = "/login/login.html";
+  struct MHD_Response* response;
+
+  /** @TODO: validation, URL length restriction (allows you to view ANY
+    *        file that the user running the gsad might look at!) */
+  /** @TODO use glibs path functions */
+  path = g_strconcat (GSA_STATE_DIR, url, NULL);
+  file = fopen (path, "r"); /* flawfinder: ignore, this file is just
+                                read and sent */
+
+  /* In case the file is not found, logout if logged in, else always
+   * the default file. */
+  if (file == NULL)
+    {
+      tracef ("File %s failed, ", path);
+      g_free (path);
+
+      if (is_http_authenticated (connection))
+        {
+          *http_response_code = MHD_HTTP_UNAUTHORIZED;
+          return create_http_authenticate_response (REALM);
+        }
+
+      /** @TODO use glibs path functions */
+      path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
+      tracef ("trying default file <%s>.\n", path);
+      file = fopen (path, "r"); /* flawfinder: ignore, this file is just
+                                    read and sent */
+    }
+
+  if (file == NULL)
+    {
+      /* Even the default file failed. */
+      tracef ("Default file failed.\n");
+      *http_response_code = MHD_HTTP_NOT_FOUND;
+      g_free (path);
+      return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
+                                                (void *) FILE_NOT_FOUND,
+                                                MHD_NO, MHD_YES);
+    }
+  else
+    {
+      struct stat buf;
+      tracef ("Default file successful.\n");
+      if (stat (path, &buf))
+        {
+          /* File information could not be retrieved. */
+          g_critical ("%s: file <%s> can not be stat'ed.\n",
+                      __FUNCTION__,
+                      path);
+          g_free (path);
+          return NULL;
+        }
+
+      response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
+                                                    &file_reader,
+                                                    file,
+                                                    (MHD_ContentReaderFreeCallback)
+                                                    &fclose);
+      /** @TODO Set disposition and content type (therefore we need to
+        *        know what kind of file we serve). */
+      g_free (path);
+      *http_response_code = MHD_HTTP_OK;
+      return response;
+    }
+}
+
+/**
  * @brief HTTP request handler for GSAD.
  *
  * This routine is the callback request handler for microhttpd.
@@ -2639,17 +2744,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
                  size_t * upload_data_size, void **con_cls)
 {
   const char *url_base = "/";
+  char *default_file = "/login/login.html";
   const char *omp_cgi_base = "/omp";
   const char *oap_cgi_base = "/oap";
-  char *default_file = "/login/login.html";
   enum content_type content_type;
   char *content_disposition = NULL;
   gsize response_size = 0;
+  int http_response_code = MHD_HTTP_OK;
 
   struct MHD_Response *response = NULL;
   int ret;
-  FILE *file;
-  char *path;
   char *res;
   credentials_t *credentials;
 
@@ -2795,6 +2899,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
         }
+      else
+        {
+          /* URL requests neither an OMP command nor a special GSAD command,
+           * so it is a simple file. */
+          /* Serve a file. */
+          response = file_content_response (connection, url,
+                                            &http_response_code);
+        }
 
       if (response)
         {
@@ -2805,75 +2917,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        content_disposition);
               free (content_disposition);
             }
-          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+          ret = MHD_queue_response (connection, http_response_code, response);
           MHD_destroy_response (response);
           return MHD_YES;
-        }
-
-      /* URL requests neither an OMP command nor a special GSAD command,
-       * so it is a simple file. */
-
-
-      /** @TODO: validation, URL length restriction (allows you to view ANY
-       *        file that the user running the gsad might look at!) */
-      /** @TODO use glibs path functions */
-      path = g_strconcat (GSA_STATE_DIR, url, NULL);
-      file = fopen (path, "r"); /* flawfinder: ignore, this file is just
-                                   read and sent */
-
-      /* In case the file is not found, logout if logged in, else always
-       * the default file. */
-      if (file == NULL)
-        {
-          tracef ("File %s failed, ", path);
-          g_free (path);
-
-          if (is_http_authenticated (connection))
-            {
-              return send_http_authenticate_header (connection, REALM);
-            }
-
-          /** @TODO use glibs path functions */
-          path = g_strconcat (GSA_STATE_DIR, default_file, NULL);
-          tracef ("trying default file <%s>.\n", path);
-          file = fopen (path, "r"); /* flawfinder: ignore, this file is just
-                                       read and sent */
-        }
-
-      if (file == NULL)
-        {
-          /* Even the default file failed. */
-          tracef ("Default file failed.\n");
-          send_response (connection, FILE_NOT_FOUND, MHD_HTTP_NOT_FOUND);
-          g_free (path);
         }
       else
         {
-          struct stat buf;
-          tracef ("Default file successful.\n");
-          if (stat (path, &buf))
-            {
-              /* File information could not be retrieved. */
-              g_critical ("%s: file <%s> can not be stat'ed.\n",
-                          __FUNCTION__,
-                          path);
-              g_free (path);
-              return MHD_NO;
-            }
-
-          response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
-                                                        &file_reader,
-                                                        file,
-                                                        (MHD_ContentReaderFreeCallback)
-                                                        &fclose);
-          /** @TODO Set disposition and content type (therefore we need to
-           *        know what kind of file we serve). */
-
-          ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
-
-          MHD_destroy_response (response);
-          g_free (path);
-          return MHD_YES;
+          // Severe memory or file access problem.
+          return MHD_NO;
         }
     }
 
