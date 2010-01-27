@@ -2384,6 +2384,8 @@ send_response (struct MHD_Connection *connection, const char *page,
 
   response = MHD_create_response_from_data (strlen (page),
                                             (void *) page, MHD_NO, MHD_YES);
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                           "text/html; charset=utf-8");
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
@@ -2408,7 +2410,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
   if (!response)
     return MHD_NO;
 
-  ret = MHD_add_response_header (response, "Location", location);
+  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, location);
   if (!ret)
     {
       MHD_destroy_response (response);
@@ -2448,7 +2450,8 @@ send_http_authenticate_header (struct MHD_Connection *connection,
       return MHD_NO;
     }
 
-  ret = MHD_add_response_header (response, "WWW-Authenticate", headervalue);
+  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_WWW_AUTHENTICATE,
+                                 headervalue);
   g_free (headervalue);
   if (!ret)
     {

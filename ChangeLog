@@ -1,8 +1,16 @@
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
+	Set content-type header for error pages.
+
+	* src/gsad.c (send_response): Add content type header to response.
+	(send_redirect_header, send_http_authenticate_header): Use
+	libmicrohttpd macros.
+
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
 	Further removal of global variables, closing mem leaks.
 
-	* gsad.c: Removed global variable content_disposition and
+	* src/gsad.c: Removed global variable content_disposition and
 	response_size.
 	(exec_omp_get): Added new parameter.
 	(request_handler): Added local variables as replacements for the global
