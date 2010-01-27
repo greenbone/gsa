@@ -1,3 +1,11 @@
+2010-01-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 1.0.0-beta2 release.
+
+	* src/html/src/about.htm4: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (main): Add options --alisten and --mlisten.

@@ -1,3 +1,28 @@
+gsa 1.0.0-beta2 (2010-01-27)
+
+This is the second beta release of the optional gsa module
+for the Open Vulnerability Assessment System (OpenVAS) leading up to the
+upcoming gsa 1.0.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Felix Wolfsteller.
+
+Main changes since 1.0.0-beta1:
+
+* Integrated online help extended. 
+* Improved handling of feed management.
+* Added support for administrator feature to edit
+  scanner settings.
+* Added support for administrator feature to edit
+  user details (password, IP-based access rules).
+* Allow "\" as part of a credential login name.
+* Remain on the task page after deleting the
+  task's last report.
+* Improved handling of XML/HTML report exports.
+* Added command line option "--listen", "--alisten",
+  "--mlisten".
+
+
 gsa 1.0.0-beta1 (2010-01-12)
 
 This is the first beta release of the optional gsa module
