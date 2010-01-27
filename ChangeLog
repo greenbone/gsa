@@ -1,3 +1,11 @@
+2010-01-27  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Preparing the gsa 1.0.0-beta3 release.
+
+	* src/html/src/about.htm4: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
 
 	* README: Updated.
