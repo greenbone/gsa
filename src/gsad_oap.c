@@ -170,7 +170,6 @@ create_user_oap (credentials_t * credentials, const char *name,
                  const char *password, const char *role, const char *hosts,
                  const char *hosts_allow)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml;
   int socket;
@@ -228,8 +227,7 @@ create_user_oap (credentials_t * credentials, const char *name,
                                "/oap?cmd=get_users");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -239,7 +237,6 @@ create_user_oap (credentials_t * credentials, const char *name,
                                "Diagnostics: Failure to receive response from administrator daemon.",
                                "/oap?cmd=get_users");
         }
-      free_entity (entity);
     }
 
   /* Get all users. */
@@ -255,8 +252,7 @@ create_user_oap (credentials_t * credentials, const char *name,
                            "/oap?cmd=get_users");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -266,7 +262,6 @@ create_user_oap (credentials_t * credentials, const char *name,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/oap?cmd=get_users");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -295,7 +290,6 @@ save_user_oap (credentials_t * credentials, const char *name,
                const char *modify_password, const char *password,
                const char *role, const char *hosts, const char *hosts_allow)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml;
   int socket;
@@ -355,8 +349,7 @@ save_user_oap (credentials_t * credentials, const char *name,
                                "/oap?cmd=get_users");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -366,7 +359,6 @@ save_user_oap (credentials_t * credentials, const char *name,
                                "Diagnostics: Failure to receive response from administrator daemon.",
                                "/oap?cmd=get_users");
         }
-      free_entity (entity);
     }
 
   /* Get all users. */
@@ -382,8 +374,7 @@ save_user_oap (credentials_t * credentials, const char *name,
                            "/oap?cmd=get_users");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -393,7 +384,6 @@ save_user_oap (credentials_t * credentials, const char *name,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/oap?cmd=get_users");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -438,7 +428,6 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
                            "/oap?cmd=get_users");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -448,7 +437,6 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
                            "Diagnostics: Failure to read response from administrator daemon.",
                            "/oap?cmd=get_users");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   return xsl_transform_oap (credentials, text);
@@ -465,8 +453,7 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
 char *
 edit_user_oap (credentials_t * credentials, const char * name)
 {
-  tracef ("In get_users_oap\n");
-  entity_t entity;
+  tracef ("In edit_users_oap\n");
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -503,8 +490,7 @@ edit_user_oap (credentials_t * credentials, const char * name)
 
   xml = g_string_new ("<edit_user>");
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -513,7 +499,6 @@ edit_user_oap (credentials_t * credentials, const char * name)
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_users");
     }
-  free_entity (entity);
 
   g_string_append (xml, "</edit_user>");
   openvas_server_close (socket, session);
@@ -532,7 +517,6 @@ char *
 get_user_oap (credentials_t * credentials, const char * name)
 {
   tracef ("In get_users_oap\n");
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -569,8 +553,7 @@ get_user_oap (credentials_t * credentials, const char * name)
 
   xml = g_string_new ("<get_user>");
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -579,7 +562,6 @@ get_user_oap (credentials_t * credentials, const char * name)
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_users");
     }
-  free_entity (entity);
 
   g_string_append (xml, "</get_user>");
   openvas_server_close (socket, session);
@@ -639,7 +621,6 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -649,7 +630,6 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   tracef ("get_users_oap: got text: %s", text);
@@ -707,7 +687,6 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -717,7 +696,6 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   tracef ("get_feed_oap: got text: %s", text);
@@ -773,7 +751,6 @@ sync_feed_oap (credentials_t * credentials)
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -783,7 +760,6 @@ sync_feed_oap (credentials_t * credentials)
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   tracef ("sync_feed_oap: got text: %s", text);
@@ -841,7 +817,6 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -851,7 +826,6 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   tracef ("get_settings_oap: got text: %s", text);
@@ -872,7 +846,6 @@ char *
 edit_settings_oap (credentials_t * credentials, const char * sort_field,
                    const char * sort_order)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml;
   int socket;
@@ -908,8 +881,7 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
 
   xml = g_string_new ("<edit_settings>");
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -919,7 +891,6 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   g_string_append (xml, "</edit_settings>");
   openvas_server_close (socket, session);
@@ -1024,7 +995,6 @@ save_settings_oap (credentials_t * credentials,
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -1033,7 +1003,6 @@ save_settings_oap (credentials_t * credentials,
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 

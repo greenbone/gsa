@@ -165,7 +165,6 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 
   /* Read the response. */
 
-  entity = NULL;
   if (read_entity (session, &entity))
     {
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -266,7 +265,6 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 char *
 gsad_newtask (credentials_t * credentials, const char* message)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -295,8 +293,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -306,7 +303,6 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   if (openvas_server_send (&session,
                            "<get_configs"
@@ -323,8 +319,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -334,7 +329,6 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   if (openvas_server_send (&session,
                            "<get_escalators"
@@ -351,8 +345,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -362,7 +355,6 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   if (message)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Task"));
@@ -703,7 +695,6 @@ get_status_omp (credentials_t * credentials, const char *task_id,
                 const char *sort_field, const char *sort_order,
                 const char *refresh_interval)
 {
-  entity_t entity;
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
@@ -753,9 +744,8 @@ get_status_omp (credentials_t * credentials, const char *task_id,
         }
     }
 
-  entity = NULL;
   xml = g_string_new ("<get_status>");
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       openvas_server_close (socket, session);
       g_string_free (xml, TRUE);
@@ -765,7 +755,6 @@ get_status_omp (credentials_t * credentials, const char *task_id,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   g_string_append (xml, "</get_status>");
   if (refresh_interval && strcmp (refresh_interval, "")
@@ -797,7 +786,6 @@ create_lsc_credential_omp (credentials_t * credentials,
                            const char *login,
                            const char *password)
 {
-  entity_t entity;
   gnutls_session_t session;
   int socket;
   GString *xml;
@@ -859,8 +847,7 @@ create_lsc_credential_omp (credentials_t * credentials,
                                "/omp?cmd=get_lsc_credentials");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -870,7 +857,6 @@ create_lsc_credential_omp (credentials_t * credentials,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_lsc_credentials");
         }
-      free_entity (entity);
     }
 
   /* Get all LSC credentials. */
@@ -889,8 +875,7 @@ create_lsc_credential_omp (credentials_t * credentials,
                            "/omp?cmd=get_lsc_credentials");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -900,7 +885,6 @@ create_lsc_credential_omp (credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_lsc_credentials");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -983,7 +967,6 @@ get_lsc_credential_omp (credentials_t * credentials,
                         const char * sort_field,
                         const char * sort_order)
 {
-  entity_t entity;
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
@@ -1015,10 +998,9 @@ get_lsc_credential_omp (credentials_t * credentials,
                            "/omp?cmd=get_lsc_credentials");
     }
 
-  entity = NULL;
   xml = g_string_new ("<get_lsc_credential>");
 
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -1028,7 +1010,6 @@ get_lsc_credential_omp (credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_lsc_credentials");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -1250,7 +1231,6 @@ create_agent_omp (credentials_t * credentials, const char *name,
                   const char *howto_install, int howto_install_size,
                   const char *howto_use, int howto_use_size)
 {
-  entity_t entity;
   gnutls_session_t session;
   int socket;
   GString *xml;
@@ -1318,8 +1298,7 @@ create_agent_omp (credentials_t * credentials, const char *name,
                                "/omp?cmd=get_agents");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -1329,7 +1308,6 @@ create_agent_omp (credentials_t * credentials, const char *name,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_agents");
         }
-      free_entity (entity);
     }
 
   /* Get all agents. */
@@ -1348,8 +1326,7 @@ create_agent_omp (credentials_t * credentials, const char *name,
                            "/omp?cmd=get_agents");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -1359,7 +1336,6 @@ create_agent_omp (credentials_t * credentials, const char *name,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_agents");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -1410,7 +1386,6 @@ delete_agent_omp (credentials_t * credentials, const char *name)
                            "/omp?cmd=get_agents");
     }
 
-  entity = NULL;
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
@@ -1420,7 +1395,6 @@ delete_agent_omp (credentials_t * credentials, const char *name)
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_agents");
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, text);
@@ -1654,7 +1628,6 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
                       const char *event, GArray *event_data,
                       const char *method, GArray *method_data)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml;
   int socket;
@@ -1704,8 +1677,7 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
                                "/omp?cmd=get_escalators");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -1715,7 +1687,6 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_escalators");
         }
-      free_entity (entity);
     }
 
   /* Get all the escalators. */
@@ -1735,8 +1706,7 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
                            "/omp?cmd=get_escalators");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -1746,7 +1716,6 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_escalators");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -1766,7 +1735,6 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
 char *
 delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -1801,8 +1769,7 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
                            "/omp?cmd=get_escalators");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -1812,7 +1779,6 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_escalators");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -1835,7 +1801,6 @@ char *
 get_escalator_omp (credentials_t * credentials, const char * name,
                    const char * sort_field, const char * sort_order)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -1868,8 +1833,7 @@ get_escalator_omp (credentials_t * credentials, const char * name,
                            "/omp?cmd=get_escalators");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -1878,7 +1842,6 @@ get_escalator_omp (credentials_t * credentials, const char * name,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_escalators");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -1901,8 +1864,6 @@ char *
 get_escalators_xml (gnutls_session_t *session, GString *xml,
                     const char *sort_field, const char *sort_order)
 {
-  entity_t entity;
-
   if (openvas_server_sendf (session,
                             "<get_escalators"
                             " sort_field=\"%s\""
@@ -1916,14 +1877,12 @@ get_escalators_xml (gnutls_session_t *session, GString *xml,
                          "Diagnostics: Failure to send command to manager daemon.",
                          "/omp?cmd=get_status");
 
-  entity = NULL;
-  if (read_entity_and_string (session, &entity, &xml))
+  if (read_string (session, &xml))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting escalators list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to receive response from manager daemon.",
                          "/omp?cmd=get_status");
-  free_entity (entity);
 
   return NULL;
 }
@@ -1982,7 +1941,6 @@ char *
 test_escalator_omp (credentials_t * credentials, const char * name,
                     const char * sort_field, const char * sort_order)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -2011,8 +1969,7 @@ test_escalator_omp (credentials_t * credentials, const char * name,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2021,7 +1978,6 @@ test_escalator_omp (credentials_t * credentials, const char * name,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Get all escalators. */
 
@@ -2055,7 +2011,6 @@ char *
 create_target_omp (credentials_t * credentials, char *name, char *hosts,
                    char *comment, const char *target_credential)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml;
   int socket;
@@ -2112,8 +2067,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                                "/omp?cmd=get_targets");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -2123,7 +2077,6 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_targets");
         }
-      free_entity (entity);
     }
 
   /* Get all the targets. */
@@ -2143,8 +2096,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2154,7 +2106,6 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Get the credentials. */
 
@@ -2173,8 +2124,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2184,7 +2134,6 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2204,7 +2153,6 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
 char *
 delete_target_omp (credentials_t * credentials, const char *target_name)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -2242,8 +2190,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2253,7 +2200,6 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2276,7 +2222,6 @@ char *
 get_target_omp (credentials_t * credentials, const char * name,
                 const char * sort_field, const char * sort_order)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -2311,8 +2256,7 @@ get_target_omp (credentials_t * credentials, const char * name,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2322,7 +2266,6 @@ get_target_omp (credentials_t * credentials, const char * name,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2344,7 +2287,6 @@ char *
 get_targets_omp (credentials_t * credentials, const char * sort_field,
                  const char * sort_order)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -2377,8 +2319,7 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2388,7 +2329,6 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Get the credentials. */
 
@@ -2407,8 +2347,7 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_targets");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2418,7 +2357,6 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2441,7 +2379,6 @@ char *
 create_config_omp (credentials_t * credentials, char *name, char *comment,
                    const char *base)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
@@ -2482,8 +2419,7 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                                "/omp?cmd=get_configs");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -2493,7 +2429,6 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_configs");
         }
-      free_entity (entity);
     }
 
   /* Get all the configs. */
@@ -2513,8 +2448,7 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2524,7 +2458,6 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2544,7 +2477,6 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
 char *
 import_config_omp (credentials_t * credentials, char *xml_file)
 {
-  entity_t entity;
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
@@ -2576,8 +2508,7 @@ import_config_omp (credentials_t * credentials, char *xml_file)
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2587,7 +2518,6 @@ import_config_omp (credentials_t * credentials, char *xml_file)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   /* Get all the configs. */
 
@@ -2606,8 +2536,7 @@ import_config_omp (credentials_t * credentials, char *xml_file)
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2617,7 +2546,6 @@ import_config_omp (credentials_t * credentials, char *xml_file)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
@@ -2696,7 +2624,6 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
 char *
 get_config_omp (credentials_t * credentials, const char * name, int edit)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -2732,8 +2659,7 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -2743,7 +2669,6 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   /* Get all the families. */
 
@@ -2760,8 +2685,7 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
                                "/omp?cmd=get_configs");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -2771,7 +2695,6 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_configs");
         }
-      free_entity (entity);
     }
 
   /* Cleanup, and return transformed XML. */
@@ -2988,7 +2911,6 @@ get_config_family_omp (credentials_t * credentials,
                        const char * sort_order,
                        int edit)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -3029,8 +2951,7 @@ get_config_family_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -3040,7 +2961,6 @@ get_config_family_omp (credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   if (edit)
     {
@@ -3067,8 +2987,7 @@ get_config_family_omp (credentials_t * credentials,
                                "/omp?cmd=get_configs");
         }
 
-      entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -3078,7 +2997,6 @@ get_config_family_omp (credentials_t * credentials,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_configs");
         }
-      free_entity (entity);
 
       g_string_append (xml, "</all>");
     }
@@ -3204,7 +3122,6 @@ get_config_nvt_omp (credentials_t * credentials,
                     const char * sort_order,
                     int edit)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -3245,8 +3162,7 @@ get_config_nvt_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -3256,7 +3172,6 @@ get_config_nvt_omp (credentials_t * credentials,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_configs");
     }
-  free_entity (entity);
 
   g_string_append (xml, "</get_config_nvt_response>");
   openvas_server_close (socket, session);
@@ -3818,7 +3733,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
       xml = g_string_new ("<commands_response>");
 
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_string (&session, &xml))
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -3827,7 +3742,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_status");
         }
-      free_entity (entity);
 
       {
 
@@ -3860,7 +3774,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  "/omp?cmd=get_status");
           }
 
-        if (read_entity_and_string (&session, &entity, &xml))
+        if (read_string (&session, &xml))
           {
             g_string_free (xml, TRUE);
             openvas_server_close (socket, session);
@@ -3870,7 +3784,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  "Diagnostics: Failure to receive response from manager daemon.",
                                  "/omp?cmd=get_status");
           }
-        free_entity (entity);
 
         g_string_append (xml, "</all>");
       }
@@ -3892,7 +3805,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 char *
 get_system_reports_omp (credentials_t * credentials, const char * duration)
 {
-  entity_t entity;
   GString *xml;
   gnutls_session_t session;
   int socket;
@@ -3923,8 +3835,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                            "/omp?cmd=get_status");
     }
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -3934,7 +3845,6 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 

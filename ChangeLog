@@ -1,3 +1,18 @@
+2010-01-28  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+
+	* src/gsad_oap.c (create_user_oap, save_user_oap, delete_user_oap)
+	(edit_user_oap, get_user_oapt_users_oap, get_feed_oap, sync_feed_oap)
+	(get_settings_oap, edit_settings_oap, save_settings_oap),
+	src/gsad_omp (check_modify_config, gsad_newtask, get_status_omp)
+	(create_lsc_credential_omp, get_lsc_credential_omp, create_agent_omp)
+	(delete_agent_omp, create_escalator_omp, delete_escalator_omp)
+	(get_escalator_omp, get_escalators_xml, test_escalator_omp)
+	(create_target_omp, delete_target_omp, get_target_omp, get_targets_omp)
+	(create_config_omp, import_config_omp, get_config_family_omp)
+	(get_config_nvt_omp, get_report_omp, get_system_reports_omp): Use new
+	library read_string function to access only the string of gnutls
+	session.
+
 2010-01-28  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (send_redirect_header)
