@@ -2995,20 +2995,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
 static gboolean
 drop_privileges (struct passwd * nobody_pw)
 {
-  if (setgid (nobody_pw->pw_gid) == 0)
-    {
-      // Success.
-    }
-  else
+  if (setgid (nobody_pw->pw_gid) != 0)
     {
       g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
       return FALSE;
     }
-  if (setuid (nobody_pw->pw_uid) == 0)
-    {
-      // Success.
-    }
-  else
+  if (setuid (nobody_pw->pw_uid) != 0)
     {
       g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
       return FALSE;
