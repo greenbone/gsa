@@ -2654,17 +2654,17 @@ gsad_add_content_type_header (struct MHD_Response *response,
  */
 static struct MHD_Response*
 file_content_response (struct MHD_Connection *connection, const char* url,
-                      int* http_response_code, enum content_type* content_type,
-                      char** content_disposition)
+                       int* http_response_code, enum content_type* content_type,
+                       char** content_disposition)
 {
   FILE* file;
   gchar* path;
   char *default_file = "login/login.html";
   struct MHD_Response* response;
 
-  /** @TODO: validation, URL length restriction (allows you to view ANY
-    *        file that the user running the gsad might look at!) */
-  /** @TODO use glibs path functions */
+  /** @todo validation, URL length restriction (allows you to view ANY
+    *       file that the user running the gsad might look at!) */
+  /** @todo use glibs path functions */
   /* Attempt to prevent disclosing non-gsa content. */
   if (strstr (url, ".."))
     path = g_strconcat (default_file, NULL);
@@ -2695,51 +2695,58 @@ file_content_response (struct MHD_Connection *connection, const char* url,
       path = g_strconcat (default_file, NULL);
       tracef ("trying default file <%s>.\n", path);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
-                                    read and sent */
-    }
-
-  if (file == NULL)
-    {
-      /* Even the default file failed. */
-      tracef ("Default file failed.\n");
-      *http_response_code = MHD_HTTP_NOT_FOUND;
-      g_free (path);
-      return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
-                                                (void *) FILE_NOT_FOUND,
-                                                MHD_NO, MHD_YES);
-    }
-  else
-    {
-      /* Guess content type. */
-      if (strstr (path, ".png"))
-        *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
-      else if (strstr (path, ".html"))
-        *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
-      else if (strstr (path, ".css"))
-        *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
-      /** @todo Set content disposition? */
-
-      struct stat buf;
-      tracef ("Default file successful.\n");
-      if (stat (path, &buf))
+                                   read and sent */
+      if (file == NULL)
         {
-          /* File information could not be retrieved. */
-          g_critical ("%s: file <%s> can not be stat'ed.\n",
-                      __FUNCTION__,
-                      path);
+          /* Even the default file failed. */
+          tracef ("Default file failed.\n");
+          *http_response_code = MHD_HTTP_NOT_FOUND;
           g_free (path);
-          return NULL;
+          return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
+                                                (void *) FILE_NOT_FOUND,
+                                                MHD_NO,
+                                                MHD_YES);
         }
-
-      response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
-                                                    &file_reader,
-                                                    file,
-                                                    (MHD_ContentReaderFreeCallback)
-                                                    &fclose);
-      g_free (path);
-      *http_response_code = MHD_HTTP_OK;
-      return response;
     }
+
+  /* Guess content type. */
+  if (strstr (path, ".png"))
+    *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
+  else if (strstr (path, ".html"))
+    *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
+  else if (strstr (path, ".css"))
+    *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
+  /** @todo Set content disposition? */
+
+  struct stat buf;
+  tracef ("Default file successful.\n");
+  if (stat (path, &buf))
+    {
+      /* File information could not be retrieved. */
+      g_critical ("%s: file <%s> can not be stat'ed.\n",
+                  __FUNCTION__,
+                  path);
+      g_free (path);
+      return NULL;
+    }
+
+  response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
+                                                &file_reader,
+                                                file,
+                                                (MHD_ContentReaderFreeCallback)
+                                                &fclose);
+
+  if (strcmp (path, default_file) == 0)
+    {
+      /* Try prevent the browser from automatically sending the
+       * authentication header. */
+      MHD_add_response_header (response, "Expires", "-1");
+      MHD_add_response_header (response, "Cache-Control", "no-cache");
+    }
+
+  g_free (path);
+  *http_response_code = MHD_HTTP_OK;
+  return response;
 }
 
 /**
