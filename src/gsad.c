@@ -2418,6 +2418,9 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
       return MHD_NO;
     }
 
+  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
+
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
   MHD_destroy_response (response);
   return ret;
@@ -2434,7 +2437,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
 static struct MHD_Response*
 create_http_authenticate_response (const char *realm)
 {
-int ret;
+  int ret;
   gchar *headervalue;
   struct MHD_Response *response =
     MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
@@ -2457,6 +2460,10 @@ int ret;
       MHD_destroy_response (response);
       return NULL;
     }
+
+  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
+
   return response;
 }
 
@@ -2740,8 +2747,9 @@ file_content_response (struct MHD_Connection *connection, const char* url,
     {
       /* Try prevent the browser from automatically sending the
        * authentication header. */
-      MHD_add_response_header (response, "Expires", "-1");
-      MHD_add_response_header (response, "Cache-Control", "no-cache");
+      MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
+                               "no-cache");
     }
 
   g_free (path);

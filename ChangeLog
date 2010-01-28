@@ -1,5 +1,12 @@
 2010-01-28  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (send_redirect_header)
+	(create_http_authenticate_response): Add Expires and Cache-Control
+	headers.
+	(file_content_response): Use MHD defines for header names.
+
+2010-01-28  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (file_content_response): Indent args.  Downcase @todos.
 	Move fopen return check for default_file into block that does fopen.
 	Add Expires and Cache-Control headers if path matches default_file.
