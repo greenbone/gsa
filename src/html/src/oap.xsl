@@ -431,7 +431,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- DESCRIBE FEED RESPONSE    -->
 
 <xsl:template match="describe_feed_response">
-  <xsl:call-template name="html-feed-form"/>
+  <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">Describe Feed</xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-feed-form"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="html-feed-form">
@@ -454,6 +469,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <b><xsl:value-of select="feed/name"/></b><br/>
             </td>
           </tr>
+          <xsl:choose>
+            <xsl:when test="feed/currently_syncing">
+              <tr>
+                <td valign="top" width="125"></td>
+                <td>
+                  Synchronization
+	              <b>in progress</b>.  Started
+                  <b>
+                    <xsl:value-of select="feed/currently_syncing/timestamp"/>
+                  </b>
+                  by
+                  <b><xsl:value-of select="feed/currently_syncing/user"/></b>.
+                </td>
+              </tr>
+            </xsl:when>
+          </xsl:choose>
           <tr>
             <td valign="top" width="125">Description</td>
             <td>
@@ -463,7 +494,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td colspan="2" style="text-align:right;">
               <xsl:choose>
-                <xsl:when test="currently_syncing">
+                <xsl:when test="feed/currently_syncing">
                   <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
                 </xsl:when>
                 <xsl:otherwise>
