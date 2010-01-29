@@ -310,7 +310,7 @@ save_user_oap (credentials_t * credentials, const char *name,
     {
       int ret;
 
-      /* Create the user. */
+      /* Modify the user. */
 
       if (strcmp (hosts_allow, "2") && strlen (hosts))
         ret = openvas_server_sendf (&session,
@@ -660,7 +660,7 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
     {
       case -1:
         return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the user list. "
+                             "An internal error occurred while getting the feed list. "
                              "The current list of feeds is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
                              "/omp?cmd=get_status");
@@ -691,7 +691,7 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
     {
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user list. "
+                           "An internal error occurred while getting the feed. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");

@@ -1243,7 +1243,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_status_response">
   <xsl:choose>
-    <xsl:when test="substring(@status, 0, 1) = '4' or substring(@status, 0, 1) = '5'">
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
         <xsl:with-param name="operation">Get Status</xsl:with-param>
         <xsl:with-param name="status">
@@ -1297,7 +1297,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Comment (optional)</td>
             <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
+              <input type="text" name="comment" value="" size="30"
+	                 maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -1316,7 +1317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Password
                   </td>
                   <td>
-                    <input type="password" name="password" size="30"
+                    <input type="password" name="password" value="" size="30"
                            maxlength="40"/>
                   </td>
                 </tr>

@@ -56,8 +56,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="username"/>
   <div style="text-align:left;">
     <div class="logo_l">
-      <a href="/omp?cmd=get_status">
-        <img src="/img/style/logo_l.png" alt=""/>
+      <a href="/omp?cmd=get_status" title="Greenbone Security Assistant">
+        <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>
     <div class="logo_r"></div>
