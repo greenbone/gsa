@@ -1,3 +1,8 @@
+2010-02-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/omp.xsl: Made file entries have same length
+	as text entries.
+
 2010-01-29  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (get_status_response): Correct substring args.
