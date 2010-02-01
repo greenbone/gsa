@@ -1485,7 +1485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h1>Targets using this Credential: None</h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Targets using this Credential:</h1>
+          <h1>Targets using this Credential</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>Name</td>
