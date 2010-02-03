@@ -1,3 +1,10 @@
+2010-02-03  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (result) [detailed]: Remove PRE from description.
+
+	* src/html/src/gsa-style.css (.issue_box_box): Add line wrapping, space
+	preservation and PRE like font.
+
 2010-02-01  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (lsc_credential) [details]: Remove colon from
