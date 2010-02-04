@@ -38,6 +38,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<!-- This is called within a PRE. -->
+<xsl:template name="wrap">
+  <xsl:param name="string"></xsl:param>
+
+  <xsl:variable name="to-next-newline">
+    <xsl:value-of select="substring-before($string, '&#10;')"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="string-length($string) = 0">
+      <!-- The string is empty. -->
+    </xsl:when>
+    <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; 100)">
+      <!-- There's a newline before the edge, so output the line. -->
+<xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
+<xsl:call-template name="wrap">
+  <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
+</xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Any newline comes after the edge, so output up to the edge. -->
+<xsl:value-of select="substring($string, 1, 100)"/>
+      <xsl:if test="string-length($string) &gt; 100">&#8629;
+<xsl:call-template name="wrap">
+  <xsl:with-param name="string"><xsl:value-of select="substring($string, 100, string-length($string))"/></xsl:with-param>
+</xsl:call-template>
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+
+</xsl:template>
+
 <xsl:template match="sort">
 </xsl:template>
 
@@ -3904,7 +3936,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <div class="issue_box_box">
-    <xsl:value-of select="description"/>
+	<pre>
+	  <xsl:call-template name="wrap">
+		<xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
+	  </xsl:call-template>
+	</pre>
   </div>
   <br/>
 </xsl:template>

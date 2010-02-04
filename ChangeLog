@@ -1,3 +1,14 @@
+2010-02-04  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Wrap lines of result descriptions during the XSL transform.
+
+	* src/html/src/omp.xsl (wrap): New template.
+	(result) [detailed]: Add PRE around description.  Filter description
+	through wrap template.
+
+	* src/html/src/gsa-style.css (.issue_box_box): Remove white-space and
+	font-family.
+
 2010-02-04  Michael Wiegand <michael.wiegand@intevation.de>
 
 	* src/html/src/omp.xsl: Reconciled value of of increment with max value
