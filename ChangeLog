@@ -1,3 +1,8 @@
+2010-02-04  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/omp.xsl: Reconciled value of of increment with max value
+	in exec_omp_get in gsad.c to repair pagination.
+
 2010-02-03  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (result) [detailed]: Remove PRE from description.

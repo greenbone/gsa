@@ -310,7 +310,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="count(report/results/result) &gt; 0">
             <!-- This must match the max value in exec_omp_get in gsad.c. -->
-            <xsl:variable name="increment">10</xsl:variable>
+            <xsl:variable name="increment">1000</xsl:variable>
             <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
             <xsl:if test = "report/results/@start &gt; 1">
               <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}">&lt;&lt;</a>
