@@ -1,3 +1,11 @@
+2010-02-05  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Preparing the gsa 1.0.0-beta4 release.
+
+	* src/html/src/about.htm4: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-02-04  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Wrap lines of result descriptions during the XSL transform.

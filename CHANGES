@@ -1,3 +1,19 @@
+gsa 1.0.0-beta4 (2010-02-05)
+
+This is the fourth beta release of the optional gsa module for the Open
+Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix Wolfsteller.
+
+Main changes since 1.0.0-beta3:
+
+* Improved HTTP conformity.
+* Improved Feed synchronization support.
+* Improved line wrapping in reports.
+* A bug in the report pagination has been fixed.
+
+
 gsa 1.0.0-beta3 (2010-01-27)
 
 This is the third beta release of the optional gsa module
