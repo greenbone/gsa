@@ -1,3 +1,7 @@
+2010-02-05  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (wrap): Lower wrap column to 90.
+
 2010-02-05  Michael Wiegand <michael.wiegand@intevation.de>
 
 	Post release version bump.
