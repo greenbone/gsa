@@ -298,7 +298,10 @@ validate_hosts_parameter (const char* hosts_parameter)
       if (slashpos[1] != '\0')
         cidr_mask = atoi (slashpos + 1);
       else
-        return TRUE;
+        {
+          g_free (copy);
+          return TRUE;
+        }
       if (cidr_mask < 16)
         {
           g_free (copy);
@@ -2734,6 +2737,7 @@ file_content_response (struct MHD_Connection *connection, const char* url,
                   __FUNCTION__,
                   path);
       g_free (path);
+      fclose (file);
       return NULL;
     }
 
