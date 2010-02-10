@@ -1,3 +1,8 @@
+2010-02-10  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (escalator) [details]: Remove greying of method
+	background.
+
 2010-02-08  Tim Brown <timb@openvas.org>
 
 	* src/gsad.c: Fixed couple of leaks reported by cppcheck.

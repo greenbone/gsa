@@ -2065,7 +2065,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td valign="top">Method:</td>
           <td>
             <table>
-              <tr class="odd">
+              <tr>
                 <td colspan="3">
                   <xsl:value-of select="method/text()"/>
                 </td>
