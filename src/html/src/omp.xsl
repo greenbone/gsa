@@ -3888,6 +3888,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-report-details"/>
 </xsl:template>
 
+<!--     DELETE_NOTE_RESPONSE -->
+
+<xsl:template match="delete_note_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Note
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     NOTE -->
 
 <xsl:template match="note" mode="detailed">
@@ -3895,6 +3911,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <b>Note</b><br/>
     <pre><xsl:value-of select="text"/></pre>
     Last modified: <xsl:value-of select="modification_time"/>.
+    <div style="float:right; text-align:right">
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}"
+         title="Delete Note" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
+      </a>
+    </div>
   </div>
 </xsl:template>
 

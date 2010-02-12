@@ -180,6 +180,7 @@ init_validator ()
                          "|(delete_config)"
                          "|(delete_escalator)"
                          "|(delete_lsc_credential)"
+                         "|(delete_note)"
                          "|(delete_report)"
                          "|(delete_target)"
                          "|(delete_task)"
@@ -238,6 +239,7 @@ init_validator ()
   /** @todo Because we fear injections, we're requiring weaker passwords! */
   openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:], ;:\\./\\\\]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
+  openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
@@ -1878,6 +1880,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *agent_format = NULL;
   const char *task_id      = NULL;
   const char *report_id    = NULL;
+  const char *note_id      = NULL;
   const char *format       = NULL;
   const char *package_format = NULL;
   const char *name         = NULL;
@@ -1926,6 +1929,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                "report_id");
       if (openvas_validate (validator, "report_id", report_id))
         report_id = NULL;
+
+      note_id = MHD_lookup_connection_value (connection,
+                                             MHD_GET_ARGUMENT_KIND,
+                                             "note_id");
+      if (openvas_validate (validator, "note_id", note_id))
+        note_id = NULL;
 
       oid = MHD_lookup_connection_value (connection,
                                          MHD_GET_ARGUMENT_KIND,
@@ -2092,6 +2101,11 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
     return delete_lsc_credential_omp (credentials, name);
+
+  else if ((!strcmp (cmd, "delete_note"))
+           && (note_id != NULL) && (strlen (note_id) < VAL_MAX_SIZE)
+           && (report_id != NULL) && (strlen (report_id) < VAL_MAX_SIZE))
+    return delete_note_omp (credentials, note_id, report_id);
 
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))

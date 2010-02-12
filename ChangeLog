@@ -1,5 +1,20 @@
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add removal of notes.
+
+	* src/gsad.c (init_validator): Add delete_note command.  Add "note_id"
+	validator.
+	(exec_omp_get): Handle command "delete_note".
+
+	* src/gsad_omp.c (delete_note_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/omp.xsl (delete_note_response): New templates.
+	(note) [detailed]: Add delete button.
+
+2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note) [detailed]: New template.
 	(result) [detailed]: Apply any notes.
 

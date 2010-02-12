@@ -3797,6 +3797,67 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 }
 
 /**
+ * @brief Delete note, get report, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  note_id      ID of note.
+ * @param[in]  report_id    ID of current report.
+ * @param[in]  result_id    ID of result in report.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_note_omp (credentials_t * credentials, const char *note_id,
+                 const char *report_id)
+{
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a note. "
+                         "The note was not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<delete_note note_id=\"%s\" />"
+                            "<get_report"
+                            " notes=\"1\""
+                            " notes_details=\"1\""
+                            " report_id=\"%s\" />"
+                            "</commands>",
+                            note_id,
+                            report_id) == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a note. "
+                           "The note was not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a report. "
+                           "It is unclear whether the report has been deleted or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
  * @brief Get all system reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
