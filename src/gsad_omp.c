@@ -3606,6 +3606,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (openvas_server_sendf (&session,
                             "<get_report"
+                            " notes=\"1\""
+                            " notes_details=\"1\""
                             " report_id=\"%s\""
                             " format=\"%s\""
                             " first_result=\"%u\""

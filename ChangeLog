@@ -1,3 +1,13 @@
+2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (note) [detailed]: New template.
+	(result) [detailed]: Apply any notes.
+
+	* src/html/src/gsa-style.css (.issue_box_box): Zero margin-bottom.
+	(.note_box_box): New style.
+
+	* src/gsad_omp.c (get_report_omp): Request notes.
+
 2010-02-10  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (escalator) [details]: Remove greying of method

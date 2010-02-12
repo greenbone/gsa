@@ -3888,6 +3888,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-report-details"/>
 </xsl:template>
 
+<!--     NOTE -->
+
+<xsl:template match="note" mode="detailed">
+  <div class="note_box_box">
+    <b>Note</b><br/>
+    <pre><xsl:value-of select="text"/></pre>
+    Last modified: <xsl:value-of select="modification_time"/>.
+  </div>
+</xsl:template>
+
 <!--     RESULT -->
 
 <xsl:template match="result" mode="overview">
@@ -3942,6 +3952,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	  </xsl:call-template>
 	</pre>
   </div>
+  <xsl:apply-templates select="notes/note" mode="detailed"/>
   <br/>
 </xsl:template>
 
