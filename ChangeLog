@@ -1,5 +1,28 @@
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add adding of notes.
+
+	* src/gsad.c (init_validator): Add creeate_note and new_note commands.
+	Add "max_results" and "text" validators.
+	(struct req_parms): Add params.
+	(free_resources): Add param freeing.
+	(append_chunk_string): New function.
+	(serve_post): Add create_note handling.
+	(exec_omp_get): Pass get_report params to delete_note_omp.  Add new_note
+	handling.
+
+	* src/gsad_omp.c (new_note_omp, create_note_omp): New function.
+	(delete_note_omp): Add get_report params.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/omp.xsl (html-create-note-form, html-result-box, new_note)
+	(create_note_response): New templates.
+	(note) [detailed]: Wrap note text.  Pass get_report params to delete_note.
+	(result) [detailed]: Add "new note" button.
+
+2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add removal of notes.
 
 	* src/gsad.c (init_validator): Add delete_note command.  Add "note_id"
@@ -10,7 +33,7 @@
 
 	* src/gsad_omp.h: Add header accordingly.
 
-	* src/omp.xsl (delete_note_response): New templates.
+	* src/omp.xsl (delete_note_response): New template.
 	(note) [detailed]: Add delete button.
 
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>

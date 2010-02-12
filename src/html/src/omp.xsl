@@ -3882,10 +3882,105 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END NVT DETAILS -->
 
+<!-- BEGIN NOTES MANAGEMENT -->
+
+<xsl:template name="html-create-note-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Note
+      <a href="/help/notes.html#newnote"
+         title="Help: Notes (New Note)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_note"/>
+        <input type="hidden" name="oid" value="{nvt/@id}"/>
+        <input type="hidden" name="report_id" value="{report/@id}"/>
+        <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="max_results" value="{max_results}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="levels" value="{levels}"/>
+        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Text</td>
+            <td>
+              <textarea name="text" rows="10" cols="60"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Note"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-result-box">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Targets
+      <a href="/help/configure_targets.html#targets"
+         title="Help: Configure Targets (Targets)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Hosts</td>
+            <td>IPs</td>
+            <td>Credential</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="target"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_note">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-create-note-form"/>
+  <!-- The for-each makes the get_results_response the current node. -->
+  <xsl:for-each select="get_results_response/result">
+    <xsl:call-template name="html-result-box"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END NOTES MANAGEMENT -->
+
 <!-- BEGIN REPORT DETAILS -->
 
 <xsl:template match="get_report_response">
   <xsl:call-template name="html-report-details"/>
+</xsl:template>
+
+<!--     CREATE_NOTE_RESPONSE -->
+
+<xsl:template match="create_note_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Create Note
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     DELETE_NOTE_RESPONSE -->
@@ -3909,10 +4004,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="note" mode="detailed">
   <div class="note_box_box">
     <b>Note</b><br/>
-    <pre><xsl:value-of select="text"/></pre>
+	<pre>
+	  <xsl:call-template name="wrap">
+		<xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
+	  </xsl:call-template>
+	</pre>
     Last modified: <xsl:value-of select="modification_time"/>.
     <div style="float:right; text-align:right">
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}"
+      <!-- FIX max_results -->
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
@@ -3968,6 +4068,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <div class="issue_box_box">
+    <div style="float:right; text-align:right">
+      <!-- FIX max_results -->
+      <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}"
+         title="Add Note" style="margin-left:3px;">
+        <img src="/img/new.png" border="0" alt="Add Note"/>
+      </a>
+    </div>
 	<pre>
 	  <xsl:call-template name="wrap">
 		<xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>

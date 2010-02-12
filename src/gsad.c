@@ -42,6 +42,7 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 #include <arpa/inet.h>
+#include <assert.h>
 #include <errno.h>
 #include <gcrypt.h>
 #include <glib.h>
@@ -173,6 +174,7 @@ init_validator ()
                          "|(create_config)"
                          "|(create_escalator)"
                          "|(create_lsc_credential)"
+                         "|(create_note)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(create_user)"
@@ -211,6 +213,7 @@ init_validator ()
                          "|(get_user)"
                          "|(get_users)"
                          "|(import_config)"
+                         "|(new_note)"
                          "|(test_escalator)"
                          "|(save_config)"
                          "|(save_config_family)"
@@ -230,6 +233,7 @@ init_validator ()
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
+  openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
@@ -253,6 +257,7 @@ init_validator ()
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "search_phrase", "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
@@ -427,6 +432,11 @@ struct gsad_connection_info
     char *pw;            ///< Value of "pw" parameter.
     char *password;      ///< Value of "password" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
+    char *text;          ///< Value of "text" parameter.
+    char *report_id;     ///< Value of "report_id" parameter.
+    char *first_result;  ///< Value of "first_result" parameter.
+    char *max_results;   ///< Value of "max_results" parameter.
+    char *search_phrase; ///< Value of "search_phrase" parameter.
     char *installer;     ///< Value of "installer" parameter.
     int installer_size;  ///< Size of "installer" parameter.
     char *howto_install; ///< Value of "howto_install" parameter.
@@ -607,6 +617,11 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.sort_field);
   free (con_info->req_parms.sort_order);
   free (con_info->req_parms.timeout);
+  free (con_info->req_parms.text);
+  free (con_info->req_parms.report_id);
+  free (con_info->req_parms.first_result);
+  free (con_info->req_parms.max_results);
+  free (con_info->req_parms.search_phrase);
   free (con_info->req_parms.installer);
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
@@ -710,6 +725,57 @@ free_resources (void *cls, struct MHD_Connection *connection,
     }
   free (con_info);
   *con_cls = NULL;
+}
+
+/**
+ * @brief Append a chunk to a string parameter.
+ *
+ * @param[in]   chunk         Incoming chunk data.
+ * @param[out]  chunk_size    Size of chunk.
+ * @param[out]  chunk_offset  Offset into all data.
+ * @param[out]  param         Parameter.
+ * @param[out]  param_size    Parameter size.
+ *
+ * @return MHD_YES on success, MHD_NO on error.
+ */
+static int
+append_chunk_string (struct gsad_connection_info *con_info,
+                     const char *chunk_data,
+                     int chunk_size,
+                     int chunk_offset,
+                     char **param)
+{
+  if (chunk_size)
+    {
+      if (*param == NULL)
+        {
+          assert (chunk_offset == 0);
+          *param = malloc (chunk_size + 1);
+          if (*param == NULL)
+            return MHD_NO;
+        }
+      else
+        {
+          char *new_param;
+          if (*param == NULL)
+            return MHD_NO;
+          new_param = realloc (*param, strlen (*param) + chunk_size + 1);
+          if (new_param == NULL)
+            return MHD_NO;
+          *param = new_param;
+        }
+      memcpy (*param + chunk_offset,
+              chunk_data,
+              chunk_size);
+      (*param)[chunk_offset + chunk_size] = '\0';
+    }
+  else if (*param == NULL)
+    {
+      *param = malloc (100);
+      **param = '\0';
+    }
+  con_info->answercode = MHD_HTTP_OK;
+  return MHD_YES;
 }
 
 /**
@@ -1139,6 +1205,32 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
+
+      if (!strcmp (key, "text"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.text);
+      if (!strcmp (key, "report_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.report_id);
+      if (!strcmp (key, "first_result"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.first_result);
+      if (!strcmp (key, "max_results"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.max_results);
+      if (!strcmp (key, "sort_field"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.sort_field);
+      if (!strcmp (key, "sort_order"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.sort_order);
+      if (!strcmp (key, "levels"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.levels);
+      if (!strcmp (key, "search_phrase"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.search_phrase);
+
       if (!strcmp (key, "installer"))
         {
           if (append_chunk_binary (data,
@@ -1697,6 +1789,110 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.comment,
                            con_info->req_parms.base);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "create_note"))
+    {
+      const char *first_result;
+      const char *max_results;
+      unsigned int first;
+      unsigned int max;
+
+      /* Check parameters for creating the note. */
+
+      if (openvas_validate (validator, "oid", con_info->req_parms.oid))
+        {
+          free (con_info->req_parms.oid);
+          con_info->req_parms.oid = NULL;
+        }
+#if 0
+      if (openvas_validate (validator,
+                            "hosts",
+                            con_info->req_parms.hosts)
+          || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+#endif
+      if (openvas_validate (validator, "text", con_info->req_parms.text))
+        {
+          free (con_info->req_parms.text);
+          con_info->req_parms.text = NULL;
+        }
+
+      /* Check parameters for requesting the report. */
+
+      if (openvas_validate (validator,
+                            "report_id",
+                            con_info->req_parms.report_id))
+        {
+          free (con_info->req_parms.report_id);
+          con_info->req_parms.report_id = NULL;
+        }
+      if (openvas_validate (validator,
+                            "first_result",
+                            con_info->req_parms.first_result))
+        {
+          free (con_info->req_parms.first_result);
+          con_info->req_parms.first_result = NULL;
+        }
+      if (openvas_validate (validator,
+                            "max_results",
+                            con_info->req_parms.max_results))
+        {
+          free (con_info->req_parms.max_results);
+          con_info->req_parms.max_results = NULL;
+        }
+      if (openvas_validate (validator,
+                            "sort_field",
+                            con_info->req_parms.sort_field))
+        {
+          free (con_info->req_parms.sort_field);
+          con_info->req_parms.sort_field = NULL;
+        }
+      if (openvas_validate (validator,
+                            "sort_order",
+                            con_info->req_parms.sort_order))
+        {
+          free (con_info->req_parms.sort_order);
+          con_info->req_parms.sort_order = NULL;
+        }
+      if (openvas_validate (validator,
+                            "levels",
+                            con_info->req_parms.levels))
+        {
+          free (con_info->req_parms.levels);
+          con_info->req_parms.levels = NULL;
+        }
+      if (openvas_validate (validator,
+                            "search_phrase",
+                            con_info->req_parms.search_phrase))
+        {
+          free (con_info->req_parms.search_phrase);
+          con_info->req_parms.search_phrase = NULL;
+        }
+
+      /* Call the page handler. */
+
+      first_result = con_info->req_parms.first_result;
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      max_results = con_info->req_parms.max_results;
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
+      con_info->response =
+        create_note_omp (credentials,
+                         con_info->req_parms.oid,
+                         con_info->req_parms.text,
+                         con_info->req_parms.report_id,
+                         first,
+                         max,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.levels,
+                         con_info->req_parms.search_phrase);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
     {
       con_info->response = get_status_omp (credentials,
@@ -2103,9 +2299,27 @@ exec_omp_get (struct MHD_Connection *connection,
     return delete_lsc_credential_omp (credentials, name);
 
   else if ((!strcmp (cmd, "delete_note"))
-           && (note_id != NULL) && (strlen (note_id) < VAL_MAX_SIZE)
-           && (report_id != NULL) && (strlen (report_id) < VAL_MAX_SIZE))
-    return delete_note_omp (credentials, note_id, report_id);
+           && (note_id != NULL)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (max_results != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (search_phrase != NULL))
+    {
+      unsigned int first;
+      unsigned int max;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
+      return delete_note_omp (credentials, note_id, report_id, first, max,
+                              sort_field, sort_order, levels, search_phrase);
+    }
 
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))
@@ -2305,6 +2519,18 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "test_escalator")) && (name != NULL))
     return test_escalator_omp (credentials, name, sort_field, sort_order);
+
+  else if ((!strcmp (cmd, "new_note"))
+           && (oid != NULL)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (max_results != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (search_phrase != NULL))
+    return new_note_omp (credentials, oid, report_id, first_result, max_results,
+                         sort_field, sort_order, levels, search_phrase);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
