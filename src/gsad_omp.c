@@ -3801,6 +3801,10 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  oid            OID of NVT associated with note.
+ * @param[in]  port           Port to limit note to, "" for all.
+ * @param[in]  threat         Threat to limit note to, "" for all.
+ * @param[in]  task_id        ID of task to limit note to, "" for all.
+ * @param[in]  task_name      Name of task to limit note to, task_id given.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -3813,14 +3817,32 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  */
 char *
 new_note_omp (credentials_t *credentials, const char *oid,
+              const char *hosts, const char *port, const char *threat,
+              const char *task_id, const char *task_name,
+              const char *result_id,
               const char *report_id, const char *first_result,
               const char *max_results, const char *sort_field,
               const char *sort_order, const char *levels,
               const char *search_phrase)
 {
+  if (hosts == NULL || port == NULL || threat == NULL || task_id == NULL
+      || report_id == NULL) // FIX
+    {
+      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
   return xsl_transform_omp (credentials,
                             g_strdup_printf ("<new_note>"
                                              "<nvt id=\"%s\"/>"
+                                             "<hosts>%s</hosts>"
+                                             "<port>%s</port>"
+                                             "<threat>%s</threat>"
+                                             "<task id=\"%s\">"
+                                             "<name>%s</name>"
+                                             "</task>"
+                                             "<result id=\"%s\"/>"
+                                             /* Passthroughs. */
                                              "<report id=\"%s\"/>"
                                              "<first_result>%s</first_result>"
                                              "<max_results>%s</max_results>"
@@ -3830,6 +3852,12 @@ new_note_omp (credentials_t *credentials, const char *oid,
                                              "<search_phrase>%s</search_phrase>"
                                              "</new_note>",
                                              oid,
+                                             hosts,
+                                             port,
+                                             threat,
+                                             task_id,
+                                             task_name,
+                                             result_id,
                                              report_id,
                                              first_result,
                                              max_results,
@@ -3844,8 +3872,12 @@ new_note_omp (credentials_t *credentials, const char *oid,
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  oid            OID of NVT associated with note.
- * @param[in]  hosts          Hosts associated with note.
- * @param[out] text           Text of note.
+ * @param[in]  text           Text of note.
+ * @param[in]  hosts          Hosts note applied to, "" for all.
+ * @param[in]  port           Port note applies to, "" for all.
+ * @param[in]  threat         Threat note applies to, "" for all.
+ * @param[in]  task_id        ID of task to limit note to, "" for all.
+ * @param[in]  result_id      ID of result to limit note to, "" for all.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -3858,7 +3890,9 @@ new_note_omp (credentials_t *credentials, const char *oid,
  */
 char *
 create_note_omp (credentials_t *credentials, const char *oid,
-                 const char *text, const char *report_id,
+                 const char *text, const char *hosts, const char *port,
+                 const char *threat, const char *task_id, const char *result_id,
+                 const char *report_id,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
@@ -3882,6 +3916,13 @@ create_note_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_notes");
 
+  if (threat == NULL || port == NULL || hosts == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new note. "
+                         "No new note was created. "
+                         "Diagnostics: A required parameter was NULL.",
+                         "/omp?cmd=get_notes");
+
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
@@ -3902,10 +3943,20 @@ create_note_omp (credentials_t *credentials, const char *oid,
       ret = openvas_server_sendf (&session,
                                   "<create_note>"
                                   "<nvt>%s</nvt>"
+                                  "<hosts>%s</hosts>"
+                                  "<port>%s</port>"
+                                  "<threat>%s</threat>"
                                   "<text>%s</text>"
+                                  "<task>%s</task>"
+                                  "<result>%s</result>"
                                   "</create_note>",
                                   oid,
-                                  text);
+                                  hosts,
+                                  port,
+                                  threat,
+                                  text,
+                                  task_id,
+                                  result_id);
 
       if (ret == -1)
         {

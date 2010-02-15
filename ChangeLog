@@ -1,8 +1,27 @@
+2010-02-15  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add note constraints.
+
+	* src/gsad.c (init_validator): Add "port", "result_id" and "threat"
+	validators.
+	(struct req_parms): Add params.
+	(free_resources): Add param freeing.
+	(serve_post): Pass contraint args to create_note_omp.
+	(exec_omp_get): Pass contraint args to new_note_omp.
+
+	* src/gsad_omp.c (new_note_omp): Add constraint args.
+	(create_note_omp): Add constraint args.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/omp.xsl (html-create-note-form): Add contraint input.
+	(new_note): Pass contraint values to new_note.
+
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add adding of notes.
 
-	* src/gsad.c (init_validator): Add creeate_note and new_note commands.
+	* src/gsad.c (init_validator): Add create_note and new_note commands.
 	Add "max_results" and "text" validators.
 	(struct req_parms): Add params.
 	(free_resources): Add param freeing.

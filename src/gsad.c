@@ -250,14 +250,17 @@ init_validator ()
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
+  openvas_validator_add (validator, "port",       "^[[:alnum:]_/]{1,400}$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   NULL);
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
+  openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|)$");
   openvas_validator_add (validator, "search_phrase", "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
@@ -431,8 +434,12 @@ struct gsad_connection_info
     char *oid;           ///< Value of "oid" parameter.
     char *pw;            ///< Value of "pw" parameter.
     char *password;      ///< Value of "password" parameter.
+    char *port;          ///< Value of "port" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
+    char *threat;        ///< Value of "threat" parameter.
     char *text;          ///< Value of "text" parameter.
+    char *task_id;       ///< Value of "task_id" parameter.
+    char *result_id;     ///< Value of "result_id" parameter.
     char *report_id;     ///< Value of "report_id" parameter.
     char *first_result;  ///< Value of "first_result" parameter.
     char *max_results;   ///< Value of "max_results" parameter.
@@ -613,11 +620,15 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.login);
   free (con_info->req_parms.pw);
   free (con_info->req_parms.password);
+  free (con_info->req_parms.port);
   free (con_info->req_parms.oid);
   free (con_info->req_parms.sort_field);
   free (con_info->req_parms.sort_order);
   free (con_info->req_parms.timeout);
+  free (con_info->req_parms.threat);
   free (con_info->req_parms.text);
+  free (con_info->req_parms.task_id);
+  free (con_info->req_parms.result_id);
   free (con_info->req_parms.report_id);
   free (con_info->req_parms.first_result);
   free (con_info->req_parms.max_results);
@@ -1206,9 +1217,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           return MHD_YES;
         }
 
+      if (!strcmp (key, "port"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.port);
+      if (!strcmp (key, "threat"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.threat);
       if (!strcmp (key, "text"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.text);
+      if (!strcmp (key, "task_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.task_id);
+      if (!strcmp (key, "result_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.result_id);
       if (!strcmp (key, "report_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.report_id);
@@ -1803,20 +1826,55 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.oid);
           con_info->req_parms.oid = NULL;
         }
-#if 0
-      if (openvas_validate (validator,
-                            "hosts",
-                            con_info->req_parms.hosts)
-          || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
-        {
-          free (con_info->req_parms.hosts);
-          con_info->req_parms.hosts = NULL;
-        }
-#endif
+
       if (openvas_validate (validator, "text", con_info->req_parms.text))
         {
           free (con_info->req_parms.text);
           con_info->req_parms.text = NULL;
+        }
+
+       if (strcmp (con_info->req_parms.port, "")
+           && openvas_validate (validator, "port", con_info->req_parms.port))
+        {
+          free (con_info->req_parms.port);
+          con_info->req_parms.port = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.threat, "")
+          && openvas_validate (validator,
+                               "threat",
+                               con_info->req_parms.threat))
+        {
+          free (con_info->req_parms.threat);
+          con_info->req_parms.threat = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.hosts, "")
+          && (openvas_validate (validator,
+                                "hosts",
+                                con_info->req_parms.hosts)
+              || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE))
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.task_id, "")
+          && openvas_validate (validator,
+                               "task_id",
+                               con_info->req_parms.task_id))
+        {
+          free (con_info->req_parms.task_id);
+          con_info->req_parms.task_id = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.result_id, "")
+          && openvas_validate (validator,
+                               "result_id",
+                               con_info->req_parms.result_id))
+        {
+          free (con_info->req_parms.result_id);
+          con_info->req_parms.result_id = NULL;
         }
 
       /* Check parameters for requesting the report. */
@@ -1885,6 +1943,11 @@ exec_omp_post (credentials_t * credentials,
         create_note_omp (credentials,
                          con_info->req_parms.oid,
                          con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.task_id,
+                         con_info->req_parms.result_id,
                          con_info->req_parms.report_id,
                          first,
                          max,
@@ -2075,6 +2138,7 @@ exec_omp_get (struct MHD_Connection *connection,
   char *cmd = NULL;
   const char *agent_format = NULL;
   const char *task_id      = NULL;
+  const char *result_id    = NULL;
   const char *report_id    = NULL;
   const char *note_id      = NULL;
   const char *format       = NULL;
@@ -2082,12 +2146,15 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *name         = NULL;
   const char *family       = NULL;
   const char *first_result = NULL;
+  const char *hosts        = NULL;
   const char *max_results  = NULL;
   const char *oid          = NULL;
   const char *sort_field   = NULL;
   const char *sort_order   = NULL;
   const char *levels       = NULL;
   const char *search_phrase = NULL;
+  const char *port         = NULL;
+  const char *threat       = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
@@ -2119,6 +2186,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "task_id");
       if (openvas_validate (validator, "task_id", task_id))
         task_id = NULL;
+
+      result_id = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "result_id");
+      if (openvas_validate (validator, "result_id", result_id))
+        result_id = NULL;
 
       report_id = MHD_lookup_connection_value (connection,
                                                MHD_GET_ARGUMENT_KIND,
@@ -2262,6 +2335,30 @@ exec_omp_get (struct MHD_Connection *connection,
         }
       else
         search_phrase = "";
+
+      hosts = MHD_lookup_connection_value (connection,
+                                           MHD_GET_ARGUMENT_KIND,
+                                           "hosts");
+      if (openvas_validate (validator, "hosts", hosts))
+        hosts = NULL;
+
+      port = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "port");
+      if (port)
+        {
+          if (openvas_validate (validator, "port", port))
+            port = NULL;
+        }
+
+      threat = MHD_lookup_connection_value (connection,
+                                            MHD_GET_ARGUMENT_KIND,
+                                            "threat");
+      if (threat)
+        {
+          if (openvas_validate (validator, "threat", threat))
+            threat = NULL;
+        }
     }
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2521,7 +2618,14 @@ exec_omp_get (struct MHD_Connection *connection,
     return test_escalator_omp (credentials, name, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "new_note"))
+           /* Note params. */
            && (oid != NULL)
+           && (hosts != NULL)
+           && (port != NULL)
+           && (threat != NULL)
+           && (task_id != NULL)
+           && (result_id != NULL)
+           /* Report passthrough params. */
            && (report_id != NULL)
            && (first_result != NULL)
            && (max_results != NULL)
@@ -2529,8 +2633,10 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_order != NULL)
            && (levels != NULL)
            && (search_phrase != NULL))
-    return new_note_omp (credentials, oid, report_id, first_result, max_results,
-                         sort_field, sort_order, levels, search_phrase);
+    return new_note_omp (credentials, oid, hosts, port, threat, task_id,
+                         name, result_id, report_id, first_result,
+                         max_results, sort_field, sort_order, levels,
+                         search_phrase);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,

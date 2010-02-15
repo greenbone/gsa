@@ -3907,6 +3907,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
+            <td valign="top" width="125">
+              Hosts
+            </td>
+            <td>
+              <input type="radio" name="hosts" value="" checked="1"/>
+              All
+              <input type="radio" name="hosts" value="{hosts}"/>
+              <xsl:value-of select="hosts"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Port
+            </td>
+            <td>
+              <input type="radio" name="port" value="" checked="1"/>
+              All
+              <input type="radio" name="port" value="{port}"/>
+              <xsl:value-of select="port"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Threat
+            </td>
+            <td>
+              <input type="radio" name="threat" value="" checked="1"/>
+              All
+              <input type="radio" name="threat" value="{threat}"/>
+              <xsl:value-of select="threat"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Task
+            </td>
+            <td>
+              <input type="radio" name="task_id" value="" checked="1"/>
+              All
+              <input type="radio" name="task_id" value="{task/@id}"/>
+              <xsl:value-of select="task/name"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Result
+            </td>
+            <td>
+              <input type="radio" name="result_id" value="" checked="1"/>
+              All
+              <input type="radio" name="result_id" value="{result/@id}"/>
+              <xsl:value-of select="result/@id"/>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="125">Text</td>
             <td>
               <textarea name="text" rows="10" cols="60"/>
@@ -4070,7 +4125,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="issue_box_box">
     <div style="float:right; text-align:right">
       <!-- FIX max_results -->
-      <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}"
+      <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}"
          title="Add Note" style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Add Note"/>
       </a>
