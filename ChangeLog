@@ -1,3 +1,12 @@
+2010-02-16  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/img/new_note.png, src/html/src/img/delete_note.png,
+	src/html/src/img/note.png: New files.
+
+	* src/html/src/omp.xsl (note, result) [detailed]: Use new note images.
+
+	* ChangeLog: Correct omp.xsl paths.
+
 2010-02-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/omp.xsl: Fixed a typo regarding refresh
@@ -20,7 +29,7 @@
 
 	* src/gsad_omp.h: Update headers accordingly.
 
-	* src/omp.xsl (html-create-note-form): Add contraint input.
+	* src/html/src/omp.xsl (html-create-note-form): Add contraint input.
 	(new_note): Pass contraint values to new_note.
 
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
@@ -41,7 +50,7 @@
 
 	* src/gsad_omp.h: Update headers accordingly.
 
-	* src/omp.xsl (html-create-note-form, html-result-box, new_note)
+	* src/html/src/omp.xsl (html-create-note-form, html-result-box, new_note)
 	(create_note_response): New templates.
 	(note) [detailed]: Wrap note text.  Pass get_report params to delete_note.
 	(result) [detailed]: Add "new note" button.
@@ -58,7 +67,7 @@
 
 	* src/gsad_omp.h: Add header accordingly.
 
-	* src/omp.xsl (delete_note_response): New template.
+	* src/html/src/omp.xsl (delete_note_response): New template.
 	(note) [detailed]: Add delete button.
 
 2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
@@ -1047,7 +1056,7 @@
 
 	* src/gsad_omp.h: Add and update headers accordingly.
 
-	* src/omp.xsl (html-report-table): Add escalator link.
+	* src/html/src/omp.xsl (html-report-table): Add escalator link.
 	(escalator, html-create-escalator-form, html-escalators-table)
 	(create_escalator_response, delete_escalator_response)
 	(escalator, get_escalator): New templates.

@@ -4069,7 +4069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- FIX max_results -->
       <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}"
          title="Delete Note" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
+        <img src="/img/delete_note.png" border="0" alt="Delete"/>
       </a>
     </div>
   </div>
@@ -4127,7 +4127,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- FIX max_results -->
       <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}"
          title="Add Note" style="margin-left:3px;">
-        <img src="/img/new.png" border="0" alt="Add Note"/>
+        <img src="/img/new_note.png" border="0" alt="Add Note"/>
       </a>
     </div>
 	<pre>
