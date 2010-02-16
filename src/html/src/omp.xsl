@@ -117,7 +117,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='60'">
-                <option value="60" selected="1">30 Sec.</option>
+                <option value="60" selected="1">60 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="60">60 Sec.</option>

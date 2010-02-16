@@ -1,3 +1,9 @@
+2010-02-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/omp.xsl: Fixed a typo regarding refresh
+	intervals. When selecting 60 seconds, the GUI applied 60
+	but showed 30.
+
 2010-02-15  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add note constraints.
