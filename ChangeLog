@@ -1,5 +1,10 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (note): Remove NVT link, as it looks too much like
+	a link to the details.
+
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add a note details page.
 
 	* src/gsad_omp.c (get_note_omp): New function.
