@@ -1,5 +1,20 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add notes management page.
+
+	* src/gsad_omp.c (get_notes_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator): Add get_notes command.
+	(exec_omp_get): Add get_notes command handling.
+
+	* src/html/src/omp.xsl (note, html-notes-table, get_notes): New templates.
+
+	* src/html/header.m4, src/html/src/gsad.xsl: Add "Notes" menu item.
+
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add note filtering in reports.
 
 	* src/html/src/omp.xsl (html-report-details): Add "Show notes" checkbox.

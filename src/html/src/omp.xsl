@@ -4004,6 +4004,95 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-create-note-form"/>
 </xsl:template>
 
+<xsl:template match="note">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <xsl:variable name="max" select="40"/>
+      <xsl:choose>
+        <xsl:when test="string-length(nvt/name) &gt; $max">
+          <b><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</b>
+        </xsl:when>
+        <xsl:otherwise>
+          <b><xsl:value-of select="nvt/name"/></b>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+        <xsl:value-of select="nvt/@oid"/>
+      </a>
+    </td>
+    <td>
+<!--
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}"
+         title="Delete Note" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
+      </a>
+      <a href="/omp?cmd=get_note&amp;name={name}"
+         title="Note Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+-->
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="html-notes-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Notes
+      <a href="/help/configure_notes.html#notes"
+         title="Help: Configure Notes (Notes)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="notes">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>NVT Name</td>
+            <td>NVT OID</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="note"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_notes">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:choose>
+	<xsl:when test="get_notes_response/@status = '500'">
+	  <xsl:call-template name="command_result_dialog">
+		<xsl:with-param name="operation">
+		  Get Notes
+		</xsl:with-param>
+		<xsl:with-param name="status">
+		  <xsl:value-of select="500"/>
+		</xsl:with-param>
+		<xsl:with-param name="msg">
+		  <xsl:value-of select="get_notes_response/@status_text"/>
+		</xsl:with-param>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise>
+      <!-- The for-each makes the get_notes_response the current node. -->
+      <xsl:for-each select="get_notes_response">
+        <xsl:call-template name="html-notes-table"/>
+      </xsl:for-each>
+	</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- END NOTES MANAGEMENT -->
 
 <!-- BEGIN REPORT DETAILS -->

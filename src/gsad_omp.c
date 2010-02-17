@@ -3802,6 +3802,60 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 }
 
 /**
+ * @brief Get all notes, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_notes_omp (credentials_t * credentials)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the notes. "
+                         "The list of notes is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_notes>");
+
+  /* Get the notes. */
+
+  if (openvas_server_send (&session, "<get_notes/>") == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the notes. "
+                           "The list of notes is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the notes. "
+                           "The list of notes is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_notes>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Return the new notes page.
  *
  * @param[in]  credentials    Username and password for authentication.

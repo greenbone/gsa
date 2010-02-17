@@ -97,6 +97,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <ul>
               <li><a href="/omp?cmd=get_status">Tasks</a></li>
               <li><a href="/new_task.html">New Task</a></li>
+              <li><a href="/omp?cmd=get_notes">Notes</a></li>
               <li><a href="/omp?cmd=get_system_reports">Performance</a></li>
             </ul>
           </li>
