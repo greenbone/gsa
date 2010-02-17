@@ -4053,11 +4053,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;name={name}"
+-->
+      <a href="/omp?cmd=get_note&amp;note_id={@id}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
--->
     </td>
   </tr>
 </xsl:template>
@@ -4086,13 +4086,136 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;name={name}"
+-->
+      <a href="/omp?cmd=get_note&amp;note_id={@id}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
--->
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template match="note" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Note Details
+       <a href="/help/configure_notes.html#notedetails"
+         title="Help: Configure Notes (Note Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_notes">Back to Notes</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>NVT Name:</b></td>
+          <td>
+            <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+              <xsl:variable name="max" select="70"/>
+              <xsl:choose>
+                <xsl:when test="string-length(nvt/name) &gt; $max">
+                  <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="nvt/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>NVT OID:</td>
+          <td><xsl:value-of select="nvt/@oid"/></td>
+        </tr>
+        <tr>
+          <td>Created:</td>
+          <td><xsl:value-of select="creation_time"/></td>
+        </tr>
+        <tr>
+          <td>Last Modified:</td>
+          <td><xsl:value-of select="modification_time"/></td>
+        </tr>
+      </table>
+
+      <h1>Application</h1>
+      <table>
+        <tr>
+          <td>Hosts:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(hosts) &gt; 0">
+                <xsl:value-of select="hosts"/>
+              </xsl:when>
+              <xsl:otherwise>
+                any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Port:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(port) &gt; 0">
+                <xsl:value-of select="port"/>
+              </xsl:when>
+              <xsl:otherwise>
+                any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Threat:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(threat) &gt; 0">
+                <xsl:value-of select="threat"/>
+              </xsl:when>
+              <xsl:otherwise>
+                any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Task:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="task and string-length(task/@id) &gt; 0">
+                <a href="?cmd=get_status&amp;task_id={task/@id}">
+                  <xsl:value-of select="task/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Result:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(result/@id) &gt; 0">
+                <xsl:value-of select="result/@id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+
+      <h1>Text</h1>
+      <pre><xsl:value-of select="text"/></pre>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template name="html-notes-table">
@@ -4118,6 +4241,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="get_note">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:choose>
+	<xsl:when test="get_notes_response/@status = '500'">
+	  <xsl:call-template name="command_result_dialog">
+		<xsl:with-param name="operation">
+		  Get Note
+		</xsl:with-param>
+		<xsl:with-param name="status">
+		  <xsl:value-of select="500"/>
+		</xsl:with-param>
+		<xsl:with-param name="msg">
+		  <xsl:value-of select="get_notes_response/@status_text"/>
+		</xsl:with-param>
+	  </xsl:call-template>
+	</xsl:when>
+	<xsl:otherwise>
+      <xsl:apply-templates select="get_notes_response/note" mode="details"/>
+	</xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_notes">

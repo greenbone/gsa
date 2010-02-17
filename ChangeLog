@@ -1,5 +1,21 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add a note details page.
+
+	* src/gsad_omp.c (get_note_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator): Add get_note command.
+	(exec_omp_get): Add get_note command handling.
+
+	* src/html/src/omp.xsl (note): Enable details button.
+	(note) [nvt-details]: Enable details button.
+	(note) [details]: New template.
+	(get_note): New template.
+
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_omp.c (get_nvt_details_omp): Also request notes for the NVT.
 
 	* src/html/src/omp.xsl (get_notes_response): New template.

@@ -203,6 +203,7 @@ init_validator ()
                          "|(get_escalators)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
+                         "|(get_note)"
                          "|(get_notes)"
                          "|(get_nvt_details)"
                          "|(get_report)"
@@ -2602,6 +2603,10 @@ exec_omp_get (struct MHD_Connection *connection,
         return ret;
       }
     }
+
+  else if ((!strcmp (cmd, "get_note"))
+           && (note_id != NULL))
+    return get_note_omp (credentials, note_id);
 
   else if ((!strcmp (cmd, "get_notes")))
     return get_notes_omp (credentials);

@@ -110,6 +110,7 @@ char * export_config_omp (credentials_t *, const char *, enum content_type*,
                           char **, gsize *);
 
 char * get_notes_omp (credentials_t *);
+char * get_note_omp (credentials_t *, const char *);
 char * new_note_omp (credentials_t *, const char *, const char *, const char *,
                      const char *, const char *, const char *, const char *,
                      const char *, const char *, const char *, const char *,
