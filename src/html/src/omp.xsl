@@ -3974,33 +3974,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </form>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template name="html-result-box">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Targets
-      <a href="/help/configure_targets.html#targets"
-         title="Help: Configure Targets (Targets)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Hosts</td>
-            <td>IPs</td>
-            <td>Credential</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="target"/>
-        </table>
-      </div>
+      <h3>
+        Associated Result
+      </h3>
+      <xsl:for-each select="get_results_response/results/result">
+        <xsl:call-template name="result-detailed">
+          <xsl:with-param name="note-buttons">0</xsl:with-param>
+        </xsl:call-template>
+      </xsl:for-each>
     </div>
   </div>
 </xsl:template>
@@ -4008,10 +3989,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="new_note">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:call-template name="html-create-note-form"/>
-  <!-- The for-each makes the get_results_response the current node. -->
-  <xsl:for-each select="get_results_response/result">
-    <xsl:call-template name="html-result-box"/>
-  </xsl:for-each>
 </xsl:template>
 
 <!-- END NOTES MANAGEMENT -->
@@ -4056,7 +4033,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     NOTE -->
 
-<xsl:template match="note" mode="detailed">
+<xsl:template name="note-detailed" match="note" mode="detailed">
+  <xsl:param name="note-buttons">1</xsl:param>
   <div class="note_box_box">
     <b>Note</b><br/>
 	<pre>
@@ -4065,13 +4043,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	  </xsl:call-template>
 	</pre>
     Last modified: <xsl:value-of select="modification_time"/>.
-    <div style="float:right; text-align:right">
-      <!-- FIX max_results -->
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}"
-         title="Delete Note" style="margin-left:3px;">
-        <img src="/img/delete_note.png" border="0" alt="Delete"/>
-      </a>
-    </div>
+    <xsl:if test="$note-buttons = 1">
+      <div style="float:right; text-align:right">
+        <!-- FIX max_results -->
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}"
+           title="Delete Note" style="margin-left:3px;">
+          <img src="/img/delete_note.png" border="0" alt="Delete"/>
+        </a>
+      </div>
+    </xsl:if>
   </div>
 </xsl:template>
 
@@ -4090,7 +4070,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="result" mode="detailed">
+<xsl:template name="result-detailed" match="result" mode="detailed">
+  <xsl:param name="note-buttons">1</xsl:param>
   <xsl:variable name="style">
     <xsl:choose>
        <xsl:when test="threat='Low'">background:#539dcb</xsl:when>
@@ -4123,20 +4104,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <div class="issue_box_box">
-    <div style="float:right; text-align:right">
-      <!-- FIX max_results -->
-      <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}"
-         title="Add Note" style="margin-left:3px;">
-        <img src="/img/new_note.png" border="0" alt="Add Note"/>
-      </a>
-    </div>
+    <xsl:if test="$note-buttons = 1">
+      <div style="float:right; text-align:right">
+        <!-- FIX max_results -->
+        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}"
+           title="Add Note" style="margin-left:3px;">
+          <img src="/img/new_note.png" border="0" alt="Add Note"/>
+        </a>
+      </div>
+    </xsl:if>
 	<pre>
 	  <xsl:call-template name="wrap">
 		<xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
 	  </xsl:call-template>
 	</pre>
   </div>
-  <xsl:apply-templates select="notes/note" mode="detailed"/>
+  <xsl:for-each select="notes/note">
+    <xsl:call-template name="note-detailed">
+      <xsl:with-param name="note-buttons">
+        <xsl:value-of select="$note-buttons"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:for-each>
   <br/>
 </xsl:template>
 

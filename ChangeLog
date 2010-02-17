@@ -1,3 +1,16 @@
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Put result on "New Note" page.
+
+	* src/html/src/omp.xsl (html-create-note-form): Add "Associated Result"
+	section.
+	(html-result-box): Remove.
+	(new_note): Remove call to html-result-box.
+	(note, result) [detailed]: Add template name.  Add note-buttons param to
+	control display of note buttons.
+
+	* src/gsad_omp.c (new_note_omp): Include result in response.
+
 2010-02-16  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/img/new_note.png, src/html/src/img/delete_note.png,

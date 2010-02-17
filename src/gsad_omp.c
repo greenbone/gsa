@@ -3825,6 +3825,10 @@ new_note_omp (credentials_t *credentials, const char *oid,
               const char *sort_order, const char *levels,
               const char *search_phrase)
 {
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
   if (hosts == NULL || port == NULL || threat == NULL || task_id == NULL
       || report_id == NULL) // FIX
     {
@@ -3832,39 +3836,82 @@ new_note_omp (credentials_t *credentials, const char *oid,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
-  return xsl_transform_omp (credentials,
-                            g_strdup_printf ("<new_note>"
-                                             "<nvt id=\"%s\"/>"
-                                             "<hosts>%s</hosts>"
-                                             "<port>%s</port>"
-                                             "<threat>%s</threat>"
-                                             "<task id=\"%s\">"
-                                             "<name>%s</name>"
-                                             "</task>"
-                                             "<result id=\"%s\"/>"
-                                             /* Passthroughs. */
-                                             "<report id=\"%s\"/>"
-                                             "<first_result>%s</first_result>"
-                                             "<max_results>%s</max_results>"
-                                             "<sort_field>%s</sort_field>"
-                                             "<sort_order>%s</sort_order>"
-                                             "<levels>%s</levels>"
-                                             "<search_phrase>%s</search_phrase>"
-                                             "</new_note>",
-                                             oid,
-                                             hosts,
-                                             port,
-                                             threat,
-                                             task_id,
-                                             task_name,
-                                             result_id,
-                                             report_id,
-                                             first_result,
-                                             max_results,
-                                             sort_field,
-                                             sort_order,
-                                             levels,
-                                             search_phrase));
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new note. "
+                         "No new note was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_notes");
+
+  if (openvas_server_sendf (&session,
+                            "<get_results"
+                            " result_id=\"%s\""
+                            " task_id=\"%s\""
+                            " notes_details=\"1\""
+                            " notes=\"1\"/>",
+                            result_id,
+                            task_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new note. "
+                           "No new note was created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_notes");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml,
+                          "<new_note>"
+                          "<nvt id=\"%s\"/>"
+                          "<hosts>%s</hosts>"
+                          "<port>%s</port>"
+                          "<threat>%s</threat>"
+                          "<task id=\"%s\">"
+                          "<name>%s</name>"
+                          "</task>"
+                          "<result id=\"%s\"/>"
+                          /* Passthroughs. */
+                          "<report id=\"%s\"/>"
+                          "<first_result>%s</first_result>"
+                          "<max_results>%s</max_results>"
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>"
+                          "<levels>%s</levels>"
+                          "<search_phrase>%s</search_phrase>",
+                          oid,
+                          hosts,
+                          port,
+                          threat,
+                          task_id,
+                          task_name,
+                          result_id,
+                          report_id,
+                          first_result,
+                          max_results,
+                          sort_field,
+                          sort_order,
+                          levels,
+                          search_phrase);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new note. "
+                           "It is unclear whether the note has been created or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_notes");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</new_note>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
