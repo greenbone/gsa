@@ -1,5 +1,22 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add note filtering in reports.
+
+	* src/html/src/omp.xsl (html-report-details): Add "Show notes" checkbox.
+
+	* src/gsad.c (init_validator): Add "notes" validator.
+	(struct req_parms): Add notes.
+	(free_resources): Add param freeing.
+	(serve_post): Pass notes arg to create_note_omp.
+	(exec_omp_get): Pass notes arg to report related functions.
+
+	* src/gsad_omp.c (get_report_omp, new_note_omp, create_note_omp)
+	(delete_note_omp) Add notes arg.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Put result on "New Note" page.
 
 	* src/html/src/omp.xsl (html-create-note-form): Add "Associated Result"

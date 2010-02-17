@@ -280,6 +280,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_medium", "boolean");
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
+  openvas_validator_alias (validator, "notes",        "boolean");
 }
 
 
@@ -425,6 +426,7 @@ struct gsad_connection_info
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
     char *levels;        ///< Value of "levels" parameter.
+    char *notes;         ///< Value of "notes" parameter.
     char *xml_file;      ///< Value of "xml_file" parameter.
     char *role;          ///< Value of "role" parameter.
     char *submit;        ///< Value of "submit" parameter.
@@ -1250,6 +1252,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "levels"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.levels);
+      if (!strcmp (key, "notes"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.notes);
       if (!strcmp (key, "search_phrase"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.search_phrase);
@@ -1922,6 +1927,13 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.levels = NULL;
         }
       if (openvas_validate (validator,
+                            "notes",
+                            con_info->req_parms.notes))
+        {
+          free (con_info->req_parms.notes);
+          con_info->req_parms.notes = NULL;
+        }
+      if (openvas_validate (validator,
                             "search_phrase",
                             con_info->req_parms.search_phrase))
         {
@@ -1954,6 +1966,7 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.sort_field,
                          con_info->req_parms.sort_order,
                          con_info->req_parms.levels,
+                         con_info->req_parms.notes,
                          con_info->req_parms.search_phrase);
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
@@ -2152,6 +2165,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *sort_field   = NULL;
   const char *sort_order   = NULL;
   const char *levels       = NULL;
+  const char *notes        = NULL;
   const char *search_phrase = NULL;
   const char *port         = NULL;
   const char *threat       = NULL;
@@ -2325,6 +2339,17 @@ exec_omp_get (struct MHD_Connection *connection,
             log = atoi (level);
         }
 
+      notes = MHD_lookup_connection_value (connection,
+                                           MHD_GET_ARGUMENT_KIND,
+                                           "notes");
+      if (notes)
+        {
+          if (openvas_validate (validator, "notes", notes))
+            notes = NULL;
+        }
+      else
+        notes = "0";
+
       search_phrase = MHD_lookup_connection_value (connection,
                                                    MHD_GET_ARGUMENT_KIND,
                                                    "search_phrase");
@@ -2403,6 +2428,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
+           && (notes != NULL)
            && (search_phrase != NULL))
     {
       unsigned int first;
@@ -2415,7 +2441,8 @@ exec_omp_get (struct MHD_Connection *connection,
         max = 1000;
 
       return delete_note_omp (credentials, note_id, report_id, first, max,
-                              sort_field, sort_order, levels, search_phrase);
+                              sort_field, sort_order, levels, notes,
+                              search_phrase);
     }
 
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
@@ -2552,6 +2579,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                sort_field,
                                sort_order,
                                levels,
+                               notes,
                                search_phrase);
 
       {
@@ -2567,6 +2595,7 @@ exec_omp_get (struct MHD_Connection *connection,
                               sort_field,
                               sort_order,
                               string->str,
+                              notes,
                               search_phrase);
         g_string_free (string, TRUE);
         return ret;
@@ -2632,10 +2661,11 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
+           && (notes != NULL)
            && (search_phrase != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id,
                          name, result_id, report_id, first_result,
-                         max_results, sort_field, sort_order, levels,
+                         max_results, sort_field, sort_order, levels, notes,
                          search_phrase);
 
   else

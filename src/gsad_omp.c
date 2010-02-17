@@ -3567,6 +3567,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  sort_field     Field to sort on, or NULL.
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
  * @param[in]  search_phrase  Phrase which included results must contain.
  *
  * @return Report.
@@ -3577,7 +3578,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const unsigned int first_result,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
-                const char * levels, const char * search_phrase)
+                const char * levels, const char * notes,
+                const char * search_phrase)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -3597,6 +3599,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
+  if (notes == NULL || strlen (notes) == 0) notes = "0";
+
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report. "
@@ -3606,7 +3610,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (openvas_server_sendf (&session,
                             "<get_report"
-                            " notes=\"1\""
+                            " notes=\"%i\""
                             " notes_details=\"1\""
                             " report_id=\"%s\""
                             " format=\"%s\""
@@ -3616,6 +3620,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " sort_order=\"%s\""
                             " levels=\"%s\""
                             " search_phrase=\"%s\"/>",
+                            strcmp (notes, "0") ? 1 : 0,
                             report_id,
                             format ? format : "xml",
                             first_result,
@@ -3811,6 +3816,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @param[in]  sort_field     Field to sort on, or NULL.
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
  * @param[in]  search_phrase  Phrase which included results must contain.
  *
  * @return Result of XSL transformation.
@@ -3822,7 +3828,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
               const char *result_id,
               const char *report_id, const char *first_result,
               const char *max_results, const char *sort_field,
-              const char *sort_order, const char *levels,
+              const char *sort_order, const char *levels, const char *notes,
               const char *search_phrase)
 {
   GString *xml;
@@ -3880,6 +3886,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           "<sort_field>%s</sort_field>"
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
+                          "<notes>%s</notes>"
                           "<search_phrase>%s</search_phrase>",
                           oid,
                           hosts,
@@ -3894,6 +3901,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           sort_field,
                           sort_order,
                           levels,
+                          notes,
                           search_phrase);
 
   if (read_string (&session, &xml))
@@ -3931,6 +3939,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_field     Field to sort on, or NULL.
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
  * @param[in]  search_phrase  Phrase which included results must contain.
  *
  * @return Result of XSL transformation.
@@ -3943,7 +3952,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
-                 const char *levels, const char *search_phrase)
+                 const char *levels, const char *notes,
+                 const char *search_phrase)
 {
   gnutls_session_t session;
   GString *xml;
@@ -4032,9 +4042,11 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
+  if (notes == NULL || strlen (notes) == 0) notes = "0";
+
   if (openvas_server_sendf (&session,
                             "<get_report"
-                            " notes=\"1\""
+                            " notes=\"%i\""
                             " notes_details=\"1\""
                             " report_id=\"%s\""
                             " format=\"xml\""
@@ -4044,6 +4056,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                             " sort_order=\"%s\""
                             " levels=\"%s\""
                             " search_phrase=\"%s\"/>",
+                            strcmp (notes, "0") ? 1 : 0,
                             report_id,
                             first_result,
                             max_results,
@@ -4140,6 +4153,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_field     Field to sort on, or NULL.
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
  * @param[in]  search_phrase  Phrase which included results must contain.
  *
  * @return Result of XSL transformation.
@@ -4150,7 +4164,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
-                 const char *levels, const char *search_phrase)
+                 const char *levels, const char *notes,
+                 const char *search_phrase)
 {
   entity_t entity;
   char *text = NULL;
@@ -4173,11 +4188,13 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
+  if (notes == NULL || strlen (notes) == 0) notes = "0";
+
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<delete_note note_id=\"%s\" />"
                             "<get_report"
-                            " notes=\"1\""
+                            " notes=\"%i\""
                             " notes_details=\"1\""
                             " report_id=\"%s\""
                             " format=\"xml\""
@@ -4189,6 +4206,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                             " search_phrase=\"%s\"/>"
                             "</commands>",
                             note_id,
+                            strcmp (notes, "0") ? 1 : 0,
                             report_id,
                             first_result,
                             max_results,
