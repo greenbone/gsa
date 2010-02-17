@@ -653,7 +653,9 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<get_nvt_details oid=\"%s\" />"
+                            "<get_notes><nvt id=\"%s\"/></get_notes>"
                             "</commands>",
+                            oid,
                             oid)
         == -1)
     {

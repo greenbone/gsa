@@ -3882,6 +3882,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <pre><xsl:value-of select="description"/></pre>
 </xsl:template>
 
+<xsl:template match="get_notes_response">
+</xsl:template>
+
 <xsl:template match="get_nvt_details_response">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -3889,6 +3892,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">NVT Details</div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="nvt"/>
+      <h1>Notes</h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+        <tr class="gbntablehead2">
+          <td>Text</td>
+          <td width="100">Actions</td>
+        </tr>
+        <xsl:apply-templates select="../get_notes_response/note"
+                             mode="nvt-details"/>
+      </table>
     </div>
   </div>
 </xsl:template>
@@ -4014,19 +4026,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <xsl:variable name="max" select="40"/>
+      <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+        <xsl:choose>
+          <xsl:when test="string-length(nvt/name) &gt; $max">
+            <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="nvt/name"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </td>
+    <td>
       <xsl:choose>
-        <xsl:when test="string-length(nvt/name) &gt; $max">
-          <b><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</b>
+        <xsl:when test="text/@excerpt = 1">
+          <xsl:value-of select="text/text()"/>...
         </xsl:when>
         <xsl:otherwise>
-          <b><xsl:value-of select="nvt/name"/></b>
+          <xsl:value-of select="text/text()"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
-      <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
-        <xsl:value-of select="nvt/@oid"/>
+<!--
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}"
+         title="Delete Note" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
+      <a href="/omp?cmd=get_note&amp;name={name}"
+         title="Note Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+-->
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="note" mode="nvt-details">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <xsl:choose>
+        <xsl:when test="text/@excerpt = 1">
+          <xsl:value-of select="text/text()"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
 <!--
@@ -4057,8 +4109,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="notes">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td>NVT Name</td>
-            <td>NVT OID</td>
+            <td>NVT</td>
+            <td>Text</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="note"/>

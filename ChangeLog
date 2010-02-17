@@ -1,5 +1,14 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (get_nvt_details_omp): Also request notes for the NVT.
+
+	* src/html/src/omp.xsl (get_notes_response): New template.
+	(get_nvt_details_response): Add notes section.
+	(note, html-notes-table): Replace OID column with text column.
+	(note) [nvt-details]: New template.
+
+2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add notes management page.
 
 	* src/gsad_omp.c (get_notes_omp): New function.
