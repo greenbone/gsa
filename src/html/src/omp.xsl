@@ -4210,8 +4210,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h1>Text</h1>
-      <pre><xsl:value-of select="text"/></pre>
+      <h1>Appearance</h1>
+      <div class="note_top_line"></div>
+      <xsl:call-template name="note-detailed">
+        <xsl:with-param name="note-buttons">0</xsl:with-param>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>

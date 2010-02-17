@@ -1,7 +1,8 @@
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
-	* src/html/src/omp.xsl (note): Remove NVT link, as it looks too much like
-	a link to the details.
+	* src/html/src/gsa-style.css (.note_top_line): New style.
+
+	* src/html/src/omp.xsl (note) [details]: Put note text in yellow box.
 
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
