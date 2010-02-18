@@ -4379,6 +4379,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete_note.png" border="0" alt="Delete"/>
         </a>
+        <a href="/omp?cmd=get_note&amp;note_id={@id}"
+           title="Note Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
       </div>
     </xsl:if>
   </div>
