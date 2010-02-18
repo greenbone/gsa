@@ -1,5 +1,10 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-report-details): Test filters/notes directly
+	instead of counting it.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-config-family-table): Count in
 	get_nvt_details_response instead of all/get_nvt_details_response, in
 	view case.

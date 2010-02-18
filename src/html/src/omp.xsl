@@ -447,7 +447,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>
                 <xsl:choose>
-                  <xsl:when test="count(report/filters/notes) = 0">
+                  <xsl:when test="report/filters/notes = 0">
                     <input type="checkbox" name="notes" value="1"/>
                   </xsl:when>
                   <xsl:otherwise>
