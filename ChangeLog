@@ -1,5 +1,12 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-report-details, report, task)
+	(html-create-note-form, note-detailed, result-detailed): Pass the "notes"
+	flag when requesting a report.  Preserve the notes flag across new_note
+	and delete_note.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-report-details): Test filters/notes directly
 	instead of counting it.
 
