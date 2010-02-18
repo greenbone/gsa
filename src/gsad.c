@@ -252,7 +252,7 @@ init_validator ()
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
-  openvas_validator_add (validator, "port",       "^[[:alnum:]_/]{1,400}$");
+  openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
