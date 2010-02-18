@@ -653,7 +653,9 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<get_nvt_details oid=\"%s\" />"
-                            "<get_notes><nvt id=\"%s\"/></get_notes>"
+                            "<get_notes sort_field=\"notes.text\">"
+                            "<nvt id=\"%s\"/>"
+                            "</get_notes>"
                             "</commands>",
                             oid,
                             oid)
@@ -713,7 +715,10 @@ get_status_omp (credentials_t * credentials, const char *task_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "<get_status task_id=\"%s\" />"
-                                "<get_notes><task id=\"%s\"/></get_notes>"
+                                "<get_notes"
+                                " sort_field=\"notes.nvt, notes.text\">"
+                                "<task id=\"%s\"/>"
+                                "</get_notes>"
                                 "</commands>",
                                 task_id,
                                 task_id)
@@ -3830,7 +3835,9 @@ get_notes_omp (credentials_t * credentials)
 
   /* Get the notes. */
 
-  if (openvas_server_send (&session, "<get_notes/>") == -1)
+  if (openvas_server_send (&session,
+                           "<get_notes sort_field=\"notes.nvt, notes.text\"/>")
+      == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);

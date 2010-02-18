@@ -1,5 +1,10 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (get_nvt_details_omp, get_status_omp, get_notes_omp): Add
+	GET_NOTES sort fields.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-create-note-form): Refer to anchor in query.
 	(note-detailed): Refer to anchor in delete_note query.
 	(result-detailed): Add anchor.
