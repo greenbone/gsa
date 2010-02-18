@@ -713,7 +713,9 @@ get_status_omp (credentials_t * credentials, const char *task_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "<get_status task_id=\"%s\" />"
+                                "<get_notes><task id=\"%s\"/></get_notes>"
                                 "</commands>",
+                                task_id,
                                 task_id)
           == -1)
         {

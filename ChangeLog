@@ -1,5 +1,11 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (get_status_omp): Request notes with task.
+
+	* src/html/src/omp.xsl (html-report-table): Add notes window.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad.c (init_validator): Extend the "port" rule to allow ports like
 	"port-name (111/tcp)".
 

@@ -675,6 +675,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </div>
+  <br/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Notes on Results of "<xsl:value-of select="task/name"/>"
+      <a href="/help/reports.html#reports" title="Help: Notes (Notes)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="notes">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>NVT</td>
+            <td>Text</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="../get_notes_response/note"/>
+        </table>
+      </div>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template name="short_timestamp_first">
