@@ -1,3 +1,9 @@
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (html-config-family-table): Count in
+	get_nvt_details_response instead of all/get_nvt_details_response, in
+	view case.
+
 2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/gsa-style.css (.note_top_line): New style.

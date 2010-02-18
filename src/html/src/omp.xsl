@@ -2757,7 +2757,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td>
               Total:
-              <xsl:value-of select="count(all/get_nvt_details_response/nvt)"/>
+              <xsl:value-of select="count(get_nvt_details_response/nvt)"/>
             </td>
             <td></td>
             <td></td>
