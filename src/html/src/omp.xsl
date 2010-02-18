@@ -3948,7 +3948,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+      <form action="/omp#result-{result/@id}"
+            method="post"
+            enctype="multipart/form-data">
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -4375,7 +4377,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
         <!-- FIX max_results -->
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete_note.png" border="0" alt="Delete"/>
         </a>
@@ -4412,6 +4414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <xsl:when test="threat='High'">background:#cb1d17</xsl:when>
     </xsl:choose>
   </xsl:variable>
+  <a class="anchor" name="result-{@id}"/>
   <div class="issue_box_head" style="{$style}">
     <div style="float:right; text-align:right">
       <xsl:value-of select="port"/>

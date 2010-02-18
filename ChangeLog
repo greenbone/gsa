@@ -1,5 +1,11 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-create-note-form): Refer to anchor in query.
+	(note-detailed): Refer to anchor in delete_note query.
+	(result-detailed): Add anchor.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (result-detailed): Add notes button.
 
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
