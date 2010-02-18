@@ -4439,6 +4439,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="issue_box_box">
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
+        <xsl:if test="count(notes/note) &gt; 1">
+          <a href="#notes-{@id}"
+             title="Notes" style="margin-left:3px;">
+            <img src="/img/note.png" border="0" alt="Notes"/>
+          </a>
+        </xsl:if>
         <!-- FIX max_results -->
         <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}"
            title="Add Note" style="margin-left:3px;">
@@ -4452,6 +4458,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	  </xsl:call-template>
 	</pre>
   </div>
+  <a class="anchor" name="notes-{@id}"/>
   <xsl:for-each select="notes/note">
     <xsl:call-template name="note-detailed">
       <xsl:with-param name="note-buttons">

@@ -1,5 +1,9 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (result-detailed): Add notes button.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note-detailed): Add details button.
 
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
