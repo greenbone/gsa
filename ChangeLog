@@ -1,3 +1,8 @@
+2010-02-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/omp.xsl (html-report-details): Prevent unnecessary
+	wrapping.
+
 2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (wrap): Handle the case of a single line that must

@@ -455,7 +455,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
             <tr>
-              <td>
+              <td colspan="3">
                 <xsl:choose>
                   <xsl:when test="report/filters/notes = 0">
                     <input type="checkbox" name="notes" value="1"/>
