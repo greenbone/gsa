@@ -50,6 +50,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="string-length($string) = 0">
       <!-- The string is empty. -->
     </xsl:when>
+    <xsl:when test="(string-length($to-next-newline) = 0) and (substring($string, 1, 1) != '&#10;')">
+      <!-- A single line missing a newline, output up to the edge. -->
+<xsl:value-of select="substring($string, 1, 90)"/>
+      <xsl:if test="string-length($string) &gt; 90">&#8629;
+<xsl:call-template name="wrap">
+  <xsl:with-param name="string"><xsl:value-of select="substring($string, 90, string-length($string))"/></xsl:with-param>
+</xsl:call-template>
+      </xsl:if>
+    </xsl:when>
     <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; 90)">
       <!-- There's a newline before the edge, so output the line. -->
 <xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
