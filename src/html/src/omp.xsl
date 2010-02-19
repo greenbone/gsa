@@ -3970,7 +3970,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
-        <input type="hidden" name="max_results" value="{max_results}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
@@ -4389,8 +4388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     Last modified: <xsl:value-of select="modification_time"/>.
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
-        <!-- FIX max_results -->
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete_note.png" border="0" alt="Delete"/>
         </a>
@@ -4461,8 +4459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/note.png" border="0" alt="Notes"/>
           </a>
         </xsl:if>
-        <!-- FIX max_results -->
-        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@start+1000}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}"
+        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}"
            title="Add Note" style="margin-left:3px;">
           <img src="/img/new_note.png" border="0" alt="Add Note"/>
         </a>

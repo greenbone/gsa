@@ -1,5 +1,13 @@
 2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (exec_omp_get): Use fixed max_results values for notes.
+
+	* src/html/src/omp.xsl (html-create-note-form): Remove max_results
+	passthrough.
+	(note-detailed, result-detailed): Remove max_results from requests.
+
+2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_omp.c (new_note_omp): Check all args.
 
 2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
