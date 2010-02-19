@@ -4018,8 +4018,11 @@ new_note_omp (credentials_t *credentials, const char *oid,
   gnutls_session_t session;
   int socket;
 
-  if (hosts == NULL || port == NULL || threat == NULL || task_id == NULL
-      || report_id == NULL) // FIX
+  if (first_result == NULL || max_results == NULL || hosts == NULL
+      || levels == NULL || notes == NULL || oid == NULL || port == NULL
+      || report_id == NULL || result_id == NULL || search_phrase == NULL
+      || sort_field == NULL || sort_order == NULL || task_id == NULL
+      || task_name == NULL || threat == NULL)
     {
       GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
