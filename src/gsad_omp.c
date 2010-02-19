@@ -629,18 +629,19 @@ start_task_omp (credentials_t * credentials, const char *task_id)
 }
 
 /**
- * @brief Requests NVT details.
+ * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  oid          OID of NVT.
+ * @param[in]  commands     Extra commands to run before the others.
  *
  * @return XSL transformed NVT details response or error message.
  */
-char*
-get_nvt_details_omp (credentials_t * credentials, const char* oid)
+static char*
+get_nvt_details (credentials_t *credentials, const char *oid,
+                 const char *commands)
 {
-  entity_t entity;
-  char *text = NULL;
+  GString *xml = NULL;
   gnutls_session_t session;
   int socket;
 
@@ -652,11 +653,13 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
+                            "%s"
                             "<get_nvt_details oid=\"%s\" />"
                             "<get_notes sort_field=\"notes.text\">"
                             "<nvt id=\"%s\"/>"
                             "</get_notes>"
                             "</commands>",
+                            commands ? commands : "",
                             oid,
                             oid)
         == -1)
@@ -668,19 +671,34 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
                             "/omp?cmd=get_status");
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
+  xml = g_string_new ("<get_nvt_details>");
+  if (read_string (&session, &xml))
     {
       openvas_server_close (socket, session);
+      g_string_free (xml, TRUE);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
-  free_entity (entity);
+  g_string_append (xml, "</get_nvt_details>");
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Requests NVT details, accepting extra commands.
+ *
+ * @param[in]  credentials  Credentials for the manager connection.
+ * @param[in]  oid          OID of NVT.
+ *
+ * @return XSL transformed NVT details response or error message.
+ */
+char*
+get_nvt_details_omp (credentials_t *credentials, const char *oid)
+{
+  return get_nvt_details (credentials, oid, NULL);
 }
 
 /**
@@ -691,13 +709,14 @@ get_nvt_details_omp (credentials_t * credentials, const char* oid)
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  refresh_interval Refresh interval (parsed to int).
+ * @param[in]  command      Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_status_omp (credentials_t * credentials, const char *task_id,
-                const char *sort_field, const char *sort_order,
-                const char *refresh_interval)
+static char *
+get_status (credentials_t * credentials, const char *task_id,
+            const char *sort_field, const char *sort_order,
+            const char *refresh_interval, const char *commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -714,12 +733,14 @@ get_status_omp (credentials_t * credentials, const char *task_id,
     {
       if (openvas_server_sendf (&session,
                                 "<commands>"
+                                "%s"
                                 "<get_status task_id=\"%s\" />"
                                 "<get_notes"
                                 " sort_field=\"notes.nvt, notes.text\">"
                                 "<task id=\"%s\"/>"
                                 "</get_notes>"
                                 "</commands>",
+                                commands ? commands : "",
                                 task_id,
                                 task_id)
           == -1)
@@ -736,10 +757,12 @@ get_status_omp (credentials_t * credentials, const char *task_id,
     {
       if (openvas_server_sendf (&session,
                                 "<commands>"
+                                "%s"
                                 "<get_status"
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>"
                                 "</commands>",
+                                commands ? commands : "",
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
           == -1)
@@ -773,6 +796,26 @@ get_status_omp (credentials_t * credentials, const char *task_id,
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all tasks, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  task_id      ID of task.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  refresh_interval Refresh interval (parsed to int).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_status_omp (credentials_t * credentials, const char *task_id,
+                const char *sort_field, const char *sort_order,
+                const char *refresh_interval)
+{
+  return get_status (credentials, task_id, sort_field, sort_order,
+                     refresh_interval, NULL);
 }
 
 /**
@@ -3814,11 +3857,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @brief Get all notes, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  commands     Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_notes_omp (credentials_t * credentials)
+static char *
+get_notes (credentials_t *credentials, const char *commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3835,8 +3879,12 @@ get_notes_omp (credentials_t * credentials)
 
   /* Get the notes. */
 
-  if (openvas_server_send (&session,
-                           "<get_notes sort_field=\"notes.nvt, notes.text\"/>")
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_notes sort_field=\"notes.nvt, notes.text\"/>"
+                            "</commands>",
+                            commands ? commands : "")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3864,6 +3912,19 @@ get_notes_omp (credentials_t * credentials)
   g_string_append (xml, "</get_notes>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all notes, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_notes_omp (credentials_t *credentials)
+{
+  return get_notes (credentials, NULL);
 }
 
 /**
@@ -4265,10 +4326,11 @@ create_note_omp (credentials_t *credentials, const char *oid,
 }
 
 /**
- * @brief Delete note, get report, XSL transform the result.
+ * @brief Delete note, get next page, XSL transform the result.
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  note_id        ID of note.
+ * @param[in]  next           Name of next page.
  * @param[in]  report_id      ID of current report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -4277,29 +4339,69 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
  * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  task_id        ID of task (for get_status).
  *
  * @return Result of XSL transformation.
  */
 char *
 delete_note_omp (credentials_t * credentials, const char *note_id,
-                 const char *report_id,
+                 const char *next, const char *report_id,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
                  const char *levels, const char *notes,
-                 const char *search_phrase)
+                 const char *search_phrase, const char *oid,
+                 const char *task_id)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
 
-  if (search_phrase == NULL)
+  if (next == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a note. "
                          "The note remains intact. "
-                         "Diagnostics: Search phrase was NULL.",
+                         "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_notes");
+
+  if (strcmp (next, "get_nvt_details") == 0)
+    {
+      gchar *extra;
+      char *ret;
+
+      if (oid == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while deleting a note. "
+                               "The note remains intact. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_notes");
+        }
+
+      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      ret = get_nvt_details (credentials, oid, extra);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_notes") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      char *ret = get_notes (credentials, extra);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_status") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      char *ret = get_status (credentials, task_id, NULL, NULL, NULL, extra);
+      g_free (extra);
+      return ret;
+    }
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -4308,46 +4410,68 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
 
-  if (levels == NULL || strlen (levels) == 0) levels = "hm";
+  if (strcmp (next, "get_report") == 0)
+    {
+      if (search_phrase == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while deleting a note. "
+                               "The note remains intact. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_notes");
+        }
 
-  if (notes == NULL || strlen (notes) == 0) notes = "0";
+      if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_note note_id=\"%s\" />"
-                            "<get_report"
-                            " notes=\"%i\""
-                            " notes_details=\"1\""
-                            " report_id=\"%s\""
-                            " format=\"xml\""
-                            " first_result=\"%u\""
-                            " max_results=\"%u\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
-                            " levels=\"%s\""
-                            " search_phrase=\"%s\"/>"
-                            "</commands>",
-                            note_id,
-                            strcmp (notes, "0") ? 1 : 0,
-                            report_id,
-                            first_result,
-                            max_results,
-                            sort_field ? sort_field : "type",
-                            sort_order
-                             ? sort_order
-                             : ((sort_field == NULL
-                                 || strcmp (sort_field, "type") == 0)
-                                ? "descending"
-                                : "ascending"),
-                            levels,
-                            search_phrase)
-      == -1)
+      if (notes == NULL || strlen (notes) == 0) notes = "0";
+
+      if (openvas_server_sendf (&session,
+                                "<commands>"
+                                "<delete_note note_id=\"%s\" />"
+                                "<get_report"
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " report_id=\"%s\""
+                                " format=\"xml\""
+                                " first_result=\"%u\""
+                                " max_results=\"%u\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " search_phrase=\"%s\"/>"
+                                "</commands>",
+                                note_id,
+                                strcmp (notes, "0") ? 1 : 0,
+                                report_id,
+                                first_result,
+                                max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                levels,
+                                search_phrase)
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while deleting a note. "
+                               "It is unclear whether the note has been deleted or not. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+    }
+  else
     {
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a note. "
-                           "It is unclear whether the note has been deleted or not. "
-                           "Diagnostics: Failure to send command to manager daemon.",
+                           "The note remains intact. "
+                           "Diagnostics: Error in parameter next.",
                            "/omp?cmd=get_status");
     }
 

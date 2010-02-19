@@ -696,7 +696,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Text</td>
             <td width="100">Actions</td>
           </tr>
-          <xsl:apply-templates select="../get_notes_response/note"/>
+          <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
+          <xsl:for-each select="../get_notes_response/note">
+            <xsl:call-template name="note">
+              <xsl:with-param name="next">get_status&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
         </table>
       </div>
     </div>
@@ -3913,20 +3918,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_notes_response">
 </xsl:template>
 
-<xsl:template match="get_nvt_details_response">
+<xsl:template match="get_nvt_details">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_note_response"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">NVT Details</div>
     <div class="gb_window_part_content">
-      <xsl:apply-templates select="nvt"/>
+      <xsl:apply-templates
+        select="commands_response/get_nvt_details_response/nvt"/>
       <h1>Notes</h1>
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
           <td>Text</td>
           <td width="100">Actions</td>
         </tr>
-        <xsl:apply-templates select="../get_notes_response/note"
+        <xsl:apply-templates select="commands_response/get_notes_response/note"
                              mode="nvt-details"/>
       </table>
     </div>
@@ -4047,7 +4055,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-create-note-form"/>
 </xsl:template>
 
-<xsl:template match="note">
+<xsl:template name="note" match="note">
+  <xsl:param name="next">get_notes</xsl:param>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -4077,12 +4086,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-<!--
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}"
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next={$next}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
--->
       <a href="/omp?cmd=get_note&amp;note_id={@id}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -4110,12 +4117,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-<!--
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}"
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
--->
       <a href="/omp?cmd=get_note&amp;note_id={@id}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -4299,8 +4304,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_notes">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_note_response"/>
   <xsl:choose>
-	<xsl:when test="get_notes_response/@status = '500'">
+	<xsl:when test="commands_response/get_notes_response/@status = '500'">
 	  <xsl:call-template name="command_result_dialog">
 		<xsl:with-param name="operation">
 		  Get Notes
@@ -4309,13 +4315,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 		  <xsl:value-of select="500"/>
 		</xsl:with-param>
 		<xsl:with-param name="msg">
-		  <xsl:value-of select="get_notes_response/@status_text"/>
+		  <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
 		</xsl:with-param>
 	  </xsl:call-template>
 	</xsl:when>
 	<xsl:otherwise>
       <!-- The for-each makes the get_notes_response the current node. -->
-      <xsl:for-each select="get_notes_response">
+      <xsl:for-each select="commands_response/get_notes_response">
         <xsl:call-template name="html-notes-table"/>
       </xsl:for-each>
 	</xsl:otherwise>
@@ -4377,7 +4383,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
         <!-- FIX max_results -->
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@start+1000}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete_note.png" border="0" alt="Delete"/>
         </a>

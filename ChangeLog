@@ -1,5 +1,30 @@
 2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add delete buttons on all note lists.
+
+	* src/gsad.c (exec_omp_get): Call delete_note_omp according to page that
+	must follow.
+
+	* src/gsad_omp.c (get_nvt_details, get_status, get_note): New function.
+	Bodies from _omp versions.
+	(get_nvt_details_omp, get_status_omp, get_notes_omp): Call through to
+	static functions.
+	(delete_note_omp): Add more passthrough args, and next page arg.  Pass
+	work to handler of next page.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/src/omp.xsl (html-report-table): Pass next page to note
+	template.
+	(get_nvt_details_response): Remove.
+	(get_nvt_details): New template.
+	(note): Add next param.  Enable button.
+	(note) [nvt-details]: Enable button.
+	(get_notes): Expect entites in a commands_response.
+	(note-detailed): Add next page to request.
+
+2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_omp.c (get_nvt_details_omp, get_status_omp, get_notes_omp): Add
 	GET_NOTES sort fields.
 

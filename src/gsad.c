@@ -2156,6 +2156,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *result_id    = NULL;
   const char *report_id    = NULL;
   const char *note_id      = NULL;
+  const char *next         = NULL;
   const char *format       = NULL;
   const char *package_format = NULL;
   const char *name         = NULL;
@@ -2220,6 +2221,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "note_id");
       if (openvas_validate (validator, "note_id", note_id))
         note_id = NULL;
+
+      next = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "next");
+      if (openvas_validate (validator, "page", next))
+        next = NULL;
 
       oid = MHD_lookup_connection_value (connection,
                                          MHD_GET_ARGUMENT_KIND,
@@ -2424,6 +2431,27 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "delete_note"))
            && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_notes") == 0))
+    {
+      return delete_note_omp (credentials, note_id, "get_notes", NULL, 0, 0,
+                              NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return delete_note_omp (credentials, note_id, "get_nvt_details", NULL,
+                              0, 0, NULL, NULL, NULL, NULL, NULL, oid, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
            && (max_results != NULL)
@@ -2442,9 +2470,19 @@ exec_omp_get (struct MHD_Connection *connection,
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
         max = 1000;
 
-      return delete_note_omp (credentials, note_id, report_id, first, max,
-                              sort_field, sort_order, levels, notes,
-                              search_phrase);
+      return delete_note_omp (credentials, note_id, "get_report", report_id,
+                              first, max, sort_field, sort_order, levels,
+                              notes, search_phrase, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return delete_note_omp (credentials, note_id, "get_status", NULL, 0, 0,
+                              NULL, NULL, NULL, NULL, NULL, NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
