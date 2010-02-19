@@ -3928,15 +3928,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:apply-templates
         select="commands_response/get_nvt_details_response/nvt"/>
-      <h1>Notes</h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-        <tr class="gbntablehead2">
-          <td>Text</td>
-          <td width="100">Actions</td>
-        </tr>
-        <xsl:apply-templates select="commands_response/get_notes_response/note"
-                             mode="nvt-details"/>
-      </table>
+      <xsl:choose>
+        <xsl:when test="count(commands_response/get_notes_response/note) = 0">
+          <h1>Notes: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Notes</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td>Text</td>
+              <td width="100">Actions</td>
+            </tr>
+            <xsl:apply-templates select="commands_response/get_notes_response/note"
+                                 mode="nvt-details"/>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
