@@ -4081,7 +4081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <xsl:variable name="max" select="40"/>
+      <xsl:variable name="max" select="35"/>
       <xsl:choose>
         <xsl:when test="string-length(nvt/name) &gt; $max">
           <xsl:value-of select="substring(nvt/name, 0, $max)"/>...

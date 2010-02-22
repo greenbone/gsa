@@ -1,5 +1,10 @@
 2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (note): Decrease max to 35 so NVT name always fits
+	on a single line.
+
+2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note-detailed): Put the "Last modified" line
 	after the button float, so that Konqueror keeps the buttons inside the
 	box.
