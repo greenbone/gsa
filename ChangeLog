@@ -1,5 +1,11 @@
 2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (note-detailed): Put the "Last modified" line
+	after the button float, so that Konqueror keeps the buttons inside the
+	box.
+
+2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-create-note-form): Check the more specific
 	option in most constraints instead of the general option.
 

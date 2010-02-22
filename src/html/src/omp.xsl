@@ -4395,7 +4395,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 		<xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
 	  </xsl:call-template>
 	</pre>
-    Last modified: <xsl:value-of select="modification_time"/>.
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
         <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
@@ -4408,6 +4407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
+    Last modified: <xsl:value-of select="modification_time"/>.
   </div>
 </xsl:template>
 
