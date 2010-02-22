@@ -1,5 +1,11 @@
 2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (init_validator): Add DVI to "format".
+
+	* src/gsad_omp.c (get_report_omp): Allow DVI as format.
+
+2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note): Decrease max to 35 so NVT name always fits
 	on a single line.
 

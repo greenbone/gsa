@@ -3700,6 +3700,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     {
       if (strcmp (format, "nbe") == 0
           || strcmp (format, "pdf") == 0
+          || strcmp (format, "dvi") == 0
           || strcmp (format, "html") == 0
           || strcmp (format, "html-pdf") == 0)
         {

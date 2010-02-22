@@ -236,7 +236,7 @@ init_validator ()
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
-  openvas_validator_add (validator, "format",     "^(html)|(nbe)|(pdf)|(xml)$");
+  openvas_validator_add (validator, "format",     "^(dvi)|(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "access_hosts", "^[[:alnum:], \\./]{0,80}$");
