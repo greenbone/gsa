@@ -3991,7 +3991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <input type="radio" name="hosts" value="" checked="1"/>
-              All
+              Any
               <input type="radio" name="hosts" value="{hosts}"/>
               <xsl:value-of select="hosts"/>
             </td>
@@ -4002,7 +4002,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <input type="radio" name="port" value="" checked="1"/>
-              All
+              Any
               <input type="radio" name="port" value="{port}"/>
               <xsl:value-of select="port"/>
             </td>
@@ -4013,7 +4013,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <input type="radio" name="threat" value="" checked="1"/>
-              All
+              Any
               <input type="radio" name="threat" value="{threat}"/>
               <xsl:value-of select="threat"/>
             </td>
@@ -4024,7 +4024,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <input type="radio" name="task_id" value="" checked="1"/>
-              All
+              Any
               <input type="radio" name="task_id" value="{task/@id}"/>
               <xsl:value-of select="task/name"/>
             </td>
@@ -4035,7 +4035,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <input type="radio" name="result_id" value="" checked="1"/>
-              All
+              Any
               <input type="radio" name="result_id" value="{result/@id}"/>
               <xsl:value-of select="result/@id"/>
             </td>
@@ -4200,7 +4200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="hosts"/>
               </xsl:when>
               <xsl:otherwise>
-                any
+                Any
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -4213,7 +4213,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="port"/>
               </xsl:when>
               <xsl:otherwise>
-                any
+                Any
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -4226,7 +4226,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="threat"/>
               </xsl:when>
               <xsl:otherwise>
-                any
+                Any
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -4241,7 +4241,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                any
+                Any
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -4254,7 +4254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="result/@id"/>
               </xsl:when>
               <xsl:otherwise>
-                any
+                Any
               </xsl:otherwise>
             </xsl:choose>
           </td>
