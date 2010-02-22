@@ -3990,9 +3990,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Hosts
             </td>
             <td>
-              <input type="radio" name="hosts" value="" checked="1"/>
+              <input type="radio" name="hosts" value=""/>
               Any
-              <input type="radio" name="hosts" value="{hosts}"/>
+              <input type="radio" name="hosts" value="{hosts}" checked="1"/>
               <xsl:value-of select="hosts"/>
             </td>
           </tr>
@@ -4001,9 +4001,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Port
             </td>
             <td>
-              <input type="radio" name="port" value="" checked="1"/>
+              <input type="radio" name="port" value=""/>
               Any
-              <input type="radio" name="port" value="{port}"/>
+              <input type="radio" name="port" value="{port}" checked="1"/>
               <xsl:value-of select="port"/>
             </td>
           </tr>
@@ -4012,9 +4012,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Threat
             </td>
             <td>
-              <input type="radio" name="threat" value="" checked="1"/>
+              <input type="radio" name="threat" value=""/>
               Any
-              <input type="radio" name="threat" value="{threat}"/>
+              <input type="radio" name="threat" value="{threat}" checked="1"/>
               <xsl:value-of select="threat"/>
             </td>
           </tr>
@@ -4023,9 +4023,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Task
             </td>
             <td>
-              <input type="radio" name="task_id" value="" checked="1"/>
+              <input type="radio" name="task_id" value=""/>
               Any
-              <input type="radio" name="task_id" value="{task/@id}"/>
+              <input type="radio" name="task_id" value="{task/@id}"
+                     checked="1"/>
               <xsl:value-of select="task/name"/>
             </td>
           </tr>

@@ -1,5 +1,10 @@
 2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-create-note-form): Check the more specific
+	option in most constraints instead of the general option.
+
+2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-create-note-form): Replace "All" with "Any".
 	(note) [details]: Capitalise "any".
 
