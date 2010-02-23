@@ -1,3 +1,8 @@
+2010-02-23  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (result-detailed): Compare note count with 0
+	instead of 1.
+
 2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (init_validator): Add DVI to "format".

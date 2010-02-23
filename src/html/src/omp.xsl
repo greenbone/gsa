@@ -4463,7 +4463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="issue_box_box">
     <xsl:if test="$note-buttons = 1">
       <div style="float:right; text-align:right">
-        <xsl:if test="count(notes/note) &gt; 1">
+        <xsl:if test="count(notes/note) &gt; 0">
           <a href="#notes-{@id}"
              title="Notes" style="margin-left:3px;">
             <img src="/img/note.png" border="0" alt="Notes"/>
