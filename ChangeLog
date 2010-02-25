@@ -1,5 +1,9 @@
 2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/gsa-style.css (.issue_box_head): Remove stray colon.
+
+2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note-detailed): Use normal delete button.
 
 2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
