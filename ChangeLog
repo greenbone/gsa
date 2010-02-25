@@ -1,5 +1,24 @@
 2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
 
+	Add notes help.
+
+	* src/html/src/help/notes.htm4: New file.
+
+	* src/html/src/help/view_report.htm4: Correct typo.  Add notes sections.
+	Mention "Show notes" filter.
+
+	* src/html/src/help/glossay.htm4: Add a note entry.  Improve the NVT
+	entry a little.
+
+	* src/html/src/help/reports.htm4: Add notes section.
+
+	* src/html/src/help/contents.htm4: Add notes item.
+
+	* src/html/src/omp.xsl (html-report-table): Link help to reports help.
+	(note [details], html-notes-table): Link help to notes.html.
+
+2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (note [details]): Label task and result in orphans,
 	otherwise they show as "Any".
 

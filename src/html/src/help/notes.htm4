@@ -1,0 +1,152 @@
+m4_define(`PAGE_TITLE', `Help: Notes')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+<div style="float:right;"><a href="/omp?cmd=get_notes">Jump to dialog</a></div>
+&nbsp;<br />
+
+<a name="notes"></a>
+<h1>Notes</h1>
+
+<p>
+This table provides an overview of all
+<a href="glossary.html#note">notes</a> and summarizes
+the essential aspects of each.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td>Column</td>
+  <td>Description</td>
+</tr>
+<tr class="odd">
+  <td>NVT</td>
+  <td>The name of the NVT to which the note applies.  The name is truncated if
+      it is too long for the column.</td>
+</tr>
+<tr>
+  <td>Text</td>
+  <td>An excerpt from the beginning of the text of the note.  If the note has
+      been orphaned because the task it applies to was removed, then "Orphan"
+      appears above the excerpt, in bold.
+  </td>
+</tr>
+</table>
+
+<a name="actions"></a>
+<h3>Actions</h3>
+
+<h4>Delete Note</h4>
+
+<p>
+Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+remove the note immediately.  The list of notes will be updated.
+</p>
+
+<h4>Note Details</h4>
+
+<p>
+Pressing the details icon
+<img src="/img/details.png" alt="Details" title="Details" />
+will show the  <a href="#notedetails">Note Details</a> page.  This page has
+full details of the note, including the note text and all
+contraints on the note.
+</p>
+
+<h4>Edit Note</h4>
+
+<p>
+A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+will show the <a href="#editnote">Edit Note</a> page, which allows modification
+of the note.
+</p>
+
+<a name="newnote"></a>
+<h2>New Note</h2>
+
+<p>
+For creating a new note this dialog offers the following entries.
+Below the entries are details of the result that may be associated with
+the note.
+Hit the button "Create Note" to submit the new note.
+The previous page will be updated.
+</p>
+
+<table class="gbntable">
+<tr class="gbntablehead2">
+  <td></td>
+  <td>Mandatory</td>
+  <td>Max Length</td>
+  <td>Syntax</td>
+  <td>Example</td>
+</tr>
+<tr class="odd">
+  <td>Hosts</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>Radio button</td>
+  <td></td>
+</tr>
+<tr class="even">
+  <td>Port</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>Radio button</td>
+  <td></td>
+</tr>
+<tr class="odd">
+  <td>Threat</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>Radio button</td>
+  <td></td>
+</tr>
+<tr class="even">
+  <td>Task</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>Radio button</td>
+  <td></td>
+</tr>
+<tr class="odd">
+  <td>Result</td>
+  <td>yes</td>
+  <td>--</td>
+  <td>Radio button</td>
+  <td></td>
+</tr>
+<tr class="odd">
+  <td>Text</td>
+  <td>yes</td>
+  <td>600</td>
+  <td>Free form text</td>
+  <td>This issue will go away when we switch to GNU/Hurd.</td>
+</tr>
+</table>
+
+<a name="notedetails"></a>
+<h2>Note Details</h2>
+
+<p>
+A page that provides detailed information about a note.
+This includes the NVT, creation time, modification time,
+all constraints on the note and the full text of the note.
+</p>
+
+<p>
+Clicking on the NVT name will go to the NVT Details page.
+</p>
+
+<a name="editnote"></a>
+<h2>Edit Note</h2>
+
+<p>
+A page for modifying a note.  The fields are like those on the
+<a href="#newnote">New Note</a> page.
+</p>
+
+<p>
+Hit the button "Save Note" to submit the modification.
+</p>
+
+m4_include(`footer.m4')

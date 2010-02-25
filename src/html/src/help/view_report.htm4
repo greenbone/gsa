@@ -18,7 +18,7 @@ download formats HTML and PDF.
 <p>
 It is a single page with links that
 refer to the same page further up or down.
-For example, the host names in the "Host" table links to the hosts
+For example, the host names in the "Host" table link to the host
 results further down the page.
 The exception is the "Back to Tasks" link that refers to the
 <a href="/help/glossary.html#task">task</a>'s
@@ -30,6 +30,36 @@ The exception is the "Back to Tasks" link that refers to the
 <p>
 To download the currently shown report, the format can be chosen.
 The download will start shortly after a click on the "Download" button.
+</p>
+
+<h2>Notes</h2>
+
+<p>
+Any <a href="/help/glossary.html#note">notes</a> that apply to a result are
+displayed under the result.  The notes for a result are sorted most recently
+created first.
+</p>
+
+<p>
+Each note has a group of action buttons
+<img src="/img/delete.png" alt="Delete" title="Delete" />
+<img src="/img/details.png" alt="Details" title="Details" />
+<img src="/img/edit.png" alt="Edit" title="Edit" />
+which affect the note as on the <a href="notes.html">Notes</a> page.
+</p>
+
+<p>
+To add a note to an NVT, click the new note button
+<img src="/img/new_note.png" alt="New Note" title="New Note" />
+on a result of the NVT.
+</p>
+
+<p>
+If a result has notes and note display is enabled in the filter (see below),
+then the notes icon
+<img src="/img/note.png" alt="Note" title="Note" />
+is shown on the result.  Clicking the icon jumps to the notes,
+which is helpful if the result has a very long description.
 </p>
 
 <h2>Result Sorting</h2>
@@ -49,6 +79,7 @@ or unticked to
 include or exclude results of the respective threat level in the shown report.
 This can be combined with a text phrase, which limits the report to all the
 results that include the entered phrase.
+The "Show notes" checkbox toggles the display of notes.
 </p>
 
 <p>

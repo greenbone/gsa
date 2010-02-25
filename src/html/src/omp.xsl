@@ -690,7 +690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Notes on Results of "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html#reports" title="Help: Notes (Notes)">
+      <a href="/help/reports.html#notes" title="Help: Reports (Notes)">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
@@ -4350,8 +4350,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Note Details
-       <a href="/help/configure_notes.html#notedetails"
-         title="Help: Configure Notes (Note Details)">
+       <a href="/help/notes.html#notedetails"
+         title="Help: Notes (Note Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
@@ -4481,8 +4481,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Notes
-      <a href="/help/configure_notes.html#notes"
-         title="Help: Configure Notes (Notes)">
+      <a href="/help/notes.html"
+         title="Help: Notes">
         <img src="/img/help.png"/>
       </a>
     </div>
