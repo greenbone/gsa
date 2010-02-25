@@ -1,5 +1,9 @@
 2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (note-detailed): Use normal delete button.
+
+2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add note editing.
 
 	* src/html/src/omp.xsl (html-edit-note-form, edit_note)
