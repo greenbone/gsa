@@ -4435,6 +4435,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Task:</td>
           <td>
             <xsl:choose>
+              <xsl:when test="orphan != 0">
+                <b>Orphan</b>
+              </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
                 <a href="?cmd=get_status&amp;task_id={task/@id}">
                   <xsl:value-of select="task/name"/>
@@ -4450,6 +4453,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Result:</td>
           <td>
             <xsl:choose>
+              <xsl:when test="orphan != 0">
+                <b>Orphan</b>
+              </xsl:when>
               <xsl:when test="string-length(result/@id) &gt; 0">
                 <xsl:value-of select="result/@id"/>
               </xsl:when>
