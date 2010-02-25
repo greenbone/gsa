@@ -4279,6 +4279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
       <xsl:choose>
         <xsl:when test="text/@excerpt = 1">
           <xsl:value-of select="text/text()"/>...
@@ -4315,6 +4316,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
+      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
       <xsl:choose>
         <xsl:when test="text/@excerpt = 1">
           <xsl:value-of select="text/text()"/>...
