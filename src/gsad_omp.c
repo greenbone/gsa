@@ -4496,6 +4496,313 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 }
 
 /**
+ * @brief Edit note, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  note_id         ID of note.
+ * @param[in]  next            Name of next page.
+ * @param[in]  report_id       ID of current report.
+ * @param[in]  first_result    Number of first result in report.
+ * @param[in]  max_results     Number of results in report.
+ * @param[in]  sort_field      Field to sort on, or NULL.
+ * @param[in]  sort_order      "ascending", "descending", or NULL.
+ * @param[in]  levels          Threat levels to include in report.
+ * @param[in]  notes           Whether to include notes.
+ * @param[in]  search_phrase   Phrase which included results must contain.
+ * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  task_id         ID of task (for get_status).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_note_omp (credentials_t * credentials, const char *note_id,
+               /* Next page params. */
+               const char *next, const char *report_id,
+               const unsigned int first_result,
+               const unsigned int max_results,
+               const char *sort_field, const char *sort_order,
+               const char *levels, const char *notes,
+               const char *search_phrase, const char *oid,
+               const char *task_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (note_id == NULL)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a note. "
+                           "The note remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_notes");
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a note. "
+                         "The note remains as it was. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_notes");
+
+  if (openvas_server_sendf (&session,
+                            "<get_notes"
+                            " note_id=\"%s\""
+                            " details=\"1\""
+                            " result=\"1\"/>",
+                            note_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a note. "
+                           "The note remains as it was. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_notes");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml,
+                          "<edit_note>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Parameters for get_report. */
+                          "<report id=\"%s\"/>"
+                          "<first_result>%i</first_result>"
+                          "<max_results>%i</max_results>"
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>"
+                          "<levels>%s</levels>"
+                          "<notes>%s</notes>"
+                          "<search_phrase>%s</search_phrase>"
+                          /* Parameters for get_nvt_details. */
+                          "<nvt id=\"%s\"/>"
+                          /* Parameters for get_status. */
+                          "<task id=\"%s\"/>",
+                          next,
+                          report_id,
+                          first_result,
+                          max_results,
+                          sort_field,
+                          sort_order,
+                          levels,
+                          notes,
+                          search_phrase,
+                          oid,
+                          task_id);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a note. "
+                           "The note remains as it was. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_notes");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_note>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Save note, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials     Username and password for authentication.
+ * @param[in]  note_id         ID of note.
+ * @param[in]  text            Text of note.
+ * @param[in]  hosts           Hosts note applied to, "" for all.
+ * @param[in]  port            Port note applies to, "" for all.
+ * @param[in]  threat          Threat note applies to, "" for all.
+ * @param[in]  note_task_id    ID of task to limit note to, "" for all.
+ * @param[in]  note_result_id  ID of result to limit note to, "" for all.
+ * @param[in]  next            Name of next page.
+ * @param[in]  report_id       ID of current report.
+ * @param[in]  first_result    Number of first result in report.
+ * @param[in]  max_results     Number of results in report.
+ * @param[in]  sort_field      Field to sort on, or NULL.
+ * @param[in]  sort_order      "ascending", "descending", or NULL.
+ * @param[in]  levels          Threat levels to include in report.
+ * @param[in]  notes           Whether to include notes.
+ * @param[in]  search_phrase   Phrase which included results must contain.
+ * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  task_id         ID of task (for get_status).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_note_omp (credentials_t * credentials, const char *note_id,
+               const char *text, const char *hosts, const char *port,
+               const char *threat, const char *note_task_id,
+               const char *note_result_id, const char *next,
+               const char *report_id,
+               const unsigned int first_result,
+               const unsigned int max_results,
+               const char *sort_field, const char *sort_order,
+               const char *levels, const char *notes,
+               const char *search_phrase, const char *oid,
+               const char *task_id)
+{
+  entity_t entity;
+  char *response = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *modify_note;
+
+  if (next == NULL || note_task_id == NULL || note_result_id == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a note. "
+                         "The note remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_notes");
+
+  modify_note = g_strdup_printf ("<modify_note note_id=\"%s\">"
+                                 "<hosts>%s</hosts>"
+                                 "<port>%s</port>"
+                                 "<threat>%s</threat>"
+                                 "<text>%s</text>"
+                                 "<task>%s</task>"
+                                 "<result>%s</result>"
+                                 "</modify_note>",
+                                 note_id,
+                                 hosts ? hosts : "",
+                                 port ? port : "",
+                                 threat ? threat : "",
+                                 text ? text : "",
+                                 note_task_id,
+                                 note_result_id);
+
+  if (strcmp (next, "get_nvt_details") == 0)
+    {
+      char *ret;
+
+      if (oid == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a note. "
+                               "The note remains the same. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_notes");
+        }
+
+      ret = get_nvt_details (credentials, oid, modify_note);
+      g_free (modify_note);
+      return ret;
+    }
+
+  if (strcmp (next, "get_notes") == 0)
+    {
+      char *ret = get_notes (credentials, modify_note);
+      g_free (modify_note);
+      return ret;
+    }
+
+  if (strcmp (next, "get_status") == 0)
+    {
+      char *ret = get_status (credentials, task_id, NULL, NULL, NULL,
+                              modify_note);
+      g_free (modify_note);
+      return ret;
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a note. "
+                         "The note was not saved. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  if (strcmp (next, "get_report") == 0)
+    {
+      if (search_phrase == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a note. "
+                               "The note remains the same. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_notes");
+        }
+
+      if (levels == NULL || strlen (levels) == 0) levels = "hm";
+
+      if (notes == NULL || strlen (notes) == 0) notes = "0";
+
+      if (openvas_server_sendf (&session,
+                                "<commands>"
+                                "%s"
+                                "<get_report"
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " report_id=\"%s\""
+                                " format=\"xml\""
+                                " first_result=\"%u\""
+                                " max_results=\"%u\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " search_phrase=\"%s\"/>"
+                                "</commands>",
+                                modify_note,
+                                strcmp (notes, "0") ? 1 : 0,
+                                report_id,
+                                first_result,
+                                max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                levels,
+                                search_phrase)
+          == -1)
+        {
+          g_free (modify_note);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a note. "
+                               "It is unclear whether the note has been saved or not. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+      g_free (modify_note);
+    }
+  else
+    {
+      g_free (modify_note);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a note. "
+                           "The note remains the same. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a note. "
+                           "It is unclear whether the note has been saved or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, response);
+}
+
+/**
  * @brief Get all system reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

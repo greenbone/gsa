@@ -4071,6 +4071,193 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-create-note-form"/>
 </xsl:template>
 
+<xsl:template name="html-edit-note-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Note
+      <a href="/help/notes.html#editnote"
+         title="Help: Notes (Edit Note)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="get">
+        <input type="hidden" name="cmd" value="save_note"/>
+        <input type="hidden" name="note_id"
+               value="{get_notes_response/note/@id}"/>
+
+        <input type="hidden" name="next" value="{next}"/>
+
+        <!-- get_report params. -->
+        <input type="hidden" name="report_id" value="{report/@id}"/>
+        <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="levels" value="{levels}"/>
+        <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+
+        <!-- get_nvt_details param. -->
+        <input type="hidden" name="oid" value="{nvt/@id}"/>
+
+        <!-- get_status param. -->
+        <input type="hidden" name="task_id" value="{task/@id}"/>
+
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">
+              Hosts
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_notes_response/note/hosts) = 0">
+                  <input type="radio" name="hosts" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="hosts" value=""/>
+                  Any
+                  <input type="radio" name="hosts" value="{get_notes_response/note/hosts}"
+                         checked="1"/>
+                  <xsl:value-of select="get_notes_response/note/hosts"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Port
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_notes_response/note/port) = 0">
+                  <input type="radio" name="port" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="port" value=""/>
+                  Any
+                  <input type="radio" name="port" value="{get_notes_response/note/port}" checked="1"/>
+                  <xsl:value-of select="get_notes_response/note/port"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Threat
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_notes_response/note/threat) = 0">
+                  <input type="radio" name="threat" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="threat" value=""/>
+                  Any
+                  <input type="radio" name="threat" value="{get_notes_response/note/threat}"
+                         checked="1"/>
+                  <xsl:value-of select="get_notes_response/note/threat"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Task
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_notes_response/note/task/@id) = 0">
+                  <input type="radio" name="note_task_id" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="note_task_id" value=""/>
+                  Any
+                  <input type="radio" name="note_task_id" value="{get_notes_response/note/task/@id}"
+                         checked="1"/>
+                  <xsl:value-of select="get_notes_response/note/task/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Result
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_notes_response/note/result/@id) = 0">
+                  <input type="radio" name="note_result_id" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="note_result_id" value=""/>
+                  Any
+                  <input type="radio" name="note_result_id"
+                         value="{get_notes_response/note/result/@id}" checked="1"/>
+                  <xsl:value-of select="get_notes_response/note/result/@id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Text</td>
+            <td>
+              <textarea name="text" rows="10" cols="60"><xsl:value-of select="get_notes_response/note/text"/></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Note"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <xsl:choose>
+        <xsl:when test="string-length(get_notes_response/note/result/@id) = 0">
+          <h3>Associated Result: Any</h3>
+        </xsl:when>
+        <xsl:otherwise>
+          <h3>
+            Associated Result
+          </h3>
+          <xsl:for-each select="get_notes_response/note/result">
+            <xsl:call-template name="result-detailed">
+              <xsl:with-param name="note-buttons">0</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_note">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-note-form"/>
+</xsl:template>
+
+<xsl:template match="modify_note_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Note</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="note" match="note">
   <xsl:param name="next">get_notes</xsl:param>
   <xsl:variable name="class">
@@ -4110,6 +4297,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next={$next}"
+         title="Edit Note"
+         style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -4140,6 +4332,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_note&amp;note_id={@id}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+         title="Edit Note"
+         style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
     </td>
   </tr>
@@ -4404,6 +4601,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="/omp?cmd=get_note&amp;note_id={@id}"
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;search_phrase={../../../../filters/phrase}"
+           title="Edit Note"
+           style="margin-left:3px;">
+          <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </div>
     </xsl:if>

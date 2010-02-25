@@ -124,6 +124,16 @@ char * delete_note_omp (credentials_t *, const char *, const char *,
                         const char *, const unsigned int, const unsigned int,
                         const char *, const char *, const char *, const char *,
                         const char *, const char *, const char *);
+char * edit_note_omp (credentials_t *, const char *, const char *,
+                      const char *, const unsigned int, const unsigned int,
+                      const char *, const char *, const char *, const char *,
+                      const char *, const char *, const char *);
+char * save_note_omp (credentials_t *, const char *, const char *, const char *,
+                      const char *, const char *, const char *, const char *,
+                      const char *, const char *, const unsigned int,
+                      const unsigned int, const char *, const char *,
+                      const char *, const char *, const char *, const char *,
+                      const char *);
 
 char * get_system_reports_omp (credentials_t *, const char *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,

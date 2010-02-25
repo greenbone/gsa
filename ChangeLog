@@ -1,3 +1,19 @@
+2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add note editing.
+
+	* src/html/src/omp.xsl (html-edit-note-form, edit_note)
+	(modify_note_response): New templates.
+	(note, note [nvt_details], note-detailed): Add edit note button.
+
+	* src/gsad.c (init_validator): Add edit_note and save_note commands.  Add
+	hosts_opt, note_task_id and note_result_id rules.
+	(exec_omp_get): Add edit_note and save_note handling.
+
+	* src/gsad_omp.c (edit_note_omp, save_note_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
 2010-02-23  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (result-detailed): Compare note count with 0

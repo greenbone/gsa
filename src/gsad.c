@@ -190,6 +190,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(edit_note)"
                          "|(edit_settings)"
                          "|(edit_user)"
                          "|(export_config)"
@@ -220,6 +221,7 @@ init_validator ()
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
+                         "|(save_note)"
                          "|(save_settings)"
                          "|(save_user)"
                          "|(start_task)"
@@ -239,13 +241,15 @@ init_validator ()
   openvas_validator_add (validator, "format",     "^(dvi)|(html)|(nbe)|(pdf)|(xml)$");
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
-  openvas_validator_add (validator, "access_hosts", "^[[:alnum:], \\./]{0,80}$");
+  openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
   openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:], ;:\\./\\\\]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "note_task_id", "^[a-z0-9\\-]*$");
+  openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
@@ -276,6 +280,7 @@ init_validator ()
   openvas_validator_alias (validator, "scantarget",   "name");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
+  openvas_validator_alias (validator, "access_hosts", "hosts_opt");
   openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "modify_password", "boolean");
   openvas_validator_alias (validator, "level_high",   "boolean");
@@ -2156,6 +2161,8 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *result_id    = NULL;
   const char *report_id    = NULL;
   const char *note_id      = NULL;
+  const char *note_task_id   = NULL;
+  const char *note_result_id = NULL;
   const char *next         = NULL;
   const char *format       = NULL;
   const char *package_format = NULL;
@@ -2172,6 +2179,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *search_phrase = NULL;
   const char *port         = NULL;
   const char *threat       = NULL;
+  const char *text         = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
@@ -2221,6 +2229,18 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "note_id");
       if (openvas_validate (validator, "note_id", note_id))
         note_id = NULL;
+
+      note_task_id = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "note_task_id");
+      if (openvas_validate (validator, "note_task_id", note_task_id))
+        note_task_id = NULL;
+
+      note_result_id = MHD_lookup_connection_value (connection,
+                                                    MHD_GET_ARGUMENT_KIND,
+                                                    "note_result_id");
+      if (openvas_validate (validator, "note_result_id", note_result_id))
+        note_result_id = NULL;
 
       next = MHD_lookup_connection_value (connection,
                                           MHD_GET_ARGUMENT_KIND,
@@ -2393,6 +2413,17 @@ exec_omp_get (struct MHD_Connection *connection,
           if (openvas_validate (validator, "threat", threat))
             threat = NULL;
         }
+
+      text = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "text");
+      if (text)
+        {
+          if (openvas_validate (validator, "text", text))
+            text = NULL;
+        }
+      else
+        text = "";
     }
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -2503,6 +2534,61 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, name, family, oid, sort_field,
                                sort_order, 1);
+
+  else if ((!strcmp (cmd, "edit_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_notes") == 0))
+    {
+      return edit_note_omp (credentials, note_id, "get_notes",
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                            NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return edit_note_omp (credentials, note_id, "get_nvt_details",
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, oid,
+                            NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (search_phrase != NULL))
+    {
+      unsigned int first;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      return edit_note_omp (credentials, note_id, "get_report", report_id,
+                            first, 1000, sort_field, sort_order, levels,
+                            notes, search_phrase, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return edit_note_omp (credentials, note_id, "get_status",
+                            /* Parameters for next page. */
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                            task_id);
+    }
 
   else if (!strcmp (cmd, "edit_settings"))
     return edit_settings_oap (credentials, sort_field, sort_order);
@@ -2708,6 +2794,62 @@ exec_omp_get (struct MHD_Connection *connection,
                          name, result_id, report_id, first_result,
                          "1000", sort_field, sort_order, levels, notes,
                          search_phrase);
+
+  else if ((!strcmp (cmd, "save_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_notes") == 0))
+    {
+      return save_note_omp (credentials, note_id, text, hosts, port, threat,
+                            note_task_id, note_result_id, "get_notes", NULL,
+                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return save_note_omp (credentials, note_id, text, hosts, port, threat,
+                            note_task_id, note_result_id, "get_nvt_details",
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, oid,
+                            NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (search_phrase != NULL))
+    {
+      unsigned int first;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      return save_note_omp (credentials, note_id, text, hosts, port, threat,
+                            note_task_id, note_result_id, "get_report",
+                            report_id, first, 1000, sort_field, sort_order,
+                            levels, notes, search_phrase, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return save_note_omp (credentials, note_id, text, hosts, port, threat,
+                            note_task_id, note_result_id, "get_status", NULL,
+                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, task_id);
+    }
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
