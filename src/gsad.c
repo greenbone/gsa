@@ -894,338 +894,78 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
        *     http://xxx/omp/get_targets?sort_field=name
        */
 
-      /** @todo Why validate these here and in exec_omp_post? */
-
       if (!strcmp (key, "access_hosts"))
-        {
-          con_info->req_parms.access_hosts = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.access_hosts,
-                  (char *) data,
-                  size);
-          con_info->req_parms.access_hosts[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "access_hosts",
-                                   con_info->req_parms.access_hosts))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.access_hosts);
       if (!strcmp (key, "base"))
-        {
-          con_info->req_parms.base = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.base, (char *) data, size);
-          con_info->req_parms.base[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "base",
-                                   con_info->req_parms.base))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.base);
       if (!strcmp (key, "cmd"))
-        {
-          con_info->req_parms.cmd = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.cmd, (char *) data, size);
-          con_info->req_parms.cmd[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator, "cmd", con_info->req_parms.cmd))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.cmd);
       if (!strcmp (key, "condition"))
-        {
-          con_info->req_parms.condition = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.condition,
-                  (char *) data,
-                  size);
-          con_info->req_parms.condition[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "condition",
-                                   con_info->req_parms.condition))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.condition);
       if (!strcmp (key, "credential_login"))
-        {
-          con_info->req_parms.credential_login = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.credential_login,
-                  (char *) data,
-                  size);
-          con_info->req_parms.credential_login[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "credential_login",
-                                   con_info->req_parms.credential_login))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.credential_login);
       if (!strcmp (key, "escalator"))
-        {
-          con_info->req_parms.escalator = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.escalator, (char *) data, size);
-          con_info->req_parms.escalator[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "escalator",
-                                   con_info->req_parms.escalator))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.escalator);
       if (!strcmp (key, "event"))
-        {
-          con_info->req_parms.event = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.event,
-                  (char *) data,
-                  size);
-          con_info->req_parms.event[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "event",
-                                   con_info->req_parms.event))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.event);
       if (!strcmp (key, "modify_password"))
-        {
-          con_info->req_parms.modify_password = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.modify_password,
-                  (char *) data,
-                  size);
-          con_info->req_parms.modify_password[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "modify_password",
-                                   con_info->req_parms.modify_password))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.modify_password);
       if (!strcmp (key, "method"))
-        {
-          con_info->req_parms.method = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.method,
-                  (char *) data,
-                  size);
-          con_info->req_parms.method[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "method",
-                                   con_info->req_parms.method))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.method);
       if (!strcmp (key, "name"))
-        {
-          con_info->req_parms.name = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.name, (char *) data, size);
-          con_info->req_parms.name[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator, "name", con_info->req_parms.name))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.name);
       if (!strcmp (key, "login"))
-        {
-          con_info->req_parms.login = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.login, (char *) data, size);
-          con_info->req_parms.login[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "login",
-                                   con_info->req_parms.login))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.login);
       if (!strcmp (key, "pw"))
-        {
-          con_info->req_parms.pw = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.pw, (char *) data, size);
-          con_info->req_parms.pw[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator, "pw", con_info->req_parms.pw))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.pw);
       if (!strcmp (key, "family"))
-        {
-          con_info->req_parms.family = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.family, (char *) data, size);
-          con_info->req_parms.family[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "family",
-                                   con_info->req_parms.family))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.family);
       if (!strcmp (key, "scanconfig"))
-        {
-          con_info->req_parms.scanconfig = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.scanconfig, (char *) data, size);
-          con_info->req_parms.scanconfig[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "scanconfig",
-                                   con_info->req_parms.scanconfig))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.scanconfig);
       if (!strcmp (key, "scantarget"))
-        {
-          con_info->req_parms.scantarget = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.scantarget, (char *) data, size);
-          con_info->req_parms.scantarget[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "scantarget",
-                                   con_info->req_parms.scantarget))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.scantarget);
       if (!strcmp (key, "hosts"))
-        {
-          con_info->req_parms.hosts = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.hosts, (char *) data, size);
-          con_info->req_parms.hosts[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "hosts",
-                                   con_info->req_parms.hosts))
-            return MHD_NO;
-          if (validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.hosts);
       if (!strcmp (key, "hosts_allow"))
-        {
-          con_info->req_parms.hosts_allow = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.hosts_allow,
-                  (char *) data,
-                  size);
-          con_info->req_parms.hosts_allow[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "hosts_allow",
-                                   con_info->req_parms.hosts_allow))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.hosts_allow);
       if (!strcmp (key, "comment"))
-        {
-          con_info->req_parms.comment = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.comment, (char *) data, size);
-          con_info->req_parms.comment[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "comment",
-                                   con_info->req_parms.comment))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.comment);
       if (!strcmp (key, "xml_file"))
-        {
-          if (con_info->req_parms.xml_file)
-            {
-              int prevsize = strlen (con_info->req_parms.xml_file);
-              con_info->req_parms.xml_file =
-                realloc (con_info->req_parms.xml_file, prevsize + size + 1);
-              memcpy (&con_info->req_parms.xml_file[prevsize], (char *) data,
-                      size);
-              con_info->req_parms.xml_file[size + prevsize] = 0;
-              con_info->answercode = MHD_HTTP_OK;
-              return MHD_YES;
-            }
-          else
-            {
-              con_info->req_parms.xml_file = malloc (size + 1);
-              memcpy ((char *) con_info->req_parms.xml_file, (char *) data, size);
-              con_info->req_parms.xml_file[size] = 0;
-              con_info->answercode = MHD_HTTP_OK;
-              return MHD_YES;
-            }
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.xml_file);
       if (!strcmp (key, "oid"))
-        {
-          con_info->req_parms.oid = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.oid, (char *) data, size);
-          con_info->req_parms.oid[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "oid",
-                                   con_info->req_parms.oid))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.oid);
       if (!strcmp (key, "password"))
-        {
-          con_info->req_parms.password = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.password, (char *) data, size);
-          con_info->req_parms.password[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "password",
-                                   con_info->req_parms.password))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.password);
       if (!strcmp (key, "role"))
-        {
-          con_info->req_parms.role = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.role, (char *) data, size);
-          con_info->req_parms.role[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator, "role", con_info->req_parms.role))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.role);
       if (!strcmp (key, "submit"))
-        {
-          con_info->req_parms.submit = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.submit, (char *) data, size);
-          con_info->req_parms.submit[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "page",
-                                   con_info->req_parms.submit))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.submit);
       if (!strcmp (key, "timeout"))
-        {
-          con_info->req_parms.timeout = malloc (size + 1);
-          memcpy ((char *) con_info->req_parms.timeout, (char *) data, size);
-          con_info->req_parms.timeout[size] = 0;
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "boolean",
-                                   con_info->req_parms.timeout))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.timeout);
       if (!strcmp (key, "port"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.port);

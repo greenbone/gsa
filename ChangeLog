@@ -1,5 +1,10 @@
 2010-02-26  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (serve_post): Use append_chunk_string to setup string request
+	parameters.
+
+2010-02-26  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/oap.xsl (html-users-table): Sort by role then name.
 
 2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
