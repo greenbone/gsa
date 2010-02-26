@@ -120,7 +120,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Host Access</td>
             <td width="100">Actions</td>
           </tr>
-          <xsl:apply-templates select="user"/>
+          <xsl:apply-templates select="user">
+            <xsl:sort select="role"/>
+            <xsl:sort select="name"/>
+          </xsl:apply-templates>
         </table>
       </div>
     </div>
