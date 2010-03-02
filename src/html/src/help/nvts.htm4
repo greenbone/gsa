@@ -1,0 +1,24 @@
+m4_define(`PAGE_TITLE', `Help: NVTs')
+m4_include(`header.m4')
+
+<div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+&nbsp;<br />
+
+<a name="nvts"></a>
+<h1>Network Vulnerability Tests (NVTs)</h1>
+
+<p>
+Currently, there is one page in the web interface
+about <a href="glossary.html#nvt">NVT</a>s.
+</p>
+
+<a name="nvtdetails"></a>
+<h2>NVT Details</h2>
+
+<p>
+A page that provides detailed information about an NVT.
+This includes the NVT family and the full description of the NVT,
+as well as a table listing all notes on the NVT.
+</p>
+
+m4_include(`footer.m4')

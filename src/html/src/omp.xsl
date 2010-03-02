@@ -3933,7 +3933,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVT Details</div>
+    <div class="gb_window_part_center">NVT Details
+      <a href="/help/nvts.html#nvtdetails"
+         title="Help: NVTS (NVT Details)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates
         select="commands_response/get_nvt_details_response/nvt"/>
