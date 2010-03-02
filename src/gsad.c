@@ -2967,6 +2967,11 @@ gsad_add_content_type_header (struct MHD_Response *response,
 }
 
 /**
+ * @brief At least maximum length of rfc2822 format date.
+ */
+#define DATE_2822_LEN 100
+
+/**
  * @brief Create a response to serve a file.
  *
  * If the file does not exist, but user is logged in, refuse credentials
@@ -2990,6 +2995,9 @@ file_content_response (struct MHD_Connection *connection, const char* url,
   gchar* path;
   char *default_file = "login/login.html";
   struct MHD_Response* response;
+  char date_2822[DATE_2822_LEN];
+  struct tm *mtime;
+  time_t next_week;
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -3073,6 +3081,21 @@ file_content_response (struct MHD_Connection *connection, const char* url,
       MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
       MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
                                "no-cache");
+    }
+
+  mtime = localtime (&buf.st_mtime);
+  if (mtime
+      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z", mtime))
+    {
+      MHD_add_response_header (response, "Last-Modified", date_2822);
+    }
+
+  next_week = time (NULL) + 7 * 24 * 60 * 60;
+  mtime = localtime (&next_week);
+  if (mtime
+      && strftime (date_2822, DATE_2822_LEN, "%a, %d %b %Y %H:%M:%S %Z", mtime))
+    {
+      MHD_add_response_header (response, "Expires", date_2822);
     }
 
   g_free (path);
