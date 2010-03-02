@@ -1,5 +1,10 @@
 2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-edit-note-form): Add NVT name row before
+	constraint rows.
+
+2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-edit-note-form): Add details button.
 	(note [details]): Correct alignment.
 

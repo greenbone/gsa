@@ -4111,6 +4111,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
+            <td><b>NVT Name</b></td>
+            <td>
+              <xsl:variable name="nvt" select="get_notes_response/note/nvt"/>
+              <a href="?cmd=get_nvt_details&amp;oid={$nvt/@oid}">
+                <xsl:variable name="max" select="70"/>
+                <xsl:choose>
+                  <xsl:when test="string-length($nvt/name) &gt; $max">
+                    <xsl:value-of select="substring($nvt/name, 0, $max)"/>...
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$nvt/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="125">
               Hosts
             </td>
