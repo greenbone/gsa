@@ -4080,6 +4080,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Notes (Edit Note)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}"
+         title="Note Details"
+         style="margin-left:3px;">
+        <img src="/img/details.png"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="get">
@@ -4349,16 +4354,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Note Details
-       <a href="/help/notes.html#notedetails"
-         title="Help: Notes (Note Details)">
-         <img src="/img/help.png"/>
-       </a>
-       <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_note"
-          title="Edit Note"
-          style="margin-left:3px;">
-         <img src="/img/edit.png"/>
-       </a>
+      Note Details
+      <a href="/help/notes.html#notedetails"
+        title="Help: Notes (Note Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_note"
+         title="Edit Note"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <div style="float:right;">

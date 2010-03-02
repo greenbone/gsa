@@ -1,5 +1,10 @@
 2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-edit-note-form): Add details button.
+	(note [details]): Correct alignment.
+
+2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add edit button to get_note page.
 
 	* src/gsad.c (exec_omp_get): Add edit_note and save_note cases for
