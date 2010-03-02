@@ -1,3 +1,17 @@
+2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add edit button to get_note page.
+
+	* src/gsad.c (exec_omp_get): Add edit_note and save_note cases for
+	get_note page.
+
+	* src/gsad_omp.c (get_note): New function.  Body from get_note_omp.
+	(get_note_omp): Wrap get_note.
+	(save_note_omp): Add get_note page handling.
+
+	* src/html/src/omp.xsl (note [details]): Add edit button.
+	(get_note): Expect get_notes_response in a commands_response.
+
 2010-02-26  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (serve_post): Use append_chunk_string to setup string request

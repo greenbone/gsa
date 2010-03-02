@@ -4354,6 +4354,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Notes (Note Details)">
          <img src="/img/help.png"/>
        </a>
+       <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_note"
+          title="Edit Note"
+          style="margin-left:3px;">
+         <img src="/img/edit.png"/>
+       </a>
     </div>
     <div class="gb_window_part_content">
       <div style="float:right;">
@@ -4504,7 +4509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_note">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:choose>
-	<xsl:when test="get_notes_response/@status = '500'">
+	<xsl:when test="commands_reponse/get_notes_response/@status = '500'">
 	  <xsl:call-template name="command_result_dialog">
 		<xsl:with-param name="operation">
 		  Get Note
@@ -4513,12 +4518,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 		  <xsl:value-of select="500"/>
 		</xsl:with-param>
 		<xsl:with-param name="msg">
-		  <xsl:value-of select="get_notes_response/@status_text"/>
+		  <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
 		</xsl:with-param>
 	  </xsl:call-template>
 	</xsl:when>
 	<xsl:otherwise>
-      <xsl:apply-templates select="get_notes_response/note" mode="details"/>
+      <xsl:apply-templates select="commands_response/get_notes_response/note" mode="details"/>
 	</xsl:otherwise>
   </xsl:choose>
 </xsl:template>

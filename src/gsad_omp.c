@@ -3929,15 +3929,16 @@ get_notes_omp (credentials_t *credentials)
 }
 
 /**
- * @brief Get a notes, XSL transform the result.
+ * @brief Get a note, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  note_id      ID of note.
+ * @param[in]  commands     Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_note_omp (credentials_t *credentials, const char *note_id)
+static char *
+get_note (credentials_t *credentials, const char *note_id, const char *commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3954,9 +3955,13 @@ get_note_omp (credentials_t *credentials, const char *note_id)
   /* Get the note. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_notes"
                             " note_id=\"%s\""
-                            " details=\"1\"/>",
+                            " details=\"1\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             note_id)
       == -1)
     {
@@ -3983,6 +3988,20 @@ get_note_omp (credentials_t *credentials, const char *note_id)
   g_string_append (xml, "</get_note>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get a note, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  note_id      ID of note.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_note_omp (credentials_t *credentials, const char *note_id)
+{
+  return get_note (credentials, note_id, NULL);
 }
 
 /**
@@ -4692,6 +4711,13 @@ save_note_omp (credentials_t * credentials, const char *note_id,
         }
 
       ret = get_nvt_details (credentials, oid, modify_note);
+      g_free (modify_note);
+      return ret;
+    }
+
+  if (strcmp (next, "get_note") == 0)
+    {
+      char *ret = get_note (credentials, note_id, modify_note);
       g_free (modify_note);
       return ret;
     }

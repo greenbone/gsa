@@ -2278,6 +2278,16 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
            && (next != NULL)
+           && (strcmp (next, "get_note") == 0))
+    {
+      return edit_note_omp (credentials, note_id, "get_note",
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                            NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_note"))
+           && (note_id != NULL)
+           && (next != NULL)
            && (strcmp (next, "get_notes") == 0))
     {
       return edit_note_omp (credentials, note_id, "get_notes",
@@ -2534,6 +2544,16 @@ exec_omp_get (struct MHD_Connection *connection,
                          name, result_id, report_id, first_result,
                          "1000", sort_field, sort_order, levels, notes,
                          search_phrase);
+
+  else if ((!strcmp (cmd, "save_note"))
+           && (note_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_note") == 0))
+    {
+      return save_note_omp (credentials, note_id, text, hosts, port, threat,
+                            note_task_id, note_result_id, "get_note", NULL,
+                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
 
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
