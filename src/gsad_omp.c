@@ -3698,12 +3698,41 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (format)
     {
-      if (strcmp (format, "nbe") == 0
-          || strcmp (format, "pdf") == 0
-          || strcmp (format, "dvi") == 0
-          || strcmp (format, "html") == 0
-          || strcmp (format, "html-pdf") == 0)
+      if (strcmp (format, "xml") == 0)
         {
+          /* Manager sends XML report as plain XML. */
+          /** @TODO Call g_string_sized_new with an appropriate size */
+          xml = g_string_new ("");
+          if (read_entity (&session, &entity))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_status");
+            }
+          openvas_server_close (socket, session);
+          entity_t report = entity_child (entity, "report");
+          if (report == NULL)
+            {
+              free_entity (entity);
+              g_string_free (xml, TRUE);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Response from manager daemon did not contain a report.",
+                                   "/omp?cmd=get_status");
+            }
+          print_entity_to_string (report, xml);
+          free_entity (entity);
+          return g_string_free (xml, FALSE);
+        }
+      else
+        {
+          /* "nbe", "pdf", "dvi", "html", "html-pdf"... */
+
           xml = g_string_new ("<commands_response>");
 
           entity = NULL;
@@ -3747,44 +3776,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "Diagnostics: Failure to receive report from manager daemon.",
                                    "/omp?cmd=get_status");
             }
-        }
-      else if (strcmp (format, "xml") == 0)
-        {
-          /* Manager sends XML report as plain XML. */
-          /** @TODO Call g_string_sized_new with an appropriate size */
-          xml = g_string_new ("");
-          if (read_entity (&session, &entity))
-            {
-              g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_status");
-            }
-          openvas_server_close (socket, session);
-          entity_t report = entity_child (entity, "report");
-          if (report == NULL)
-            {
-              free_entity (entity);
-              g_string_free (xml, TRUE);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Response from manager daemon did not contain a report.",
-                                   "/omp?cmd=get_status");
-            }
-          print_entity_to_string (report, xml);
-          free_entity (entity);
-          return g_string_free (xml, FALSE);
-        }
-      else
-        {
-          openvas_server_close (socket, session);
-          g_string_free (xml, TRUE);
-          xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
-          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
     }
   else
