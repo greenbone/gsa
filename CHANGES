@@ -10,6 +10,7 @@ Main changes since 1.0.0-beta4:
 
 * Support for notes has been added.
 * Support for ITG and CPE reports has been added.
+* Improved HTTP conformity.
 * Significant speed-up.
 * Various cosmetic changes of the html pages
   as well as of some report types.

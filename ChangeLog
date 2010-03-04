@@ -1,3 +1,13 @@
+2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Preparing the gsa 1.0.0-beta5 release, part two.
+
+	* src/html/src/about.htm4: Updated version number.
+
+	* CHANGES: Updated, added line missing from last commit.
+
+	* ChangeLog: Corrected entry.
+
 2010-03-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CHANGES: Updated and improved a bit for beta4.
@@ -8,7 +18,11 @@
 
 2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
 
+	Preparing the gsa 1.0.0-beta5 release, part one.
+
 	* ChangeLog: Restored lost entry.
+
+	* CHANGES: Updated.
 
 2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
 
