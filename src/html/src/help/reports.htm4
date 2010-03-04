@@ -123,6 +123,18 @@ for the selected task (see Task Summary box).
         set up post-processing based on the XML file, not
         based on the NBE file.
       </td></tr>
+      <tr><td valign="top">ITG:</td><td>
+        Any tabular results of IT-Grundschutz scans are collected
+        from the report and assembled to a single CSV file for
+        simple integration into spreadsheet applications or
+        databases.
+      </td></tr>
+      <tr><td valign="top">CPE:</td><td>
+        Any tabular results of CPE inventory scans are collected
+        from the report and assembled to a single CSV file for
+        simple integration into spreadsheet applications or
+        databases.
+      </td></tr>
       </table>
   </td>
 </tr>
