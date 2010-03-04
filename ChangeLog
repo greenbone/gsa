@@ -1,5 +1,10 @@
 2010-03-04  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (get_config_family_omp, get_config_family_omp)
+	(get_config_nvt_omp): Add table qualifier to GET_NVT_DETAILS sort field.
+
+2010-03-04  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (trend_meter): Get trend from OMP.
 
 2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>

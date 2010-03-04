@@ -2990,7 +2990,7 @@ get_config_family_omp (credentials_t * credentials,
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             name,
                             family,
-                            sort_field ? sort_field : "name",
+                            sort_field ? sort_field : "nvts.name",
                             sort_order ? sort_order : "ascending")
       == -1)
     {
@@ -3026,7 +3026,7 @@ get_config_family_omp (credentials_t * credentials,
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
                                 family,
-                                sort_field ? sort_field : "name",
+                                sort_field ? sort_field : "nvts.name",
                                 sort_order ? sort_order : "ascending")
           == -1)
         {
@@ -3201,7 +3201,7 @@ get_config_nvt_omp (credentials_t * credentials,
                             config,
                             family,
                             nvt,
-                            sort_field ? sort_field : "name",
+                            sort_field ? sort_field : "nvts.name",
                             sort_order ? sort_order : "ascending")
       == -1)
     {
