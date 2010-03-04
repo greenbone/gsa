@@ -736,133 +736,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- TREND METER -->
 <xsl:template name="trend_meter">
-
-  <xsl:variable name="threat_a">
-    <xsl:choose>
-      <xsl:when test="last_report/report/messages/hole &gt; 0">4</xsl:when>
-      <xsl:when test="last_report/report/messages/warning &gt; 0">3</xsl:when>
-      <xsl:when test="last_report/report/messages/info &gt; 0">2</xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="sum_ta">
-    <xsl:choose>
-      <xsl:when test="last_report/report/messages/hole &gt; 0">
-        <xsl:value-of select="last_report/report/messages/hole"/>
-      </xsl:when>
-      <xsl:when test="last_report/report/messages/warning &gt; 0">
-        <xsl:value-of select="last_report/report/messages/warning"/>
-      </xsl:when>
-      <xsl:when test="last_report/report/messages/info &gt; 0">
-        <xsl:value-of select="last_report/report/messages/info"/>
-      </xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="sum_ta2">
-    <xsl:choose>
-      <xsl:when test="last_report/report/messages/hole &gt; 0">
-        <xsl:value-of select="last_report/report/messages/warning"/>
-      </xsl:when>
-      <xsl:when test="last_report/report/messages/warning &gt; 0">
-        <xsl:value-of select="last_report/report/messages/info"/>
-      </xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="threat_b">
-    <xsl:choose>
-      <xsl:when test="second_last_report/report/messages/hole &gt; 0">
-        4
-      </xsl:when>
-      <xsl:when test="second_last_report/report/messages/warning &gt; 0">
-        3
-      </xsl:when>
-      <xsl:when test="second_last_report/report/messages/info &gt; 0">
-        2
-      </xsl:when>
-      <xsl:otherwise>
-        1
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="sum_tb">
-    <xsl:choose>
-      <xsl:when test="second_last_report/report/messages/hole &gt; 0">
-        <xsl:value-of select="second_last_report/report/messages/hole"/>
-      </xsl:when>
-      <xsl:when test="second_last_report/report/messages/warning &gt; 0">
-        <xsl:value-of select="second_last_report/report/messages/warning"/>
-      </xsl:when>
-      <xsl:when test="second_last_report/report/messages/info &gt; 0">
-        <xsl:value-of select="second_last_report/report/messages/info"/>
-      </xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="sum_tb2">
-    <xsl:choose>
-      <xsl:when test="second_last_report/report/messages/hole &gt; 0">
-        <xsl:value-of select="second_last_report/report/messages/warning"/>
-      </xsl:when>
-      <xsl:when test="second_last_report/report/messages/warning &gt; 0">
-        <xsl:value-of select="second_last_report/report/messages/info"/>
-      </xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
   <xsl:choose>
-    <xsl:when test="report_count/finished &gt; 1 and status!='Running'">
-      <xsl:choose>
-        <xsl:when test="$threat_a &gt; $threat_b">
-          <img src="/img/trend_up.png" alt="Threat level increased"
-               title="Threat level increased"/>
-        </xsl:when>
-        <xsl:when test="$threat_a &lt; $threat_b">
-          <img src="/img/trend_down.png" alt="Threat level decreased"
-               title="Threat level decreased"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="$sum_ta &gt; $sum_tb">
-              <img src="/img/trend_more.png" alt="Threat count increased"
-                   title="Threat count increased"/>
-            </xsl:when>
-            <xsl:when test="$sum_ta &lt; $sum_tb">
-              <img src="/img/trend_less.png" alt="Threat count decreased"
-                   title="Threat count decreased"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:choose>
-                <xsl:when test="$sum_ta2 &gt; $sum_tb2">
-                  <img src="/img/trend_more.png" alt="Threat count increased"
-                     title="Threat count increased"/>
-                </xsl:when>
-                <xsl:when test="$sum_ta2 &lt; $sum_tb2">
-                  <img src="/img/trend_less.png" alt="Threat count decreased"
-                     title="Threat count decreased"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/trend_nochange.png"
-                       alt="Threat did not change"
-                       title="The threat did not change"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:when test="trend = 'up'">
+      <img src="/img/trend_up.png" alt="Threat level increased"
+           title="Threat level increased"/>
+    </xsl:when>
+    <xsl:when test="trend = 'down'">
+      <img src="/img/trend_down.png" alt="Threat level decreased"
+           title="Threat level decreased"/>
+    </xsl:when>
+    <xsl:when test="trend = 'more'">
+      <img src="/img/trend_more.png" alt="Threat count increased"
+           title="Threat count increased"/>
+    </xsl:when>
+    <xsl:when test="trend = 'less'">
+      <img src="/img/trend_less.png" alt="Threat count decreased"
+           title="Threat count decreased"/>
+    </xsl:when>
+    <xsl:when test="trend = 'same'">
+      <img src="/img/trend_nochange.png" alt="Threat did not change"
+           title="The threat did not change"/>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
   </xsl:choose>
-
 </xsl:template>
 
 <xsl:template match="target" mode="newtask">
