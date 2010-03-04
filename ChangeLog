@@ -1,5 +1,9 @@
 2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
 
+	* ChangeLog: Restored lost entry.
+
+2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+
 	Add format for CPE inventory report.
 
 	* src/html/src/omp.xsl (html-report-details): Add report format "CPE".
@@ -13,6 +17,11 @@
 	* src/gsad_omp.c (get_report_omp): Relax report format check.
 
 	* src/html/src/omp.xsl (html-report-details): Add report format "ITG".
+
+2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (DATE_2822_LEN): New define.
+	(file_content_response): Add Last-Modified and Expires headers.
 
 2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
 
