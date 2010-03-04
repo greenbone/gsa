@@ -1,3 +1,9 @@
+2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+
+	Add format for CPE inventory report.
+
+	* src/html/src/omp.xsl (html-report-details): Add report format "CPE".
+
 2010-03-03  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add format for IT-Grundschutz (German FSI IT baseline protection) report.
