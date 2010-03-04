@@ -1,4 +1,4 @@
-gsa 1.0.0-beta5 (2010-03-02)
+gsa 1.0.0-beta5 (2010-03-04)
 
 This is the fifth beta release of the optional gsa module for the Open
 Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
@@ -10,6 +10,10 @@ Main changes since 1.0.0-beta4:
 
 * Support for notes has been added.
 * Support for ITG and CPE reports has been added.
+* Significant speed-up.
+* Various cosmetic changes of the html pages
+  as well as of some report types.
+
 
 gsa 1.0.0-beta4 (2010-02-05)
 
