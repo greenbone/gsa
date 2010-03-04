@@ -1,5 +1,13 @@
 2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
 
+	Post release version bump.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/src/about.htm4: Updated version number.
+
+2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+
 	Preparing the gsa 1.0.0-beta5 release, part two.
 
 	* src/html/src/about.htm4: Updated version number.
