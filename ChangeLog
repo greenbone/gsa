@@ -1,3 +1,7 @@
+2010-03-08  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (report): Add ITG and CPE to download formats.
+
 2010-03-04  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (get_config_family_omp, get_config_family_omp)

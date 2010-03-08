@@ -1038,6 +1038,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
             <option value="xml">XML</option>
+            <option value="ITG">ITG</option>
+            <option value="CPE">CPE</option>
             <option value="nbe">NBE</option>
           </select>
           <input type="submit" value="Download" title="Download"/>
