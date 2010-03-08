@@ -1032,6 +1032,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="notes" value="1"/>
+          <input type="hidden" name="levels" value="hmlg"/>
           <select name="format"
                   style="margin-right:3px;"
                   title="Download Format">
