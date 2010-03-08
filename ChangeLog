@@ -1,3 +1,7 @@
+2010-03-08  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/help/reports.htm4: Corrected image filenames.
+
 2010-03-08  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (report): Add ITG and CPE to download formats.

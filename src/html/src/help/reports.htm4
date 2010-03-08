@@ -45,27 +45,27 @@ for the selected task (see Task Summary box).
       <br />
       <table>
       <tr>
-        <td valign="top"><img src="/img/last_report_status_high.png" /></td>
+        <td valign="top"><img src="/img/high_big.png" /></td>
         <td>
           High: At least one NVT reported severity "High" for at least one
           target host in the report.
         </td>
       </tr><tr>
-        <td valign="top"><img src="/img/last_report_status_medium.png" /></td>
+        <td valign="top"><img src="/img/medium_big.png" /></td>
         <td>
           Medium: Severity "High" does not occur in the
           report. At least one NVT reported severity "Medium"
           for at least one target host in the report.
         </td>
       </tr><tr>
-        <td valign="top"><img src="/img/last_report_status_low.png" /></td>
+        <td valign="top"><img src="/img/low_big.png" /></td>
         <td>
           Low: Neither severity "High" nor "Medium" occurs in the report.
           At least one NVT reported severity "Low" for at
           least one target host in the report.
         </td>
       </tr><tr>
-        <td valign="top"><img src="/img/last_report_status_none.png" /></td>
+        <td valign="top"><img src="/img/none_big.png" /></td>
         <td>
           None: The report does not contain a single severe finding. This could
           also mean that the scan was interrupted or failed, especially if
@@ -81,16 +81,16 @@ for the selected task (see Task Summary box).
       of occurances for each severity level.
       <br />
       <table>
-      <tr><td valign="top"><img src="/img/report_high.png" alt="High" title="High" /></td><td>
+      <tr><td valign="top"><img src="/img/high.png" alt="High" title="High" /></td><td>
         The number of issues of severity "High" found during the scan.
       </td></tr>
-      <tr><td valign="top"><img src="/img/report_medium.png" alt="Medium" title="Medium" /></td><td>
+      <tr><td valign="top"><img src="/img/medium.png" alt="Medium" title="Medium" /></td><td>
         The number of issues of severity "Medium" found during the scan.
       </td></tr>
-      <tr><td valign="top"><img src="/img/report_low.png" alt="Low" title="Low" /></td><td>
+      <tr><td valign="top"><img src="/img/low.png" alt="Low" title="Low" /></td><td>
         The number of issues of severity "Low" found during the scan.
       </td></tr>
-      <tr><td valign="top"><img src="/img/report_log.png" alt="Log" title="Log" /></td><td>
+      <tr><td valign="top"><img src="/img/log.png" alt="Log" title="Log" /></td><td>
         The number of log-entries that occured during the scan.
       </td></tr>
       </table>
