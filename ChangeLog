@@ -1,3 +1,17 @@
+2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (init_validator): Add command resume_stopped_task.
+	(exec_omp_get): Add resume_stopped_task handling.
+
+	* src/gsad_omp.c (resume_stopped_task_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/src/help/tasks.htm4: Add Resume Task section.
+
+	* src/html/src/img/resume_inactive.png,
+	src/html/src/img/resume_inactive.png: New files.
+
 2010-03-08  Michael Wiegand <michael.wiegand@intevation.de>
 
 	* src/html/src/omp.xsl: Enable all levels for report downloads in the

@@ -88,7 +88,7 @@ the essential aspects of each.
         The last scan for this task was aborted by the user. The newest
         report might be incomplete. Also, this status is set in cases
         where the task was aborted due to other arbitrary circumstances
-        such as power outage. 
+        such as power outage.
       </td></tr>
       <tr><td valign="top">
         <div class="progressbar_box" title="Internal Error">
@@ -245,8 +245,15 @@ Pressing the start icon <img src="/img/start.png" alt="Start" title="Start" /> w
 start a new scan. The list of tasks will be updated.
 </p>
 
+<h4>Resume Task</h4>
+
 <p>
-This action is only available if the task has status "New" or "Done".
+Pressing the resume icon <img src="/img/resume.png" alt="Resume" title="Resume" />
+will resume a stopped scan.  The list of tasks will be updated.
+</p>
+
+<p>
+This action is only available if the task has status "Stopped".
 </p>
 
 <h4>Abort Task</h4>

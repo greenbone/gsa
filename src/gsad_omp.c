@@ -572,6 +572,63 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
 }
 
 /**
+ * @brief Resume a stopped task, get all tasks, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  task_id      ID of task.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
+{
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while resuming a stopped task. "
+                         "The task was not resumed. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<resume_stopped_task task_id=\"%s\" />"
+                            "<get_status"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            task_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while resuming a stopped task. "
+                           "The task was not resumed. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while resuming a stopped task. "
+                           "It is unclear whether the task has been resumed or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
  * @brief Start a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

@@ -217,6 +217,7 @@ init_validator ()
                          "|(get_users)"
                          "|(import_config)"
                          "|(new_note)"
+                         "|(resume_stopped_task)"
                          "|(test_escalator)"
                          "|(save_config)"
                          "|(save_config_family)"
@@ -2182,6 +2183,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "abort_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
     return abort_task_omp (credentials, task_id);
+
+  else if ((!strcmp (cmd, "resume_stopped_task")) && (task_id != NULL)
+           && (strlen (task_id) < VAL_MAX_SIZE))
+    return resume_stopped_task_omp (credentials, task_id);
 
   else if ((!strcmp (cmd, "start_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
