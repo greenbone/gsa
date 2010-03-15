@@ -117,7 +117,7 @@ and all its preferences.
 
 <p>
 The tasks that use the shown config are listed.
-A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
+A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> will open
 the <a href="reports.html#tasksummary">Task summary</a> page.
 </p>
 

@@ -1,5 +1,17 @@
 2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (task): Use details button instead of list button
+	for summary link.  Always enable this details button.
+	(escalator [details], target [details], html-config-table): Use details
+	button instead of list button for task summary link.
+
+	* src/html/src/help/tasks.htm4: Make "Reports" section "Task Details".
+
+	* src/html/src/help/scanconfig_details.htm4,
+	src/html/src/help/scanconfig_editor.htm4: Switch to details button.
+
+2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Complete last commit: Add Manager-side task resuming.
 
 	* src/html/src/omp.xsl (resume_stopped_task_response): New template.

@@ -1233,22 +1233,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="report_count &lt; 1">
-              <img src="/img/list_inactive.png"
-                   border="0"
-                   alt="Reports"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
-                <img src="/img/list.png"
-                     border="0"
-                     alt="Reports"
-                     style="margin-left:3px;"/>
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
+          <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+            <img src="/img/details.png"
+                 border="0"
+                 alt="Details"
+                 style="margin-left:3px;"/>
+          </a>
         </td>
       </tr>
     </xsl:otherwise>
@@ -2120,10 +2110,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
-                    <img src="/img/list.png"
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                    <img src="/img/details.png"
                          border="0"
-                         alt="Reports"
+                         alt="Details"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -2390,10 +2380,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
-                    <img src="/img/list.png"
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                    <img src="/img/details.png"
                          border="0"
-                         alt="Reports"
+                         alt="Details"
                          style="margin-left:3px;"/>
                   </a>
                 </td>
@@ -3577,10 +3567,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{$class}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
-                <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
-                  <img src="/img/list.png"
+                <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                  <img src="/img/details.png"
                        border="0"
-                       alt="Reports"
+                       alt="Details"
                        style="margin-left:3px;"/>
                 </a>
               </td>

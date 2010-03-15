@@ -280,16 +280,12 @@ of the reports associated with this task will be removed.
 This action is only available if the task has status "New" or "Done".
 </p>
 
-<h4>Reports</h4>
+<h4>Task Details</h4>
 
 <p>
-Pressing the report icon <img src="/img/list.png" alt="Reports" title="Reports" /> will
-switch to an overview on all reports for this task.
+Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
+switch to an overview of this task, including a list of all reports for the task.
 It is the same action as clicking on the number of reports in the column "Reports: Total".
-</p>
-
-<p>
-This action is only available if at least one report is present.
 </p>
 
 m4_include(`footer.m4')
