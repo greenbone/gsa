@@ -1,5 +1,9 @@
 2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/help/scanconfig_details.htm4: Close tags properly.
+
+2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (task): Use details button instead of list button
 	for summary link.  Always enable this details button.
 	(escalator [details], target [details], html-config-table): Use details
