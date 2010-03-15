@@ -1,5 +1,11 @@
 2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad.c (DEFAULT_GSAD_PORT): Remove.
+	(DEFAULT_GSAD_HTTP_PORT, DEFAULT_GSAD_HTTPS_PORT): New defines.
+	(main): Use appropriate define for gsad_port, depending on http_only.
+
+2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/help/scanconfig_details.htm4: Close tags properly.
 
 2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>

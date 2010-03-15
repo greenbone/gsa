@@ -70,9 +70,14 @@
 #include "validator.h"
 
 /**
- * @brief Fallback GSAD port.
+ * @brief Fallback GSAD port for HTTPS.
  */
-#define DEFAULT_GSAD_PORT 443
+#define DEFAULT_GSAD_HTTPS_PORT 443
+
+/**
+ * @brief Fallback GSAD port for HTTP.
+ */
+#define DEFAULT_GSAD_HTTP_PORT 9392
 
 /**
  * @brief Fallback GSAD port.
@@ -3508,7 +3513,7 @@ int
 main (int argc, char **argv)
 {
   gchar *rc_name;
-  int gsad_port = DEFAULT_GSAD_PORT;
+  int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
   int gsad_administrator_port = DEFAULT_OPENVAS_ADMINISTRATOR_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
@@ -3624,6 +3629,8 @@ main (int argc, char **argv)
   g_log_set_always_fatal (G_LOG_FATAL_MASK);
 
   /* Finish processing the command line options. */
+
+  gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;
 
   if (gsad_port_string)
     {
