@@ -968,6 +968,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="resume_stopped_task_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Resume Stopped Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="task_count">
 </xsl:template>
 
@@ -1172,6 +1184,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  title="Start Task">
                 <img src="/img/start.png" border="0" alt="Start"/>
               </a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="status='Stopped'">
+              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}"
+                 title="Resume Task">
+                <img src="/img/resume.png"
+                     border="0"
+                     alt="Resume"
+                     style="margin-left:3px;"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                   style="margin-left:3px;"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
