@@ -1,3 +1,8 @@
+2010-03-16  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/img/resume.png, src/html/src/img/resume_inactive.png: Make
+	right margin wider.  Thanks to Karl-Heinz Ruskowski.
+
 2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad.c (DEFAULT_GSAD_PORT): Remove.
@@ -38,8 +43,8 @@
 
 	* src/html/src/help/tasks.htm4: Add Resume Task section.
 
-	* src/html/src/img/resume_inactive.png,
-	src/html/src/img/resume_inactive.png: New files.
+	* src/html/src/img/resume.png, src/html/src/img/resume_inactive.png: New
+	files.  Created by Karl-Heinz Ruskowski.
 
 2010-03-08  Michael Wiegand <michael.wiegand@intevation.de>
 
