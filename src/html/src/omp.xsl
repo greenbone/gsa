@@ -1176,6 +1176,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <xsl:choose>
+            <xsl:when test="string-length(schedule/@id) &gt; 0">
+              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}"
+                 title="Schedule Details">
+                <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
+              </a>
+            </xsl:when>
             <xsl:when test="status='Running' or status='Requested' or status='Stop Requested' or status='Delete Requested'">
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
@@ -1187,6 +1193,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
+            <xsl:when test="string-length(schedule/@id) &gt; 0">
+              <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                   style="margin-left:3px;"/>
+            </xsl:when>
             <xsl:when test="status='Stopped'">
               <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}"
                  title="Resume Task">
@@ -1202,6 +1212,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
+            <xsl:when test="string-length(schedule/@id) &gt; 0">
+              <img src="/img/stop_inactive.png" border="0"
+                   alt="Abort"
+                   style="margin-left:3px;"/>
+            </xsl:when>
             <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped'">
               <img src="/img/stop_inactive.png" border="0"
                    alt="Abort"
