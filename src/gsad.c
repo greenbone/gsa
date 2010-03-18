@@ -215,8 +215,10 @@ init_validator ()
                          "|(get_report)"
                          "|(get_settings)"
                          "|(get_status)"
-                         "|(get_target)"
+                         "|(get_schedule)"
+                         "|(get_schedules)"
                          "|(get_system_reports)"
+                         "|(get_target)"
                          "|(get_targets)"
                          "|(get_user)"
                          "|(get_users)"
@@ -276,6 +278,7 @@ init_validator ()
   openvas_validator_add (validator, "search_phrase", "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
 
 
@@ -1928,6 +1931,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *text         = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
+  const char *schedule_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
   credentials_t *credentials = NULL;
 
@@ -2067,6 +2071,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                 "sort_order");
       if (openvas_validate (validator, "sort_order", sort_order))
         sort_order = NULL;
+
+      schedule_id = MHD_lookup_connection_value (connection,
+                                                 MHD_GET_ARGUMENT_KIND,
+                                                 "schedule_id");
+      if (openvas_validate (validator, "schedule_id", schedule_id))
+        schedule_id = NULL;
 
       levels = MHD_lookup_connection_value (connection,
                                             MHD_GET_ARGUMENT_KIND,
@@ -2492,6 +2502,12 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "get_status"))
     return get_status_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
+
+  else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
+    return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);
+
+  else if (!strcmp (cmd, "get_schedules"))
+    return get_schedules_omp (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "get_system_reports")))
     return get_system_reports_omp (credentials, duration);

@@ -53,6 +53,7 @@ m4_define(`GSAD_HTML_ICON_DETAILS', `<img src="/img/details.png" alt="Details" t
        <li><a href="/omp?cmd=get_lsc_credentials">Credentials</a></li>
        <li><a href="/omp?cmd=get_agents">Agents</a></li>
        <li><a href="/omp?cmd=get_escalators">Escalators</a></li>
+       <li><a href="/omp?cmd=get_schedules">Schedules</a></li>
       </ul>
       </li>
       <li>Administration

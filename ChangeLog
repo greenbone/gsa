@@ -1,3 +1,21 @@
+2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Start list and details pages for schedules.
+
+	* src/gsad_omp.c (get_schedule_omp, get_schedules_omp): New function.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/gsad.c (init_validator): Add get_schedule and get_schedules command.
+	Add schedule_id validator.
+	(exec_omp_get): Add get_schedule and get_schedules command handling.
+
+	* src/html/src/omp.xsl (html-create-schedule-form, html-schedules-table)
+	(create_schedule_response, delete_schedule_response, schedule)
+	(schedule [details], get_schedule, get_schedules): New templates.
+
+	* src/html/header.m4, src/html/src/gsad.xsl: Add "Schedules" menu item.
+
 2010-03-17  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (task): Always grey resume and stop buttons for

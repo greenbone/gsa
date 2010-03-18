@@ -3805,6 +3805,295 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END CONFIGS MANAGEMENT -->
 
+<!-- BEGIN SCHEDULES MANAGEMENT -->
+
+<xsl:template name="html-create-schedule-form">
+  <xsl:param name="lsc-credentials"></xsl:param>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Schedule
+      <a href="/help/configure_schedules.html#newschedule"
+         title="Help: Configure Schedules (New Schedule)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_schedule"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name</td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Hosts</td>
+            <td>
+              <input type="text" name="hosts" value="localhost" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Credential (optional)</td>
+            <td>
+              <select name="password">
+                <option value="--">--</option>
+                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Schedule"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-schedules-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Schedules
+      <a href="/help/configure_schedules.html#schedules"
+         title="Help: Configure Schedules (Schedules)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>First Run</td>
+            <td>Next Run</td>
+            <td>Period (s)</td>
+            <td>Duration (s)</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="schedule"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     CREATE_SCHEDULE_RESPONSE -->
+
+<xsl:template match="create_schedule_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Schedule</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_SCHEDULE_RESPONSE -->
+
+<xsl:template match="delete_schedule_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Schedule
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     SCHEDULE -->
+
+<xsl:template match="schedule">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="first_time"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="next_time &gt; 0">
+          <xsl:value-of select="next_time"/>
+        </xsl:when>
+        <xsl:otherwise>-</xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="period = 0">
+          Once
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="period"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="duration = 0">
+          Duration of Operation
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="duration"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_schedule&amp;schedue_id={@id}"
+             title="Delete Schedule" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}"
+         title="Schedule Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="schedule" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Schedule Details
+       <a href="/help/configure_schedules.html#scheduledetails"
+         title="Help: Configure Schedules (Schedule Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:right;">
+        <a href="?cmd=get_schedules">Back to Schedules</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>First time:</td>
+          <td><xsl:value-of select="first_time"/></td>
+        </tr>
+        <tr>
+          <td>Next time:</td>
+          <td><xsl:value-of select="first_time"/></td>
+        </tr>
+        <tr>
+          <td>Period:</td>
+          <td><xsl:value-of select="period"/></td>
+        </tr>
+        <tr>
+          <td>Duration:</td>
+          <td><xsl:value-of select="duration"/></td>
+        </tr>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1>Tasks using this Schedule: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks using this Schedule</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_SCHEDULE -->
+
+<xsl:template match="get_schedule">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_schedule_response"/>
+  <xsl:apply-templates select="get_schedules_response/schedule" mode="details"/>
+</xsl:template>
+
+<!--     GET_SCHEDULES -->
+
+<xsl:template match="get_schedules">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_schedule_response"/>
+  <xsl:apply-templates select="create_schedule_response"/>
+  <!-- The for-each makes the get_schedules_response the current node. -->
+  <xsl:for-each select="get_schedules_response | commands_response/get_schedules_response">
+    <xsl:call-template name="html-schedules-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END SCHEDULES MANAGEMENT -->
+
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
