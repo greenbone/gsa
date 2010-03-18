@@ -1,5 +1,9 @@
 2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-report-table): Add schedule.
+
+2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Start list and details pages for schedules.
 
 	* src/gsad_omp.c (get_schedule_omp, get_schedules_omp): New function.

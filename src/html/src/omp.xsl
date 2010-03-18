@@ -614,6 +614,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Schedule:</td>
+          <td>
+            <xsl:if test="task/schedule">
+              <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}">
+                <xsl:value-of select="task/schedule/name"/>
+              </a>
+              <xsl:choose>
+                <xsl:when test="task/schedule/next_time = 0">
+                  (Next due: over)
+                </xsl:when>
+                <xsl:otherwise>
+                  (Next due: <xsl:value-of select="task/schedule/name"/>)
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
+          </td>
+        </tr>
+        <tr>
           <td>Target:</td>
           <td>
             <a href="/omp?cmd=get_target&amp;name={task/target/name}">
