@@ -119,7 +119,7 @@ CONFIGURE_FILE (gsad_log_conf.cmake_in
 ## Install
 
 install (TARGETS gsad
-         RUNTIME DESTINATION ${BINDIR}
+         RUNTIME DESTINATION ${SBINDIR}
          LIBRARY DESTINATION ${LIBDIR}
          ARCHIVE DESTINATION ${LIBDIR}/static)
 

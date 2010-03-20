@@ -1,3 +1,7 @@
++2010-03-20  Stephan Kleine
+
+	* src/CMakeLists.txt: Install gsad into ${SBINDIR} since it is a service.
+
 2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (html-report-table): Add schedule.
