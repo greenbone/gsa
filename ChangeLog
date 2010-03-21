@@ -1,4 +1,9 @@
-+2010-03-20  Stephan Kleine
+2010-03-21  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad_omp.c (delete_note_omp): Remove openvas_server_close called
+	before session is open.  Closes #1334 (http://bugs.openvas.org/1334).
+
+2010-03-20  Stephan Kleine
 
 	* src/CMakeLists.txt: Install gsad into ${SBINDIR} since it is a service.
 

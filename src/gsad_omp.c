@@ -4443,14 +4443,11 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       char *ret;
 
       if (oid == NULL)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while deleting a note. "
-                               "The note remains intact. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_notes");
-        }
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a note. "
+                             "The note remains intact. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
       ret = get_nvt_details (credentials, oid, extra);
