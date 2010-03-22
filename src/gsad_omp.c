@@ -4999,6 +4999,70 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
 }
 
 /**
+ * @brief Delete a schedule, get all schedules, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  schedule     UUID of schedule.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_schedule_omp (credentials_t * credentials, const char *schedule)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a schedule. "
+                         "The schedule was not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_schedules");
+
+  xml = g_string_new ("<get_schedules>");
+
+  /* Delete the schedule and get all schedules. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<delete_schedule schedule_id=\"%s\"/>"
+                            "<get_schedules"
+                            " details=\"1\""
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            schedule)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a schedule. "
+                           "The schedule was not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_schedules");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a schedule. "
+                           "It is unclear whether the schedule has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_schedules");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_schedules>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Get all system reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

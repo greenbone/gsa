@@ -1,3 +1,14 @@
+2010-03-22  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Complete support for removing schedules.
+
+	* src/gsad.c (init_validator): Add delete_schedule command.
+	(exec_omp_get): Handle command "delete_schedule".
+
+	* src/gsad_omp.c (delete_schedule_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
 2010-03-21  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (delete_note_omp): Remove openvas_server_close called

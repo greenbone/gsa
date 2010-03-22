@@ -189,6 +189,7 @@ init_validator ()
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_report)"
+                         "|(delete_schedule)"
                          "|(delete_target)"
                          "|(delete_task)"
                          "|(delete_user)"
@@ -2274,6 +2275,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))
     return delete_report_omp (credentials, report_id, task_id);
+
+  else if ((!strcmp (cmd, "delete_schedule"))
+           && (schedule_id != NULL))
+    return delete_schedule_omp (credentials, schedule_id);
 
   else if ((!strcmp (cmd, "delete_user")) && (name != NULL))
     return delete_user_oap (credentials, name);
