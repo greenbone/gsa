@@ -4999,6 +4999,137 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
 }
 
 /**
+ * @brief Create a schedule, get all schedules, XSL transform the result.
+ *
+ * @param[in]   credentials   Username and password for authentication.
+ * @param[in]   name          Name of new schedule.
+ * @param[in]   comment       Comment on schedule.
+ * @param[in]   hour          First time hour (0 to 23).
+ * @param[in]   minute        First time minute (0 to 59).
+ * @param[in]   day_of_month  First time day of month (1 to 31).
+ * @param[in]   month         First time month (1 to 12).
+ * @param[in]   year          First time year.
+ * @param[in]   period        How often the action will run.  0 for once.  0 if
+ *                            "".
+ * @param[in]   duration      How long the action will run for.  0 for entire
+ *                            duration of action.  0 if "".
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_schedule_omp (credentials_t * credentials, const char *name,
+                     const char *comment, const char *hour, const char *minute,
+                     const char *day_of_month, const char *month,
+                     const char *year, const char *period, const char *duration)
+{
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new schedule. "
+                         "No new schedule was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_schedules");
+
+  xml = g_string_new ("<get_schedules>");
+
+  if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
+      || month == NULL || year == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
+  else
+    {
+      int ret;
+
+      /* Create the schedule. */
+
+      ret = openvas_server_sendf (&session,
+                                  "<create_schedule>"
+                                  "<name>%s</name>"
+                                  "%s%s%s"
+                                  "<first_time>"
+                                  "<hour>%s</hour>"
+                                  "<minute>%s</minute>"
+                                  "<day_of_month>%s</day_of_month>"
+                                  "<month>%s</month>"
+                                  "<year>%s</year>"
+                                  "</first_time>"
+                                  "<period>%s</period>"
+                                  "<duration>%s</duration>"
+                                  "</create_schedule>",
+                                  name,
+                                  comment ? "<comment>" : "",
+                                  comment ? comment : "",
+                                  comment ? "</comment>" : "",
+                                  hour,
+                                  minute,
+                                  day_of_month,
+                                  month,
+                                  year,
+                                  ((*period == '\0') ? "0" : period),
+                                  ((*duration == '\0') ? "0" : duration));
+
+      if (ret == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new schedule. "
+                               "No new schedule was created. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_schedules");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new schedule. "
+                               "It is unclear whether the schedule has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_schedules");
+        }
+    }
+
+  /* Get all the schedules. */
+
+  if (openvas_server_send (&session,
+                           "<get_schedules"
+                           " details=\"1\""
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new schedule. "
+                           "A new schedule was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_schedules");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new schedule. "
+                           "A new schedule was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_schedules");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_schedules>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Delete a schedule, get all schedules, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

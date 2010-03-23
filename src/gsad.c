@@ -180,6 +180,7 @@ init_validator ()
                          "|(create_escalator)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
+                         "|(create_schedule)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(create_user)"
@@ -242,6 +243,7 @@ init_validator ()
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\\\]{1,40}$");
+  openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
@@ -251,16 +253,20 @@ init_validator ()
   openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
+  openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
   openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:], ;:\\./\\\\]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
+  openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
+  openvas_validator_add (validator, "month",      "^(0[0-9]{1,1})|10|11|12$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "note_task_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
+  openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
@@ -281,10 +287,11 @@ init_validator ()
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
+  openvas_validator_add (validator, "year",       "^[0-9]+$");
 
 
   openvas_validator_alias (validator, "base",         "name");
-  openvas_validator_alias (validator, "duration",     "number");
+  openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "escalator",    "name");
   openvas_validator_alias (validator, "scanconfig",   "name");
   openvas_validator_alias (validator, "scantarget",   "name");
@@ -298,6 +305,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "notes",        "boolean");
+  openvas_validator_alias (validator, "period",       "optional_number");
 }
 
 
@@ -433,9 +441,12 @@ struct gsad_connection_info
     char *comment;       ///< Value of "comment" parameter.
     char *condition;     ///< Value of "condition" parameter.
     char *credential_login; ///< Value of "credential_login" parameter.
+    char *day_of_month;  ///< Value of "day_of_month" parameter.
+    char *duration;      ///< Value of "duration" parameter.
     char *escalator;     ///< Value of "escalator" parameter.
     char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
+    char *hour;          ///< Value of "hour" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
@@ -450,7 +461,10 @@ struct gsad_connection_info
     char *hosts;         ///< Value of "hosts" parameter.
     char *hosts_allow;   ///< Value of "hosts_allow" parameter.
     char *login;         ///< Value of "login" parameter.
+    char *minute;        ///< Value of "minute" parameter.
+    char *month;         ///< Value of "month" parameter.
     char *oid;           ///< Value of "oid" parameter.
+    char *period;        ///< Value of "period" parameter.
     char *pw;            ///< Value of "pw" parameter.
     char *password;      ///< Value of "password" parameter.
     char *port;          ///< Value of "port" parameter.
@@ -469,6 +483,7 @@ struct gsad_connection_info
     int howto_install_size; ///< Size of "howto_install" parameter.
     char *howto_use;     ///< Value of "howto_use" parameter.
     int howto_use_size;  ///< Size of "howto_use" parameter.
+    char *year;          ///< Value of "year" parameter.
     GArray *condition_data; ///< Collection of "condition_data:*" parameters.
     GArray *event_data;  ///< Collection of "event_data:*" parameters.
     GArray *method_data; ///< Collection of "method_data:*" parameters.
@@ -624,9 +639,14 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.comment);
   free (con_info->req_parms.condition);
   free (con_info->req_parms.credential_login);
+  free (con_info->req_parms.day_of_month);
+  free (con_info->req_parms.duration);
   free (con_info->req_parms.escalator);
   free (con_info->req_parms.event);
   free (con_info->req_parms.family);
+  free (con_info->req_parms.hour);
+  free (con_info->req_parms.minute);
+  free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
   free (con_info->req_parms.scanconfig);
@@ -637,6 +657,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.hosts);
   free (con_info->req_parms.hosts_allow);
   free (con_info->req_parms.login);
+  free (con_info->req_parms.period);
   free (con_info->req_parms.pw);
   free (con_info->req_parms.password);
   free (con_info->req_parms.port);
@@ -655,6 +676,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.installer);
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
+  free (con_info->req_parms.year);
   if (con_info->req_parms.condition_data)
     {
       gchar *item;
@@ -919,12 +941,27 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "credential_login"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.credential_login);
+      if (!strcmp (key, "day_of_month"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.day_of_month);
+      if (!strcmp (key, "duration"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.duration);
       if (!strcmp (key, "escalator"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.escalator);
       if (!strcmp (key, "event"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.event);
+      if (!strcmp (key, "hour"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.hour);
+      if (!strcmp (key, "minute"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.minute);
+      if (!strcmp (key, "month"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.month);
       if (!strcmp (key, "modify_password"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.modify_password);
@@ -937,6 +974,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "login"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.login);
+      if (!strcmp (key, "period"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.period);
       if (!strcmp (key, "pw"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.pw);
@@ -1015,6 +1055,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "search_phrase"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.search_phrase);
+      if (!strcmp (key, "year"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.year);
 
       if (!strcmp (key, "installer"))
         {
@@ -1520,6 +1563,69 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.role,
                          con_info->req_parms.access_hosts,
                          con_info->req_parms.hosts_allow);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_schedule"))
+    {
+      if (openvas_validate (validator, "name", con_info->req_parms.name))
+        {
+          free (con_info->req_parms.name);
+          con_info->req_parms.name = NULL;
+        }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
+      if (openvas_validate (validator, "hour", con_info->req_parms.hour))
+        {
+          free (con_info->req_parms.hour);
+          con_info->req_parms.hour = NULL;
+        }
+      if (openvas_validate (validator, "minute", con_info->req_parms.minute))
+        {
+          free (con_info->req_parms.minute);
+          con_info->req_parms.minute = NULL;
+        }
+      if (openvas_validate (validator,
+                            "day_of_month",
+                            con_info->req_parms.day_of_month))
+        {
+          free (con_info->req_parms.day_of_month);
+          con_info->req_parms.day_of_month = NULL;
+        }
+      if (openvas_validate (validator, "month", con_info->req_parms.month))
+        {
+          free (con_info->req_parms.month);
+          con_info->req_parms.month = NULL;
+        }
+      if (openvas_validate (validator, "year", con_info->req_parms.year))
+        {
+          free (con_info->req_parms.year);
+          con_info->req_parms.year = NULL;
+        }
+      if (openvas_validate (validator, "period", con_info->req_parms.period))
+        {
+          free (con_info->req_parms.period);
+          con_info->req_parms.period = NULL;
+        }
+      if (openvas_validate (validator,
+                            "duration",
+                            con_info->req_parms.duration))
+        {
+          free (con_info->req_parms.duration);
+          con_info->req_parms.duration = NULL;
+        }
+      con_info->response =
+        create_schedule_omp (credentials,
+                             con_info->req_parms.name,
+                             con_info->req_parms.comment,
+                             con_info->req_parms.hour,
+                             con_info->req_parms.minute,
+                             con_info->req_parms.day_of_month,
+                             con_info->req_parms.month,
+                             con_info->req_parms.year,
+                             con_info->req_parms.period,
+                             con_info->req_parms.duration);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
@@ -2515,7 +2621,8 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_schedules_omp (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "get_system_reports")))
-    return get_system_reports_omp (credentials, duration);
+    return get_system_reports_omp (credentials,
+                                   (*duration == '\0') ? "0" : duration);
 
   else if ((!strcmp (cmd, "get_target")) && (name != NULL))
     return get_target_omp (credentials, name, sort_field, sort_order);

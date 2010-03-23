@@ -1,3 +1,22 @@
+2010-03-23  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add schedule creation.
+
+	* src/gsad.c (init_validator): Add create_schedule command.
+	Add validators for create_schedule.  Change duration to an
+	"optional_number".
+	(struct req_parms): Add params.
+	(free_resources): Add param freeing.
+	(serve_post): Add create_schedule handling.
+	(exec_omp_get): Pass "0" to get_system_reports_omp if duration is empty.
+
+	* src/gsad_omp.c (create_schedule_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/src/omp.xsl (html-create-schedule-form): Add schedule params.
+	(get_schedules): Add call to html-create-schedule-form.
+
 2010-03-22  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Complete support for removing schedules.

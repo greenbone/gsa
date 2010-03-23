@@ -83,6 +83,10 @@ char * create_agent_omp (credentials_t *, const char *, const char *,
                          const char *, int);
 char * delete_agent_omp (credentials_t *, const char *);
 
+char * create_schedule_omp (credentials_t *, const char *, const char *,
+                            const char *, const char *, const char *,
+                            const char *, const char *, const char *,
+                            const char *);
 char * delete_schedule_omp (credentials_t *, const char *);
 char * get_schedule_omp (credentials_t *, const char *, const char *,
                          const char *);
