@@ -1,3 +1,19 @@
+2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Add schedule input to "New Task" page.
+
+	* src/gsad.c (struct req_parms): Add schedule_id.
+	(free_resources): Free schedule_id.
+	(serve_post): Pass schedule ID to create_task_omp.
+
+	* src/gsad_omp.c (gsad_newtask): Also get schedules.
+	(create_task_omp): Add schedule_id arg.  Send to Manager in CREATE_TASK.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/src/omp.xsl (schedule [newtask]): New template.
+	(gsad_newtask): Add schedule field.
+
 2010-03-23  Matthew Mundell <matthew.mundell@intevation.de>
 
 	Add schedule creation.

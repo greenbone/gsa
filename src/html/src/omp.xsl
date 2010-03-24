@@ -792,6 +792,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <option value="{name}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
+<xsl:template match="schedule" mode="newtask">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
 <xsl:template name="status_bar">
   <xsl:param name="status">(Unknown)</xsl:param>
   <xsl:param name="progress">(Unknown)</xsl:param>
@@ -5349,6 +5353,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <select name="escalator">
               <option value="--">--</option>
               <xsl:apply-templates select="get_escalators_response/escalator"
+                                   mode="newtask"/>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Schedule (optional)</td>
+          <td>
+            <select name="schedule_id">
+              <option value="--">--</option>
+              <xsl:apply-templates select="get_schedules_response/schedule"
                                    mode="newtask"/>
             </select>
           </td>

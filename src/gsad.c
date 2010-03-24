@@ -449,6 +449,7 @@ struct gsad_connection_info
     char *hour;          ///< Value of "hour" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
+    char *schedule_id;   ///< Value of "escalator" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *scantarget;    ///< Value of "scantarget" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
@@ -651,6 +652,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.method);
   free (con_info->req_parms.scanconfig);
   free (con_info->req_parms.scantarget);
+  free (con_info->req_parms.schedule_id);
   free (con_info->req_parms.xml_file);
   free (con_info->req_parms.role);
   free (con_info->req_parms.submit);
@@ -1040,6 +1042,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "max_results"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.max_results);
+      if (!strcmp (key, "schedule_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.schedule_id);
       if (!strcmp (key, "sort_field"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.sort_field);
@@ -1512,16 +1517,27 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.scanconfig);
           con_info->req_parms.scanconfig  = NULL;
         }
+      if (con_info->req_parms.schedule_id
+          && strcmp (con_info->req_parms.schedule_id, "--")
+          && openvas_validate (validator,
+                               "schedule_id",
+                               con_info->req_parms.schedule_id))
+        {
+          free (con_info->req_parms.schedule_id);
+          con_info->req_parms.schedule_id  = NULL;
+        }
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.scanconfig == NULL) ||
-          (con_info->req_parms.scantarget == NULL))
+          (con_info->req_parms.scantarget == NULL) ||
+          (con_info->req_parms.schedule_id == NULL))
         con_info->response = gsad_newtask (credentials, "Invalid parameter");
       else
         con_info->response =
           create_task_omp (credentials, con_info->req_parms.name, "comment",
                            con_info->req_parms.scantarget,
                            con_info->req_parms.scanconfig,
-                           con_info->req_parms.escalator);
+                           con_info->req_parms.escalator,
+                           con_info->req_parms.schedule_id);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {

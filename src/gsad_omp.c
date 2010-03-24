@@ -356,6 +356,32 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
+  if (openvas_server_send (&session,
+                           "<get_schedules"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the schedule list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the schedule list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
   if (message)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Task"));
   g_string_append_printf (xml,
@@ -375,12 +401,14 @@ gsad_newtask (credentials_t * credentials, const char* message)
  * @param[in]  scantarget   Target for task.
  * @param[in]  scanconfig   Config for task.
  * @param[in]  escalator    Escalator for task.
+ * @param[in]  schedule_id  UUID of schedule for task.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *scantarget, char *scanconfig, const char *escalator)
+                 char *scantarget, char *scanconfig, const char *escalator,
+                 const char *schedule_id)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -399,6 +427,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<commands>"
                                 "<create_task>"
                                 "<config>%s</config>"
+                                "<schedule>%s</schedule>"
                                 "<target>%s</target>"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
@@ -408,6 +437,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 scanconfig,
+                                strcmp (schedule_id, "--") ? schedule_id : "",
                                 scantarget,
                                 name,
                                 comment);
@@ -417,6 +447,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<create_task>"
                                 "<config>%s</config>"
                                 "<escalator>%s</escalator>"
+                                "<schedule id=\"%s\"/>"
                                 "<target>%s</target>"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
@@ -427,6 +458,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "</commands>",
                                 scanconfig,
                                 escalator,
+                                strcmp (schedule_id, "--") ? schedule_id : "",
                                 scantarget,
                                 name,
                                 comment);
