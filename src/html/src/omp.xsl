@@ -4143,7 +4143,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Next time:</td>
-          <td><xsl:value-of select="first_time"/></td>
+          <td><xsl:value-of select="next_time"/></td>
         </tr>
         <tr>
           <td>Period:</td>

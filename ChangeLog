@@ -1,5 +1,10 @@
 2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (schedule [details]): Get next_time for next time,
+	instead of first_time.
+
+2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-report-table): Get next time for "Next due",
 	instead of name.
 
