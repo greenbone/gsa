@@ -625,7 +625,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   (Next due: over)
                 </xsl:when>
                 <xsl:otherwise>
-                  (Next due: <xsl:value-of select="task/schedule/name"/>)
+                  (Next due: <xsl:value-of select="task/schedule/next_time"/>)
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>
