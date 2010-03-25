@@ -3958,14 +3958,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Period</td>
+            <td valign="top" width="125">Period (optional)</td>
             <td>
               <input type="text" name="period" value="" size="30"
                      maxlength="80"/> seconds
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Duration</td>
+            <td valign="top" width="125">Duration (optional)</td>
             <td>
               <input type="text" name="duration" value="" size="30"
                      maxlength="80"/> seconds
