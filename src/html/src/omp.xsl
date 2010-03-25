@@ -4093,7 +4093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_schedule&amp;schedue_id={@id}"
+          <a href="/omp?cmd=delete_schedule&amp;schedule_id={@id}"
              title="Delete Schedule" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>

@@ -1,4 +1,8 @@
-2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (schedule): Correct delete URL.
+
+2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (html-create-schedule-form): Add "(optional)" to
 	period and duration fields.
