@@ -1,5 +1,10 @@
 2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (schedule [details]): Add units to period and
+	duration.
+
+2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (schedule): Correct delete URL.
 
 2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
