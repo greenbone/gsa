@@ -1,3 +1,23 @@
+2010-03-27  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (html-create-schedule-form): Add odd row
+	background colours.  Switch period and duration input to time and unit
+	dropdowns.
+	(html-schedules-table): Remove "(s)" from period heading.
+	(schedule): Include period months.  Add unit to period cells.  Shorten
+	entire duration text.
+
+	* src/gsad.c (init_validator): Add calendar_unit rule and duration_unit
+	and period_unit aliases.
+	(struct req_parms): Add duration_unit and period_unit.
+	(free_resources): Free duration_unit and period_unit.
+	(serve_post): Also pass units to create_schedule_omp.
+
+	* src/gsad_omp.c (create_schedule_omp): Add period_unit and duration_unit
+	args.  Add to CREATE_SCHEDULE request.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (schedule [details]): Add units to period and

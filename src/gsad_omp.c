@@ -5033,18 +5033,20 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
 /**
  * @brief Create a schedule, get all schedules, XSL transform the result.
  *
- * @param[in]   credentials   Username and password for authentication.
- * @param[in]   name          Name of new schedule.
- * @param[in]   comment       Comment on schedule.
- * @param[in]   hour          First time hour (0 to 23).
- * @param[in]   minute        First time minute (0 to 59).
- * @param[in]   day_of_month  First time day of month (1 to 31).
- * @param[in]   month         First time month (1 to 12).
- * @param[in]   year          First time year.
- * @param[in]   period        How often the action will run.  0 for once.  0 if
- *                            "".
- * @param[in]   duration      How long the action will run for.  0 for entire
- *                            duration of action.  0 if "".
+ * @param[in]   credentials    Username and password for authentication.
+ * @param[in]   name           Name of new schedule.
+ * @param[in]   comment        Comment on schedule.
+ * @param[in]   hour           First time hour (0 to 23).
+ * @param[in]   minute         First time minute (0 to 59).
+ * @param[in]   day_of_month   First time day of month (1 to 31).
+ * @param[in]   month          First time month (1 to 12).
+ * @param[in]   year           First time year.
+ * @param[in]   period         How often the action will run.  0 for once.  0 if
+ *                             "".
+ * @param[in]   period_unit    The unit of period.  "second" if "".
+ * @param[in]   duration       How long the action will run for.  0 for entire
+ *                             duration of action.  0 if "".
+ * @param[in]   duration_unit  The unit of duration.  "second" if "".
  *
  * @return Result of XSL transformation.
  */
@@ -5052,7 +5054,9 @@ char *
 create_schedule_omp (credentials_t * credentials, const char *name,
                      const char *comment, const char *hour, const char *minute,
                      const char *day_of_month, const char *month,
-                     const char *year, const char *period, const char *duration)
+                     const char *year,
+                     const char *period, const char *period_unit,
+                     const char *duration, const char *duration_unit)
 {
   gnutls_session_t session;
   GString *xml;
@@ -5068,7 +5072,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
   xml = g_string_new ("<get_schedules>");
 
   if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
-      || month == NULL || year == NULL)
+      || duration == NULL || duration_unit == NULL || month == NULL || period == NULL
+      || period_unit == NULL || year == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
   else
     {
@@ -5087,8 +5092,14 @@ create_schedule_omp (credentials_t * credentials, const char *name,
                                   "<month>%s</month>"
                                   "<year>%s</year>"
                                   "</first_time>"
-                                  "<period>%s</period>"
-                                  "<duration>%s</duration>"
+                                  "<period>"
+                                  "<unit>%s</unit>"
+                                  "%s"
+                                  "</period>"
+                                  "<duration>"
+                                  "<unit>%s</unit>"
+                                  "%s"
+                                  "</duration>"
                                   "</create_schedule>",
                                   name,
                                   comment ? "<comment>" : "",
@@ -5099,8 +5110,14 @@ create_schedule_omp (credentials_t * credentials, const char *name,
                                   day_of_month,
                                   month,
                                   year,
-                                  ((*period == '\0') ? "0" : period),
-                                  ((*duration == '\0') ? "0" : duration));
+                                  (strcmp (period_unit, "")
+                                    ? period_unit
+                                    : "second"),
+                                  period,
+                                  (strcmp (duration_unit, "")
+                                    ? duration_unit
+                                    : "second"),
+                                  duration);
 
       if (ret == -1)
         {

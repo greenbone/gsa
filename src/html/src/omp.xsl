@@ -3843,7 +3843,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="cmd" value="create_schedule"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Name</td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -3856,7 +3856,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">First Time</td>
             <td>
               <select name="hour">
@@ -3960,15 +3960,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Period (optional)</td>
             <td>
-              <input type="text" name="period" value="" size="30"
-                     maxlength="80"/> seconds
+              <select name="period">
+                <option value="00" selected="1">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+              </select>
+              <select name="period_unit">
+                <option value="minute">minute(s)</option>
+                <option value="hour" selected="1">hour(s)</option>
+                <option value="day">day(s)</option>
+                <option value="week">week(s)</option>
+                <option value="month">month(s)</option>
+              </select>
             </td>
           </tr>
-          <tr>
+          <tr class="odd">
             <td valign="top" width="125">Duration (optional)</td>
             <td>
-              <input type="text" name="duration" value="" size="30"
-                     maxlength="80"/> seconds
+              <select name="duration">
+                <option value="00" selected="1">00</option>
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+              </select>
+              <select name="duration_unit">
+                <option value="minute">minute(s)</option>
+                <option value="hour" selected="1">hour(s)</option>
+                <option value="day">day(s)</option>
+                <option value="week">week(s)</option>
+              </select>
             </td>
           </tr>
           <tr>
@@ -3999,7 +4062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>First Run</td>
             <td>Next Run</td>
-            <td>Period (s)</td>
+            <td>Period</td>
             <td>Duration (s)</td>
             <td width="100">Actions</td>
           </tr>
@@ -4072,18 +4135,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="period = 0">
+        <xsl:when test="period = 0 and period_months = 0">
           Once
         </xsl:when>
+        <xsl:when test="period = 0 and period_months = 1">
+          1 month
+        </xsl:when>
+        <xsl:when test="period = 0">
+          <xsl:value-of select="period_months"/> months
+        </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="period"/>
+          <xsl:value-of select="period"/> secs
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
       <xsl:choose>
         <xsl:when test="duration = 0">
-          Duration of Operation
+          Entire Operation
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="duration"/>
