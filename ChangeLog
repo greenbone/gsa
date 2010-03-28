@@ -1,3 +1,11 @@
+2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+
+	Display schedule intervals in unit format.
+
+	* src/html/src/omp.xsl (interval-with-unit): New template.
+	(schedule): Call interval-with-unit for intervals.
+	(schedule [details]): Display unit interval instead of just seconds.
+
 2010-03-27  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/html/src/omp.xsl (html-create-schedule-form): Add odd row

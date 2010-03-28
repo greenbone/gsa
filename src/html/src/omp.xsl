@@ -4105,6 +4105,62 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     SCHEDULE -->
 
+<xsl:template name="interval-with-unit">
+  <xsl:param name="interval">0</xsl:param>
+  <xsl:choose>
+    <xsl:when test="$interval mod (60 * 60 * 24 * 7) = 0">
+      <xsl:value-of select="$interval div (60 * 60 * 24 * 7)"/>
+      <xsl:choose>
+        <xsl:when test="$interval = (60 * 60 * 24 * 7)">
+          week
+        </xsl:when>
+        <xsl:otherwise>
+          weeks
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$interval mod (60 * 60 * 24) = 0">
+      <xsl:value-of select="$interval div (60 * 60 * 24)"/>
+      <xsl:choose>
+        <xsl:when test="$interval = (60 * 60 * 24)">
+          day
+        </xsl:when>
+        <xsl:otherwise>
+          days
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$interval mod (60 * 60) = 0">
+      <xsl:value-of select="$interval div (60 * 60)"/>
+      <xsl:choose>
+        <xsl:when test="$interval = (60 * 60)">
+          hour
+        </xsl:when>
+        <xsl:otherwise>
+          hours
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$interval mod (60) = 0">
+      <xsl:value-of select="$interval div (60)"/>
+      <xsl:choose>
+        <xsl:when test="$interval = 60">
+          min
+        </xsl:when>
+        <xsl:otherwise>
+          mins
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="$interval = 1">
+      <xsl:value-of select="$interval"/> sec
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$interval"/> secs
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="schedule">
   <xsl:variable name="class">
     <xsl:choose>
@@ -4145,7 +4201,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="period_months"/> months
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="period"/> secs
+          <xsl:call-template name="interval-with-unit">
+            <xsl:with-param name="interval">
+              <xsl:value-of select="period"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -4155,7 +4215,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           Entire Operation
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="duration"/>
+          <xsl:call-template name="interval-with-unit">
+            <xsl:with-param name="interval">
+              <xsl:value-of select="duration"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -4216,11 +4280,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Period:</td>
-          <td><xsl:value-of select="period"/> seconds</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="period = 0 and period_months = 0">
+                Once
+              </xsl:when>
+              <xsl:when test="period = 0 and period_months = 1">
+                1 month
+              </xsl:when>
+              <xsl:when test="period = 0">
+                <xsl:value-of select="period_months"/> months
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="interval-with-unit">
+                  <xsl:with-param name="interval">
+                    <xsl:value-of select="period"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td>Duration:</td>
-          <td><xsl:value-of select="duration"/> seconds</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="duration = 0">
+                Entire Operation
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="interval-with-unit">
+                  <xsl:with-param name="interval">
+                    <xsl:value-of select="duration"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
       </table>
 
