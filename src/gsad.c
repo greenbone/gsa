@@ -199,6 +199,7 @@ init_validator ()
                          "|(edit_config_nvt)"
                          "|(edit_note)"
                          "|(edit_settings)"
+                         "|(edit_task)"
                          "|(edit_user)"
                          "|(export_config)"
                          "|(get_agents)"
@@ -233,6 +234,7 @@ init_validator ()
                          "|(save_config_nvt)"
                          "|(save_note)"
                          "|(save_settings)"
+                         "|(save_task)"
                          "|(save_user)"
                          "|(start_task)"
                          "|(sync_feed)$");
@@ -2065,6 +2067,7 @@ exec_omp_get (struct MHD_Connection *connection,
 {
   char *cmd = NULL;
   const char *agent_format = NULL;
+  const char *comment      = NULL;
   const char *task_id      = NULL;
   const char *result_id    = NULL;
   const char *report_id    = NULL;
@@ -2115,6 +2118,13 @@ exec_omp_get (struct MHD_Connection *connection,
       /** @todo Why lookup all parameters when each handler only uses some? */
 
       tracef ("cmd: [%s]\n", cmd);
+
+      comment = MHD_lookup_connection_value (connection,
+                                             MHD_GET_ARGUMENT_KIND,
+                                             "comment");
+      if (openvas_validate (validator, "comment", comment))
+        comment = NULL;
+
       task_id = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
                                              "task_id");
@@ -2526,6 +2536,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "edit_settings"))
     return edit_settings_oap (credentials, sort_field, sort_order);
 
+  else if ((!strcmp (cmd, "edit_task"))
+           && (task_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0))
+    return edit_task_omp (credentials, task_id, "get_status", refresh_interval,
+                          sort_field, sort_order);
+
   else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
     return edit_user_oap (credentials, name);
 
@@ -2800,6 +2817,14 @@ exec_omp_get (struct MHD_Connection *connection,
                             note_task_id, note_result_id, "get_status", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, task_id);
     }
+
+  else if ((!strcmp (cmd, "save_task"))
+           && (task_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0))
+    return save_task_omp (credentials, task_id, name, comment, schedule_id,
+                          "get_status", refresh_interval, sort_field,
+                          sort_order);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,

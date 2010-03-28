@@ -231,7 +231,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="3">Reports</td>
             <td rowspan="2">Threat</td>
             <td rowspan="2">Trend</td>
-            <td width="100" rowspan="2">Actions</td>
+            <td width="115" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
             <td width="1" style="font-size:10px;">Total</td>
@@ -1130,6 +1130,156 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="html-edit-task-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Task
+      <a href="/help/tasks.html#edit_task" title="Help: Edit Task">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="get">
+        <input type="hidden" name="cmd" value="save_task"/>
+        <input type="hidden"
+               name="task_id"
+               value="{commands_response/get_status_response/task/@id}"/>
+        <input type="hidden"
+               name="refresh_interval"
+               value="{refresh_interval}"/>
+        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+           <td valign="top" width="125">Name</td>
+           <td>
+             <input type="text"
+                    name="name"
+                    value="{commands_response/get_status_response/task/name}"
+                    size="30"
+                    maxlength="80"/>
+           </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_status_response/task/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Scan Config</td>
+            <td>
+              <select name="scanconfig" disabled="1">
+                <xsl:choose>
+                  <xsl:when
+                    test="string-length (commands_response/get_status_response/task/config/name) &gt; 0">
+                    <xsl:apply-templates
+                      select="commands_response/get_status_response/task/config"
+                      mode="newtask"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="--">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Scan Targets</td>
+            <td>
+              <select name="scantarget" disabled="1">
+                <xsl:choose>
+                  <xsl:when
+                    test="string-length (commands_response/get_status_response/task/target/name) &gt; 0">
+                    <xsl:apply-templates
+                      select="commands_response/get_status_response/task/target"
+                      mode="newtask"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="--">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Escalator (optional)</td>
+            <td>
+              <select name="escalator" disabled="1">
+                <xsl:choose>
+                  <xsl:when
+                    test="string-length (commands_response/get_status_response/task/escalator/name) &gt; 0">
+                    <xsl:apply-templates
+                      select="commands_response/get_status_response/task/escalator"
+                      mode="newtask"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="--">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Schedule (optional)</td>
+            <td>
+              <select name="schedule_id">
+                <xsl:variable name="schedule_id">
+                  <xsl:value-of select="commands_response/get_status_response/task/schedule/@id"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="string-length ($schedule_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="commands_response/get_schedules_response/schedule">
+                  <xsl:choose>
+                    <xsl:when test="@id = $schedule_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Task"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_task">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-task-form"/>
+</xsl:template>
+
+<xsl:template match="modify_task_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- TASK -->
 
 <xsl:template match="task">
@@ -1287,6 +1437,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  border="0"
                  alt="Details"
                  style="margin-left:3px;"/>
+          </a>
+          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_status&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}"
+             title="Edit Task"
+             style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
         </td>
       </tr>

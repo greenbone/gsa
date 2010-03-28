@@ -87,7 +87,13 @@ gchar *manager_address = NULL;
  */
 int manager_port = 9390;
 
+
+/* Headers. */
+
 int manager_connect (credentials_t *, int *, gnutls_session_t *);
+
+static char *get_status (credentials_t *, const char *, const char *,
+                         const char *, const char *, const char *);
 
 
 /* Helpers. */
@@ -547,6 +553,166 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
 }
 
 /**
+ * @brief Setup edit_task XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  task_id      UUID of task.
+ * @param[in]  next         Name of next page.
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_task_omp (credentials_t * credentials, const char *task_id,
+               const char *next,
+               /* Parameters for get_status. */
+               const char *refresh_interval, const char *sort_field,
+               const char *sort_order)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (task_id == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a task. "
+                         "The task remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a task. "
+                         "The task remains as it was. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_tasks");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_status task_id=\"%s\" />"
+                            "<get_targets"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "<get_configs"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "<get_escalators"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "<get_schedules"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            task_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting task info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml,
+                          "<edit_task>"
+                          "<task id=\"%s\"/>"
+                          "<user>%s</user>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Passthroughs. */
+                          "<refresh_interval>%s</refresh_interval>"
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>",
+                          task_id,
+                          credentials->username,
+                          next,
+                          refresh_interval,
+                          sort_field,
+                          sort_order);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting task info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_task>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Save task, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  task_id           ID of task.
+ * @param[in]  name              New name for task.
+ * @param[in]  comment           New comment for task.
+ * @param[in]  schedule_id       New schedule for task.
+ * @param[in]  next              Name of next page.
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_task_omp (credentials_t * credentials, const char *task_id,
+               const char *name, const char *comment, const char *schedule_id,
+               const char *next,
+               /* Parameters for get_status. */
+               const char *refresh_interval, const char *sort_field,
+               const char *sort_order)
+{
+  gchar *modify_task;
+
+  if (comment == NULL || name == NULL || next == NULL
+      || refresh_interval == NULL || sort_field == NULL
+      || sort_order == NULL || task_id == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a task. "
+                         "The task remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_status");
+
+  modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
+                                 "<name>%s</name>"
+                                 "<comment>%s</comment>"
+                                 "<schedule id=\"%s\"/>"
+                                 "</modify_task>",
+                                 task_id,
+                                 name,
+                                 comment,
+                                 schedule_id);
+
+  if (strcmp (next, "get_status") == 0)
+    {
+      char *ret = get_status (credentials, NULL, sort_field, sort_order,
+                              refresh_interval, modify_task);
+      g_free (modify_task);
+      return ret;
+    }
+
+  g_free (modify_task);
+  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a task. "
+                       "The task remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_status");
+}
+
+/**
  * @brief Abort a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -878,8 +1044,9 @@ get_status (credentials_t * credentials, const char *task_id,
     }
 
   g_string_append (xml, "</get_status>");
-  if (refresh_interval && strcmp (refresh_interval, "")
-      && strcmp (refresh_interval, "0"))
+  if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
+    g_string_append_printf (xml, "<autorefresh interval=\"0\" />");
+  else
     g_string_append_printf (xml, "<autorefresh interval=\"%s\" />",
                             refresh_interval);
 

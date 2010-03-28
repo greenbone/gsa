@@ -49,7 +49,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- Add meta refresh info if autorefresh element present -->
 <xsl:template match="autorefresh" mode="html-header-meta">
-  <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_status&amp;refresh_interval={@interval}" />
+  <xsl:if test="@interval &gt; 0">
+    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_status&amp;refresh_interval={@interval}" />
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="html-gsa-logo">

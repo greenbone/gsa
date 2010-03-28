@@ -44,6 +44,11 @@ char * gsad_newtask (credentials_t *, const char *);
 char * create_task_omp (credentials_t *, char *, char *, char *, char *,
                         const char *, const char *);
 char * delete_task_omp (credentials_t *, const char *);
+char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
+                      const char *, const char *);
+char * save_task_omp (credentials_t *, const char *, const char *, const char *,
+                      const char *, const char *, const char *, const char *,
+                      const char *);
 char * abort_task_omp (credentials_t *, const char *);
 char * resume_stopped_task_omp (credentials_t *, const char *);
 char * start_task_omp (credentials_t *, const char *);
