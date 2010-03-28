@@ -596,6 +596,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><b><xsl:value-of select="task/name"/></b></td>
         </tr>
         <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="task/comment"/></td>
+        </tr>
+        <tr>
           <td>Config:</td>
           <td>
             <a href="/omp?cmd=get_config&amp;name={task/config/name}">
@@ -1147,7 +1151,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:variable>
       <tr class="{$class}">
-        <td><b><xsl:value-of select="name"/></b></td>
+        <td>
+          <b><xsl:value-of select="name"/></b>
+          <xsl:choose>
+            <xsl:when test="comment != ''">
+              <br/>(<xsl:value-of select="comment"/>)
+            </xsl:when>
+            <xsl:otherwise></xsl:otherwise>
+          </xsl:choose>
+        </td>
         <td>
           <xsl:call-template name="status_bar">
             <xsl:with-param name="status">
