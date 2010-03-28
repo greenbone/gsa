@@ -1,5 +1,11 @@
 2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (edit_task_omp): Add next and refresh_interval NULL
+	checks.
+	(save_task_omp): Remove refresh_interval NULL enforcement.
+
+2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+
 	Add basic task editing.
 
 	* src/html/src/gsad.xsl (autorefresh [html-header-meta]): Only add header

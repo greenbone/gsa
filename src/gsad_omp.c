@@ -575,7 +575,7 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
   gnutls_session_t session;
   int socket;
 
-  if (task_id == NULL)
+  if (task_id == NULL || next == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a task. "
                          "The task remains as it was. "
@@ -631,7 +631,7 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
                           task_id,
                           credentials->username,
                           next,
-                          refresh_interval,
+                          refresh_interval ? refresh_interval : "",
                           sort_field,
                           sort_order);
 
@@ -678,8 +678,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
   gchar *modify_task;
 
   if (comment == NULL || name == NULL || next == NULL
-      || refresh_interval == NULL || sort_field == NULL
-      || sort_order == NULL || task_id == NULL)
+      || sort_field == NULL || sort_order == NULL || task_id == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
                          "The task remains the same. "
