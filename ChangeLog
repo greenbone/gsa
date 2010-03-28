@@ -1,5 +1,12 @@
 2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (gsad_newtask): Add comment entry.
+
+	* src/gsad.c (exec_omp_post): Pass comment from request to
+	create_task_omp.
+
+2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-report-table): Add comment field.
 	(task): Add comment under name.
 

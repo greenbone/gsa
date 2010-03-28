@@ -1509,6 +1509,11 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.name);
           con_info->req_parms.name = NULL;
         }
+      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
+        {
+          free (con_info->req_parms.comment);
+          con_info->req_parms.comment = NULL;
+        }
       if (openvas_validate (validator,
                             "escalator",
                             con_info->req_parms.escalator))
@@ -1540,13 +1545,15 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.schedule_id  = NULL;
         }
       if ((con_info->req_parms.name == NULL) ||
+          (con_info->req_parms.comment == NULL) ||
           (con_info->req_parms.scanconfig == NULL) ||
           (con_info->req_parms.scantarget == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
         con_info->response = gsad_newtask (credentials, "Invalid parameter");
       else
         con_info->response =
-          create_task_omp (credentials, con_info->req_parms.name, "comment",
+          create_task_omp (credentials, con_info->req_parms.name,
+                           con_info->req_parms.comment,
                            con_info->req_parms.scantarget,
                            con_info->req_parms.scanconfig,
                            con_info->req_parms.escalator,
