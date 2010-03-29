@@ -1153,7 +1153,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-           <td valign="top" width="125">Name</td>
+           <td valign="top" width="165">Name</td>
            <td>
              <input type="text"
                     name="name"
@@ -1163,14 +1163,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_status_response/task/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top">Scan Config</td>
+            <td valign="top">Scan Config (immutable)</td>
             <td>
               <select name="scanconfig" disabled="1">
                 <xsl:choose>
@@ -1188,7 +1188,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td>Scan Targets</td>
+            <td>Scan Targets (immutable)</td>
             <td>
               <select name="scantarget" disabled="1">
                 <xsl:choose>
@@ -4155,7 +4155,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="24">24</option>
               </select>
               <select name="period_unit">
-                <option value="minute">minute(s)</option>
                 <option value="hour" selected="1">hour(s)</option>
                 <option value="day">day(s)</option>
                 <option value="week">week(s)</option>
@@ -4194,7 +4193,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="24">24</option>
               </select>
               <select name="duration_unit">
-                <option value="minute">minute(s)</option>
                 <option value="hour" selected="1">hour(s)</option>
                 <option value="day">day(s)</option>
                 <option value="week">week(s)</option>

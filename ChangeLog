@@ -1,3 +1,9 @@
+2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/html/src/omp.xsl (html-create-schedule-form): Remove minute units
+	from period and duration.
+	(html-edit-task-form): Add "(immutable)" to target and config input names.
+
 2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (edit_task_omp): Add next and refresh_interval NULL
