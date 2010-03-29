@@ -247,6 +247,7 @@ init_validator ()
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\\\]{1,40}$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
+  openvas_validator_add (validator, "escalator_id", "^[-_[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
@@ -2068,6 +2069,7 @@ exec_omp_get (struct MHD_Connection *connection,
   char *cmd = NULL;
   const char *agent_format = NULL;
   const char *comment      = NULL;
+  const char *escalator_id = NULL;
   const char *task_id      = NULL;
   const char *result_id    = NULL;
   const char *report_id    = NULL;
@@ -2124,6 +2126,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "comment");
       if (openvas_validate (validator, "comment", comment))
         comment = NULL;
+
+      escalator_id = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "escalator_id");
+      if (openvas_validate (validator, "escalator_id", escalator_id))
+        escalator_id = NULL;
 
       task_id = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -2822,9 +2830,9 @@ exec_omp_get (struct MHD_Connection *connection,
            && (task_id != NULL)
            && (next != NULL)
            && (strcmp (next, "get_status") == 0))
-    return save_task_omp (credentials, task_id, name, comment, schedule_id,
-                          "get_status", refresh_interval, sort_field,
-                          sort_order);
+    return save_task_omp (credentials, task_id, name, comment, escalator_id,
+                          schedule_id, "get_status", refresh_interval,
+                          sort_field, sort_order);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,

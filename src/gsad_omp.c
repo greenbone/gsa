@@ -659,6 +659,7 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  task_id           ID of task.
  * @param[in]  name              New name for task.
  * @param[in]  comment           New comment for task.
+ * @param[in]  escalator_id      New escalator for task.
  * @param[in]  schedule_id       New schedule for task.
  * @param[in]  next              Name of next page.
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
@@ -669,15 +670,16 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
  */
 char *
 save_task_omp (credentials_t * credentials, const char *task_id,
-               const char *name, const char *comment, const char *schedule_id,
-               const char *next,
+               const char *name, const char *comment, const char *escalator_id,
+               const char *schedule_id, const char *next,
                /* Parameters for get_status. */
                const char *refresh_interval, const char *sort_field,
                const char *sort_order)
 {
   gchar *modify_task;
 
-  if (comment == NULL || name == NULL || next == NULL
+  if (comment == NULL || name == NULL || escalator_id == NULL
+      || schedule_id == NULL || next == NULL
       || sort_field == NULL || sort_order == NULL || task_id == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -688,11 +690,13 @@ save_task_omp (credentials_t * credentials, const char *task_id,
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
                                  "<comment>%s</comment>"
+                                 "<escalator id=\"%s\"/>"
                                  "<schedule id=\"%s\"/>"
                                  "</modify_task>",
                                  task_id,
                                  name,
                                  comment,
+                                 escalator_id,
                                  schedule_id);
 
   if (strcmp (next, "get_status") == 0)

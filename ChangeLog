@@ -1,5 +1,17 @@
 2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/html/src/omp.xsl (html-edit-task-form): Make escalator editable.
+
+	* src/gsad.c (init_validator): Add rule "escalator_id".
+	(exec_omp_get): Pass escalator to save_task_omp.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/gsad_omp.c (save_task_omp): Add schedule_id arg.  Include in
+	MODIFY_TASK command.
+
+2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-create-schedule-form): Remove minute units
 	from period and duration.
 	(html-edit-task-form): Add "(immutable)" to target and config input names.

@@ -1208,18 +1208,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td>Escalator (optional)</td>
             <td>
-              <select name="escalator" disabled="1">
+              <select name="escalator_id">
+                <xsl:variable name="escalator">
+                  <xsl:value-of select="commands_response/get_status_response/task/escalator/name"/>
+                </xsl:variable>
                 <xsl:choose>
-                  <xsl:when
-                    test="string-length (commands_response/get_status_response/task/escalator/name) &gt; 0">
-                    <xsl:apply-templates
-                      select="commands_response/get_status_response/task/escalator"
-                      mode="newtask"/>
+                  <xsl:when test="string-length ($escalator) &gt; 0">
+                    <option value="">--</option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="--">--</option>
+                    <option value="" selected="1">--</option>
                   </xsl:otherwise>
                 </xsl:choose>
+                <xsl:for-each select="commands_response/get_escalators_response/escalator">
+                  <xsl:choose>
+                    <xsl:when test="name = $escalator">
+                      <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{name}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
               </select>
             </td>
           </tr>
