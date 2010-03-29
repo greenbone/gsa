@@ -1,5 +1,14 @@
 2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (get_schedules_omp, create_schedule_omp)
+	(delete_schedule_omp): Add TIME to GET_SCHEDULES.
+
+	* src/html/src/omp.xsl (opt): New template.
+	(html-create-schedule-form): Create first time input via "opt" so that
+	currect time is selected.
+
+2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/gsad_omp.c (edit_task): New function.  Body from edit_task_omp.  Add
 	extra_xml arg.
 	(edit_task_omp): Call through to edit_task.

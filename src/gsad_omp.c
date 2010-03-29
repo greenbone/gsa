@@ -5186,6 +5186,8 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  time_t now;
+  struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -5194,6 +5196,26 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
                          "/omp?cmd=get_status");
 
   xml = g_string_new ("<get_schedules>");
+
+  now = time (NULL);
+  now_broken = localtime (&now);
+  g_string_append_printf (xml,
+                          "<time>"
+                          "<minute>%s%i</minute>"
+                          "<hour>%s%i</hour>"
+                          "<day_of_month>%s%i</day_of_month>"
+                          "<month>%s%i</month>"
+                          "<year>%i</year>"
+                          "</time>",
+                          (now_broken->tm_min > 9 ? "" : "0"),
+                          now_broken->tm_min,
+                          (now_broken->tm_hour > 9 ? "" : "0"),
+                          now_broken->tm_hour,
+                          (now_broken->tm_mday > 9 ? "" : "0"),
+                          now_broken->tm_mday,
+                          ((now_broken->tm_mon + 1) > 9 ? "" : "0"),
+                          (now_broken->tm_mon + 1),
+                          (now_broken->tm_year + 1900));
 
   /* Get the schedules. */
 
@@ -5262,6 +5284,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  time_t now;
+  struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -5271,6 +5295,26 @@ create_schedule_omp (credentials_t * credentials, const char *name,
                          "/omp?cmd=get_schedules");
 
   xml = g_string_new ("<get_schedules>");
+
+  now = time (NULL);
+  now_broken = localtime (&now);
+  g_string_append_printf (xml,
+                          "<time>"
+                          "<minute>%s%i</minute>"
+                          "<hour>%s%i</hour>"
+                          "<day_of_month>%s%i</day_of_month>"
+                          "<month>%s%i</month>"
+                          "<year>%i</year>"
+                          "</time>",
+                          (now_broken->tm_min > 9 ? "" : "0"),
+                          now_broken->tm_min,
+                          (now_broken->tm_hour > 9 ? "" : "0"),
+                          now_broken->tm_hour,
+                          (now_broken->tm_mday > 9 ? "" : "0"),
+                          now_broken->tm_mday,
+                          ((now_broken->tm_mon + 1) > 9 ? "" : "0"),
+                          (now_broken->tm_mon + 1),
+                          (now_broken->tm_year + 1900));
 
   if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
       || duration == NULL || duration_unit == NULL || month == NULL || period == NULL
@@ -5393,6 +5437,8 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  time_t now;
+  struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -5402,6 +5448,26 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
                          "/omp?cmd=get_schedules");
 
   xml = g_string_new ("<get_schedules>");
+
+  now = time (NULL);
+  now_broken = localtime (&now);
+  g_string_append_printf (xml,
+                          "<time>"
+                          "<minute>%s%i</minute>"
+                          "<hour>%s%i</hour>"
+                          "<day_of_month>%s%i</day_of_month>"
+                          "<month>%s%i</month>"
+                          "<year>%i</year>"
+                          "</time>",
+                          (now_broken->tm_min > 9 ? "" : "0"),
+                          now_broken->tm_min,
+                          (now_broken->tm_hour > 9 ? "" : "0"),
+                          now_broken->tm_hour,
+                          (now_broken->tm_mday > 9 ? "" : "0"),
+                          now_broken->tm_mday,
+                          ((now_broken->tm_mon + 1) > 9 ? "" : "0"),
+                          (now_broken->tm_mon + 1),
+                          (now_broken->tm_year + 1900));
 
   /* Delete the schedule and get all schedules. */
 
