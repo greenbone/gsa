@@ -555,9 +555,10 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
 /**
  * @brief Setup edit_task XML, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      UUID of task.
- * @param[in]  next         Name of next page.
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  task_id           UUID of task.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[in]  next              Name of next page.
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
@@ -565,11 +566,11 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (credentials_t * credentials, const char *task_id,
-               const char *next,
-               /* Parameters for get_status. */
-               const char *refresh_interval, const char *sort_field,
-               const char *sort_order)
+edit_task (credentials_t * credentials, const char *task_id,
+           const char *extra_xml, const char *next,
+           /* Parameters for get_status. */
+           const char *refresh_interval, const char *sort_field,
+           const char *sort_order)
 {
   GString *xml;
   gnutls_session_t session;
@@ -618,6 +619,9 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
 
   xml = g_string_new ("");
 
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
   g_string_append_printf (xml,
                           "<edit_task>"
                           "<task id=\"%s\"/>"
@@ -653,6 +657,29 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
 }
 
 /**
+ * @brief Setup edit_task XML, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  task_id           UUID of task.
+ * @param[in]  next              Name of next page.
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_task_omp (credentials_t * credentials, const char *task_id,
+               const char *next,
+               /* Parameters for get_status. */
+               const char *refresh_interval, const char *sort_field,
+               const char *sort_order)
+{
+  return edit_task (credentials, task_id, NULL, next, refresh_interval,
+                    sort_field, sort_order);
+}
+
+/**
  * @brief Save task, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
@@ -678,8 +705,12 @@ save_task_omp (credentials_t * credentials, const char *task_id,
 {
   gchar *modify_task;
 
-  if (comment == NULL || name == NULL || escalator_id == NULL
-      || schedule_id == NULL || next == NULL
+  if (comment == NULL || name == NULL)
+    return edit_task (credentials, task_id,
+                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
+                      refresh_interval, sort_field, sort_order);
+
+  if (escalator_id == NULL || schedule_id == NULL || next == NULL
       || sort_field == NULL || sort_order == NULL || task_id == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "

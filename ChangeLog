@@ -1,5 +1,13 @@
 2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
 
+	* src/gsad_omp.c (edit_task): New function.  Body from edit_task_omp.  Add
+	extra_xml arg.
+	(edit_task_omp): Call through to edit_task.
+	(save_task_omp): For comment or name error, put up the parameter error
+	message on the edit_task page.
+
+2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+
 	* src/html/src/omp.xsl (html-edit-task-form): Make escalator editable.
 
 	* src/gsad.c (init_validator): Add rule "escalator_id".
