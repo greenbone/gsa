@@ -142,10 +142,21 @@ oap_init (const gchar *address_administrator, int port_administrator)
 static char *
 xsl_transform_oap (credentials_t * credentials, gchar * xml)
 {
-  gchar *res = g_strdup_printf ("<envelope><login>%s</login>%s</envelope>",
-                                credentials->username,
-                                xml);
-  char *html = xsl_transform (res);
+  time_t now;
+  gchar *res;
+  char *html;
+
+  now = time (NULL);
+  res = g_strdup_printf ("<envelope>"
+                         "<time>%s</time>"
+                         "<login>%s</login>"
+                         "%s"
+                         "</envelope>",
+                         ctime (&now),
+                         credentials->username,
+                         xml);
+  html = xsl_transform (res);
+
   g_free (res);
   g_free (xml);
   return html;

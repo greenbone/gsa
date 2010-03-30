@@ -56,6 +56,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
+  <xsl:param name="time"/>
   <div style="text-align:left;">
     <div class="logo_l">
       <a href="/omp?cmd=get_status" title="Greenbone Security Assistant">
@@ -73,6 +74,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <a href="/logout" title="Logout" style="margin-left:3px;">Logout</a>
+        <br/>
+        <br/>
+        <xsl:value-of select="$time"/>
       </div>
     </div>
   </div>
@@ -259,11 +263,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="login">
 </xsl:template>
 
+<xsl:template match="time">
+</xsl:template>
+
 <xsl:template match="envelope">
   <div class="envelope">
     <xsl:call-template name="html-gsa-logo">
       <xsl:with-param name="username">
         <xsl:value-of select="login/text()"/>
+      </xsl:with-param>
+      <xsl:with-param name="time">
+        <xsl:value-of select="time"/>
       </xsl:with-param>
     </xsl:call-template>
     <table width="100%" cellpadding="3" cellspacing="0">
