@@ -1,3 +1,7 @@
+2010-03-30  Matthew Mundell <matthew.mundell@intevation.de>
+
+	* src/gsad.c (exec_omp_get): Add NULL guard for duration.
+
 2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (get_schedules_omp, create_schedule_omp)

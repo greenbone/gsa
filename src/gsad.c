@@ -2699,7 +2699,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_system_reports")))
     return get_system_reports_omp (credentials,
-                                   (*duration == '\0') ? "0" : duration);
+                                   (duration == NULL || (*duration == '\0'))
+                                    ? "0" : duration);
 
   else if ((!strcmp (cmd, "get_target")) && (name != NULL))
     return get_target_omp (credentials, name, sort_field, sort_order);
