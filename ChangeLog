@@ -1,5 +1,10 @@
 2010-04-01  Michael Wiegand <michael.wiegand@intevation.de>
 
+	* src/html/src/about.htm4: Make sure that supporters are in
+	alphabetical order.
+
+2010-04-01  Michael Wiegand <michael.wiegand@intevation.de>
+
 	* src/html/src/omp.xsl (nvt): Display NVT tags if they are set.
 
 2010-03-30  Matthew Mundell <matthew.mundell@intevation.de>
