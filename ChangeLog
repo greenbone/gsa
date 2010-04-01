@@ -1,3 +1,7 @@
+2010-04-01  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/omp.xsl (nvt): Display NVT tags if they are set.
+
 2010-03-30  Matthew Mundell <matthew.mundell@intevation.de>
 
 	* src/gsad_omp.c (xsl_transform_omp): Add TIME to ENVELOPE.

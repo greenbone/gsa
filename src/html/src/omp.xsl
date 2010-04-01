@@ -4884,6 +4884,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
     </tr>
+    <tr>
+      <td>Tags:</td>
+      <td>
+        <!-- "NOTAG" means no tags, skip. -->
+        <xsl:choose>
+          <xsl:when test="tags = 'NOTAG'">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="tags"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
   </table>
 
   <h1>Description</h1>
