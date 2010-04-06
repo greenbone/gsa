@@ -472,6 +472,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <b><xsl:value-of select="feed/name"/></b><br/>
             </td>
           </tr>
+          <tr>
+            <td valign="top" width="125">Feed Version</td>
+            <td>
+              <xsl:value-of select="feed/version"/>
+            </td>
+          </tr>
           <xsl:choose>
             <xsl:when test="feed/currently_syncing">
               <tr>
