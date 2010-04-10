@@ -111,7 +111,7 @@ set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
 
 add_custom_target (genhtml ALL
-                   COMMAND make -C html -f make_html)
+                   COMMAND make -C ${CMAKE_SOURCE_DIR}/src/html -f make_html)
 
 CONFIGURE_FILE (gsad_log_conf.cmake_in
                 "${CMAKE_CURRENT_SOURCE_DIR}/gsad_log.conf")
