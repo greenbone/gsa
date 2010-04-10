@@ -1,5 +1,9 @@
 2010-04-10 Stephan Kleine
 
+	* src/CMakeLists.txt: Fix build with as-needed and remove duplicate lines.
+
+2010-04-10 Stephan Kleine
+
 	* CMakeLists.txt: Add support for out-of-source builds.
 
 	* src/CMakeLists.txt: Add support for out-of-source builds.
