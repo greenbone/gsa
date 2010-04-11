@@ -1,0 +1,2572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet
+      version="1.0"
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+     <xsl:output
+      method="html"
+      doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+      doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+      encoding="UTF-8"/>
+
+<!--
+Greenbone Security Assistant
+$Id$
+Description: Help documents for GSA.
+
+Authors:
+Matthew Mundell <matthew.mundell@intevation.de>
+Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+Michael Wiegand <michael.wiegand@greenbone.net>
+
+Copyright:
+Copyright (C) 2009, 2010 Greenbone Networks GmbH
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2,
+or, at your option, any later version as published by the Free
+Software Foundation
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<xsl:template match="help">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+       <xsl:apply-templates/>
+  </div> 
+</xsl:template>
+
+<xsl:template match="configure_agents.html">
+  <div class="gb_window_part_center">Help: Configure Agents</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_agents">Jump to dialog</a></div>
+    <div style="text-align:left">
+      <br/>
+      <h1>Configure Agents</h1>
+      <p>
+       This feature allows to store agent tools accompanied with
+       respective documentation on how to install and use them.
+      </p>
+
+      <a name="new_agent"></a>
+      <h2>New Agent</h2>
+      <p>
+       For creating an agent the dialog offers these entries.
+       Hit the button "Create Agent" to submit the new agent.
+       The list of agents will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>WinSLAD</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td>This agent collects several plugins.</td>
+        </tr>
+        <tr class="odd">
+          <td>Installer</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>Upload the agent tool.</td>
+        </tr>
+      <!-- TODO: installer, howto_install, howto_us -->
+      </table>
+
+      <a name="agents"></a>
+      <h2>Agents</h2>
+      <p>
+       This table provides an overview of all stored
+       agents.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the agent.</td>
+        </tr>
+        <tr>
+         <td>Comment</td>
+         <td>Shows the comment that was provided for this agent.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete Agent</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the entry and update the list.
+      </p>
+
+      <h4>Download Installer Package</h4>
+      <p>
+       Pressing the download icon
+       <img src="/img/agent.png" alt="Download Installer Package" title="Download Installer Package" />
+       will download a installation package for this agent.
+      </p>
+      <!-- TODO: Description for howto's. -->
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="configure_credentials.html">
+  <div class="gb_window_part_center">Help: Configure Credentials</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_lsc_credentials">Jump to dialog</a></div>
+    <div style="text-align:left">
+     
+      <br/>
+      <h1>Configure Credentials for Local Security Checks</h1>
+
+      <p>
+       Credentials for local security checks are required to allow
+       <a href="glossary.html#nvt">NVTs</a> to log into target systems
+       for the purpose of locally check there e.g. for the presence
+       of all vendor security patches.
+      </p>
+      <p>
+       The dialog to create a new credential pair allows to either specify a password
+       or to generate a secure password.
+       Note that if the latter option was chosen, users are not able or allowed to
+       access either passwords nor so-called private keys.
+       Instead, installer packages are created that can be installed on target
+       systems. Internals of these installers are explained in the
+       <a href="#actions">Actions</a> section of this help page.
+       These actions are not available if the password was specified manually.
+      </p>
+      <p>
+       <b>Please note</b> that you will need to associate one or more
+       <a href="glossary.html#target">targets</a> with the credential you installed
+       on them.
+       Only this finally allows the scan engine to apply the suitable credentials.
+      </p>
+
+      <a name="new_lsc_credential"></a>
+      <h2>New Credential for Local Security Checks</h2>
+      <p>
+       For creating a credential the dialog offers these entries.
+       Hit the button "Create Credential" to submit the new credential.
+       The list of credentials will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Security Scan Account</td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>no</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>jsmith</td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td>For the Windows systems</td>
+        </tr>
+        <tr class="even">
+          <td>[password option]</td>
+          <td>yes</td>
+          <td>"Autogenerate Credential" or a provided password</td>
+          <td>Alphanumeric</td>
+          <td>"Autogenerate Credential", hx7ZgI2n</td>
+        </tr>
+      </table>
+ 
+      <a name="credentials"></a>
+      <h2>Credentials for Local Security Checks</h2>
+      <p>
+       This table provides an overview of all configured
+       credentials.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the credential.</td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>Shows the login name that was provided for this credential.</td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>Shows the comment that was provided for this credential.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       Note that depending on the method that was chosen to specify a password
+       (manually or autogenerated), some actions might not be available.
+       Specifically, when the password was supplied manually, just the Delete and
+       Details actions are available.
+      </p>
+
+      <h4>Delete Credential</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the entry and update the list.
+      </p>
+
+      <h4>Credential Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show details about the credential.
+      </p>
+
+      <h4>Download RPM Package</h4>
+      <p>
+       Pressing the RPM icon
+       <img src="/img/rpm.png" alt="Download RPM Package" title="Download RPM Package" />
+       will download a ".rpm" installation package.
+      </p>
+      <p>
+       With installing this package on a RPM-based systems (e.g. SUSE, RedHat, Fedora, Centos)
+       a low privileged user account is created on that target system to allow
+       the scan engine to access the system retrieve information about intalled software
+       and other product information. De-installation of the package will disable the access.
+      </p>
+
+      <h4>Download Debian Package</h4>
+      <p>
+       Pressing the Debian icon
+       <img src="/img/deb.png" alt="Download Debian Package" title="Download Debian Package" />
+       will download a ".deb" installation package.
+      </p>
+      <p>
+       With installing this package on a dpkg-based systems (e.g. Debian, Ubuntu)
+       a low privileged user account is created on that target system to allow
+       the scan engine to access the system retrieve information about intalled software
+       and other product information. De-installation of the package will disable the access.
+      </p>
+
+      <h4>Download Exe Package</h4>
+      <p>
+       Pressing the Exe icon
+       <img src="/img/exe.png" alt="Download Exe Package" title="Download Exe Package" />
+       will download a ".exe" installation package.
+      </p>
+      <p>
+       With installing this package on a Windows systems (e.g. XP, 2003)
+       a low privileged user account is created on that target system to allow
+       the scan engine to access the system retrieve information about intalled software
+       and other product information. De-installation of the package will disable the access.
+      </p>
+
+      <h4>Download Public Key</h4>
+      <p>
+       Pressing the public key icon
+       <img src="/img/key.png" alt="Download Public Key" title="Download Public Key" />
+       will download a SSH Public Key in ASCII form.
+      </p>
+      <p>
+       This key corresponds to the keys
+       used for RPM and Debian packages (not for Exe-Packages).
+       The key file is intended to support expert users to prepare targets systems for
+       local security checks on their own (i.e. without the provided RPM/Debian
+       packages).
+      </p>
+
+      <a name="credentialdetails"></a>
+      <h2>Credential Details</h2>
+      <p>
+       Provides information about credentials like the login and comment.
+      </p>
+
+      <h3>Targets using this Credential</h3>
+      <p>
+       This table provides an overview of the targets associated with this credential.
+       Details of these targets can be seen after a click on the Details
+       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="configure_escalators.html">
+  <div class="gb_window_part_center">Help: Configure Escalator</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_escalators">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Escalators</h1>
+      <p>
+       Escalators can be added to <a href="glossary.html#task">tasks</a>.
+       Escalators are hooked into the system. Whenever a configured event happens
+       (e.g. a task finished), a chosen condition is checked (e.g. vulnerability
+       with high threat level detected).
+       If the condition is met, an action is performed (e.g. an email is sent to a
+       specified adress).
+      </p>
+
+      <a name="newescalator"></a>
+      <h2>New Escalator</h2>
+
+      <p>
+       To create an escalator the dialog offers these entries.
+       Hit the button "Create Escalator" to submit the new escalator.
+       The list of escalators will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>EmailFinished</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Event</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Done</td>
+        </tr>
+        <tr class="even">
+          <td>Condition</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>Always</td>
+        </tr>
+        <tr class="odd">
+          <td>Method</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>Email</td>
+        </tr>
+      </table>
+
+      <a name="escalators"></a>
+      <h2>Escalators</h2>
+      <p>
+       This table provides an overview of all created escalators.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>User-given name of the escalator.</td>
+        </tr>
+        <tr class="even">
+          <td>event</td>
+          <td>Shows the event for which the condition has to be checked.</td>
+        </tr>
+        <tr class="odd">
+          <td>Condition</td>
+          <td>Condition to be checked when event happened.</td>
+        </tr>
+        <tr class="even">
+          <td>Method</td>
+          <td>Notification method.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete Escalator</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the escalator and update the list.
+      </p>
+      <p>
+       It is not possible to remove an escalator that is in use by a task.
+      </p>
+
+      <h4>Escalator Details</h4>
+      <p>
+       Details of an escalator can be seen by clicking on the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />.
+      </p>
+
+      <h4>Test Escalator</h4>
+      <p>
+       By clicking on the start icon
+       <img src="/img/start.png" alt="Test Escalator" title="Test Escalator" />
+       the corresponding escalator is immediately executed with some
+       dummy data.
+      </p>
+
+      <a name="escalatordetails"></a>
+      <h2>Escalator Details</h2>
+      <p>
+       Provides information about an escalator like the name, comment, condition and
+       notification method.
+      </p>
+
+      <h3>Tasks using this Escalators</h3>
+      <p>
+       This table provides an overview of the tasks associated with this escalator.
+       Details of these tasks can be seen after a click on the Details
+       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="configure_scanconfigs.html">
+  <div class="gb_window_part_center">Help: Configure Scan Configs</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_configs">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Scan Configs</h1>
+      <p>
+       Any <a href="glossary.html#task">task</a> is associated with
+       a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       The configured Scan Configs will appear as selection
+       in the dialog for creating a <a href="new_task.html">new task</a>.
+      </p>
+
+      <a name="newconfig"></a>
+      <h2>New Scan Config</h2>
+      <p>
+       For creating a new scan configuration the dialog offers these entries.
+       Hit the button "Create Scan Config" to submit the new scan configuration.
+       The list of scan configurations will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Full and deep scan</td>
+        </tr>
+        <tr>
+          <td>Comment</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td>All-inclusive scan which might consume quite some time.</td>
+        </tr>
+        <tr class="odd">
+          <td>Base</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>A predefined base scan configuration</td>
+          <td>Empty, static and fast<br/>
+              Full and Fast</td>
+        </tr>   
+      </table>
+
+      <a name="importconfig"></a>
+      <h2>Import Scan Config</h2>
+      <p>
+       To import a scan configuration, select the configuration file and hit the
+       "Import Scan Config" to submit the scan configuration.
+       The list of scan configurations will be updated.
+       Note that if the name of the scan configuration already exists in your system,
+       a numeric suffix will be added to the name of the imported scan configuration.
+      </p>
+      <p>
+       To create a file that can be imported (e.g. if you have multiple GSA running
+       on different machines), refer to the <a href="#export">export action</a>.
+      </p>
+
+      <a name="scanconfigs"></a>
+      <h2>Scan Configs</h2>
+      <p>
+       This table provides on overview on all configured
+       scan configurations.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the scan configuration and,
+              if specificied, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr>
+          <td>Families: Total</td>
+          <td>The number of NVT families that would be considered
+              with the current NVT set. "N/A" means that the
+              number is not available at the moment.</td>
+        </tr>
+        <tr class="odd">
+          <td>Families: Trend</td>
+          <td>This field can have two states: "Grow"
+              (<img src="/img/trend_more.png" />) or
+              "Static" (<img src="/img/trend_nochange.png" />). "Grow" means that
+              the NVT selection associated with the Scan Config specified to include
+              any new family that occurs in the NVT set. "Static" means, that the
+              NVT selection associated with the Scan Config has an explicit definition
+              which families are to be considered.</td>
+        </tr>
+        <tr>
+          <td>NVTs: Total</td>
+          <td>The number of NVTs that would be considered
+              with the current NVT set. "N/A" means that the
+              number is not available at the moment.</td>
+        </tr>
+        <tr class="odd">
+          <td>NVTs: Trend</td>
+          <td>This field can have two states: "Grow"
+              (<img src="/img/trend_more.png" />) or "Static"
+              (<img src="/img/trend_nochange.png" />). "Grow" means that
+              the NVT selection associated with the Scan Config specified to include
+              new NVTs that occurs in the NVT set at least for one family.
+              "Static" means, that the NVT selection associated with the Scan Config
+              has an explicit definition which NVTs are to be considered.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       For Scan Configurations the following actions are available.
+      </p>
+
+      <h4>Delete Scan Config</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       immediatly remove the entry and update the list.
+      </p>
+      <p>
+       Note that if a scan config is associated with at least one task,
+       it is not possible to delete it. In this case the button is greyed
+       out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+      </p>
+
+      <h4>Scan Config Details</h4>
+      <p>
+       Issueing the details icon
+       <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
+       will open the <a href="scanconfig_details.html">Scan Config Details</a>
+       dialog to provide details on the configuration
+       such as the selected NVTs and applied settings.
+      </p>
+
+      <h4>Edit Scan Config</h4>
+      <p>
+       A Scan Config can be modified if it is not currently in use by a task.
+       A click on the edit icon
+       <img src="/img/edit.png" alt="Edit" title="Edit" />
+       will open the <a href="scanconfig_editor.html">Scan Config Editor</a> dialog
+       with details on the configuration
+       such as the selected NVTs and applied settings and allow modifications of it.
+       If the Scan Config is currently in use by a task, the icon will appear greyed
+       out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.
+      </p>
+
+      <a name="export"></a>
+      <h4>Export Scan Config XML</h4>
+      <p> 
+       A Scan Config can be saved to file, e.g. for sharing or backup.
+       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
+       will let you download a file describing this scan config.
+      </p>
+      <p>
+       The file can later be imported by chosing to <a href="#importconfig">Import a Scan Config</a>.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="configure_targets.html">
+  <div class="gb_window_part_center">Help: Configure Targets</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_targets">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Targets</h1>
+      <p>
+       Any <a href="glossary.html#task">task</a> is associated with
+       a <a href="glossary.html#target">target</a>.
+       The configured targets will appear as selection
+       in the dialog for creating a <a href="new_task.html">new task</a>.
+      </p>
+
+      <a name="newtarget"></a>
+      <h2>New Target</h2>
+      <p>
+       For creating a new target the dialog offers these entries.
+       Hit the button "Create Target" to submit the new target.
+       The list of targets will be updated.
+      </p>
+      <p>
+       Note on <b>Hosts</b>:
+        <ul>
+          <li> Larger networks can either be specified as a comma-separated list of
+               IPs (e.g. <tt>192.168.13.1,192.168.13.2,...</tt>), hostnames (e.g.
+               <tt>myhost1.domain,myhost2.domain</tt> or using the CIDR notation
+               (e.g. <tt>192.168.13.0/24</tt>). These options can be mixed.
+               Note that the netmask in cidr notation is limited to 16 (65535 hosts).
+          </li>
+          <li> Incorrect syntax for Hosts will not be warned but rather accepted.
+               When applied for a scan, only correct entries will be used and the rest
+               will be ignored.</li>
+        </ul>
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Staging webservers</td>
+        </tr>
+        <tr class="even">
+          <td>Hosts</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Comma separated list of IPs and/or hostnames</td>
+          <td><tt>192.168.1.23,192.168.1.2/31,webserv1.mycompany.tld</tt></td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td>Covers both of our web staging systems</td>
+        </tr>
+        <tr class="even">
+          <td>Credential (optional)</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_credentials.html">configured credentials</a>.</td>
+          <td>Security Scan Account</td>
+        </tr>
+      </table>
+
+      <a name="targets"></a>
+      <a name="targets"></a>
+      <h2>Targets</h2>
+      <p>
+       This table provides an overview of all configured
+       targets. The complete contents of the target entries
+       are shown (name, comment and hosts).
+       If credentials are linked to the target, they are listed as well.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the target and,
+              if specificied, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Hosts</td>
+          <td>The comma separated list of target hosts, specified
+              either via hostname or IP.</td>
+        </tr>
+        <tr class="odd">
+          <td>IPs</td>
+          <td>The total number of IPs that results from the
+              hosts specification.</td>
+        </tr>
+        <tr class="even">
+          <td>Credentials</td>
+          <td>List of associated credentials, that can be clicked on to view details.</td>
+        </tr>
+      </table>
+      
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       Target specifications can only be inspected or deleted.
+       <em>Editing a target</em> is not foreseen.
+       You may copy the contents from the list to the above
+       shown "New Target" dialog and create a new target from this
+       with a different name.
+      </p>
+
+      <h4>Delete Target</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the entry and update the list.
+      </p>
+      <p>
+       Note that if a target is associated with at least one task, it is not possible
+       to delete it. In this case the button is greyed
+       out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+      </p>
+
+      <h4>Target Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show details of the target specification and Tasks that use this target.
+      </p>
+
+      <a name="targetdetails"></a>
+      <h2>Target Details</h2>
+      <p>
+       Provides detailed information about the target.
+       This includes the name, comment and the maximum number of hosts to scan.
+       If credentials are associated with this target, its name can be seen. A click
+       on the credentials name will show more information about the associated
+       credentials.
+      </p>
+
+      <h3>Tasks using this Target</h3>
+      <p>
+       This table provides an overview of the tasks that are associated to the target
+       (if any).
+       Details of these tasks can be seen after a click on the Details
+       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="configure_users.html">
+  <div class="gb_window_part_center">Help: Configure Users</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_users">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Users</h1>
+      <p>
+       The administration of users is only accessible for users that own
+       the "Administrator" role.
+      </p>
+
+      <a name="newuser"></a>
+      <h2>New User</h2>
+      <p>
+       For creating a user the dialog offers these entries.
+       Hit the button "Create User" to submit the new user.
+       The list of users will be updated.
+      </p>
+      <p>
+       Note on <b>Host Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
+       contain a list of comma-separated IPs.
+       The CIDR notation (e.g. <tt>192.168.10.0/24</tt>) can be used.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>jsmith</td>
+        </tr>
+        <tr class="even">
+          <td>Password</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Role</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>"User" or "Administrator"</td>
+          <td>User</td>
+        </tr>
+        <tr class="even">
+          <td>Host access</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>"Allow all", or either "Allow:" or "Deny:" with additional entry</td>
+          <td>"Allow all", "Allow:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
+        </tr>
+      </table>
+
+      <a name="users"></a>
+      <h2>Users</h2>
+      <p>
+       This table provides an overview of all configured
+       users.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Login name of the user.</td>
+        </tr>
+        <tr class="even">
+          <td>Role</td>
+          <td>Shows the role of the user.</td>
+        </tr>
+        <tr class="odd">
+          <td>Host Access</td>
+          <td>Host access rules of the user.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete User</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the user and update the list.
+      </p>
+      <p>
+       It is not possible to remove the last Administrator, which
+       is the same as removing the currently used account.
+      </p>
+
+      <h4>Details</h4>
+      <p>
+       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will lead to a page
+       dispalying user details.
+      </p>
+
+      <h4>Edit</h4>
+      <p>
+       Pressing the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" /> will lead to a page where the
+       password, role and Host Access rules can be changed.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="contents.html">
+  <div class="gb_window_part_center">Help: Contents</div>
+  <div class="gb_window_part_content">
+    <div style="text-align:left">
+
+      <h1>Contents</h1>
+      <p>
+       This is the help system of Greenbone Security Assistant.
+       Small <a href="/help/contents.html" title="Help"><img src="/img/help.png"/></a>
+       icons all over the web interface will jump you into the respective contents.
+       Alternatively you can browse the following structure.
+      </p>
+
+      <div id="list">
+        <ul>
+          <li> Scan Management</li>
+          <ul>
+            <li> <a href="tasks.html">Tasks</a></li>
+            <ul>
+              <li> <a href="reports.html">Reports</a></li>
+              <li> <a href="view_report.html">View Report</a></li>
+            </ul>
+            <li> <a href="new_task.html">New task</a></li>
+            <li> <a href="notes.html">Notes</a></li>
+            <li> <a href="performance.html">Performance</a></li>
+          </ul>
+          <li> Configuration</li>
+          <ul>
+            <li> <a href="configure_scanconfigs.html">Configure Scan Configs</a></li>
+            <ul>
+              <li> <a href="scanconfig_details.html">Scan Config Details</a></li>
+              <li> <a href="scanconfig_family_details.html">Scan Config Family Details</a></li>
+              <li> <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a></li>
+              <li> <a href="scanconfig_editor.html">Scan Config Editor</a></li>
+              <li> <a href="scanconfig_editor_nvt_families.html">Scan Config Family Editor</a></li>
+              <li> <a href="scanconfig_editor_nvt.html">Scan Config NVT Editor</a></li>
+            </ul>
+            <li> <a href="configure_targets.html">Configure Targets</a></li>
+            <li> <a href="configure_credentials.html">Configure Credentials</a></li>
+            <li> <a href="configure_agents.html">Configure Agents</a></li>
+            <li> <a href="configure_escalators.html">Configure Escalators</a></li>
+          </ul>
+          <li> Administration</li>
+          <ul>
+            <li> <a href="configure_users.html">Configure Users</a></li>
+            <li> <a href="feed_management.html">NVT Feed Management</a></li>
+            <li> <a href="settings.html">Settings</a></li>
+          </ul>
+          <li> Miscellaneous</li>
+          <ul>
+            <li> <a href="nvts.html">NVT Details</a></li>
+            <li> <a href="error_messages.html">Error Messages</a></li>
+            <li> <a href="glossary.html">Glossary</a></li>
+          </ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="error_messages.html">
+  <div class="gb_window_part_center">Help: Error Messages</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=unknown_cmd">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Error Messages</h1>
+
+      <h2>Problems during a operation</h2>
+      <p>
+       Whenever an operation does not work as expected,
+       the "Results of last operation" window title bar
+       turns to red color.
+       In such a case the "Status code" is 4xx and the
+       "Status Message" explains what happened.
+      </p>
+      <p>
+       No serious failures happened and you can continue
+       working with GSA. You should consider the
+       contents of "Status Message" to avoid the problem.
+      </p>
+
+      <h2>Internal Error Dialog</h2>
+      <p>
+       Usually, GSA itself is not affected
+       critically as long as you get
+       such error dialogs.
+      </p>
+      <p>
+       The dialog shows a <em>function name:line number</em> (this has only
+       meaning to the software developers) and a <em>error text</em>
+       (which might give your system administrator a valuable hint).
+      </p>
+      <p>
+       You always have three options:
+      </p>
+
+      <ol>
+        <p><li>
+          "Back" button of browser: This will go back to the previous
+          page. Note, that if the last action that caused the error
+          was to submit a form, the form is resent. In some cases,
+          a action like "Create Task" may have been successful already
+          and will even be for any resent. Please read the error text
+          carefully about hints.
+        </li></p>
+        <p><li>
+          Assumed last sane state: GSA tries to guess a last sane
+          state. The guess might be wrong or it might help.
+          In any case, no re-posting will happen, so that unwanted
+          actions like could happen with the browsers back button
+          are prevented.
+        </li></p>
+        <p><li>
+          Logout: In case of serious problems where neither of the
+          two other options helps, you shoud log out of GSA. As long
+          as GSA is still running, you will get the login dialog.
+        </li></p>
+      </ol>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="feed_management.html">
+  <div class="gb_window_part_center">Help: NVT Feed Management</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_feed">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>NVT Feed Management</h1>
+      <p>
+       The management of NVT feeds is only accessible for users that own
+       the "Administrator" role.
+      </p>
+
+      <a name="feed_synchronization"></a>
+      <h2>Synchronization with an NVT Feed</h2>
+      <p>
+       This dialog allows you synchronize your NVT collection with an NVT feed. It
+       shows the name of the NVT Feed Service your installation is configured to use
+       and a short description of the tool which will be used to synchronize your NVT
+       collection with the Feed Service. Hit the "Synchronize with Feed now" button to
+       start the synchronization.
+      </p>
+
+      <a name="consequences"></a>
+      <h2>Consequences of an NVT Synchronization</h2>
+      <p>
+       The synchronization with an NVT Feed Service will take a short amount of time,
+       depending on the time of your last synchronization and the amount of changes in
+       the Feed Service. While synchronizing, the interface might seem slow to react.
+       At the end of the synchronization, some components of your installation will
+       need to be reloaded to make full use of your updated NVT collection. This may
+       cause the interface to be unresponsive for a short amount of time.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="glossary.html">
+
+  <div class="gb_window_part_center">Help: Glossary</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Glossary</h1>
+      <p>
+       For Greenbone Security Assistant (GSA) a number
+       of terms are used consistently throughout the
+       user interface.
+      </p>
+      <p>
+       Most of the terms are general and to avoid
+       misinterpretation, this page summarizes the
+       definitions of these
+       terms as they are used in GSA.
+      </p>
+
+      <a name="escalator"></a>
+      <h2>Escalator</h2>
+      <p>
+       An escalator is an action that can be triggered at certain events.
+       Usually this means notification, e.g. via e-mail in case of
+       new found vulnerabilities.
+      </p>
+
+      <a name="note"></a>
+      <h2>Note</h2>
+      <p>
+       A note is a textual comment associated with an <a href="#nvt">NVT</a>.
+       Notes show up in <a href="#report">reports</a>, below the results
+       generated by the NVT.  A note can be applied to a particular
+       result, task, threat level, port and/or host, so that the note appears only
+       in certain reports.
+      </p>
+
+      <a name="nvt"></a>
+      <h2>Network Vulnerability Test (NVT)</h2>
+      <p>
+       A Network Vulnerability Test (NVT) is a routine
+       that checks a target system for the presence of a
+       specific known or potential security problem.
+      </p>
+      <p>
+       NVTs are grouped into families of similar
+       tests. The selection of families and/or
+       single NVTs is part of a
+       <a href="#scanconfig">Scan Configuration</a>.
+      </p>
+
+      <a name="report"></a>
+      <h2>Report</h2>
+      <p>
+       A report is the result of a <a href="#scan">Scan</a>
+       and contains a summary of what the selected NVTs found
+       out for each of the target hosts.
+      </p>
+      <p> 
+       A report is always associated with a
+       <a href="#task">task</a>. The
+       <a href="#scanconfig">Scan Configuration</a> that
+       detemines the extend of the report is part of the
+       associated task and can not be modified. Therefore,
+       for any report it is ensured that its execution
+       configuration is preserved and available.
+      </p>
+
+      <a name="scan"></a>
+      <h2>Scan</h2>
+      <p>
+       A scan is a <a href="#task">task</a> in progress.
+       For each task only one scan can be active.
+       The result of a scan is a <a href="#report">report</a>.
+      </p>
+      <p>
+       The status of all active scan can be seen
+       in the <a href="/omp?get_status">task overview</a>.
+       The progress is shown as a percentage of
+       total number of tests to be executed. The
+       duration of a scan is determined by the number
+       <a href="#target">tagets</a> and the complexity
+       of the <a href="#scanconfig">Scan Configuration</a>
+       and ranges from 1 minute to many hours or even days.
+      </p>
+      <p>
+       The task overview offers an option to stop a scan.
+       The resulting report will then be imcomplete.
+      </p>
+
+      <a name="scanconfig"></a>
+      <h2>Scan Configuration</h2>
+      <p>
+       A scan configuration covers the selection
+       of <a href="#nvt">NVTs</a> as well as general
+       and very specific (expert) parameters for the scan server
+       and for some of the NVTs.
+      </p>
+      <p>
+       Not covered by a Scan Configuration is the selection
+       of targets. These are separately specified as a
+       <a href="#target">target</a>.
+      </p>
+
+      <a name="target"></a>
+      <h2>Target</h2>
+      <p>
+       A target defines a set of systems (called "hosts")
+       that are to be scanned.
+       The systems are identified either by
+       their IP addresses, by their hostnames, or with CIDR network notation.
+      </p>
+
+      <a name="task"></a>
+      <h2>Task</h2>
+      <p>
+       A task is initially formed by a <a href="#target">target</a>
+       and a <a href="#scanconfig">scan configuration</a>.
+       Executing a task means to create a <a href="#scan">scan</a>.
+       As a result, a task collects a series
+       of <a href="#report">reports</a>.
+      </p> 
+      <p>
+       The target and scan configuration is static.
+       Thus, the resulting sequence of reports describe the
+       change of security status over time.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_task.html">
+  <div class="gb_window_part_center">Help: New task</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/new_task.html">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>New task</h1>
+      <a name="newtask"></a>
+      <p>
+       To create a new <a href="/help/glossary.html#task">task</a>
+       you have to provide the following elements:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Task Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>All Windows desktops in-depth</td>
+        </tr>
+        <tr class="even">
+          <td>Scan Type</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>One of the
+              <a href="/help/configure_scanconfigs.html">configured scan configs</a>.
+          </td>
+          <td>Full and fast</td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Targets</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>One of the
+              <a href="/help/configure_targets.html">configured targets</a>.</td>
+          <td>The Windows Desktops</td>
+        </tr>
+        <tr class="even">
+          <td>Escalator (optional)</td>
+          <td>no</td>
+          <td>---</td>
+          <td>One of the
+              <a href="/help/configure_escalators.html">configured escalators</a>.
+          </td>
+          <td>EmailFinished</td>
+        </tr>
+      </table>
+
+      <p>
+       Pressing button "Create Task" will add a new entry to the list
+       of tasks and return to the <a href="/help/tasks.html">Tasks</a>
+       overview.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="notes.html">
+  <div class="gb_window_part_center">Help: Notes</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_notes">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="notes"></a>
+      <h1>Notes</h1>
+      <p>
+       This table provides an overview of all
+       <a href="glossary.html#note">notes</a> and summarizes
+       the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>NVT</td>
+          <td>The name of the NVT to which the note applies.  The name is truncated if
+              it is too long for the column.</td>
+        </tr>
+        <tr>
+          <td>Text</td>
+          <td>An excerpt from the beginning of the text of the note.  If the note has
+              been orphaned because the task it applies to was removed, then "Orphan"
+              appears above the excerpt, in bold.
+          </td>
+        </tr>
+      </table>
+ 
+      <a name="actions"></a>
+      <h3>Actions</h3>
+  
+      <h4>Delete Note</h4>
+      <p>
+       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       remove the note immediately.  The list of notes will be updated.
+      </p>
+  
+      <h4>Note Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show the  <a href="#notedetails">Note Details</a> page.  This page has
+       full details of the note, including the note text and all
+       contraints on the note.
+      </p>
+  
+      <h4>Edit Note</h4>
+      <p>
+       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+       will show the <a href="#editnote">Edit Note</a> page, which allows modification
+       of the note.
+      </p>
+
+      <a name="newnote"></a>
+      <h2>New Note</h2>
+      <p>
+       For creating a new note this dialog offers the following entries.
+       Below the entries are details of the result that may be associated with
+       the note.
+       Hit the button "Create Note" to submit the new note.
+       The previous page will be updated.
+      </p>
+    
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Hosts</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Port</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Threat</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Task</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Result</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Text</td>
+          <td>yes</td>
+          <td>600</td>
+          <td>Free form text</td>
+          <td>This issue will go away when we switch to GNU/Hurd.</td>
+        </tr>
+      </table>
+
+      <a name="notedetails"></a>
+      <h2>Note Details</h2>
+      <p>
+       A page that provides detailed information about a note.
+       This includes the NVT, creation time, modification time,
+       all constraints on the note and the full text of the note.
+      </p>
+      <p>
+       Clicking on the NVT name will go to the NVT Details page.
+      </p>
+ 
+      <a name="editnote"></a>
+      <h2>Edit Note</h2>
+      <p>
+       A page for modifying a note.  The fields are like those on the
+       <a href="#newnote">New Note</a> page.
+      </p>
+      <p>
+       Hit the button "Save Note" to submit the modification.
+      </p>
+    </div>
+  </div>
+</xsl:template>    
+
+<xsl:template match="nvts.html">
+  <div class="gb_window_part_center">Help: NVTs</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="nvts"></a>
+      <h1>Network Vulnerability Tests (NVTs)</h1>
+      <p>
+       Currently, there is one page in the web interface
+       about <a href="glossary.html#nvt">NVT</a>s.
+      </p>
+
+      <a name="nvtdetails"></a>
+      <h2>NVT Details</h2>
+      <p>
+       A page that provides detailed information about an NVT.
+       This includes the NVT family and the full description of the NVT,
+       as well as a table listing all notes on the NVT.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="performance.html">
+  <div class="gb_window_part_center">Help: Performance</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_system_reports">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="performance"></a>
+      <h1>Performance</h1>
+      <p>
+       This page provides a system performance overview.
+      </p>
+      <p>
+       A number of graphs summarize the performance of the hardware and
+       operating system.  Initially the graphs summarize the past day of
+       activity.  At the top of the dialog are links to other time periods,
+       like the past hour and month.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="reports.html">
+  <div class="gb_window_part_center">Help: Reports</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_status&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
+    <div style="text-align:left">
+    
+      <br/>
+      <a name="tasksummary"></a>
+      <h1>Task Summary</h1>
+      <p>
+       This information dialog lists name, status and number of reports for
+       the task for which the report list is shown below.
+       It also lists the <a href="glossary.html#scanconfig">Scan Config</a>,
+       <a href="glossary.html#escalator">Escalator</a> and <a href="glossary.html#target">Target</a> for the shown report, if
+       any were chosen. Information about the chosen Scan Config, Escalator or
+       Target is accessible by clicking on the respective items name.
+      </p>
+
+      <a name="reports"></a>
+      <h1>Reports</h1>
+      <p>
+       This table provides an overview of all
+       <a href="glossary.html#report">reports</a>
+       for the selected task (see Task Summary box).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Report</td>
+          <td>Shows the time stamp for the report. This indicates
+              when the scan finished and the final report
+              was created.</td>
+        </tr>
+        <tr>
+          <td>Threat</td>
+          <td>Threat level of the report. These levels
+            can occur:
+            <br />
+            <table>
+              <tr>
+                <td valign="top"><img src="/img/high_big.png" /></td>
+                <td>
+                  High: At least one NVT reported severity "High" for at least one
+                  target host in the report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/medium_big.png" /></td>
+                <td>
+                  Medium: Severity "High" does not occur in the
+                  report. At least one NVT reported severity "Medium"
+                  for at least one target host in the report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/low_big.png" /></td>
+                <td>
+                  Low: Neither severity "High" nor "Medium" occurs in the report.
+                  At least one NVT reported severity "Low" for at
+                  least one target host in the report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/none_big.png" /></td>
+                <td>
+                  None: The report does not contain a single severe finding. This could
+                  also mean that the scan was interrupted or failed, especially if
+                  even no log information occur in the report.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Results</td>
+          <td>This column lists the number
+            of occurances for each severity level.
+            <br />
+            <table>
+              <tr><td valign="top"><img src="/img/high.png" alt="High" title="High" /></td><td>
+                  The number of issues of severity "High" found during the scan.
+              </td></tr>
+              <tr><td valign="top"><img src="/img/medium.png" alt="Medium" title="Medium" /></td><td>
+                  The number of issues of severity "Medium" found during the scan.
+              </td></tr>
+              <tr><td valign="top"><img src="/img/low.png" alt="Low" title="Low" /></td><td>
+                  The number of issues of severity "Low" found during the scan.
+              </td></tr>
+              <tr><td valign="top"><img src="/img/log.png" alt="Log" title="Log" /></td><td>
+                  The number of log-entries that occured during the scan.
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>Download</td>
+          <td>This field offers to download the report in various formats:
+            <br />
+            <table>
+              <tr><td valign="top">PDF:</td><td>
+                  A single PDF file is created from the report details.
+              </td></tr>
+              <tr><td valign="top">HTML:</td><td>
+                  A single HTML file is created from the report details.
+                  This is similar to the page created via action "Details"
+                  but is an self-contained document that could be viewed
+                  independent of GSA.
+              </td></tr>
+              <tr><td valign="top">XML:</td><td>
+                  A single XML file is created from the report details.
+                  This should be the basis for creating your own style
+                  for a report or post-process the results in other ways.
+              </td></tr>
+              <tr><td valign="top">NBE:</td><td>
+                  A single NBE file is created. This format is supported
+                  by OpenVAS-Client and in the past often used for
+                  post-processing the results. It is offered primarily
+                  for compatibility purposes. It is recommended to
+                  set up post-processing based on the XML file, not
+                  based on the NBE file.
+              </td></tr>
+              <tr><td valign="top">ITG:</td><td>
+                  Any tabular results of IT-Grundschutz scans are collected
+                  from the report and assembled to a single CSV file for
+                  simple integration into spreadsheet applications or
+                  databases.
+              </td></tr>
+              <tr><td valign="top">CPE:</td><td>
+                  Any tabular results of CPE inventory scans are collected
+                  from the report and assembled to a single CSV file for
+                  simple integration into spreadsheet applications or
+                  databases.
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" /> will
+       display all report details on a new page
+       <a href="/help/view_report.html">View Report</a>.
+      </p>
+
+      <h4>Delete Report</h4>
+      <p>
+       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       remove the report immediately. The list of reports will be updated.
+      </p>
+
+      <a name="notes"></a>
+      <h1>Notes</h1>
+      <p>
+       This table provides an overview of all
+       <a href="glossary.html#note">notes</a>
+       that apply to any result generated by the task.
+       It is formatted much like the <a href="notes.html">Notes</a> page.
+      </p>                   
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_details.html">
+  <div class="gb_window_part_center">Help: Scan Config Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast">Jump to example dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Scan Config Details</h1>
+      <p>
+       This dialog shows the name and comment of a given
+       <a href="glossary.html#scanconfig">Scan Configuration</a> together with the
+       associated configuration parameters itself.
+      </p>
+
+      <h2>Network Vulnerability Test Families</h2>
+      <p>
+       This table provides an overview of the selected NVTs and NVT Families.
+       A Trend icon next to the Family column of the table indicates whether new
+       families will automaticall be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" />
+       or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Family</td>
+          <td>Shows the name of the NVT Family.</td>
+        </tr>
+        <tr class="even">
+          <td>NVT's selected</td>
+          <td>The number of NVTs that would be considered
+              with the current NVT set and the total number of NVTs in this family.</td>
+        </tr>
+        <tr class="odd">
+          <td>Family</td>
+          <td>Shows the name of the NVT Family.</td>
+        </tr>
+        <tr class="even">
+          <td>NVT's selected</td>
+          <td>The number of NVTs that would be considered
+              with the current NVT set and the total number of NVTs in this family.</td>
+        </tr>
+        <tr class="odd">
+          <td>Trend</td>
+          <td>Shows the Trend, which indicates whether new NVTs of this family are
+              automatically added to the configuration ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or
+              not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />. </td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+  
+      <h4>Scan Config Family Details</h4>
+      <p>
+       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
+       will show an intermediate detailed <a href="scanconfig_family_details.html">list of NVTs</a> and its preferences.
+      </p>
+
+      <h2>Scanner Preferences</h2>
+      <p>
+       This table shows the preferences of the scan engine itself.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of the Scanner Preference.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>Shows the current value of the Scanner Preference.</td>
+        </tr>
+      </table>
+
+      <h2>Network Vulnerability Test Preferences</h2>
+      <p>
+       Network Vulnerability Tests can have multiple preferences that influence the
+       test behaviour.
+       This table lists one preference and the current value per row.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>NVT</td>
+          <td>Shows the name of an NVT.</td>
+        </tr>
+        <tr class="even">
+          <td>Name</td>
+          <td>Shows the name of a prefence for an NVT.</td>
+        </tr>
+        <tr class="odd">
+          <td>Value</td>
+          <td>Shows current value of a prefence for an NVT.</td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+
+      <h4>Scan Config NVT Details</h4>
+      <p>
+       A click on the details icon
+       <img src="/img/details.png" alt="Details" title="Details" /> will open the
+       <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
+       and all its preferences.
+      </p>
+
+      <h2>Tasks using this Config</h2>
+      <p>
+       The tasks that use the shown config are listed.
+       A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
+       the <a href="reports.html#tasksummary">Task summary</a> page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_editor.html">
+  <div class="gb_window_part_center">Help: Scan Config Editor</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Scan Config Editor</h1>
+      <p>
+       The Scan Config Editor allows modification of all parameters of a
+       <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       These include a selection of <a href="glossary.html#nvt">NVT</a>s and the
+       specifications how the selection should automatically updated, NVT Preferences
+       and Timeouts and advanced Scanner Preferences.
+      </p>
+      <p>
+       Note that only Scan Configurations that are not currently in use by a
+       <a href="glossary.html#task">Task</a> allow modifications.
+      </p>  
+
+      <h1>Edit Scan Config Details</h1>
+      <p>
+       This dialog shows the name and comment of a given
+       <a href="glossary.html#scanconfig">Scan Configuration</a> together with the
+       associated configuration parameters itself.
+       It allows to adjust all parameters of the Scan Configuration.
+      </p>
+      <p>
+       Note: In order to save modifications, the button labelled "Save Config" must
+       be clicked. The edit action <img src="/img/edit.png" alt="Edit" title="Edit" />
+       on NVT Families will save the selection.
+      </p>
+
+      <h2>Edit Network Vulnerability Test Families</h2>
+      <p>
+       This table provides an overview of the selected NVTs and NVT Families and allow
+       to choose which Families or individual NVTs should be included.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Family</td>
+          <td>Shows the name of the NVT Family. The trend icon in the Family column
+              header allows to specify whether new families will automaticall be
+              included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or not ("Static")
+              <img src="/img/trend_nochange.png" alt="Static" title="Static" />.</td>
+        </tr>
+        <tr class="even">
+          <td>NVT's selected</td>
+          <td>Shows the number of NVTs that would be considered with the current
+              selection and the total number of NVTs in this family.</td>
+        </tr>
+        <tr class="odd">
+          <td>Trend</td>
+          <td>Allows modification of the trend for this family. If the trend is set to
+             "Grow" <img src="/img/trend_more.png" alt="Grow" title="Grow" />, new NVTs of this family are
+              automatically added to the configuration. If it is set to "Static"
+              <img src="/img/trend_nochange.png" alt="Static" title="Static" />, the selection will not be
+              automatically changed. </td>
+        </tr>
+        <tr class="even">
+          <td>Select all NVT's</td>
+          <td>If this checkbox is ticked, all NVTs that are currently available in this
+              Family will be selected.</td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+
+      <h4>Save Config and edit Family Details</h4>
+      <p>
+       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+       will save the modifications and show the
+       <a href="scanconfig_editor_nvt_families.html">Edit Scan Config Family Details</a>
+       page which shows details about NVTs within the family and allows to select or
+       deselect individual NVTs.
+      </p>
+    
+      <h2>Edit Scanner Preferences</h2>
+      <p>
+       This table shows the preferences of the scan engine itself and allows to modify
+       these. This feature is intended for advanced users only. Modifications will be
+       saved after a click on the "Save Config" button below the table.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of the Scanner Preference.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>Shows the current value of the Scanner Preference.</td>
+        </tr>
+      </table>
+
+      <h2>Network Vulnerability Test Preferences</h2>
+      <p>
+       Network Vulnerability Tests can have multiple preferences that influence the
+       test behaviour.
+       This table lists one preference and the current value per row.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>NVT</td>
+          <td>Shows the name of an NVT.</td>
+        </tr>
+        <tr class="even">
+          <td>Name</td>
+          <td>Shows the name of a prefence for an NVT.</td>
+        </tr>
+        <tr class="odd">
+          <td>Value</td>
+          <td>Shows current value of a prefence for an NVT.</td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+
+     <h4>Scan Config NVT Details</h4>
+      <p>
+       A click on the details icon
+       <img src="/img/details.png" alt="Details" title="Details" /> will open the
+       <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog
+       with detailed information about a certain NVT and all its preferences.
+      </p>
+
+      <h4>Edit Scan Config NVT Details</h4>
+
+      <p>
+       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
+       will open the <a href="scanconfig_editor_nvt.html">Edit Scan Config NVT Details</a>
+       dialog with detailed information about a certain NVT and all its preferences.
+       This page will provide an overview over all preferences and the currently set
+       Timeout for this NVT and allow modifications.
+      </p>
+
+      <h2>Tasks using this Config</h2>
+      <p>
+       The tasks that use the shown config are listed.
+       A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
+       the <a href="reports.html#tasksummary">Task summary</a> page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_editor_nvt_families.html">
+  <div class="gb_window_part_center">Help: Scan Config Editor NVT Families</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="editscanconfigfamilydetails"></a>
+      <h1>Edit Scan Config Family Details</h1>
+      <p>
+       This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
+       family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+      </p>
+
+      <h2>Edit Network Vulnerability Tests</h2>
+      <p>
+       This table provides an overview of NVTs of one family in a Scan Configuration
+       and allows to include or exclude a NVT and to modify its preferences or timeout.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of a NVT.</td>
+        </tr>
+        <tr class="even">
+          <td>OID</td>
+          <td>Shows the OID of a NVT.</td>
+        </tr>
+        <tr class="odd">
+          <td>Timeout</td>
+          <td>Shows current timeout setting in seconds for a NVT (or "default" if the
+              default value is used).</td>
+        </tr>
+        <tr class="even">
+          <td>Preferences</td>
+          <td>Shows the number of Preferences of a NVT.</td>
+        </tr>
+        <tr class="odd">
+          <td>Selected</td>
+          <td>Shows whether the NVT is included in the Scan Config or not and allows to
+              add or remove it from the selection.</td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+
+      <h4>NVT Details</h4>
+      <p>
+       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> 
+       will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
+      </p>
+
+      <h4>Select and Edit NVT Details</h4>
+      <p>
+       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />will add the NVT to the selection
+       and lead to a page that lists <a href="scanconfig_editor_nvt.html">NVT details and allows to modify preferences</a> and
+       the timeout.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_editor_nvt.html">
+  <div class="gb_window_part_center">Help: Scan Config editor NVT</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Edit Scan Config NVT Details</h1>
+      <p>
+       This dialog shows information of a single <a href="glossary.html#nvt">NVT</a>
+       and its preference settings within a
+        <a href="glossary.html#scanconfig">Scan Configuration</a>.
+      </p>
+
+      <h2>Edit Network Vulnerability Test</h2>
+    
+      <h3>Details</h3>
+      <p>
+       Provides information like the name of the NVT, a summary, its OID, Family
+       Affiliation and References.
+      </p>
+
+      <h3>Description</h3>
+      <p>
+       This section provides a description of the NVT. It might contain a
+       classification into a Risk Factor and suggest solutions to fix the issue that
+       can be detected by this NVT.
+      </p>
+
+      <h3>Preferences</h3>
+      <p>
+       This table shows values of the timeout and NVT specific preferences one per
+       row. Depending on the Preference, there are different input methods (e.g.
+       checkboxes, text input fields, etc).
+      </p>
+      <p>
+       Note: After any changes, the "Save Config" button has to be clicked.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of the NVT Preference.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>The value for the NVT Preference in the given Scan Configuration.
+              For different Preference Types, different input methods are shown.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_family_details.html">
+  <div class="gb_window_part_center">Help: Scan Config Family Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="scanconfigfamilydetails"></a>
+      <h1>Scan Config Family Details</h1>
+      <p>
+       This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
+       family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+      </p>
+    
+      <h2>Network Vulnerability Tests</h2>
+      <p>
+       This table provides an overview of NVTs of one family in a Scan Configuration.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of a NVT.</td>
+        </tr>
+        <tr class="even">
+          <td>OID</td>
+          <td>Shows the OID of a NVT.</td>
+        </tr>
+        <tr class="odd">
+          <td>Timeout</td>
+          <td>Shows current timeout setting in seconds for a NVT (or "default" if the
+              default value is used).</td>
+        </tr>
+        <tr class="even">
+          <td>Preferences</td>
+          <td>Shows the number of Preferences of a NVT.</td>
+        </tr>
+      </table>
+
+      <h3>Actions</h3>
+    
+      <h4>NVT Details</h4>
+      <p>
+       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> 
+       will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="scanconfig_nvt_details.html">
+  <div class="gb_window_part_center">Help: Scan Config NVT Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Scan Config NVT Details</h1>
+      <p>
+       This dialog shows information of a single <a href="glossary.html#nvt">NVT</a>
+       and its preference settings within a
+       <a href="glossary.html#scanconfig">Scan Configuration</a>.
+      </p>
+
+      <h2>Network Vulnerability Test</h2>
+  
+      <h3>Details</h3>
+      <p>
+       Provides information like the name of the NVT, a summary, its OID, Family
+       Affiliation and References.
+      </p>
+
+      <h3>Description</h3>
+      <p>
+       This section provides a description of the NVT. It might contain a
+       classification into a Risk Factor and suggest solutions to fix the issue that
+       can be detected by this NVT.
+      </p>
+    
+      <h3>Preferences</h3>
+      <p>
+       This table shows values of the timeout and NVT specific preferences one per
+       row.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows the name of the NVT Preference.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>The value for the NVT Preference in the given Scan Configuration.</td>
+        </tr>
+      </table>      
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="settings.html">
+  <div class="gb_window_part_center">Help: Settings</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_settings">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Settings</h1>
+      <p>
+       The management of settings is only accessible for users that own the
+       "Administrator" role.
+      </p>
+      <p>
+       This dialog allows you to view the current settings of your installation.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="tasks.html">
+  <div class="gb_window_part_center">Help: Tasks</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_status">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="tasks"></a>
+      <h1>Tasks</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html#task">tasks</a> and summarizes
+       the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Task</td>
+          <td>Shows name of the task. Names are not
+              necessarily unique, so the same name
+              may appear multiply. An internal ID
+              distinguishes the tasks.</td>
+        </tr>
+        <tr>
+          <td>Status</td>
+          <td>The status of a task is one of these:
+            <br />
+            <table>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Running">
+                    <div class="progressbar_bar" style="width:42px;"></div>
+                    <div class="progressbar_text">42 %</div>
+                   </div>
+                </td><td>
+                  A active scan for this task is running and completed 42%.
+                  The percentage refers
+                  to number of hosts multiplied with number of NVTs. Thus,
+                  it may not correspond perfectly with the duration of the scan.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="New">
+                    <div class="progressbar_bar_new" style="width:100px;"></div>
+                    <div class="progressbar_text"><i><b>New</b></i></div>
+                  </div>
+                </td><td>
+                  The task has not been started since it was created.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Requested</div>
+                  </div>
+                </td><td>
+                  This task has just been started and prepares to delegate the scan
+                  to the scan engine.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Delete Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Delete Requested</div>
+                  </div>
+                </td><td>
+                  The user has recently deleted the task. Currently the manager
+                  server cleans up the database which might take some time because
+                  any reports associated with this task will be removed as well.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Stop Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Stop Requested</div>
+                  </div>
+                </td><td>
+                  The user has recently aborted the scan. Currently the manager
+                  server has submitted this command to the scanner, but the scanner
+                  has not yet cleanly stopped the scan.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Stopped">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Stopped</div>
+                  </div>
+                </td><td>
+                  The last scan for this task was aborted by the user. The newest
+                  report might be incomplete. Also, this status is set in cases
+                  where the task was aborted due to other arbitrary circumstances
+                  such as power outage.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Internal Error">
+                    <div class="progressbar_bar_error" style="width:100px;"></div>
+                    <div class="progressbar_text">Internal Error</div>
+                  </div>
+                </td><td>
+                  The last scan for this task resulted in an error. The newest
+                  report might be incomplete or entirely missing. In the latter case
+                  the newest visible report is in fact one from an earlier scan.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Done">
+                    <div class="progressbar_bar_done" style="width:100px;"></div>
+                    <div class="progressbar_text">Done</div>
+                  </div>
+                </td><td>
+                  The Task returned successful from a scan and produced a report. The
+                  newest report is complete with regard to targets and scan configuration
+                  of the task.
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Reports: Total</td>
+          <td>The number of reports that have been created by
+              running this task.</td>
+        </tr>
+        <tr>
+          <td>Reports: First</td>
+          <td>Date when the first report was created.
+              This field is left empty if less then 2
+              reports are available.</td>
+        </tr>
+        <tr class="odd">
+          <td>Reports: Last</td>
+          <td>Date when the newest report was created.</td>
+        </tr>
+        <tr>
+          <td>Threat</td>
+          <td>Threat level of the newest report. These levels can occur:
+            <br />
+            <table>
+              <tr>
+                <td valign="top"><img src="/img/high_big.png" /></td>
+                <td>
+                  High: At least one NVT reported severity "High" for at least one
+                  target host in the newest report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/medium_big.png" /></td>
+                <td>
+                  Medium: Severity "High" does not occur in the newest
+                  report. At least one NVT reported severity "Medium"
+                  for at least one target host in the newest report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/low_big.png" /></td>
+                <td>
+                  Low: Neither severity "High" nor "Medium" occurs in the newest report.
+                  At least one NVT reported severity "Low" for at
+                  least one target host in the newest report.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/none_big.png" /></td>
+                <td>
+                  None: No security threat occurs in the newest report. Perhaps
+                  some NVT created a log information, so the report is not necessarily empty.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Trend</td>
+          <td>Describes the change of threat between the newest
+              report and the report before the newest:
+            <br />
+            <table>
+              <tr>
+                <td valign="top"><img src="/img/trend_up.png" /></td>
+                <td>
+                  Threat level increased: In the newest report at least one NVT for at least one
+                  target host reported a higher severity level than any NVT reported
+                  in the report before the newest one.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/trend_more.png" /></td>
+                <td>
+                  Threat number increased: The threat level of the last report
+                  and the report before the
+                  last report is the same. But the newest report contains more
+                  security issues of this threat level than the report before.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/trend_nochange.png" /></td>
+                <td>
+                  Threat did not change: The number of High, Medium, Low and Log
+                  reports of the newest report and the one before are identical.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/trend_less.png" /></td>
+                <td>
+                  Threat number decreased: The threat level of the last
+                  report and the report before the
+                  last report is the same. But the newest report contains less
+                  of the security issues of this threat level than the report before.
+                </td>
+              </tr><tr>
+                <td valign="top"><img src="/img/trend_down.png" /></td>
+                <td>
+                  Threat level decreased: In the newest report at no NVT for at any
+                  target host reported a severity level as high as the severity
+                  level of the report before the newest one.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+      <a name="sorting"></a>
+      <h3>Sorting</h3>
+      <p>
+       The table can be sorted either by the Task name or by the Status column.
+       Therefore click on the descending <img src="/img/descending.png" alt="Sort descending" title="Sort descending" />
+       or ascending <img src="/img/ascending.png" alt="Sort ascending" title="Sort ascending" /> icon.
+       The icon of the current choice will appear greyed out <img src="/img/ascending_inactive.png" alt="Current sort ascending" title="Current sort ascending" />, <img src="/img/descending_inactive.png" alt="Current sort descending" title="Current sort descending" />.
+       The list will be updated immediately.
+      </p>
+      
+      <a name="autorefresh"></a>
+      <h3>Auto-refresh</h3>
+      <p>
+       The tasks overview allows to set a time interval for
+       an automatic page refresh. Select one of the
+       intervals (10 seconds, 30 seconds or 60 seconds)
+       and confirm with pressing the refresh
+       <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon.
+      </p>
+      <p>
+       Note that leaving this page will reset the refresh interval to manual refresh.
+      </p>
+      
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      
+      <h4>Start Task</h4>
+      <p>
+       Pressing the start icon <img src="/img/start.png" alt="Start" title="Start" /> will
+       start a new scan. The list of tasks will be updated.
+      </p>
+      <p>
+       This action is only available if the task has status "New" or "Done".
+      </p>
+      
+      <h4>Abort Task</h4>
+      <p>
+       Pressing the abort icon <img src="/img/stop.png" alt="Abort" title="Abort" /> will
+       abort a running task. The list of tasks will be updated and for this task
+       a half-finished report is added to the list of reports.
+      </p>
+      <p>
+       This action is only available if the task status shows a progress bar.
+      </p>
+      
+      <h4>Delete Task</h4>
+      <p>
+       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       remove the task immediately. The list of tasks will be updated. Note that also all
+       of the reports associated with this task will be removed.
+      </p>
+      <p>
+       This action is only available if the task has status "New" or "Done".
+      </p>
+      
+      <h4>Reports</h4>
+      <p>
+       Pressing the report icon <img src="/img/list.png" alt="Reports" title="Reports" /> will
+       switch to an overview on all reports for this task.
+       It is the same action as clicking on the number of reports in the column "Reports: Total".
+      </p>
+      <p>
+       This action is only available if at least one report is present.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="view_report.html">
+  <div class="gb_window_part_center">Help: View Report</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30">Jump to dialog with sample content</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="viewreport"></a>
+      <h1>View Report</h1>
+      <p>
+       This "View Report" page summarizes all information the selected
+       <a href="/help/glossary.html#report">report</a> contains.
+       This page is structured and designed like the
+       download formats HTML and PDF.
+      </p>
+      <p>
+       It is a single page with links that
+       refer to the same page further up or down.
+       For example, the host names in the "Host" table link to the host
+       results further down the page.
+       The exception is the "Back to Tasks" link that refers to the
+       <a href="/help/glossary.html#task">task</a>'s
+       <a href="/help/reports.html">list of reports</a>.
+      </p>
+      
+      <h2>Download a report</h2>
+      <p>
+       To download the currently shown report, the format can be chosen.
+       The download will start shortly after a click on the "Download" button.
+      </p>
+      
+      <h2>Notes</h2>
+      <p>
+       Any <a href="/help/glossary.html#note">notes</a> that apply to a result are
+       displayed under the result.  The notes for a result are sorted most recently
+       created first.
+      </p>
+      <p>
+       Each note has a group of action buttons
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       <img src="/img/details.png" alt="Details" title="Details" />
+       <img src="/img/edit.png" alt="Edit" title="Edit" />
+       which affect the note as on the <a href="notes.html">Notes</a> page.
+      </p>
+      <p>
+       To add a note to an NVT, click the new note button
+       <img src="/img/new_note.png" alt="New Note" title="New Note" />
+       on a result of the NVT.
+      </p>
+      <p>
+       If a result has notes and note display is enabled in the filter (see below),
+       then the notes icon
+       <img src="/img/note.png" alt="Note" title="Note" />
+       is shown on the result.  Clicking the icon jumps to the notes,
+       which is helpful if the result has a very long description.
+      </p>
+      
+      <h2>Result Sorting</h2>
+      <p>
+       Results shown on the page can be sorted either by the port number or by threat
+       level, and ascending or descending.
+       The sort order is changed by clicking on the respective text (e.g.
+       "threat ascending").
+      </p>
+      
+      <h2>Result Filtering</h2>
+      <p>
+       A checkbox for each threat level (High, Medium, Low and Log) can be ticked
+       or unticked to
+       include or exclude results of the respective threat level in the shown report.
+       This can be combined with a text phrase, which limits the report to all the
+       results that include the entered phrase.
+       The "Show notes" checkbox toggles the display of notes.
+      </p>
+      <p>
+       The list of results is updated after a click on the "Apply" button.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+</xsl:stylesheet> 

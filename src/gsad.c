@@ -3494,6 +3494,23 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
         }
+      else if (!strncmp (&url[0], "/help/",
+                    strlen ("/help/"))) /* flawfinder: ignore,
+                                           it is a const str */
+        { 
+          // XXX: url subsearch could be nicer and xsl transform could
+          // be generalized with the other transforms.
+          char * c = (char *)&url[0];
+          time_t now = time(NULL);
+          while (c[0] && c[0] != '#') { c ++; }
+          c[0] = 0;
+          gchar *xml = g_strdup_printf ("<envelope><time>%s</time><login>%s</login>"
+                                        "<help><%s/></help></envelope>",
+                                        ctime(&now), credentials->username, &url[6]);
+          res = xsl_transform (xml);
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+        }
       else
         {
           /* URL requests neither an OMP command nor a special GSAD command,

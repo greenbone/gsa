@@ -1,3 +1,19 @@
+2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Patch contributed by Mareike Piechowiak <noplant@gmx.de>.
+
+	This moves all help page content to XSL and thus allows
+	to have user name and date in the header (which was not
+	possible with the static files).
+
+	* src/gsad.c (request_handler): Added handling of any URL
+	with "/help/".
+
+	* src/html/src/help.xsl: New. Contains all help texts
+	of the .htm4 files.
+
+	* src/html/src/gsad.xsl: Added inclusion of help.xsl.
+
 2010-04-10 Stephan Kleine
 
 	* src/CMakeLists.txt: Fix build with as-needed and remove duplicate lines.
