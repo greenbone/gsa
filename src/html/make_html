@@ -37,7 +37,6 @@ PUBLIC_LIST=gsa-style.css favicon.gif img/gsa_splash.png \
 
 all: clean
 	# make directories
-	mkdir -p $(BUILDDIR)/help
 	mkdir -p $(BUILDDIR)/img/style
 	mkdir -p $(BUILDDIR)/login/img/style
 
