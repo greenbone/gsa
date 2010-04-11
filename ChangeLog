@@ -1,5 +1,13 @@
 2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/gsad.xsl: Changed URL for about page.
+
+	* src/html/src/help.xsl: Added content of pages "about" and "gplv2".
+
+	* src/html/src/about.htm4, src/html/src/gplv2.htm4: Removed.
+
+2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Static help files are not necessary anymore.
 
 	* src/html/make_html: Don't create directory "help".
