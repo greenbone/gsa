@@ -1,5 +1,13 @@
 2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/make_html, src/html/header.m4, src/html/template.m4,
+	src/html/footer.m4: Removed.
+
+	* src/CMakeLists.txt: Instead of insalling the build directory
+	do direct installation.
+
+2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/src/gsad.xsl: Changed URL for about page.
 
 	* src/html/src/help.xsl: Added content of pages "about" and "gplv2".

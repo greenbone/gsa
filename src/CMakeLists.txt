@@ -109,9 +109,6 @@ set_target_properties (gsad PROPERTIES LINK_FLAGS
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
 
-add_custom_target (genhtml ALL
-                   COMMAND make -C ${CMAKE_SOURCE_DIR}/src/html -f make_html)
-
 CONFIGURE_FILE (gsad_log_conf.cmake_in
                 "${CMAKE_CURRENT_SOURCE_DIR}/gsad_log.conf")
 
@@ -122,8 +119,53 @@ install (TARGETS gsad
          LIBRARY DESTINATION ${LIBDIR}
          ARCHIVE DESTINATION ${LIBDIR}/static)
 
-install (DIRECTORY html/build/
+install (FILES html/src/favicon.gif html/src/gsad.xsl html/src/gsa-style.css
+               html/src/help.xsl  html/src/oap.xsl  html/src/omp.xsl
          DESTINATION ${GSA_STATE_DIR})
+
+install (FILES html/src/login/login.html
+         DESTINATION ${GSA_STATE_DIR}/login)
+
+install (FILES html/src/img/agent.png html/src/img/descending.png
+               html/src/img/key.png html/src/img/p_bar_bg.png
+               html/src/img/start_inactive.png html/src/img/alert_sign.png
+               html/src/img/details.png html/src/img/list_inactive.png
+               html/src/img/p_bar_done.png html/src/img/start.png
+               html/src/img/ascending_inactive.png html/src/img/download.png
+               html/src/img/list.png html/src/img/p_bar_error.png
+               html/src/img/stop_inactive.png html/src/img/ascending.png
+               html/src/img/edit_inactive.png html/src/img/log.png
+               html/src/img/p_bar_new.png html/src/img/stop.png
+               html/src/img/bsi-logo.png html/src/img/edit.png
+               html/src/img/low_big.png html/src/img/p_bar.png
+               html/src/img/bullet2.png html/src/img/exe.png
+               html/src/img/low.png html/src/img/p_bar_request.png
+               html/src/img/trend_down.png html/src/img/bullet.png
+               html/src/img/gb-logo.png html/src/img/medium_big.png
+               html/src/img/refresh.png html/src/img/trend_less.png
+               html/src/img/deb.png html/src/img/gsa_splash.png
+               html/src/img/medium.png html/src/img/resume_inactive.png
+               html/src/img/trend_more.png html/src/img/delete_inactive.png
+               html/src/img/help.png html/src/img/new_note.png
+               html/src/img/resume.png html/src/img/trend_nochange.png
+               html/src/img/delete_note.png html/src/img/high_big.png
+               html/src/img/new.png html/src/img/rpm.png
+               html/src/img/trend_up.png html/src/img/delete.png
+               html/src/img/high.png html/src/img/none_big.png
+               html/src/img/scheduled_inactive.png
+               html/src/img/descending_inactive.png
+               html/src/img/intevation-logo.png html/src/img/note.png
+               html/src/img/scheduled.png
+         DESTINATION ${GSA_STATE_DIR}/img)
+
+install (FILES html/src/img/style/logo_l.png html/src/img/style/logo_r.png
+               html/src/img/style/window_dec_a.png
+               html/src/img/style/window_dec_b.png
+               html/src/img/style/window_dec_c.png html/src/img/style/logo_m.png
+               html/src/img/style/window_dec_a_error.png
+               html/src/img/style/window_dec_b_error.png
+               html/src/img/style/window_dec_c_error.png
+         DESTINATION ${GSA_STATE_DIR}/img/style)
 
 install (FILES gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
