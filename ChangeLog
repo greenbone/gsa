@@ -1,3 +1,8 @@
+2010-04-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/CMakeLists.txt: Fix some installation directives to
+	make the login dialog appear properly.
+
 2010-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/make_html, src/html/header.m4, src/html/template.m4,

@@ -123,8 +123,17 @@ install (FILES html/src/favicon.gif html/src/gsad.xsl html/src/gsa-style.css
                html/src/help.xsl  html/src/oap.xsl  html/src/omp.xsl
          DESTINATION ${GSA_STATE_DIR})
 
-install (FILES html/src/login/login.html
+install (FILES html/src/login/login.html html/src/gsa-style.css
+               html/src/favicon.gif
          DESTINATION ${GSA_STATE_DIR}/login)
+
+install (FILES html/src/img/gsa_splash.png
+         DESTINATION ${GSA_STATE_DIR}/login/img)
+
+install (FILES html/src/img/style/window_dec_a.png
+               html/src/img/style/window_dec_b.png
+               html/src/img/style/window_dec_c.png
+         DESTINATION ${GSA_STATE_DIR}/login/img/style)
 
 install (FILES html/src/img/agent.png html/src/img/descending.png
                html/src/img/key.png html/src/img/p_bar_bg.png
