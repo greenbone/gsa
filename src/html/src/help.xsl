@@ -41,7 +41,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
        <xsl:apply-templates/>
-  </div> 
+  </div>
 </xsl:template>
 
 <xsl:template match="about.html">
@@ -203,7 +203,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
     <div style="float:right;"><a href="/omp?cmd=get_lsc_credentials">Jump to dialog</a></div>
     <div style="text-align:left">
-     
+
       <br/>
       <h1>Configure Credentials for Local Security Checks</h1>
 
@@ -275,7 +275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>"Autogenerate Credential", hx7ZgI2n</td>
         </tr>
       </table>
- 
+
       <a name="credentials"></a>
       <h2>Credentials for Local Security Checks</h2>
       <p>
@@ -592,7 +592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>A predefined base scan configuration</td>
           <td>Empty, static and fast<br/>
               Full and Fast</td>
-        </tr>   
+        </tr>
       </table>
 
       <a name="importconfig"></a>
@@ -702,7 +702,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <a name="export"></a>
       <h4>Export Scan Config XML</h4>
-      <p> 
+      <p>
        A Scan Config can be saved to file, e.g. for sharing or backup.
        A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
        will let you download a file describing this scan config.
@@ -826,7 +826,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>List of associated credentials, that can be clicked on to view details.</td>
         </tr>
       </table>
-      
+
       <a name="actions"></a>
       <h3>Actions</h3>
       <p>
@@ -1220,7 +1220,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        and contains a summary of what the selected NVTs found
        out for each of the target hosts.
       </p>
-      <p> 
+      <p>
        A report is always associated with a
        <a href="#task">task</a>. The
        <a href="#scanconfig">Scan Configuration</a> that
@@ -1283,7 +1283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Executing a task means to create a <a href="#scan">scan</a>.
        As a result, a task collects a series
        of <a href="#report">reports</a>.
-      </p> 
+      </p>
       <p>
        The target and scan configuration is static.
        Thus, the resulting sequence of reports describe the
@@ -1746,16 +1746,16 @@ Public License instead of this License.
           </td>
         </tr>
       </table>
- 
+
       <a name="actions"></a>
       <h3>Actions</h3>
-  
+
       <h4>Delete Note</h4>
       <p>
        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
        remove the note immediately.  The list of notes will be updated.
       </p>
-  
+
       <h4>Note Details</h4>
       <p>
        Pressing the details icon
@@ -1764,7 +1764,7 @@ Public License instead of this License.
        full details of the note, including the note text and all
        contraints on the note.
       </p>
-  
+
       <h4>Edit Note</h4>
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
@@ -1781,7 +1781,7 @@ Public License instead of this License.
        Hit the button "Create Note" to submit the new note.
        The previous page will be updated.
       </p>
-    
+
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td></td>
@@ -1844,7 +1844,7 @@ Public License instead of this License.
       <p>
        Clicking on the NVT name will go to the NVT Details page.
       </p>
- 
+
       <a name="editnote"></a>
       <h2>Edit Note</h2>
       <p>
@@ -1856,7 +1856,7 @@ Public License instead of this License.
       </p>
     </div>
   </div>
-</xsl:template>    
+</xsl:template>
 
 <xsl:template match="nvts.html">
   <div class="gb_window_part_center">Help: NVTs</div>
@@ -1912,7 +1912,7 @@ Public License instead of this License.
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
     <div style="float:right;"><a href="/omp?cmd=get_status&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
-    
+
       <br/>
       <a name="tasksummary"></a>
       <h1>Task Summary</h1>
@@ -2045,7 +2045,7 @@ Public License instead of this License.
           </td>
         </tr>
       </table>
-    
+
       <a name="actions"></a>
       <h3>Actions</h3>
 
@@ -2070,7 +2070,7 @@ Public License instead of this License.
        <a href="glossary.html#note">notes</a>
        that apply to any result generated by the task.
        It is formatted much like the <a href="notes.html">Notes</a> page.
-      </p>                   
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -2130,7 +2130,7 @@ Public License instead of this License.
       </table>
 
       <h3>Actions</h3>
-  
+
       <h4>Scan Config Family Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
@@ -2221,7 +2221,7 @@ Public License instead of this License.
       <p>
        Note that only Scan Configurations that are not currently in use by a
        <a href="glossary.html#task">Task</a> allow modifications.
-      </p>  
+      </p>
 
       <h1>Edit Scan Config Details</h1>
       <p>
@@ -2284,7 +2284,7 @@ Public License instead of this License.
        page which shows details about NVTs within the family and allows to select or
        deselect individual NVTs.
       </p>
-    
+
       <h2>Edit Scanner Preferences</h2>
       <p>
        This table shows the preferences of the scan engine itself and allows to modify
@@ -2416,7 +2416,7 @@ Public License instead of this License.
 
       <h4>NVT Details</h4>
       <p>
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> 
+       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
        will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
       </p>
 
@@ -2445,7 +2445,7 @@ Public License instead of this License.
       </p>
 
       <h2>Edit Network Vulnerability Test</h2>
-    
+
       <h3>Details</h3>
       <p>
        Provides information like the name of the NVT, a summary, its OID, Family
@@ -2501,7 +2501,7 @@ Public License instead of this License.
        This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
        family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
       </p>
-    
+
       <h2>Network Vulnerability Tests</h2>
       <p>
        This table provides an overview of NVTs of one family in a Scan Configuration.
@@ -2532,10 +2532,10 @@ Public License instead of this License.
       </table>
 
       <h3>Actions</h3>
-    
+
       <h4>NVT Details</h4>
       <p>
-       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" /> 
+       A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
        will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
       </p>
     </div>
@@ -2557,7 +2557,7 @@ Public License instead of this License.
       </p>
 
       <h2>Network Vulnerability Test</h2>
-  
+
       <h3>Details</h3>
       <p>
        Provides information like the name of the NVT, a summary, its OID, Family
@@ -2570,7 +2570,7 @@ Public License instead of this License.
        classification into a Risk Factor and suggest solutions to fix the issue that
        can be detected by this NVT.
       </p>
-    
+
       <h3>Preferences</h3>
       <p>
        This table shows values of the timeout and NVT specific preferences one per
@@ -2590,7 +2590,7 @@ Public License instead of this License.
           <td>Value</td>
           <td>The value for the NVT Preference in the given Scan Configuration.</td>
         </tr>
-      </table>      
+      </table>
     </div>
   </div>
 </xsl:template>
@@ -2837,7 +2837,7 @@ Public License instead of this License.
        The icon of the current choice will appear greyed out <img src="/img/ascending_inactive.png" alt="Current sort ascending" title="Current sort ascending" />, <img src="/img/descending_inactive.png" alt="Current sort descending" title="Current sort descending" />.
        The list will be updated immediately.
       </p>
-      
+
       <a name="autorefresh"></a>
       <h3>Auto-refresh</h3>
       <p>
@@ -2850,10 +2850,10 @@ Public License instead of this License.
       <p>
        Note that leaving this page will reset the refresh interval to manual refresh.
       </p>
-      
+
       <a name="actions"></a>
       <h3>Actions</h3>
-      
+
       <h4>Start Task</h4>
       <p>
        Pressing the start icon <img src="/img/start.png" alt="Start" title="Start" /> will
@@ -2862,7 +2862,7 @@ Public License instead of this License.
       <p>
        This action is only available if the task has status "New" or "Done".
       </p>
-      
+
       <h4>Abort Task</h4>
       <p>
        Pressing the abort icon <img src="/img/stop.png" alt="Abort" title="Abort" /> will
@@ -2872,7 +2872,7 @@ Public License instead of this License.
       <p>
        This action is only available if the task status shows a progress bar.
       </p>
-      
+
       <h4>Delete Task</h4>
       <p>
        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
@@ -2882,7 +2882,7 @@ Public License instead of this License.
       <p>
        This action is only available if the task has status "New" or "Done".
       </p>
-      
+
       <h4>Reports</h4>
       <p>
        Pressing the report icon <img src="/img/list.png" alt="Reports" title="Reports" /> will
@@ -2921,13 +2921,13 @@ Public License instead of this License.
        <a href="/help/glossary.html#task">task</a>'s
        <a href="/help/reports.html">list of reports</a>.
       </p>
-      
+
       <h2>Download a report</h2>
       <p>
        To download the currently shown report, the format can be chosen.
        The download will start shortly after a click on the "Download" button.
       </p>
-      
+
       <h2>Notes</h2>
       <p>
        Any <a href="/help/glossary.html#note">notes</a> that apply to a result are
@@ -2953,7 +2953,7 @@ Public License instead of this License.
        is shown on the result.  Clicking the icon jumps to the notes,
        which is helpful if the result has a very long description.
       </p>
-      
+
       <h2>Result Sorting</h2>
       <p>
        Results shown on the page can be sorted either by the port number or by threat
@@ -2961,7 +2961,7 @@ Public License instead of this License.
        The sort order is changed by clicking on the respective text (e.g.
        "threat ascending").
       </p>
-      
+
       <h2>Result Filtering</h2>
       <p>
        A checkbox for each threat level (High, Medium, Low and Log) can be ticked
@@ -2978,4 +2978,4 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-</xsl:stylesheet> 
+</xsl:stylesheet>
