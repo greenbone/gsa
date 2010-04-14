@@ -714,6 +714,140 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="configure_schedules.html">
+  <div class="gb_window_part_center">Help: Configure Schedule</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:right;"><a href="/omp?cmd=get_schedules">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Schedules</h1>
+      <p>
+        Schedules can be added to <a href="glossary.html#task">tasks</a>.
+        They can be used to start a task at a pre-defined time, to repeat a task
+        after a certain interval or to limit the maximum duration of a task.
+      </p>
+
+      <a name="newschedule"></a>
+      <h2>New Schedule</h2>
+
+      <p>
+       To create a schedule the dialog offers these entries.
+       Hit the button "Create Schedule" to submit the new schedule.
+       The list of schedules will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Weekly Scan</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>40</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>First Time</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Date and time</td>
+          <td>10h00, 01 May 2010</td>
+        </tr>
+        <tr class="even">
+          <td>Period</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Interval</td>
+          <td>1 week</td>
+        </tr>
+        <tr class="odd">
+          <td>Duration</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Interval</td>
+          <td>12 hours</td>
+        </tr>
+      </table>
+
+      <a name="schedules"></a>
+      <h2>Schedules</h2>
+      <p>
+       This table provides an overview of all created schedules.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>User-given name of the schedule.</td>
+        </tr>
+        <tr class="even">
+          <td>First Run</td>
+          <td>Date and time for the first run of the task.</td>
+        </tr>
+        <tr class="odd">
+          <td>Period</td>
+          <td>Period after which the task should run again.</td>
+        </tr>
+        <tr class="even">
+          <td>Duration</td>
+          <td>Maximum duration of a running task.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete Schedule</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immedialy remove the schedule and update the list.
+      </p>
+      <p>
+       It is not possible to remove an schedule that is in use by a task.
+      </p>
+
+      <h4>Schedule Details</h4>
+      <p>
+       Details of an schedule can be seen by clicking on the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />.
+      </p>
+
+      <a name="scheduledetails"></a>
+      <h2>Schedule Details</h2>
+      <p>
+       Provides information about an schedule like the name, comment, the first
+       and next time the schedule will be executed, the period and the duration.
+      </p>
+
+      <h3>Tasks using this Schedules</h3>
+      <p>
+       This table provides an overview of the tasks associated with this schedule.
+       Details of these tasks can be seen after a click on the Details
+       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="configure_targets.html">
   <div class="gb_window_part_center">Help: Configure Targets</div>
   <div class="gb_window_part_content">
@@ -1038,6 +1172,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_credentials.html">Configure Credentials</a></li>
             <li> <a href="configure_agents.html">Configure Agents</a></li>
             <li> <a href="configure_escalators.html">Configure Escalators</a></li>
+            <li> <a href="configure_schedules.html">Configure Schedules</a></li>
           </ul>
           <li> Administration</li>
           <ul>

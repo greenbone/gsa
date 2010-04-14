@@ -1,3 +1,8 @@
+2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/help.xsl (configure_schedules.html): Added help for
+	scheduling.
+
 2010-04-13  Michael Wiegand <michael.wiegand@intevation.de>
 
 	* src/html/src/help.xsl: Flush trailing whitespace.
