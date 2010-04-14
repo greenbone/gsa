@@ -1,5 +1,10 @@
 2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
 
+	* src/html/src/help.xsl (tasks.html): Updated help for tasks list with
+	new features and elements.
+
+2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+
 	Set the GSA to use UTC as timezone to stay consistent with the manager
 	when scheduling.
 

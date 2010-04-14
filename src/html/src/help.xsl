@@ -2995,7 +2995,29 @@ Public License instead of this License.
        start a new scan. The list of tasks will be updated.
       </p>
       <p>
-       This action is only available if the task has status "New" or "Done".
+       This action is only available if the task has status "New" or "Done" and
+       is not a scheduled task.
+      </p>
+
+      <h4>Schedule Details</h4>
+      <p>
+        Pressing the "Schedule Details" icon <img src="/img/scheduled.png"
+          alt="Schedule Details" title="Schedule Details" /> will switch to an
+        overview of the details of the schedule used for this task.
+      </p>
+      <p>
+        This action is only available if the task is a scheduled task.
+      </p>
+
+      <h4>Resume Task</h4>
+      <p>
+       Pressing the resume icon <img src="/img/resume.png" alt="Resume"
+         title="Resume" /> will resume a previously stopped task. The list of
+       tasks will be updated.
+      </p>
+      <p>
+        This action is only available if the task has been stopped before, either
+        manually or due to its scheduled duration.
       </p>
 
       <h4>Abort Task</h4>
@@ -3018,14 +3040,22 @@ Public License instead of this License.
        This action is only available if the task has status "New" or "Done".
       </p>
 
-      <h4>Reports</h4>
+      <h4>Details</h4>
       <p>
-       Pressing the report icon <img src="/img/list.png" alt="Reports" title="Reports" /> will
+       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
        switch to an overview on all reports for this task.
        It is the same action as clicking on the number of reports in the column "Reports: Total".
       </p>
       <p>
        This action is only available if at least one report is present.
+      </p>
+
+      <h4>Edit Task</h4>
+      <p>
+       Pressing the "Edit Task" icon <img src="/img/edit.png" alt="Edit Task"
+         title="Edit Task" /> will
+       switch to an overview of the configuration for this task and allows
+       editing of some of the tasks properties.
       </p>
     </div>
   </div>
