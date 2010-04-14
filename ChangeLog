@@ -1,5 +1,16 @@
 2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
 
+	Set the GSA to use UTC as timezone to stay consistent with the manager
+	when scheduling.
+
+	* src/gsad.c (main): Set timezone to UTC.
+
+	* src/html/src/omp.xsl (html-create-schedule-form): Mark time as UTC.
+
+	* src/html/src/gsad.xsl (html-gsa-logo): Mark time as UTC.
+
+2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+
 	* src/html/src/help.xsl (configure_escalators.html): Comments are
 	not mandatory for escalators.
 

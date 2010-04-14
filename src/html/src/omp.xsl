@@ -4414,6 +4414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="time/year"/>
                 </xsl:call-template>
               </select>
+              (UTC)
             </td>
           </tr>
           <tr>

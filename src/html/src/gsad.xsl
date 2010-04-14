@@ -76,7 +76,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="/logout" title="Logout" style="margin-left:3px;">Logout</a>
         <br/>
         <br/>
-        <xsl:value-of select="$time"/>
+        <xsl:value-of select="$time"/> (UTC)
       </div>
     </div>
   </div>
