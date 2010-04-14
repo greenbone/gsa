@@ -1,5 +1,10 @@
 2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
 
+	* src/html/src/help.xsl (configure_escalators.html): Comments are
+	not mandatory for escalators.
+
+2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+
 	* src/html/src/help.xsl (configure_schedules.html): Added help for
 	scheduling.
 
