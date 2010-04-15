@@ -140,7 +140,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td>This agent collects several plugins.</td>
         </tr>
@@ -263,7 +263,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td>For the Windows systems</td>
         </tr>
@@ -439,7 +439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td></td>
         </tr>
@@ -581,7 +581,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td>All-inclusive scan which might consume quite some time.</td>
         </tr>
@@ -756,7 +756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td></td>
         </tr>
@@ -911,7 +911,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>Comment</td>
           <td>no</td>
-          <td>40</td>
+          <td>400</td>
           <td>Alphanumeric</td>
           <td>Covers both of our web staging systems</td>
         </tr>
@@ -1401,6 +1401,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <a href="#target">target</a>.
       </p>
 
+      <a name="schedule"></a>
+      <h2>Schedule</h2>
+      <p>
+        A schedule sets the time when a <a href="#task">task</a> should be
+        automatically started, a period after which the task should run again
+        and a maximum duration the task is allowed to take.
+      </p>
+
       <a name="target"></a>
       <h2>Target</h2>
       <p>
@@ -1811,6 +1819,13 @@ Public License instead of this License.
           <td>All Windows desktops in-depth</td>
         </tr>
         <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>This task scans all Windows desktops on this floor.</td>
+        </tr>
+        <tr class="odd">
           <td>Scan Type</td>
           <td>yes</td>
           <td>---</td>
@@ -1819,7 +1834,7 @@ Public License instead of this License.
           </td>
           <td>Full and fast</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Scan Targets</td>
           <td>yes</td>
           <td>---</td>
@@ -1827,7 +1842,7 @@ Public License instead of this License.
               <a href="/help/configure_targets.html">configured targets</a>.</td>
           <td>The Windows Desktops</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Escalator (optional)</td>
           <td>no</td>
           <td>---</td>
@@ -1835,6 +1850,15 @@ Public License instead of this License.
               <a href="/help/configure_escalators.html">configured escalators</a>.
           </td>
           <td>EmailFinished</td>
+        </tr>
+        <tr class="even">
+          <td>Schedule (optional)</td>
+          <td>no</td>
+          <td>---</td>
+          <td>One of the
+              <a href="/help/configure_schedules.html">configured schedules</a>.
+          </td>
+          <td>Every Tuesday Morning</td>
         </tr>
       </table>
 
@@ -2055,9 +2079,12 @@ Public License instead of this License.
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.
        It also lists the <a href="glossary.html#scanconfig">Scan Config</a>,
-       <a href="glossary.html#escalator">Escalator</a> and <a href="glossary.html#target">Target</a> for the shown report, if
-       any were chosen. Information about the chosen Scan Config, Escalator or
-       Target is accessible by clicking on the respective items name.
+       <a href="glossary.html#escalator">Escalator</a>,
+       <a href="glossary.html#schedule">Schedule</a> and 
+       <a href="glossary.html#target">Target</a> for the shown report, if
+       any were chosen. Information about the chosen Scan Config, Escalator,
+       Schedule or Target is accessible by clicking on the respective items
+       name.
       </p>
 
       <a name="reports"></a>

@@ -1,3 +1,11 @@
+2010-04-15  Michael Wiegand <michael.wiegand@intevation.de>
+
+	* src/html/src/help.xsl: Corrected the maximum comment length.
+	(glossary.html): Added entry for schedule to glossary.
+	(new_task.html): Added missing help for comment field, added help for
+	schedule field.
+	(reports.html): Updated help for report summary.
+
 2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
 
 	* src/html/src/help.xsl (tasks.html): Updated help for tasks list with
