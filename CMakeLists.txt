@@ -175,6 +175,10 @@ SET(CPACK_SOURCE_IGNORE_FILES
 "Makefile"
 "src/html/build/"
 "/doc/generated/"
+"log.conf$"
+"Doxyfile$"
+"Doxyfile_full$"
+"VERSION$"
 )
 
 INCLUDE(CPack)
