@@ -464,7 +464,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<create_task>"
                                 "<config>%s</config>"
                                 "<escalator>%s</escalator>"
-                                "<schedule id=\"%s\"/>"
+                                "<schedule>%s</schedule>"
                                 "<target>%s</target>"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"

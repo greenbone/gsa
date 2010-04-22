@@ -1,5 +1,10 @@
 2010-04-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad_omp.c (create_task_omp): Fixed syntax for schedule element
+	when creating a new task.
+
+2010-04-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/src/gsad.xsl, src/html/src/help.xsl: Add default duration
 	for links to the performance monitor.
 
