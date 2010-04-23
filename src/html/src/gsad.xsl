@@ -17,6 +17,7 @@ Authors:
 Matthew Mundell <matthew.mundell@intevation.de>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@intevation.de>
+Hartmut Goebel <h.goebel@goebel-consult.de>
 
 Copyright:
 Copyright (C) 2009, 2010 Greenbone Networks GmbH
@@ -41,6 +42,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-head">
   <head>
     <link rel="stylesheet" type="text/css" href="/gsa-style.css"/>
+    <!-- Internet Explorer CSS Fixes -->
+    <xsl:comment>[if IE 6]&gt;
+      <!-- HACK: Since this will become a comment for the webserver,
+           URLS are not rewritten within here. Try some locations so
+           one should match. This is ugly, but IE6 is too.
+      -->
+        &lt;link rel="stylesheet" type="text/css" href="IE6fixes.css"/&gt;
+        &lt;link rel="stylesheet" type="text/css" href="../IE6fixes.css"/&gt;
+    &lt;![endif]</xsl:comment>
     <link rel="icon" href="/favicon.gif" type="image/x-icon"/>
     <title>Greenbone Security Assistant</title>
     <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
@@ -57,7 +67,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
-  <div style="text-align:left;">
+  <div class="gsa-logo-header">
     <div class="logo_l">
       <a href="/omp?cmd=get_status" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
@@ -152,7 +162,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">Error Message</div>
         <div class="gb_window_part_content_error" style="text-align:center;">
-          <div style="float:right;">
+          <div class="float-right">
             <a href="/help/error_messages.html" title="Help: Error Message">
               <img src="/img/help.png"/>
             </a>

@@ -121,10 +121,11 @@ install (TARGETS gsad
 
 install (FILES html/src/favicon.gif html/src/gsad.xsl html/src/gsa-style.css
                html/src/help.xsl  html/src/oap.xsl  html/src/omp.xsl
+	       html/src/IE6fixes.css
          DESTINATION ${GSA_STATE_DIR})
 
 install (FILES html/src/login/login.html html/src/gsa-style.css
-               html/src/favicon.gif
+               html/src/favicon.gif html/src/IE6fixes.css
          DESTINATION ${GSA_STATE_DIR}/login)
 
 install (FILES html/src/img/gsa_splash.png

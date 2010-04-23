@@ -7,6 +7,7 @@
  * Matthew Mundell <matthew.mundell@intevation.de>
  * Karl-Heinz Ruskowski <karl-heinz.ruskowski@intevation.de>
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+ * Hartmut Goebel <h.goebel@goebel-consult.de>
  *
  * Copyright:
  * Copyright (C) 2009 Greenbone Networks GmbH
@@ -103,6 +104,10 @@ p {
   background-color: #FFFF99;
   border: 3px solid #CC0000;
   margin: 10px;
+}
+
+div.float-right {
+  float: right;
 }
 
 /* BEGIN Greenbone Progress Bar */
@@ -292,6 +297,11 @@ table.odd {
 /* END Window decorations */
 
 /* Logo Bar */
+
+.gsa-logo-header {
+  text-align:left;
+}
+
 .logo_l {
  color:#FFFFFF;
  background-color: #3A3A3A;

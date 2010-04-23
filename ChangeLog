@@ -1,3 +1,13 @@
+2010-04-23  Hartmut Goebel <h.goebel@goebel-consult.de>
+
+	* src/html/src/gsad.xsl, src/html/src/help.xsl
+	src/html/src/omp.xsl, src/html/src/oap.xsl,
+	src/html/src/gsa-style.css, src/html/src/login/login.html ,
+	src/CMakeLists.txt: Fixed: IE6 did not display some content
+	elements at all and table headers were visually cluttered.
+
+	* src/html/src/IE6fixes.css: New stylesheet (onyl used by IE6).
+
 2010-04-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Fixed syntax for schedule element
