@@ -272,7 +272,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_status&amp;task_id={report/task/@id}">Back to Task</a>
       </div>
 
@@ -367,7 +367,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <div id="small_form" class="float-right">
+      <div id="small_form" class="float_right">
         <form action="" method="get">
           This report as:
           <input type="hidden" name="cmd" value="get_report"/>
@@ -587,7 +587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="/omp?cmd=get_status">Back to Tasks</a>
       </div>
       <table>
@@ -1682,7 +1682,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_lsc_credentials">Back to Credentials</a>
       </div>
       <table>
@@ -2215,7 +2215,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_escalators">Back to Escalators</a>
       </div>
       <table>
@@ -2543,7 +2543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_targets">Back to Targets</a>
       </div>
       <table>
@@ -2755,7 +2755,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </div>
   <div class="gb_window_part_content">
-    <div class="float-right">
+    <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
           <a href="?cmd=edit_config&amp;name={config/name}">
@@ -3280,7 +3280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:variable name="family">
       <xsl:value-of select="get_nvt_details_response/nvt/family"/>
     </xsl:variable>
-    <div class="float-right">
+    <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
           <a href="?cmd=edit_config_family&amp;name={config/name}&amp;family={$family}">
@@ -3686,7 +3686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <xsl:variable name="config" select="get_configs_response/config"/>
-    <div class="float-right">
+    <div class="float_right">
       <a href="?cmd=get_configs">Back to Configs</a>
     </div>
     <br/>
@@ -4722,7 +4722,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_schedules">Back to Schedules</a>
       </div>
       <table>
@@ -5374,7 +5374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_notes">Back to Notes</a>
       </div>
       <table>
@@ -5619,7 +5619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 	  </xsl:call-template>
 	</pre>
     <xsl:if test="$note-buttons = 1">
-      <div class="float-right" style="text-align:right">
+      <div class="float_right" style="text-align:right">
         <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
@@ -5665,7 +5665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <a class="anchor" name="result-{@id}"/>
   <div class="issue_box_head" style="{$style}">
-    <div class="float-right" style="text-align:right">
+    <div class="float_right" style="text-align:right">
       <xsl:value-of select="port"/>
     </div>
     <b><xsl:value-of select="threat"/></b>
@@ -5690,7 +5690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="issue_box_box">
     <xsl:if test="$note-buttons = 1">
-      <div class="float-right" style="text-align:right">
+      <div class="float_right" style="text-align:right">
         <xsl:if test="count(notes/note) &gt; 0">
           <a href="#notes-{@id}"
              title="Notes" style="margin-left:3px;">

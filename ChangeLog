@@ -1,3 +1,11 @@
+2010-04-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/src/gsa-style.css, src/html/src/omp.xsl,
+	src/html/src/gsad.xsl, src/html/src/oap.xsl,
+	src/html/src/IE6fixes.css, src/html/src/help.xsl: Made
+	older Konqueror work again. Thanks to Hartmut Goebel
+	for this proposed fix.
+
 2010-04-23  Hartmut Goebel <h.goebel@goebel-consult.de>
 
 	* src/html/src/gsad.xsl, src/html/src/help.xsl

@@ -162,7 +162,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">Error Message</div>
         <div class="gb_window_part_content_error" style="text-align:center;">
-          <div class="float-right">
+          <div class="float_right">
             <a href="/help/error_messages.html" title="Help: Error Message">
               <img src="/img/help.png"/>
             </a>

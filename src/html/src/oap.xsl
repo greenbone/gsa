@@ -232,7 +232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_users">Back to Users</a>
       </div>
       <table>
@@ -318,7 +318,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float-right">
+      <div class="float_right">
         <a href="?cmd=get_users">Back to Users</a>
       </div>
       <form action="/oap" method="post" enctype="multipart/form-data">

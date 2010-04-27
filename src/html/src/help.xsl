@@ -105,7 +105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Agents</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_agents">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_agents">Jump to dialog</a></div>
     <div style="text-align:left">
       <br/>
       <h1>Configure Agents</h1>
@@ -201,7 +201,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Credentials</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_lsc_credentials">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_lsc_credentials">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -398,7 +398,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Escalator</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_escalators">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_escalators">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -543,7 +543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Scan Configs</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_configs">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_configs">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -718,7 +718,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Schedule</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_schedules">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_schedules">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -852,7 +852,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Targets</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_targets">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_targets">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1015,7 +1015,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Configure Users</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_users">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_users">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1196,7 +1196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: Error Messages</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=unknown_cmd">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+    <div class="float_right"><a href="/omp?cmd=unknown_cmd">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
     <div style="text-align:left">
 
       <br/>
@@ -1261,7 +1261,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Help: NVT Feed Management</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_feed">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_feed">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1792,7 +1792,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: New task</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/new_task.html">Jump to dialog</a></div>
+    <div class="float_right"><a href="/new_task.html">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1875,7 +1875,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Notes</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_notes">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_notes">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2046,7 +2046,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Performance</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_system_reports&amp;duration=86400">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2069,7 +2069,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_status&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_status&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2241,7 +2241,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Scan Config Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast">Jump to example dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast">Jump to example dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2761,7 +2761,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Settings</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_settings">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_settings">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2781,7 +2781,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_status">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_status">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3092,7 +3092,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: View Report</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float-right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30">Jump to dialog with sample content</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
