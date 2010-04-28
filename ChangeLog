@@ -1,3 +1,8 @@
+2010-04-28  Hartmut Goebel <h.goebel@goebel-consult.de>
+
+	* src/html/src/IE6fixes.css: Fixed: In reports IE6 did shift
+	issues to the left more and more.
+
 2010-04-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/gsa-style.css, src/html/src/omp.xsl,

@@ -37,3 +37,9 @@
 div.float_right {
   float:right; position:relative;
 }
+.issue_box_head {
+  padding-bottom:0;
+}
+.issue_box_head div {
+  padding-bottom:4px;
+}
