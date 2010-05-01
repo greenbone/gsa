@@ -253,7 +253,7 @@ init_validator ()
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
-  openvas_validator_add (validator, "hosts",      "^[[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "hosts",      "^[[:alnum:],: \\./]{1,80}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");

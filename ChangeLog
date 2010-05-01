@@ -1,3 +1,8 @@
+2010-05-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c: Added ":" to hosts validator to allow
+	IPv6 adresses.
+
 2010-04-28  Hartmut Goebel <h.goebel@goebel-consult.de>
 
 	* src/html/src/IE6fixes.css: Fixed: In reports IE6 did shift
