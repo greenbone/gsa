@@ -119,62 +119,62 @@ install (TARGETS gsad
          LIBRARY DESTINATION ${LIBDIR}
          ARCHIVE DESTINATION ${LIBDIR}/static)
 
-install (FILES html/src/favicon.gif html/src/gsad.xsl html/src/gsa-style.css
-               html/src/help.xsl  html/src/oap.xsl  html/src/omp.xsl
-	       html/src/IE6fixes.css
+install (FILES html/favicon.gif html/gsad.xsl html/gsa-style.css
+               html/help.xsl  html/oap.xsl  html/omp.xsl
+	       html/IE6fixes.css
          DESTINATION ${GSA_STATE_DIR})
 
-install (FILES html/src/login/login.html html/src/gsa-style.css
-               html/src/favicon.gif html/src/IE6fixes.css
+install (FILES html/login/login.html html/gsa-style.css
+               html/favicon.gif html/IE6fixes.css
          DESTINATION ${GSA_STATE_DIR}/login)
 
-install (FILES html/src/img/gsa_splash.png
+install (FILES html/img/gsa_splash.png
          DESTINATION ${GSA_STATE_DIR}/login/img)
 
-install (FILES html/src/img/style/window_dec_a.png
-               html/src/img/style/window_dec_b.png
-               html/src/img/style/window_dec_c.png
+install (FILES html/img/style/window_dec_a.png
+               html/img/style/window_dec_b.png
+               html/img/style/window_dec_c.png
          DESTINATION ${GSA_STATE_DIR}/login/img/style)
 
-install (FILES html/src/img/agent.png html/src/img/descending.png
-               html/src/img/key.png html/src/img/p_bar_bg.png
-               html/src/img/start_inactive.png html/src/img/alert_sign.png
-               html/src/img/details.png html/src/img/list_inactive.png
-               html/src/img/p_bar_done.png html/src/img/start.png
-               html/src/img/ascending_inactive.png html/src/img/download.png
-               html/src/img/list.png html/src/img/p_bar_error.png
-               html/src/img/stop_inactive.png html/src/img/ascending.png
-               html/src/img/edit_inactive.png html/src/img/log.png
-               html/src/img/p_bar_new.png html/src/img/stop.png
-               html/src/img/bsi-logo.png html/src/img/edit.png
-               html/src/img/low_big.png html/src/img/p_bar.png
-               html/src/img/bullet2.png html/src/img/exe.png
-               html/src/img/low.png html/src/img/p_bar_request.png
-               html/src/img/trend_down.png html/src/img/bullet.png
-               html/src/img/gb-logo.png html/src/img/medium_big.png
-               html/src/img/refresh.png html/src/img/trend_less.png
-               html/src/img/deb.png html/src/img/gsa_splash.png
-               html/src/img/medium.png html/src/img/resume_inactive.png
-               html/src/img/trend_more.png html/src/img/delete_inactive.png
-               html/src/img/help.png html/src/img/new_note.png
-               html/src/img/resume.png html/src/img/trend_nochange.png
-               html/src/img/delete_note.png html/src/img/high_big.png
-               html/src/img/new.png html/src/img/rpm.png
-               html/src/img/trend_up.png html/src/img/delete.png
-               html/src/img/high.png html/src/img/none_big.png
-               html/src/img/scheduled_inactive.png
-               html/src/img/descending_inactive.png
-               html/src/img/intevation-logo.png html/src/img/note.png
-               html/src/img/scheduled.png
+install (FILES html/img/agent.png html/img/descending.png
+               html/img/key.png html/img/p_bar_bg.png
+               html/img/start_inactive.png html/img/alert_sign.png
+               html/img/details.png html/img/list_inactive.png
+               html/img/p_bar_done.png html/img/start.png
+               html/img/ascending_inactive.png html/img/download.png
+               html/img/list.png html/img/p_bar_error.png
+               html/img/stop_inactive.png html/img/ascending.png
+               html/img/edit_inactive.png html/img/log.png
+               html/img/p_bar_new.png html/img/stop.png
+               html/img/bsi-logo.png html/img/edit.png
+               html/img/low_big.png html/img/p_bar.png
+               html/img/bullet2.png html/img/exe.png
+               html/img/low.png html/img/p_bar_request.png
+               html/img/trend_down.png html/img/bullet.png
+               html/img/gb-logo.png html/img/medium_big.png
+               html/img/refresh.png html/img/trend_less.png
+               html/img/deb.png html/img/gsa_splash.png
+               html/img/medium.png html/img/resume_inactive.png
+               html/img/trend_more.png html/img/delete_inactive.png
+               html/img/help.png html/img/new_note.png
+               html/img/resume.png html/img/trend_nochange.png
+               html/img/delete_note.png html/img/high_big.png
+               html/img/new.png html/img/rpm.png
+               html/img/trend_up.png html/img/delete.png
+               html/img/high.png html/img/none_big.png
+               html/img/scheduled_inactive.png
+               html/img/descending_inactive.png
+               html/img/intevation-logo.png html/img/note.png
+               html/img/scheduled.png
          DESTINATION ${GSA_STATE_DIR}/img)
 
-install (FILES html/src/img/style/logo_l.png html/src/img/style/logo_r.png
-               html/src/img/style/window_dec_a.png
-               html/src/img/style/window_dec_b.png
-               html/src/img/style/window_dec_c.png html/src/img/style/logo_m.png
-               html/src/img/style/window_dec_a_error.png
-               html/src/img/style/window_dec_b_error.png
-               html/src/img/style/window_dec_c_error.png
+install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
+               html/img/style/window_dec_a.png
+               html/img/style/window_dec_b.png
+               html/img/style/window_dec_c.png html/img/style/logo_m.png
+               html/img/style/window_dec_a_error.png
+               html/img/style/window_dec_b_error.png
+               html/img/style/window_dec_c_error.png
          DESTINATION ${GSA_STATE_DIR}/img/style)
 
 install (FILES gsad_log.conf

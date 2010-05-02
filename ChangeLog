@@ -1,3 +1,16 @@
+2010-05-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Move up the html files on directory in order to eliminate
+	the unnecessary additional directory "src".
+
+	* src/html/src/favicon.gif, src/html/src/gsad.xsl,
+	src/html/src/gsa-style.css, src/html/src/help.xsl,
+	src/html/src/IE6fixes.css, src/html/src/img,
+	src/html/src/login, src/html/src/oap.xsl, src/html/src/omp.xsl:
+	Moved to src/html/.
+
+	* src/CMakeLists.txt: Adjusted paths.
+
 2010-05-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c: Added ":" to hosts validator to allow
