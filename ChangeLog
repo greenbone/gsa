@@ -1,5 +1,9 @@
 2010-05-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/src/: Finally remove empty directory.
+
+2010-05-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Move up the html files on directory in order to eliminate
 	the unnecessary additional directory "src".
 
