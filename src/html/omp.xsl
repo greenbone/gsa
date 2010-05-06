@@ -2001,6 +2001,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </select>
                   </td>
                 </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <input type="radio" name="condition" value="Threat level changed"/>
+                    Threat level
+                    <select name="condition_data:direction">
+                      <option value="changed" selected="1">changed</option>
+                      <option value="increased">increased</option>
+                      <option value="decreased">decreased</option>
+                    </select>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -2166,6 +2177,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
           <br/>(<xsl:value-of select="condition/data[name='level']/text()"/>)
         </xsl:when>
+        <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='direction']/text()"/>)
+        </xsl:when>
       </xsl:choose>
     </td>
     <td>
@@ -2235,6 +2249,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
                 (<xsl:value-of select="condition/data[name='level']/text()"/>)
               </xsl:when>
+			  <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+				(<xsl:value-of select="condition/data[name='direction']/text()"/>)
+			  </xsl:when>
             </xsl:choose>
           </td>
         </tr>

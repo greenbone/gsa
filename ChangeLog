@@ -1,3 +1,9 @@
+2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-escalator-form): Add "threat level
+	changed" condition.
+	(escalator, escalator [details]): Add "threat level changed" handling.
+
 2010-05-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/src/: Finally remove empty directory.
