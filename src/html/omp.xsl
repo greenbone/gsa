@@ -2988,7 +2988,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td><xsl:value-of select="nvt/name"/></td>
     <td><xsl:value-of select="name"/></td>
-    <td><xsl:value-of select="value"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="type='file' and string-length(value) &gt; 0">
+          <i>File attached.</i>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="value"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:if test="string-length($config) &gt; 0">
         <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={nvt/family}"
