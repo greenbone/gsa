@@ -1,5 +1,9 @@
 2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl, src/html/oap.xsl: Convert tabs to spaces.
+
+2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make saving of file preferences conditional on a checkbox.
 
 	* src/html/omp.xsl (edit-config-preference): Add checkbox to "file"

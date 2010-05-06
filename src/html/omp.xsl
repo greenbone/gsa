@@ -1518,7 +1518,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Comment (optional)</td>
             <td>
               <input type="text" name="comment" value="" size="30"
-	                 maxlength="400"/>
+                     maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -2249,9 +2249,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
                 (<xsl:value-of select="condition/data[name='level']/text()"/>)
               </xsl:when>
-			  <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
-				(<xsl:value-of select="condition/data[name='direction']/text()"/>)
-			  </xsl:when>
+              <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+                (<xsl:value-of select="condition/data[name='direction']/text()"/>)
+              </xsl:when>
             </xsl:choose>
           </td>
         </tr>
@@ -3892,9 +3892,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="msg">
       <xsl:value-of select="@status_text"/>
     </xsl:with-param>
-	<xsl:with-param name="details">
+    <xsl:with-param name="details">
       <xsl:if test="@status = '201' and config/name">
-		Name of new config is '<xsl:value-of select="config/name"/>'.
+        Name of new config is '<xsl:value-of select="config/name"/>'.
       </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
@@ -5568,22 +5568,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_note">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:choose>
-	<xsl:when test="commands_reponse/get_notes_response/@status = '500'">
-	  <xsl:call-template name="command_result_dialog">
-		<xsl:with-param name="operation">
-		  Get Note
-		</xsl:with-param>
-		<xsl:with-param name="status">
-		  <xsl:value-of select="500"/>
-		</xsl:with-param>
-		<xsl:with-param name="msg">
-		  <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
-		</xsl:with-param>
-	  </xsl:call-template>
-	</xsl:when>
-	<xsl:otherwise>
+    <xsl:when test="commands_reponse/get_notes_response/@status = '500'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Note
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
       <xsl:apply-templates select="commands_response/get_notes_response/note" mode="details"/>
-	</xsl:otherwise>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
@@ -5591,25 +5591,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_note_response"/>
   <xsl:choose>
-	<xsl:when test="commands_response/get_notes_response/@status = '500'">
-	  <xsl:call-template name="command_result_dialog">
-		<xsl:with-param name="operation">
-		  Get Notes
-		</xsl:with-param>
-		<xsl:with-param name="status">
-		  <xsl:value-of select="500"/>
-		</xsl:with-param>
-		<xsl:with-param name="msg">
-		  <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
-		</xsl:with-param>
-	  </xsl:call-template>
-	</xsl:when>
-	<xsl:otherwise>
+    <xsl:when test="commands_response/get_notes_response/@status = '500'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Notes
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
       <!-- The for-each makes the get_notes_response the current node. -->
       <xsl:for-each select="commands_response/get_notes_response">
         <xsl:call-template name="html-notes-table"/>
       </xsl:for-each>
-	</xsl:otherwise>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
@@ -5659,11 +5659,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="note-buttons">1</xsl:param>
   <div class="note_box_box">
     <b>Note</b><br/>
-	<pre>
-	  <xsl:call-template name="wrap">
-		<xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
-	  </xsl:call-template>
-	</pre>
+    <pre>
+      <xsl:call-template name="wrap">
+        <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
+      </xsl:call-template>
+    </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
         <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
@@ -5749,11 +5749,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
-	<pre>
-	  <xsl:call-template name="wrap">
-		<xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-	  </xsl:call-template>
-	</pre>
+    <pre>
+      <xsl:call-template name="wrap">
+        <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
+      </xsl:call-template>
+    </pre>
   </div>
   <a class="anchor" name="notes-{@id}"/>
   <xsl:for-each select="notes/note">
@@ -5864,14 +5864,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="system_report" mode="image">
   <tr>
-	<td>
-	  <h1><xsl:value-of select="title"/></h1>
-	</td>
+    <td>
+      <h1><xsl:value-of select="title"/></h1>
+    </td>
   </tr>
   <tr>
-	<td>
-	  <img src="/system_report/{name}/report.png?duration={../../../../duration}"/>
-	</td>
+    <td>
+      <img src="/system_report/{name}/report.png?duration={../../../../duration}"/>
+    </td>
   </tr>
 </xsl:template>
 
@@ -5952,27 +5952,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_system_reports">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:choose>
-	<xsl:when test="get_system_reports_response/@status = '500'">
-	  <xsl:call-template name="command_result_dialog">
-		<xsl:with-param name="operation">
-		  Get System Reports
-		</xsl:with-param>
-		<xsl:with-param name="status">
-		  <xsl:value-of select="500"/>
-		</xsl:with-param>
-		<xsl:with-param name="msg">
-		  <xsl:value-of select="get_system_reports_response/@status_text"/>
-		</xsl:with-param>
-		<xsl:with-param name="details">
-		  There was an error getting the performance results.  Please ensure that
-	      there is a system reporting program installed with the Manager, and that
-	      this program is configured correctly.
-		</xsl:with-param>
-	  </xsl:call-template>
-	</xsl:when>
-	<xsl:otherwise>
-	  <xsl:apply-templates select="get_system_reports_response/system_report"/>
-	</xsl:otherwise>
+    <xsl:when test="get_system_reports_response/@status = '500'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get System Reports
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="get_system_reports_response/@status_text"/>
+        </xsl:with-param>
+        <xsl:with-param name="details">
+          There was an error getting the performance results.  Please ensure that
+          there is a system reporting program installed with the Manager, and that
+          this program is configured correctly.
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="get_system_reports_response/system_report"/>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
