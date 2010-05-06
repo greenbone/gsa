@@ -1,5 +1,10 @@
 2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (preference [details]): Print "File attached."
+	instead of the contents of file preferences.
+
+2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preference [preference]): Print "File attached."
 	instead of the contents of file preferences.
 

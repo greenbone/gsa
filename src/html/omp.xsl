@@ -3024,7 +3024,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td><xsl:value-of select="name"/></td>
-    <td><xsl:value-of select="value"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="type='file' and string-length(value) &gt; 0">
+          <i>File attached.</i>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="value"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td></td>
   </tr>
 </xsl:template>
