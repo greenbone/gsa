@@ -3087,6 +3087,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           Replace old value
         </xsl:when>
         <xsl:when test="type='file'">
+          <input type="checkbox" name="file:{nvt/name}[file]:{name}"
+                 value="yes"/>
+          <xsl:choose>
+            <xsl:when test="string-length(value) &gt; 0">
+              Replace existing file with:
+            </xsl:when>
+            <xsl:otherwise>
+              Upload file:
+            </xsl:otherwise>
+          </xsl:choose>
+          <br/>
           <input type="file" name="preference:{nvt/name}[file]:{name}" size="30"/>
         </xsl:when>
         <xsl:when test="type='entry'">

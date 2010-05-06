@@ -495,6 +495,7 @@ struct gsad_connection_info
     char *year;          ///< Value of "year" parameter.
     GArray *condition_data; ///< Collection of "condition_data:*" parameters.
     GArray *event_data;  ///< Collection of "event_data:*" parameters.
+    GArray *files;       ///< Collection of "file:*" parameters.
     GArray *method_data; ///< Collection of "method_data:*" parameters.
     GArray *passwords;   ///< Collection of "password:*" parameters.
     GArray *preferences; ///< Collection of "preference:*" parameters.
@@ -708,6 +709,23 @@ free_resources (void *cls, struct MHD_Connection *connection,
         g_free (item);
 
       g_array_free (con_info->req_parms.event_data, TRUE);
+    }
+  if (con_info->req_parms.files)
+    {
+      preference_t *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.files,
+                                    preference_t*,
+                                    index++)))
+        {
+          g_free (item->name);
+          g_free (item->nvt);
+          g_free (item->value);
+          g_free (item);
+        }
+
+      g_array_free (con_info->req_parms.files, TRUE);
     }
   if (con_info->req_parms.method_data)
     {
@@ -1154,6 +1172,59 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
+        }
+      if (!strncmp (key, "file:", strlen ("file:")))
+        {
+          int uuid_start = -1, uuid_end = -1, count;
+          count = sscanf (key,
+                          "file:%*[^[][%n%*[^]]%n]:%*s",
+                          &uuid_start,
+                          &uuid_end);
+          if (count == 0 && uuid_start > 0 && uuid_end > 0)
+            {
+              preference_t preference;
+
+              /* Just put the type in the nvt field for now, so that there
+               * is something to free. */
+              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
+              if (abort_on_insane
+                  && openvas_validate (validator, "uuid", preference.nvt))
+                {
+                  g_free (preference.nvt);
+                  return MHD_NO;
+                }
+
+              preference.name = g_strdup (key + strlen ("file:"));
+              if (abort_on_insane
+                  && openvas_validate (validator,
+                                       "preference_name",
+                                       preference.name))
+                {
+                  g_free (preference.nvt);
+                  g_free (preference.name);
+                  return MHD_NO;
+                }
+
+              preference.value = g_memdup (data, size);
+              preference.value_size = size;
+
+              if (con_info->req_parms.files == NULL)
+                con_info->req_parms.files
+                 = g_array_new (TRUE,
+                                FALSE,
+                                sizeof (preference_t*));
+
+              {
+                gconstpointer p = g_memdup (&preference, sizeof (preference));
+                g_array_append_vals (con_info->req_parms.files,
+                                     &p,
+                                     1);
+              }
+
+              con_info->answercode = MHD_HTTP_OK;
+              return MHD_YES;
+            }
+          return MHD_NO;
         }
       if (!strncmp (key, "method_data:", strlen ("method_data:")))
         {
@@ -1967,6 +2038,7 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.sort_field,
                              con_info->req_parms.sort_order,
                              con_info->req_parms.preferences,
+                             con_info->req_parms.files,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
@@ -3497,7 +3569,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       else if (!strncmp (&url[0], "/help/",
                     strlen ("/help/"))) /* flawfinder: ignore,
                                            it is a const str */
-        { 
+        {
           // XXX: url subsearch could be nicer and xsl transform could
           // be generalized with the other transforms.
           char * c = (char *)&url[0];

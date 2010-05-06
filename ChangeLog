@@ -1,5 +1,22 @@
 2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make saving of file preferences conditional on a checkbox.
+
+	* src/html/omp.xsl (edit-config-preference): Add checkbox to "file"
+	preferences so that saving the file is optional.
+
+	* src/gsad_omp.c (save_config_nvt_omp): Add files arg which lists files
+	that must be updated.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/gsad.c (req_parms): Add files array.
+	(free_resources): Free files.
+	(serve_post): Collect files.
+	(exec_omp_post): Pass files to save_config_nvt_omp.
+
+2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preference [details]): Print "File attached."
 	instead of the contents of file preferences.
 

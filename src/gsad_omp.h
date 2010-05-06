@@ -118,7 +118,7 @@ char * get_config_nvt_omp (credentials_t *, const char *, const char *,
                            const char *, const char *, const char *, int);
 char * save_config_nvt_omp (credentials_t *, const char *, const char *,
                             const char *, const char *, const char *, GArray *,
-                            GArray *, const char *);
+                            GArray *, GArray *, const char *);
 char * create_config_omp (credentials_t *, char *, char *, const char *);
 char * import_config_omp (credentials_t *, char *);
 char * delete_config_omp (credentials_t *, const char *);

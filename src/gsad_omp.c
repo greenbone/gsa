@@ -3541,6 +3541,7 @@ get_config_nvt_omp (credentials_t * credentials,
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  preferences  Preferences.
+ * @param[in]  files        Files within preferences that must be updated.
  * @param[in]  passwords    Passwords within preferences that must be updated.
  * @param[in]  timeout      0 to skip timeout preference.
  *
@@ -3554,6 +3555,7 @@ save_config_nvt_omp (credentials_t * credentials,
                      const char * sort_field,
                      const char * sort_order,
                      GArray *preferences,
+                     GArray *files,
                      GArray *passwords,
                      const char * timeout)
 {
@@ -3580,9 +3582,9 @@ save_config_nvt_omp (credentials_t * credentials,
           gchar *value;
           char *modify_config_ret;
 
-          /* Passwords have a radio to control whether they must be reset.
-           * This works around the need for the Manager to send the actual
-           * password. */
+          /* Passwords and files have checkboxes to control whether they
+           * must be reset.  This works around the need for the Manager to
+           * send the actual password or show the actual file. */
 
           /* LDAPsearch[entry]:Timeout value */
           count = sscanf (preference->name,
@@ -3609,6 +3611,26 @@ save_config_nvt_omp (credentials_t * credentials,
                         }
                   if (found == 0)
                     /* Skip modifying the password preference. */
+                    continue;
+                }
+              else if (strncmp (preference->name + type_start,
+                                "file",
+                                type_end - type_start)
+                       == 0)
+                {
+                  const preference_t *file;
+                  int index = 0, found = 0;
+                  if (files)
+                    while ((file = g_array_index (files,
+                                                  preference_t*,
+                                                  index++)))
+                      if (strcmp (file->name, preference->name) == 0)
+                        {
+                          found = 1;
+                          break;
+                        }
+                  if (found == 0)
+                    /* Skip modifying the file preference. */
                     continue;
                 }
               else if (strncmp (preference->name + type_start,
