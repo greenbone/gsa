@@ -2080,7 +2080,7 @@ Public License instead of this License.
        the task for which the report list is shown below.
        It also lists the <a href="glossary.html#scanconfig">Scan Config</a>,
        <a href="glossary.html#escalator">Escalator</a>,
-       <a href="glossary.html#schedule">Schedule</a> and 
+       <a href="glossary.html#schedule">Schedule</a> and
        <a href="glossary.html#target">Target</a> for the shown report, if
        any were chosen. Information about the chosen Scan Config, Escalator,
        Schedule or Target is accessible by clicking on the respective items
@@ -2870,6 +2870,25 @@ Public License instead of this License.
                   such as power outage.
               </td></tr>
               <tr><td valign="top">
+                  <div class="progressbar_box" title="Pause Requested">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Pause Requested</div>
+                  </div>
+                </td><td>
+                  The user has recently paused the scan. The manager
+                  server has submitted this command to the scanner, but the scanner
+                  has not yet cleanly paused the scan.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Paused">
+                    <div class="progressbar_bar_request" style="width:100px;"></div>
+                    <div class="progressbar_text">Paused</div>
+                  </div>
+                </td><td>
+                  The last scan for this task was paused by the user. The newest
+                  report might be incomplete.
+              </td></tr>
+              <tr><td valign="top">
                   <div class="progressbar_box" title="Internal Error">
                     <div class="progressbar_bar_error" style="width:100px;"></div>
                     <div class="progressbar_text">Internal Error</div>
@@ -3026,6 +3045,16 @@ Public License instead of this License.
        is not a scheduled task.
       </p>
 
+      <h4>Pause Task</h4>
+      <p>
+       Pressing the pause icon <img src="/img/pause.png" alt="Pause" title="Pause" /> will
+       pause a running task. The list of tasks will be updated.
+      </p>
+      <p>
+       This action is only available if the task has status "Running" or "Requested" and
+       is not a scheduled task.
+      </p>
+
       <h4>Schedule Details</h4>
       <p>
         Pressing the "Schedule Details" icon <img src="/img/scheduled.png"
@@ -3039,7 +3068,7 @@ Public License instead of this License.
       <h4>Resume Task</h4>
       <p>
        Pressing the resume icon <img src="/img/resume.png" alt="Resume"
-         title="Resume" /> will resume a previously stopped task. The list of
+         title="Resume" /> will resume a previously paused or stopped task. The list of
        tasks will be updated.
       </p>
       <p>

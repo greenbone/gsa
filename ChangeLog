@@ -1,5 +1,9 @@
 2010-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (tasks.html): Add pausing states and pause action.
+
+2010-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add pausing of tasks.
 
 	* src/html/omp.xsl (status_bar): Add pausing states.
