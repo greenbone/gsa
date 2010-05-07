@@ -1,5 +1,14 @@
 2010-05-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	Added simple compile time syntax checks on the xsl files.
+
+	* CMakeLists.txt: Lowercased a cmake command, check for xsltproc
+	program.
+
+	* src/CMakeLists.txt: Check xsl stylesheets with xsltproc, if found.
+
+2010-05-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	* CMakeLists.txt, src/CMakeLists.txt: Lowercased cmake commands as in
 	all other openvas modules, converted tab to whitespaces.
 

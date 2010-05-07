@@ -49,6 +49,9 @@ find_program (PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config 
                         " to retrieve information about installed"
                         " openvas-libraries in the system.")
 
+find_program (PATH_TO_XSLTPROC xsltproc DOC "xsltproc command line "
+              "xslt processor.")
+
 ## TODO this check is obsolete with the FindPkgConfig module (see below,
 ## pkg_check_module sets OKG_CONFIG_FOUND)
 message (STATUS "Looking for pkg-config... ${PATH_TO_PKGCONFIG}")
@@ -120,7 +123,7 @@ endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
-FIND_PROGRAM(SVN_EXECUTABLE svn DOC "subversion command line client")
+find_program (SVN_EXECUTABLE svn DOC "subversion command line client")
 
 macro (Subversion_GET_REVISION dir variable)
   execute_process (COMMAND ${SVN_EXECUTABLE} info ${CMAKE_SOURCE_DIR}/${dir}

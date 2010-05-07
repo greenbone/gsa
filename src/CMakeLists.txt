@@ -194,4 +194,27 @@ add_custom_target (flawfinder COMMENT "Running flawfinder..."
 add_custom_target (check COMMENT "Checking code...")
 add_dependencies (check splint rats flawfinder)
 
+## Very superficial check if stylesheets are fine
+
+if (PATH_TO_XSLTPROC)
+  add_custom_target (oap-xsl-syntax ALL
+                                    COMMENT "Checking syntax of oap.xsl"
+                                    COMMAND xsltproc html/oap.xsl
+                                    DEPENDS html/oap.xsl)
+  add_custom_target (omp-xsl-syntax ALL
+                                    COMMENT "Checking syntax of omp.xsl"
+                                    COMMAND xsltproc html/omp.xsl
+                                    DEPENDS html/omp.xsl)
+  add_custom_target (gsad-xsl-syntax ALL
+                                     COMMENT "Checking syntax of gsad.xsl"
+                                     COMMAND xsltproc html/gsad.xsl
+                                     DEPENDS html/gsad.xsl)
+  add_custom_target (help-xsl-syntax ALL
+                                     COMMENT "Checking syntax of help.xsl"
+                                     COMMAND xsltproc html/help.xsl
+                                     DEPENDS html/help.xsl)
+else (PATH_TO_XSLTPROC)
+  message ("Not performing simple stylesheet tests -- xsltproc not found.")
+endif (PATH_TO_XSLTPROC)
+
 ## End
