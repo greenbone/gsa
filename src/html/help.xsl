@@ -1374,7 +1374,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        The status of all active scan can be seen
-       in the <a href="/omp?get_status">task overview</a>.
+       in the <a href="/omp?cmd=get_status">task overview</a>.
        The progress is shown as a percentage of
        total number of tests to be executed. The
        duration of a scan is determined by the number

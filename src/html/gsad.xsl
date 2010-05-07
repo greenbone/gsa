@@ -154,7 +154,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="error_dialog">
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
-  <xsl:param name="backurl">/omp?get_status</xsl:param>
+  <xsl:param name="backurl">/omp?cmd=get_status</xsl:param>
   <center>
     <div class="envelope" style="width:500px;">
       <div class="gb_window" style="margin-top:150px;">

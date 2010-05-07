@@ -1,5 +1,10 @@
 2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/gsad.xsl (error_dialog), src/html/help.xsl (glossary.html):
+	Fixed broken links to get_status page.
+
+2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/gsad.c: Added define MAX_HELP_NAME_SIZE to limit the maximum
 	length of the name of help "files" against resource exhaustion
 	attacks.
