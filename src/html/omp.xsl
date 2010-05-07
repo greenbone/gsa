@@ -832,6 +832,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
+    <xsl:when test="$status='Pause Requested'">
+      <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_request" style="width:100px;"></div>
+        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Paused'">
+      <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_request" style="width:100px;"></div>
+        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Resume Requested'">
+      <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_request" style="width:100px;"></div>
+        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
     <xsl:when test="$status='Stop Requested'">
       <div class="progressbar_box" title="{$status}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
@@ -985,6 +1003,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="abort_task_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Stop Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="pause_task_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Pause Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="resume_paused_task_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Resume Task</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -1376,7 +1418,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
               </a>
             </xsl:when>
-            <xsl:when test="status='Running' or status='Requested' or status='Stop Requested' or status='Delete Requested'">
+            <xsl:when test="status='Running' or status='Requested'">
+              <a href="/omp?cmd=pause_task&amp;task_id={@id}"
+                 title="Pause Task">
+                <img src="/img/pause.png" border="0" alt="Pause"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status = 'Paused'">
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
@@ -1393,6 +1441,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:when test="status='Stopped'">
               <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}"
+                 title="Resume Task">
+                <img src="/img/resume.png"
+                     border="0"
+                     alt="Resume"
+                     style="margin-left:3px;"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="status='Paused'">
+              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
