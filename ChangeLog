@@ -1,5 +1,16 @@
 2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Handle requests to non-existent pages more gracefully.
+
+	* src/gsad.c: Include gsad_base.h directly.
+	(file_content_response): Display an error message if a logged-in user
+	requests a file that does not exist instead of logging him out
+	forcefully.
+	(request_handler): Display an error message if the requested help page
+	does not start with a valid character.
+
+2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/gsad.xsl (error_dialog), src/html/help.xsl (glossary.html):
 	Fixed broken links to get_status page.
 

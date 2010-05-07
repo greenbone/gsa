@@ -64,6 +64,7 @@
 /* This must follow the system includes. */
 #include <microhttpd.h>
 
+#include "gsad_base.h"
 #include "gsad_omp.h"
 #include "gsad_oap.h" /* for create_user_oap */
 #include "tracef.h"
@@ -3325,8 +3326,11 @@ file_content_response (struct MHD_Connection *connection, const char* url,
 
       if (is_http_authenticated (connection))
         {
-          *http_response_code = MHD_HTTP_UNAUTHORIZED;
-          return create_http_authenticate_response (REALM);
+          char *res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
+                                    "The requested page does not exist.",
+                                    NULL);
+          return MHD_create_response_from_data (strlen (res), (void *) res,
+                                                MHD_NO, MHD_YES);
         }
 
       /** @TODO use glibs path functions */
@@ -3572,20 +3576,27 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                     res, MHD_NO, MHD_YES);
         }
       else if (!strncmp (&url[0], "/help/",
-                    strlen ("/help/"))) /* flawfinder: ignore,
-                                           it is a const str */
+                         strlen ("/help/"))) /* flawfinder: ignore,
+                                                it is a const str */
         {
           if (! g_ascii_isalpha (url[6]))
-            return MHD_NO;
-          gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
-          // XXX: url subsearch could be nicer and xsl transform could
-          // be generalized with the other transforms.
-          time_t now = time(NULL);
-          gchar *xml = g_strdup_printf ("<envelope><time>%s</time><login>%s</login>"
-                                        "<help><%s/></help></envelope>",
-                                        ctime(&now), credentials->username, page);
-          g_free (page);
-          res = xsl_transform (xml);
+            {
+              res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
+                                  "The requested help page does not exist.",
+                                  "/help/contents.html");
+            }
+          else
+            {
+              gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
+              // XXX: url subsearch could be nicer and xsl transform could
+              // be generalized with the other transforms.
+              time_t now = time(NULL);
+              gchar *xml = g_strdup_printf ("<envelope><time>%s</time><login>%s</login>"
+                                            "<help><%s/></help></envelope>",
+                                            ctime(&now), credentials->username, page);
+              g_free (page);
+              res = xsl_transform (xml);
+            }
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
         }
