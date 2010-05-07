@@ -1,3 +1,8 @@
+2010-05-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* CMakeLists.txt, src/CMakeLists.txt: Lowercased cmake commands as in
+	all other openvas modules, converted tab to whitespaces.
+
 2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (init_validator): Allow "@" and "." characters in LSC

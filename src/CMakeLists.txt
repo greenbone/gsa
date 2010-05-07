@@ -109,7 +109,7 @@ set_target_properties (gsad PROPERTIES LINK_FLAGS
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
 
-CONFIGURE_FILE (gsad_log_conf.cmake_in
+configure_file (gsad_log_conf.cmake_in
                 "${CMAKE_CURRENT_SOURCE_DIR}/gsad_log.conf")
 
 ## Install
@@ -121,7 +121,7 @@ install (TARGETS gsad
 
 install (FILES html/favicon.gif html/gsad.xsl html/gsa-style.css
                html/help.xsl  html/oap.xsl  html/omp.xsl
-	       html/IE6fixes.css
+               html/IE6fixes.css
          DESTINATION ${GSA_STATE_DIR})
 
 install (FILES html/login/login.html html/gsa-style.css
@@ -192,6 +192,6 @@ add_custom_target (flawfinder COMMENT "Running flawfinder..."
                    COMMAND sh -c \"flawfinder *.[ch]\")
 
 add_custom_target (check COMMENT "Checking code...")
-ADD_DEPENDENCIES (check splint rats flawfinder)
+add_dependencies (check splint rats flawfinder)
 
 ## End
