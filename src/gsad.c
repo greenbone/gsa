@@ -244,7 +244,7 @@ init_validator ()
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
-  openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\\\]{1,40}$");
+  openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[-_[:alnum:], \\./]{0,80}$");
@@ -260,7 +260,7 @@ init_validator ()
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
-  openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:], ;:\\./\\\\]{0,40}$");
+  openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:]@, ;:\\./\\\\]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
   openvas_validator_add (validator, "month",      "^(0[0-9]{1,1})|10|11|12$");

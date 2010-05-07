@@ -1,3 +1,8 @@
+2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow "@" and "." characters in LSC
+	login. Allow "@" character in LSC password.
+
 2010-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl, src/html/oap.xsl: Convert tabs to spaces.
