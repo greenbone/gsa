@@ -105,6 +105,11 @@
 #define POST_BUFFER_SIZE 500000
 
 /**
+ * @brief Maximum length of "file name" for /help/ URLs.
+ */
+#define MAX_HELP_NAME_SIZE 128
+
+/**
  * @brief Libgcrypt thread callback definition.
  */
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
@@ -3570,15 +3575,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     strlen ("/help/"))) /* flawfinder: ignore,
                                            it is a const str */
         {
+          if (! g_ascii_isalpha (url[6]))
+            return MHD_NO;
+          gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
           // XXX: url subsearch could be nicer and xsl transform could
           // be generalized with the other transforms.
-          char * c = (char *)&url[0];
           time_t now = time(NULL);
-          while (c[0] && c[0] != '#') { c ++; }
-          c[0] = 0;
           gchar *xml = g_strdup_printf ("<envelope><time>%s</time><login>%s</login>"
                                         "<help><%s/></help></envelope>",
-                                        ctime(&now), credentials->username, &url[6]);
+                                        ctime(&now), credentials->username, page);
+          g_free (page);
           res = xsl_transform (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);

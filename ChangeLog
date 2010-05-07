@@ -1,3 +1,14 @@
+2010-05-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c: Added define MAX_HELP_NAME_SIZE to limit the maximum
+	length of the name of help "files" against resource exhaustion
+	attacks.
+	(request_handler): Test if the name of the requested help page starts
+	with a valid character before even considering it. Duplicate and
+	truncate it to fit MAX_HELP_NAME_SIZE. Removed superfluous handling of
+	"#" character since it is not present in the request sent by the
+	browser anyway.
+
 2010-05-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added simple compile time syntax checks on the xsl files.
