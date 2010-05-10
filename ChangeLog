@@ -1,3 +1,9 @@
+2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/img/pause.png, src/html/img/pause_inactive.png: New files.
+
+	* src/CMakeLists.txt: Install pause images.
+
 2010-05-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (tasks.html): Add pausing states and pause action.
