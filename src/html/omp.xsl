@@ -840,8 +840,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$status='Paused'">
       <div class="progressbar_box" title="{$status}">
-        <div class="progressbar_bar_request" style="width:100px;"></div>
-        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+        <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
+        <div class="progressbar_text">
+          <xsl:value-of select="$status"/>
+          at <xsl:value-of select="$progress"/> %
+        </div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Resume Requested'">
@@ -858,8 +861,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$status='Stopped'">
       <div class="progressbar_box" title="{$status}">
-        <div class="progressbar_bar_request" style="width:100px;"></div>
-        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+        <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
+        <div class="progressbar_text">
+          <xsl:value-of select="$status"/>
+          at <xsl:value-of select="$progress"/> %
+        </div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Internal Error'">

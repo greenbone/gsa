@@ -1,5 +1,10 @@
 2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (status_bar): Add progress bar and percentage for
+	paused and stopped tasks.
+
+2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/img/pause.png, src/html/img/pause_inactive.png: New files.
 
 	* src/CMakeLists.txt: Install pause images.
