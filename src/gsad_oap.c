@@ -343,6 +343,7 @@ save_user_oap (credentials_t * credentials, const char *name,
                                     "<name>%s</name>"
                                     "<password modify=\"%s\">%s</password>"
                                     "<role>%s</role>"
+                                    "<hosts allow=\"0\"></hosts>"
                                     "</modify_user>",
                                     name,
                                     modify_password,
