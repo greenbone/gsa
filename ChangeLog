@@ -1,5 +1,9 @@
 2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Grey the stop button for "Internal Error".
+
+2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (status_bar): Add progress bar and percentage for
 	paused and stopped tasks.
 
