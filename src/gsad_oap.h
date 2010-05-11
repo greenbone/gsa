@@ -51,5 +51,7 @@ char * get_settings_oap (credentials_t *, const char *, const char *);
 char * edit_settings_oap (credentials_t *, const char *, const char *);
 char * save_settings_oap (credentials_t * credentials, const char *,
                           const char *, GArray *);
+char * modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
+                             const char* authdn, const char* enable);
 
 #endif /* not _GSAD_OAP_H */

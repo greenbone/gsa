@@ -621,6 +621,7 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                             "<commands>"
                             "<get_users"
                             " sort_field=\"%s\" sort_order=\"%s\"/>"
+                            "<describe_auth/>"
                             "</commands>",
                             sort_field ? sort_field : "ROWID",
                             sort_order ? sort_order : "ascending")
@@ -1012,6 +1013,83 @@ save_settings_oap (credentials_t * credentials,
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
+ * @brief Sends a modify_auth with the settings adjustable via the GSA to the
+ * @brief openvas-administrator.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  ldaphost     LDAP host for ldap configuration.
+ * @param[in]  authdn       auth dn for ldap configuration.
+ * @param[in]  enable       Whether to enable ldap authentication.
+ *
+ * @return XSL transformated list of users and configuration.
+ */
+char*
+modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
+                      const char* authdn, const char* enable)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *text = NULL;
+  char* truefalse = (enable && strcmp (enable, "1") == 0) ? "true" : "false";
+
+  switch (administrator_connect (credentials, &socket, &session))
+    {
+      case -1:
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving the ldap settings. "
+                             "The settings have not been saved. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_status");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Save Settings\">"
+                                    "Only users given the Administrator role"
+                                    " may save the settings."
+                                    "</gsad_msg>"));
+    }
+
+  /* Save settings. */
+
+  if (openvas_server_sendf (&session,
+                             "<commands>"
+                             "<get_users/>"
+                             "<modify_auth><group name=\"method:ldap\">"
+                             "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                             "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                             "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                             "</group></modify_auth>"
+                             "<describe_auth/></commands>",
+                             truefalse,
+                             ldaphost,
+                             authdn)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving the ldap settings. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the ldap settings. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_status");
     }

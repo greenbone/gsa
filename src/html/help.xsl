@@ -3199,4 +3199,32 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template match="configure_manager_auth.html">
+  <div class="gb_window_part_center">Help: Configure LDAP Authentication</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="ldapconfiguration"></a>
+      <h1>LDAP Configuration</h1>
+      <p>
+       If openvas-manager is configured to authenticate against a ldap
+       directory, the configuration can be seen on the "Administration->Users"
+       page.
+      </p>
+      <p>
+       Assuming the default schema, just the host and DN to authenticate
+       against can be set. Use of ldap authentication can also be disabled.
+      </p>
+      <p>
+       Changed values will be saved after a click on "Save". Note however, that
+       the openvas-manager daemon will have to be restarted in order for the
+       changes to take effect.
+      </p>
+
+    </div>
+  </div>
+</xsl:template>
+
 </xsl:stylesheet>

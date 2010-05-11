@@ -1,3 +1,27 @@
+2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	Added handling of DESCRIBE_AUTH and MODIFY_AUTH oap commands.
+
+	* src/gsad.c (init_validator): Added new modify auth and the important
+	parameters authdn, ldaphost and enable to the validator.
+	(gsad_connection_info): Added the parameters to req_parms struct.
+	(serve_post): Fill the new parameters with chunks from request.
+	(exec_omp_post): Handle modify_auth command, validate parameters,
+	call new modify_ldap_auth_oap function.
+
+	* src/gsad_oap.c (get_users_oap): Issue a DESCRIBE_AUTH when requesting
+	users list.
+	(modify_ldap_auth_oap): New. Implementation of new MODIFY_AUTH command.
+
+	* src/gsad_oap.h (modify_ldap_auth_oap): Added proto.
+
+	* src/html/help.xsl (configure_manager_auth.html): Added stub for
+	help of new elements.
+
+	* src/html/oap.xsl (get_users_response): Match describe_auth response.
+	(group, describe_auth_response): Added window showing the and allowing
+	modification of authentication settings, if any.
+
 2010-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_user_oap): Send an empty HOSTS to set "Allow All".
