@@ -1,3 +1,9 @@
+2010-05-11  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (file_content_response): Check whether the requested path
+	really is a regular file before trying to serve it as a file and
+	report an error message if it is not.
+
 2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (init_validator): Improve validation to avoid formatting

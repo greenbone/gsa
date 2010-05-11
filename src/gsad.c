@@ -3425,6 +3425,16 @@ file_content_response (struct MHD_Connection *connection, const char* url,
       return NULL;
     }
 
+  /* Make sure the requested path really is a file. */
+  if ((buf.st_mode & S_IFMT) != S_IFREG)
+    {
+      char *res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
+                                "The requested page does not exist.",
+                                NULL);
+      return MHD_create_response_from_data (strlen (res), (void *) res,
+                                            MHD_NO, MHD_YES);
+    }
+
   response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
                                                 &file_reader,
                                                 file,
