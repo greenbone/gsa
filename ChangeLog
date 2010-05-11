@@ -1,5 +1,13 @@
 2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/gsad_oap.c (modify_ldap_auth_oap): Handle input validation
+	failure case, communicate to user.
+
+	* src/html/oap.xsl (get_users_response, modify_auth_response): Show
+	result of modify_auth command (and input validation).
+
+2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	Added handling of DESCRIBE_AUTH and MODIFY_AUTH oap commands.
 
 	* src/gsad.c (init_validator): Added new modify auth and the important

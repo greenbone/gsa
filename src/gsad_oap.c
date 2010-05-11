@@ -1038,11 +1038,13 @@ char*
 modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
                       const char* authdn, const char* enable)
 {
+  tracef ("In modify_ldap_auth_oap\n");
   entity_t entity;
   gnutls_session_t session;
   int socket;
   char *text = NULL;
   char* truefalse = (enable && strcmp (enable, "1") == 0) ? "true" : "false";
+  GString* xml = NULL;
 
   switch (administrator_connect (credentials, &socket, &session))
     {
@@ -1062,7 +1064,39 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
                                     "</gsad_msg>"));
     }
 
-  /* Save settings. */
+  if (ldaphost == NULL || authdn == NULL)
+    {
+      /* Parameter validation failed. Only send get_users and describe_auth. */
+       if (openvas_server_send (&session,
+                            "<commands><get_users/><describe_auth/></commands>"
+                            )
+        == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting the users list. "
+                                "Diagnostics: Failure to send command to administrator daemon.",
+                                "/omp?cmd=get_status");
+        }
+
+      xml = g_string_new ("");
+      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Modify Authentication Configuration"));
+
+      if (read_string (&session, &xml))
+        {
+          openvas_server_close (socket, session);
+          g_string_free (xml, TRUE);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting the users list. "
+                                "Diagnostics: Failure to receive response from administrator daemon.",
+                                "/omp?cmd=get_status");
+        }
+
+      openvas_server_close (socket, session);
+      return xsl_transform_oap (credentials, g_string_free (xml, FALSE));
+    }
+
+  /* Input is valid. Save settings. */
 
   if (openvas_server_sendf (&session,
                              "<commands>"

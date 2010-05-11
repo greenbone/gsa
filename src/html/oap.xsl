@@ -409,6 +409,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_USERS_RESPONSE -->
 
 <xsl:template match="get_users_response">
+  <xsl:apply-templates select="../modify_auth_response" mode="show"/>
   <xsl:call-template name="html-create-user-form"/>
   <!-- If any describe_auth was found, match it here -->
   <xsl:call-template name="describe_auth_response" mode="show"/>
@@ -745,6 +746,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="describe_auth_response">
+</xsl:template>
+
+<xsl:template match="modify_auth_response" mode="show">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Modify Authentication Configuration</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="describe_auth_response" mode="show">
