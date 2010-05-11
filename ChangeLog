@@ -1,5 +1,16 @@
 2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/gsad.c (init_validator): Improve validation to avoid formatting
+	string attacks.
+
+	* src/html/help.xsl (configure_manager_auth.html): Added need for %s
+	in authdn parameter.
+
+	* src/gsad_oap.c (modify_ldap_auth_oap): Added warning about %s in
+	input string.
+
+2010-05-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	* src/gsad_oap.c (modify_ldap_auth_oap): Handle input validation
 	failure case, communicate to user.
 

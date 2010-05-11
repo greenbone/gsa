@@ -250,7 +250,7 @@ init_validator ()
 
 
   openvas_validator_add (validator, "agent_format", "^(installer)$");
-  openvas_validator_add (validator, "authdn",     "^[[:alnum:], =%]{1,200}$");
+  openvas_validator_add (validator, "authdn",     "^[[:alnum:], =]{0,200}%s[[:alnum:], =]{0,200}$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");

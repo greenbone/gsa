@@ -1098,6 +1098,7 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
 
   /* Input is valid. Save settings. */
 
+  /** @warning authdn shall contain a single %s, handle with care. */
   if (openvas_server_sendf (&session,
                              "<commands>"
                              "<get_users/>"
