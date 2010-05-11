@@ -208,6 +208,7 @@ init_validator ()
                          "|(edit_task)"
                          "|(edit_user)"
                          "|(export_config)"
+                         "|(export_preference_file)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -2200,6 +2201,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *note_result_id = NULL;
   const char *next         = NULL;
   const char *format       = NULL;
+  const char *preference_name = NULL;
   const char *package_format = NULL;
   const char *name         = NULL;
   const char *family       = NULL;
@@ -2237,7 +2239,7 @@ exec_omp_get (struct MHD_Connection *connection,
   if (openvas_validate (validator, "cmd", cmd))
     cmd = NULL;
 
-  if ((cmd != NULL) && (strlen (cmd) < CMD_MAX_SIZE))
+  if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))
     {
       /** @todo Why lookup all parameters when each handler only uses some? */
 
@@ -2315,6 +2317,19 @@ exec_omp_get (struct MHD_Connection *connection,
                                             "format");
       if (openvas_validate (validator, "format", format))
         format = NULL;
+
+      preference_name = MHD_lookup_connection_value
+                         (connection,
+                          MHD_GET_ARGUMENT_KIND,
+                          "preference_name");
+      if (openvas_validate (validator, "preference_name", preference_name))
+        preference_name = NULL;
+
+      name = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "name");
+      if (openvas_validate (validator, "name", name))
+        name = NULL;
 
       package_format = MHD_lookup_connection_value
                         (connection,
@@ -2687,6 +2702,14 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "export_config")) && (name != NULL))
     return export_config_omp (credentials, name, content_type,
                               content_disposition, response_size);
+
+  else if ((!strcmp (cmd, "export_preference_file"))
+           && (name != NULL)
+           && (oid != NULL)
+           && (preference_name != NULL))
+    return export_preference_file_omp (credentials, name, oid, preference_name,
+                                       content_type, content_disposition,
+                                       response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
            && ((name == NULL && agent_format == NULL)

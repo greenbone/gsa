@@ -1,3 +1,25 @@
+2010-05-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add downloading of file preferences.
+
+	* src/gsad.c (init_validator): Add export_preference_file command.
+	(exec_omp_get): Add export_preference_file handling.
+
+	* src/gsad_omp.c (export_preference_file_omp): New function.
+	(get_status): Always send the refresh interval, even when 0.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/omp.xsl (preference): Add file download button.
+	(preference [details]): Name preference-details.  Add "config" param and
+	file download button.
+	(edit-config-preference): Rename param "config" to "for_config_details".
+	Add param "config" and file download button.
+	(preferences [details, edit-details]): Name preferences-details.  Add
+	"config" param; pass through to preference-details and
+	edit-config-preference.
+	(html-config-nvt-table): Pass config through to preferences templates.
+
 2010-05-11  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (file_content_response): Check whether the requested path

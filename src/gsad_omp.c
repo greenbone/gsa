@@ -3988,6 +3988,107 @@ export_config_omp (credentials_t * credentials, const char *name,
 }
 
 /**
+ * @brief Export a file preference.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   config_name          Name of config.
+ * @param[in]   oid                  OID of NVT.
+ * @param[in]   preference_name      Name of preference.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content dispositions return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Config XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_preference_file_omp (credentials_t * credentials, const char *config_name,
+                            const char *oid, const char *preference_name,
+                            enum content_type * content_type, char **content_disposition,
+                            gsize *content_length)
+{
+  GString *xml;
+  entity_t entity, preference_entity, value_entity;
+  gnutls_session_t session;
+  int socket;
+
+  *content_length = 0;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a preference file. "
+                         "The file could not be delivered. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_preferences_response>");
+
+  if (config_name == NULL || oid == NULL || preference_name == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
+  else
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_preferences"
+                                " config=\"%s\""
+                                " oid=\"%s\""
+                                " preference=\"%s\"/>",
+                                config_name,
+                                oid,
+                                preference_name)
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a preference file. "
+                               "The file could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+
+      entity = NULL;
+      if (read_entity (&session, &entity))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a preference file. "
+                               "The file could not be delivered. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+
+      preference_entity = entity_child (entity, "preference");
+      if (preference_entity != NULL
+          && (value_entity = entity_child (preference_entity, "value")))
+        {
+          char *content = strdup (entity_text (value_entity));
+          *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
+          *content_disposition = g_strdup_printf ("attachment; filename=\"pref_file.bin\"");
+          *content_length = strlen (content);
+          free_entity (entity);
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return content;
+        }
+      else
+        {
+          free_entity (entity);
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a preference file. "
+                               "The file could not be delivered. "
+                               "Diagnostics: Failure to receive file from manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+    }
+
+  g_string_append (xml, "</get_preferences_response>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Delete report, get task status, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

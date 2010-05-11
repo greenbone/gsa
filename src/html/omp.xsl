@@ -3074,11 +3074,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
+      <xsl:if test="type='file' and string-length(value) &gt; 0">
+        <a href="/omp?cmd=export_preference_file&amp;name={$config}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+           title="Export File"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export File"/>
+        </a>
+      </xsl:if>
     </td>
   </tr>
 </xsl:template>
 
-<xsl:template match="preference" mode="details">
+<xsl:template name="preference-details" match="preference" mode="details">
+  <xsl:param name="config"></xsl:param>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -3097,7 +3105,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td></td>
+    <td>
+      <xsl:if test="type='file' and string-length(value) &gt; 0">
+        <a href="/omp?cmd=export_preference_file&amp;name={$config/name}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+           title="Export File"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export File"/>
+        </a>
+      </xsl:if>
+    </td>
   </tr>
 </xsl:template>
 
@@ -3105,6 +3121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               name="edit-config-preference"
               mode="edit-details">
   <xsl:param name="config"></xsl:param>
+  <xsl:param name="for_config_details"></xsl:param>
   <xsl:param name="family"></xsl:param>
   <xsl:param name="nvt"></xsl:param>
   <xsl:variable name="class">
@@ -3114,7 +3131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
   <tr class="{$class}">
-    <xsl:if test="$config">
+    <xsl:if test="$for_config_details">
       <td><xsl:value-of select="nvt/name"/></td>
     </xsl:if>
     <td><xsl:value-of select="name"/></td>
@@ -3196,12 +3213,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:if test="$config">
+      <xsl:if test="$for_config_details">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={$family}"
            title="Edit NVT Details" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$config and (string-length(value) &gt; 0)">
+          <a href="/omp?cmd=export_preference_file&amp;name={$config/name}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+             title="Export File"
+             style="margin-left:3px;">
+            <img src="/img/download.png" border="0" alt="Export File"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          Upload file:
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -3227,7 +3256,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="preferences" mode="details">
+<xsl:template name="preferences-details" match="preferences" mode="details">
+  <xsl:param name="config"></xsl:param>
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
@@ -3252,12 +3282,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td></td>
       </tr>
 
-      <xsl:apply-templates select="preference" mode="details"/>
+      <xsl:for-each select="preference">
+        <xsl:call-template name="preference-details">
+          <xsl:with-param name="config" select="$config"/>
+        </xsl:call-template>
+      </xsl:for-each>
     </table>
   </div>
 </xsl:template>
 
-<xsl:template match="preferences" mode="edit-details">
+<xsl:template name="preferences-edit-details">
+  <xsl:param name="config"></xsl:param>
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
@@ -3308,9 +3343,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td></td>
       </tr>
 
-      <xsl:apply-templates
-        select="preference"
-        mode="edit-details"/>
+      <xsl:for-each select="preference">
+        <xsl:call-template name="edit-config-preference">
+          <xsl:with-param name="config" select="$config"/>
+        </xsl:call-template>
+      </xsl:for-each>
+
       <tr>
         <td colspan="3" style="text-align:right;">
           <input type="submit"
@@ -3423,6 +3461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:apply-templates select="get_nvt_details_response/nvt"/>
 
     <h2>Preferences</h2>
+    <xsl:variable name="config" select="config"/>
     <xsl:choose>
       <xsl:when test="edit">
         <form action="" method="post" enctype="multipart/form-data">
@@ -3432,15 +3471,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="oid"
                  value="{get_nvt_details_response/nvt/@oid}"/>
-          <xsl:apply-templates
-            select="get_nvt_details_response/preferences"
-            mode="edit-details"/>
+          <xsl:for-each select="get_nvt_details_response/preferences">
+            <xsl:call-template name="preferences-edit-details">
+              <xsl:with-param name="config" select="$config"/>
+            </xsl:call-template>
+          </xsl:for-each>
         </form>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:apply-templates
-          select="get_nvt_details_response/preferences"
-          mode="details"/>
+        <xsl:for-each select="get_nvt_details_response/preferences">
+          <xsl:call-template name="preferences-details">
+            <xsl:with-param name="config" select="$config"/>
+          </xsl:call-template>
+        </xsl:for-each>
       </xsl:otherwise>
     </xsl:choose>
   </div>
