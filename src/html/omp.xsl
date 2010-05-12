@@ -3160,11 +3160,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </xsl:when>
         <xsl:when test="type='password'">
-          <input type="password" name="preference:{nvt/name}[password]:{name}"
-                 value="{value}" size="30" maxlength="40"/>
           <input type="checkbox" name="password:{nvt/name}[password]:{name}"
                  value="yes"/>
-          Replace old value
+          Replace existing value with:
+          <br/>
+          <input type="password" name="preference:{nvt/name}[password]:{name}"
+                 value="{value}" size="30" maxlength="40"/>
         </xsl:when>
         <xsl:when test="type='file'">
           <input type="checkbox" name="file:{nvt/name}[file]:{name}"
@@ -3220,7 +3221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="$config and (string-length(value) &gt; 0)">
+        <xsl:when test="$config and type='file' and (string-length(value) &gt; 0)">
           <a href="/omp?cmd=export_preference_file&amp;name={$config/name}&amp;oid={nvt/@oid}&amp;preference_name={name}"
              title="Export File"
              style="margin-left:3px;">
@@ -3228,7 +3229,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
-          Upload file:
         </xsl:otherwise>
       </xsl:choose>
     </td>

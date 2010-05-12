@@ -1,7 +1,12 @@
 2010-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (edit-config-preference): Make password entry like file
+	entry.  Only show the download button for file prefs.
+
+2010-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (tasks.html): Describe the new stopped and pause
-	progress bars.  Improve the "running" description a little
+	progress bars.  Improve the "running" description a little.
 
 2010-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
