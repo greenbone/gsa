@@ -2816,9 +2816,9 @@ Public License instead of this License.
                     <div class="progressbar_text">42 %</div>
                    </div>
                 </td><td>
-                  A active scan for this task is running and completed 42%.
+                  An active scan for this task is running and has completed 42%.
                   The percentage refers
-                  to number of hosts multiplied with number of NVTs. Thus,
+                  to the number of hosts multiplied with the number of NVTs. Thus,
                   it may not correspond perfectly with the duration of the scan.
               </td></tr>
               <tr><td valign="top">
@@ -2860,14 +2860,18 @@ Public License instead of this License.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Stopped">
-                    <div class="progressbar_bar_request" style="width:100px;"></div>
-                    <div class="progressbar_text">Stopped</div>
+                    <div class="progressbar_bar_request" style="width:15px;"></div>
+                    <div class="progressbar_text">
+                      Stopped at <xsl:value-of select="15"/> %
+                    </div>
                   </div>
                 </td><td>
-                  The last scan for this task was aborted by the user. The newest
+                  The last scan for this task was aborted by the user.  The scan was
+                  15% complete when it stopped.  The newest
                   report might be incomplete. Also, this status is set in cases
                   where the task was aborted due to other arbitrary circumstances
-                  such as power outage.
+                  such as power outage.  The task will remain stopped even if the
+                  scanner or manager server is restarted, for example on reboot.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Pause Requested">
@@ -2881,12 +2885,16 @@ Public License instead of this License.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Paused">
-                    <div class="progressbar_bar_request" style="width:100px;"></div>
-                    <div class="progressbar_text">Paused</div>
+                    <div class="progressbar_bar_request" style="width:82px;"></div>
+                    <div class="progressbar_text">
+                      Paused at <xsl:value-of select="82"/> %
+                    </div>
                   </div>
                 </td><td>
-                  The last scan for this task was paused by the user. The newest
-                  report might be incomplete.
+                  The last scan for this task was paused by the user.   The scan was
+                  82% complete when it was paused.  The newest report might be incomplete.
+                  The task will change to stopped if the scanner or manager
+                  server is restarted, for example on reboot.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Internal Error">
