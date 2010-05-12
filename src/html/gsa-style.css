@@ -110,6 +110,28 @@ div.float_right {
   float: right;
 }
 
+/* BEGIN Risk factor colouring */
+
+div.Critical {
+ background-color: #FF0000;
+}
+
+div.High {
+ background-color: #FF6666;
+}
+
+div.Medium {
+ background-color: #FFAAAA;
+}
+
+div.Low {
+ background-color: #FFDDDD;
+}
+
+div.None {
+ background-color: #FFEEEE;
+}
+
 /* BEGIN Greenbone Progress Bar */
 
 .progressbar_box {

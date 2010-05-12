@@ -2872,8 +2872,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>Name</td>
         <td>OID</td>
+        <td>CVSS</td>
         <td>Timeout</td>
-        <td>Preferences</td>
+        <td>Prefs</td>
         <xsl:if test="edit">
           <td>Selected</td>
         </xsl:if>
@@ -2898,6 +2899,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td><xsl:value-of select="$current_name"/></td>
                 <td>
                   <xsl:value-of select="@oid"/>
+                </td>
+                <td>
+                  <div class="{risk_factor}">
+                    <xsl:value-of select="cvss_base"/>
+                  </div>
                 </td>
                 <td>
                   <xsl:variable
@@ -2982,6 +2988,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="$current_name"/></td>
               <td>
                 <xsl:value-of select="@oid"/>
+              </td>
+              <td>
+                <div class="{risk_factor}">
+                  <xsl:value-of select="cvss_base"/>
+                </div>
               </td>
               <td>
                 <xsl:choose>

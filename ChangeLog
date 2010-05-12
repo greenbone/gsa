@@ -1,5 +1,13 @@
 2010-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css (div.Critical, div.High, div.Medium, div.Low)
+	(div.None): New rules.
+
+	* src/html/omp.xsl (html-config-family-table): Add CVSS column, coloured
+	according to risk factor.
+
+2010-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (edit-config-preference): Make password entry like file
 	entry.  Only show the download button for file prefs.
 
