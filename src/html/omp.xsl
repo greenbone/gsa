@@ -5067,6 +5067,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
     </tr>
+    <tr>
+      <td>CVSS base:</td>
+      <td><xsl:value-of select="cvss_base"/></td>
+    </tr>
+    <tr>
+      <td>Risk factor:</td>
+      <td><xsl:value-of select="risk_factor"/></td>
+    </tr>
   </table>
 
   <h1>Description</h1>
