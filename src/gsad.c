@@ -298,7 +298,7 @@ init_validator ()
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|)$");
-  openvas_validator_add (validator, "search_phrase", "^[-_[:alnum:], \\./]{0,400}$");
+  openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");

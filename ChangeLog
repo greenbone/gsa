@@ -1,3 +1,8 @@
+2010-05-14  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (init_validator): Expand search phrase validator to allow
+	punctuation characters and German umlauts.
+
 2010-05-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Add CVSS base and risk factor.
