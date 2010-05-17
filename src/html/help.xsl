@@ -878,7 +878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                IPs (e.g. <tt>192.168.13.1,192.168.13.2,...</tt>), hostnames (e.g.
                <tt>myhost1.domain,myhost2.domain</tt> or using the CIDR notation
                (e.g. <tt>192.168.13.0/24</tt>). These options can be mixed.
-               Note that the netmask in cidr notation is limited to 16 (65535 hosts).
+               Note that the netmask in CIDR notation is limited to 20 (4095 hosts).
           </li>
           <li> Incorrect syntax for Hosts will not be warned but rather accepted.
                When applied for a scan, only correct entries will be used and the rest
