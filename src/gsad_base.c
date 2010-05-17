@@ -78,7 +78,7 @@ xsl_transform (const char *xml_text)
   if (cur == NULL)
     {
       g_warning ("Failed to parse stylesheet " XSL_PATH);
-      return error_message;
+      return g_strdup (error_message);
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
@@ -89,7 +89,7 @@ xsl_transform (const char *xml_text)
       g_warning ("Failed to apply stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
-      return error_message;
+      return g_strdup (error_message);
     }
 
   if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
@@ -98,7 +98,7 @@ xsl_transform (const char *xml_text)
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
       xmlFreeDoc (doc);
-      return error_message;
+      return g_strdup (error_message);
     }
 
   xsltFreeStylesheet (cur);

@@ -4,6 +4,11 @@
 
 2010-05-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad_base.c (xsl_transform): Return newly allocated error
+	messages in case MHD decides to free them.
+
+2010-05-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/gsad_base.c (xsl_transform): Handle errors during XSL
 	transformation more gracefully, clean up and return an error message
 	if the transformation failed instead of aborting.
