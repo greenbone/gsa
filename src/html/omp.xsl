@@ -5915,6 +5915,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>Host</td>
+      <td>Start</td>
+      <td>End</td>
       <td><img src="/img/high.png" alt="High" title="High"/></td>
       <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
       <td><img src="/img/low.png" alt="Low" title="Low"/></td>
@@ -5926,6 +5928,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr>
         <td>
           <a href="#{$current_host}"><xsl:value-of select="$current_host"/></a>
+        </td>
+        <td>
+          <xsl:value-of select="text()"/>
+        </td>
+        <td>
+          <xsl:value-of select="../host_end[host=$current_host]/text()"/>
         </td>
         <td>
           <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
@@ -5946,6 +5954,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:for-each>
     <tr>
       <td>Total: <xsl:value-of select="count(host_start)"/></td>
+      <td></td>
+      <td></td>
       <td>
         <xsl:value-of select="count(results/result[threat/text() = 'High'])"/>
       </td>

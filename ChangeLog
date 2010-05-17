@@ -1,5 +1,10 @@
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [overview]): Add start and end times to host
+	table.
+
+2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (configure_targets.html): Change CIDR limit to 20.
 
 2010-05-17  Michael Wiegand <michael.wiegand@greenbone.net>
