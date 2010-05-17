@@ -2812,6 +2812,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="risk_factor">
+  <xsl:choose>
+    <xsl:when test="text() = 'Critical'">Crit</xsl:when>
+    <xsl:when test="text() = 'Medium'">Med</xsl:when>
+    <xsl:otherwise><xsl:value-of select="text()"/></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="html-config-family-table">
  <div class="gb_window">
   <div class="gb_window_part_left"></div>
@@ -2872,6 +2880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>Name</td>
         <td>OID</td>
+        <td>Risk</td>
         <td>CVSS</td>
         <td>Timeout</td>
         <td>Prefs</td>
@@ -2901,9 +2910,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="@oid"/>
                 </td>
                 <td>
-                  <div class="{risk_factor}">
-                    <xsl:value-of select="cvss_base"/>
-                  </div>
+                  <xsl:apply-templates select="risk_factor"/>
+                </td>
+                <td>
+                  <xsl:value-of select="cvss_base"/>
                 </td>
                 <td>
                   <xsl:variable
@@ -2990,9 +3000,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="@oid"/>
               </td>
               <td>
-                <div class="{risk_factor}">
-                  <xsl:value-of select="cvss_base"/>
-                </div>
+                <xsl:apply-templates select="risk_factor"/>
+              </td>
+              <td>
+                <xsl:value-of select="cvss_base"/>
               </td>
               <td>
                 <xsl:choose>
