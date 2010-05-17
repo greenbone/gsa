@@ -1,3 +1,9 @@
+2010-05-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad_base.c (xsl_transform): Handle errors during XSL
+	transformation more gracefully, clean up and return an error message
+	if the transformation failed instead of aborting.
+
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (validate_hosts_parameter): Limit CIDR mask to 20.

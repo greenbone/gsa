@@ -65,6 +65,8 @@ xsl_transform (const char *xml_text)
   xmlDocPtr doc, res;
   xmlChar *doc_txt_ptr = NULL;
   int doc_txt_len;
+  char *error_message =
+    "<html><body>An internal server error has occurred during XSL transformation.</body></html>";
 
   tracef ("text to transform: [%s]\n", xml_text);
 
@@ -75,8 +77,8 @@ xsl_transform (const char *xml_text)
   cur = xsltParseStylesheetFile ((const xmlChar *) XSL_PATH);
   if (cur == NULL)
     {
-      g_error ("Failed to parse stylesheet " XSL_PATH);
-      abort ();
+      g_warning ("Failed to parse stylesheet " XSL_PATH);
+      return error_message;
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
@@ -84,11 +86,20 @@ xsl_transform (const char *xml_text)
   res = xsltApplyStylesheet (cur, doc, NULL);
   if (res == NULL)
     {
-      g_error ("Failed to apply stylesheet " XSL_PATH);
-      abort ();
+      g_warning ("Failed to apply stylesheet " XSL_PATH);
+      xsltFreeStylesheet (cur);
+      xmlFreeDoc (res);
+      return error_message;
     }
 
-  xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur);
+  if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
+    {
+      g_warning ("Failed to store transformation result.");
+      xsltFreeStylesheet (cur);
+      xmlFreeDoc (res);
+      xmlFreeDoc (doc);
+      return error_message;
+    }
 
   xsltFreeStylesheet (cur);
   xmlFreeDoc (res);
