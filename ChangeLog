@@ -1,5 +1,9 @@
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result-detailed): Add CVSS alongside result NVT name.
+
+2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-config-family-table): Align CVSS right.
 
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
