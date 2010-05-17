@@ -331,11 +331,11 @@ init_validator ()
 
 
 /**
- * @brief Returns TRUE no netmask in cidr notation < 16 is given.
+ * @brief Returns TRUE no netmask in CIDR notation < 20 is given.
  *
  * @param host_parameter String containing hostnames, IPs etc.
  *
- * @return TRUE if no netmask in cidr notation < 16 was found in the
+ * @return TRUE if no netmask in CIDR notation < 20 was found in the
  *         input string.
  */
 static gboolean
@@ -359,7 +359,7 @@ validate_hosts_parameter (const char* hosts_parameter)
           g_free (copy);
           return TRUE;
         }
-      if (cidr_mask < 16)
+      if (cidr_mask < 20)
         {
           g_free (copy);
           return FALSE;

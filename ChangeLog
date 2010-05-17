@@ -1,5 +1,9 @@
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (validate_hosts_parameter): Limit CIDR mask to 20.
+
+2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Add CVSS alongside result NVT name.
 
 2010-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
