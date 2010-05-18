@@ -1,5 +1,9 @@
 2010-05-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl: Fix number of columns for "Result Filtering".
+
+2010-05-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/omp.xsl: Make "Result Filtering" box look nicer.
 
 2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
