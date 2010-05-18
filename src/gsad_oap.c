@@ -1068,15 +1068,16 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
     {
       /* Parameter validation failed. Only send get_users and describe_auth. */
        if (openvas_server_send (&session,
-                            "<commands><get_users/><describe_auth/></commands>"
-                            )
-        == -1)
+                                "<commands>"
+                                "<get_users/><describe_auth/>"
+                                "</commands>")
+           == -1)
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the users list. "
-                                "Diagnostics: Failure to send command to administrator daemon.",
-                                "/omp?cmd=get_status");
+                               "An internal error occurred while getting the users list. "
+                               "Diagnostics: Failure to send command to administrator daemon.",
+                               "/omp?cmd=get_status");
         }
 
       xml = g_string_new ("");
@@ -1087,9 +1088,9 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
           openvas_server_close (socket, session);
           g_string_free (xml, TRUE);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the users list. "
-                                "Diagnostics: Failure to receive response from administrator daemon.",
-                                "/omp?cmd=get_status");
+                               "An internal error occurred while getting the users list. "
+                               "Diagnostics: Failure to receive response from administrator daemon.",
+                               "/omp?cmd=get_status");
         }
 
       openvas_server_close (socket, session);
@@ -1100,17 +1101,17 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
 
   /** @warning authdn shall contain a single %s, handle with care. */
   if (openvas_server_sendf (&session,
-                             "<commands>"
-                             "<get_users/>"
-                             "<modify_auth><group name=\"method:ldap\">"
-                             "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-                             "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-                             "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
-                             "</group></modify_auth>"
-                             "<describe_auth/></commands>",
-                             truefalse,
-                             ldaphost,
-                             authdn)
+                            "<commands>"
+                            "<get_users/>"
+                            "<modify_auth><group name=\"method:ldap\">"
+                            "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                            "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                            "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                            "</group></modify_auth>"
+                            "<describe_auth/></commands>",
+                            truefalse,
+                            ldaphost,
+                            authdn)
       == -1)
     {
       openvas_server_close (socket, session);

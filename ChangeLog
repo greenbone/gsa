@@ -1,3 +1,8 @@
+2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c: Add newline at end of file.
+	(modify_ldap_auth_oap): Improve some formatting.
+
 2010-05-18  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (init_validator): Added new hostport-rule. Allow port
