@@ -446,7 +446,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table></p>
       <br/>
-      <table class="odd">
+      <table class="odd" width="100%">
         <xsl:variable name="sort_field">
           <xsl:value-of select="report/sort/field/text()"/>
         </xsl:variable>
@@ -460,7 +460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
             <tr>
-              <td colspan="1">
+              <td colspan="2">
                 <xsl:choose>
                   <xsl:when test="report/filters/notes = 0">
                     <input type="checkbox" name="notes" value="1"/>
@@ -470,8 +470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Show notes
-              </td>
-              <td colspan="2">
+
                 <xsl:choose>
                   <xsl:when test="report/filters/result_hosts_only = 0">
                     <input type="checkbox" name="result_hosts_only" value="1"/>
@@ -488,7 +487,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 Text phrase:
               </td>
               <td>
-                <input type="text" name="search_phrase" size="60"
+                <input type="text" name="search_phrase" size="50"
                        value="{report/filters/phrase}"
                        maxlength="400"/>
               </td>
