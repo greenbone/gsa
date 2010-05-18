@@ -354,13 +354,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:variable name="increment">1000</xsl:variable>
             <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
             <xsl:if test = "report/results/@start &gt; 1">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}">&lt;&lt;</a>
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
             </xsl:if>
             Results <xsl:value-of select="report/results/@start"/> -
             <xsl:value-of select="$last"/>
             of <xsl:value-of select="report/scan_result_count/filtered"/>
             <xsl:if test = "$last &lt; report/scan_result_count/filtered">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}">&gt;&gt;</a>
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
             </xsl:if>
           </xsl:when>
           <xsl:otherwise>
@@ -384,6 +384,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="sort_order"
                  value="{report/sort/field/order}"/>
           <input type="hidden" name="notes" value="{report/filters/notes}"/>
+          <input type="hidden"
+                 name="result_hosts_only"
+                 value="{report/filters/result_hosts_only}"/>
           <select name="format" style="margin-right:3px;" title="Download Format">
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
@@ -409,7 +412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}">port ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">port ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -418,7 +421,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}">port descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">port descending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -427,7 +430,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}">threat ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">threat ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -436,7 +439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}">threat descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">threat descending</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -457,7 +460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
             <tr>
-              <td colspan="3">
+              <td colspan="1">
                 <xsl:choose>
                   <xsl:when test="report/filters/notes = 0">
                     <input type="checkbox" name="notes" value="1"/>
@@ -467,6 +470,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Show notes
+              </td>
+              <td colspan="2">
+                <xsl:choose>
+                  <xsl:when test="report/filters/result_hosts_only = 0">
+                    <input type="checkbox" name="result_hosts_only" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Only show hosts that have results
               </td>
             </tr>
             <tr>
@@ -1118,6 +1132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="notes" value="1"/>
+          <input type="hidden" name="result_hosts_only" value="1"/>
           <input type="hidden" name="levels" value="hmlg"/>
           <select name="format"
                   style="margin-right:3px;"
@@ -1134,7 +1149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </td>
     <td>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;result_hosts_only=1"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -1394,14 +1409,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="last_report/report/@id = first_report/report/@id">
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1">
+              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;result_hosts_only=1">
                 <xsl:call-template name="short_timestamp_first"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;result_hosts_only=1">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -5157,6 +5172,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="levels" value="{levels}"/>
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
         <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -5274,6 +5290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
         <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
 
         <!-- get_nvt_details param. -->
@@ -5802,7 +5819,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
@@ -5810,7 +5827,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;search_phrase={../../../../filters/phrase}"
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}"
            title="Edit Note"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -5888,7 +5905,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/note.png" border="0" alt="Notes"/>
           </a>
         </xsl:if>
-        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}"
+        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;result_hosts_only={../../filters/result_hosts_only}"
            title="Add Note" style="margin-left:3px;">
           <img src="/img/new_note.png" border="0" alt="Add Note"/>
         </a>

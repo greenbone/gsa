@@ -1,3 +1,26 @@
+2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add "Only show hosts that have results" filtering to report results.
+
+	* src/gsad.c (init_validator): Add validator alias.
+	(req_parms): Add result_hosts_only.
+	(serve_post): Check for result_hosts_only.
+	(exec_omp_post): Pass result_hosts_only to create_note_omp.
+	(exec_omp_get): Pass result_hosts_only to delete_note_omp, edit_note_omp,
+	get_report_omp, new_note_omp and save_note_omp.
+
+	* src/gsad_omp.c (get_report_omp, new_note_omp, create_note_omp)
+	(delete_note_omp, edit_note_omp, save_note_omp): Add result_hosts_only
+	arg.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-report-details): Pass result_hosts_only in
+	get_report requests.  Add a result_hosts_only checkbox.
+	(report, task, html-create-note-form, html-edit-note-form, note-detailed)
+	(result_detailed): Pass result_hosts_only in requests that can return to
+	the get_report page.
+
 2010-05-18  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/omp.xsl (report [overview]): Shorten displayed start and
