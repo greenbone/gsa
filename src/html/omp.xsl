@@ -5930,10 +5930,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="#{$current_host}"><xsl:value-of select="$current_host"/></a>
         </td>
         <td>
-          <xsl:value-of select="text()"/>
+          <xsl:value-of select="substring(text(),5,6)"/>, <xsl:value-of select="substring(text(),12,8)"/>
         </td>
         <td>
-          <xsl:value-of select="../host_end[host=$current_host]/text()"/>
+          <xsl:value-of select="substring(../host_end[host=$current_host]/text(),5,6)"/>, <xsl:value-of select="substring(../host_end[host=$current_host]/text(),12,8)"/>
         </td>
         <td>
           <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
