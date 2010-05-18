@@ -218,4 +218,14 @@ else (PATH_TO_XSLTPROC)
   message ("Not performing simple stylesheet tests -- xsltproc not found.")
 endif (PATH_TO_XSLTPROC)
 
+## Tag files
+
+set (C_FILES "*.c")
+add_custom_target (etags COMMENT "Building TAGS..."
+                   COMMAND etags ${C_FILES})
+add_custom_target (ctags COMMENT "Building tags..."
+                   COMMAND ctags ${C_FILES})
+add_custom_target (tags COMMENT "Building tags files...")
+ADD_DEPENDENCIES (tags etags ctags)
+
 ## End

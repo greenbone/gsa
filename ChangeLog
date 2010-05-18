@@ -1,5 +1,9 @@
 2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/CMakeLists.txt: Add tags targets.
+
+2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c: Add newline at end of file.
 	(modify_ldap_auth_oap): Improve some formatting.
 
