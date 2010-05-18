@@ -3225,7 +3225,8 @@ Public License instead of this License.
        Assuming the default schema, just the host and DN to authenticate
        against can be set. Use of ldap authentication can also be disabled.
        The DN Parameter has to contain exactly one %s where the username will
-       be placed (e.g. "uid=%s,cn=users,o=company,c=org").
+       be placed (e.g. "uid=%s,cn=users,o=company,c=org"). The hostname might
+       contain a port specification as in localhost:10000 .
       </p>
       <p>
        Changed values will be saved after a click on "Save". Note however, that

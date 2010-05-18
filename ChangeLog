@@ -1,3 +1,11 @@
+2010-05-18  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c (init_validator): Added new hostport-rule. Allow port
+	definitions in ldap-host input validation.
+
+	* src/html/help.xsl (configure_manager_auth.html): Added fact that port
+	can specified in the hostname parameter.
+
 2010-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add "Only show hosts that have results" filtering to report results.
