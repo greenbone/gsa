@@ -1,5 +1,10 @@
 2010-05-19  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/omp.xsl (report [overview]): Display a message if the task
+	has not yet finished.
+
+2010-05-19  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/omp.xsl (report [overview]): Fix display of end time for
 	still running scans.
 

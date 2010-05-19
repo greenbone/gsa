@@ -5953,6 +5953,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="../host_end[host=$current_host]/text() != '(null)'">
               <xsl:value-of select="substring(../host_end[host=$current_host]/text(),5,6)"/>, <xsl:value-of select="substring(../host_end[host=$current_host]/text(),12,8)"/>
             </xsl:when>
+            <xsl:otherwise>(not finished)</xsl:otherwise>
           </xsl:choose>
         </td>
         <td>
