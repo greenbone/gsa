@@ -4160,6 +4160,8 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  notes          Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  *
  * @return Report.
  */
@@ -4170,7 +4172,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
                 const char * levels, const char * notes,
-                const char *result_hosts_only, const char * search_phrase)
+                const char *result_hosts_only, const char * search_phrase,
+                const char *min_cvss_base)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -4183,6 +4186,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
   *report_len = 0;
 
   if (search_phrase == NULL)
+    {
+      xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  if (min_cvss_base == NULL)
     {
       xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -4214,7 +4223,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " levels=\"%s\""
-                            " search_phrase=\"%s\"/>",
+                            " search_phrase=\"%s\""
+                            " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
@@ -4229,7 +4239,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                 ? "descending"
                                 : "ascending"),
                             levels,
-                            search_phrase)
+                            search_phrase,
+                            min_cvss_base)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -4557,6 +4568,8 @@ get_note_omp (credentials_t *credentials, const char *note_id)
  * @param[in]  notes          Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  *
  * @return Result of XSL transformation.
  */
@@ -4568,7 +4581,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
               const char *report_id, const char *first_result,
               const char *max_results, const char *sort_field,
               const char *sort_order, const char *levels, const char *notes,
-              const char *result_hosts_only, const char *search_phrase)
+              const char *result_hosts_only, const char *search_phrase,
+              const char *min_cvss_base)
 {
   GString *xml;
   gnutls_session_t session;
@@ -4578,7 +4592,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
       || levels == NULL || notes == NULL || oid == NULL || port == NULL
       || report_id == NULL || result_id == NULL || search_phrase == NULL
       || sort_field == NULL || sort_order == NULL || task_id == NULL
-      || task_name == NULL || threat == NULL || result_hosts_only == NULL)
+      || task_name == NULL || threat == NULL || result_hosts_only == NULL
+      || min_cvss_base == NULL)
     {
       GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -4631,7 +4646,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           "<levels>%s</levels>"
                           "<notes>%s</notes>"
                           "<result_hosts_only>%s</result_hosts_only>"
-                          "<search_phrase>%s</search_phrase>",
+                          "<search_phrase>%s</search_phrase>"
+                          "<min_cvss_base>%s</min_cvss_base>",
                           oid,
                           hosts,
                           port,
@@ -4647,7 +4663,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           levels,
                           notes,
                           result_hosts_only,
-                          search_phrase);
+                          search_phrase,
+                          min_cvss_base);
 
   if (read_string (&session, &xml))
     {
@@ -4687,6 +4704,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  notes          Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  *
  * @return Result of XSL transformation.
  */
@@ -4699,7 +4718,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
                  const char *levels, const char *notes,
-                 const char *result_hosts_only, const char *search_phrase)
+                 const char *result_hosts_only, const char *search_phrase,
+                 const char *min_cvss_base)
 {
   gnutls_session_t session;
   GString *xml;
@@ -4719,7 +4739,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_notes");
 
-  if (threat == NULL || port == NULL || hosts == NULL)
+  if (threat == NULL || port == NULL || hosts == NULL || min_cvss_base == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
@@ -4805,7 +4825,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " levels=\"%s\""
-                            " search_phrase=\"%s\"/>",
+                            " search_phrase=\"%s\""
+                            " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
@@ -4819,7 +4840,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
                                 ? "descending"
                                 : "ascending"),
                             levels,
-                            search_phrase)
+                            search_phrase,
+                            min_cvss_base)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -4856,11 +4878,13 @@ create_note_omp (credentials_t *credentials, const char *oid,
                               " first_result=\"%u\""
                               " max_results=\"%u\""
                               " levels=\"hmlg\""
+                              " search_phrase=\"%s\""
                               " search_phrase=\"%s\"/>",
                               report_id,
                               first_result,
                               max_results,
-                              search_phrase)
+                              search_phrase,
+                              min_cvss_base)
         == -1)
       {
         g_string_free (xml, TRUE);
@@ -4908,6 +4932,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  notes          Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvt_details).
  * @param[in]  task_id        ID of task (for get_status).
  *
@@ -4921,7 +4947,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                  const char *sort_field, const char *sort_order,
                  const char *levels, const char *notes,
                  const char *result_hosts_only, const char *search_phrase,
-                 const char *oid, const char *task_id)
+                 const char *min_cvss_base, const char *oid,
+                 const char *task_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -4978,7 +5005,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 
   if (strcmp (next, "get_report") == 0)
     {
-      if (search_phrase == NULL)
+      if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -5009,7 +5036,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\""
                                 " levels=\"%s\""
-                                " search_phrase=\"%s\"/>"
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\"/>"
                                 "</commands>",
                                 note_id,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -5025,7 +5053,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                     ? "descending"
                                     : "ascending"),
                                 levels,
-                                search_phrase)
+                                search_phrase,
+                                min_cvss_base)
           == -1)
         {
           openvas_server_close (socket, session);
@@ -5077,6 +5106,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  notes           Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
  * @param[in]  task_id         ID of task (for get_status).
  *
@@ -5091,13 +5122,13 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                const char *sort_field, const char *sort_order,
                const char *levels, const char *notes,
                const char *result_hosts_only, const char *search_phrase,
-               const char *oid, const char *task_id)
+               const char *min_cvss_base, const char *oid, const char *task_id)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
 
-  if (note_id == NULL)
+  if (note_id == NULL || min_cvss_base == NULL)
     {
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
@@ -5145,6 +5176,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           "<notes>%s</notes>"
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
+                          "<min_cvss_base>%s</min_cvss_base>"
                           /* Parameters for get_nvt_details. */
                           "<nvt id=\"%s\"/>"
                           /* Parameters for get_status. */
@@ -5159,6 +5191,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           notes,
                           result_hosts_only,
                           search_phrase,
+                          min_cvss_base,
                           oid,
                           task_id);
 
@@ -5201,6 +5234,8 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  notes           Whether to include notes.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
  * @param[in]  task_id         ID of task (for get_status).
  *
@@ -5217,7 +5252,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                const char *sort_field, const char *sort_order,
                const char *levels, const char *notes,
                const char *result_hosts_only, const char *search_phrase,
-               const char *oid, const char *task_id)
+               const char *min_cvss_base, const char *oid, const char *task_id)
 {
   entity_t entity;
   char *response = NULL;
@@ -5298,7 +5333,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
 
   if (strcmp (next, "get_report") == 0)
     {
-      if (search_phrase == NULL)
+      if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -5329,7 +5364,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\""
                                 " levels=\"%s\""
-                                " search_phrase=\"%s\"/>"
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\"/>"
                                 "</commands>",
                                 modify_note,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -5345,7 +5381,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                     ? "descending"
                                     : "ascending"),
                                 levels,
-                                search_phrase)
+                                search_phrase,
+                                min_cvss_base)
           == -1)
         {
           g_free (modify_note);

@@ -257,6 +257,7 @@ init_validator ()
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\.@\\\\]{1,40}$");
+  openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[-_[:alnum:], \\./]{0,80}$");
@@ -507,6 +508,8 @@ struct gsad_connection_info
     char *first_result;  ///< Value of "first_result" parameter.
     char *max_results;   ///< Value of "max_results" parameter.
     char *search_phrase; ///< Value of "search_phrase" parameter.
+    char *min_cvss_base; ///< Value of "min_cvss_base" parameter.
+    char *apply_min_cvss_base; ///< Value of "apply_min_cvss_base" parameter.
     char *installer;     ///< Value of "installer" parameter.
     int installer_size;  ///< Size of "installer" parameter.
     char *howto_install; ///< Value of "howto_install" parameter.
@@ -707,6 +710,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.first_result);
   free (con_info->req_parms.max_results);
   free (con_info->req_parms.search_phrase);
+  free (con_info->req_parms.min_cvss_base);
+  free (con_info->req_parms.apply_min_cvss_base);
   free (con_info->req_parms.installer);
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
@@ -1127,6 +1132,12 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "search_phrase"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.search_phrase);
+      if (!strcmp (key, "min_cvss_base"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.min_cvss_base);
+      if (!strcmp (key, "apply_min_cvss_base"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.apply_min_cvss_base);
       if (!strcmp (key, "year"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.year);
@@ -1969,6 +1980,22 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.search_phrase);
           con_info->req_parms.search_phrase = NULL;
         }
+      if (openvas_validate (validator,
+                            "min_cvss_base",
+                            con_info->req_parms.min_cvss_base))
+        {
+          free (con_info->req_parms.min_cvss_base);
+          con_info->req_parms.min_cvss_base = NULL;
+        }
+      else
+        {
+          if (con_info->req_parms.apply_min_cvss_base == NULL
+              || (strcmp (con_info->req_parms.apply_min_cvss_base, "0") == 0))
+            {
+              free (con_info->req_parms.min_cvss_base);
+              con_info->req_parms.min_cvss_base = g_strdup ("");
+            }
+        }
 
       /* Call the page handler. */
 
@@ -1997,7 +2024,8 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.levels,
                          con_info->req_parms.notes,
                          con_info->req_parms.result_hosts_only,
-                         con_info->req_parms.search_phrase);
+                         con_info->req_parms.search_phrase,
+                         con_info->req_parms.min_cvss_base);
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
     {
@@ -2229,6 +2257,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *notes        = NULL;
   const char *result_hosts_only = NULL;
   const char *search_phrase = NULL;
+  const char *min_cvss_base    = NULL;
   const char *port         = NULL;
   const char *threat       = NULL;
   const char *text         = NULL;
@@ -2488,6 +2517,26 @@ exec_omp_get (struct MHD_Connection *connection,
       else
         search_phrase = "";
 
+      min_cvss_base = MHD_lookup_connection_value (connection,
+                                                   MHD_GET_ARGUMENT_KIND,
+                                                   "min_cvss_base");
+      if (min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base", min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              const char *apply_min;
+              apply_min = MHD_lookup_connection_value (connection,
+                                                       MHD_GET_ARGUMENT_KIND,
+                                                       "apply_min_cvss_base");
+              if (apply_min == NULL || (strcmp (apply_min, "0") == 0))
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
       hosts = MHD_lookup_connection_value (connection,
                                            MHD_GET_ARGUMENT_KIND,
                                            "hosts");
@@ -2576,7 +2625,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_notes") == 0))
     {
       return delete_note_omp (credentials, note_id, "get_notes", NULL, 0, 0,
-                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                              NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2586,8 +2636,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (oid != NULL))
     {
       return delete_note_omp (credentials, note_id, "get_nvt_details", NULL,
-                              0, 0, NULL, NULL, NULL, NULL, NULL, NULL, oid,
-                              NULL);
+                              0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                              oid, NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2601,7 +2651,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (levels != NULL)
            && (notes != NULL)
            && (result_hosts_only != NULL)
-           && (search_phrase != NULL))
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     {
       unsigned int first;
 
@@ -2610,8 +2661,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return delete_note_omp (credentials, note_id, "get_report", report_id,
                               first, 1000, sort_field, sort_order, levels,
-                              notes, result_hosts_only, search_phrase, NULL,
-                              NULL);
+                              notes, result_hosts_only, search_phrase,
+                              min_cvss_base, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2621,7 +2672,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (task_id != NULL))
     {
       return delete_note_omp (credentials, note_id, "get_status", NULL, 0, 0,
-                              NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                               task_id);
     }
 
@@ -2660,7 +2711,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_note",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL);
+                            NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2670,7 +2721,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_notes",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL);
+                            NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2680,8 +2731,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (oid != NULL))
     {
       return edit_note_omp (credentials, note_id, "get_nvt_details",
-                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, oid,
-                            NULL, NULL);
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                            oid, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2695,7 +2746,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (levels != NULL)
            && (notes != NULL)
            && (result_hosts_only != NULL)
-           && (search_phrase != NULL))
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     {
       unsigned int first;
 
@@ -2704,8 +2756,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return edit_note_omp (credentials, note_id, "get_report", report_id,
                             first, 1000, sort_field, sort_order, levels,
-                            notes, result_hosts_only, search_phrase, NULL,
-                            NULL);
+                            notes, result_hosts_only, search_phrase,
+                            min_cvss_base, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2717,7 +2769,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_note_omp (credentials, note_id, "get_status",
                             /* Parameters for next page. */
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, task_id);
+                            NULL, NULL, task_id);
     }
 
   else if (!strcmp (cmd, "edit_settings"))
@@ -2847,7 +2899,8 @@ exec_omp_get (struct MHD_Connection *connection,
                                levels,
                                notes,
                                result_hosts_only,
-                               search_phrase);
+                               search_phrase,
+                               min_cvss_base);
 
       {
         char *ret;
@@ -2864,7 +2917,8 @@ exec_omp_get (struct MHD_Connection *connection,
                               string->str,
                               notes,
                               result_hosts_only,
-                              search_phrase);
+                              search_phrase,
+                              min_cvss_base);
         g_string_free (string, TRUE);
         return ret;
       }
@@ -2945,11 +2999,12 @@ exec_omp_get (struct MHD_Connection *connection,
            && (levels != NULL)
            && (notes != NULL)
            && (result_hosts_only != NULL)
-           && (search_phrase != NULL))
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id,
                          name, result_id, report_id, first_result,
                          "1000", sort_field, sort_order, levels, notes,
-                         result_hosts_only, search_phrase);
+                         result_hosts_only, search_phrase, min_cvss_base);
 
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
@@ -2959,7 +3014,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_note", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL);
+                            NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2970,7 +3025,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_notes", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL);
+                            NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2982,7 +3037,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_nvt_details",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            oid, NULL);
+                            NULL, oid, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2996,7 +3051,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (levels != NULL)
            && (notes != NULL)
            && (result_hosts_only != NULL)
-           && (search_phrase != NULL))
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     {
       unsigned int first;
 
@@ -3007,7 +3063,7 @@ exec_omp_get (struct MHD_Connection *connection,
                             note_task_id, note_result_id, "get_report",
                             report_id, first, 1000, sort_field, sort_order,
                             levels, notes, result_hosts_only, search_phrase,
-                            NULL, NULL);
+                            min_cvss_base, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -3019,7 +3075,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_status", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            task_id);
+                            NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "save_task"))

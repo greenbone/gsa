@@ -1,5 +1,28 @@
 2010-05-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add CVSS filtering to report results.
+
+	* src/gsad.c (init_validator): Add validator min_cvss_base.
+	(req_parms): Add min_cvss_base and apply_min_cvss_base.
+	(free_resources): Free min_cvss_base and apply_min_cvss_base.
+	(serve_post): Setup min_cvss_base and apply_min_cvss_base.
+	(exec_omp_post): Pass min_cvss_base to create_note_omp.
+	(exec_omp_get): Pass min_cvss_base to GET_REPORT related commands.
+
+	* src/gsad_omp.c (get_report_omp, new_note_omp, create_note_omp)
+	(delete_note_omp, edit_note_omp, save_note_omp): Add min_cvss_base
+	arg, for GET_REPORT.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-report-details): Pass min_cvss_base params to
+	get_report.  Add CVSS checkbox to get_report filters.
+	(html-create-note-form, html-edit-note-form, note-details)
+	(result-detailed): Pass min_cvss_base params to pages that lead to
+	get_report.
+
+2010-05-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_report_response): Add syntax error check.
 
 2010-05-19  Michael Wiegand <michael.wiegand@greenbone.net>

@@ -378,6 +378,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="search_phrase"
                  value="{report/filters/phrase}"/>
           <input type="hidden"
+                 name="apply_min_cvss_base"
+                 value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+          <input type="hidden"
+                 name="min_cvss_base"
+                 value="{report/filters/min_cvss_base}"/>
+          <input type="hidden"
                  name="sort_field"
                  value="{report/sort/field/text()}"/>
           <input type="hidden"
@@ -470,7 +476,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Show notes
-
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
                 <xsl:choose>
                   <xsl:when test="report/filters/result_hosts_only = 0">
                     <input type="checkbox" name="result_hosts_only" value="1"/>
@@ -480,6 +489,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Only show hosts that have results
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <xsl:choose>
+                  <xsl:when test="report/filters/min_cvss_base = ''">
+                    <input type="checkbox" name="apply_min_cvss_base" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="apply_min_cvss_base" value="1"
+                           checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                CVSS &gt;=
+                <select name="min_cvss_base">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'10.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'9.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/min_cvss_base = ''">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'8.0'"/>
+                        <xsl:with-param name="select-value" select="'8.0'"/>
+                      </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'8.0'"/>
+                        <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                      </xsl:call-template>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'7.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'6.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'5.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'4.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'3.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'2.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'1.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'0.0'"/>
+                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                  </xsl:call-template>
+                </select>
               </td>
             </tr>
             <tr>
@@ -5170,6 +5249,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+        <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
         <input type="hidden" name="notes" value="{notes}"/>
         <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -5291,6 +5372,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="notes" value="{notes}"/>
         <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+        <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
 
         <!-- get_nvt_details param. -->
         <input type="hidden" name="oid" value="{nvt/@id}"/>
@@ -5835,7 +5918,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
@@ -5843,7 +5926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}"
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
            title="Edit Note"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -5921,7 +6004,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/note.png" border="0" alt="Notes"/>
           </a>
         </xsl:if>
-        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;result_hosts_only={../../filters/result_hosts_only}"
+        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;result_hosts_only={../../filters/result_hosts_only}"
            title="Add Note" style="margin-left:3px;">
           <img src="/img/new_note.png" border="0" alt="Add Note"/>
         </a>
