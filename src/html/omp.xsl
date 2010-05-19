@@ -5770,7 +5770,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN REPORT DETAILS -->
 
 <xsl:template match="get_report_response">
-  <xsl:call-template name="html-report-details"/>
+  <xsl:choose>
+    <xsl:when test="@status = '400'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Report
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-report-details"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!--     CREATE_NOTE_RESPONSE -->
