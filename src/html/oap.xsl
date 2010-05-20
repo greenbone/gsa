@@ -503,10 +503,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="feed/description"/>
             </td>
           </tr>
+          <xsl:choose>
+            <xsl:when test="feed/sync_not_available">
+              <tr>
+                <td valign="top" width="125"></td>
+                <td>
+                  <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
+                  <xsl:choose>
+                    <xsl:when test="feed/sync_not_available/error/text()">
+                      The synchronization script returned the following error message: <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
+                    </xsl:when>
+                  </xsl:choose>
+                </td>
+              </tr>
+            </xsl:when>
+          </xsl:choose>
           <tr>
             <td colspan="2" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="feed/currently_syncing">
+                  <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
+                </xsl:when>
+                <xsl:when test="feed/sync_not_available">
                   <input type="submit" name="submit" value="Synchronize with Feed now" disabled="disabled"/>
                 </xsl:when>
                 <xsl:otherwise>

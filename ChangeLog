@@ -1,3 +1,9 @@
+2010-05-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/oap.xsl (html-feed-form): Display a message and disable the
+	synchronization button if the sync script reports that it is unable to
+	sync.
+
 2010-05-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add CVSS filtering to report results.
