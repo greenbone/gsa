@@ -1,3 +1,7 @@
+2010-05-20  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/CMakeLists.txt: Cosmetics.
+
 2010-05-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/oap.xsl (html-feed-form): Display a message and disable the
