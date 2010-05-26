@@ -3062,6 +3062,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>
                 Total:
                 <xsl:value-of select="count(get_nvt_details_response/nvt)"/>
@@ -3069,7 +3071,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td></td>
             </tr>
             <tr>
-              <td colspan="6" style="text-align:right;">
+              <td colspan="8" style="text-align:right;">
                 <input type="submit"
                        name="submit"
                        value="Save Config"
@@ -3134,17 +3136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
           </tr>
-          <xsl:if test="edit">
-            <tr>
-              <td colspan="6" style="text-align:right;">
-                <input type="submit"
-                       name="submit"
-                       value="Save Config"
-                       title="Save Config"/>
-              </td>
-            </tr>
-          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
     </table>

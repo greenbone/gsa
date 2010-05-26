@@ -1,3 +1,9 @@
+2010-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-config-family-table): Add columns for Risk and
+	CVSS in the final row.  Remove the edit test from the end of the details
+	version of the table.
+
 2010-05-20  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/CMakeLists.txt: Cosmetics.
