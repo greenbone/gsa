@@ -1,3 +1,8 @@
+2010-05-27  Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/gsad.c (init_validator):
+	Allow "-" character in hostnames when creating a new target.
+
 2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_oap.c (modify_ldap_auth_oap): Fixed conditions.
