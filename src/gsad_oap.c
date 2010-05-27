@@ -1120,9 +1120,9 @@ modify_ldap_auth_oap (credentials_t* credentials,
                             method,
                             truefalse,
                             ldaphost,
-                            (strcmp (method, "method:ads") != 0) ? "domain"
+                            (strcmp (method, "method:ads") == 0) ? "domain"
                                                                  : "authdn",
-                            (strcmp (method, "method:ads") != 0) ? domain
+                            (strcmp (method, "method:ads") == 0) ? domain
                                                                  : authdn)
       == -1)
     {

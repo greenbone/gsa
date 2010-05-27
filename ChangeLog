@@ -1,5 +1,9 @@
 2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/gsad_oap.c (modify_ldap_auth_oap): Fixed conditions.
+
+2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	For ADS configuration, send modification command to
 	openvas-administrator.
 
