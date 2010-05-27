@@ -2559,12 +2559,20 @@ Public License instead of this License.
           <td>Shows the OID of a NVT.</td>
         </tr>
         <tr class="odd">
+          <td>Risk</td>
+          <td>Shows the risk factor of a NVT. Any NVT has a value.</td>
+        </tr>
+        <tr class="even">
+          <td>CVSS</td>
+          <td>Shows the CVSS of a NVT. Most, but not all NVTs have a value.</td>
+        </tr>
+        <tr class="odd">
           <td>Timeout</td>
           <td>Shows current timeout setting in seconds for a NVT (or "default" if the
               default value is used).</td>
         </tr>
         <tr class="even">
-          <td>Preferences</td>
+          <td>Prefs</td>
           <td>Shows the number of Preferences of a NVT.</td>
         </tr>
         <tr class="odd">
@@ -2683,12 +2691,20 @@ Public License instead of this License.
           <td>Shows the OID of a NVT.</td>
         </tr>
         <tr class="odd">
+          <td>Risk</td>
+          <td>Shows the risk factor of a NVT. Any NVT has a value.</td>
+        </tr>
+        <tr class="even">
+          <td>CVSS</td>
+          <td>Shows the CVSS of a NVT. Most, but not all NVTs have a value.</td>
+        </tr>
+        <tr class="odd">
           <td>Timeout</td>
           <td>Shows current timeout setting in seconds for a NVT (or "default" if the
               default value is used).</td>
         </tr>
         <tr class="even">
-          <td>Preferences</td>
+          <td>Prefs</td>
           <td>Shows the number of Preferences of a NVT.</td>
         </tr>
       </table>
