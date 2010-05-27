@@ -1,5 +1,24 @@
 2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	For ADS configuration, send modification command to
+	openvas-administrator.
+
+	* src/gsad_oap.c (modify_ldap_auth_oap): Added new parameters for ADS
+	configuration, new fail conditions. Made the command sent more flexible
+	to handle both ads and "normal" ldap configurations.
+	
+	* src/gsad_oap.h (modify_ldap_auth_oap): Updated proto.
+
+	* src/gsad.c (init_validator): Added new validators for group
+	and domain.
+	(req_params): Added group and domain variable.
+	(free_resources): Free the new variables.
+	(serve_post): Read group and domain from request.
+	(exec_omp_post): Validate parameters, updated call to
+	modify_ldap_auth_oap.
+
+2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	Display ADS configuration part of describe_auth response from
 	administrator, if any. Modification not yet possible.
 

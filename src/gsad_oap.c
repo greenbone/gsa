@@ -1028,15 +1028,21 @@ save_settings_oap (credentials_t * credentials,
  * @brief openvas-administrator.
  *
  * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  method       The method to configure (ads/ldap).
+ * @param[in]  enable       Whether to enable ldap authentication.
  * @param[in]  ldaphost     LDAP host for ldap configuration.
  * @param[in]  authdn       auth dn for ldap configuration.
- * @param[in]  enable       Whether to enable ldap authentication.
+ * @param[in]  domain       domain for das configuration.
  *
  * @return XSL transformated list of users and configuration.
  */
 char*
-modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
-                      const char* authdn, const char* enable)
+modify_ldap_auth_oap (credentials_t* credentials,
+                      const char* method,
+                      const char* enable,
+                      const char* ldaphost,
+                      const char* authdn,
+                      const char* domain)
 {
   tracef ("In modify_ldap_auth_oap\n");
   entity_t entity;
@@ -1064,7 +1070,9 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
                                     "</gsad_msg>"));
     }
 
-  if (ldaphost == NULL || authdn == NULL)
+  if (ldaphost == NULL || method == NULL
+      || (strcmp (method, "method:ldap") == 0 && authdn == NULL)
+      || (strcmp (method, "method:ads")  == 0 && domain == NULL))
     {
       /* Parameter validation failed. Only send get_users and describe_auth. */
        if (openvas_server_send (&session,
@@ -1103,15 +1111,19 @@ modify_ldap_auth_oap (credentials_t* credentials, const char* ldaphost,
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<get_users/>"
-                            "<modify_auth><group name=\"method:ldap\">"
+                            "<modify_auth><group name=\"%s\">"
                             "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
                             "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-                            "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                            "<auth_conf_setting key=\"%s\" value=\"%s\"/>"
                             "</group></modify_auth>"
                             "<describe_auth/></commands>",
+                            method,
                             truefalse,
                             ldaphost,
-                            authdn)
+                            (strcmp (method, "method:ads") != 0) ? "domain"
+                                                                 : "authdn",
+                            (strcmp (method, "method:ads") != 0) ? domain
+                                                                 : authdn)
       == -1)
     {
       openvas_server_close (socket, session);

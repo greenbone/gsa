@@ -259,11 +259,14 @@ init_validator ()
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
+  openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[-_[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
+  /* Validator for  modify_auth group, e.g. "method:ldap". */
+  openvas_validator_add (validator, "group",        "^method:(ads|ldap)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
   openvas_validator_add (validator, "host",       "^[[:alnum:]\\.]{1,80}$");
@@ -473,6 +476,8 @@ struct gsad_connection_info
     char *escalator;     ///< Value of "escalator" parameter.
     char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
+    char *group;         ///< Value of "group" parameter.
+    char *domain;        ///< Value of "domain" parameter.
     char *hour;          ///< Value of "hour" parameter.
     char *ldaphost;      ///< Value of "ldaphost" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
@@ -674,11 +679,13 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.condition);
   free (con_info->req_parms.credential_login);
   free (con_info->req_parms.day_of_month);
+  free (con_info->req_parms.domain);
   free (con_info->req_parms.duration);
   free (con_info->req_parms.duration_unit);
   free (con_info->req_parms.escalator);
   free (con_info->req_parms.event);
   free (con_info->req_parms.family);
+  free (con_info->req_parms.group);
   free (con_info->req_parms.hour);
   free (con_info->req_parms.minute);
   free (con_info->req_parms.month);
@@ -1009,6 +1016,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "duration_unit"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.duration_unit);
+      if (!strcmp (key, "domain"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.domain);
       if (!strcmp (key, "enable"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.enable);
@@ -1018,6 +1028,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "event"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.event);
+      if (!strcmp (key, "group"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.group);
       if (!strcmp (key, "hour"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.hour);
@@ -2042,6 +2055,11 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "modify_auth"))
     {
+      if (openvas_validate (validator, "group", con_info->req_parms.group))
+        {
+          free (con_info->req_parms.group);
+          con_info->req_parms.group = NULL;
+        }
       if (openvas_validate (validator, "enable", con_info->req_parms.enable))
         {
           free (con_info->req_parms.enable);
@@ -2057,12 +2075,19 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.ldaphost);
           con_info->req_parms.ldaphost = NULL;
         }
+      if (openvas_validate (validator, "domain", con_info->req_parms.domain))
+        {
+          free (con_info->req_parms.domain);
+          con_info->req_parms.domain = NULL;
+        }
 
       con_info->response =
         modify_ldap_auth_oap (credentials,
+                              con_info->req_parms.group,
+                              con_info->req_parms.enable,
                               con_info->req_parms.ldaphost,
                               con_info->req_parms.authdn,
-                              con_info->req_parms.enable);
+                              con_info->req_parms.domain);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
