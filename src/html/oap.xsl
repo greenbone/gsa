@@ -717,7 +717,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">LDAP Authentication configuration
+    <div class="gb_window_part_center">
+      <xsl:choose>
+        <xsl:when test="@name='method:ads'">
+          ADS Authentication Configuration
+        </xsl:when>
+        <xsl:otherwise>
+          LDAP Authentication Configuration
+        </xsl:otherwise>
+      </xsl:choose>
         <a href="/help/configure_manager_auth.html"
             title="Help: Configure Manager Authentication">
           <img src="/img/help.png"/></a>
@@ -726,6 +734,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <form action="/oap" method="post" enctype="multipart/form-data">
           <input type="hidden" name="cmd" value="modify_auth"/>
+          <!-- group name is e.g. of method:ldap -->
+          <input type="hidden" name="group" value="{@name}"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <tr class="gbntablehead2">
               <td>Setting</td>
@@ -745,12 +755,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  </td>
               </tr>
               <tr>
-                <td>LDAP Host</td>
+                <td>
+                <xsl:choose>
+                  <xsl:when test="@name='method:ads'">
+                    ADS
+                  </xsl:when>
+                  <xsl:otherwise>
+                    LDAP
+                  </xsl:otherwise>
+                </xsl:choose>
+                Host</td>
                 <td><input type="text" name="ldaphost" value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
               </tr>
               <tr class="odd">
-                <td>Auth. DN</td>
-                <td><input type="text" name="authdn" value="{auth_conf_setting[@key='authdn']/@value}"/></td></tr>
+              <xsl:choose>
+                <xsl:when test="@name='method:ads'">
+                  <td>Domain</td>
+                  <td><input type="text" name="domain" value="{auth_conf_setting[@key='domain']/@value}"/></td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <td>Auth. DN</td>
+                  <td><input type="text" name="authdn" value="{auth_conf_setting[@key='authdn']/@value}"/></td>
+                </xsl:otherwise>
+              </xsl:choose>
+              </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="Save"/>
@@ -780,6 +808,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="describe_auth_response" mode="show">
   <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap']"/>
+  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ads']"/>
 </xsl:template>
 
 <!-- END AUTHENTICATION DESCRIPTION -->

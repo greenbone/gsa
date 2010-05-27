@@ -1,3 +1,12 @@
+2010-05-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	Display ADS configuration part of describe_auth response from
+	administrator, if any. Modification not yet possible.
+
+	* src/html/oap.xsl (group): Generalized, added display of ADS
+	configuration.
+	(describe_auth_response): Call group template with ADS configuration.
+
 2010-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-config-family-table): Add columns for Risk and
