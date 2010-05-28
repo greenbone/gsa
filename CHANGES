@@ -1,3 +1,30 @@
+gsa 1.0.0-beta7 (2010-05-28)
+
+This is the seventh beta release of the optional gsa module for the Open
+Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
+
+Many thanks to everyone who has contributed to this release:
+Hartmut Goebel, Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix
+Wolfsteller.
+
+Main changes since 1.0.0-beta6:
+* An issue which caused empty charts in the performance monitor has been fixed.
+* An issue which caused a new task created with both an escalator and a schedule
+  to lose the schedule has been fixed.
+* Support for Internet Explorer 6 clients has been improved.
+* Support for using the "Threat Level Change" escalator condition has been
+  added.
+* The handling of uploaded preference files has been improved.
+* The handling of requests for nonexistent pages has been improved.
+* Support for pausing of tasks has been added.
+* Support for displaying CVSS scores and Risk Factor values has been added.
+* The handling of errors during XSL transformation has been improved.
+* The scan start time and end time for individual host are now displayed in the
+  report.
+* Support for excluding hosts without results from the report has been added.
+* Support for filtering results based on CVSS scores has been fixed.
+
+
 gsa 1.0.0-beta6 (2010-04-15)
 
 This is the sixth beta release of the optional gsa module for the Open

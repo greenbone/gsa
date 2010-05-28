@@ -1,3 +1,11 @@
+2010-05-28  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 1.0.0-beta7 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-05-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (scanconfig_editor_nvt_families.html,
