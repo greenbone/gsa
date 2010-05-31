@@ -3234,8 +3234,9 @@ Public License instead of this License.
       <h1>LDAP Configuration</h1>
       <p>
        If openvas-manager is configured to authenticate against a ldap
-       directory, the configuration can be seen on the "Administration->Users"
-       page.
+       directory, the configuration can be seen on the
+       <a href="/oap?cmd=get_users">Users</a> page in the Administration
+       section.
       </p>
       <p>
        Assuming the default schema, just the host and DN to authenticate
@@ -3249,6 +3250,69 @@ Public License instead of this License.
        the openvas-manager daemon will have to be restarted in order for the
        changes to take effect.
       </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use ldap authentication.</td>
+          <td>Yes or No.</td>
+        </tr>
+        <tr>
+          <td>LDAP Host</td>
+          <td>Adress and optional port of the host to bind to.</td>
+          <td>localhost:389, ldap.center</td>
+        </tr>
+        <tr class="odd">
+          <td>Auth. DN</td>
+          <td>The DN to authenticate against. Place a single %s where the
+              username will be put.</td>
+          <td>cn=%s,cn=users,o=center,d=org</td>
+        </tr>
+      </table>
+
+      <a name="adsconfiguration"></a>
+      <h1>ADS Configuration</h1>
+      <p>
+       If openvas-manager is configured to authenticate against a ADS, the
+       configuration can be seen on the <a href="/oap?cmd=get_users">Users</a>
+       page in the Administration section.
+      </p>
+      <p>
+       Assuming the default configuration on the ADS, just the host and domain
+       can be set. Use of ADS authentication can also be disabled.
+       The domain parameter should not exclude the TLD.
+      </p>
+      <p>
+       Changed values will be saved after a click on "Save". Note however, that
+       the openvas-manager daemon will have to be restarted in order for the
+       changes to take effect.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use ADS authentication.</td>
+          <td>Yes or No.</td>
+        </tr>
+        <tr>
+          <td>ADS Host</td>
+          <td>Adress and optional port of the host to bind to.</td>
+          <td>localhost:389, ads.center</td>
+        </tr>
+        <tr class="odd">
+          <td>Domain</td>
+          <td>The domain to authenticate against.</td>
+          <td>adstest.local</td>
+        </tr>
+      </table>
 
     </div>
   </div>

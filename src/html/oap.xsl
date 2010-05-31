@@ -721,14 +721,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@name='method:ads'">
           ADS Authentication Configuration
+          <a href="/help/configure_manager_auth.html#adsconfiguration"
+            title="Help: Configure Manager Authentication">
+          <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:otherwise>
           LDAP Authentication Configuration
-        </xsl:otherwise>
-      </xsl:choose>
-        <a href="/help/configure_manager_auth.html"
+          <a href="/help/configure_manager_auth.html#ldapconfiguration"
             title="Help: Configure Manager Authentication">
           <img src="/img/help.png"/></a>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
