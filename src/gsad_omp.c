@@ -1882,11 +1882,11 @@ delete_agent_omp (credentials_t * credentials, const char *name)
  */
 char *
 get_agents_omp (credentials_t * credentials,
-                         const char * name,
-                         const char * format,
-                         gsize *result_len,
-                         const char * sort_field,
-                         const char * sort_order)
+                const char * name,
+                const char * format,
+                gsize *result_len,
+                const char * sort_field,
+                const char * sort_order)
 {
   entity_t entity;
   gnutls_session_t session;

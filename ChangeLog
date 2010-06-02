@@ -1,3 +1,7 @@
+2010-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_agents_omp): Indent params properly.
+
 2010-05-31  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Added help for ADS authentication configuration.
@@ -45,7 +49,7 @@
 	* src/gsad_oap.c (modify_ldap_auth_oap): Added new parameters for ADS
 	configuration, new fail conditions. Made the command sent more flexible
 	to handle both ads and "normal" ldap configurations.
-	
+
 	* src/gsad_oap.h (modify_ldap_auth_oap): Updated proto.
 
 	* src/gsad.c (init_validator): Added new validators for group
