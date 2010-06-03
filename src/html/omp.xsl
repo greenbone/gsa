@@ -1729,7 +1729,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Login</td>
             <td>Comment</td>
-            <td width="100">Actions</td>
+            <td width="115">Actions</td>
           </tr>
           <xsl:apply-templates select="lsc_credential"/>
         </table>
