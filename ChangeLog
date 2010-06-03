@@ -1,3 +1,7 @@
+2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (agent): Get UUID from "id" attrib.
+
 2010-06-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/help.xsl: Handle requests for nonexistent help pages

@@ -2048,7 +2048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_agent&amp;agent_id={@agent_id}"
+          <a href="/omp?cmd=delete_agent&amp;agent_id={@id}"
              title="Delete Agent" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -2058,7 +2058,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_agents&amp;agent_id={@agent_id}&amp;agent_format=installer"
+      <a href="/omp?cmd=get_agents&amp;agent_id={@id}&amp;agent_format=installer"
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
