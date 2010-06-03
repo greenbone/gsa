@@ -1,5 +1,10 @@
 2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_report_response/report [overview]): Compare to
+	empty string instead of '(null)'.
+
+2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch to agent UUIDs.
 
 	* src/gsad.c (init_validator): Add validator "agent_id".
