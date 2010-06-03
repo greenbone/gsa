@@ -1,3 +1,8 @@
+2010-06-03  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/help.xsl: Handle requests for nonexistent help pages
+	better. Kudos to Jan-Oliver Wagner for suggesting this approach.
+
 2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_report_response/report [overview]): Compare to

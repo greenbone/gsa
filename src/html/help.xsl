@@ -40,11 +40,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-       <xsl:apply-templates/>
+       <xsl:apply-templates mode="help"/>
   </div>
 </xsl:template>
 
-<xsl:template match="about.html">
+<xsl:template mode="help" match="*">
+  <div class="gb_window_part_center">Help: Page Not Found</div>
+  <div class="gb_window_part_content">
+    <div style="text-align:left">
+      <h1>Page Not Found</h1>
+
+      <p>
+        The help page you requested could not be found. If you have followed a
+        link and got this page, the location of the help page may have changed.
+        In this case, please use the <a href="contents.html">table of
+          contents</a> to navigate to the page you were looking for.
+      </p>
+
+      <p>
+        We apologize for any inconvenience.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="about.html">
   <div class="gb_window_part_center">About GSA</div>
   <div class="gb_window_part_content">
     <div style="text-align:left">
@@ -101,7 +121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_agents.html">
+<xsl:template mode="help" match="configure_agents.html">
   <div class="gb_window_part_center">Help: Configure Agents</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -197,7 +217,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_credentials.html">
+<xsl:template mode="help" match="configure_credentials.html">
   <div class="gb_window_part_center">Help: Configure Credentials</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -394,7 +414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_escalators.html">
+<xsl:template mode="help" match="configure_escalators.html">
   <div class="gb_window_part_center">Help: Configure Escalator</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -539,7 +559,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_scanconfigs.html">
+<xsl:template mode="help" match="configure_scanconfigs.html">
   <div class="gb_window_part_center">Help: Configure Scan Configs</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -714,7 +734,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_schedules.html">
+<xsl:template mode="help" match="configure_schedules.html">
   <div class="gb_window_part_center">Help: Configure Schedule</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -848,7 +868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_targets.html">
+<xsl:template mode="help" match="configure_targets.html">
   <div class="gb_window_part_center">Help: Configure Targets</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -1011,7 +1031,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_users.html">
+<xsl:template mode="help" match="configure_users.html">
   <div class="gb_window_part_center">Help: Configure Users</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -1131,7 +1151,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="contents.html">
+<xsl:template mode="help" match="contents.html">
   <div class="gb_window_part_center">Help: Contents</div>
   <div class="gb_window_part_content">
     <div style="text-align:left">
@@ -1192,7 +1212,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="error_messages.html">
+<xsl:template mode="help" match="error_messages.html">
   <div class="gb_window_part_center">Help: Error Messages</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -1257,7 +1277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="feed_management.html">
+<xsl:template mode="help" match="feed_management.html">
   <div class="gb_window_part_center">Help: NVT Feed Management</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -1295,7 +1315,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="glossary.html">
+<xsl:template mode="help" match="glossary.html">
 
   <div class="gb_window_part_center">Help: Glossary</div>
   <div class="gb_window_part_content">
@@ -1436,7 +1456,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="gplv2.html">
+<xsl:template mode="help" match="gplv2.html">
   <div class="gb_window_part_center">GNU General Public License Version 2</div>
   <div class="gb_window_part_content">
     <div style="text-align:left">
@@ -1788,7 +1808,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="new_task.html">
+<xsl:template mode="help" match="new_task.html">
   <div class="gb_window_part_center">Help: New task</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -1871,7 +1891,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="notes.html">
+<xsl:template mode="help" match="notes.html">
   <div class="gb_window_part_center">Help: Notes</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2017,7 +2037,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="nvts.html">
+<xsl:template mode="help" match="nvts.html">
   <div class="gb_window_part_center">Help: NVTs</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2042,7 +2062,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="performance.html">
+<xsl:template mode="help" match="performance.html">
   <div class="gb_window_part_center">Help: Performance</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2065,7 +2085,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="reports.html">
+<xsl:template mode="help" match="reports.html">
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2237,7 +2257,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_details.html">
+<xsl:template mode="help" match="scanconfig_details.html">
   <div class="gb_window_part_center">Help: Scan Config Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2365,7 +2385,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_editor.html">
+<xsl:template mode="help" match="scanconfig_editor.html">
   <div class="gb_window_part_center">Help: Scan Config Editor</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2525,7 +2545,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_editor_nvt_families.html">
+<xsl:template mode="help" match="scanconfig_editor_nvt_families.html">
   <div class="gb_window_part_center">Help: Scan Config Editor NVT Families</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2600,7 +2620,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_editor_nvt.html">
+<xsl:template mode="help" match="scanconfig_editor_nvt.html">
   <div class="gb_window_part_center">Help: Scan Config editor NVT</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2658,7 +2678,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_family_details.html">
+<xsl:template mode="help" match="scanconfig_family_details.html">
   <div class="gb_window_part_center">Help: Scan Config Family Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2720,7 +2740,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="scanconfig_nvt_details.html">
+<xsl:template mode="help" match="scanconfig_nvt_details.html">
   <div class="gb_window_part_center">Help: Scan Config NVT Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2773,7 +2793,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="settings.html">
+<xsl:template mode="help" match="settings.html">
   <div class="gb_window_part_center">Help: Settings</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -2793,7 +2813,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="tasks.html">
+<xsl:template mode="help" match="tasks.html">
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -3141,7 +3161,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="view_report.html">
+<xsl:template mode="help" match="view_report.html">
   <div class="gb_window_part_center">Help: View Report</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
@@ -3223,7 +3243,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template match="configure_manager_auth.html">
+<xsl:template mode="help" match="configure_manager_auth.html">
   <div class="gb_window_part_center">Help: Configure LDAP Authentication</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
