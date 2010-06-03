@@ -1,5 +1,19 @@
 2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch to agent UUIDs.
+
+	* src/gsad.c (init_validator): Add validator "agent_id".
+	(exec_omp_get): Pass agent_id instead of name to delete_agent_omp and
+	get_agents_omp.
+
+	* src/gsad_omp.c (delete_agent_omp, get_agents_omp): Expect agent_id
+	instead of name param.
+
+	* src/html/omp.xsl (agent): Pass agent_id instead of name in delete_agent
+	and get_agents URLs.
+
+2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-lsc-credentials-table): Widen actions column.
 
 2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>

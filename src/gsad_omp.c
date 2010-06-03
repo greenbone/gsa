@@ -1815,12 +1815,12 @@ create_agent_omp (credentials_t * credentials, const char *name,
  * @brief Delete agent, get all agents, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of agent.
+ * @param[in]  agent_id     UUID of agent.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (credentials_t * credentials, const char *name)
+delete_agent_omp (credentials_t * credentials, const char *agent_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -1836,13 +1836,11 @@ delete_agent_omp (credentials_t * credentials, const char *name)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_agent>"
-                            "<name>%s</name>"
-                            "</delete_agent>"
+                            "<delete_agent agent_id=\"%s\"/>"
                             "<get_agents"
                             " sort_field=\"name\" sort_order=\"ascending\"/>"
                             "</commands>",
-                            name)
+                            agent_id)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -1872,7 +1870,7 @@ delete_agent_omp (credentials_t * credentials, const char *name)
  * @brief Get one or all agents, XSL transform the result.
  *
  * @param[in]   credentials  Username and password for authentication.
- * @param[in]   name         Name of agent.
+ * @param[in]   agent_id     UUID of agent.
  * @param[in]   format       Format of result
  * @param[out]  result_len   Length of result.
  * @param[in]   sort_field   Field to sort on, or NULL.
@@ -1882,7 +1880,7 @@ delete_agent_omp (credentials_t * credentials, const char *name)
  */
 char *
 get_agents_omp (credentials_t * credentials,
-                const char * name,
+                const char * agent_id,
                 const char * format,
                 gsize *result_len,
                 const char * sort_field,
@@ -1903,11 +1901,11 @@ get_agents_omp (credentials_t * credentials,
 
   /* Send the request. */
 
-  if (name && format)
+  if (agent_id && format)
     {
       if (openvas_server_sendf (&session,
-                                "<get_agents name=\"%s\" format=\"%s\"/>",
-                                name,
+                                "<get_agents agent_id=\"%s\" format=\"%s\"/>",
+                                agent_id,
                                 format)
           == -1)
         {
@@ -1941,7 +1939,7 @@ get_agents_omp (credentials_t * credentials,
 
   /* Read and handle the response. */
 
-  if (name && format)
+  if (agent_id && format)
     {
       if (strcmp (format, "installer") == 0
           || strcmp (format, "howto_install") == 0

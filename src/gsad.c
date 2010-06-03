@@ -251,6 +251,7 @@ init_validator ()
 
 
   openvas_validator_add (validator, "agent_format", "^(installer)$");
+  openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "authdn",     "^[[:alnum:], =]{0,200}%s[[:alnum:], =]{0,200}$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
@@ -2259,6 +2260,7 @@ exec_omp_get (struct MHD_Connection *connection,
 {
   char *cmd = NULL;
   const char *agent_format = NULL;
+  const char *agent_id     = NULL;
   const char *comment      = NULL;
   const char *escalator_id = NULL;
   const char *task_id      = NULL;
@@ -2314,6 +2316,13 @@ exec_omp_get (struct MHD_Connection *connection,
       /** @todo Why lookup all parameters when each handler only uses some? */
 
       tracef ("cmd: [%s]\n", cmd);
+
+      agent_id = MHD_lookup_connection_value
+                      (connection,
+                       MHD_GET_ARGUMENT_KIND,
+                       "agent_id");
+      if (openvas_validate (validator, "agent_id", agent_id))
+        agent_id = NULL;
 
       comment = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -2636,8 +2645,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (task_id) < VAL_MAX_SIZE))
     return get_status_omp (credentials, task_id, sort_field, sort_order, refresh_interval);
 
-  else if ((0 == strcmp (cmd, "delete_agent")) && (name != NULL))
-    return delete_agent_omp (credentials, name);
+  else if ((0 == strcmp (cmd, "delete_agent")) && (agent_id != NULL))
+    return delete_agent_omp (credentials, agent_id);
 
   else if ((!strcmp (cmd, "delete_escalator")) && (name != NULL))
     return delete_escalator_omp (credentials, name);
@@ -2824,12 +2833,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                        response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
-           && ((name == NULL && agent_format == NULL)
-               || (name && agent_format)))
+           && ((agent_id == NULL && agent_format == NULL)
+               || (agent_id && agent_format)))
     {
-      if (name == NULL)
+      if (agent_id == NULL)
         return get_agents_omp (credentials,
-                               name,
+                               agent_id,
                                agent_format,
                                response_size,
                                sort_field,
@@ -2845,7 +2854,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
       /** @todo On fail, HTML ends up in file. */
       return get_agents_omp (credentials,
-                             name,
+                             agent_id,
                              agent_format,
                              response_size,
                              NULL,
