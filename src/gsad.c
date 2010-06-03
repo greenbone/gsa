@@ -1830,16 +1830,17 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.comment);
           con_info->req_parms.comment = NULL;
         }
-      if (openvas_validate (validator, "name", con_info->req_parms.password))
+      /** @todo Resolve discord between parameter name and validation. */
+      if (openvas_validate (validator, "name", con_info->req_parms.credential_login))
         {
-          free (con_info->req_parms.password);
-          con_info->req_parms.password = NULL;
+          free (con_info->req_parms.credential_login);
+          con_info->req_parms.credential_login = NULL;
         }
       con_info->response =
         create_target_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
-                           con_info->req_parms.password);
+                           con_info->req_parms.credential_login);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_config"))
     {

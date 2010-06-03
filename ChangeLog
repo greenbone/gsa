@@ -1,3 +1,10 @@
+2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): For selected LSC credentials in the
+	create target command, use different field in req_parms. Added todo, as
+	the proper solution might include creating a new field and validator
+	for this parameter.
+
 2010-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_agents_omp): Indent params properly.
