@@ -295,6 +295,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
 
   xml = g_string_new ("<gsad_newtask>");
 
+  /* Get list of targets. */
   if (openvas_server_send (&session,
                            "<get_targets"
                            " sort_field=\"name\""
@@ -321,6 +322,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
+  /* Get configs to select in new task UI. */
   if (openvas_server_send (&session,
                            "<get_configs"
                            " sort_field=\"name\""
@@ -347,6 +349,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
+  /* Get escalators to select in new task UI. */
   if (openvas_server_send (&session,
                            "<get_escalators"
                            " sort_field=\"name\""
@@ -373,6 +376,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "/omp?cmd=get_status");
     }
 
+  /* Get schedules to select in new task UI. */
   if (openvas_server_send (&session,
                            "<get_schedules"
                            " sort_field=\"name\""

@@ -1,5 +1,9 @@
 2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/gsad_omp.c (gsad_newtask): Added comments.
+
+2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	Added Import section to Targets page, allows fetching targets from
 	external sources ("target locators"), if manager is configured to do
 	so. Uses recent changes and additions in CREATE_TARGET and GET_SOURCES
