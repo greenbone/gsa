@@ -1,5 +1,9 @@
 2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/gsad_omp.c (get_targets_omp): Corrected command name.
+
+2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	Reflect name change of OMP command (sources became target_locators).
 
 	* src/gsad.c (gsad_connection_info, serve_post, exec_omp_post)

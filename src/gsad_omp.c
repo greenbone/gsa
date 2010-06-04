@@ -2878,7 +2878,7 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
 
   /* Get target locators. */
   if (openvas_server_send (&session,
-                           "<target_locators/>")
+                           "<get_target_locators/>")
       == -1)
     {
       g_string_free (xml, TRUE);
