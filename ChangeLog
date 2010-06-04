@@ -1,8 +1,20 @@
-2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	Reflect name change of OMP command (sources became target_locators).
+
+	* src/gsad.c (gsad_connection_info, serve_post, exec_omp_post)
+	(init_validator): Renamed source to target_locator.
+
+	* src/gsad_omp.c (create_target_omp, delete_target_omp)
+	(get_targets_omp): Renamed source to target_locator.
+
+	* src/html/omp.xsl: Renamed source to target_locator.
+
+2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (gsad_newtask): Added comments.
 
-2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added Import section to Targets page, allows fetching targets from
 	external sources ("target locators"), if manager is configured to do

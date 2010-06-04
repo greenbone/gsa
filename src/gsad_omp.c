@@ -2473,7 +2473,7 @@ test_escalator_omp (credentials_t * credentials, const char * name,
  * @param[in]  hosts        Hosts associated with target.
  * @param[in]  comment      Comment on target.
  * @param[in]  target_credential  Name of credential for target.
- * @param[in]  source       Source to pull targets from.
+ * @param[in]  target_locator Target locator to pull targets from.
  * @param[in]  username     Username for source.
  * @param[in]  password     Password for username at source.
  *
@@ -2482,7 +2482,7 @@ test_escalator_omp (credentials_t * credentials, const char * name,
 char *
 create_target_omp (credentials_t * credentials, char *name, char *hosts,
                    char *comment, const char *target_credential,
-                   const char* source, const char* username,
+                   const char* target_locator, const char* username,
                    const char* password)
 {
   gnutls_session_t session;
@@ -2498,8 +2498,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
 
   xml = g_string_new ("<get_targets>");
 
-  if (name == NULL || (hosts == NULL && source == NULL) || comment == NULL
-      || target_credential == NULL)
+  if (name == NULL || (hosts == NULL && target_locator == NULL)
+      || comment == NULL || target_credential == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
   else
     {
@@ -2513,11 +2513,11 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
       else
         comment_element = g_strdup ("");
 
-      if (source != NULL && strcmp (source, "--") != 0)
-        source_element = g_strdup_printf ("<source>%s</source>"
+      if (target_locator != NULL && strcmp (target_locator, "--") != 0)
+        source_element = g_strdup_printf ("<target_locator>%s</target_locator>"
                                           "<username>%s</username>"
                                           "<password>%s</password>",
-                                          source,
+                                          target_locator,
                                           username ? username : "",
                                           password ? password : "");
       else
@@ -2601,7 +2601,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
   /* Get the target locators. */
 
   if (openvas_server_sendf (&session,
-                            "<get_sources/>")
+                            "<get_target_locators/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2691,7 +2691,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
                             "<get_targets"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
-                            "<get_sources/>"
+                            "<get_target_locators/>"
                             "<get_lsc_credentials"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
@@ -2876,15 +2876,16 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_targets");
     }
 
-  /* Get external sources to pull/import targets from. */
+  /* Get target locators. */
   if (openvas_server_send (&session,
-                           "<get_sources/>")
+                           "<target_locators/>")
       == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the sources list. "
+                           "An internal error occurred while getting the list "
+                           "of target locators. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_status");
@@ -2895,7 +2896,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the sources list. "
+                           "An internal error occurred while getting the list "
+                           "of target locators. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");

@@ -2541,11 +2541,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END ESCALATORS MANAGEMENT -->
 
-<!-- BEGIN SOURCES TEMPLATES ! -->
-<xsl:template match="source" mode="select">
+<!-- BEGIN TARGET LOCATOR TEMPLATES ! -->
+<xsl:template match="target_locator" mode="select">
   <option value="{@name}"><xsl:value-of select="@name"/></option>
 </xsl:template>
-<!-- END SOURCES TEMPLATES ! -->
+<!-- END TARGET LOCATOR TEMPLATES ! -->
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
@@ -2576,8 +2576,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
           <td valign="top" width="125">Hosts</td>
           <xsl:choose>
-            <xsl:when test="not ($target-sources/source)">
-              <!-- No external sources given. -->
+            <xsl:when test="not ($target-sources/target_locator)">
+              <!-- No target locator(s) given. -->
               <td>
                 <input type="hidden" name="target_source" value="manual"/>
                 <input type="text" name="hosts" value="localhost" size="30"
@@ -2585,7 +2585,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </xsl:when>
             <xsl:otherwise>
-              <!-- External sources given. -->
+              <!-- Target locator(s) given. -->
               <td>
                <xsl:value-of select="$target-sources"/>
                 <table>
@@ -2606,7 +2606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       Import
                     </td>
                     <td>
-                      <select name="source">
+                      <select name="target_locator">
                         <option value="--">--</option>
                         <xsl:apply-templates select="$target-sources" mode="select"/>
                       </select>
@@ -2875,7 +2875,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
     <xsl:with-param
       name="target-sources"
-      select="get_sources_response | commands_response/get_sources_response"/>
+      select="get_target_locators_response | commands_response/get_target_locators_response"/>
   </xsl:call-template>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">

@@ -307,7 +307,7 @@ init_validator ()
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
-  openvas_validator_add (validator, "source",     "^[[:alnum:] -_/]{1,80}$");
+  openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
@@ -489,7 +489,7 @@ struct gsad_connection_info
     char *scantarget;    ///< Value of "scantarget" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
-    char *source;        ///< Value of "source" parameter.
+    char *target_locator; ///< Value of "target_locator" parameter.
     char *levels;        ///< Value of "levels" parameter.
     char *notes;         ///< Value of "notes" parameter.
     char *result_hosts_only; ///< Value of "result_hosts_only" parameter.
@@ -1097,9 +1097,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "role"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.role);
-      if (!strcmp (key, "source"))
+      if (!strcmp (key, "target_locator"))
         return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.source);
+                                    &con_info->req_parms.target_locator);
       if (!strcmp (key, "submit"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.submit);
@@ -1843,10 +1843,11 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.credential_login);
           con_info->req_parms.credential_login = NULL;
         }
-      if (openvas_validate (validator, "source", con_info->req_parms.source))
+      if (openvas_validate (validator, "target_locator",
+          con_info->req_parms.target_locator))
         {
-          free (con_info->req_parms.source);
-          con_info->req_parms.source = NULL;
+          free (con_info->req_parms.target_locator);
+          con_info->req_parms.target_locator = NULL;
         }
       if (openvas_validate (validator, "lsc_password",
           con_info->req_parms.password))
@@ -1864,7 +1865,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
                            con_info->req_parms.credential_login,
-                           con_info->req_parms.source,
+                           con_info->req_parms.target_locator,
                            con_info->req_parms.login,
                            con_info->req_parms.password);
     }
