@@ -2541,10 +2541,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END ESCALATORS MANAGEMENT -->
 
+<!-- BEGIN SOURCES TEMPLATES ! -->
+<xsl:template match="source" mode="select">
+  <option value="{@name}"><xsl:value-of select="@name"/></option>
+</xsl:template>
+<!-- END SOURCES TEMPLATES ! -->
+
 <!-- BEGIN TARGETS MANAGEMENT -->
 
 <xsl:template name="html-create-target-form">
   <xsl:param name="lsc-credentials"></xsl:param>
+  <xsl:param name="target-sources"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -2559,11 +2566,83 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_target"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="125">Name
+            </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
+          </tr>
+          <tr>
+          <td valign="top" width="125">Hosts</td>
+          <xsl:choose>
+            <xsl:when test="not ($target-sources/source)">
+              <!-- No external sources given. -->
+              <td>
+                <input type="hidden" name="target_source" value="manual"/>
+                <input type="text" name="hosts" value="localhost" size="30"
+                        maxlength="80"/>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- External sources given. -->
+              <td>
+               <xsl:value-of select="$target-sources"/>
+                <table>
+                  <tr>
+                    <td>
+                      <input type="radio" name="target_source" value="manual"
+                             checked="checked"/>
+                      Manual
+                    </td>
+                    <td>
+                      <input type="text" name="hosts" value="localhost" size="30"
+                             maxlength="80"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input type="radio" name="target_source" value="import"/>
+                      Import
+                    </td>
+                    <td>
+                      <select name="source">
+                        <option value="--">--</option>
+                        <xsl:apply-templates select="$target-sources" mode="select"/>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                       Import Authentication
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <table>
+                      <tr>
+                        <td>Username</td>
+                        <td>
+                          <input type="text" name="login" value="" size="15"
+                                maxlength="80"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Password</td>
+                        <td>
+                          <input type="password" name="password" value="" size="15"
+                                maxlength="80"/>
+                        </td>
+                      </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
           </tr>
           <tr>
             <td valign="top" width="125">Comment (optional)</td>
@@ -2572,16 +2651,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Hosts</td>
-            <td>
-              <input type="text" name="hosts" value="localhost" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
             <td valign="top" width="125">Credential (optional)</td>
             <td>
-              <select name="password">
+              <select name="credential_login">
                 <option value="--">--</option>
                 <xsl:apply-templates select="$lsc-credentials" mode="select"/>
               </select>
@@ -2801,6 +2873,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param
       name="lsc-credentials"
       select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="target-sources"
+      select="get_sources_response | commands_response/get_sources_response"/>
   </xsl:call-template>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">

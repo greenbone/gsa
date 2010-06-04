@@ -1,3 +1,30 @@
+2010-06-03  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	Added Import section to Targets page, allows fetching targets from
+	external sources ("target locators"), if manager is configured to do
+	so. Uses recent changes and additions in CREATE_TARGET and GET_SOURCES
+	OMP commands.
+
+	* src/gsad_omp.c (create_target_omp): Added parameters for source,
+	username and password, include in OMP command if present.
+	(delete_target_omp, get_targets_omp): Request sources after deletion
+	of a target.
+
+	* src/gsad_omp.h (create_target_omp): Adjusted proto.
+
+	* src/gsad.c (init_validator): Added source validator.
+	(gsad_connection_info): Added source field.
+	(serve_post): Fill new source field.
+	(exec_omp_post): Validate new parameters and pass to create_target_omp.
+
+	* src/html/omp.xsl (source): New, creates option in a select box.
+	(html-create-target-form): Updated to allow specification of source
+	and respective authorization, if configured.
+	(create_target_response): Pass response of get_sources as parameter.
+
+	* src/html/help.xsl (configure_targets): Updated examples with
+	comma-space separation of hosts.
+
 2010-06-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (agent): Get UUID from "id" attrib.

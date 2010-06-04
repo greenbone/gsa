@@ -895,8 +895,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Note on <b>Hosts</b>:
         <ul>
           <li> Larger networks can either be specified as a comma-separated list of
-               IPs (e.g. <tt>192.168.13.1,192.168.13.2,...</tt>), hostnames (e.g.
-               <tt>myhost1.domain,myhost2.domain</tt> or using the CIDR notation
+               IPs (e.g. <tt>192.168.13.1, 192.168.13.2, ...</tt>), hostnames (e.g.
+               <tt>myhost1.domain, myhost2.domain</tt> or using the CIDR notation
                (e.g. <tt>192.168.13.0/24</tt>). These options can be mixed.
                Note that the netmask in CIDR notation is limited to 20 (4095 hosts).
           </li>
@@ -926,7 +926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>yes</td>
           <td>80</td>
           <td>Comma separated list of IPs and/or hostnames</td>
-          <td><tt>192.168.1.23,192.168.1.2/31,webserv1.mycompany.tld</tt></td>
+          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
         </tr>
         <tr class="odd">
           <td>Comment</td>

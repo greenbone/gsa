@@ -105,7 +105,7 @@ char * get_target_omp (credentials_t *, const char *, const char *,
                        const char *);
 char * get_targets_omp (credentials_t *, const char *, const char *);
 char * create_target_omp (credentials_t *, char *, char *, char *,
-                          const char *);
+                          const char *, const char*, const char*, const char*);
 char * delete_target_omp (credentials_t *, const char *);
 
 char * get_config_omp (credentials_t *, const char *, int);

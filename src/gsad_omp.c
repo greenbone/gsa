@@ -2464,17 +2464,22 @@ test_escalator_omp (credentials_t * credentials, const char * name,
 /**
  * @brief Create a target, get all targets, XSL transform the result.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   name         Name of new target.
- * @param[in]   hosts        Hosts associated with target.
- * @param[out]  comment      Comment on target.
- * @param[out]  target_credential  Name of credential for target.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  name         Name of new target.
+ * @param[in]  hosts        Hosts associated with target.
+ * @param[in]  comment      Comment on target.
+ * @param[in]  target_credential  Name of credential for target.
+ * @param[in]  source       Source to pull targets from.
+ * @param[in]  username     Username for source.
+ * @param[in]  password     Password for username at source.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_target_omp (credentials_t * credentials, char *name, char *hosts,
-                   char *comment, const char *target_credential)
+                   char *comment, const char *target_credential,
+                   const char* source, const char* username,
+                   const char* password)
 {
   gnutls_session_t session;
   GString *xml;
@@ -2489,37 +2494,54 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
 
   xml = g_string_new ("<get_targets>");
 
-  if (name == NULL || hosts == NULL || comment == NULL
+  if (name == NULL || (hosts == NULL && source == NULL) || comment == NULL
       || target_credential == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
   else
     {
       int ret;
+      gchar* credentials_element = NULL;
+      gchar* source_element = NULL;
+      gchar* comment_element = NULL;
+
+      if (comment != NULL)
+        comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
+      else
+        comment_element = g_strdup ("");
+
+      if (source != NULL && strcmp (source, "--") != 0)
+        source_element = g_strdup_printf ("<source>%s</source>"
+                                          "<username>%s</username>"
+                                          "<password>%s</password>",
+                                          source,
+                                          username ? username : "",
+                                          password ? password : "");
+      else
+        source_element = g_strdup ("");
+
+      if (strcmp (target_credential, "--") == 0)
+        credentials_element = g_strdup ("");
+      else
+        credentials_element =
+            g_strdup_printf ("<lsc_credential>%s</lsc_credential>", target_credential);
 
       /* Create the target. */
 
-      if (strcmp (target_credential, "--") == 0)
-        ret = openvas_server_sendf (&session,
+      ret = openvas_server_sendf (&session,
                                     "<create_target>"
                                     "<name>%s</name>"
                                     "<hosts>%s</hosts>"
                                     "%s%s%s"
                                     "</create_target>",
-                                    name, hosts, comment ? "<comment>" : "",
-                                    comment ? comment : "",
-                                    comment ? "</comment>" : "");
-      else
-        ret = openvas_server_sendf (&session,
-                                    "<create_target>"
-                                    "<name>%s</name>"
-                                    "<hosts>%s</hosts>"
-                                    "%s%s%s"
-                                    "<lsc_credential>%s</lsc_credential>"
-                                    "</create_target>",
-                                    name, hosts, comment ? "<comment>" : "",
-                                    comment ? comment : "",
-                                    comment ? "</comment>" : "",
-                                    target_credential);
+                                    name,
+                                    (strcmp (source_element, "") == 0) ? hosts : "",
+                                    comment_element,
+                                    source_element,
+                                    credentials_element);
+
+      g_free (comment_element);
+      g_free (credentials_element);
+      g_free (source_element);
 
       if (ret == -1)
         {
@@ -2550,6 +2572,32 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                            "<get_targets"
                            " sort_field=\"name\""
                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new target. "
+                           "A new target was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new target. "
+                           "A new target was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  /* Get the target locators. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_sources/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2639,6 +2687,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
                             "<get_targets"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
+                            "<get_sources/>"
                             "<get_lsc_credentials"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
@@ -2821,6 +2870,31 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
+    }
+
+  /* Get external sources to pull/import targets from. */
+  if (openvas_server_send (&session,
+                           "<get_sources/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the sources list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the sources list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
     }
 
   /* Cleanup, and return transformed XML. */
