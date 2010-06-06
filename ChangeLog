@@ -1,3 +1,8 @@
+2010-06-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl (scanconfig_nvt_details.html): Added
+	description of risk factors.
+ 
 2010-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch to escalator UUIDs.

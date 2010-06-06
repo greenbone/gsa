@@ -2759,14 +2759,63 @@ Public License instead of this License.
       <h3>Details</h3>
       <p>
        Provides information like the name of the NVT, a summary, its OID, Family
-       Affiliation and References.
+       Affiliation and References. Also a risk class is provided and for most NVTs
+       a CVSS value.
       </p>
+
+      <p>
+       Risk catogories:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Risk factor</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>None</td>
+          <td> The NVT is only gathering information about the target
+            system and not reporting any vulnerability. Or it arranges
+            things internally such as setting special knowledge base
+            entries.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Low</td>
+          <td> The chances of the vulnerability being exploited
+            is very low. This corresponds to CVSS Base score
+            &lt;= 2.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Medium</td>
+          <td> The chances of the vulnerability being exploited
+            is moderate. This corresponds to CVSS Base score
+            &gt; 2 and &lt;= 5.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>High</td>
+          <td> The chances of the vulnerability being exploited
+            is high. This corresponds to CVSS Base score
+            &gt; 5 and &lt;= 8.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Critical</td>
+          <td> This vulnerability could be easily exploited
+            and the damages could be significant.
+            This corresponds to CVSS Base score
+            &gt; 8 and &lt;= 10.
+          </td>
+        </tr>
+      </table>
 
       <h3>Description</h3>
       <p>
-       This section provides a description of the NVT. It might contain a
-       classification into a Risk Factor and suggest solutions to fix the issue that
-       can be detected by this NVT.
+       This section provides a description of the NVT. It contains a
+       risk classification and suggest solutions to fix the issue that
+       is be detected by this NVT.
       </p>
 
       <h3>Preferences</h3>
