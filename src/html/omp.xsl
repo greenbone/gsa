@@ -703,7 +703,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Escalator:</td>
           <td>
             <xsl:if test="task/escalator">
-              <a href="/omp?cmd=get_escalator&amp;name={task/escalator/name}">
+              <a href="/omp?cmd=get_escalator&amp;escalator_id={task/escalator/@id}">
                 <xsl:value-of select="task/escalator/name"/>
               </a>
             </xsl:if>
@@ -885,7 +885,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="escalator" mode="newtask">
-  <option value="{name}"><xsl:value-of select="name"/></option>
+  <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
 <xsl:template match="schedule" mode="newtask">
@@ -1350,24 +1350,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Escalator (optional)</td>
             <td>
               <select name="escalator_id">
-                <xsl:variable name="escalator">
-                  <xsl:value-of select="commands_response/get_status_response/task/escalator/name"/>
+                <xsl:variable name="escalator_id">
+                  <xsl:value-of select="commands_response/get_status_response/task/escalator/@id"/>
                 </xsl:variable>
                 <xsl:choose>
-                  <xsl:when test="string-length ($escalator) &gt; 0">
-                    <option value="">--</option>
+                  <xsl:when test="string-length ($escalator_id) &gt; 0">
+                    <option value="0">--</option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="" selected="1">--</option>
+                    <option value="0" selected="1">--</option>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:for-each select="commands_response/get_escalators_response/escalator">
                   <xsl:choose>
-                    <xsl:when test="name = $escalator">
-                      <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                    <xsl:when test="@id = $escalator_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{name}"><xsl:value-of select="name"/></option>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:for-each>
@@ -2349,7 +2349,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_escalator&amp;name={name}"
+          <a href="/omp?cmd=delete_escalator&amp;escalator_id={@id}"
              title="Delete Escalator" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -2361,11 +2361,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_escalator&amp;name={name}"
+      <a href="/omp?cmd=get_escalator&amp;escalator_id={@id}"
          title="Escalator Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=test_escalator&amp;name={name}"
+      <a href="/omp?cmd=test_escalator&amp;escalator_id={@id}"
          title="Test Escalator" style="margin-left:3px;">
         <img src="/img/start.png" border="0" alt="Test"/>
       </a>
@@ -6389,7 +6389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Escalator (optional)</td>
           <td>
-            <select name="escalator">
+            <select name="escalator_id">
               <option value="--">--</option>
               <xsl:apply-templates select="get_escalators_response/escalator"
                                    mode="newtask"/>

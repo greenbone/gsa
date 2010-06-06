@@ -262,7 +262,7 @@ init_validator ()
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
-  openvas_validator_add (validator, "escalator_id", "^[-_[:alnum:], \\./]{0,80}$");
+  openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
@@ -317,7 +317,6 @@ init_validator ()
   openvas_validator_alias (validator, "base",         "name");
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
-  openvas_validator_alias (validator, "escalator",    "name");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "scanconfig",   "name");
   openvas_validator_alias (validator, "scantarget",   "name");
@@ -475,7 +474,7 @@ struct gsad_connection_info
     char *duration;      ///< Value of "duration" parameter.
     char *duration_unit; ///< Value of "duration_unit" parameter.
     char *enable;        ///< Value of "enable" parameter.
-    char *escalator;     ///< Value of "escalator" parameter.
+    char *escalator_id;  ///< Value of "escalator_id" parameter.
     char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
     char *group;         ///< Value of "group" parameter.
@@ -484,7 +483,7 @@ struct gsad_connection_info
     char *ldaphost;      ///< Value of "ldaphost" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
-    char *schedule_id;   ///< Value of "escalator" parameter.
+    char *schedule_id;   ///< Value of "schedule_id" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *scantarget;    ///< Value of "scantarget" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
@@ -685,7 +684,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.domain);
   free (con_info->req_parms.duration);
   free (con_info->req_parms.duration_unit);
-  free (con_info->req_parms.escalator);
+  free (con_info->req_parms.escalator_id);
   free (con_info->req_parms.event);
   free (con_info->req_parms.family);
   free (con_info->req_parms.group);
@@ -1025,9 +1024,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "enable"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.enable);
-      if (!strcmp (key, "escalator"))
+      if (!strcmp (key, "escalator_id"))
         return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.escalator);
+                                    &con_info->req_parms.escalator_id);
       if (!strcmp (key, "event"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.event);
@@ -1651,12 +1650,14 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.comment);
           con_info->req_parms.comment = NULL;
         }
-      if (openvas_validate (validator,
-                            "escalator",
-                            con_info->req_parms.escalator))
+      if (con_info->req_parms.escalator_id
+          && strcmp (con_info->req_parms.escalator_id, "--")
+          && openvas_validate (validator,
+                               "escalator_id",
+                               con_info->req_parms.escalator_id))
         {
-          free (con_info->req_parms.escalator);
-          con_info->req_parms.escalator  = NULL;
+          free (con_info->req_parms.escalator_id);
+          con_info->req_parms.escalator_id  = NULL;
         }
       if (openvas_validate (validator,
                             "scantarget",
@@ -1685,6 +1686,7 @@ exec_omp_post (credentials_t * credentials,
           (con_info->req_parms.comment == NULL) ||
           (con_info->req_parms.scanconfig == NULL) ||
           (con_info->req_parms.scantarget == NULL) ||
+          (con_info->req_parms.escalator_id == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
         con_info->response = gsad_newtask (credentials, "Invalid parameter");
       else
@@ -1693,7 +1695,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.comment,
                            con_info->req_parms.scantarget,
                            con_info->req_parms.scanconfig,
-                           con_info->req_parms.escalator,
+                           con_info->req_parms.escalator_id,
                            con_info->req_parms.schedule_id);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
@@ -2674,8 +2676,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((0 == strcmp (cmd, "delete_agent")) && (agent_id != NULL))
     return delete_agent_omp (credentials, agent_id);
 
-  else if ((!strcmp (cmd, "delete_escalator")) && (name != NULL))
-    return delete_escalator_omp (credentials, name);
+  else if ((!strcmp (cmd, "delete_escalator")) && (escalator_id != NULL))
+    return delete_escalator_omp (credentials, escalator_id);
 
   else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
     return delete_lsc_credential_omp (credentials, name);
@@ -2887,8 +2889,9 @@ exec_omp_get (struct MHD_Connection *connection,
                              NULL);
     }
 
-  else if ((!strcmp (cmd, "get_escalator")) && (name != NULL))
-    return get_escalator_omp (credentials, name, sort_field, sort_order);
+  else if ((!strcmp (cmd, "get_escalator")) && (escalator_id != NULL))
+    return get_escalator_omp (credentials, escalator_id, sort_field,
+                              sort_order);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);
@@ -3041,8 +3044,9 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_settings"))
     return get_settings_oap (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "test_escalator")) && (name != NULL))
-    return test_escalator_omp (credentials, name, sort_field, sort_order);
+  else if ((!strcmp (cmd, "test_escalator")) && (escalator_id != NULL))
+    return test_escalator_omp (credentials, escalator_id, sort_field,
+                               sort_order);
 
   else if ((!strcmp (cmd, "new_note"))
            /* Note params. */

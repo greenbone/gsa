@@ -416,19 +416,19 @@ gsad_newtask (credentials_t * credentials, const char* message)
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         New task name.
- * @param[in]  comment      Comment on task.
- * @param[in]  scantarget   Target for task.
- * @param[in]  scanconfig   Config for task.
- * @param[in]  escalator    Escalator for task.
- * @param[in]  schedule_id  UUID of schedule for task.
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  name          New task name.
+ * @param[in]  comment       Comment on task.
+ * @param[in]  scantarget    Target for task.
+ * @param[in]  scanconfig    Config for task.
+ * @param[in]  escalator_id  Escalator for task.
+ * @param[in]  schedule_id   UUID of schedule for task.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *scantarget, char *scanconfig, const char *escalator,
+                 char *scantarget, char *scanconfig, const char *escalator_id,
                  const char *schedule_id)
 {
   entity_t entity;
@@ -443,7 +443,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
 
-  if (strcmp (escalator, "--") == 0)
+  if (strcmp (escalator_id, "--") == 0)
     ret = openvas_server_sendf (&session,
                                 "<commands>"
                                 "<create_task>"
@@ -467,7 +467,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<commands>"
                                 "<create_task>"
                                 "<config>%s</config>"
-                                "<escalator>%s</escalator>"
+                                "<escalator id=\"%s\"/>"
                                 "<schedule>%s</schedule>"
                                 "<target>%s</target>"
                                 "<name>%s</name>"
@@ -478,7 +478,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 scanconfig,
-                                escalator,
+                                escalator_id,
                                 strcmp (schedule_id, "--") ? schedule_id : "",
                                 scantarget,
                                 name,
@@ -2196,13 +2196,13 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
 /**
  * @brief Delete an escalator, get all escalators, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  escalator_name  Name of escalator.
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  escalator_id  UUID of escalator.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
+delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
 {
   GString *xml;
   gnutls_session_t session;
@@ -2221,12 +2221,12 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_escalator><name>%s</name></delete_escalator>"
+                            "<delete_escalator escalator_id=\"%s\"/>"
                             "<get_escalators"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
-                            escalator_name)
+                            escalator_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2259,15 +2259,15 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_name)
 /**
  * @brief Get one escalator, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of escalator.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  escalator_id  Name of escalator.
+ * @param[in]  sort_field    Field to sort on, or NULL.
+ * @param[in]  sort_order    "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_escalator_omp (credentials_t * credentials, const char * name,
+get_escalator_omp (credentials_t * credentials, const char * escalator_id,
                    const char * sort_field, const char * sort_order)
 {
   GString *xml;
@@ -2286,10 +2286,10 @@ get_escalator_omp (credentials_t * credentials, const char * name,
 
   if (openvas_server_sendf (&session,
                             "<get_escalators"
-                            " name=\"%s\""
+                            " escalator_id=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
-                            name,
+                            escalator_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
@@ -2399,15 +2399,15 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
 /**
  * @brief Test an escalator, get all escalators XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of escalator.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  escalator_id  UUID of escalator.
+ * @param[in]  sort_field    Field to sort on, or NULL.
+ * @param[in]  sort_order    "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 char *
-test_escalator_omp (credentials_t * credentials, const char * name,
+test_escalator_omp (credentials_t * credentials, const char * escalator_id,
                     const char * sort_field, const char * sort_order)
 {
   GString *xml;
@@ -2426,8 +2426,8 @@ test_escalator_omp (credentials_t * credentials, const char * name,
   /* Test the escalator. */
 
   if (openvas_server_sendf (&session,
-                            "<test_escalator name=\"%s\"/>",
-                            name)
+                            "<test_escalator escalator_id=\"%s\"/>",
+                            escalator_id)
       == -1)
     {
       g_string_free (xml, TRUE);

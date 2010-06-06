@@ -1,3 +1,25 @@
+2010-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch to escalator UUIDs.
+
+	* src/gsad.c (init_validator): Adapt "escalator_id" for UUIDs.  Remove
+	"escalator".
+	(req_parms, free_resources, serve_post): Rename escalator to escalator_id.
+	(exec_omp_post): Allow escalator_id to be "--".  Rename escalator to
+	escalator_id.
+	(exec_omp_get): Pass escalator_id instead of name to delete_escalator_omp,
+	get_escalator_omp and test_escalator_omp.
+
+	* src/gsad_omp.c (create_task_omp): Rename escalator to escalator_id,
+	and move to attrib.
+	(delete_escalator_omp, get_escalator_omp, test_escalator_omp): Expect
+	escalator_id instead of name param.
+
+	* src/html/omp.xsl (html_report_table, escalator, gsad_newtask): Pass
+	escalator_id instead of name in escalator URLs.
+	(escalator [newtask]): Use UUID as value.
+	(html-edit-task-form): Use UUID as value, using "0" to remove escalator.
+
 2010-06-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (get_targets_omp): Corrected command name.
