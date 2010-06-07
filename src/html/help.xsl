@@ -2814,8 +2814,8 @@ Public License instead of this License.
       <h3>Description</h3>
       <p>
        This section provides a description of the NVT. It contains a
-       risk classification and suggest solutions to fix the issue that
-       is be detected by this NVT.
+       risk classification and suggests solutions to fix the issue that
+       is detected by this NVT.
       </p>
 
       <h3>Preferences</h3>

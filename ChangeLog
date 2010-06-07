@@ -1,8 +1,15 @@
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (scanconfig_nvt_details.html): Improve description.
+
+	* src/html/omp.xsl: Format header comment like others.
+	(html-create-target-form): Align cell.
+
 2010-06-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (scanconfig_nvt_details.html): Added
 	description of risk factors.
- 
+
 2010-06-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch to escalator UUIDs.

@@ -2541,11 +2541,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END ESCALATORS MANAGEMENT -->
 
-<!-- BEGIN TARGET LOCATOR TEMPLATES ! -->
+<!-- BEGIN TARGET LOCATORS MANAGEMENT -->
+
 <xsl:template match="target_locator" mode="select">
   <option value="{@name}"><xsl:value-of select="@name"/></option>
 </xsl:template>
-<!-- END TARGET LOCATOR TEMPLATES ! -->
+
+<!-- END TARGET LOCATORS MANAGEMENT -->
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
@@ -2615,7 +2617,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td></td>
                     <td>
-                       Import Authentication
+                      Import Authentication
                     </td>
                   </tr>
                   <tr>
