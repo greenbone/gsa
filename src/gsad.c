@@ -278,6 +278,7 @@ init_validator ()
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
+  openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
   openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:]@, ;:\\./\\\\]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
@@ -481,6 +482,7 @@ struct gsad_connection_info
     char *domain;        ///< Value of "domain" parameter.
     char *hour;          ///< Value of "hour" parameter.
     char *ldaphost;      ///< Value of "ldaphost" parameter.
+    char *lsc_credential_id; ///< Value of "lsc_credential_id" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *schedule_id;   ///< Value of "schedule_id" parameter.
@@ -689,6 +691,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.family);
   free (con_info->req_parms.group);
   free (con_info->req_parms.hour);
+  free (con_info->req_parms.lsc_credential_id);
   free (con_info->req_parms.minute);
   free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
@@ -1036,6 +1039,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "hour"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.hour);
+      if (!strcmp (key, "lsc_credential_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.lsc_credential_id);
       if (!strcmp (key, "minute"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.minute);
@@ -1838,12 +1844,11 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.comment);
           con_info->req_parms.comment = NULL;
         }
-      /** @todo Resolve discord between parameter name and validation. */
-      if (openvas_validate (validator, "name",
-                            con_info->req_parms.credential_login))
+      if (openvas_validate (validator, "lsc_credential_id",
+                            con_info->req_parms.lsc_credential_id))
         {
-          free (con_info->req_parms.credential_login);
-          con_info->req_parms.credential_login = NULL;
+          free (con_info->req_parms.lsc_credential_id);
+          con_info->req_parms.lsc_credential_id = NULL;
         }
       if (openvas_validate (validator, "target_locator",
                             con_info->req_parms.target_locator))
@@ -1866,7 +1871,7 @@ exec_omp_post (credentials_t * credentials,
         create_target_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
-                           con_info->req_parms.credential_login,
+                           con_info->req_parms.lsc_credential_id,
                            con_info->req_parms.target_locator,
                            con_info->req_parms.login,
                            con_info->req_parms.password);
@@ -2319,6 +2324,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *text         = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
+  const char *lsc_credential_id = NULL;
   const char *schedule_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
   credentials_t *credentials = NULL;
@@ -2498,6 +2504,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                  "schedule_id");
       if (openvas_validate (validator, "schedule_id", schedule_id))
         schedule_id = NULL;
+
+      lsc_credential_id = MHD_lookup_connection_value (connection,
+                                                       MHD_GET_ARGUMENT_KIND,
+                                                       "lsc_credential_id");
+      if (openvas_validate (validator, "lsc_credential_id", lsc_credential_id))
+        lsc_credential_id = NULL;
 
       levels = MHD_lookup_connection_value (connection,
                                             MHD_GET_ARGUMENT_KIND,
@@ -2679,8 +2691,9 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_escalator")) && (escalator_id != NULL))
     return delete_escalator_omp (credentials, escalator_id);
 
-  else if ((!strcmp (cmd, "delete_lsc_credential")) && (name != NULL))
-    return delete_lsc_credential_omp (credentials, name);
+  else if ((!strcmp (cmd, "delete_lsc_credential"))
+           && (lsc_credential_id != NULL))
+    return delete_lsc_credential_omp (credentials, lsc_credential_id);
 
   else if ((!strcmp (cmd, "delete_note"))
            && (note_id != NULL)
@@ -2896,16 +2909,17 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "get_lsc_credential")) && (name != NULL))
-    return get_lsc_credential_omp (credentials, name, sort_field, sort_order);
+  else if ((!strcmp (cmd, "get_lsc_credential")) && (lsc_credential_id != NULL))
+    return get_lsc_credential_omp (credentials, lsc_credential_id, sort_field,
+                                   sort_order);
 
   else if (!strcmp (cmd, "get_lsc_credentials")
-           && ((name == NULL && package_format == NULL)
-               || (name && package_format)))
+           && ((lsc_credential_id == NULL && package_format == NULL)
+               || (lsc_credential_id && package_format)))
     {
-      if (name == NULL)
+      if (lsc_credential_id == NULL)
         return get_lsc_credentials_omp (credentials,
-                                        name,
+                                        lsc_credential_id,
                                         package_format,
                                         response_size,
                                         sort_field,
@@ -2918,12 +2932,12 @@ exec_omp_get (struct MHD_Connection *connection,
       *content_disposition = calloc (250, sizeof (char));
       snprintf (*content_disposition, 250,
                 "attachment; filename=openvas-lsc-target-%s_0.5-1.%s",
-                name,
+                lsc_credential_id,
                 (strcmp (package_format, "key") == 0 ? "pub" : package_format));
 
       /** @todo On fail, HTML ends up in file. */
       return get_lsc_credentials_omp (credentials,
-                                      name,
+                                      lsc_credential_id,
                                       package_format,
                                       response_size,
                                       NULL,

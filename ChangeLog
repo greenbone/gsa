@@ -1,5 +1,27 @@
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch to LSC credential UUIDs.
+
+	* src/gsad.c (init_validator): Add validator "lsc_credential_id".
+	(req_parms, free_resources, serve_post): Add lsc_credential_id to required
+	params.
+	(exec_omp_post): Expect create_target_omp credential in lsc_credential_id.
+	(exec_omp_get): Pass lsc_credential_id instead of name to
+	delete_lsc_credential_omp, get_lsc_credential_omp and
+	get_lsc_credentials_omp.
+
+	* src/gsad_omp.c (delete_lsc_credential_omp, get_lsc_credential_omp)
+	(get_lsc_credentials_omp): Expect lsc_credential_id instead of name param.
+	(create_target_omp): Expect credential as UUID instead of name.
+
+	* src/html/omp.xsl (lsc_credential, target, target [details]): Pass
+	credential in "lsc_credential_id" param instead of "name" and
+	"credential_login".
+	(lsc_credential [select]): Use UUID as value.
+	(html-create-target-form): Pass 0 as value associate with "--" credential.
+
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Indent overhung assign like others.
 	Bring long lines in range.  Indent args properly.
 

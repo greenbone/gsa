@@ -1790,7 +1790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_lsc_credential&amp;name={name}"
+          <a href="/omp?cmd=delete_lsc_credential&amp;lsc_credential_id={@id}"
              title="Delete Credential" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -1800,24 +1800,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_lsc_credential&amp;name={name}"
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}"
          title="Credential Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:if test="type='gen'">
-        <a href="/omp?cmd=get_lsc_credentials&amp;name={name}&amp;package_format=rpm"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=rpm"
            title="Download RPM package" style="margin-left:3px;">
           <img src="/img/rpm.png" border="0" alt="Download RPM"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;name={name}&amp;package_format=deb"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=deb"
            title="Download Debian package" style="margin-left:3px;">
           <img src="/img/deb.png" border="0" alt="Download Deb"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;name={name}&amp;package_format=exe"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=exe"
            title="Download Exe package" style="margin-left:3px;">
           <img src="/img/exe.png" border="0" alt="Download Exe"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;name={name}&amp;package_format=key"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=key"
            title="Download Public Key" style="margin-left:3px;">
           <img src="/img/key.png" border="0" alt="Download Public Key"/>
         </a>
@@ -1909,7 +1909,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential" mode="select">
-  <option value="{name}"><xsl:value-of select="name"/></option>
+  <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
 <xsl:template match="lsc_credentials_response" mode="select">
@@ -2655,8 +2655,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Credential (optional)</td>
             <td>
-              <select name="credential_login">
-                <option value="--">--</option>
+              <select name="lsc_credential_id">
+                <option value="0">--</option>
                 <xsl:apply-templates select="$lsc-credentials" mode="select"/>
               </select>
             </td>
@@ -2751,7 +2751,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;name={lsc_credential/name}">
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={lsc_credential/@id}">
         <xsl:value-of select="lsc_credential/name"/>
       </a>
     </td>
@@ -2813,7 +2813,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Credential:</td>
           <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;name={lsc_credential/name}">
+            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={lsc_credential/@id}">
               <xsl:value-of select="lsc_credential/name"/>
             </a>
           </td>

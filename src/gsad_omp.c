@@ -1367,13 +1367,14 @@ create_lsc_credential_omp (credentials_t * credentials,
 /**
  * @brief Delete LSC credential, get all credentials, XSL transform result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of LSC credential.
+ * @param[in]  credentials        Username and password for authentication.
+ * @param[in]  lsc_credential_id  UUID of LSC credential.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_lsc_credential_omp (credentials_t * credentials, const char *name)
+delete_lsc_credential_omp (credentials_t * credentials,
+                           const char *lsc_credential_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -1389,13 +1390,11 @@ delete_lsc_credential_omp (credentials_t * credentials, const char *name)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_lsc_credential>"
-                            "<name>%s</name>"
-                            "</delete_lsc_credential>"
+                            "<delete_lsc_credential lsc_credential_id=\"%s\"/>"
                             "<get_lsc_credentials"
                             " sort_field=\"name\" sort_order=\"ascending\"/>"
                             "</commands>",
-                            name)
+                            lsc_credential_id)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -1425,16 +1424,16 @@ delete_lsc_credential_omp (credentials_t * credentials, const char *name)
 /**
  * @brief Get one LSC credential, XSL transform the result.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   name         Name of LSC credential.
- * @param[in]   sort_field   Field to sort on, or NULL.
- * @param[in]   sort_order   "ascending", "descending", or NULL.
+ * @param[in]   credentials        Username and password for authentication.
+ * @param[in]   lsc_credential_id  UUID of LSC credential.
+ * @param[in]   sort_field         Field to sort on, or NULL.
+ * @param[in]   sort_order         "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_lsc_credential_omp (credentials_t * credentials,
-                        const char * name,
+                        const char * lsc_credential_id,
                         const char * sort_field,
                         const char * sort_order)
 {
@@ -1453,10 +1452,10 @@ get_lsc_credential_omp (credentials_t * credentials,
 
   if (openvas_server_sendf (&session,
                             "<get_lsc_credentials"
-                            " name=\"%s\""
+                            " lsc_credential_id=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
-                            name,
+                            lsc_credential_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
@@ -1493,18 +1492,18 @@ get_lsc_credential_omp (credentials_t * credentials,
 /**
  * @brief Get one or all LSC credentials, XSL transform the result.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   name         Name of LSC credential.
- * @param[in]   format       Format of result
- * @param[out]  result_len   Length of result.
- * @param[in]   sort_field   Field to sort on, or NULL.
- * @param[in]   sort_order   "ascending", "descending", or NULL.
+ * @param[in]   credentials        Username and password for authentication.
+ * @param[in]   lsc_credential_id  UUID of LSC credential.
+ * @param[in]   format             Format of result
+ * @param[out]  result_len         Length of result.
+ * @param[in]   sort_field         Field to sort on, or NULL.
+ * @param[in]   sort_order         "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_lsc_credentials_omp (credentials_t * credentials,
-                         const char * name,
+                         const char * lsc_credential_id,
                          const char * format,
                          gsize *result_len,
                          const char * sort_field,
@@ -1525,11 +1524,11 @@ get_lsc_credentials_omp (credentials_t * credentials,
 
   /* Send the request. */
 
-  if (name && format)
+  if (lsc_credential_id && format)
     {
       if (openvas_server_sendf (&session,
                                 "<get_lsc_credentials name=\"%s\" format=\"%s\"/>",
-                                name,
+                                lsc_credential_id,
                                 format)
           == -1)
         {
@@ -1563,7 +1562,7 @@ get_lsc_credentials_omp (credentials_t * credentials,
 
   /* Read and handle the response. */
 
-  if (name && format)
+  if (lsc_credential_id && format)
     {
       if (strcmp (format, "rpm") == 0
           || strcmp (format, "deb") == 0
@@ -2472,7 +2471,7 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
  * @param[in]  name         Name of new target.
  * @param[in]  hosts        Hosts associated with target.
  * @param[in]  comment      Comment on target.
- * @param[in]  target_credential  Name of credential for target.
+ * @param[in]  target_credential  UUID of credential for target.
  * @param[in]  target_locator Target locator to pull targets from.
  * @param[in]  username     Username for source.
  * @param[in]  password     Password for username at source.
@@ -2527,7 +2526,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         credentials_element = g_strdup ("");
       else
         credentials_element =
-          g_strdup_printf ("<lsc_credential>%s</lsc_credential>",
+          g_strdup_printf ("<lsc_credential id=\"%s\"/>",
                            target_credential);
 
       /* Create the target. */
