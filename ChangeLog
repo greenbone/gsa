@@ -1,5 +1,9 @@
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Indent overhang properly.
+
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (scanconfig_nvt_details.html): Improve description.
 
 	* src/html/omp.xsl: Format header comment like others.

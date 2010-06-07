@@ -1840,19 +1840,19 @@ exec_omp_post (credentials_t * credentials,
         }
       /** @todo Resolve discord between parameter name and validation. */
       if (openvas_validate (validator, "name",
-          con_info->req_parms.credential_login))
+                            con_info->req_parms.credential_login))
         {
           free (con_info->req_parms.credential_login);
           con_info->req_parms.credential_login = NULL;
         }
       if (openvas_validate (validator, "target_locator",
-          con_info->req_parms.target_locator))
+                            con_info->req_parms.target_locator))
         {
           free (con_info->req_parms.target_locator);
           con_info->req_parms.target_locator = NULL;
         }
       if (openvas_validate (validator, "lsc_password",
-          con_info->req_parms.password))
+                            con_info->req_parms.password))
         {
           free (con_info->req_parms.password);
           con_info->req_parms.password = NULL;
