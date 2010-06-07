@@ -1,5 +1,10 @@
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-target-form): Revert to "--" as value
+	associate with "--" credential, which was already working.
+
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch to LSC credential UUIDs.
 
 	* src/gsad.c (init_validator): Add validator "lsc_credential_id".

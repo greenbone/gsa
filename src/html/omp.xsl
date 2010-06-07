@@ -2656,7 +2656,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Credential (optional)</td>
             <td>
               <select name="lsc_credential_id">
-                <option value="0">--</option>
+                <option value="--">--</option>
                 <xsl:apply-templates select="$lsc-credentials" mode="select"/>
               </select>
             </td>
