@@ -1,5 +1,10 @@
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Indent overhung assign like others.
+	Bring long lines in range.  Indent args properly.
+
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Indent overhang properly.
 
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>

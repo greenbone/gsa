@@ -2527,21 +2527,24 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         credentials_element = g_strdup ("");
       else
         credentials_element =
-            g_strdup_printf ("<lsc_credential>%s</lsc_credential>", target_credential);
+          g_strdup_printf ("<lsc_credential>%s</lsc_credential>",
+                           target_credential);
 
       /* Create the target. */
 
       ret = openvas_server_sendf (&session,
-                                    "<create_target>"
-                                    "<name>%s</name>"
-                                    "<hosts>%s</hosts>"
-                                    "%s%s%s"
-                                    "</create_target>",
-                                    name,
-                                    (strcmp (source_element, "") == 0) ? hosts : "",
-                                    comment_element,
-                                    source_element,
-                                    credentials_element);
+                                  "<create_target>"
+                                  "<name>%s</name>"
+                                  "<hosts>%s</hosts>"
+                                  "%s%s%s"
+                                  "</create_target>",
+                                  name,
+                                  (strcmp (source_element, "") == 0)
+                                    ? hosts
+                                    : "",
+                                  comment_element,
+                                  source_element,
+                                  credentials_element);
 
       g_free (comment_element);
       g_free (credentials_element);
