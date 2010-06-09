@@ -428,7 +428,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *target_id, char *scanconfig, const char *escalator_id,
+                 char *target_id, char *config_id, const char *escalator_id,
                  const char *schedule_id)
 {
   entity_t entity;
@@ -447,7 +447,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
     ret = openvas_server_sendf (&session,
                                 "<commands>"
                                 "<create_task>"
-                                "<config>%s</config>"
+                                "<config id=\"%s\"/>"
                                 "<schedule id=\"%s\"/>"
                                 "<target id=\"%s\"/>"
                                 "<name>%s</name>"
@@ -457,7 +457,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
-                                scanconfig,
+                                config_id,
                                 strcmp (schedule_id, "--") ? schedule_id : "",
                                 target_id,
                                 name,
@@ -466,7 +466,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
     ret = openvas_server_sendf (&session,
                                 "<commands>"
                                 "<create_task>"
-                                "<config>%s</config>"
+                                "<config id=\"%s\"/>"
                                 "<escalator id=\"%s\"/>"
                                 "<schedule id=\"%s\"/>"
                                 "<target id=\"%s/>"
@@ -477,7 +477,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
-                                scanconfig,
+                                config_id,
                                 escalator_id,
                                 strcmp (schedule_id, "--") ? schedule_id : "",
                                 target_id,
@@ -3163,19 +3163,19 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
  * @brief Get a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_config_omp (credentials_t * credentials, const char * name, int edit)
+get_config_omp (credentials_t * credentials, const char * config_id, int edit)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
 
-  assert (name);
+  assert (config_id);
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -3191,10 +3191,10 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
 
   if (openvas_server_sendf (&session,
                             "<get_configs"
-                            " name=\"%s\""
+                            " config_id=\"%s\""
                             " families=\"1\""
                             " preferences=\"1\"/>",
-                            name)
+                            config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3255,7 +3255,7 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
  * @brief Save details of an NVT for a config and return the next page.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config       Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  selects      Selected families.
@@ -3267,7 +3267,7 @@ get_config_omp (credentials_t * credentials, const char * name, int edit)
  */
 char *
 save_config_omp (credentials_t * credentials,
-                 const char * config,
+                 const char * config_id,
                  const char * sort_field,
                  const char * sort_order,
                  GArray * selects,
@@ -3305,14 +3305,13 @@ save_config_omp (credentials_t * credentials,
                   : g_strdup ("");
 
           if (openvas_server_sendf (&session,
-                                    "<modify_config>"
-                                    "<name>%s</name>"
+                                    "<modify_config config_id=\"%s\">"
                                     "<preference>"
                                     "<name>%s</name>"
                                     "<value>%s</value>"
                                     "</preference>"
                                     "</modify_config>",
-                                    config,
+                                    config_id,
                                     preference->name,
                                     value)
               == -1)
@@ -3341,11 +3340,10 @@ save_config_omp (credentials_t * credentials,
   /* Update the config. */
 
   if (openvas_server_sendf (&session,
-                            "<modify_config>"
-                            "<name>%s</name>"
+                            "<modify_config config_id=\"%s\">"
                             "<family_selection>"
                             "<growing>%i</growing>",
-                            config,
+                            config_id,
                             trends && member (trends, ""))
       == -1)
     {
@@ -3434,15 +3432,15 @@ save_config_omp (credentials_t * credentials,
   /* Return the next page. */
 
   if (next == NULL || strcmp (next, "Save Config") == 0)
-    return get_config_omp (credentials, config, 1);
-  return get_config_family_omp (credentials, config, next, NULL, NULL, 1);
+    return get_config_omp (credentials, config_id, 1);
+  return get_config_family_omp (credentials, config_id, next, NULL, NULL, 1);
 }
 
 /**
  * @brief Get details of a family for a configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  family       Name of family.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
@@ -3452,7 +3450,7 @@ save_config_omp (credentials_t * credentials,
  */
 char *
 get_config_family_omp (credentials_t * credentials,
-                       const char * name,
+                       const char * config_id,
                        const char * family,
                        const char * sort_field,
                        const char * sort_order,
@@ -3473,17 +3471,17 @@ get_config_family_omp (credentials_t * credentials,
   if (edit) g_string_append (xml, "<edit/>");
   /* @todo Would it be better include this in the get_nvt_details response? */
   g_string_append_printf (xml,
-                          "<config><name>%s</name><family>%s</family></config>",
-                          name,
+                          "<config id=\"%s\"><family>%s</family></config>",
+                          config_id,
                           family);
 
   /* Get the details for all NVT's in the config in the family. */
 
   if (openvas_server_sendf (&session,
                             "<get_nvt_details"
-                            " config=\"%s\" family=\"%s\""
+                            " config_id=\"%s\" family=\"%s\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
-                            name,
+                            config_id,
                             family,
                             sort_field ? sort_field : "nvts.name",
                             sort_order ? sort_order : "ascending")
@@ -3557,7 +3555,7 @@ get_config_family_omp (credentials_t * credentials,
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config       Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  family       Name of family.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
@@ -3567,7 +3565,7 @@ get_config_family_omp (credentials_t * credentials,
  */
 char *
 save_config_family_omp (credentials_t * credentials,
-                        const char * config,
+                        const char * config_id,
                         const char * family,
                         const char * sort_field,
                         const char * sort_order,
@@ -3588,11 +3586,10 @@ save_config_family_omp (credentials_t * credentials,
   /* Set the NVT selection. */
 
   if (openvas_server_sendf (&session,
-                            "<modify_config>"
-                            "<name>%s</name>"
+                            "<modify_config config_id=\"%s\">"
                             "<nvt_selection>"
                             "<family>%s</family>",
-                            config,
+                            config_id,
                             family)
       == -1)
     {
@@ -3643,7 +3640,7 @@ save_config_family_omp (credentials_t * credentials,
 
   /* Return the Edit family page. */
 
-  return get_config_family_omp (credentials, config, family, sort_field,
+  return get_config_family_omp (credentials, config_id, family, sort_field,
                                 sort_order, 1);
 }
 
@@ -3651,7 +3648,7 @@ save_config_family_omp (credentials_t * credentials,
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config       Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  family       Name of family.
  * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
@@ -3662,7 +3659,7 @@ save_config_family_omp (credentials_t * credentials,
  */
 char *
 get_config_nvt_omp (credentials_t * credentials,
-                    const char * config,
+                    const char * config_id,
                     const char * family,
                     const char * nvt,
                     const char * sort_field,
@@ -3684,16 +3681,16 @@ get_config_nvt_omp (credentials_t * credentials,
   if (edit) g_string_append (xml, "<edit/>");
   /* @todo Would it be better include this in the get_nvt_details response? */
   g_string_append_printf (xml,
-                          "<config><name>%s</name><family>%s</family></config>",
-                          config,
+                          "<config id=\"%s\"><family>%s</family></config>",
+                          config_id,
                           family);
 
 
   if (openvas_server_sendf (&session,
                             "<get_nvt_details"
-                            " config=\"%s\" family=\"%s\" oid=\"%s\""
+                            " config_id=\"%s\" family=\"%s\" oid=\"%s\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
-                            config,
+                            config_id,
                             family,
                             nvt,
                             sort_field ? sort_field : "nvts.name",
@@ -3729,7 +3726,7 @@ get_config_nvt_omp (credentials_t * credentials,
  * @brief Save NVT prefs for a config, get NVT details, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config       Name of config.
+ * @param[in]  config_id    UUID of config.
  * @param[in]  family       Name of family.
  * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
@@ -3743,7 +3740,7 @@ get_config_nvt_omp (credentials_t * credentials,
  */
 char *
 save_config_nvt_omp (credentials_t * credentials,
-                     const char * config,
+                     const char * config_id,
                      const char * family,
                      const char * nvt,
                      const char * sort_field,
@@ -3847,38 +3844,35 @@ save_config_nvt_omp (credentials_t * credentials,
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
                 ret = openvas_server_sendf (&session,
-                                            "<modify_config>"
-                                            "<name>%s</name>"
+                                            "<modify_config config_id=\"%s\">"
                                             "<preference>"
                                             "<name>%s</name>"
                                             "</preference>"
                                             "</modify_config>",
-                                            config,
+                                            config_id,
                                             preference->name);
               else
                 ret = openvas_server_sendf (&session,
-                                            "<modify_config>"
-                                            "<name>%s</name>"
+                                            "<modify_config config_id=\"%s\">"
                                             "<preference>"
                                             "<name>%s</name>"
                                             "<value>%s</value>"
                                             "</preference>"
                                             "</modify_config>",
-                                            config,
+                                            config_id,
                                             preference->name,
                                             value);
             }
           else
             ret = openvas_server_sendf (&session,
-                                        "<modify_config>"
-                                        "<name>%s</name>"
+                                        "<modify_config config_id=\"%s\">"
                                         "<preference>"
                                         "<nvt oid=\"%s\"/>"
                                         "<name>%s</name>"
                                         "<value>%s</value>"
                                         "</preference>"
                                         "</modify_config>",
-                                        config,
+                                        config_id,
                                         preference->nvt,
                                         preference->name,
                                         value);
@@ -3909,7 +3903,7 @@ save_config_nvt_omp (credentials_t * credentials,
 
   /* Return the Edit NVT page. */
 
-  return get_config_nvt_omp (credentials, config, family, nvt, sort_field,
+  return get_config_nvt_omp (credentials, config_id, family, nvt, sort_field,
                              sort_order, 1);
 }
 
@@ -3917,12 +3911,12 @@ save_config_nvt_omp (credentials_t * credentials,
  * @brief Delete config, get all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_name  Name of config.
+ * @param[in]  config_id    UUID of config.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (credentials_t * credentials, const char *config_name)
+delete_config_omp (credentials_t * credentials, const char *config_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -3938,12 +3932,12 @@ delete_config_omp (credentials_t * credentials, const char *config_name)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_config><name>%s</name></delete_config>"
+                            "<delete_config config_id=\"%s\"/>"
                             "<get_configs"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
-                            config_name)
+                            config_id)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -3974,7 +3968,7 @@ delete_config_omp (credentials_t * credentials, const char *config_name)
  * @brief Export a config.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   name                 Name of report.
+ * @param[in]   config_id            UUID of config.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
@@ -3982,7 +3976,7 @@ delete_config_omp (credentials_t * credentials, const char *config_name)
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (credentials_t * credentials, const char *name,
+export_config_omp (credentials_t * credentials, const char *config_id,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length)
 {
@@ -4004,15 +3998,15 @@ export_config_omp (credentials_t * credentials, const char *name,
 
   xml = g_string_new ("<get_configs_response>");
 
-  if (name == NULL)
+  if (config_id == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Scan Config"));
   else
     {
       if (openvas_server_sendf (&session,
                                 "<get_configs"
-                                " name=\"%s\""
+                                " config_id=\"%s\""
                                 " export=\"1\"/>",
-                                name)
+                                config_id)
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -4041,7 +4035,7 @@ export_config_omp (credentials_t * credentials, const char *name,
         {
           *content_type = GSAD_CONTENT_TYPE_APP_XML;
           *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
-                                                  name);
+                                                  config_id);
           *content_length = strlen (content);
           free_entity (entity);
           g_string_free (xml, TRUE);
@@ -4071,7 +4065,7 @@ export_config_omp (credentials_t * credentials, const char *name,
  * @brief Export a file preference.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   config_name          Name of config.
+ * @param[in]   config_id            UUID of config.
  * @param[in]   oid                  OID of NVT.
  * @param[in]   preference_name      Name of preference.
  * @param[out]  content_type         Content type return.
@@ -4081,7 +4075,7 @@ export_config_omp (credentials_t * credentials, const char *name,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_preference_file_omp (credentials_t * credentials, const char *config_name,
+export_preference_file_omp (credentials_t * credentials, const char *config_id,
                             const char *oid, const char *preference_name,
                             enum content_type * content_type, char **content_disposition,
                             gsize *content_length)
@@ -4102,16 +4096,16 @@ export_preference_file_omp (credentials_t * credentials, const char *config_name
 
   xml = g_string_new ("<get_preferences_response>");
 
-  if (config_name == NULL || oid == NULL || preference_name == NULL)
+  if (config_id == NULL || oid == NULL || preference_name == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
   else
     {
       if (openvas_server_sendf (&session,
                                 "<get_preferences"
-                                " config=\"%s\""
+                                " config_id=\"%s\""
                                 " oid=\"%s\""
                                 " preference=\"%s\"/>",
-                                config_name,
+                                config_id,
                                 oid,
                                 preference_name)
           == -1)

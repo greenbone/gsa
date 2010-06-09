@@ -255,6 +255,7 @@ init_validator ()
   openvas_validator_add (validator, "authdn",     "^[[:alnum:], =]{0,200}%s[[:alnum:], =]{0,200}$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:], \\./]{0,400}$");
+  openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
   openvas_validator_add (validator, "credential_login", "^[[:alnum:]\\.@\\\\]{1,40}$");
@@ -320,7 +321,6 @@ init_validator ()
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
-  openvas_validator_alias (validator, "scanconfig",   "name");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
@@ -496,6 +496,7 @@ struct gsad_connection_info
     char *name;          ///< Value of "name" parameter.
     char *comment;       ///< Value of "comment" parameter.
     char *condition;     ///< Value of "condition" parameter.
+    char *config_id;     ///< Value of "config_id" parameter.
     char *credential_login; ///< Value of "credential_login" parameter.
     char *day_of_month;  ///< Value of "day_of_month" parameter.
     char *duration;      ///< Value of "duration" parameter.
@@ -512,7 +513,6 @@ struct gsad_connection_info
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *schedule_id;   ///< Value of "schedule_id" parameter.
-    char *scanconfig;    ///< Value of "scanconfig" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
     char *target_id;     ///< Value of "target_id" parameter.
@@ -707,6 +707,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.name);
   free (con_info->req_parms.comment);
   free (con_info->req_parms.condition);
+  free (con_info->req_parms.config_id);
   free (con_info->req_parms.credential_login);
   free (con_info->req_parms.day_of_month);
   free (con_info->req_parms.domain);
@@ -722,7 +723,6 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
-  free (con_info->req_parms.scanconfig);
   free (con_info->req_parms.schedule_id);
   free (con_info->req_parms.target_id);
   free (con_info->req_parms.xml_file);
@@ -1036,6 +1036,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "condition"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.condition);
+      if (!strcmp (key, "config_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.config_id);
       if (!strcmp (key, "credential_login"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.credential_login);
@@ -1102,9 +1105,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "family"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.family);
-      if (!strcmp (key, "scanconfig"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.scanconfig);
       if (!strcmp (key, "hosts"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.hosts);
@@ -1648,7 +1648,15 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.target_id);
           con_info->req_parms.target_id  = NULL;
         }
-      validate (validator, "scanconfig", &con_info->req_parms.scanconfig);
+      if (con_info->req_parms.config_id
+          && strcmp (con_info->req_parms.config_id, "--")
+          && openvas_validate (validator,
+                               "config_id",
+                               con_info->req_parms.config_id))
+        {
+          free (con_info->req_parms.config_id);
+          con_info->req_parms.config_id  = NULL;
+        }
       if (con_info->req_parms.schedule_id
           && strcmp (con_info->req_parms.schedule_id, "--")
           && openvas_validate (validator,
@@ -1660,7 +1668,7 @@ exec_omp_post (credentials_t * credentials,
         }
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.comment == NULL) ||
-          (con_info->req_parms.scanconfig == NULL) ||
+          (con_info->req_parms.config_id == NULL) ||
           (con_info->req_parms.target_id == NULL) ||
           (con_info->req_parms.escalator_id == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
@@ -1670,7 +1678,7 @@ exec_omp_post (credentials_t * credentials,
           create_task_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.comment,
                            con_info->req_parms.target_id,
-                           con_info->req_parms.scanconfig,
+                           con_info->req_parms.config_id,
                            con_info->req_parms.escalator_id,
                            con_info->req_parms.schedule_id);
     }
@@ -1908,12 +1916,12 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
-      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "config_id", &con_info->req_parms.config_id);
       validate (validator, "family_page", &con_info->req_parms.submit);
 
       con_info->response =
         save_config_omp (credentials,
-                         con_info->req_parms.name,
+                         con_info->req_parms.config_id,
                          con_info->req_parms.sort_field,
                          con_info->req_parms.sort_order,
                          con_info->req_parms.selects,
@@ -1923,11 +1931,11 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
     {
-      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "config_id", &con_info->req_parms.config_id);
       validate (validator, "family", &con_info->req_parms.family);
       con_info->response =
         save_config_family_omp (credentials,
-                                con_info->req_parms.name,
+                                con_info->req_parms.config_id,
                                 con_info->req_parms.family,
                                 con_info->req_parms.sort_field,
                                 con_info->req_parms.sort_order,
@@ -1935,12 +1943,12 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config_nvt"))
     {
-      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "config_id", &con_info->req_parms.config_id);
       validate (validator, "family", &con_info->req_parms.family);
       validate (validator, "oid", &con_info->req_parms.oid);
       con_info->response =
         save_config_nvt_omp (credentials,
-                             con_info->req_parms.name,
+                             con_info->req_parms.config_id,
                              con_info->req_parms.family,
                              con_info->req_parms.oid,
                              con_info->req_parms.sort_field,
@@ -2019,6 +2027,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *agent_format = NULL;
   const char *agent_id     = NULL;
   const char *comment      = NULL;
+  const char *config_id    = NULL;
   const char *escalator_id = NULL;
   const char *task_id      = NULL;
   const char *result_id    = NULL;
@@ -2088,6 +2097,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "comment");
       if (openvas_validate (validator, "comment", comment))
         comment = NULL;
+
+      config_id = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "config_id");
+      if (openvas_validate (validator, "config_id", config_id))
+        config_id = NULL;
 
       escalator_id = MHD_lookup_connection_value (connection,
                                                   MHD_GET_ARGUMENT_KIND,
@@ -2497,18 +2512,18 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_target")) && (target_id != NULL))
     return delete_target_omp (credentials, target_id);
 
-  else if ((!strcmp (cmd, "delete_config")) && (name != NULL))
-    return delete_config_omp (credentials, name);
+  else if ((!strcmp (cmd, "delete_config")) && (config_id != NULL))
+    return delete_config_omp (credentials, config_id);
 
   else if (!strcmp (cmd, "edit_config"))
-    return get_config_omp (credentials, name, 1);
+    return get_config_omp (credentials, config_id, 1);
 
   else if (!strcmp (cmd, "edit_config_family"))
-    return get_config_family_omp (credentials, name, family, sort_field,
+    return get_config_family_omp (credentials, config_id, family, sort_field,
                                   sort_order, 1);
 
   else if (!strcmp (cmd, "edit_config_nvt"))
-    return get_config_nvt_omp (credentials, name, family, oid, sort_field,
+    return get_config_nvt_omp (credentials, config_id, family, oid, sort_field,
                                sort_order, 1);
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2592,15 +2607,15 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
     return edit_user_oap (credentials, name);
 
-  else if ((!strcmp (cmd, "export_config")) && (name != NULL))
-    return export_config_omp (credentials, name, content_type,
+  else if ((!strcmp (cmd, "export_config")) && (config_id != NULL))
+    return export_config_omp (credentials, config_id, content_type,
                               content_disposition, response_size);
 
   else if ((!strcmp (cmd, "export_preference_file"))
-           && (name != NULL)
+           && (config_id != NULL)
            && (oid != NULL)
            && (preference_name != NULL))
-    return export_preference_file_omp (credentials, name, oid, preference_name,
+    return export_preference_file_omp (credentials, config_id, oid, preference_name,
                                        content_type, content_disposition,
                                        response_size);
 
@@ -2770,17 +2785,17 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_feed_oap (credentials, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_config"))
-    return get_config_omp (credentials, name, 0);
+    return get_config_omp (credentials, config_id, 0);
 
   else if (!strcmp (cmd, "get_configs"))
     return get_configs_omp (credentials, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_config_family"))
-    return get_config_family_omp (credentials, name, family, sort_field,
+    return get_config_family_omp (credentials, config_id, family, sort_field,
                                   sort_order, 0);
 
   else if (!strcmp (cmd, "get_config_nvt"))
-    return get_config_nvt_omp (credentials, name, family, oid, sort_field,
+    return get_config_nvt_omp (credentials, config_id, family, oid, sort_field,
                                sort_order, 0);
 
   else if ((!strcmp (cmd, "get_nvt_details")) && (oid != NULL))

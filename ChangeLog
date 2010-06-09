@@ -1,5 +1,33 @@
 2010-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch to config UUIDs.
+
+	* src/gsad.c (init_validator): Add validator "config_id".  Remove
+	"scanconfig".
+	(req_parms, free_resources, serve_post): Add config_id to required params.
+	Remove scanconfig.
+	(exec_omp_post): Expect create_task_omp config in config_id instead of
+	scanconfig.  Expect config UUID instead of name in save_config_omp,
+	save_config_family_omp and save_config_nvt_omp.
+	(exec_omp_get): Pass config UUID instead of config name to config related
+	functions.
+
+	* src/gsad_omp.c (create_task_omp, get_config_omp)
+	(save_config_omp, get_config_family_omp, save_config_family_omp)
+	(get_config_nvt_omp, save_config_nvt_omp, delete_config_omp)
+	(export_config_omp, export_preference_file_omp): Expect config as UUID
+	instead of name.
+
+	* src/html/omp.xsl (html-report-table, html-edit-task-form)
+	(html-config-family-table, preference, preference-details)
+	(edit-config-preference, preferences, html-config-nvt-table)
+	(family, html-config-table, config, gsad_newtask): Pass
+	config in "config_id" param instead of "name" or "scanconfig".
+	(config [newtask]): Use UUID as value.
+	(html-create-config-form): Replace predefined config names with UUIDs.
+
+2010-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Use correct variable when validating family.
 
 2010-06-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>

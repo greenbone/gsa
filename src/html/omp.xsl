@@ -694,7 +694,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Config:</td>
           <td>
-            <a href="/omp?cmd=get_config&amp;name={task/config/name}">
+            <a href="/omp?cmd=get_config&amp;config_id={task/config/@id}">
               <xsl:value-of select="task/config/name"/>
             </a>
           </td>
@@ -881,7 +881,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="config" mode="newtask">
-  <option value="{name}"><xsl:value-of select="name"/></option>
+  <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
 <xsl:template match="escalator" mode="newtask">
@@ -2924,14 +2924,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base" value="empty"
+                    <input type="radio" name="base"
+                           value="085569ce-73ed-11df-83c3-002264764cea"
                            checked="1"/>
                     Empty, static and fast
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base" value="Full and fast"/>
+                    <input type="radio" name="base"
+                           value="daba56c8-73ec-11df-a475-002264764cea"/>
                     Full and fast
                   </td>
                 </tr>
@@ -3017,12 +3019,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
-          <a href="?cmd=edit_config&amp;name={config/name}">
+          <a href="?cmd=edit_config&amp;config_id={config/@id}">
             Back to Config Details
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="?cmd=get_config&amp;name={config/name}">
+          <a href="?cmd=get_config&amp;config_id={config/@id}">
             Back to Config Details
           </a>
         </xsl:otherwise>
@@ -3030,11 +3032,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <br/>
 
-    <xsl:variable name="config" select="config/name"/>
+    <xsl:variable name="config_id" select="config/@id"/>
     <xsl:variable name="family" select="config/family"/>
 
     <table>
-    <tr><td>Config:</td><td><xsl:value-of select="$config"/></td></tr>
+    <tr><td>Config:</td><td><xsl:value-of select="$config_id"/></td></tr>
     <tr><td>Family:</td><td><xsl:value-of select="$family"/></td></tr>
     </table>
 
@@ -3064,7 +3066,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="edit">
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="save_config_family"/>
-            <input type="hidden" name="name" value="{$config}"/>
+            <input type="hidden" name="config_id" value="{$config_id}"/>
             <input type="hidden" name="family" value="{$family}"/>
             <xsl:for-each select="all/get_nvt_details_response/nvt" >
               <xsl:variable name="current_name" select="name/text()"/>
@@ -3120,11 +3122,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </td>
                 <td>
-                  <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
+                  <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;family={$family}"
                      title="NVT Details" style="margin-left:3px;">
                     <img src="/img/details.png" border="0" alt="Details"/>
                   </a>
-                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
+                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;family={$family}"
                      title="Select and Edit NVT Details"
                      style="margin-left:3px;">
                     <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -3198,7 +3200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </td>
               <td>
-                <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;name={$config}&amp;family={$family}"
+                <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;family={$family}"
                    title="NVT Details" style="margin-left:3px;">
                   <img src="/img/details.png" border="0" alt="Details"/>
                 </a>
@@ -3227,7 +3229,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     CONFIG PREFERENCES -->
 
 <xsl:template name="preference" match="preference">
-  <xsl:param name="config"></xsl:param>
+  <xsl:param name="config_id"></xsl:param>
   <xsl:param name="edit"></xsl:param>
   <xsl:variable name="class">
     <xsl:choose>
@@ -3249,20 +3251,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:if test="string-length($config) &gt; 0">
-        <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={nvt/family}"
+      <xsl:if test="string-length($config_id) &gt; 0">
+        <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;family={nvt/family}"
            title="Scan Config NVT Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
       </xsl:if>
       <xsl:if test="string-length($edit) &gt; 0">
-        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={nvt/family}"
+        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;family={nvt/family}"
            title="Edit Scan Config NVT Details" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
-        <a href="/omp?cmd=export_preference_file&amp;name={$config}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+        <a href="/omp?cmd=export_preference_file&amp;config_id={$config_id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
            title="Export File"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export File"/>
@@ -3294,7 +3296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
-        <a href="/omp?cmd=export_preference_file&amp;name={$config/name}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+        <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
            title="Export File"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export File"/>
@@ -3402,14 +3404,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:if test="$for_config_details">
-        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;name={$config}&amp;family={$family}"
+        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}"
            title="Edit NVT Details" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$config and type='file' and (string-length(value) &gt; 0)">
-          <a href="/omp?cmd=export_preference_file&amp;name={$config/name}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+          <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
              title="Export File"
              style="margin-left:3px;">
             <img src="/img/download.png" border="0" alt="Export File"/>
@@ -3423,7 +3425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="preferences" name="preferences">
-  <xsl:param name="config"></xsl:param>
+  <xsl:param name="config_id"></xsl:param>
   <xsl:param name="edit"></xsl:param>
   <div id="preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
@@ -3435,7 +3437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
       <xsl:for-each select="preference[string-length(./nvt)&gt;0]">
         <xsl:call-template name="preference">
-          <xsl:with-param name="config" select="$config"/>
+          <xsl:with-param name="config_id" select="$config_id"/>
           <xsl:with-param name="edit" select="$edit"/>
         </xsl:call-template>
       </xsl:for-each>
@@ -3617,12 +3619,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
-          <a href="?cmd=edit_config_family&amp;name={config/name}&amp;family={$family}">
+          <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;family={$family}">
             Back to Config Family Details
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="?cmd=get_config_family&amp;name={config/name}&amp;family={$family}">
+          <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;family={$family}">
             Back to Config Family Details
           </a>
         </xsl:otherwise>
@@ -3653,7 +3655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="edit">
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="cmd" value="save_config_nvt"/>
-          <input type="hidden" name="name" value="{config/name}"/>
+          <input type="hidden" name="config_id" value="{config/@id}"/>
           <input type="hidden" name="family" value="{$family}"/>
           <input type="hidden"
                  name="oid"
@@ -3846,7 +3848,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_config_family&amp;name={../../name}&amp;family={$current_name}"
+          <a href="/omp?cmd=get_config_family&amp;config_id={../../@id}&amp;family={$current_name}"
              title="Scan Config Family Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
@@ -4044,7 +4046,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="edit">
         <form action="" method="post">
           <input type="hidden" name="cmd" value="save_config"/>
-          <input type="hidden" name="name" value="{$config/name}"/>
+          <input type="hidden" name="config_id" value="{$config/@id}"/>
 
           <h1>Edit Network Vulnerability Test Families</h1>
 
@@ -4070,7 +4072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <h1>Network Vulnerability Test Preferences</h1>
               <xsl:for-each select="$config/preferences">
                 <xsl:call-template name="preferences">
-                  <xsl:with-param name="config" select="$config/name"/>
+                  <xsl:with-param name="config_id" select="$config/@id"/>
                   <xsl:with-param name="edit">yes</xsl:with-param>
                 </xsl:call-template>
               </xsl:for-each>
@@ -4096,7 +4098,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <h1>Network Vulnerability Test Preferences</h1>
             <xsl:for-each select="$config/preferences">
               <xsl:call-template name="preferences">
-                <xsl:with-param name="config" select="$config/name"/>
+                <xsl:with-param name="config_id" select="$config/@id"/>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:otherwise>
@@ -4284,7 +4286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_config&amp;name={name}"
+          <a href="/omp?cmd=delete_config&amp;config_id={@id}"
              title="Delete Scan Config" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -4294,14 +4296,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_config&amp;name={name}"
+      <a href="/omp?cmd=get_config&amp;config_id={@id}"
          title="Scan Config Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=edit_config&amp;name={name}"
+          <a href="/omp?cmd=edit_config&amp;config_id={@id}"
              title="Edit Scan Config"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -4312,7 +4314,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=export_config&amp;name={name}"
+      <a href="/omp?cmd=export_config&amp;config_id={@id}"
          title="Export Scan Config XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -6374,7 +6376,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td valign="top">Scan Config</td>
           <td>
-            <select name="scanconfig">
+            <select name="config_id">
               <xsl:apply-templates select="get_configs_response/config"
                                    mode="newtask"/>
             </select>
