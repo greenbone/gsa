@@ -337,6 +337,32 @@ init_validator ()
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
 }
 
+/**
+ * @brief Checks whether an input string is valid according to a rule
+ * @brief registered with \ref validator. Frees and NULLs \ref string if not.
+ *
+ * @param[in]      validator       Validator to use.
+ * @param[in]      validator_rule  The rule with which to validate
+ *                                 \ref string.
+ * @param[in,out]  string          The string to validate. If invalid, memory
+ *                                 location pointed to  will be freed and set
+ *                                 to NULL.
+ *
+ * @return TRUE if \ref input was invalid and was freed, FALSE otherwise.
+ */
+static gboolean
+validate (validator_t validator, const gchar* validator_rule, char** string)
+{
+  if (openvas_validate (validator, validator_rule, *string))
+    {
+      free (*string);
+      *string = NULL;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 
 /**
  * @brief Returns TRUE no netmask in CIDR notation < 20 is given.
@@ -809,6 +835,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
       g_array_free (con_info->req_parms.passwords, TRUE);
     }
+  // Free gchar* arrays.
   if (con_info->req_parms.nvts)
     {
       gchar *item;
@@ -1521,16 +1548,8 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_agent"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
       con_info->response =
         create_agent_omp (credentials,
                           con_info->req_parms.name,
@@ -1544,33 +1563,12 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_escalator"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
-      if (openvas_validate (validator,
-                            "condition",
-                            con_info->req_parms.condition))
-        {
-          free (con_info->req_parms.condition);
-          con_info->req_parms.condition = NULL;
-        }
-      if (openvas_validate (validator, "event", con_info->req_parms.event))
-        {
-          free (con_info->req_parms.event);
-          con_info->req_parms.event = NULL;
-        }
-      if (openvas_validate (validator, "method", con_info->req_parms.method))
-        {
-          free (con_info->req_parms.method);
-          con_info->req_parms.method = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "condition", &con_info->req_parms.condition);
+      validate (validator, "event", &con_info->req_parms.event);
+      if (validate (validator, "method", &con_info->req_parms.method))
+        ;
       else if (strcasecmp (con_info->req_parms.method, "Email") == 0)
         {
           char *to_address;
@@ -1605,37 +1603,21 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
       if (openvas_validate (validator,
                             "credential_login",
                             con_info->req_parms.credential_login))
         {
+          /** @todo Maybe resolve discord between rule and params
+           *  (con_info->req_parms.credential_login vs
+           *  con_info->req_parms.name) */
           free (con_info->req_parms.name);
           con_info->req_parms.name = NULL;
         }
-      if (openvas_validate (validator,
-                            "lsc_password",
-                            con_info->req_parms.password))
-        {
-          free (con_info->req_parms.password);
-          con_info->req_parms.password = NULL;
-        }
-      if (openvas_validate (validator,
-                            "create_credentials_type",
-                            con_info->req_parms.base))
-        {
-          free (con_info->req_parms.base);
-          con_info->req_parms.base = NULL;
-        }
+      validate (validator, "lsc_password", &con_info->req_parms.password);
+      validate (validator, "create_credentials_type",
+                &con_info->req_parms.base);
       con_info->response =
         create_lsc_credential_omp (credentials,
                                    con_info->req_parms.name,
@@ -1646,16 +1628,8 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_task"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
       if (con_info->req_parms.escalator_id
           && strcmp (con_info->req_parms.escalator_id, "--")
           && openvas_validate (validator,
@@ -1674,13 +1648,7 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.target_id);
           con_info->req_parms.target_id  = NULL;
         }
-      if (openvas_validate (validator,
-                            "scanconfig",
-                            con_info->req_parms.scanconfig))
-        {
-          free (con_info->req_parms.scanconfig);
-          con_info->req_parms.scanconfig  = NULL;
-        }
+      validate (validator, "scanconfig", &con_info->req_parms.scanconfig);
       if (con_info->req_parms.schedule_id
           && strcmp (con_info->req_parms.schedule_id, "--")
           && openvas_validate (validator,
@@ -1708,11 +1676,7 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
-      if (openvas_validate (validator, "login", con_info->req_parms.login))
-        {
-          free (con_info->req_parms.login);
-          con_info->req_parms.login = NULL;
-        }
+      validate (validator, "login", &con_info->req_parms.login);
       if (openvas_validate (validator,
                             "password",
                             con_info->req_parms.password))
@@ -1720,25 +1684,9 @@ exec_omp_post (credentials_t * credentials,
           /** @todo Free con_info->req_parms.password? */
           con_info->req_parms.password = NULL;
         }
-      if (openvas_validate (validator, "role", con_info->req_parms.role))
-        {
-          free (con_info->req_parms.role);
-          con_info->req_parms.role = NULL;
-        }
-      if (openvas_validate (validator,
-                            "access_hosts",
-                            con_info->req_parms.access_hosts))
-        {
-          free (con_info->req_parms.access_hosts);
-          con_info->req_parms.access_hosts = NULL;
-        }
-      if (openvas_validate (validator,
-                            "hosts_allow",
-                            con_info->req_parms.hosts_allow))
-        {
-          free (con_info->req_parms.hosts_allow);
-          con_info->req_parms.hosts_allow = NULL;
-        }
+      validate (validator, "role", &con_info->req_parms.role);
+      validate (validator, "access_hosts", &con_info->req_parms.access_hosts);
+      validate (validator, "hosts_allow", &con_info->req_parms.hosts_allow);
       con_info->response =
         create_user_oap (credentials,
                          con_info->req_parms.login,
@@ -1749,69 +1697,18 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_schedule"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
-      if (openvas_validate (validator, "hour", con_info->req_parms.hour))
-        {
-          free (con_info->req_parms.hour);
-          con_info->req_parms.hour = NULL;
-        }
-      if (openvas_validate (validator, "minute", con_info->req_parms.minute))
-        {
-          free (con_info->req_parms.minute);
-          con_info->req_parms.minute = NULL;
-        }
-      if (openvas_validate (validator,
-                            "day_of_month",
-                            con_info->req_parms.day_of_month))
-        {
-          free (con_info->req_parms.day_of_month);
-          con_info->req_parms.day_of_month = NULL;
-        }
-      if (openvas_validate (validator, "month", con_info->req_parms.month))
-        {
-          free (con_info->req_parms.month);
-          con_info->req_parms.month = NULL;
-        }
-      if (openvas_validate (validator, "year", con_info->req_parms.year))
-        {
-          free (con_info->req_parms.year);
-          con_info->req_parms.year = NULL;
-        }
-      if (openvas_validate (validator, "period", con_info->req_parms.period))
-        {
-          free (con_info->req_parms.period);
-          con_info->req_parms.period = NULL;
-        }
-      if (openvas_validate (validator,
-                            "period_unit",
-                            con_info->req_parms.period_unit))
-        {
-          free (con_info->req_parms.period_unit);
-          con_info->req_parms.period_unit = NULL;
-        }
-      if (openvas_validate (validator,
-                            "duration",
-                            con_info->req_parms.duration))
-        {
-          free (con_info->req_parms.duration);
-          con_info->req_parms.duration = NULL;
-        }
-      if (openvas_validate (validator,
-                            "duration_unit",
-                            con_info->req_parms.duration_unit))
-        {
-          free (con_info->req_parms.duration_unit);
-          con_info->req_parms.duration_unit = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "hour", &con_info->req_parms.hour);
+      validate (validator, "minute", &con_info->req_parms.minute);
+      validate (validator, "day_of_month", &con_info->req_parms.day_of_month);
+      validate (validator, "month", &con_info->req_parms.month);
+      validate (validator, "year", &con_info->req_parms.year);
+      validate (validator, "period", &con_info->req_parms.period);
+      validate (validator, "period_unit", &con_info->req_parms.period_unit);
+      validate (validator, "duration", &con_info->req_parms.duration);
+      validate (validator, "duration_unit", &con_info->req_parms.duration_unit);
+
       con_info->response =
         create_schedule_omp (credentials,
                              con_info->req_parms.name,
@@ -1828,12 +1725,7 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
-      if (openvas_validate (validator, "name",
-                            con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
       if (openvas_validate (validator,
                             "hosts",
                             con_info->req_parms.hosts)
@@ -1842,34 +1734,13 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;
         }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
-      if (openvas_validate (validator, "lsc_credential_id",
-                            con_info->req_parms.lsc_credential_id))
-        {
-          free (con_info->req_parms.lsc_credential_id);
-          con_info->req_parms.lsc_credential_id = NULL;
-        }
-      if (openvas_validate (validator, "target_locator",
-                            con_info->req_parms.target_locator))
-        {
-          free (con_info->req_parms.target_locator);
-          con_info->req_parms.target_locator = NULL;
-        }
-      if (openvas_validate (validator, "lsc_password",
-                            con_info->req_parms.password))
-        {
-          free (con_info->req_parms.password);
-          con_info->req_parms.password = NULL;
-        }
-      if (openvas_validate (validator, "login", con_info->req_parms.login))
-        {
-          free (con_info->req_parms.login);
-          con_info->req_parms.login = NULL;
-        }
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "lsc_credential_id", 
+                &con_info->req_parms.lsc_credential_id);
+      validate (validator, "target_locator",
+                &con_info->req_parms.target_locator);
+      validate (validator, "lsc_password", &con_info->req_parms.password);
+      validate (validator, "login", &con_info->req_parms.login);
       con_info->response =
         create_target_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.hosts,
@@ -1881,21 +1752,9 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_config"))
     {
-      if (openvas_validate (validator, "base", con_info->req_parms.base))
-        {
-          free (con_info->req_parms.base);
-          con_info->req_parms.base  = NULL;
-        }
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "comment", con_info->req_parms.comment))
-        {
-          free (con_info->req_parms.comment);
-          con_info->req_parms.comment = NULL;
-        }
+      validate (validator, "base", &con_info->req_parms.base);
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
       con_info->response =
         create_config_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.comment,
@@ -1910,17 +1769,9 @@ exec_omp_post (credentials_t * credentials,
 
       /* Check parameters for creating the note. */
 
-      if (openvas_validate (validator, "oid", con_info->req_parms.oid))
-        {
-          free (con_info->req_parms.oid);
-          con_info->req_parms.oid = NULL;
-        }
+      validate (validator, "oid", &con_info->req_parms.oid);
 
-      if (openvas_validate (validator, "text", con_info->req_parms.text))
-        {
-          free (con_info->req_parms.text);
-          con_info->req_parms.text = NULL;
-        }
+      validate (validator, "text", &con_info->req_parms.text);
 
        if (strcmp (con_info->req_parms.port, "")
            && openvas_validate (validator, "port", con_info->req_parms.port))
@@ -1968,69 +1819,17 @@ exec_omp_post (credentials_t * credentials,
 
       /* Check parameters for requesting the report. */
 
-      if (openvas_validate (validator,
-                            "report_id",
-                            con_info->req_parms.report_id))
-        {
-          free (con_info->req_parms.report_id);
-          con_info->req_parms.report_id = NULL;
-        }
-      if (openvas_validate (validator,
-                            "first_result",
-                            con_info->req_parms.first_result))
-        {
-          free (con_info->req_parms.first_result);
-          con_info->req_parms.first_result = NULL;
-        }
-      if (openvas_validate (validator,
-                            "max_results",
-                            con_info->req_parms.max_results))
-        {
-          free (con_info->req_parms.max_results);
-          con_info->req_parms.max_results = NULL;
-        }
-      if (openvas_validate (validator,
-                            "sort_field",
-                            con_info->req_parms.sort_field))
-        {
-          free (con_info->req_parms.sort_field);
-          con_info->req_parms.sort_field = NULL;
-        }
-      if (openvas_validate (validator,
-                            "sort_order",
-                            con_info->req_parms.sort_order))
-        {
-          free (con_info->req_parms.sort_order);
-          con_info->req_parms.sort_order = NULL;
-        }
-      if (openvas_validate (validator,
-                            "levels",
-                            con_info->req_parms.levels))
-        {
-          free (con_info->req_parms.levels);
-          con_info->req_parms.levels = NULL;
-        }
-      if (openvas_validate (validator,
-                            "notes",
-                            con_info->req_parms.notes))
-        {
-          free (con_info->req_parms.notes);
-          con_info->req_parms.notes = NULL;
-        }
-      if (openvas_validate (validator,
-                            "result_hosts_only",
-                            con_info->req_parms.result_hosts_only))
-        {
-          free (con_info->req_parms.result_hosts_only);
-          con_info->req_parms.result_hosts_only = NULL;
-        }
-      if (openvas_validate (validator,
-                            "search_phrase",
-                            con_info->req_parms.search_phrase))
-        {
-          free (con_info->req_parms.search_phrase);
-          con_info->req_parms.search_phrase = NULL;
-        }
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "first_result", &con_info->req_parms.first_result);
+      validate (validator, "max_results", &con_info->req_parms.max_results);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate (validator, "notes", &con_info->req_parms.notes);
+      validate (validator, "result_hosts_only",
+                &con_info->req_parms.result_hosts_only);
+      validate (validator, "search_phrase",
+                &con_info->req_parms.search_phrase);
       if (openvas_validate (validator,
                             "min_cvss_base",
                             con_info->req_parms.min_cvss_base))
@@ -2093,31 +1892,11 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "modify_auth"))
     {
-      if (openvas_validate (validator, "group", con_info->req_parms.group))
-        {
-          free (con_info->req_parms.group);
-          con_info->req_parms.group = NULL;
-        }
-      if (openvas_validate (validator, "enable", con_info->req_parms.enable))
-        {
-          free (con_info->req_parms.enable);
-          con_info->req_parms.enable = NULL;
-        }
-      if (openvas_validate (validator, "authdn", con_info->req_parms.authdn))
-        {
-          free (con_info->req_parms.authdn);
-          con_info->req_parms.authdn = NULL;
-        }
-      if (openvas_validate (validator, "ldaphost", con_info->req_parms.ldaphost))
-        {
-          free (con_info->req_parms.ldaphost);
-          con_info->req_parms.ldaphost = NULL;
-        }
-      if (openvas_validate (validator, "domain", con_info->req_parms.domain))
-        {
-          free (con_info->req_parms.domain);
-          con_info->req_parms.domain = NULL;
-        }
+      validate (validator, "group", &con_info->req_parms.group);
+      validate (validator, "enable", &con_info->req_parms.enable);
+      validate (validator, "authdn", &con_info->req_parms.authdn);
+      validate (validator, "ldaphost", &con_info->req_parms.ldaphost);
+      validate (validator, "domain", &con_info->req_parms.domain);
 
       con_info->response =
         modify_ldap_auth_oap (credentials,
@@ -2129,16 +1908,9 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "family_page", con_info->req_parms.submit))
-        {
-          free (con_info->req_parms.submit);
-          con_info->req_parms.submit = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "family_page", &con_info->req_parms.submit);
+
       con_info->response =
         save_config_omp (credentials,
                          con_info->req_parms.name,
@@ -2151,16 +1923,8 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "family", con_info->req_parms.family))
-        {
-          free (con_info->req_parms.family);
-          con_info->req_parms.family = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "family", &con_info->req_parms.family);
       con_info->response =
         save_config_family_omp (credentials,
                                 con_info->req_parms.name,
@@ -2171,21 +1935,9 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config_nvt"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
-        {
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
-      if (openvas_validate (validator, "family", con_info->req_parms.family))
-        {
-          free (con_info->req_parms.family);
-          con_info->req_parms.family = NULL;
-        }
-      if (openvas_validate (validator, "oid", con_info->req_parms.oid))
-        {
-          free (con_info->req_parms.oid);
-          con_info->req_parms.oid = NULL;
-        }
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "family", &con_info->req_parms.family);
+      validate (validator, "oid", &con_info->req_parms.oid);
       con_info->response =
         save_config_nvt_omp (credentials,
                              con_info->req_parms.name,
@@ -2208,44 +1960,13 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_user"))
     {
-      if (openvas_validate (validator, "login", con_info->req_parms.login))
-        {
-          free (con_info->req_parms.login);
-          con_info->req_parms.login = NULL;
-        }
-      if (openvas_validate (validator,
-                            "modify_password",
-                            con_info->req_parms.modify_password))
-        {
-          free (con_info->req_parms.modify_password);
-          con_info->req_parms.modify_password = NULL;
-        }
-      if (openvas_validate (validator,
-                            "password",
-                            con_info->req_parms.password))
-        {
-          free (con_info->req_parms.password);
-          con_info->req_parms.password = NULL;
-        }
-      if (openvas_validate (validator, "role", con_info->req_parms.role))
-        {
-          free (con_info->req_parms.role);
-          con_info->req_parms.role = NULL;
-        }
-      if (openvas_validate (validator,
-                            "access_hosts",
-                            con_info->req_parms.access_hosts))
-        {
-          free (con_info->req_parms.access_hosts);
-          con_info->req_parms.access_hosts = NULL;
-        }
-      if (openvas_validate (validator,
-                            "hosts_allow",
-                            con_info->req_parms.hosts_allow))
-        {
-          free (con_info->req_parms.hosts_allow);
-          con_info->req_parms.hosts_allow = NULL;
-        }
+      validate (validator, "login", &con_info->req_parms.login);
+      validate (validator, "modify_password",
+                &con_info->req_parms.modify_password);
+      validate (validator, "password", &con_info->req_parms.password);
+      validate (validator, "role", &con_info->req_parms.role);
+      validate (validator, "access_hosts", &con_info->req_parms.access_hosts);
+      validate (validator, "hosts_allow", &con_info->req_parms.hosts_allow);
       con_info->response =
         save_user_oap (credentials,
                        con_info->req_parms.login,

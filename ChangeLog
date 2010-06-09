@@ -1,3 +1,10 @@
+2010-06-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c (validate): New function that validates a parameter from
+	the request. If parameter was found invalid, free it and set the
+	corresponding variable to NULL.
+	(exec_omp_post): Replaced code with call to validate.
+
 2010-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Pass schedule ID in attribute.
