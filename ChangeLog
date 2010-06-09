@@ -1,3 +1,7 @@
+2010-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_get): Use correct variable when validating family.
+
 2010-06-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (validate): New function that validates a parameter from

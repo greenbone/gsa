@@ -1735,7 +1735,7 @@ exec_omp_post (credentials_t * credentials,
           con_info->req_parms.hosts = NULL;
         }
       validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "lsc_credential_id", 
+      validate (validator, "lsc_credential_id",
                 &con_info->req_parms.lsc_credential_id);
       validate (validator, "target_locator",
                 &con_info->req_parms.target_locator);
@@ -2185,7 +2185,7 @@ exec_omp_get (struct MHD_Connection *connection,
       family = MHD_lookup_connection_value (connection,
                                             MHD_GET_ARGUMENT_KIND,
                                             "family");
-      if (openvas_validate (validator, "family", name))
+      if (openvas_validate (validator, "family", family))
         family = NULL;
 
       first_result = MHD_lookup_connection_value (connection,
