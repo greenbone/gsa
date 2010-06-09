@@ -419,7 +419,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  name          New task name.
  * @param[in]  comment       Comment on task.
- * @param[in]  scantarget    Target for task.
+ * @param[in]  target_id     Target for task.
  * @param[in]  scanconfig    Config for task.
  * @param[in]  escalator_id  Escalator for task.
  * @param[in]  schedule_id   UUID of schedule for task.
@@ -428,7 +428,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *scantarget, char *scanconfig, const char *escalator_id,
+                 char *target_id, char *scanconfig, const char *escalator_id,
                  const char *schedule_id)
 {
   entity_t entity;
@@ -449,7 +449,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<create_task>"
                                 "<config>%s</config>"
                                 "<schedule>%s</schedule>"
-                                "<target>%s</target>"
+                                "<target id=\"%s\"/>"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
                                 "</create_task>"
@@ -459,7 +459,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "</commands>",
                                 scanconfig,
                                 strcmp (schedule_id, "--") ? schedule_id : "",
-                                scantarget,
+                                target_id,
                                 name,
                                 comment);
   else
@@ -469,7 +469,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 "<config>%s</config>"
                                 "<escalator id=\"%s\"/>"
                                 "<schedule>%s</schedule>"
-                                "<target>%s</target>"
+                                "<target id=\"%s/>"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
                                 "</create_task>"
@@ -480,7 +480,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                                 scanconfig,
                                 escalator_id,
                                 strcmp (schedule_id, "--") ? schedule_id : "",
-                                scantarget,
+                                target_id,
                                 name,
                                 comment);
 
@@ -2665,12 +2665,12 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
  * @brief Delete a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  target_name  Name of target.
+ * @param[in]  target_id    UUID of target.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (credentials_t * credentials, const char *target_name)
+delete_target_omp (credentials_t * credentials, const char *target_id)
 {
   GString *xml;
   gnutls_session_t session;
@@ -2689,7 +2689,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_target><name>%s</name></delete_target>"
+                            "<delete_target target_id=\"%s\"/>"
                             "<get_targets"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
@@ -2698,7 +2698,7 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
-                            target_name)
+                            target_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2732,14 +2732,14 @@ delete_target_omp (credentials_t * credentials, const char *target_name)
  * @brief Get one target, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of target.
+ * @param[in]  target_id    UUID of target.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (credentials_t * credentials, const char * name,
+get_target_omp (credentials_t * credentials, const char * target_id,
                 const char * sort_field, const char * sort_order)
 {
   GString *xml;
@@ -2759,10 +2759,10 @@ get_target_omp (credentials_t * credentials, const char * name,
 
   if (openvas_server_sendf (&session,
                             "<get_targets"
-                            " name=\"%s\""
+                            " target_id=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
-                            name,
+                            target_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)

@@ -730,7 +730,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Target:</td>
           <td>
-            <a href="/omp?cmd=get_target&amp;name={task/target/name}">
+            <a href="/omp?cmd=get_target&amp;target_id={task/target/@id}">
               <xsl:value-of select="task/target/name"/>
             </a>
           </td>
@@ -877,7 +877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="target" mode="newtask">
-  <option value="{name}"><xsl:value-of select="name"/></option>
+  <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
 <xsl:template match="config" mode="newtask">
@@ -1331,7 +1331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td>Scan Targets (immutable)</td>
             <td>
-              <select name="scantarget" disabled="1">
+              <select name="target_id" disabled="1">
                 <xsl:choose>
                   <xsl:when
                     test="string-length (commands_response/get_status_response/task/target/name) &gt; 0">
@@ -1877,7 +1877,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_target&amp;name={name}" title="Target Details">
+                  <a href="/omp?cmd=get_target&amp;target_id={@id}"
+                     title="Target Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -2758,7 +2759,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_target&amp;name={name}"
+          <a href="/omp?cmd=delete_target&amp;target_id={@id}"
              title="Delete Target" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -2770,7 +2771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_target&amp;name={name}"
+      <a href="/omp?cmd=get_target&amp;target_id={@id}"
          title="Target Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -6382,7 +6383,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Scan Targets</td>
           <td>
-            <select name="scantarget">
+            <select name="target_id">
               <xsl:apply-templates select="get_targets_response/target"
                                    mode="newtask"/>
             </select>

@@ -1,5 +1,26 @@
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch to target UUIDs.
+
+	* src/gsad.c (init_validator): Add validator "target_id".  Remove
+	"scantarget".
+	(req_parms, free_resources, serve_post): Add target_id to required params.
+	Remove scantarget.
+	(exec_omp_post): Expect create_task_omp target in target_id instead of
+	scantarget.
+	(exec_omp_get): Pass target_id instead of name to delete_target_omp and
+	get_target_omp.
+
+	* src/gsad_omp.c (create_task_omp, delete_target_omp)
+	(get_target_omp): Expect target as UUID instead of name.
+
+	* src/html/omp.xsl (html-report-table, html-edit-task-form)
+	(lsc_credential [details], target, gsad_newtask): Pass
+	target in "target_id" param instead of "name".
+	(target [newtask]): Use UUID as value.
+
+2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-target-form): Revert to "--" as value
 	associate with "--" credential, which was already working.
 

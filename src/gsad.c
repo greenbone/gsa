@@ -302,6 +302,7 @@ init_validator ()
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|)$");
@@ -320,7 +321,6 @@ init_validator ()
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "scanconfig",   "name");
-  openvas_validator_alias (validator, "scantarget",   "name");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
@@ -487,9 +487,9 @@ struct gsad_connection_info
     char *method;        ///< Value of "event" parameter.
     char *schedule_id;   ///< Value of "schedule_id" parameter.
     char *scanconfig;    ///< Value of "scanconfig" parameter.
-    char *scantarget;    ///< Value of "scantarget" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
+    char *target_id;     ///< Value of "target_id" parameter.
     char *target_locator; ///< Value of "target_locator" parameter.
     char *levels;        ///< Value of "levels" parameter.
     char *notes;         ///< Value of "notes" parameter.
@@ -697,8 +697,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
   free (con_info->req_parms.scanconfig);
-  free (con_info->req_parms.scantarget);
   free (con_info->req_parms.schedule_id);
+  free (con_info->req_parms.target_id);
   free (con_info->req_parms.xml_file);
   free (con_info->req_parms.role);
   free (con_info->req_parms.submit);
@@ -1078,9 +1078,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "scanconfig"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.scanconfig);
-      if (!strcmp (key, "scantarget"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.scantarget);
       if (!strcmp (key, "hosts"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.hosts);
@@ -1102,6 +1099,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "role"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.role);
+      if (!strcmp (key, "target_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.target_id);
       if (!strcmp (key, "target_locator"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.target_locator);
@@ -1665,12 +1665,14 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.escalator_id);
           con_info->req_parms.escalator_id  = NULL;
         }
-      if (openvas_validate (validator,
-                            "scantarget",
-                            con_info->req_parms.scantarget))
+      if (con_info->req_parms.target_id
+          && strcmp (con_info->req_parms.target_id, "--")
+          && openvas_validate (validator,
+                               "target_id",
+                               con_info->req_parms.target_id))
         {
-          free (con_info->req_parms.scantarget);
-          con_info->req_parms.scantarget  = NULL;
+          free (con_info->req_parms.target_id);
+          con_info->req_parms.target_id  = NULL;
         }
       if (openvas_validate (validator,
                             "scanconfig",
@@ -1691,7 +1693,7 @@ exec_omp_post (credentials_t * credentials,
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.comment == NULL) ||
           (con_info->req_parms.scanconfig == NULL) ||
-          (con_info->req_parms.scantarget == NULL) ||
+          (con_info->req_parms.target_id == NULL) ||
           (con_info->req_parms.escalator_id == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
         con_info->response = gsad_newtask (credentials, "Invalid parameter");
@@ -1699,7 +1701,7 @@ exec_omp_post (credentials_t * credentials,
         con_info->response =
           create_task_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.comment,
-                           con_info->req_parms.scantarget,
+                           con_info->req_parms.target_id,
                            con_info->req_parms.scanconfig,
                            con_info->req_parms.escalator_id,
                            con_info->req_parms.schedule_id);
@@ -1826,7 +1828,8 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
-      if (openvas_validate (validator, "name", con_info->req_parms.name))
+      if (openvas_validate (validator, "name",
+                            con_info->req_parms.name))
         {
           free (con_info->req_parms.name);
           con_info->req_parms.name = NULL;
@@ -2326,6 +2329,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *duration     = NULL;
   const char *lsc_credential_id = NULL;
   const char *schedule_id  = NULL;
+  const char *target_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0;
   credentials_t *credentials = NULL;
 
@@ -2510,6 +2514,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                        "lsc_credential_id");
       if (openvas_validate (validator, "lsc_credential_id", lsc_credential_id))
         lsc_credential_id = NULL;
+
+      target_id = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "target_id");
+      if (openvas_validate (validator, "target_id", target_id))
+        target_id = NULL;
 
       levels = MHD_lookup_connection_value (connection,
                                             MHD_GET_ARGUMENT_KIND,
@@ -2763,8 +2773,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_user")) && (name != NULL))
     return delete_user_oap (credentials, name);
 
-  else if ((!strcmp (cmd, "delete_target")) && (name != NULL))
-    return delete_target_omp (credentials, name);
+  else if ((!strcmp (cmd, "delete_target")) && (target_id != NULL))
+    return delete_target_omp (credentials, target_id);
 
   else if ((!strcmp (cmd, "delete_config")) && (name != NULL))
     return delete_config_omp (credentials, name);
@@ -3023,8 +3033,8 @@ exec_omp_get (struct MHD_Connection *connection,
                                    (duration == NULL || (*duration == '\0'))
                                     ? "0" : duration);
 
-  else if ((!strcmp (cmd, "get_target")) && (name != NULL))
-    return get_target_omp (credentials, name, sort_field, sort_order);
+  else if ((!strcmp (cmd, "get_target")) && (target_id != NULL))
+    return get_target_omp (credentials, target_id, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_targets"))
     return get_targets_omp (credentials, sort_field, sort_order);
