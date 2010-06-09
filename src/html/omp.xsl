@@ -1523,7 +1523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>
             </xsl:when>
-            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status = 'Paused'">
+            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested'">
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
@@ -1567,7 +1567,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    alt="Abort"
                    style="margin-left:3px;"/>
             </xsl:when>
-            <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error'">
+            <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
               <img src="/img/stop_inactive.png" border="0"
                    alt="Abort"
                    style="margin-left:3px;"/>
@@ -1582,7 +1582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
-            <xsl:when test="status='Running' or status='Requested'">
+            <xsl:when test="status='Running' or status='Requested' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
               <img src="/img/delete_inactive.png"
                    border="0"
                    alt="Delete"

@@ -1,3 +1,8 @@
+2010-06-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/omp.xsl (task): Deactivate icons when the actions are not
+	applicable to the current status.
+
 2010-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch to target UUIDs.
