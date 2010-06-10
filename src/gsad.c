@@ -1917,11 +1917,13 @@ exec_omp_post (credentials_t * credentials,
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
       validate (validator, "config_id", &con_info->req_parms.config_id);
+      validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "family_page", &con_info->req_parms.submit);
 
       con_info->response =
         save_config_omp (credentials,
                          con_info->req_parms.config_id,
+                         con_info->req_parms.name,
                          con_info->req_parms.sort_field,
                          con_info->req_parms.sort_order,
                          con_info->req_parms.selects,
@@ -1932,10 +1934,12 @@ exec_omp_post (credentials_t * credentials,
   else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
     {
       validate (validator, "config_id", &con_info->req_parms.config_id);
+      validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "family", &con_info->req_parms.family);
       con_info->response =
         save_config_family_omp (credentials,
                                 con_info->req_parms.config_id,
+                                con_info->req_parms.name,
                                 con_info->req_parms.family,
                                 con_info->req_parms.sort_field,
                                 con_info->req_parms.sort_order,
@@ -1944,11 +1948,13 @@ exec_omp_post (credentials_t * credentials,
   else if (!strcmp (con_info->req_parms.cmd, "save_config_nvt"))
     {
       validate (validator, "config_id", &con_info->req_parms.config_id);
+      validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "family", &con_info->req_parms.family);
       validate (validator, "oid", &con_info->req_parms.oid);
       con_info->response =
         save_config_nvt_omp (credentials,
                              con_info->req_parms.config_id,
+                             con_info->req_parms.name,
                              con_info->req_parms.family,
                              con_info->req_parms.oid,
                              con_info->req_parms.sort_field,
@@ -2519,12 +2525,12 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_config_omp (credentials, config_id, 1);
 
   else if (!strcmp (cmd, "edit_config_family"))
-    return get_config_family_omp (credentials, config_id, family, sort_field,
-                                  sort_order, 1);
+    return get_config_family_omp (credentials, config_id, name, family,
+                                  sort_field, sort_order, 1);
 
   else if (!strcmp (cmd, "edit_config_nvt"))
-    return get_config_nvt_omp (credentials, config_id, family, oid, sort_field,
-                               sort_order, 1);
+    return get_config_nvt_omp (credentials, config_id, name, family, oid,
+                               sort_field, sort_order, 1);
 
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
@@ -2791,12 +2797,12 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_configs_omp (credentials, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_config_family"))
-    return get_config_family_omp (credentials, config_id, family, sort_field,
-                                  sort_order, 0);
+    return get_config_family_omp (credentials, config_id, name, family,
+                                  sort_field, sort_order, 0);
 
   else if (!strcmp (cmd, "get_config_nvt"))
-    return get_config_nvt_omp (credentials, config_id, family, oid, sort_field,
-                               sort_order, 0);
+    return get_config_nvt_omp (credentials, config_id, name, family, oid,
+                               sort_field, sort_order, 0);
 
   else if ((!strcmp (cmd, "get_nvt_details")) && (oid != NULL))
     return get_nvt_details_omp (credentials, oid);

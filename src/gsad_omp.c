@@ -3256,6 +3256,7 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config_id    UUID of config.
+ * @param[in]  name         Name of config.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
  * @param[in]  selects      Selected families.
@@ -3268,6 +3269,7 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
 char *
 save_config_omp (credentials_t * credentials,
                  const char * config_id,
+                 const char * name,
                  const char * sort_field,
                  const char * sort_order,
                  GArray * selects,
@@ -3433,7 +3435,8 @@ save_config_omp (credentials_t * credentials,
 
   if (next == NULL || strcmp (next, "Save Config") == 0)
     return get_config_omp (credentials, config_id, 1);
-  return get_config_family_omp (credentials, config_id, next, NULL, NULL, 1);
+  return get_config_family_omp (credentials, config_id, name, next, NULL, NULL,
+                                1);
 }
 
 /**
@@ -3441,6 +3444,7 @@ save_config_omp (credentials_t * credentials,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config_id    UUID of config.
+ * @param[in]  name         Name of config.
  * @param[in]  family       Name of family.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
@@ -3451,6 +3455,7 @@ save_config_omp (credentials_t * credentials,
 char *
 get_config_family_omp (credentials_t * credentials,
                        const char * config_id,
+                       const char * name,
                        const char * family,
                        const char * sort_field,
                        const char * sort_order,
@@ -3471,8 +3476,11 @@ get_config_family_omp (credentials_t * credentials,
   if (edit) g_string_append (xml, "<edit/>");
   /* @todo Would it be better include this in the get_nvt_details response? */
   g_string_append_printf (xml,
-                          "<config id=\"%s\"><family>%s</family></config>",
+                          "<config id=\"%s\">"
+                          "<name>%s</name><family>%s</family>"
+                          "</config>",
                           config_id,
+                          name,
                           family);
 
   /* Get the details for all NVT's in the config in the family. */
@@ -3556,6 +3564,7 @@ get_config_family_omp (credentials_t * credentials,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config_id    UUID of config.
+ * @param[in]  name         Name of config.
  * @param[in]  family       Name of family.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
@@ -3566,6 +3575,7 @@ get_config_family_omp (credentials_t * credentials,
 char *
 save_config_family_omp (credentials_t * credentials,
                         const char * config_id,
+                        const char * name,
                         const char * family,
                         const char * sort_field,
                         const char * sort_order,
@@ -3640,8 +3650,8 @@ save_config_family_omp (credentials_t * credentials,
 
   /* Return the Edit family page. */
 
-  return get_config_family_omp (credentials, config_id, family, sort_field,
-                                sort_order, 1);
+  return get_config_family_omp (credentials, config_id, name, family,
+                                sort_field, sort_order, 1);
 }
 
 /**
@@ -3649,6 +3659,7 @@ save_config_family_omp (credentials_t * credentials,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config_id    UUID of config.
+ * @param[in]  name         Name of config.
  * @param[in]  family       Name of family.
  * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
@@ -3660,6 +3671,7 @@ save_config_family_omp (credentials_t * credentials,
 char *
 get_config_nvt_omp (credentials_t * credentials,
                     const char * config_id,
+                    const char * name,
                     const char * family,
                     const char * nvt,
                     const char * sort_field,
@@ -3681,8 +3693,11 @@ get_config_nvt_omp (credentials_t * credentials,
   if (edit) g_string_append (xml, "<edit/>");
   /* @todo Would it be better include this in the get_nvt_details response? */
   g_string_append_printf (xml,
-                          "<config id=\"%s\"><family>%s</family></config>",
+                          "<config id=\"%s\">"
+                          "<name>%s</name><family>%s</family>"
+                          "</config>",
                           config_id,
+                          name,
                           family);
 
 
@@ -3727,6 +3742,7 @@ get_config_nvt_omp (credentials_t * credentials,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  config_id    UUID of config.
+ * @param[in]  name         Name of config.
  * @param[in]  family       Name of family.
  * @param[in]  nvt          OID of NVT.
  * @param[in]  sort_field   Field to sort on, or NULL.
@@ -3741,6 +3757,7 @@ get_config_nvt_omp (credentials_t * credentials,
 char *
 save_config_nvt_omp (credentials_t * credentials,
                      const char * config_id,
+                     const char * name,
                      const char * family,
                      const char * nvt,
                      const char * sort_field,
@@ -3903,8 +3920,8 @@ save_config_nvt_omp (credentials_t * credentials,
 
   /* Return the Edit NVT page. */
 
-  return get_config_nvt_omp (credentials, config_id, family, nvt, sort_field,
-                             sort_order, 1);
+  return get_config_nvt_omp (credentials, config_id, name, family, nvt,
+                             sort_field, sort_order, 1);
 }
 
 /**

@@ -111,17 +111,20 @@ char * delete_target_omp (credentials_t *, const char *);
 char * get_config_omp (credentials_t *, const char *, int);
 char * get_configs_omp (credentials_t *, const char *, const char *);
 char * save_config_omp (credentials_t *, const char *, const char *,
-                        const char *, GArray *, GArray *, GArray *,
-                        const char *);
+                        const char *, const char *, GArray *, GArray *,
+                        GArray *, const char *);
 char * get_config_family_omp (credentials_t *, const char *, const char *,
-                              const char *, const char *, int);
+                              const char *, const char *, const char *, int);
 char * save_config_family_omp (credentials_t *, const char *, const char *,
-                               const char *, const char *, GArray *);
+                               const char *, const char *, const char *,
+                               GArray *);
 char * get_config_nvt_omp (credentials_t *, const char *, const char *,
-                           const char *, const char *, const char *, int);
+                           const char *, const char *, const char *,
+                           const char *, int);
 char * save_config_nvt_omp (credentials_t *, const char *, const char *,
-                            const char *, const char *, const char *, GArray *,
-                            GArray *, GArray *, const char *);
+                            const char *, const char *, const char *,
+                            const char *, GArray *, GArray *, GArray *,
+                            const char *);
 char * create_config_omp (credentials_t *, char *, char *, const char *);
 char * import_config_omp (credentials_t *, char *);
 char * delete_config_omp (credentials_t *, const char *);

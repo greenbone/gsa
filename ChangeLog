@@ -1,3 +1,23 @@
+2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass config names to pages that need them.
+
+	* src/gsad.c (exec_omp_post): Pass name to save_config_omp,
+	save_config_family_omp and save_config_nvt_omp.
+	(exec_omp_get): Pass name to get_config_family_omp, get_config_nvt_omp,
+	get_config_family_omp and get_config_nvt_omp.
+
+	* src/gsad_omp.c (save_config_omp, save_config_family_omp)
+	(save_config_nvt_omp): Add name arguments.
+	(get_config_family_omp, get_config_nvt_omp): Add name arguments.  Add
+	NAME to CONFIG.  Update callers.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-config-family-table, preference, preferences)
+	(html-config-nvt-table, html-config-table): Pass config name alongside
+	UUID.
+
 2010-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch to config UUIDs.
