@@ -1,5 +1,9 @@
 2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_task_omp): Add missing XML quote.
+
+2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Pass config names to pages that need them.
 
 	* src/gsad.c (exec_omp_post): Pass name to save_config_omp,
