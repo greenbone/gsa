@@ -2108,7 +2108,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="80"/>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="125">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
@@ -2136,7 +2136,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="125">Condition</td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -2219,7 +2219,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Escalator"/>
             </td>
@@ -4397,7 +4397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="80"/>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="125">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
@@ -4773,7 +4773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               (UTC)
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="125">Period (optional)</td>
             <td>
               <select name="period">
@@ -4848,7 +4848,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Schedule"/>
             </td>

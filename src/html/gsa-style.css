@@ -216,6 +216,14 @@ tr.odd {
  background-color: #EEEEEE;
 }
 
+tr.odd:hover {
+ background: #DDDDDD;
+}
+
+tr.even:hover {
+ background: #DDDDDD;
+}
+
 table.odd {
  background-color: #EEEEEE;
 }

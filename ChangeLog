@@ -1,3 +1,10 @@
+2010-06-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsa-style.css: Add hover style for odd and even tr.
+
+	* src/html/omp.xsl: Make tr's that correspond to a tr.odd
+	now a tr.even.
+
 2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Add missing XML quote.
