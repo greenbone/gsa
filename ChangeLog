@@ -1,3 +1,10 @@
+2010-06-10  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad_omp.c (create_task_omp): Fix. If no schedule is given, do
+	not send schedule element with empty id, as manager will not be able
+	to find it. Dont send schedule element instead. Merged with same issue
+	for escalator.
+
 2010-06-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsa-style.css: Add hover style for odd and even tr.

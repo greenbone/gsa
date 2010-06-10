@@ -435,6 +435,8 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   gnutls_session_t session;
   char *text = NULL;
   int socket, ret;
+  gchar *schedule_element;
+  gchar *escalator_element;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -443,46 +445,40 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_status");
 
-  if (strcmp (escalator_id, "--") == 0)
-    ret = openvas_server_sendf (&session,
-                                "<commands>"
-                                "<create_task>"
-                                "<config id=\"%s\"/>"
-                                "<schedule id=\"%s\"/>"
-                                "<target id=\"%s\"/>"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "</create_task>"
-                                "<get_status"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "</commands>",
-                                config_id,
-                                strcmp (schedule_id, "--") ? schedule_id : "",
-                                target_id,
-                                name,
-                                comment);
+  if (!schedule_id || strcmp (schedule_id, "--") == 0)
+    schedule_element = g_strdup ("");
   else
-    ret = openvas_server_sendf (&session,
-                                "<commands>"
-                                "<create_task>"
-                                "<config id=\"%s\"/>"
-                                "<escalator id=\"%s\"/>"
-                                "<schedule id=\"%s\"/>"
-                                "<target id=\"%s\"/>"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "</create_task>"
-                                "<get_status"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "</commands>",
-                                config_id,
-                                escalator_id,
-                                strcmp (schedule_id, "--") ? schedule_id : "",
-                                target_id,
-                                name,
-                                comment);
+    schedule_element = g_strdup_printf ("<schedule id=\"%s\"/>", schedule_id);
+
+  if (!escalator_id || strcmp (escalator_id, "--") == 0)
+    escalator_element = g_strdup ("");
+  else
+    escalator_element = g_strdup_printf ("<escalator id=\"%s\"/>",
+                                         escalator_id);
+
+  ret = openvas_server_sendf (&session,
+                              "<commands>"
+                              "<create_task>"
+                              "<config id=\"%s\"/>"
+                              "%s"
+                              "%s"
+                              "<target id=\"%s\"/>"
+                              "<name>%s</name>"
+                              "<comment>%s</comment>"
+                              "</create_task>"
+                              "<get_status"
+                              " sort_field=\"name\""
+                              " sort_order=\"ascending\"/>"
+                              "</commands>",
+                              config_id,
+                              schedule_element,
+                              escalator_element,
+                              target_id,
+                              name,
+                              comment);
+
+  g_free (schedule_element);
+  g_free (escalator_element);
 
   if (ret == -1)
     {
