@@ -1,4 +1,8 @@
-2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+2010-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (result [detailed]): Skip CVSS when overridden.
+
+2010-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add threat overrides.
 
