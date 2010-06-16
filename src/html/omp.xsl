@@ -354,13 +354,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:variable name="increment">1000</xsl:variable>
             <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
             <xsl:if test = "report/results/@start &gt; 1">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
             </xsl:if>
             Results <xsl:value-of select="report/results/@start"/> -
             <xsl:value-of select="$last"/>
             of <xsl:value-of select="report/scan_result_count/filtered"/>
             <xsl:if test = "$last &lt; report/scan_result_count/filtered">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
+              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
             </xsl:if>
           </xsl:when>
           <xsl:otherwise>
@@ -390,6 +390,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="sort_order"
                  value="{report/sort/field/order}"/>
           <input type="hidden" name="notes" value="{report/filters/notes}"/>
+          <input type="hidden" name="overrides" value="{report/filters/overrides}"/>
           <input type="hidden"
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
@@ -418,7 +419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">port ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">port ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -427,7 +428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">port descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">port descending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -436,7 +437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">threat ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">threat ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -445,7 +446,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;result_hosts_only={report/filters/result_hosts_only}">threat descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">threat descending</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -476,6 +477,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Show notes
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <xsl:choose>
+                  <xsl:when test="report/filters/overrides = 0">
+                    <input type="checkbox" name="overrides" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="overrides" value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Show overrides
               </td>
             </tr>
             <tr>
@@ -824,6 +838,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_notes_response/note">
             <xsl:call-template name="note">
+              <xsl:with-param name="next">get_status&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </table>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Overrides on Results of "<xsl:value-of select="task/name"/>"
+      <a href="/help/reports.html#overrides" title="Help: Reports (Overrides)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="overrides">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>NVT</td>
+            <td>New Threat</td>
+            <td>Text</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
+          <xsl:for-each select="../get_overrides_response/override">
+            <xsl:call-template name="override">
               <xsl:with-param name="next">get_status&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
@@ -1210,6 +1256,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="notes" value="1"/>
+          <input type="hidden" name="overrides" value="1"/>
           <input type="hidden" name="result_hosts_only" value="1"/>
           <input type="hidden" name="levels" value="hmlg"/>
           <select name="format"
@@ -1227,7 +1274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </td>
     <td>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;result_hosts_only=1"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -1487,14 +1534,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="last_report/report/@id = first_report/report/@id">
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;result_hosts_only=1">
+              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1">
                 <xsl:call-template name="short_timestamp_first"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;result_hosts_only=1">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -5271,9 +5318,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_notes_response">
 </xsl:template>
 
+<xsl:template match="get_overrides_response">
+</xsl:template>
+
 <xsl:template match="get_nvt_details">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_note_response"/>
+  <xsl:apply-templates select="commands_response/delete_override_response"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -5299,6 +5350,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
             <xsl:apply-templates select="commands_response/get_notes_response/note"
                                  mode="nvt-details"/>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="count(commands_response/get_overrides_response/override) = 0">
+          <h1>Overrides: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Overrides</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td>New Threat</td>
+              <td>Text</td>
+              <td width="100">Actions</td>
+            </tr>
+            <xsl:apply-templates
+              select="commands_response/get_overrides_response/override"
+              mode="nvt-details"/>
           </table>
         </xsl:otherwise>
       </xsl:choose>
@@ -5335,6 +5404,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
         <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
         <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="overrides" value="{overrides}"/>
         <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -5453,6 +5523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
         <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="overrides" value="{overrides}"/>
         <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
         <input type="hidden" name="search_phrase" value="{search_phrase}"/>
         <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
@@ -5933,6 +6004,672 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END NOTES MANAGEMENT -->
 
+<!-- BEGIN OVERRIDES MANAGEMENT -->
+
+<xsl:template name="html-create-override-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Override
+      <a href="/help/overrides.html#newoverride"
+         title="Help: Overrides (New Override)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp#result-{result/@id}"
+            method="post"
+            enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_override"/>
+        <input type="hidden" name="oid" value="{nvt/@id}"/>
+        <input type="hidden" name="report_id" value="{report/@id}"/>
+        <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="levels" value="{levels}"/>
+        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+        <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
+        <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="overrides" value="{overrides}"/>
+        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">
+              Hosts
+            </td>
+            <td>
+              <input type="radio" name="hosts" value=""/>
+              Any
+              <input type="radio" name="hosts" value="{hosts}" checked="1"/>
+              <xsl:value-of select="hosts"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Port
+            </td>
+            <td>
+              <input type="radio" name="port" value=""/>
+              Any
+              <input type="radio" name="port" value="{port}" checked="1"/>
+              <xsl:value-of select="port"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Threat
+            </td>
+            <td>
+              <input type="radio" name="threat" value=""/>
+              Any
+              <input type="radio" name="threat" value="{threat}" checked="1"/>
+              <xsl:value-of select="threat"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              <b>New Threat</b>
+            </td>
+            <td>
+              <select name="new_threat">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+                <option value="Log" selected="1">Log</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Task
+            </td>
+            <td>
+              <input type="radio" name="task_id" value=""/>
+              Any
+              <input type="radio" name="task_id" value="{task/@id}"
+                     checked="1"/>
+              <xsl:value-of select="task/name"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Result
+            </td>
+            <td>
+              <input type="radio" name="result_id" value="" checked="1"/>
+              Any
+              <input type="radio" name="result_id" value="{result/@id}"/>
+              <xsl:value-of select="result/@id"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Text</td>
+            <td>
+              <textarea name="text" rows="10" cols="60"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Override"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <h3>
+        Associated Result
+      </h3>
+      <xsl:for-each select="get_results_response/results/result">
+        <xsl:call-template name="result-detailed">
+          <xsl:with-param name="override-buttons">0</xsl:with-param>
+        </xsl:call-template>
+      </xsl:for-each>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_override">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-create-override-form"/>
+</xsl:template>
+
+<xsl:template name="html-edit-override-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Override
+      <a href="/help/overrides.html#editoverride"
+         title="Help: Overrides (Edit Override)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}"
+         title="Override Details"
+         style="margin-left:3px;">
+        <img src="/img/details.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="get">
+        <input type="hidden" name="cmd" value="save_override"/>
+        <input type="hidden" name="override_id"
+               value="{get_overrides_response/override/@id}"/>
+
+        <input type="hidden" name="next" value="{next}"/>
+
+        <!-- get_report params. -->
+        <input type="hidden" name="report_id" value="{report/@id}"/>
+        <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="levels" value="{levels}"/>
+        <input type="hidden" name="notes" value="{notes}"/>
+        <input type="hidden" name="overrides" value="{overrides}"/>
+        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
+        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+        <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
+
+        <!-- get_nvt_details param. -->
+        <input type="hidden" name="oid" value="{nvt/@id}"/>
+
+        <!-- get_status param. -->
+        <input type="hidden" name="task_id" value="{task/@id}"/>
+
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td><b>NVT Name</b></td>
+            <td>
+              <xsl:variable name="nvt" select="get_overrides_response/override/nvt"/>
+              <a href="?cmd=get_nvt_details&amp;oid={$nvt/@oid}">
+                <xsl:variable name="max" select="70"/>
+                <xsl:choose>
+                  <xsl:when test="string-length($nvt/name) &gt; $max">
+                    <xsl:value-of select="substring($nvt/name, 0, $max)"/>...
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$nvt/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Hosts
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_overrides_response/override/hosts) = 0">
+                  <input type="radio" name="hosts" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="hosts" value=""/>
+                  Any
+                  <input type="radio" name="hosts" value="{get_overrides_response/override/hosts}"
+                         checked="1"/>
+                  <xsl:value-of select="get_overrides_response/override/hosts"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Port
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_overrides_response/override/port) = 0">
+                  <input type="radio" name="port" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="port" value=""/>
+                  Any
+                  <input type="radio" name="port" value="{get_overrides_response/override/port}" checked="1"/>
+                  <xsl:value-of select="get_overrides_response/override/port"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Threat
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_overrides_response/override/threat) = 0">
+                  <input type="radio" name="threat" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="threat" value=""/>
+                  Any
+                  <input type="radio" name="threat" value="{get_overrides_response/override/threat}"
+                         checked="1"/>
+                  <xsl:value-of select="get_overrides_response/override/threat"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              <b>New Threat</b>
+            </td>
+            <td>
+              <select name="new_threat">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+                <option value="Log" selected="1">Log</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Task
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_overrides_response/override/task/@id) = 0">
+                  <input type="radio" name="override_task_id" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="override_task_id" value=""/>
+                  Any
+                  <input type="radio" name="override_task_id" value="{get_overrides_response/override/task/@id}"
+                         checked="1"/>
+                  <xsl:value-of select="get_overrides_response/override/task/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">
+              Result
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="string-length (get_overrides_response/override/result/@id) = 0">
+                  <input type="radio" name="override_result_id" value="" checked="1"
+                         readonly="1"/>
+                  Any
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="override_result_id" value=""/>
+                  Any
+                  <input type="radio" name="override_result_id"
+                         value="{get_overrides_response/override/result/@id}" checked="1"/>
+                  <xsl:value-of select="get_overrides_response/override/result/@id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Text</td>
+            <td>
+              <textarea name="text" rows="10" cols="60"><xsl:value-of select="get_overrides_response/override/text"/></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Override"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <xsl:choose>
+        <xsl:when test="string-length(get_overrides_response/override/result/@id) = 0">
+          <h3>Associated Result: Any</h3>
+        </xsl:when>
+        <xsl:otherwise>
+          <h3>
+            Associated Result
+          </h3>
+          <xsl:for-each select="get_overrides_response/override/result">
+            <xsl:call-template name="result-detailed">
+              <xsl:with-param name="override-buttons">0</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_override">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-override-form"/>
+</xsl:template>
+
+<xsl:template match="modify_override_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Override</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="override" match="override">
+  <xsl:param name="next">get_overrides</xsl:param>
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <xsl:variable name="max" select="35"/>
+      <xsl:choose>
+        <xsl:when test="string-length(nvt/name) &gt; $max">
+          <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="nvt/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="new_threat"/>
+    </td>
+    <td>
+      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
+      <xsl:choose>
+        <xsl:when test="text/@excerpt = 1">
+          <xsl:value-of select="text/text()"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next={$next}"
+         title="Delete Override" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
+      </a>
+      <a href="/omp?cmd=get_override&amp;override_id={@id}"
+         title="Override Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}"
+         title="Edit Override"
+         style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="override" mode="nvt-details">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <xsl:value-of select="new_threat"/>
+    </td>
+    <td>
+      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
+      <xsl:choose>
+        <xsl:when test="text/@excerpt = 1">
+          <xsl:value-of select="text/text()"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+         title="Delete Override" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
+      </a>
+      <a href="/omp?cmd=get_override&amp;override_id={@id}"
+         title="Override Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+         title="Edit Override"
+         style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="override" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Override Details
+      <a href="/help/overrides.html#overridedetails"
+        title="Help: Overrides (Override Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_override"
+         title="Edit Override"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_overrides">Back to Overrides</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>NVT Name:</b></td>
+          <td>
+            <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+              <xsl:variable name="max" select="70"/>
+              <xsl:choose>
+                <xsl:when test="string-length(nvt/name) &gt; $max">
+                  <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="nvt/name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>NVT OID:</td>
+          <td><xsl:value-of select="nvt/@oid"/></td>
+        </tr>
+        <tr>
+          <td>Created:</td>
+          <td><xsl:value-of select="creation_time"/></td>
+        </tr>
+        <tr>
+          <td>Last Modified:</td>
+          <td><xsl:value-of select="modification_time"/></td>
+        </tr>
+      </table>
+
+      <h1>Application</h1>
+      <table>
+        <tr>
+          <td>Hosts:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(hosts) &gt; 0">
+                <xsl:value-of select="hosts"/>
+              </xsl:when>
+              <xsl:otherwise>
+                Any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Port:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(port) &gt; 0">
+                <xsl:value-of select="port"/>
+              </xsl:when>
+              <xsl:otherwise>
+                Any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Threat:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(threat) &gt; 0">
+                <xsl:value-of select="threat"/>
+              </xsl:when>
+              <xsl:otherwise>
+                Any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td><b>New Threat:</b></td>
+          <td>
+            <xsl:value-of select="new_threat"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Task:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="orphan != 0">
+                <b>Orphan</b>
+              </xsl:when>
+              <xsl:when test="task and string-length(task/@id) &gt; 0">
+                <a href="?cmd=get_status&amp;task_id={task/@id}">
+                  <xsl:value-of select="task/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                Any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Result:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="orphan != 0">
+                <b>Orphan</b>
+              </xsl:when>
+              <xsl:when test="string-length(result/@id) &gt; 0">
+                <xsl:value-of select="result/@id"/>
+              </xsl:when>
+              <xsl:otherwise>
+                Any
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+
+      <h1>Appearance</h1>
+      <div class="override_top_line"></div>
+      <xsl:call-template name="override-detailed">
+        <xsl:with-param name="override-buttons">0</xsl:with-param>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-overrides-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Overrides
+      <a href="/help/overrides.html"
+         title="Help: Overrides">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="overrides">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>NVT</td>
+            <td>New Threat</td>
+            <td>Text</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="override"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_override">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:choose>
+    <xsl:when test="commands_reponse/get_overrides_response/@status = '500'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Override
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="commands_response/get_overrides_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="commands_response/get_overrides_response/override" mode="details"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="get_overrides">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_override_response"/>
+  <xsl:choose>
+    <xsl:when test="commands_response/get_overrides_response/@status = '500'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Overrides
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="commands_response/get_overrides_response/@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- The for-each makes the get_overrides_response the current node. -->
+      <xsl:for-each select="commands_response/get_overrides_response">
+        <xsl:call-template name="html-overrides-table"/>
+      </xsl:for-each>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- END OVERRIDES MANAGEMENT -->
+
 <!-- BEGIN REPORT DETAILS -->
 
 <xsl:template match="get_report_response">
@@ -5972,12 +6709,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     CREATE_OVERRIDE_RESPONSE -->
+
+<xsl:template match="create_override_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Create Override
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     DELETE_NOTE_RESPONSE -->
 
 <xsl:template match="delete_note_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
       Delete Note
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_OVERRIDE_RESPONSE -->
+
+<xsl:template match="delete_override_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Override
     </xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
@@ -6001,7 +6770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
@@ -6009,8 +6778,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
            title="Edit Note"
+           style="margin-left:3px;">
+          <img src="/img/edit.png" border="0" alt="Edit"/>
+        </a>
+      </div>
+    </xsl:if>
+    Last modified: <xsl:value-of select="modification_time"/>.
+  </div>
+</xsl:template>
+
+<!--     OVERRIDE -->
+
+<xsl:template name="override-detailed" match="override" mode="detailed">
+  <xsl:param name="override-buttons">1</xsl:param>
+  <div class="override_box_box">
+    <b>Override to <xsl:value-of select="new_threat"/></b><br/>
+    <pre>
+      <xsl:call-template name="wrap">
+        <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
+      </xsl:call-template>
+    </pre>
+    <xsl:if test="$override-buttons = 1">
+      <div class="float_right" style="text-align:right">
+        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
+           title="Delete Override" style="margin-left:3px;">
+          <img src="/img/delete.png" border="0" alt="Delete"/>
+        </a>
+        <a href="/omp?cmd=get_override&amp;override_id={@id}"
+           title="Override Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+        <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
+           title="Edit Override"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
@@ -6037,6 +6838,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="result-detailed" match="result" mode="detailed">
   <xsl:param name="note-buttons">1</xsl:param>
+  <xsl:param name="override-buttons">1</xsl:param>
   <xsl:variable name="style">
     <xsl:choose>
        <xsl:when test="threat='Low'">background:#539dcb</xsl:when>
@@ -6049,7 +6851,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right" style="text-align:right">
       <xsl:value-of select="port"/>
     </div>
-    <b><xsl:value-of select="threat"/></b>
+      <b><xsl:value-of select="threat"/></b>
+      <xsl:if test="original_threat">
+        <xsl:choose>
+          <xsl:when test="threat = original_threat">
+          </xsl:when>
+          <xsl:otherwise>
+            (Overridden from <b><xsl:value-of select="original_threat"/></b>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
     <xsl:if test="string-length(nvt/cvss_base) &gt; 0">
        (CVSS: <xsl:value-of select="nvt/cvss_base"/>)
     </xsl:if>
@@ -6087,9 +6898,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/note.png" border="0" alt="Notes"/>
           </a>
         </xsl:if>
-        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;result_hosts_only={../../filters/result_hosts_only}"
+        <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
            title="Add Note" style="margin-left:3px;">
           <img src="/img/new_note.png" border="0" alt="Add Note"/>
+        </a>
+      </div>
+    </xsl:if>
+    <xsl:if test="$override-buttons = 1">
+      <div class="float_right" style="text-align:right">
+        <xsl:if test="count(overrides/override) &gt; 0">
+          <a href="#overrides-{@id}"
+             title="Overrides" style="margin-left:3px;">
+            <img src="/img/override.png" border="0" alt="Overrides"/>
+          </a>
+        </xsl:if>
+        <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
+           title="Add Override" style="margin-left:3px;">
+          <img src="/img/new_override.png" border="0" alt="Add Override"/>
         </a>
       </div>
     </xsl:if>
@@ -6104,6 +6929,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="note-detailed">
       <xsl:with-param name="note-buttons">
         <xsl:value-of select="$note-buttons"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:for-each>
+  <a class="anchor" name="overrides-{@id}"/>
+  <xsl:for-each select="overrides/override">
+    <xsl:call-template name="override-detailed">
+      <xsl:with-param name="override-buttons">
+        <xsl:value-of select="$override-buttons"/>
       </xsl:with-param>
     </xsl:call-template>
   </xsl:for-each>

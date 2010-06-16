@@ -1,3 +1,43 @@
+2010-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add threat overrides.
+
+	* src/gsad.c (init_validator): Add overrides commands and validators.
+	(struct req_parms): Add overrides and new_threat.
+	(free_resources): Free new_threat.
+	(serve_post): Fill overrides and new_threat.
+	(exec_omp_post): Pass overrides to create_note_omp.  Add handling for
+	override commands.
+	(exec_omp_get): Pass override request params to intermediate pages, as
+	with notes request params.  Add handling for override commands.  Pass
+	overrides param to get_report_omp.
+
+	* src/gsad_omp.c (get_nvt_details): Get overrides.
+	(get_report_omp, new_note_omp, create_note_omp, delete_note_omp)
+	(edit_note_omp, save_note_omp): Add overrides flag arg.
+	(get_overrides, get_overrides_omp, get_override, get_override_omp)
+	(new_override_omp, create_override_omp, delete_override_omp)
+	(edit_override_omp, save_override_omp): New function.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl: Pass overrides param to get_report.  Pass override
+	request params to intermediate pages, as with notes request params.
+	(html-report-details): Add overrides checkbox.
+	(html-report-table): Add task overrides window.
+	(get_overrides_response): New template.
+	(get_nvt_details): Apply delete_override_response.  Add overrides section.
+	(html-create-override-form, new_override, html-edit-override-form)
+	(edit_override, modify_override_response, override, overide [nvt-details])
+	(override [details], html-overrides-table, get_override, get_overrides)
+	(create_override_response, delete_override_response, override-detailed): New templates.
+	(result_detailed): Add override header, buttons and box.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add "Notes" menu item.
+
+	* src/html/src/gsa-style.css (.override_box_box, .override_top_line): New
+	styles.
+
 2010-06-10  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Fix. If no schedule is given, do

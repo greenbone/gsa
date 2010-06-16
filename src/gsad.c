@@ -186,6 +186,7 @@ init_validator ()
                          "|(create_escalator)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
+                         "|(create_override)"
                          "|(create_schedule)"
                          "|(create_target)"
                          "|(create_task)"
@@ -195,6 +196,7 @@ init_validator ()
                          "|(delete_escalator)"
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
+                         "|(delete_override)"
                          "|(delete_report)"
                          "|(delete_schedule)"
                          "|(delete_target)"
@@ -204,6 +206,7 @@ init_validator ()
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
                          "|(edit_note)"
+                         "|(edit_override)"
                          "|(edit_settings)"
                          "|(edit_task)"
                          "|(edit_user)"
@@ -222,6 +225,8 @@ init_validator ()
                          "|(get_note)"
                          "|(get_notes)"
                          "|(get_nvt_details)"
+                         "|(get_override)"
+                         "|(get_overrides)"
                          "|(get_report)"
                          "|(get_settings)"
                          "|(get_status)"
@@ -235,6 +240,7 @@ init_validator ()
                          "|(import_config)"
                          "|(modify_auth)"
                          "|(new_note)"
+                         "|(new_override)"
                          "|(pause_task)"
                          "|(resume_paused_task)"
                          "|(resume_stopped_task)"
@@ -243,6 +249,7 @@ init_validator ()
                          "|(save_config_family)"
                          "|(save_config_nvt)"
                          "|(save_note)"
+                         "|(save_override)"
                          "|(save_settings)"
                          "|(save_task)"
                          "|(save_user)"
@@ -288,6 +295,9 @@ init_validator ()
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "note_task_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
+  openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "override_task_id", "^[a-z0-9\\-]*$");
+  openvas_validator_add (validator, "override_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
@@ -332,6 +342,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "notes",        "boolean");
+  openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
@@ -519,6 +530,7 @@ struct gsad_connection_info
     char *target_locator; ///< Value of "target_locator" parameter.
     char *levels;        ///< Value of "levels" parameter.
     char *notes;         ///< Value of "notes" parameter.
+    char *overrides;     ///< Value of "overrides" parameter.
     char *result_hosts_only; ///< Value of "result_hosts_only" parameter.
     char *xml_file;      ///< Value of "xml_file" parameter.
     char *role;          ///< Value of "role" parameter.
@@ -536,6 +548,7 @@ struct gsad_connection_info
     char *port;          ///< Value of "port" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
     char *threat;        ///< Value of "threat" parameter.
+    char *new_threat;    ///< Value of "new_threat" parameter.
     char *text;          ///< Value of "text" parameter.
     char *task_id;       ///< Value of "task_id" parameter.
     char *result_id;     ///< Value of "result_id" parameter.
@@ -741,6 +754,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.sort_order);
   free (con_info->req_parms.timeout);
   free (con_info->req_parms.threat);
+  free (con_info->req_parms.new_threat);
   free (con_info->req_parms.text);
   free (con_info->req_parms.task_id);
   free (con_info->req_parms.result_id);
@@ -1144,6 +1158,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "threat"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.threat);
+      if (!strcmp (key, "new_threat"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.new_threat);
       if (!strcmp (key, "text"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.text);
@@ -1177,6 +1194,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "notes"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.notes);
+      if (!strcmp (key, "overrides"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.overrides);
       if (!strcmp (key, "result_hosts_only"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.result_hosts_only);
@@ -1834,6 +1854,7 @@ exec_omp_post (credentials_t * credentials,
       validate (validator, "sort_order", &con_info->req_parms.sort_order);
       validate (validator, "levels", &con_info->req_parms.levels);
       validate (validator, "notes", &con_info->req_parms.notes);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
       validate (validator, "result_hosts_only",
                 &con_info->req_parms.result_hosts_only);
       validate (validator, "search_phrase",
@@ -1881,9 +1902,139 @@ exec_omp_post (credentials_t * credentials,
                          con_info->req_parms.sort_order,
                          con_info->req_parms.levels,
                          con_info->req_parms.notes,
+                         con_info->req_parms.overrides,
                          con_info->req_parms.result_hosts_only,
                          con_info->req_parms.search_phrase,
                          con_info->req_parms.min_cvss_base);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_override"))
+    {
+      const char *first_result;
+      const char *max_results;
+      unsigned int first;
+      unsigned int max;
+
+      /* Check parameters for creating the override. */
+
+      validate (validator, "oid", &con_info->req_parms.oid);
+
+      validate (validator, "text", &con_info->req_parms.text);
+
+       if (strcmp (con_info->req_parms.port, "")
+           && openvas_validate (validator, "port", con_info->req_parms.port))
+        {
+          free (con_info->req_parms.port);
+          con_info->req_parms.port = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.threat, "")
+          && openvas_validate (validator,
+                               "threat",
+                               con_info->req_parms.threat))
+        {
+          free (con_info->req_parms.threat);
+          con_info->req_parms.threat = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.new_threat, "")
+          && openvas_validate (validator,
+                               "threat",
+                               con_info->req_parms.new_threat))
+        {
+          free (con_info->req_parms.new_threat);
+          con_info->req_parms.new_threat = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.hosts, "")
+          && (openvas_validate (validator,
+                                "hosts",
+                                con_info->req_parms.hosts)
+              || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE))
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.task_id, "")
+          && openvas_validate (validator,
+                               "task_id",
+                               con_info->req_parms.task_id))
+        {
+          free (con_info->req_parms.task_id);
+          con_info->req_parms.task_id = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.result_id, "")
+          && openvas_validate (validator,
+                               "result_id",
+                               con_info->req_parms.result_id))
+        {
+          free (con_info->req_parms.result_id);
+          con_info->req_parms.result_id = NULL;
+        }
+
+      /* Check parameters for requesting the report. */
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "first_result", &con_info->req_parms.first_result);
+      validate (validator, "max_results", &con_info->req_parms.max_results);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate (validator, "notes", &con_info->req_parms.notes);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
+      validate (validator, "result_hosts_only",
+                &con_info->req_parms.result_hosts_only);
+      validate (validator, "search_phrase",
+                &con_info->req_parms.search_phrase);
+      if (openvas_validate (validator,
+                            "min_cvss_base",
+                            con_info->req_parms.min_cvss_base))
+        {
+          free (con_info->req_parms.min_cvss_base);
+          con_info->req_parms.min_cvss_base = NULL;
+        }
+      else
+        {
+          if (con_info->req_parms.apply_min_cvss_base == NULL
+              || (strcmp (con_info->req_parms.apply_min_cvss_base, "0") == 0))
+            {
+              free (con_info->req_parms.min_cvss_base);
+              con_info->req_parms.min_cvss_base = g_strdup ("");
+            }
+        }
+
+      /* Call the page handler. */
+
+      first_result = con_info->req_parms.first_result;
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      max_results = con_info->req_parms.max_results;
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
+      con_info->response =
+        create_override_omp (credentials,
+                             con_info->req_parms.oid,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.task_id,
+                             con_info->req_parms.result_id,
+                             con_info->req_parms.report_id,
+                             first,
+                             max,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.levels,
+                             con_info->req_parms.notes,
+                             con_info->req_parms.overrides,
+                             con_info->req_parms.result_hosts_only,
+                             con_info->req_parms.search_phrase,
+                             con_info->req_parms.min_cvss_base);
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_status"))
     {
@@ -2042,6 +2193,9 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *note_task_id   = NULL;
   const char *note_result_id = NULL;
   const char *next         = NULL;
+  const char *override_id  = NULL;
+  const char *override_task_id   = NULL;
+  const char *override_result_id = NULL;
   const char *format       = NULL;
   const char *preference_name = NULL;
   const char *package_format = NULL;
@@ -2055,11 +2209,13 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *sort_order   = NULL;
   const char *levels       = NULL;
   const char *notes        = NULL;
+  const char *overrides    = NULL;
   const char *result_hosts_only = NULL;
   const char *search_phrase = NULL;
   const char *min_cvss_base    = NULL;
   const char *port         = NULL;
   const char *threat       = NULL;
+  const char *new_threat   = NULL;
   const char *text         = NULL;
   const char *refresh_interval = NULL;
   const char *duration     = NULL;
@@ -2151,6 +2307,26 @@ exec_omp_get (struct MHD_Connection *connection,
                                                     "note_result_id");
       if (openvas_validate (validator, "note_result_id", note_result_id))
         note_result_id = NULL;
+
+      override_id = MHD_lookup_connection_value (connection,
+                                                 MHD_GET_ARGUMENT_KIND,
+                                                 "override_id");
+      if (openvas_validate (validator, "override_id", override_id))
+        override_id = NULL;
+
+      override_task_id = MHD_lookup_connection_value (connection,
+                                                      MHD_GET_ARGUMENT_KIND,
+                                                      "override_task_id");
+      if (openvas_validate (validator, "override_task_id", override_task_id))
+        override_task_id = NULL;
+
+      override_result_id = MHD_lookup_connection_value (connection,
+                                                        MHD_GET_ARGUMENT_KIND,
+                                                        "override_result_id");
+      if (openvas_validate (validator,
+                            "override_result_id",
+                            override_result_id))
+        override_result_id = NULL;
 
       next = MHD_lookup_connection_value (connection,
                                           MHD_GET_ARGUMENT_KIND,
@@ -2320,6 +2496,17 @@ exec_omp_get (struct MHD_Connection *connection,
       else
         notes = "0";
 
+      overrides = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "overrides");
+      if (overrides)
+        {
+          if (openvas_validate (validator, "overrides", overrides))
+            overrides = NULL;
+        }
+      else
+        overrides = "0";
+
       result_hosts_only = MHD_lookup_connection_value (connection,
                                                        MHD_GET_ARGUMENT_KIND,
                                                        "result_hosts_only");
@@ -2385,6 +2572,15 @@ exec_omp_get (struct MHD_Connection *connection,
       if (threat)
         {
           if (openvas_validate (validator, "threat", threat))
+            threat = NULL;
+        }
+
+      new_threat = MHD_lookup_connection_value (connection,
+                                                MHD_GET_ARGUMENT_KIND,
+                                                "new_threat");
+      if (new_threat)
+        {
+          if (openvas_validate (validator, "new_threat", threat))
             threat = NULL;
         }
 
@@ -2454,7 +2650,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return delete_note_omp (credentials, note_id, "get_notes", NULL, 0, 0,
                               NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              NULL);
+                              NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2465,7 +2661,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return delete_note_omp (credentials, note_id, "get_nvt_details", NULL,
                               0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              oid, NULL);
+                              NULL, oid, NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2478,6 +2674,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_order != NULL)
            && (levels != NULL)
            && (notes != NULL)
+           && (overrides != NULL)
            && (result_hosts_only != NULL)
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
@@ -2489,8 +2686,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return delete_note_omp (credentials, note_id, "get_report", report_id,
                               first, 1000, sort_field, sort_order, levels,
-                              notes, result_hosts_only, search_phrase,
-                              min_cvss_base, NULL, NULL);
+                              notes, overrides, result_hosts_only,
+                              search_phrase, min_cvss_base, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "delete_note"))
@@ -2501,7 +2698,66 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return delete_note_omp (credentials, note_id, "get_status", NULL, 0, 0,
                               NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              task_id);
+                              NULL, task_id);
+    }
+
+  else if ((!strcmp (cmd, "delete_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_overrides") == 0))
+    {
+      return delete_override_omp (credentials, override_id, "get_overrides",
+                                  NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return delete_override_omp (credentials, override_id, "get_nvt_details",
+                                  NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, oid, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
+    {
+      unsigned int first;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      return delete_override_omp (credentials, override_id, "get_report",
+                                  report_id, first, 1000, sort_field,
+                                  sort_order, levels, notes, overrides,
+                                  result_hosts_only, search_phrase,
+                                  min_cvss_base, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "delete_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return delete_override_omp (credentials, override_id, "get_status", NULL,
+                                  0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
@@ -2539,7 +2795,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_note",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL);
+                            NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2549,7 +2805,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_notes",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL);
+                            NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2560,7 +2816,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_nvt_details",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            oid, NULL, NULL);
+                            NULL, oid, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2573,6 +2829,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_order != NULL)
            && (levels != NULL)
            && (notes != NULL)
+           && (overrides != NULL)
            && (result_hosts_only != NULL)
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
@@ -2584,7 +2841,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return edit_note_omp (credentials, note_id, "get_report", report_id,
                             first, 1000, sort_field, sort_order, levels,
-                            notes, result_hosts_only, search_phrase,
+                            notes, overrides, result_hosts_only, search_phrase,
                             min_cvss_base, NULL, NULL);
     }
 
@@ -2597,7 +2854,76 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_note_omp (credentials, note_id, "get_status",
                             /* Parameters for next page. */
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, task_id);
+                            NULL, NULL, NULL, task_id);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_override") == 0))
+    {
+      return edit_override_omp (credentials, override_id, "get_override",
+                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, "-1", NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_overrides") == 0))
+    {
+      return edit_override_omp (credentials, override_id, "get_overrides",
+                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, "-1", NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return edit_override_omp (credentials, override_id, "get_nvt_details",
+                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, "-1", oid, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
+    {
+      unsigned int first;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      return edit_override_omp (credentials, override_id, "get_report",
+                                report_id, first, 1000, sort_field, sort_order,
+                                levels, notes, overrides, result_hosts_only,
+                                search_phrase, min_cvss_base, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return edit_override_omp (credentials, override_id, "get_status",
+                                /* Parameters for next page. */
+                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, "-1", NULL, task_id);
     }
 
   else if (!strcmp (cmd, "edit_settings"))
@@ -2728,6 +3054,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                sort_order,
                                levels,
                                notes,
+                               overrides,
                                result_hosts_only,
                                search_phrase,
                                min_cvss_base);
@@ -2746,6 +3073,7 @@ exec_omp_get (struct MHD_Connection *connection,
                               sort_order,
                               string->str,
                               notes,
+                              overrides,
                               result_hosts_only,
                               search_phrase,
                               min_cvss_base);
@@ -2760,6 +3088,13 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_notes")))
     return get_notes_omp (credentials);
+
+  else if ((!strcmp (cmd, "get_override"))
+           && (override_id != NULL))
+    return get_override_omp (credentials, override_id);
+
+  else if ((!strcmp (cmd, "get_overrides")))
+    return get_overrides_omp (credentials);
 
   else if (!strcmp (cmd, "get_status"))
     return get_status_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
@@ -2829,13 +3164,15 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_order != NULL)
            && (levels != NULL)
            && (notes != NULL)
+           && (overrides != NULL)
            && (result_hosts_only != NULL)
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id,
                          name, result_id, report_id, first_result,
                          "1000", sort_field, sort_order, levels, notes,
-                         result_hosts_only, search_phrase, min_cvss_base);
+                         overrides, result_hosts_only, search_phrase,
+                         min_cvss_base);
 
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
@@ -2845,7 +3182,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_note", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL);
+                            NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2856,7 +3193,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_notes", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL);
+                            NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2868,7 +3205,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_nvt_details",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, oid, NULL);
+                            NULL, NULL, oid, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2881,6 +3218,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (sort_order != NULL)
            && (levels != NULL)
            && (notes != NULL)
+           && (overrides != NULL)
            && (result_hosts_only != NULL)
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
@@ -2893,8 +3231,8 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_report",
                             report_id, first, 1000, sort_field, sort_order,
-                            levels, notes, result_hosts_only, search_phrase,
-                            min_cvss_base, NULL, NULL);
+                            levels, notes, overrides, result_hosts_only,
+                            search_phrase, min_cvss_base, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "save_note"))
@@ -2906,7 +3244,110 @@ exec_omp_get (struct MHD_Connection *connection,
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_status", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, task_id);
+                            NULL, NULL, task_id);
+    }
+
+  else if ((!strcmp (cmd, "new_override"))
+           /* Override params. */
+           && (oid != NULL)
+           && (hosts != NULL)
+           && (port != NULL)
+           && (threat != NULL)
+           && (task_id != NULL)
+           && (result_id != NULL)
+           /* Report passthrough params. */
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
+    return new_override_omp (credentials, oid, hosts, port, threat, task_id,
+                             name, result_id, report_id, first_result,
+                             "1000", sort_field, sort_order, levels, notes,
+                             overrides, result_hosts_only, search_phrase,
+                             min_cvss_base);
+
+  else if ((!strcmp (cmd, "save_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_override") == 0))
+    {
+      return save_override_omp (credentials, override_id, text, hosts, port,
+                                threat, new_threat, override_task_id,
+                                override_result_id, "get_override", NULL, 0, 0,
+                                NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_overrides") == 0))
+    {
+      return save_override_omp (credentials, override_id, text, hosts, port,
+                                threat, new_threat, override_task_id,
+                                override_result_id, "get_overrides", NULL,
+                                0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_nvt_details") == 0)
+           && (oid != NULL))
+    {
+      return save_override_omp (credentials, override_id, text, hosts, port,
+                                threat, new_threat, override_task_id,
+                                override_result_id, "get_nvt_details", NULL,
+                                0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, oid, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_report") == 0)
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
+    {
+      unsigned int first;
+
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      return save_override_omp (credentials, override_id, text, hosts, port,
+                                threat, new_threat, override_task_id,
+                                override_result_id, "get_report", report_id,
+                                first, 1000, sort_field, sort_order, levels,
+                                notes, overrides, result_hosts_only,
+                                search_phrase, min_cvss_base, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "save_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_status") == 0)
+           && (task_id != NULL))
+    {
+      return save_override_omp (credentials, override_id, text, hosts, port,
+                                threat, new_threat, override_task_id,
+                                override_result_id, "get_status", NULL, 0, 0,
+                                NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "save_task"))

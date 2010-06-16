@@ -1072,8 +1072,12 @@ get_nvt_details (credentials_t *credentials, const char *oid,
                             "<get_notes sort_field=\"notes.text\">"
                             "<nvt id=\"%s\"/>"
                             "</get_notes>"
+                            "<get_overrides sort_field=\"overrides.text\">"
+                            "<nvt id=\"%s\"/>"
+                            "</get_overrides>"
                             "</commands>",
                             commands ? commands : "",
+                            oid,
                             oid,
                             oid)
         == -1)
@@ -1153,8 +1157,13 @@ get_status (credentials_t * credentials, const char *task_id,
                                 " sort_field=\"notes.nvt, notes.text\">"
                                 "<task id=\"%s\"/>"
                                 "</get_notes>"
+                                "<get_overrides"
+                                " sort_field=\"overrides.nvt, overrides.text\">"
+                                "<task id=\"%s\"/>"
+                                "</get_overrides>"
                                 "</commands>",
                                 commands ? commands : "",
+                                task_id,
                                 task_id,
                                 task_id)
           == -1)
@@ -4245,6 +4254,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -4259,8 +4269,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
                 const char * levels, const char * notes,
-                const char *result_hosts_only, const char * search_phrase,
-                const char *min_cvss_base)
+                const char * overrides, const char *result_hosts_only,
+                const char * search_phrase, const char *min_cvss_base)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -4288,6 +4298,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
+  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
@@ -4302,6 +4314,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             "<get_report"
                             " notes=\"%i\""
                             " notes_details=\"1\""
+                            " overrides=\"%i\""
+                            " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
                             " format=\"%s\""
@@ -4313,6 +4327,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
                             format ? format : "xml",
@@ -4653,6 +4668,7 @@ get_note_omp (credentials_t *credentials, const char *note_id)
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -4668,8 +4684,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
               const char *report_id, const char *first_result,
               const char *max_results, const char *sort_field,
               const char *sort_order, const char *levels, const char *notes,
-              const char *result_hosts_only, const char *search_phrase,
-              const char *min_cvss_base)
+              const char *overrides, const char *result_hosts_only,
+              const char *search_phrase, const char *min_cvss_base)
 {
   GString *xml;
   gnutls_session_t session;
@@ -4680,7 +4696,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
       || report_id == NULL || result_id == NULL || search_phrase == NULL
       || sort_field == NULL || sort_order == NULL || task_id == NULL
       || task_name == NULL || threat == NULL || result_hosts_only == NULL
-      || min_cvss_base == NULL)
+      || min_cvss_base == NULL || overrides == NULL)
     {
       GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -4732,6 +4748,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<notes>%s</notes>"
+                          "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
                           "<min_cvss_base>%s</min_cvss_base>",
@@ -4749,6 +4766,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
                           sort_order,
                           levels,
                           notes,
+                          overrides,
                           result_hosts_only,
                           search_phrase,
                           min_cvss_base);
@@ -4789,6 +4807,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -4804,7 +4823,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
-                 const char *levels, const char *notes,
+                 const char *levels, const char *notes, const char *overrides,
                  const char *result_hosts_only, const char *search_phrase,
                  const char *min_cvss_base)
 {
@@ -4900,10 +4919,14 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
+  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
   if (openvas_server_sendf (&session,
                             "<get_report"
                             " notes=\"%i\""
                             " notes_details=\"1\""
+                            " overrides=\"%i\""
+                            " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
                             " format=\"xml\""
@@ -4915,6 +4938,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
                             first_result,
@@ -5017,6 +5041,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -5032,7 +5057,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
-                 const char *levels, const char *notes,
+                 const char *levels, const char *notes, const char *overrides,
                  const char *result_hosts_only, const char *search_phrase,
                  const char *min_cvss_base, const char *oid,
                  const char *task_id)
@@ -5106,6 +5131,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 
       if (notes == NULL || strlen (notes) == 0) notes = "0";
 
+      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
       if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
         result_hosts_only = "1";
 
@@ -5115,6 +5142,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                 "<get_report"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
+                                " overrides=\"%i\""
+                                " overrides_details=\"1\""
                                 " result_hosts_only=\"%i\""
                                 " report_id=\"%s\""
                                 " format=\"xml\""
@@ -5128,6 +5157,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                 "</commands>",
                                 note_id,
                                 strcmp (notes, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
                                 strcmp (result_hosts_only, "0") ? 1 : 0,
                                 report_id,
                                 first_result,
@@ -5181,7 +5211,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 /**
  * @brief Edit note, get next page, XSL transform the result.
  *
- * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  credentials     Username and password for authentication.
  * @param[in]  note_id         ID of note.
  * @param[in]  next            Name of next page.
  * @param[in]  report_id       ID of current report.
@@ -5191,10 +5221,11 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  sort_order      "ascending", "descending", or NULL.
  * @param[in]  levels          Threat levels to include in report.
  * @param[in]  notes           Whether to include notes.
+ * @param[in]  overrides       Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  min_cvss_base   Minimum CVSS included results may have.
+ *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
  * @param[in]  task_id         ID of task (for get_status).
  *
@@ -5207,7 +5238,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                const unsigned int first_result,
                const unsigned int max_results,
                const char *sort_field, const char *sort_order,
-               const char *levels, const char *notes,
+               const char *levels, const char *notes, const char *overrides,
                const char *result_hosts_only, const char *search_phrase,
                const char *min_cvss_base, const char *oid, const char *task_id)
 {
@@ -5261,6 +5292,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<notes>%s</notes>"
+                          "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
                           "<min_cvss_base>%s</min_cvss_base>"
@@ -5276,6 +5308,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           sort_order,
                           levels,
                           notes,
+                          overrides,
                           result_hosts_only,
                           search_phrase,
                           min_cvss_base,
@@ -5319,10 +5352,11 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  sort_order      "ascending", "descending", or NULL.
  * @param[in]  levels          Threat levels to include in report.
  * @param[in]  notes           Whether to include notes.
+ * @param[in]  overrides       Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  min_cvss_base   Minimum CVSS included results may have.
+ *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
  * @param[in]  task_id         ID of task (for get_status).
  *
@@ -5337,7 +5371,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                const unsigned int first_result,
                const unsigned int max_results,
                const char *sort_field, const char *sort_order,
-               const char *levels, const char *notes,
+               const char *levels, const char *notes, const char *overrides,
                const char *result_hosts_only, const char *search_phrase,
                const char *min_cvss_base, const char *oid, const char *task_id)
 {
@@ -5434,6 +5468,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
 
       if (notes == NULL || strlen (notes) == 0) notes = "0";
 
+      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
       if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
         result_hosts_only = "1";
 
@@ -5443,6 +5479,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                 "<get_report"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
+                                " overrides=\"%i\""
+                                " overrides_details=\"1\""
                                 " result_hosts_only=\"%i\""
                                 " report_id=\"%s\""
                                 " format=\"xml\""
@@ -5456,6 +5494,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                 "</commands>",
                                 modify_note,
                                 strcmp (notes, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
                                 strcmp (result_hosts_only, "0") ? 1 : 0,
                                 report_id,
                                 first_result,
@@ -5500,6 +5539,1072 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a note. "
                            "It is unclear whether the note has been saved or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, response);
+}
+
+/**
+ * @brief Get all overrides, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  commands     Extra commands to run before the others.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_overrides (credentials_t *credentials, const char *commands)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the overrides. "
+                         "The list of overrides is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_overrides>");
+
+  /* Get the overrides. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_overrides"
+                            " sort_field=\"overrides.nvt, overrides.text\"/>"
+                            "</commands>",
+                            commands ? commands : "")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the overrides. "
+                           "The list of overrides is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the overrides. "
+                           "The list of overrides is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_overrides>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all overrides, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_overrides_omp (credentials_t *credentials)
+{
+  return get_overrides (credentials, NULL);
+}
+
+/**
+ * @brief Get an override, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  override_id  ID of override.
+ * @param[in]  commands     Extra commands to run before the others.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_override (credentials_t *credentials, const char *override_id,
+              const char *commands)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the override. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  xml = g_string_new ("<get_override>");
+
+  /* Get the override. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_overrides"
+                            " override_id=\"%s\""
+                            " details=\"1\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            override_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the override. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the override. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_override>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get an override, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  override_id  ID of override.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_override_omp (credentials_t *credentials, const char *override_id)
+{
+  return get_override (credentials, override_id, NULL);
+}
+
+/**
+ * @brief Return the new overrides page.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  oid            OID of NVT associated with override.
+ * @param[in]  port           Port to limit override to, "" for all.
+ * @param[in]  threat         Threat to limit override to, "" for all.
+ * @param[in]  task_id        ID of task to limit override to, "" for all.
+ * @param[in]  task_name      Name of task to limit override to, task_id given.
+ * @param[in]  report_id      ID of report.
+ * @param[in]  first_result   Number of first result in report.
+ * @param[in]  max_results    Number of results in report.
+ * @param[in]  sort_field     Field to sort on, or NULL.
+ * @param[in]  sort_order     "ascending", "descending", or NULL.
+ * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_override_omp (credentials_t *credentials, const char *oid,
+                  const char *hosts, const char *port, const char *threat,
+                  const char *task_id, const char *task_name,
+                  const char *result_id,
+                  const char *report_id, const char *first_result,
+                  const char *max_results, const char *sort_field,
+                  const char *sort_order, const char *levels,
+                  const char *notes, const char *overrides,
+                  const char *result_hosts_only, const char *search_phrase,
+                  const char *min_cvss_base)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (first_result == NULL || max_results == NULL || hosts == NULL
+      || levels == NULL || notes == NULL || oid == NULL || port == NULL
+      || report_id == NULL || result_id == NULL || search_phrase == NULL
+      || sort_field == NULL || sort_order == NULL || task_id == NULL
+      || task_name == NULL || threat == NULL || result_hosts_only == NULL
+      || min_cvss_base == NULL || overrides == NULL)
+    {
+      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_overrides");
+
+  if (openvas_server_sendf (&session,
+                            "<get_results"
+                            " result_id=\"%s\""
+                            " task_id=\"%s\""
+                            " notes_details=\"1\""
+                            " notes=\"1\""
+                            " overrides_details=\"1\""
+                            " overrides=\"1\""
+                            " result_hosts_only=\"1\"/>",
+                            result_id,
+                            task_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new override. "
+                           "No new override was created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml,
+                          "<new_override>"
+                          "<nvt id=\"%s\"/>"
+                          "<hosts>%s</hosts>"
+                          "<port>%s</port>"
+                          "<threat>%s</threat>"
+                          "<task id=\"%s\">"
+                          "<name>%s</name>"
+                          "</task>"
+                          "<result id=\"%s\"/>"
+                          /* Passthroughs. */
+                          "<report id=\"%s\"/>"
+                          "<first_result>%s</first_result>"
+                          "<max_results>%s</max_results>"
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>"
+                          "<levels>%s</levels>"
+                          "<notes>%s</notes>"
+                          "<overrides>%s</overrides>"
+                          "<result_hosts_only>%s</result_hosts_only>"
+                          "<search_phrase>%s</search_phrase>"
+                          "<min_cvss_base>%s</min_cvss_base>",
+                          oid,
+                          hosts,
+                          port,
+                          threat,
+                          task_id,
+                          task_name,
+                          result_id,
+                          report_id,
+                          first_result,
+                          max_results,
+                          sort_field,
+                          sort_order,
+                          levels,
+                          notes,
+                          overrides,
+                          result_hosts_only,
+                          search_phrase,
+                          min_cvss_base);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new override. "
+                           "It is unclear whether the override has been created or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</new_override>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Create an override, get report, XSL transform the result.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  oid            OID of NVT associated with override.
+ * @param[in]  text           Text of override.
+ * @param[in]  hosts          Hosts override applied to, "" for all.
+ * @param[in]  port           Port override applies to, "" for all.
+ * @param[in]  threat         Threat override applies to, "" for all.
+ * @param[in]  new_threat     Threat to override the result to.
+ * @param[in]  task_id        ID of task to limit override to, "" for all.
+ * @param[in]  result_id      ID of result to limit override to, "" for all.
+ * @param[in]  report_id      ID of report.
+ * @param[in]  first_result   Number of first result in report.
+ * @param[in]  max_results    Number of results in report.
+ * @param[in]  sort_field     Field to sort on, or NULL.
+ * @param[in]  sort_order     "ascending", "descending", or NULL.
+ * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_override_omp (credentials_t *credentials, const char *oid,
+                     const char *text, const char *hosts, const char *port,
+                     const char *threat, const char *new_threat,
+                     const char *task_id, const char *result_id,
+                     const char *report_id,
+                     const unsigned int first_result,
+                     const unsigned int max_results,
+                     const char *sort_field, const char *sort_order,
+                     const char *levels, const char *notes,
+                     const char *overrides, const char *result_hosts_only,
+                     const char *search_phrase, const char *min_cvss_base)
+{
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  if (search_phrase == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: Search phrase was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  if (oid == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: OID was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  if (threat == NULL || new_threat == NULL || port == NULL || hosts == NULL
+      || min_cvss_base == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: A required parameter was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_overrides");
+
+  xml = g_string_new ("<commands_response>");
+
+  if (text == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Override"));
+  else
+    {
+      int ret;
+
+      /* Create the override. */
+
+      ret = openvas_server_sendf (&session,
+                                  "<create_override>"
+                                  "<nvt>%s</nvt>"
+                                  "<hosts>%s</hosts>"
+                                  "<port>%s</port>"
+                                  "<threat>%s</threat>"
+                                  "<new_threat>%s</new_threat>"
+                                  "<text>%s</text>"
+                                  "<task>%s</task>"
+                                  "<result>%s</result>"
+                                  "</create_override>",
+                                  oid,
+                                  hosts,
+                                  port,
+                                  threat,
+                                  new_threat,
+                                  text,
+                                  task_id,
+                                  result_id);
+
+      if (ret == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new override. "
+                               "No new override was created. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_overrides");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new override. "
+                               "It is unclear whether the override has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_overrides");
+        }
+    }
+
+  /* Get the report. */
+
+  if (levels == NULL || strlen (levels) == 0) levels = "hm";
+
+  if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
+    result_hosts_only = "1";
+
+  if (notes == NULL || strlen (notes) == 0) notes = "0";
+
+  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
+  if (openvas_server_sendf (&session,
+                            "<get_report"
+                            " notes=\"%i\""
+                            " notes_details=\"1\""
+                            " overrides=\"%i\""
+                            " overrides_details=\"1\""
+                            " result_hosts_only=\"%i\""
+                            " report_id=\"%s\""
+                            " format=\"xml\""
+                            " first_result=\"%u\""
+                            " max_results=\"%u\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\""
+                            " levels=\"%s\""
+                            " search_phrase=\"%s\""
+                            " min_cvss_base=\"%s\"/>",
+                            strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
+                            strcmp (result_hosts_only, "0") ? 1 : 0,
+                            report_id,
+                            first_result,
+                            max_results,
+                            sort_field ? sort_field : "type",
+                            sort_order
+                             ? sort_order
+                             : ((sort_field == NULL
+                                 || strcmp (sort_field, "type") == 0)
+                                ? "descending"
+                                : "ascending"),
+                            levels,
+                            search_phrase,
+                            min_cvss_base)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the report. "
+                           "The new override was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the report. "
+                           "The new override was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+
+  {
+
+    /* As a temporary hack until there's a reasonable way to do it in the
+     * Manager, get the report again with all threat levels, so that the XSL
+     * can count per-host grand totals. */
+
+    g_string_append (xml, "<all>");
+
+    if (openvas_server_sendf (&session,
+                              "<get_report"
+                              " report_id=\"%s\""
+                              " format=\"xml\""
+                              " first_result=\"%u\""
+                              " max_results=\"%u\""
+                              " levels=\"hmlg\""
+                              " search_phrase=\"%s\""
+                              " search_phrase=\"%s\"/>",
+                              report_id,
+                              first_result,
+                              max_results,
+                              search_phrase,
+                              min_cvss_base)
+        == -1)
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the report. "
+                             "The new override was, however, created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_status");
+      }
+
+    if (read_string (&session, &xml))
+      {
+        g_string_free (xml, TRUE);
+        openvas_server_close (socket, session);
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the report. "
+                             "The new override was, however, created. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_status");
+      }
+
+    g_string_append (xml, "</all>");
+  }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</commands_response>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Delete override, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  override_id    ID of override.
+ * @param[in]  next           Name of next page.
+ * @param[in]  report_id      ID of current report.
+ * @param[in]  first_result   Number of first result in report.
+ * @param[in]  max_results    Number of results in report.
+ * @param[in]  sort_field     Field to sort on, or NULL.
+ * @param[in]  sort_order     "ascending", "descending", or NULL.
+ * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  task_id        ID of task (for get_status).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_override_omp (credentials_t * credentials, const char *override_id,
+                     const char *next, const char *report_id,
+                     const unsigned int first_result,
+                     const unsigned int max_results,
+                     const char *sort_field, const char *sort_order,
+                     const char *levels, const char *notes,
+                     const char *overrides, const char *result_hosts_only,
+                     const char *search_phrase, const char *min_cvss_base,
+                     const char *oid, const char *task_id)
+{
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+
+  if (next == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an override. "
+                         "The override remains intact. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  if (strcmp (next, "get_nvt_details") == 0)
+    {
+      gchar *extra;
+      char *ret;
+
+      if (oid == NULL)
+        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an override. "
+                             "The override remains intact. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_overrides");
+
+      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                               override_id);
+      ret = get_nvt_details (credentials, oid, extra);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_overrides") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                                      override_id);
+      char *ret = get_overrides (credentials, extra);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_status") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                                      override_id);
+      char *ret = get_status (credentials, task_id, NULL, NULL, NULL, extra);
+      g_free (extra);
+      return ret;
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an override. "
+                         "The override was not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  if (strcmp (next, "get_report") == 0)
+    {
+      if (search_phrase == NULL || min_cvss_base == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while deleting an override. "
+                               "The override remains intact. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_overrides");
+        }
+
+      if (levels == NULL || strlen (levels) == 0) levels = "hm";
+
+      if (notes == NULL || strlen (notes) == 0) notes = "0";
+
+      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
+      if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
+        result_hosts_only = "1";
+
+      if (openvas_server_sendf (&session,
+                                "<commands>"
+                                "<delete_override override_id=\"%s\" />"
+                                "<get_report"
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " overrides=\"%i\""
+                                " overrides_details=\"1\""
+                                " result_hosts_only=\"%i\""
+                                " report_id=\"%s\""
+                                " format=\"xml\""
+                                " first_result=\"%u\""
+                                " max_results=\"%u\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\"/>"
+                                "</commands>",
+                                override_id,
+                                strcmp (notes, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
+                                strcmp (result_hosts_only, "0") ? 1 : 0,
+                                report_id,
+                                first_result,
+                                max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                levels,
+                                search_phrase,
+                                min_cvss_base)
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while deleting an override. "
+                               "It is unclear whether the override has been deleted or not. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+    }
+  else
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an override. "
+                           "The override remains intact. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an override. "
+                           "It is unclear whether the override has been deleted or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_status");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Edit override, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  override_id    ID of override.
+ * @param[in]  next           Name of next page.
+ * @param[in]  report_id      ID of current report.
+ * @param[in]  first_result   Number of first result in report.
+ * @param[in]  max_results    Number of results in report.
+ * @param[in]  sort_field     Field to sort on, or NULL.
+ * @param[in]  sort_order     "ascending", "descending", or NULL.
+ * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  notes          Whether to include notes.
+ * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  search_phrase  Phrase which included results must contain.
+ * @param[in]  min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  task_id        ID of task (for get_status).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_override_omp (credentials_t * credentials, const char *override_id,
+                   /* Next page params. */
+                   const char *next, const char *report_id,
+                   const unsigned int first_result,
+                   const unsigned int max_results,
+                   const char *sort_field, const char *sort_order,
+                   const char *levels, const char *notes, const char *overrides,
+                   const char *result_hosts_only, const char *search_phrase,
+                   const char *min_cvss_base, const char *oid,
+                   const char *task_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (override_id == NULL || min_cvss_base == NULL)
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an override. "
+                           "The override remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing an override. "
+                         "The override remains as it was. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_overrides");
+
+  if (openvas_server_sendf (&session,
+                            "<get_overrides"
+                            " override_id=\"%s\""
+                            " details=\"1\""
+                            " result=\"1\"/>",
+                            override_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an override. "
+                           "The override remains as it was. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  xml = g_string_new ("");
+
+  g_string_append_printf (xml,
+                          "<edit_override>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Parameters for get_report. */
+                          "<report id=\"%s\"/>"
+                          "<first_result>%i</first_result>"
+                          "<max_results>%i</max_results>"
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>"
+                          "<levels>%s</levels>"
+                          "<notes>%s</notes>"
+                          "<overrides>%s</overrides>"
+                          "<result_hosts_only>%s</result_hosts_only>"
+                          "<search_phrase>%s</search_phrase>"
+                          "<min_cvss_base>%s</min_cvss_base>"
+                          /* Parameters for get_nvt_details. */
+                          "<nvt id=\"%s\"/>"
+                          /* Parameters for get_status. */
+                          "<task id=\"%s\"/>",
+                          next,
+                          report_id,
+                          first_result,
+                          max_results,
+                          sort_field,
+                          sort_order,
+                          levels,
+                          notes,
+                          overrides,
+                          result_hosts_only,
+                          search_phrase,
+                          min_cvss_base,
+                          oid,
+                          task_id);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an override. "
+                           "The override remains as it was. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_override>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Save override, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials     Username and password for authentication.
+ * @param[in]  override_id     ID of override.
+ * @param[in]  text            Text of override.
+ * @param[in]  hosts           Hosts override applied to, "" for all.
+ * @param[in]  port            Port override applies to, "" for all.
+ * @param[in]  threat          Threat override applies to, "" for all.
+ * @param[in]  new_threat      Threat to override result to.
+ * @param[in]  override_task_id    ID of task to limit override to, "" for all.
+ * @param[in]  override_result_id  ID of result to limit override to, "" for all.
+ * @param[in]  next            Name of next page.
+ * @param[in]  report_id       ID of current report.
+ * @param[in]  first_result    Number of first result in report.
+ * @param[in]  max_results     Number of results in report.
+ * @param[in]  sort_field      Field to sort on, or NULL.
+ * @param[in]  sort_order      "ascending", "descending", or NULL.
+ * @param[in]  levels          Threat levels to include in report.
+ * @param[in]  notes           Whether to include notes.
+ * @param[in]  overrides       Whether to include overrides.
+ * @param[in]  result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  search_phrase   Phrase which included results must contain.
+ * @param[in]  min_cvss_base   Minimum CVSS included results may have.
+ *                             "-1" for all, including results with NULL CVSS.
+ * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  task_id         ID of task (for get_status).
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_override_omp (credentials_t * credentials, const char *override_id,
+                   const char *text, const char *hosts, const char *port,
+                   const char *threat, const char *new_threat,
+                   const char *override_task_id,
+                   const char *override_result_id, const char *next,
+                   const char *report_id,
+                   const unsigned int first_result,
+                   const unsigned int max_results,
+                   const char *sort_field, const char *sort_order,
+                   const char *levels, const char *notes, const char *overrides,
+                   const char *result_hosts_only, const char *search_phrase,
+                   const char *min_cvss_base, const char *oid,
+                   const char *task_id)
+{
+  entity_t entity;
+  char *response = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *modify_override;
+
+  if (next == NULL || override_task_id == NULL || override_result_id == NULL
+      || new_threat == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving an override. "
+                         "The override remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  modify_override = g_strdup_printf ("<modify_override override_id=\"%s\">"
+                                     "<hosts>%s</hosts>"
+                                     "<port>%s</port>"
+                                     "<threat>%s</threat>"
+                                     "<new_threat>%s</new_threat>"
+                                     "<text>%s</text>"
+                                     "<task>%s</task>"
+                                     "<result>%s</result>"
+                                     "</modify_override>",
+                                     override_id,
+                                     hosts ? hosts : "",
+                                     port ? port : "",
+                                     threat ? threat : "",
+                                     new_threat,
+                                     text ? text : "",
+                                     override_task_id,
+                                     override_result_id);
+
+  if (strcmp (next, "get_nvt_details") == 0)
+    {
+      char *ret;
+
+      if (oid == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving an override. "
+                               "The override remains the same. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_overrides");
+        }
+
+      ret = get_nvt_details (credentials, oid, modify_override);
+      g_free (modify_override);
+      return ret;
+    }
+
+  if (strcmp (next, "get_override") == 0)
+    {
+      char *ret = get_override (credentials, override_id, modify_override);
+      g_free (modify_override);
+      return ret;
+    }
+
+  if (strcmp (next, "get_overrides") == 0)
+    {
+      char *ret = get_overrides (credentials, modify_override);
+      g_free (modify_override);
+      return ret;
+    }
+
+  if (strcmp (next, "get_status") == 0)
+    {
+      char *ret = get_status (credentials, task_id, NULL, NULL, NULL,
+                              modify_override);
+      g_free (modify_override);
+      return ret;
+    }
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving an override. "
+                         "The override was not saved. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_status");
+
+  if (strcmp (next, "get_report") == 0)
+    {
+      if (search_phrase == NULL || min_cvss_base == NULL)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving an override. "
+                               "The override remains the same. "
+                               "Diagnostics: Required parameter was NULL.",
+                               "/omp?cmd=get_overrides");
+        }
+
+      if (levels == NULL || strlen (levels) == 0) levels = "hm";
+
+      if (notes == NULL || strlen (notes) == 0) notes = "0";
+
+      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
+      if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
+        result_hosts_only = "1";
+
+      if (openvas_server_sendf (&session,
+                                "<commands>"
+                                "%s"
+                                "<get_report"
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " overrides=\"%i\""
+                                " overrides_details=\"1\""
+                                " result_hosts_only=\"%i\""
+                                " report_id=\"%s\""
+                                " format=\"xml\""
+                                " first_result=\"%u\""
+                                " max_results=\"%u\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\"/>"
+                                "</commands>",
+                                modify_override,
+                                strcmp (notes, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
+                                strcmp (result_hosts_only, "0") ? 1 : 0,
+                                report_id,
+                                first_result,
+                                max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                levels,
+                                search_phrase,
+                                min_cvss_base)
+          == -1)
+        {
+          g_free (modify_override);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving an override. "
+                               "It is unclear whether the override has been saved or not. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_status");
+        }
+      g_free (modify_override);
+    }
+  else
+    {
+      g_free (modify_override);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving an override. "
+                           "The override remains the same. "
+                           "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_status");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving an override. "
+                           "It is unclear whether the override has been saved or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_status");
     }
