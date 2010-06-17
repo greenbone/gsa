@@ -1,3 +1,9 @@
+2010-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task_id, identifier): Remove.  Old templates.
+	(result-detailed): Ensure that new notes and overrides use the original
+	threat.
+
 2010-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (result [detailed]): Skip CVSS when overridden.
