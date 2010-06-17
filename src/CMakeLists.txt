@@ -166,6 +166,7 @@ install (FILES html/img/agent.png html/img/descending.png
                html/img/descending_inactive.png
                html/img/intevation-logo.png html/img/note.png
                html/img/scheduled.png html/img/pause.png
+               html/img/override.png html/img/new_override.png
                html/img/pause_inactive.png
          DESTINATION ${GSA_STATE_DIR}/img)
 
