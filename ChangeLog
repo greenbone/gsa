@@ -1,5 +1,10 @@
 2010-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_task, get_status, delete_report_omp): Request
+	details when getting status with task.
+
+2010-06-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task_id, identifier): Remove.  Old templates.
 	(result-detailed): Ensure that new notes and overrides use the original
 	threat.

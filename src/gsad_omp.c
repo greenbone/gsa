@@ -603,7 +603,7 @@ edit_task (credentials_t * credentials, const char *task_id,
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<get_status task_id=\"%s\" />"
+                            "<get_status task_id=\"%s\" details=\"1\" />"
                             "<get_targets"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
@@ -1152,7 +1152,7 @@ get_status (credentials_t * credentials, const char *task_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_status task_id=\"%s\" />"
+                                "<get_status task_id=\"%s\" details=\"1\" />"
                                 "<get_notes"
                                 " sort_field=\"notes.nvt, notes.text\">"
                                 "<task id=\"%s\"/>"
@@ -4212,7 +4212,7 @@ delete_report_omp (credentials_t * credentials,
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<delete_report report_id=\"%s\" />"
-                            "<get_status task_id=\"%s\" />"
+                            "<get_status task_id=\"%s\" details=\"1\" />"
                             "</commands>",
                             report_id,
                             task_id) == -1)
