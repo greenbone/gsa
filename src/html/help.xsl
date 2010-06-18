@@ -1096,6 +1096,75 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
+      <a name="ldapauthentication"></a>
+      <h2>LDAP Authentication</h2>
+      <p>
+       This dialog box is only visible if the backend
+       is configured to support LDAP authentication.
+      </p>
+      <p>
+       Changes will be saved after confirming with the "Save" button,
+       but <b>only get into effect after</b> the backend is restarted.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use ldap authentication.</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>LDAP Host</td>
+          <td>Hostname or IP with optional port
+              of the LDAP service. If no port is given, 389 will
+              be used the default for LDAP services. </td>
+          <td>ldap.example.com:389</td>
+        </tr>
+        <tr class="odd">
+          <td>Auth. DN</td>
+          <td>The DN to authenticate against. Place a single %s where the
+              username will be put.</td>
+          <td>uid=%s,cn=users,o=center,d=org</td>
+        </tr>
+      </table>
+
+      <a name="adsauthentication"></a>
+      <h2>ADS Authentication</h2>
+      <p>
+       This dialog box is only visible if the backend
+       is configured to support ADS authentication.
+      </p>
+      <p>
+       Changes will be saved after confirming with the "Save" button,
+       but <b>only get into effect after</b> the backend is restarted.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use ADS authentication.</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>ADS Host</td>
+          <td>Adress and optional port of the ADS host to bind to.</td>
+          <td>ads.example.com:389</td>
+        </tr>
+        <tr class="odd">
+          <td>Domain</td>
+          <td>The domain for authentication. This should include the TLD. </td>
+          <td>adstest.local</td>
+        </tr>
+      </table>
+
       <a name="users"></a>
       <h2>Users</h2>
       <p>
@@ -3288,101 +3357,6 @@ Public License instead of this License.
       <p>
        The list of results is updated after a click on the "Apply" button.
       </p>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="configure_manager_auth.html">
-  <div class="gb_window_part_center">Help: Configure LDAP Authentication</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <a name="ldapconfiguration"></a>
-      <h1>LDAP Configuration</h1>
-      <p>
-       If openvas-manager is configured to authenticate against a ldap
-       directory, the configuration can be seen on the
-       <a href="/oap?cmd=get_users">Users</a> page in the Administration
-       section.
-      </p>
-      <p>
-       Assuming the default schema, just the host and DN to authenticate
-       against can be set. Use of ldap authentication can also be disabled.
-       The DN Parameter has to contain exactly one %s where the username will
-       be placed (e.g. "uid=%s,cn=users,o=company,c=org"). The hostname might
-       contain a port specification as in localhost:10000 .
-      </p>
-      <p>
-       Changed values will be saved after a click on "Save". Note however, that
-       the openvas-manager daemon will have to be restarted in order for the
-       changes to take effect.
-      </p>
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Description</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Enable</td>
-          <td>Whether or not to use ldap authentication.</td>
-          <td>Yes or No.</td>
-        </tr>
-        <tr>
-          <td>LDAP Host</td>
-          <td>Adress and optional port of the host to bind to.</td>
-          <td>localhost:389, ldap.center</td>
-        </tr>
-        <tr class="odd">
-          <td>Auth. DN</td>
-          <td>The DN to authenticate against. Place a single %s where the
-              username will be put.</td>
-          <td>cn=%s,cn=users,o=center,d=org</td>
-        </tr>
-      </table>
-
-      <a name="adsconfiguration"></a>
-      <h1>ADS Configuration</h1>
-      <p>
-       If openvas-manager is configured to authenticate against a ADS, the
-       configuration can be seen on the <a href="/oap?cmd=get_users">Users</a>
-       page in the Administration section.
-      </p>
-      <p>
-       Assuming the default configuration on the ADS, just the host and domain
-       can be set. Use of ADS authentication can also be disabled.
-       The domain parameter should not exclude the TLD.
-      </p>
-      <p>
-       Changed values will be saved after a click on "Save". Note however, that
-       the openvas-manager daemon will have to be restarted in order for the
-       changes to take effect.
-      </p>
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Description</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Enable</td>
-          <td>Whether or not to use ADS authentication.</td>
-          <td>Yes or No.</td>
-        </tr>
-        <tr>
-          <td>ADS Host</td>
-          <td>Adress and optional port of the host to bind to.</td>
-          <td>localhost:389, ads.center</td>
-        </tr>
-        <tr class="odd">
-          <td>Domain</td>
-          <td>The domain to authenticate against.</td>
-          <td>adstest.local</td>
-        </tr>
-      </table>
-
     </div>
   </div>
 </xsl:template>

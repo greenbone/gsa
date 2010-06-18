@@ -1,3 +1,10 @@
+2010-06-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/oap.xsl: Little facelift for ADS/LDAP dialogs.
+
+	* src/html/help.xsl: Moved and cleaned up ADS and LDAP
+	documentation into Users page.
+
 2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp, create_note_omp, delete_note_omp)

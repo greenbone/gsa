@@ -59,7 +59,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="80"/>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="125">Password</td>
             <td>
               <input type="password" name="password" value="" size="30"
@@ -75,7 +75,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top">Host Access</td>
             <td>
               <input type="radio" name="hosts_allow" value="2" checked="1"/>
@@ -720,15 +720,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:choose>
         <xsl:when test="@name='method:ads'">
-          ADS Authentication Configuration
-          <a href="/help/configure_manager_auth.html#adsconfiguration"
-            title="Help: Configure Manager Authentication">
+          ADS Authentication
+          <a href="/help/configure_users.html#adsauthentication"
+            title="Help: Configure Users (ADS Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:otherwise>
-          LDAP Authentication Configuration
-          <a href="/help/configure_manager_auth.html#ldapconfiguration"
-            title="Help: Configure Manager Authentication">
+          LDAP Authentication
+          <a href="/help/configure_users.html#ldapauthentication"
+            title="Help: Configure Users (LDAP Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:otherwise>
       </xsl:choose>
@@ -757,7 +757,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  </xsl:choose>
                  </td>
               </tr>
-              <tr>
+              <tr class="even">
                 <td>
                 <xsl:choose>
                   <xsl:when test="@name='method:ads'">
@@ -768,17 +768,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Host</td>
-                <td><input type="text" name="ldaphost" value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
+                <td><input type="text" name="ldaphost" size="30"
+                     value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
               </tr>
               <tr class="odd">
               <xsl:choose>
                 <xsl:when test="@name='method:ads'">
                   <td>Domain</td>
-                  <td><input type="text" name="domain" value="{auth_conf_setting[@key='domain']/@value}"/></td>
+                  <td><input type="text" name="domain" size="30"
+                       value="{auth_conf_setting[@key='domain']/@value}"/></td>
                 </xsl:when>
                 <xsl:otherwise>
                   <td>Auth. DN</td>
-                  <td><input type="text" name="authdn" value="{auth_conf_setting[@key='authdn']/@value}"/></td>
+                  <td><input type="text" name="authdn" size="30"
+                       value="{auth_conf_setting[@key='authdn']/@value}"/></td>
                 </xsl:otherwise>
               </xsl:choose>
               </tr>
