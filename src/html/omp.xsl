@@ -482,14 +482,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td colspan="3">
                 <xsl:choose>
-                  <xsl:when test="report/filters/overrides = 0">
+                  <xsl:when test="report/filters/apply_overrides = 0">
                     <input type="checkbox" name="overrides" value="1"/>
                   </xsl:when>
                   <xsl:otherwise>
                     <input type="checkbox" name="overrides" value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                Show overrides
+                Apply overrides
               </td>
             </tr>
             <tr>

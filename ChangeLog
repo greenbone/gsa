@@ -1,5 +1,17 @@
 2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp, create_note_omp, delete_note_omp)
+	(save_note_omp, new_override_omp, create_override_omp)
+	(delete_override_omp, save_override_omp): Pass overrides as 1 always, and
+	pass apply_overrides with alongside overrides with the value overrides
+	had.
+
+	* src/html/omp.xsl (html-report-details): Rename "Show overrides" to
+	"Apply overrides" and check it according to the apply_overrides filter
+	setting.
+
+2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (init_validator): Move "get_tasks" into alphabetical
 	order.
 
