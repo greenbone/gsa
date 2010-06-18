@@ -1,3 +1,41 @@
+2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Rename GET_STATUS to GET_TASKS.
+
+	* src/omp.c (init_validator, exec_omp_post, exec_omp_get): Replace
+	"get_status" with "get_tasks".
+
+	* src/oap.c (get_users_oap, get_feed_oap, sync_feed_oap, get_settings_oap)
+	(edit_settings_oap, save_settings_oap, modify_ldap_auth_oap): Replace
+	"get_status" with "get_tasks".
+
+	* src/gsad_omp.c: Replace "get_status" with "get_tasks" in all messages
+	and comments.
+	(get_status, get_status_omp): Remove.
+	(get_tasks, get_tasks_omp): New function.  Renamed from "status" version.
+	(edit_task_xml, start_task_xml, delete_report_omp): Replace get_status
+	with get_tasks in OMP.
+	(save_task_xml, delete_note_omp, save_note_omp)
+	(save_override_omp): Replace get_status call with get_tasks.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/gsad.xsl (autorefresh, html_gsa_logo, html-gsa-navigation)
+	(error_dialog): Replace "get_status" with "get_tasks".
+
+	* src/html/help.xsl (feed_management.html, reports.html)
+	(tasks.html): Replace "get_status" with "get_tasks".
+
+	* src/html/login/login.html: Replace "get_status" with "get_tasks".
+
+	* src/html/oap.xsl (user [details]): Replace "get_status" with
+	"get_tasks".
+
+	* src/html/omp.xsl: Replace "get_status" with "get_tasks" in all URLs,
+	POST variables and comments.
+	(get_status_response): Remove.
+	(get_tasks_response): New template.  Renamed from get_status_response.
+
 2010-06-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/override.png, src/html/img/new_override.png: New.

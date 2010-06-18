@@ -1394,7 +1394,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        The status of all active scan can be seen
-       in the <a href="/omp?cmd=get_status">task overview</a>.
+       in the <a href="/omp?cmd=get_tasks">task overview</a>.
        The progress is shown as a percentage of
        total number of tests to be executed. The
        duration of a scan is determined by the number
@@ -2089,7 +2089,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_status&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2866,7 +2866,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_status">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>

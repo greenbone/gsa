@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- Add meta refresh info if autorefresh element present -->
 <xsl:template match="autorefresh" mode="html-header-meta">
   <xsl:if test="@interval &gt; 0">
-    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_status&amp;refresh_interval={@interval}" />
+    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_tasks&amp;refresh_interval={@interval}" />
   </xsl:if>
 </xsl:template>
 
@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="time"/>
   <div class="gsa-logo-header">
     <div class="logo_l">
-      <a href="/omp?cmd=get_status" title="Greenbone Security Assistant">
+      <a href="/omp?cmd=get_tasks" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>
@@ -111,7 +111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li>
             Scan Management
             <ul>
-              <li><a href="/omp?cmd=get_status">Tasks</a></li>
+              <li><a href="/omp?cmd=get_tasks">Tasks</a></li>
               <li><a href="/new_task.html">New Task</a></li>
               <li><a href="/omp?cmd=get_notes">Notes</a></li>
               <li><a href="/omp?cmd=get_overrides">Overrides</a></li>
@@ -155,7 +155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="error_dialog">
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
-  <xsl:param name="backurl">/omp?cmd=get_status</xsl:param>
+  <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <center>
     <div class="envelope" style="width:500px;">
       <div class="gb_window" style="margin-top:150px;">

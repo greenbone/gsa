@@ -98,7 +98,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="image"
                  src="/img/refresh.png"
                  alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
-          <input type="hidden" name="cmd" value="get_status"/>
+          <input type="hidden" name="cmd" value="get_tasks"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">
@@ -149,7 +149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=descending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -157,7 +157,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=ascending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -168,13 +168,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=ascending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_status&amp;sort_field=name&amp;sort_order=descending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"
@@ -192,7 +192,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=descending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -200,7 +200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=ascending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -213,13 +213,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=ascending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_status&amp;sort_field=run_status&amp;sort_order=descending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"
@@ -273,7 +273,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_status&amp;task_id={report/task/@id}">Back to Task</a>
+        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}">Back to Task</a>
       </div>
 
       <a name="summary"/>
@@ -688,13 +688,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Reports (Task Summary)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="/omp?cmd=get_status">Back to Tasks</a>
+        <a href="/omp?cmd=get_tasks">Back to Tasks</a>
       </div>
       <table>
         <tr>
@@ -781,7 +781,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#reports" title="Help: Reports (Reports)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
@@ -823,7 +823,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#notes" title="Help: Reports (Notes)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
@@ -838,7 +838,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_notes_response/note">
             <xsl:call-template name="note">
-              <xsl:with-param name="next">get_status&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
+              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -854,7 +854,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#overrides" title="Help: Reports (Overrides)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_status&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
@@ -870,7 +870,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_overrides_response/override">
             <xsl:call-template name="override">
-              <xsl:with-param name="next">get_status&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
+              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -1320,7 +1320,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="save_task"/>
         <input type="hidden"
                name="task_id"
-               value="{commands_response/get_status_response/task/@id}"/>
+               value="{commands_response/get_tasks_response/task/@id}"/>
         <input type="hidden"
                name="refresh_interval"
                value="{refresh_interval}"/>
@@ -1333,7 +1333,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            <td>
              <input type="text"
                     name="name"
-                    value="{commands_response/get_status_response/task/name}"
+                    value="{commands_response/get_tasks_response/task/name}"
                     size="30"
                     maxlength="80"/>
            </td>
@@ -1342,7 +1342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_status_response/task/comment}"/>
+                     value="{commands_response/get_tasks_response/task/comment}"/>
             </td>
           </tr>
           <tr>
@@ -1351,9 +1351,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="scanconfig" disabled="1">
                 <xsl:choose>
                   <xsl:when
-                    test="string-length (commands_response/get_status_response/task/config/name) &gt; 0">
+                    test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
                     <xsl:apply-templates
-                      select="commands_response/get_status_response/task/config"
+                      select="commands_response/get_tasks_response/task/config"
                       mode="newtask"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -1369,9 +1369,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="target_id" disabled="1">
                 <xsl:choose>
                   <xsl:when
-                    test="string-length (commands_response/get_status_response/task/target/name) &gt; 0">
+                    test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
                     <xsl:apply-templates
-                      select="commands_response/get_status_response/task/target"
+                      select="commands_response/get_tasks_response/task/target"
                       mode="newtask"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -1386,7 +1386,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="escalator_id">
                 <xsl:variable name="escalator_id">
-                  <xsl:value-of select="commands_response/get_status_response/task/escalator/@id"/>
+                  <xsl:value-of select="commands_response/get_tasks_response/task/escalator/@id"/>
                 </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="string-length ($escalator_id) &gt; 0">
@@ -1414,7 +1414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="schedule_id">
                 <xsl:variable name="schedule_id">
-                  <xsl:value-of select="commands_response/get_status_response/task/schedule/@id"/>
+                  <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
                 </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="string-length ($schedule_id) &gt; 0">
@@ -1509,7 +1509,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_status&amp;task_id={@id}">
+              <a href="/omp?cmd=get_tasks&amp;task_id={@id}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -1633,13 +1633,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:otherwise>
           </xsl:choose>
-          <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+          <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
             <img src="/img/details.png"
                  border="0"
                  alt="Details"
                  style="margin-left:3px;"/>
           </a>
-          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_status&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}"
+          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}"
              title="Edit Task"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -1652,7 +1652,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- GET_TASKS_RESPONSE -->
 
-<xsl:template match="get_status_response">
+<xsl:template match="get_tasks_response">
   <xsl:choose>
     <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
@@ -2533,7 +2533,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -2877,7 +2877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -4171,7 +4171,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{$class}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
-                <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
                   <img src="/img/details.png"
                        border="0"
                        alt="Details"
@@ -5190,7 +5190,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -5520,7 +5520,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- get_nvt_details param. -->
         <input type="hidden" name="oid" value="{nvt/@id}"/>
 
-        <!-- get_status param. -->
+        <!-- get_tasks param. -->
         <input type="hidden" name="task_id" value="{task/@id}"/>
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -5880,7 +5880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_status&amp;task_id={task/@id}">
+                <a href="?cmd=get_tasks&amp;task_id={task/@id}">
                   <xsl:value-of select="task/name"/>
                 </a>
               </xsl:when>
@@ -6160,7 +6160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- get_nvt_details param. -->
         <input type="hidden" name="oid" value="{nvt/@id}"/>
 
-        <!-- get_status param. -->
+        <!-- get_tasks param. -->
         <input type="hidden" name="task_id" value="{task/@id}"/>
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -6545,7 +6545,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_status&amp;task_id={task/@id}">
+                <a href="?cmd=get_tasks&amp;task_id={task/@id}">
                   <xsl:value-of select="task/name"/>
                 </a>
               </xsl:when>

@@ -92,8 +92,8 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *);
 
-static char *get_status (credentials_t *, const char *, const char *,
-                         const char *, const char *, const char *);
+static char *get_tasks (credentials_t *, const char *, const char *,
+                        const char *, const char *, const char *);
 
 
 /* Helpers. */
@@ -291,7 +291,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                          "An internal error occurred while getting targets list. "
                          "The current list of targets is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<gsad_newtask>");
 
@@ -308,7 +308,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -319,7 +319,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Get configs to select in new task UI. */
@@ -335,7 +335,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -346,7 +346,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Get escalators to select in new task UI. */
@@ -362,7 +362,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -373,7 +373,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Get schedules to select in new task UI. */
@@ -389,7 +389,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting the schedule list. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -400,7 +400,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                            "An internal error occurred while getting the schedule list. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (message)
@@ -443,7 +443,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                          "An internal error occurred while creating a new task. "
                          "The task is not created. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (!schedule_id || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
@@ -466,7 +466,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                               "<name>%s</name>"
                               "<comment>%s</comment>"
                               "</create_task>"
-                              "<get_status"
+                              "<get_tasks"
                               " sort_field=\"name\""
                               " sort_order=\"ascending\"/>"
                               "</commands>",
@@ -487,7 +487,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                            "An internal error occurred while creating a new task. "
                            "The task is not created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -498,7 +498,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                            "An internal error occurred while creating a new task. "
                            "It is unclear whether the task has been created or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -527,12 +527,12 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while deleting a new task. "
                          "The task is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<delete_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -544,7 +544,7 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while deleting a new task. "
                            "The task is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -555,7 +555,7 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while deleting a new task. "
                            "It is unclear whether the task has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -579,7 +579,7 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
 char *
 edit_task (credentials_t * credentials, const char *task_id,
            const char *extra_xml, const char *next,
-           /* Parameters for get_status. */
+           /* Parameters for get_tasks. */
            const char *refresh_interval, const char *sort_field,
            const char *sort_order)
 {
@@ -603,7 +603,7 @@ edit_task (credentials_t * credentials, const char *task_id,
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<get_status task_id=\"%s\" details=\"1\" />"
+                            "<get_tasks task_id=\"%s\" details=\"1\" />"
                             "<get_targets"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
@@ -625,7 +625,7 @@ edit_task (credentials_t * credentials, const char *task_id,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   xml = g_string_new ("");
@@ -682,7 +682,7 @@ edit_task (credentials_t * credentials, const char *task_id,
 char *
 edit_task_omp (credentials_t * credentials, const char *task_id,
                const char *next,
-               /* Parameters for get_status. */
+               /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
                const char *sort_order)
 {
@@ -710,7 +710,7 @@ char *
 save_task_omp (credentials_t * credentials, const char *task_id,
                const char *name, const char *comment, const char *escalator_id,
                const char *schedule_id, const char *next,
-               /* Parameters for get_status. */
+               /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
                const char *sort_order)
 {
@@ -727,7 +727,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                          "An internal error occurred while saving a task. "
                          "The task remains the same. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
@@ -741,10 +741,10 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                                  escalator_id,
                                  schedule_id);
 
-  if (strcmp (next, "get_status") == 0)
+  if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_status (credentials, NULL, sort_field, sort_order,
-                              refresh_interval, modify_task);
+      char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
+                             refresh_interval, modify_task);
       g_free (modify_task);
       return ret;
     }
@@ -754,7 +754,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                        "An internal error occurred while saving a task. "
                        "The task remains the same. "
                        "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_status");
+                       "/omp?cmd=get_tasks");
 }
 
 /**
@@ -778,12 +778,12 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while aborting a task. "
                          "The task is not aborted. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<abort_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -795,7 +795,7 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while aborting a task. "
                            "The task is not aborted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -806,7 +806,7 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while aborting a task. "
                            "It is unclear whether the task has been aborted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -835,12 +835,12 @@ pause_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while pausing a task. "
                          "The task was not paused. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<pause_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -852,7 +852,7 @@ pause_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while pausing a task. "
                            "The task was not paused. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -863,7 +863,7 @@ pause_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while pausing a task. "
                            "It is unclear whether the task has been paused or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -892,12 +892,12 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while resuming a paused task. "
                          "The task was not resumed. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<resume_paused_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -909,7 +909,7 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while resuming a paused task. "
                            "The task was not resumed. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -920,7 +920,7 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while resuming a paused task. "
                            "It is unclear whether the task has been resumed or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -949,12 +949,12 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while resuming a stopped task. "
                          "The task was not resumed. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<resume_stopped_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -966,7 +966,7 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while resuming a stopped task. "
                            "The task was not resumed. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -977,7 +977,7 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while resuming a stopped task. "
                            "It is unclear whether the task has been resumed or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -1006,12 +1006,12 @@ start_task_omp (credentials_t * credentials, const char *task_id)
                          "An internal error occurred while starting a task. "
                          "The task is not started. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<start_task task_id=\"%s\" />"
-                            "<get_status"
+                            "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -1023,7 +1023,7 @@ start_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while starting a task. "
                            "The task is not started. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -1034,7 +1034,7 @@ start_task_omp (credentials_t * credentials, const char *task_id)
                            "An internal error occurred while starting a task. "
                            "It is unclear whether the task has been started or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -1063,7 +1063,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting nvt details. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -1086,7 +1086,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
                             "Diagnostics: Failure to send command to manager daemon.",
-                            "/omp?cmd=get_status");
+                            "/omp?cmd=get_tasks");
     }
 
   xml = g_string_new ("<get_nvt_details>");
@@ -1097,7 +1097,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   g_string_append (xml, "</get_nvt_details>");
 
@@ -1132,9 +1132,9 @@ get_nvt_details_omp (credentials_t *credentials, const char *oid)
  * @return Result of XSL transformation.
  */
 static char *
-get_status (credentials_t * credentials, const char *task_id,
-            const char *sort_field, const char *sort_order,
-            const char *refresh_interval, const char *commands)
+get_tasks (credentials_t * credentials, const char *task_id,
+           const char *sort_field, const char *sort_order,
+           const char *refresh_interval, const char *commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -1145,14 +1145,14 @@ get_status (credentials_t * credentials, const char *task_id,
                          "An internal error occurred while getting the status. "
                          "No update on status can be retrieved. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (task_id)
     {
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_status task_id=\"%s\" details=\"1\" />"
+                                "<get_tasks task_id=\"%s\" details=\"1\" />"
                                 "<get_notes"
                                 " sort_field=\"notes.nvt, notes.text\">"
                                 "<task id=\"%s\"/>"
@@ -1173,7 +1173,7 @@ get_status (credentials_t * credentials, const char *task_id,
                                "An internal error occurred while getting the status. "
                                "No update on the requested task can be retrieved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
   else
@@ -1181,7 +1181,7 @@ get_status (credentials_t * credentials, const char *task_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_status"
+                                "<get_tasks"
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>"
                                 "</commands>",
@@ -1195,11 +1195,11 @@ get_status (credentials_t * credentials, const char *task_id,
                                "An internal error occurred while getting the status. "
                                "No update of the list of tasks can be retrieved. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
 
-  xml = g_string_new ("<get_status>");
+  xml = g_string_new ("<get_tasks>");
   if (read_string (&session, &xml))
     {
       openvas_server_close (socket, session);
@@ -1208,10 +1208,10 @@ get_status (credentials_t * credentials, const char *task_id,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
-  g_string_append (xml, "</get_status>");
+  g_string_append (xml, "</get_tasks>");
   if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
     g_string_append_printf (xml, "<autorefresh interval=\"0\" />");
   else
@@ -1234,12 +1234,12 @@ get_status (credentials_t * credentials, const char *task_id,
  * @return Result of XSL transformation.
  */
 char *
-get_status_omp (credentials_t * credentials, const char *task_id,
+get_tasks_omp (credentials_t * credentials, const char *task_id,
                 const char *sort_field, const char *sort_order,
                 const char *refresh_interval)
 {
-  return get_status (credentials, task_id, sort_field, sort_order,
-                     refresh_interval, NULL);
+  return get_tasks (credentials, task_id, sort_field, sort_order,
+                    refresh_interval, NULL);
 }
 
 /**
@@ -1623,7 +1623,7 @@ get_lsc_credentials_omp (credentials_t * credentials,
                                    "An internal error occurred while getting a credential. "
                                    "The credential could not be delivered. "
                                    "Diagnostics: Failure to receive credential from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
         }
       else
@@ -1640,7 +1640,7 @@ get_lsc_credentials_omp (credentials_t * credentials,
                                    "An internal error occurred while getting a credential. "
                                    "The credential could not be delivered. "
                                    "Diagnostics: Failure to receive credential from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
           openvas_server_close (socket, session);
 
@@ -1658,7 +1658,7 @@ get_lsc_credentials_omp (credentials_t * credentials,
                                "An internal error occurred while getting a credential. "
                                "The credential could not be delivered. "
                                "Diagnostics: Failure to parse credential from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
   else
@@ -2003,7 +2003,7 @@ get_agents_omp (credentials_t * credentials,
                                    "An internal error occurred while getting a agent. "
                                    "The agent could not be delivered. "
                                    "Diagnostics: Failure to receive agent from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
         }
       else
@@ -2020,7 +2020,7 @@ get_agents_omp (credentials_t * credentials,
                                    "An internal error occurred while getting a agent. "
                                    "The agent could not be delivered. "
                                    "Diagnostics: Failure to receive agent from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
           openvas_server_close (socket, session);
 
@@ -2030,7 +2030,7 @@ get_agents_omp (credentials_t * credentials,
                                "An internal error occurred while getting a agent. "
                                "The agent could not be delivered. "
                                "Diagnostics: Failure to parse agent from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
   else
@@ -2047,7 +2047,7 @@ get_agents_omp (credentials_t * credentials,
                                "An internal error occurred while getting agent list. "
                                "The current list of agents is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
       free_entity (entity);
 
@@ -2348,14 +2348,14 @@ get_escalators_xml (gnutls_session_t *session, GString *xml,
                          "An internal error occurred while getting escalators list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to send command to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (read_string (session, &xml))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting escalators list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to receive response from manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   return NULL;
 }
@@ -2383,7 +2383,7 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
                          "An internal error occurred while getting escalator list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_escalators>");
 
@@ -2895,7 +2895,7 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "of target locators. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -2907,7 +2907,7 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
                            "of target locators. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -4016,7 +4016,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
                          "An internal error occurred while getting a config. "
                          "The config could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_configs_response>");
 
@@ -4037,7 +4037,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       entity = NULL;
@@ -4049,7 +4049,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       config_entity = entity_child (entity, "config");
@@ -4074,7 +4074,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to receive config from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
 
@@ -4114,7 +4114,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
                          "An internal error occurred while getting a preference file. "
                          "The file could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_preferences_response>");
 
@@ -4138,7 +4138,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       entity = NULL;
@@ -4150,7 +4150,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       preference_entity = entity_child (entity, "preference");
@@ -4175,7 +4175,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive file from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
 
@@ -4207,12 +4207,12 @@ delete_report_omp (credentials_t * credentials,
                          "An internal error occurred while deleting a report. "
                          "The report is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<delete_report report_id=\"%s\" />"
-                            "<get_status task_id=\"%s\" details=\"1\" />"
+                            "<get_tasks task_id=\"%s\" details=\"1\" />"
                             "</commands>",
                             report_id,
                             task_id) == -1)
@@ -4222,7 +4222,7 @@ delete_report_omp (credentials_t * credentials,
                            "An internal error occurred while deleting a report. "
                            "The report is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -4233,7 +4233,7 @@ delete_report_omp (credentials_t * credentials,
                            "An internal error occurred while deleting a report. "
                            "It is unclear whether the report has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -4308,7 +4308,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                          "An internal error occurred while getting a report. "
                          "The report could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<get_report"
@@ -4350,7 +4350,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (format)
@@ -4368,7 +4368,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
           openvas_server_close (socket, session);
           entity_t report = entity_child (entity, "report");
@@ -4380,7 +4380,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Response from manager daemon did not contain a report.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
           print_entity_to_string (report, xml);
           free_entity (entity);
@@ -4401,7 +4401,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
 
           report_entity = entity_child (entity, "report");
@@ -4431,7 +4431,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive report from manager daemon.",
-                                   "/omp?cmd=get_status");
+                                   "/omp?cmd=get_tasks");
             }
         }
     }
@@ -4448,7 +4448,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       {
@@ -4479,7 +4479,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  "An internal error occurred while getting a report. "
                                  "The report could not be delivered. "
                                  "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_status");
+                                 "/omp?cmd=get_tasks");
           }
 
         if (read_string (&session, &xml))
@@ -4490,7 +4490,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  "An internal error occurred while getting a report. "
                                  "The report could not be delivered. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_status");
+                                 "/omp?cmd=get_tasks");
           }
 
         g_string_append (xml, "</all>");
@@ -4522,7 +4522,7 @@ get_notes (credentials_t *credentials, const char *commands)
                          "An internal error occurred while getting the notes. "
                          "The list of notes is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_notes>");
 
@@ -4542,7 +4542,7 @@ get_notes (credentials_t *credentials, const char *commands)
                            "An internal error occurred while getting the notes. "
                            "The list of notes is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -4553,7 +4553,7 @@ get_notes (credentials_t *credentials, const char *commands)
                            "An internal error occurred while getting the notes. "
                            "The list of notes is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -4596,7 +4596,7 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the note. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_note>");
 
@@ -4618,7 +4618,7 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the note. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -4628,7 +4628,7 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the note. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -4960,7 +4960,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                            "An internal error occurred while getting the report. "
                            "The new note was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -4971,7 +4971,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                            "An internal error occurred while getting the report. "
                            "The new note was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   {
@@ -5004,7 +5004,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                              "An internal error occurred while getting the report. "
                              "The new note was, however, created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       }
 
     if (read_string (&session, &xml))
@@ -5015,7 +5015,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                              "An internal error occurred while getting the report. "
                              "The new note was, however, created. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       }
 
     g_string_append (xml, "</all>");
@@ -5047,7 +5047,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvt_details).
- * @param[in]  task_id        ID of task (for get_status).
+ * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -5100,10 +5100,10 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       return ret;
     }
 
-  if (strcmp (next, "get_status") == 0)
+  if (strcmp (next, "get_tasks") == 0)
     {
       gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_status (credentials, task_id, NULL, NULL, NULL, extra);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra);
       g_free (extra);
       return ret;
     }
@@ -5113,7 +5113,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                          "An internal error occurred while deleting a note. "
                          "The note was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -5179,7 +5179,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                "An internal error occurred while deleting a note. "
                                "It is unclear whether the note has been deleted or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
   else
@@ -5189,7 +5189,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                            "An internal error occurred while deleting a note. "
                            "The note remains intact. "
                            "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -5200,7 +5200,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                            "An internal error occurred while deleting a note. "
                            "It is unclear whether the note has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -5227,7 +5227,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
- * @param[in]  task_id         ID of task (for get_status).
+ * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -5298,7 +5298,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           "<min_cvss_base>%s</min_cvss_base>"
                           /* Parameters for get_nvt_details. */
                           "<nvt id=\"%s\"/>"
-                          /* Parameters for get_status. */
+                          /* Parameters for get_tasks. */
                           "<task id=\"%s\"/>",
                           next,
                           report_id,
@@ -5358,7 +5358,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
- * @param[in]  task_id         ID of task (for get_status).
+ * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -5437,10 +5437,10 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       return ret;
     }
 
-  if (strcmp (next, "get_status") == 0)
+  if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_status (credentials, task_id, NULL, NULL, NULL,
-                              modify_note);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
+                             modify_note);
       g_free (modify_note);
       return ret;
     }
@@ -5450,7 +5450,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                          "An internal error occurred while saving a note. "
                          "The note was not saved. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -5517,7 +5517,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                "An internal error occurred while saving a note. "
                                "It is unclear whether the note has been saved or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
       g_free (modify_note);
     }
@@ -5529,7 +5529,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                            "An internal error occurred while saving a note. "
                            "The note remains the same. "
                            "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -5540,7 +5540,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                            "An internal error occurred while saving a note. "
                            "It is unclear whether the note has been saved or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -5568,7 +5568,7 @@ get_overrides (credentials_t *credentials, const char *commands)
                          "An internal error occurred while getting the overrides. "
                          "The list of overrides is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_overrides>");
 
@@ -5589,7 +5589,7 @@ get_overrides (credentials_t *credentials, const char *commands)
                            "An internal error occurred while getting the overrides. "
                            "The list of overrides is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -5600,7 +5600,7 @@ get_overrides (credentials_t *credentials, const char *commands)
                            "An internal error occurred while getting the overrides. "
                            "The list of overrides is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -5644,7 +5644,7 @@ get_override (credentials_t *credentials, const char *override_id,
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the override. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_override>");
 
@@ -5666,7 +5666,7 @@ get_override (credentials_t *credentials, const char *override_id,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the override. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -5676,7 +5676,7 @@ get_override (credentials_t *credentials, const char *override_id,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the override. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -6016,7 +6016,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
                            "An internal error occurred while getting the report. "
                            "The new override was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -6027,7 +6027,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
                            "An internal error occurred while getting the report. "
                            "The new override was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   {
@@ -6060,7 +6060,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
                              "An internal error occurred while getting the report. "
                              "The new override was, however, created. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       }
 
     if (read_string (&session, &xml))
@@ -6071,7 +6071,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
                              "An internal error occurred while getting the report. "
                              "The new override was, however, created. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       }
 
     g_string_append (xml, "</all>");
@@ -6103,7 +6103,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvt_details).
- * @param[in]  task_id        ID of task (for get_status).
+ * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -6158,11 +6158,11 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       return ret;
     }
 
-  if (strcmp (next, "get_status") == 0)
+  if (strcmp (next, "get_tasks") == 0)
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      char *ret = get_status (credentials, task_id, NULL, NULL, NULL, extra);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra);
       g_free (extra);
       return ret;
     }
@@ -6172,7 +6172,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                          "An internal error occurred while deleting an override. "
                          "The override was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -6238,7 +6238,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                                "An internal error occurred while deleting an override. "
                                "It is unclear whether the override has been deleted or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
     }
   else
@@ -6248,7 +6248,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                            "An internal error occurred while deleting an override. "
                            "The override remains intact. "
                            "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -6259,7 +6259,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                            "An internal error occurred while deleting an override. "
                            "It is unclear whether the override has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -6286,7 +6286,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvt_details).
- * @param[in]  task_id        ID of task (for get_status).
+ * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -6358,7 +6358,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
                           "<min_cvss_base>%s</min_cvss_base>"
                           /* Parameters for get_nvt_details. */
                           "<nvt id=\"%s\"/>"
-                          /* Parameters for get_status. */
+                          /* Parameters for get_tasks. */
                           "<task id=\"%s\"/>",
                           next,
                           report_id,
@@ -6419,7 +6419,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvt_details).
- * @param[in]  task_id         ID of task (for get_status).
+ * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
  */
@@ -6503,10 +6503,10 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       return ret;
     }
 
-  if (strcmp (next, "get_status") == 0)
+  if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_status (credentials, task_id, NULL, NULL, NULL,
-                              modify_override);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
+                             modify_override);
       g_free (modify_override);
       return ret;
     }
@@ -6516,7 +6516,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                          "An internal error occurred while saving an override. "
                          "The override was not saved. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -6583,7 +6583,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                "An internal error occurred while saving an override. "
                                "It is unclear whether the override has been saved or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
       g_free (modify_override);
     }
@@ -6595,7 +6595,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                            "An internal error occurred while saving an override. "
                            "The override remains the same. "
                            "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   entity = NULL;
@@ -6606,7 +6606,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                            "An internal error occurred while saving an override. "
                            "It is unclear whether the override has been saved or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
   free_entity (entity);
 
@@ -6701,7 +6701,7 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the schedule list. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_schedules>");
 
@@ -6741,7 +6741,7 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -6751,7 +6751,7 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -7037,7 +7037,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                          "An internal error occurred while getting the system reports. "
                          "The current list of system reports is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_system_reports>");
   g_string_append_printf (xml, "<duration>%s</duration>",
@@ -7055,7 +7055,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -7066,7 +7066,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */

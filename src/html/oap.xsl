@@ -289,7 +289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_status&amp;task_id={@id}" title="Reports">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Reports">
                     <img src="/img/list.png"
                          border="0"
                          alt="Reports"

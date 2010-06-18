@@ -606,7 +606,7 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                              "An internal error occurred while getting the user list. "
                              "The current list of users is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -631,7 +631,7 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the user list. "
                            "The current list of users is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_entity_and_text (&session, &entity, &text))
@@ -641,7 +641,7 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the user list. "
                            "The current list of users is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   openvas_server_close (socket, session);
@@ -676,7 +676,7 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                              "An internal error occurred while getting the feed list. "
                              "The current list of feeds is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -697,7 +697,7 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the feed list. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_entity_and_text (&session, &entity, &text))
@@ -707,7 +707,7 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the feed. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   openvas_server_close (socket, session);
@@ -739,7 +739,7 @@ sync_feed_oap (credentials_t * credentials)
                              "An internal error occurred while synchronizing with the NVT feed. "
                              "Feed synchronization is currently not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -761,7 +761,7 @@ sync_feed_oap (credentials_t * credentials)
                            "An internal error occurred while synchronizing with the NVT feed. "
                            "Feed synchronization is currently not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_entity_and_text (&session, &entity, &text))
@@ -771,7 +771,7 @@ sync_feed_oap (credentials_t * credentials)
                            "An internal error occurred while synchronizing with the NVT feed. "
                            "Feed synchronization is currently not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   openvas_server_close (socket, session);
@@ -806,7 +806,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                              "An internal error occurred while getting the user list. "
                              "The current list of settings is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -827,7 +827,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the user list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_entity_and_text (&session, &entity, &text))
@@ -837,7 +837,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the user list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   openvas_server_close (socket, session);
@@ -870,7 +870,7 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
                              "An internal error occurred while getting the settings. "
                              "The current list of settings is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -889,7 +889,7 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   xml = g_string_new ("<edit_settings>");
@@ -902,7 +902,7 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   g_string_append (xml, "</edit_settings>");
@@ -938,7 +938,7 @@ save_settings_oap (credentials_t * credentials,
                              "An internal error occurred while saving the settings. "
                              "The settings have not been saved. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -1005,7 +1005,7 @@ save_settings_oap (credentials_t * credentials,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "Diagnostics: Failure to send command to administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_entity_and_text (&session, &entity, &text))
@@ -1014,7 +1014,7 @@ save_settings_oap (credentials_t * credentials,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -1059,7 +1059,7 @@ modify_ldap_auth_oap (credentials_t* credentials,
                              "An internal error occurred while saving the ldap settings. "
                              "The settings have not been saved. "
                              "Diagnostics: Failure to connect to administrator daemon.",
-                             "/omp?cmd=get_status");
+                             "/omp?cmd=get_tasks");
       case -2:
         return xsl_transform_oap (credentials,
                                   g_strdup
@@ -1085,7 +1085,7 @@ modify_ldap_auth_oap (credentials_t* credentials,
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the users list. "
                                "Diagnostics: Failure to send command to administrator daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       xml = g_string_new ("");
@@ -1098,7 +1098,7 @@ modify_ldap_auth_oap (credentials_t* credentials,
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the users list. "
                                "Diagnostics: Failure to receive response from administrator daemon.",
-                               "/omp?cmd=get_status");
+                               "/omp?cmd=get_tasks");
         }
 
       openvas_server_close (socket, session);
@@ -1139,7 +1139,7 @@ modify_ldap_auth_oap (credentials_t* credentials,
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the ldap settings. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
-                           "/omp?cmd=get_status");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */

@@ -229,7 +229,7 @@ init_validator ()
                          "|(get_overrides)"
                          "|(get_report)"
                          "|(get_settings)"
-                         "|(get_status)"
+                         "|(get_tasks)"
                          "|(get_schedule)"
                          "|(get_schedules)"
                          "|(get_system_reports)"
@@ -1564,7 +1564,7 @@ exec_omp_post (credentials_t * credentials,
                                          __LINE__,
                                          "An internal error occured inside GSA daemon. "
                                          "Diagnostics: Empty command.",
-                                         "/omp?cmd=get_status");
+                                         "/omp?cmd=get_tasks");
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_agent"))
     {
@@ -2036,13 +2036,13 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.search_phrase,
                              con_info->req_parms.min_cvss_base);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "get_status"))
+  else if (!strcmp (con_info->req_parms.cmd, "get_tasks"))
     {
-      con_info->response = get_status_omp (credentials,
-                                           NULL,
-                                           con_info->req_parms.sort_field,
-                                           con_info->req_parms.sort_order,
-                                           "");
+      con_info->response = get_tasks_omp (credentials,
+                                          NULL,
+                                          con_info->req_parms.sort_field,
+                                          con_info->req_parms.sort_order,
+                                          "");
     }
   else if (!strcmp (con_info->req_parms.cmd, "import_config"))
     {
@@ -2152,7 +2152,7 @@ exec_omp_post (credentials_t * credentials,
                                          __LINE__,
                                          "An internal error occured inside GSA daemon. "
                                          "Diagnostics: Unknown command.",
-                                         "/omp?cmd=get_status");
+                                         "/omp?cmd=get_tasks");
     }
 
   con_info->answercode = MHD_HTTP_OK;
@@ -2599,7 +2599,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occured inside GSA daemon. "
                          "Diagnostics: No valid command for omp.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 
   /** @todo Pass sort_order and sort_field to all page handlers. */
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
@@ -2629,9 +2629,9 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (task_id) < VAL_MAX_SIZE))
     return start_task_omp (credentials, task_id);
 
-  else if ((!strcmp (cmd, "get_status")) && (task_id != NULL)
+  else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
-    return get_status_omp (credentials, task_id, sort_field, sort_order, refresh_interval);
+    return get_tasks_omp (credentials, task_id, sort_field, sort_order, refresh_interval);
 
   else if ((0 == strcmp (cmd, "delete_agent")) && (agent_id != NULL))
     return delete_agent_omp (credentials, agent_id);
@@ -2693,10 +2693,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
-      return delete_note_omp (credentials, note_id, "get_status", NULL, 0, 0,
+      return delete_note_omp (credentials, note_id, "get_tasks", NULL, 0, 0,
                               NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                               NULL, task_id);
     }
@@ -2752,10 +2752,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
-      return delete_override_omp (credentials, override_id, "get_status", NULL,
+      return delete_override_omp (credentials, override_id, "get_tasks", NULL,
                                   0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                                   NULL, NULL, NULL, task_id);
     }
@@ -2848,10 +2848,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
-      return edit_note_omp (credentials, note_id, "get_status",
+      return edit_note_omp (credentials, note_id, "get_tasks",
                             /* Parameters for next page. */
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                             NULL, NULL, NULL, task_id);
@@ -2917,10 +2917,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
-      return edit_override_omp (credentials, override_id, "get_status",
+      return edit_override_omp (credentials, override_id, "get_tasks",
                                 /* Parameters for next page. */
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                                 NULL, "-1", NULL, task_id);
@@ -2932,8 +2932,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_task"))
            && (task_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0))
-    return edit_task_omp (credentials, task_id, "get_status", refresh_interval,
+           && (strcmp (next, "get_tasks") == 0))
+    return edit_task_omp (credentials, task_id, "get_tasks", refresh_interval,
                           sort_field, sort_order);
 
   else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
@@ -3096,8 +3096,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "get_overrides")))
     return get_overrides_omp (credentials);
 
-  else if (!strcmp (cmd, "get_status"))
-    return get_status_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
+  else if (!strcmp (cmd, "get_tasks"))
+    return get_tasks_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
 
   else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
     return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);
@@ -3238,11 +3238,11 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_status", NULL,
+                            note_task_id, note_result_id, "get_tasks", NULL,
                             0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                             NULL, NULL, task_id);
     }
@@ -3340,12 +3340,12 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0)
+           && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return save_override_omp (credentials, override_id, text, hosts, port,
                                 threat, new_threat, override_task_id,
-                                override_result_id, "get_status", NULL, 0, 0,
+                                override_result_id, "get_tasks", NULL, 0, 0,
                                 NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                 NULL, task_id);
     }
@@ -3353,16 +3353,16 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_task"))
            && (task_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_status") == 0))
+           && (strcmp (next, "get_tasks") == 0))
     return save_task_omp (credentials, task_id, name, comment, escalator_id,
-                          schedule_id, "get_status", refresh_interval,
+                          schedule_id, "get_tasks", refresh_interval,
                           sort_field, sort_order);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occured inside GSA daemon. "
                          "Diagnostics: Unknown command.",
-                         "/omp?cmd=get_status");
+                         "/omp?cmd=get_tasks");
 }
 
 /**
