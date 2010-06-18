@@ -1,5 +1,9 @@
 2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css: Order authors alphabetically.
+
+2010-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Rename GET_STATUS to GET_TASKS.
 
 	* src/omp.c (init_validator, exec_omp_post, exec_omp_get): Replace
