@@ -944,7 +944,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <a name="targets"></a>
+      <p>
+      If the backend is configured to support LDAP, additional fields for hosts will appear
+      that allow to import target systems from management systems:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Manual</td>
+          <td>---</td>
+          <td>80</td>
+          <td>Comma separated list of IPs and/or hostnames</td>
+          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
+        </tr>
+        <tr class="even">
+          <td>Import</td>
+          <td>---</td>
+          <td>---</td>
+          <td>Selection of configured services</td>
+          <td>UCS 2.3</td>
+        </tr>
+        <tr class="odd">
+          <td>Username</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Account name for the selected service.</td>
+          <td>smith</td>
+        </tr>
+        <tr class="even">
+          <td>Password</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Password corresponind to the above username.</td>
+          <td></td>
+        </tr>
+      </table>
+
       <a name="targets"></a>
       <h2>Targets</h2>
       <p>
