@@ -2038,11 +2038,15 @@ exec_omp_post (credentials_t * credentials,
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_tasks"))
     {
-      con_info->response = get_tasks_omp (credentials,
-                                          NULL,
-                                          con_info->req_parms.sort_field,
-                                          con_info->req_parms.sort_order,
-                                          "");
+      con_info->response
+       = get_tasks_omp (credentials,
+                        NULL,
+                        con_info->req_parms.sort_field,
+                        con_info->req_parms.sort_order,
+                        "",
+                        con_info->req_parms.overrides
+                         ? strcmp (con_info->req_parms.overrides, "0")
+                         : 0);
     }
   else if (!strcmp (con_info->req_parms.cmd, "import_config"))
     {
@@ -2631,7 +2635,9 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
-    return get_tasks_omp (credentials, task_id, sort_field, sort_order, refresh_interval);
+    return get_tasks_omp (credentials, task_id, sort_field, sort_order,
+                          refresh_interval,
+                          overrides ? strcmp (overrides, "0") : 0);
 
   else if ((0 == strcmp (cmd, "delete_agent")) && (agent_id != NULL))
     return delete_agent_omp (credentials, agent_id);
@@ -3097,7 +3103,9 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_overrides_omp (credentials);
 
   else if (!strcmp (cmd, "get_tasks"))
-    return get_tasks_omp (credentials, NULL, sort_field, sort_order, refresh_interval);
+    return get_tasks_omp (credentials, NULL, sort_field, sort_order,
+                          refresh_interval,
+                          overrides ? strcmp (overrides, "0") : 0);
 
   else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
     return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);

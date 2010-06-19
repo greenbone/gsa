@@ -93,7 +93,7 @@ int manager_port = 9390;
 int manager_connect (credentials_t *, int *, gnutls_session_t *);
 
 static char *get_tasks (credentials_t *, const char *, const char *,
-                        const char *, const char *, const char *);
+                        const char *, const char *, const char *, int);
 
 
 /* Helpers. */
@@ -744,7 +744,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
-                             refresh_interval, modify_task);
+                             refresh_interval, modify_task, 1);
       g_free (modify_task);
       return ret;
     }
@@ -1126,15 +1126,17 @@ get_nvt_details_omp (credentials_t *credentials, const char *oid)
  * @param[in]  task_id      ID of task.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  refresh_interval Refresh interval (parsed to int).
- * @param[in]  command      Extra commands to run before the others.
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  command           Extra commands to run before the others.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_tasks (credentials_t * credentials, const char *task_id,
            const char *sort_field, const char *sort_order,
-           const char *refresh_interval, const char *commands)
+           const char *refresh_interval, const char *commands,
+           int apply_overrides)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -1152,7 +1154,10 @@ get_tasks (credentials_t * credentials, const char *task_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_tasks task_id=\"%s\" details=\"1\" />"
+                                "<get_tasks"
+                                " task_id=\"%s\""
+                                " apply_overrides=\"%i\""
+                                " details=\"1\" />"
                                 "<get_notes"
                                 " sort_field=\"notes.nvt, notes.text\">"
                                 "<task id=\"%s\"/>"
@@ -1164,6 +1169,7 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 "</commands>",
                                 commands ? commands : "",
                                 task_id,
+                                apply_overrides,
                                 task_id,
                                 task_id)
           == -1)
@@ -1182,10 +1188,12 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 "<commands>"
                                 "%s"
                                 "<get_tasks"
+                                " apply_overrides=\"%i\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>"
                                 "</commands>",
                                 commands ? commands : "",
+                                apply_overrides,
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
           == -1)
@@ -1200,6 +1208,9 @@ get_tasks (credentials_t * credentials, const char *task_id,
     }
 
   xml = g_string_new ("<get_tasks>");
+  g_string_append_printf (xml,
+                          "<apply_overrides>%i</apply_overrides>",
+                          apply_overrides);
   if (read_string (&session, &xml))
     {
       openvas_server_close (socket, session);
@@ -1229,17 +1240,18 @@ get_tasks (credentials_t * credentials, const char *task_id,
  * @param[in]  task_id      ID of task.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  refresh_interval Refresh interval (parsed to int).
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_tasks_omp (credentials_t * credentials, const char *task_id,
                 const char *sort_field, const char *sort_order,
-                const char *refresh_interval)
+                const char *refresh_interval, int apply_overrides)
 {
   return get_tasks (credentials, task_id, sort_field, sort_order,
-                    refresh_interval, NULL);
+                    refresh_interval, NULL, apply_overrides);
 }
 
 /**
@@ -5105,7 +5117,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra, 1);
       g_free (extra);
       return ret;
     }
@@ -5443,7 +5455,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
-                             modify_note);
+                             modify_note, 1);
       g_free (modify_note);
       return ret;
     }
@@ -6168,7 +6180,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra, 1);
       g_free (extra);
       return ret;
     }
@@ -6513,7 +6525,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
-                             modify_override);
+                             modify_override, 1);
       g_free (modify_override);
       return ret;
     }

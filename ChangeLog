@@ -1,3 +1,19 @@
+2010-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add "Apply override" checkboxes for task and report lists.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get): Pass overrides flag to
+	get_tasks_omp.
+
+	* src/gsad_omp.c (get_tasks): Add overrides arg.  Update callers.
+	(get_tasks_omp): Add overrides arg.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-task-table, html-report-table): Add "Apply
+	overrides" checkbox.
+	(get_tasks): New template.
+
 2010-06-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/oap.xsl: Little facelift for ADS/LDAP dialogs.

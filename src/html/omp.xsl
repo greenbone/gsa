@@ -83,6 +83,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-task-table">
+  <xsl:variable name="apply-overrides" select="../../apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -133,6 +134,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </select>
+        </form>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <div id="small_form">
+        <form action="" method="get">
+          <input type="hidden" name="cmd" value="get_tasks"/>
+          <xsl:choose>
+            <xsl:when test="$apply-overrides = 0">
+              <input type="checkbox" name="overrides" value="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="checkbox" name="overrides" value="1" checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          Apply overrides
+          <input type="submit" value="Update" title="Update"/>
         </form>
       </div>
     </div>
@@ -680,6 +698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-report-table">
+  <xsl:variable name="apply-overrides" select="../../apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -784,6 +803,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div id="small_form">
+        <form action="" method="get">
+          <input type="hidden" name="cmd" value="get_tasks"/>
+          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <xsl:choose>
+            <xsl:when test="$apply-overrides = 0">
+              <input type="checkbox" name="overrides" value="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="checkbox" name="overrides" value="1" checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          Apply overrides
+          <input type="submit" value="Update" title="Update"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="reports">
@@ -1672,6 +1709,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="html-task-table"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- GET_TASKS -->
+
+<xsl:template match="get_tasks">
+  <xsl:apply-templates select="get_tasks_response"/>
+  <xsl:apply-templates select="commands_response"/>
 </xsl:template>
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
