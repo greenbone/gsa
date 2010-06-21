@@ -982,7 +982,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Password</td>
           <td>yes</td>
           <td>40</td>
-          <td>Password corresponind to the above username.</td>
+          <td>Password corresponding to the above username.</td>
           <td></td>
         </tr>
       </table>
@@ -1915,89 +1915,6 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 </pre>
 
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="new_task.html">
-  <div class="gb_window_part_center">Help: New task</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/new_task.html">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <h1>New task</h1>
-      <a name="newtask"></a>
-      <p>
-       To create a new <a href="/help/glossary.html#task">task</a>
-       you have to provide the following elements:
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Task Name</td>
-          <td>yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>All Windows desktops in-depth</td>
-        </tr>
-        <tr class="even">
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td>This task scans all Windows desktops on this floor.</td>
-        </tr>
-        <tr class="odd">
-          <td>Scan Type</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>One of the
-              <a href="/help/configure_scanconfigs.html">configured scan configs</a>.
-          </td>
-          <td>Full and fast</td>
-        </tr>
-        <tr class="even">
-          <td>Scan Targets</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>One of the
-              <a href="/help/configure_targets.html">configured targets</a>.</td>
-          <td>The Windows Desktops</td>
-        </tr>
-        <tr class="odd">
-          <td>Escalator (optional)</td>
-          <td>no</td>
-          <td>---</td>
-          <td>One of the
-              <a href="/help/configure_escalators.html">configured escalators</a>.
-          </td>
-          <td>EmailFinished</td>
-        </tr>
-        <tr class="even">
-          <td>Schedule (optional)</td>
-          <td>no</td>
-          <td>---</td>
-          <td>One of the
-              <a href="/help/configure_schedules.html">configured schedules</a>.
-          </td>
-          <td>Every Tuesday Morning</td>
-        </tr>
-      </table>
-
-      <p>
-       Pressing button "Create Task" will add a new entry to the list
-       of tasks and return to the <a href="/help/tasks.html">Tasks</a>
-       overview.
-      </p>
     </div>
   </div>
 </xsl:template>

@@ -1,3 +1,47 @@
+2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Remove report "Apply overrides" checkbox.  Make the actions on the task
+	list preserve the override state.
+
+	* src/gsad.c (init_validator): Add command new_task.
+	(exec_omp_post): Call new_task_omp instead of gsad_newtask, passing
+	"apply override" flag.  Pass "apply override" flag to create_task_omp.
+	(exec_omp_get): Pass "apply override" flag to task functions that lead to
+	getting the task list.  Pass "show overrides" flag to functions that lead
+	to getting a single task.
+	(request_handler): Remove new_task.html special case.
+
+	* src/gsad_omp.c (gsad_newtask): Remove.
+	(new_task_omp): New function.  Rename from gsad_newtask.  Add
+	apply_overrides arg.
+	(create_task_omp, delete_task_omp, edit_task, edit_task_omp)
+	(save_task_omp, abort_task_omp, pause_task_omp, resume_paused_task_omp)
+	(resume_stopped_task_omp, start_task_omp): Add apply_overrides flag.
+	(delete_note_omp, save_note_omp, delete_override_omp)
+	(save_override_omp): Pass overrides arg to get_tasks as apply_overrides.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/gsad.xsl (autorefresh): Add overrides to URL.
+	(html-gsa-navigation): Add overrides flags to get_tasks URL.  Replace
+	new_task.html with new_task command.
+
+	* src/html/help.xsl (configure_targets.html): Correct typo.
+	(new_task.html): Remove.
+
+	* src/html/omp.xsl (apply_overrides): New template.
+	(html-task-table): Get apply_overrides directly from get_tasks response.
+	Replace new_task.html with command version, including overrides flag.
+	Pass overrides flag to pages that return to get_tasks.
+	(html-report-details): Pass overrides to get_report.  Remove overrides
+	checkbox.
+	(html-edit-task-form): Pass override flag on to get_tasks.
+	(task): Pass overrides flag through to report and report list and to pages
+	that return to get_tasks.
+	(gsad_newtask): Remove.
+	(new_task): New template.  Renamed from gsad_newtask.  Pass override flag
+	to create_task.
+
 2010-06-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (configure_targets.html): Added

@@ -82,8 +82,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="sort">
 </xsl:template>
 
+<xsl:template match="apply_overrides">
+</xsl:template>
+
 <xsl:template name="html-task-table">
-  <xsl:variable name="apply-overrides" select="../../apply_overrides"/>
+  <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -91,7 +94,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/tasks.html" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
-      <a href="/new_task.html" title="New Task">
+      <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}"
+         title="New Task">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <div id="small_inline_form" style="display: inline">
@@ -100,6 +104,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  src="/img/refresh.png"
                  alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
+          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">
@@ -484,6 +489,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
+            <input type="hidden"
+                   name="overrides"
+                   value="{report/filters/apply_overrides}"/>
             <tr>
               <td colspan="3">
                 <xsl:choose>
@@ -495,19 +503,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 Show notes
-              </td>
-            </tr>
-            <tr>
-              <td colspan="3">
-                <xsl:choose>
-                  <xsl:when test="report/filters/apply_overrides = 0">
-                    <input type="checkbox" name="overrides" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="overrides" value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                Apply overrides
               </td>
             </tr>
             <tr>
@@ -1364,6 +1359,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{next}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="overrides" value="{apply_overrides}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
            <td valign="top" width="165">Name</td>
@@ -1546,7 +1542,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_tasks&amp;task_id={@id}">
+              <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -1559,14 +1555,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="last_report/report/@id = first_report/report/@id">
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1">
+              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1">
                 <xsl:call-template name="short_timestamp_first"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -1590,7 +1586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Running' or status='Requested'">
-              <a href="/omp?cmd=pause_task&amp;task_id={@id}"
+              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
                  title="Pause Task">
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>
@@ -1599,7 +1595,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=start_task&amp;task_id={@id}"
+              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
                  title="Start Task">
                 <img src="/img/start.png" border="0" alt="Start"/>
               </a>
@@ -1611,7 +1607,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:when test="status='Stopped'">
-              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}"
+              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -1620,7 +1616,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Paused'">
-              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}"
+              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -1645,7 +1641,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=abort_task&amp;task_id={@id}" title="Abort Task">
+              <a href="/omp?cmd=abort_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+                 title="Abort Task">
                 <img src="/img/stop.png"
                      border="0"
                      alt="Abort"
@@ -1661,7 +1658,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=delete_task&amp;task_id={@id}"
+              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
                  title="Delete Task"
                  style="margin-left:3px;">
                 <img src="/img/delete.png"
@@ -1676,7 +1673,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  alt="Details"
                  style="margin-left:3px;"/>
           </a>
-          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}"
+          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={../apply_overrides}"
              title="Edit Task"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -7245,9 +7242,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!-- GSAD_NEWTASK -->
+<!-- NEW_TASK -->
 
-<xsl:template match="gsad_newtask">
+<xsl:template match="new_task">
   <xsl:apply-templates select="gsad_msg"/>
 
   <div class="gb_window_part_left"></div>
@@ -7260,6 +7257,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="cmd" value="create_task"/>
+      <input type="hidden" name="overrides" value="{apply_overrides}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
          <td valign="top" width="125">Name</td>

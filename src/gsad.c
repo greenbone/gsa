@@ -241,6 +241,7 @@ init_validator ()
                          "|(modify_auth)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_task)"
                          "|(pause_task)"
                          "|(resume_paused_task)"
                          "|(resume_stopped_task)"
@@ -1686,13 +1687,20 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.schedule_id);
           con_info->req_parms.schedule_id  = NULL;
         }
+      validate (validator, "overrides", &con_info->req_parms.overrides);
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.comment == NULL) ||
           (con_info->req_parms.config_id == NULL) ||
+          (con_info->req_parms.overrides == NULL) ||
           (con_info->req_parms.target_id == NULL) ||
           (con_info->req_parms.escalator_id == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
-        con_info->response = gsad_newtask (credentials, "Invalid parameter");
+        con_info->response
+         = new_task_omp (credentials,
+                         "Invalid parameter",
+                         con_info->req_parms.overrides
+                          ? strcmp (con_info->req_parms.overrides, "0")
+                          : 0);
       else
         con_info->response =
           create_task_omp (credentials, con_info->req_parms.name,
@@ -1700,7 +1708,8 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.target_id,
                            con_info->req_parms.config_id,
                            con_info->req_parms.escalator_id,
-                           con_info->req_parms.schedule_id);
+                           con_info->req_parms.schedule_id,
+                           con_info->req_parms.overrides);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
@@ -2610,28 +2619,39 @@ exec_omp_get (struct MHD_Connection *connection,
 
   /* Check cmd and precondition, start respective OMP command(s). */
   if ((!strcmp (cmd, "delete_task")) && (task_id != NULL)
-      && (strlen (task_id) < VAL_MAX_SIZE))
-    return delete_task_omp (credentials, task_id);
+      && (strlen (task_id) < VAL_MAX_SIZE)
+      && (overrides != NULL))
+    return delete_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "abort_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return abort_task_omp (credentials, task_id);
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return abort_task_omp (credentials, task_id, overrides);
+
+  else if ((!strcmp (cmd, "new_task"))
+           && (overrides != NULL))
+    return new_task_omp (credentials, NULL,
+                         overrides ? strcmp (overrides, "0") : 0);
 
   else if ((!strcmp (cmd, "pause_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return pause_task_omp (credentials, task_id);
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return pause_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "resume_paused_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return resume_paused_task_omp (credentials, task_id);
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return resume_paused_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "resume_stopped_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return resume_stopped_task_omp (credentials, task_id);
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return resume_stopped_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "start_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return start_task_omp (credentials, task_id);
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return start_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
@@ -2699,12 +2719,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_note"))
            && (note_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return delete_note_omp (credentials, note_id, "get_tasks", NULL, 0, 0,
-                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              NULL, task_id);
+                              NULL, NULL, NULL, NULL, overrides, NULL, NULL,
+                              NULL, NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "delete_override"))
@@ -2938,9 +2959,11 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_task"))
            && (task_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0))
     return edit_task_omp (credentials, task_id, "get_tasks", refresh_interval,
-                          sort_field, sort_order);
+                          sort_field, sort_order,
+                          overrides ? strcmp (overrides, "0") : 0);
 
   else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
     return edit_user_oap (credentials, name);
@@ -3246,12 +3269,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_tasks", NULL,
-                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                            0, 0, NULL, NULL, NULL, NULL, overrides, NULL, NULL,
                             NULL, NULL, task_id);
     }
 
@@ -3348,14 +3372,15 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_override"))
            && (override_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return save_override_omp (credentials, override_id, text, hosts, port,
                                 threat, new_threat, override_task_id,
                                 override_result_id, "get_tasks", NULL, 0, 0,
-                                NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, task_id);
+                                NULL, NULL, NULL, NULL, overrides, NULL, NULL,
+                                NULL, NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "save_task"))
@@ -3364,7 +3389,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_tasks") == 0))
     return save_task_omp (credentials, task_id, name, comment, escalator_id,
                           schedule_id, "get_tasks", refresh_interval,
-                          sort_field, sort_order);
+                          sort_field, sort_order,
+                          overrides ? strcmp (overrides, "0") : 0);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -4007,14 +4033,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
           free (res);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
-      else if (!strncmp (&url[0], "/new_task.html",
-                    strlen ("/new_task.html"))) /* flawfinder: ignore,
-                                                   it is a const str */
-        {
-          res = gsad_newtask (credentials, NULL);
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
-        }
       else if (!strncmp (&url[0], "/system_report/",
                     strlen ("/system_report/"))) /* flawfinder: ignore,
                                                     it is a const str */

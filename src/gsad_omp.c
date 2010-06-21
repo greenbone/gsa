@@ -276,11 +276,13 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  message      If not NULL, display message.
+ * @param[in]  apply_overrides  Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-gsad_newtask (credentials_t * credentials, const char* message)
+new_task_omp (credentials_t * credentials, const char* message,
+              int apply_overrides)
 {
   GString *xml;
   gnutls_session_t session;
@@ -293,7 +295,7 @@ gsad_newtask (credentials_t * credentials, const char* message)
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
 
-  xml = g_string_new ("<gsad_newtask>");
+  xml = g_string_new ("<new_task>");
 
   /* Get list of targets. */
   if (openvas_server_send (&session,
@@ -406,8 +408,11 @@ gsad_newtask (credentials_t * credentials, const char* message)
   if (message)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Task"));
   g_string_append_printf (xml,
-                          "<user>%s</user></gsad_newtask>",
-                          credentials->username);
+                          "<user>%s</user>"
+                          "<apply_overrides>%i</apply_overrides>"
+                          "</new_task>",
+                          credentials->username,
+                          apply_overrides);
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -423,13 +428,14 @@ gsad_newtask (credentials_t * credentials, const char* message)
  * @param[in]  scanconfig    Config for task.
  * @param[in]  escalator_id  Escalator for task.
  * @param[in]  schedule_id   UUID of schedule for task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
                  char *target_id, char *config_id, const char *escalator_id,
-                 const char *schedule_id)
+                 const char *schedule_id, const char *apply_overrides)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -468,14 +474,16 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                               "</create_task>"
                               "<get_tasks"
                               " sort_field=\"name\""
-                              " sort_order=\"ascending\"/>"
+                              " sort_order=\"ascending\""
+                              " apply_overrides=\"%s\"/>"
                               "</commands>",
                               config_id,
                               schedule_element,
                               escalator_element,
                               target_id,
                               name,
-                              comment);
+                              comment,
+                              apply_overrides);
 
   g_free (schedule_element);
   g_free (escalator_element);
@@ -511,11 +519,13 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (credentials_t * credentials, const char *task_id)
+delete_task_omp (credentials_t * credentials, const char *task_id,
+                 const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -534,9 +544,11 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
                             "<delete_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -573,6 +585,7 @@ delete_task_omp (credentials_t * credentials, const char *task_id)
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
@@ -581,7 +594,7 @@ edit_task (credentials_t * credentials, const char *task_id,
            const char *extra_xml, const char *next,
            /* Parameters for get_tasks. */
            const char *refresh_interval, const char *sort_field,
-           const char *sort_order)
+           const char *sort_order, int apply_overrides)
 {
   GString *xml;
   gnutls_session_t session;
@@ -642,13 +655,15 @@ edit_task (credentials_t * credentials, const char *task_id,
                           /* Passthroughs. */
                           "<refresh_interval>%s</refresh_interval>"
                           "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>",
+                          "<sort_order>%s</sort_order>"
+                          "<apply_overrides>%i</apply_overrides>",
                           task_id,
                           credentials->username,
                           next,
                           refresh_interval ? refresh_interval : "",
                           sort_field,
-                          sort_order);
+                          sort_order,
+                          apply_overrides);
 
   if (read_string (&session, &xml))
     {
@@ -676,6 +691,7 @@ edit_task (credentials_t * credentials, const char *task_id,
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
@@ -684,10 +700,10 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
                const char *next,
                /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
-               const char *sort_order)
+               const char *sort_order, int apply_overrides)
 {
   return edit_task (credentials, task_id, NULL, next, refresh_interval,
-                    sort_field, sort_order);
+                    sort_field, sort_order, apply_overrides);
 }
 
 /**
@@ -703,6 +719,7 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
@@ -712,14 +729,15 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                const char *schedule_id, const char *next,
                /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
-               const char *sort_order)
+               const char *sort_order, int apply_overrides)
 {
   gchar *modify_task;
 
   if (comment == NULL || name == NULL)
     return edit_task (credentials, task_id,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
-                      refresh_interval, sort_field, sort_order);
+                      refresh_interval, sort_field, sort_order,
+                      apply_overrides);
 
   if (escalator_id == NULL || schedule_id == NULL || next == NULL
       || sort_field == NULL || sort_order == NULL || task_id == NULL)
@@ -744,7 +762,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
-                             refresh_interval, modify_task, 1);
+                             refresh_interval, modify_task, apply_overrides);
       g_free (modify_task);
       return ret;
     }
@@ -762,11 +780,13 @@ save_task_omp (credentials_t * credentials, const char *task_id,
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-abort_task_omp (credentials_t * credentials, const char *task_id)
+abort_task_omp (credentials_t * credentials, const char *task_id,
+                const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -785,9 +805,11 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
                             "<abort_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -819,11 +841,13 @@ abort_task_omp (credentials_t * credentials, const char *task_id)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-pause_task_omp (credentials_t * credentials, const char *task_id)
+pause_task_omp (credentials_t * credentials, const char *task_id,
+                const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -842,9 +866,11 @@ pause_task_omp (credentials_t * credentials, const char *task_id)
                             "<pause_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -876,11 +902,13 @@ pause_task_omp (credentials_t * credentials, const char *task_id)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_paused_task_omp (credentials_t * credentials, const char *task_id)
+resume_paused_task_omp (credentials_t * credentials, const char *task_id,
+                        const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -899,9 +927,11 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id)
                             "<resume_paused_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -933,11 +963,13 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
+resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
+                         const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -956,9 +988,11 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
                             "<resume_stopped_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -990,11 +1024,13 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (credentials_t * credentials, const char *task_id)
+start_task_omp (credentials_t * credentials, const char *task_id,
+                const char *apply_overrides)
 {
   entity_t entity;
   char *text = NULL;
@@ -1013,9 +1049,11 @@ start_task_omp (credentials_t * credentials, const char *task_id)
                             "<start_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " sort_order=\"ascending\""
+                            " apply_overrides=\"%s\"/>"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       openvas_server_close (socket, session);
@@ -5055,7 +5093,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  overrides      Whether to apply/include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -5117,7 +5155,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra, 1);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
+                             overrides ? strcmp (overrides, "0") : 0);
       g_free (extra);
       return ret;
     }
@@ -5367,7 +5406,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  sort_order      "ascending", "descending", or NULL.
  * @param[in]  levels          Threat levels to include in report.
  * @param[in]  notes           Whether to include notes.
- * @param[in]  overrides       Whether to include overrides.
+ * @param[in]  overrides       Whether to apply/include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
@@ -5455,7 +5494,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
-                             modify_note, 1);
+                             modify_note,
+                             overrides ? strcmp (overrides, "0") : 0);
       g_free (modify_note);
       return ret;
     }
@@ -6115,7 +6155,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
  * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
+ * @param[in]  overrides      Whether to apply/include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
@@ -6180,7 +6220,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra, 1);
+      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
+                             overrides ? strcmp (overrides, "0") : 0);
       g_free (extra);
       return ret;
     }
@@ -6432,7 +6473,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
  * @param[in]  sort_order      "ascending", "descending", or NULL.
  * @param[in]  levels          Threat levels to include in report.
  * @param[in]  notes           Whether to include notes.
- * @param[in]  overrides       Whether to include overrides.
+ * @param[in]  overrides       Whether to apply/include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
  * @param[in]  search_phrase   Phrase which included results must contain.
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
@@ -6525,7 +6566,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
-                             modify_override, 1);
+                             modify_override,
+                             overrides ? strcmp (overrides, "0") : 0);
       g_free (modify_override);
       return ret;
     }

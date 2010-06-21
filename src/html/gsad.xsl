@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- Add meta refresh info if autorefresh element present -->
 <xsl:template match="autorefresh" mode="html-header-meta">
   <xsl:if test="@interval &gt; 0">
-    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_tasks&amp;refresh_interval={@interval}" />
+    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_tasks&amp;refresh_interval={@interval}&amp;overrides={../get_tasks/apply_overrides}" />
   </xsl:if>
 </xsl:template>
 
@@ -111,8 +111,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li>
             Scan Management
             <ul>
-              <li><a href="/omp?cmd=get_tasks">Tasks</a></li>
-              <li><a href="/new_task.html">New Task</a></li>
+              <li><a href="/omp?cmd=get_tasks&amp;overrides=1">Tasks</a></li>
+              <li><a href="/omp?cmd=new_task&amp;overrides=1">New Task</a></li>
               <li><a href="/omp?cmd=get_notes">Notes</a></li>
               <li><a href="/omp?cmd=get_overrides">Overrides</a></li>
               <li><a href="/omp?cmd=get_system_reports&amp;duration=86400">Performance</a></li>
