@@ -1709,7 +1709,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:otherwise>
           </xsl:choose>
-          <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+          <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+             title="Details">
             <img src="/img/details.png"
                  border="0"
                  alt="Details"

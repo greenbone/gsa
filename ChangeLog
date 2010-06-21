@@ -1,5 +1,10 @@
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Also pass apply_override through to task
+	details page.
+
+2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_tasks_response): Improve operation name.
 
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
