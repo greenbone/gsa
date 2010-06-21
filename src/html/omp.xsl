@@ -284,9 +284,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-report-details">
-  <xsl:variable name="levels">
-    <xsl:value-of select="report/filters/text()"/>
-  </xsl:variable>
+  <xsl:variable name="levels"
+                select="report/filters/text()"/>
+  <xsl:variable name="apply-overrides"
+                select="report/filters/apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -328,8 +329,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
       <div id="small_form">
         <form action="" method="get">
-          <xsl:variable name="apply-overrides"
-                        select="report/filters/apply_overrides"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
           <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -455,6 +454,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  value="{report/sort/field/order}"/>
           <input type="hidden" name="notes" value="{report/filters/notes}"/>
           <input type="hidden" name="overrides" value="{report/filters/overrides}"/>
+          <input type="hidden"
+                 name="apply_overrides"
+                 value="{$apply-overrides}"/>
           <input type="hidden"
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
