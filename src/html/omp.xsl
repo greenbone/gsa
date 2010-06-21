@@ -453,9 +453,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="sort_order"
                  value="{report/sort/field/order}"/>
           <input type="hidden" name="notes" value="{report/filters/notes}"/>
-          <input type="hidden" name="overrides" value="{report/filters/overrides}"/>
           <input type="hidden"
-                 name="apply_overrides"
+                 name="overrides"
                  value="{$apply-overrides}"/>
           <input type="hidden"
                  name="result_hosts_only"

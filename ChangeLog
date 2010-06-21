@@ -1,5 +1,10 @@
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Use correct name for
+	apply_overrides in report download request.
+
+2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add apply_overrides to report
 	download request.
 
