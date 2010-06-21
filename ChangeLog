@@ -1,5 +1,9 @@
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add _ to credential_login chars.
+
+2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Also pass apply_override through to task
 	details page.
 
