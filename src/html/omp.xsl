@@ -284,6 +284,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-report-details">
+  <xsl:variable name="levels">
+    <xsl:value-of select="report/filters/text()"/>
+  </xsl:variable>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -322,6 +325,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="report/scan_run_status"/></td>
         </tr>
       </table>
+      <br/>
+      <div id="small_form">
+        <form action="" method="get">
+          <xsl:variable name="apply-overrides"
+                        select="report/filters/apply_overrides"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="first_result" value="{report/results/@start}"/>
+          <input type="hidden" name="levels" value="{$levels}"/>
+          <input type="hidden"
+                 name="search_phrase"
+                 value="{report/filters/phrase}"/>
+          <input type="hidden"
+                 name="apply_min_cvss_base"
+                 value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+          <input type="hidden"
+                 name="min_cvss_base"
+                 value="{report/filters/min_cvss_base}"/>
+          <input type="hidden"
+                 name="sort_field"
+                 value="{report/sort/field/text()}"/>
+          <input type="hidden"
+                 name="sort_order"
+                 value="{report/sort/field/order}"/>
+          <input type="hidden" name="notes" value="{report/filters/notes}"/>
+          <input type="hidden"
+                 name="result_hosts_only"
+                 value="{report/filters/result_hosts_only}"/>
+          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <xsl:choose>
+            <xsl:when test="$apply-overrides = 0">
+              <input type="checkbox" name="overrides" value="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="checkbox" name="overrides" value="1" checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          Apply overrides
+          <input type="submit" value="Update" title="Update"/>
+        </form>
+      </div>
       <br/>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
@@ -367,9 +411,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       -->
     </div>
     <div class="gb_window_part_content">
-      <xsl:variable name="levels">
-        <xsl:value-of select="report/filters/text()"/>
-      </xsl:variable>
       <div style="float:left;">
         <xsl:choose>
           <xsl:when test="count(report/results/result) &gt; 0">

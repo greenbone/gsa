@@ -1,5 +1,9 @@
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add "Apply overrides" checkbox.
+
+2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Remove report "Apply overrides" checkbox.  Make the actions on the task
 	list preserve the override state.
 
