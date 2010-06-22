@@ -2967,7 +2967,7 @@ Public License instead of this License.
                     <div class="progressbar_text">Stop Requested</div>
                   </div>
                 </td><td>
-                  The user has recently aborted the scan. Currently the manager
+                  The user has recently stopped the scan. Currently the manager
                   server has submitted this command to the scanner, but the scanner
                   has not yet cleanly stopped the scan.
               </td></tr>
@@ -2979,10 +2979,10 @@ Public License instead of this License.
                     </div>
                   </div>
                 </td><td>
-                  The last scan for this task was aborted by the user.  The scan was
+                  The last scan for this task was stopped by the user.  The scan was
                   15% complete when it stopped.  The newest
                   report might be incomplete. Also, this status is set in cases
-                  where the task was aborted due to other arbitrary circumstances
+                  where the task was stopped due to other arbitrary circumstances
                   such as power outage.  The task will remain stopped even if the
                   scanner or manager server is restarted, for example on reboot.
               </td></tr>
@@ -3197,10 +3197,10 @@ Public License instead of this License.
         manually or due to its scheduled duration.
       </p>
 
-      <h4>Abort Task</h4>
+      <h4>Stop Task</h4>
       <p>
-       Pressing the abort icon <img src="/img/stop.png" alt="Abort" title="Abort" /> will
-       abort a running task. The list of tasks will be updated and for this task
+       Pressing the stop icon <img src="/img/stop.png" alt="Stop" title="Stop" /> will
+       stop a running task. The list of tasks will be updated and for this task
        a half-finished report is added to the list of reports.
       </p>
       <p>

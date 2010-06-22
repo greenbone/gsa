@@ -180,8 +180,7 @@ init_validator ()
 
   openvas_validator_add (validator,
                          "cmd",
-                         "^(abort_task)"
-                         "|(create_agent)"
+                         "^(create_agent)"
                          "|(create_config)"
                          "|(create_escalator)"
                          "|(create_lsc_credential)"
@@ -255,6 +254,7 @@ init_validator ()
                          "|(save_task)"
                          "|(save_user)"
                          "|(start_task)"
+                         "|(stop_task)"
                          "|(sync_feed)$");
 
 
@@ -2623,11 +2623,6 @@ exec_omp_get (struct MHD_Connection *connection,
       && (overrides != NULL))
     return delete_task_omp (credentials, task_id, overrides);
 
-  else if ((!strcmp (cmd, "abort_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (overrides != NULL))
-    return abort_task_omp (credentials, task_id, overrides);
-
   else if ((!strcmp (cmd, "new_task"))
            && (overrides != NULL))
     return new_task_omp (credentials, NULL,
@@ -2652,6 +2647,11 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (task_id) < VAL_MAX_SIZE)
            && (overrides != NULL))
     return start_task_omp (credentials, task_id, overrides);
+
+  else if ((!strcmp (cmd, "stop_task")) && (task_id != NULL)
+           && (strlen (task_id) < VAL_MAX_SIZE)
+           && (overrides != NULL))
+    return stop_task_omp (credentials, task_id, overrides);
 
   else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))

@@ -776,7 +776,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
 }
 
 /**
- * @brief Abort a task, get all tasks, XSL transform the result.
+ * @brief Stop a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
@@ -785,7 +785,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
  * @return Result of XSL transformation.
  */
 char *
-abort_task_omp (credentials_t * credentials, const char *task_id,
+stop_task_omp (credentials_t * credentials, const char *task_id,
                 const char *apply_overrides)
 {
   entity_t entity;
@@ -795,14 +795,14 @@ abort_task_omp (credentials_t * credentials, const char *task_id,
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while aborting a task. "
-                         "The task is not aborted. "
+                         "An internal error occurred while stopping a task. "
+                         "The task is not stopped. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<abort_task task_id=\"%s\" />"
+                            "<stop_task task_id=\"%s\" />"
                             "<get_tasks"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\""
@@ -814,8 +814,8 @@ abort_task_omp (credentials_t * credentials, const char *task_id,
     {
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while aborting a task. "
-                           "The task is not aborted. "
+                           "An internal error occurred while stoping a task. "
+                           "The task is not stopped. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
@@ -825,8 +825,8 @@ abort_task_omp (credentials_t * credentials, const char *task_id,
     {
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while aborting a task. "
-                           "It is unclear whether the task has been aborted or not. "
+                           "An internal error occurred while stopping a task. "
+                           "It is unclear whether the task has been stoppeded or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }

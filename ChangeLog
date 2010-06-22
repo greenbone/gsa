@@ -1,3 +1,21 @@
+2010-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Rename ABORT_TASK to STOP_TASK.
+
+	* src/gsad.c (init_validator): Remove abort_task.  Add stop_task.
+	(exec_omp_get): Call stop_task_omp instead of abort_task_omp.
+
+	* src/gsad_omp.c (abort_task_omp): Remove.
+	(stop_task_omp): New function.  Rename from "abort" version.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/help.xsl (tasks.html): Replace "abort" with "stop".
+
+	* src/html/omp.xsl (abort_task_response): Remove.
+	(stop_task_response): New template.  Renamed from abort_task_response.
+	(task): Replace "abort" with "stop".
+
 2010-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add _ to credential_login chars.

@@ -1206,7 +1206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="abort_task_response">
+<xsl:template match="stop_task_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Stop Task</xsl:with-param>
     <xsl:with-param name="status">
@@ -1674,20 +1674,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
               <img src="/img/stop_inactive.png" border="0"
-                   alt="Abort"
+                   alt="Stop"
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
               <img src="/img/stop_inactive.png" border="0"
-                   alt="Abort"
+                   alt="Stop"
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=abort_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
-                 title="Abort Task">
+              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+                 title="Stop Task">
                 <img src="/img/stop.png"
                      border="0"
-                     alt="Abort"
+                     alt="Stop"
                      style="margin-left:3px;"/>
               </a>
             </xsl:otherwise>
