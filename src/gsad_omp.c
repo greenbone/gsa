@@ -1090,7 +1090,7 @@ start_task_omp (credentials_t * credentials, const char *task_id,
  * @return XSL transformed NVT details response or error message.
  */
 static char*
-get_nvt_details (credentials_t *credentials, const char *oid,
+get_nvts (credentials_t *credentials, const char *oid,
                  const char *commands)
 {
   GString *xml = NULL;
@@ -1106,7 +1106,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "%s"
-                            "<get_nvt_details oid=\"%s\" />"
+                            "<get_nvts oid=\"%s\" details=\"1\"/>"
                             "<get_notes sort_field=\"notes.text\">"
                             "<nvt id=\"%s\"/>"
                             "</get_notes>"
@@ -1127,7 +1127,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
                             "/omp?cmd=get_tasks");
     }
 
-  xml = g_string_new ("<get_nvt_details>");
+  xml = g_string_new ("<get_nvts>");
   if (read_string (&session, &xml))
     {
       openvas_server_close (socket, session);
@@ -1137,7 +1137,7 @@ get_nvt_details (credentials_t *credentials, const char *oid,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
-  g_string_append (xml, "</get_nvt_details>");
+  g_string_append (xml, "</get_nvts>");
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -1152,9 +1152,9 @@ get_nvt_details (credentials_t *credentials, const char *oid,
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvt_details_omp (credentials_t *credentials, const char *oid)
+get_nvts_omp (credentials_t *credentials, const char *oid)
 {
-  return get_nvt_details (credentials, oid, NULL);
+  return get_nvts (credentials, oid, NULL);
 }
 
 /**
@@ -3529,7 +3529,7 @@ get_config_family_omp (credentials_t * credentials,
 
   xml = g_string_new ("<get_config_family_response>");
   if (edit) g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvt_details response? */
+  /* @todo Would it be better include this in the get_nvts response? */
   g_string_append_printf (xml,
                           "<config id=\"%s\">"
                           "<name>%s</name><family>%s</family>"
@@ -3541,8 +3541,8 @@ get_config_family_omp (credentials_t * credentials,
   /* Get the details for all NVT's in the config in the family. */
 
   if (openvas_server_sendf (&session,
-                            "<get_nvt_details"
-                            " config_id=\"%s\" family=\"%s\""
+                            "<get_nvts"
+                            " config_id=\"%s\" details=\"1\" family=\"%s\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
                             family,
@@ -3577,7 +3577,8 @@ get_config_family_omp (credentials_t * credentials,
       g_string_append (xml, "<all>");
 
       if (openvas_server_sendf (&session,
-                                "<get_nvt_details"
+                                "<get_nvts"
+                                " details=\"1\""
                                 " family=\"%s\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
@@ -3746,7 +3747,7 @@ get_config_nvt_omp (credentials_t * credentials,
 
   xml = g_string_new ("<get_config_nvt_response>");
   if (edit) g_string_append (xml, "<edit/>");
-  /* @todo Would it be better include this in the get_nvt_details response? */
+  /* @todo Would it be better include this in the get_nvts response? */
   g_string_append_printf (xml,
                           "<config id=\"%s\">"
                           "<name>%s</name><family>%s</family>"
@@ -3757,9 +3758,10 @@ get_config_nvt_omp (credentials_t * credentials,
 
 
   if (openvas_server_sendf (&session,
-                            "<get_nvt_details"
+                            "<get_nvts"
                             " config_id=\"%s\" family=\"%s\" oid=\"%s\""
-                            " sort_field=\"%s\" sort_order=\"%s\"/>",
+                            " details=\"1\" sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
                             config_id,
                             family,
                             nvt,
@@ -5098,7 +5100,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  oid            OID of NVT (for get_nvts).
  * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -5126,7 +5128,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_notes");
 
-  if (strcmp (next, "get_nvt_details") == 0)
+  if (strcmp (next, "get_nvts") == 0)
     {
       gchar *extra;
       char *ret;
@@ -5139,7 +5141,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                              "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_nvt_details (credentials, oid, extra);
+      ret = get_nvts (credentials, oid, extra);
       g_free (extra);
       return ret;
     }
@@ -5280,7 +5282,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  search_phrase   Phrase which included results must contain.
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
- * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  oid             OID of NVT (for get_nvts).
  * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -5350,7 +5352,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
                           "<min_cvss_base>%s</min_cvss_base>"
-                          /* Parameters for get_nvt_details. */
+                          /* Parameters for get_nvts. */
                           "<nvt id=\"%s\"/>"
                           /* Parameters for get_tasks. */
                           "<task id=\"%s\"/>",
@@ -5411,7 +5413,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  search_phrase   Phrase which included results must contain.
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
- * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  oid             OID of NVT (for get_nvts).
  * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -5458,7 +5460,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                  note_task_id,
                                  note_result_id);
 
-  if (strcmp (next, "get_nvt_details") == 0)
+  if (strcmp (next, "get_nvts") == 0)
     {
       char *ret;
 
@@ -5472,7 +5474,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                "/omp?cmd=get_notes");
         }
 
-      ret = get_nvt_details (credentials, oid, modify_note);
+      ret = get_nvts (credentials, oid, modify_note);
       g_free (modify_note);
       return ret;
     }
@@ -6160,7 +6162,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  oid            OID of NVT (for get_nvts).
  * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -6188,7 +6190,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_overrides");
 
-  if (strcmp (next, "get_nvt_details") == 0)
+  if (strcmp (next, "get_nvts") == 0)
     {
       gchar *extra;
       char *ret;
@@ -6202,7 +6204,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
 
       extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                override_id);
-      ret = get_nvt_details (credentials, oid, extra);
+      ret = get_nvts (credentials, oid, extra);
       g_free (extra);
       return ret;
     }
@@ -6345,7 +6347,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  oid            OID of NVT (for get_nvt_details).
+ * @param[in]  oid            OID of NVT (for get_nvts).
  * @param[in]  task_id        ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -6416,7 +6418,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
                           "<min_cvss_base>%s</min_cvss_base>"
-                          /* Parameters for get_nvt_details. */
+                          /* Parameters for get_nvts. */
                           "<nvt id=\"%s\"/>"
                           /* Parameters for get_tasks. */
                           "<task id=\"%s\"/>",
@@ -6478,7 +6480,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
  * @param[in]  search_phrase   Phrase which included results must contain.
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
- * @param[in]  oid             OID of NVT (for get_nvt_details).
+ * @param[in]  oid             OID of NVT (for get_nvts).
  * @param[in]  task_id         ID of task (for get_tasks).
  *
  * @return Result of XSL transformation.
@@ -6530,7 +6532,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                      override_task_id,
                                      override_result_id);
 
-  if (strcmp (next, "get_nvt_details") == 0)
+  if (strcmp (next, "get_nvts") == 0)
     {
       char *ret;
 
@@ -6544,7 +6546,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                "/omp?cmd=get_overrides");
         }
 
-      ret = get_nvt_details (credentials, oid, modify_override);
+      ret = get_nvts (credentials, oid, modify_override);
       g_free (modify_override);
       return ret;
     }

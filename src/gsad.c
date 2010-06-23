@@ -223,7 +223,7 @@ init_validator ()
                          "|(get_lsc_credentials)"
                          "|(get_note)"
                          "|(get_notes)"
-                         "|(get_nvt_details)"
+                         "|(get_nvts)"
                          "|(get_override)"
                          "|(get_overrides)"
                          "|(get_report)"
@@ -2682,10 +2682,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
-      return delete_note_omp (credentials, note_id, "get_nvt_details", NULL,
+      return delete_note_omp (credentials, note_id, "get_nvts", NULL,
                               0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                               NULL, oid, NULL);
     }
@@ -2741,10 +2741,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
-      return delete_override_omp (credentials, override_id, "get_nvt_details",
+      return delete_override_omp (credentials, override_id, "get_nvts",
                                   NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
                                   NULL, NULL, NULL, oid, NULL);
     }
@@ -2838,10 +2838,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
-      return edit_note_omp (credentials, note_id, "get_nvt_details",
+      return edit_note_omp (credentials, note_id, "get_nvts",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                             NULL, oid, NULL, NULL);
     }
@@ -2907,10 +2907,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
-      return edit_override_omp (credentials, override_id, "get_nvt_details",
+      return edit_override_omp (credentials, override_id, "get_nvts",
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                                 NULL, "-1", oid, NULL);
     }
@@ -3170,8 +3170,8 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_config_nvt_omp (credentials, config_id, name, family, oid,
                                sort_field, sort_order, 0);
 
-  else if ((!strcmp (cmd, "get_nvt_details")) && (oid != NULL))
-    return get_nvt_details_omp (credentials, oid);
+  else if ((!strcmp (cmd, "get_nvts")) && (oid != NULL))
+    return get_nvts_omp (credentials, oid);
 
   else if (!strcmp (cmd, "get_settings"))
     return get_settings_oap (credentials, sort_field, sort_order);
@@ -3230,11 +3230,11 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_note"))
            && (note_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_nvt_details",
+                            note_task_id, note_result_id, "get_nvts",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
                             NULL, NULL, oid, NULL);
     }
@@ -3331,12 +3331,12 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_override"))
            && (override_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_nvt_details") == 0)
+           && (strcmp (next, "get_nvts") == 0)
            && (oid != NULL))
     {
       return save_override_omp (credentials, override_id, text, hosts, port,
                                 threat, new_threat, override_task_id,
-                                override_result_id, "get_nvt_details", NULL,
+                                override_result_id, "get_nvts", NULL,
                                 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                                 NULL, oid, NULL);
     }

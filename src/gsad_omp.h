@@ -206,6 +206,6 @@ char * get_system_report_omp (credentials_t *, const char *, const char *,
 
 gboolean is_omp_authenticated (gchar *, gchar *);
 
-char * get_nvt_details_omp (credentials_t *, const char *);
+char * get_nvts_omp (credentials_t *, const char *);
 
 #endif /* not _GSAD_OMP_H */

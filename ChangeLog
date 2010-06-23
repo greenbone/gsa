@@ -1,3 +1,27 @@
+2010-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Rename GET_NVT_DETAILS to GET_NVTS.
+
+	* src/gsad.c (init_validator): Remove get_nvt_details.  Add get_nvts.
+	(exec_omp_get): Call get_nvts_omp instead of get_nvt_details_omp.  Replace
+	"get_nvt_details" page name args with "get_nvts".
+
+	* src/gsad_omp.c: Replace get_nvt_details in comments and docs.
+	(get_nvt_details, get_nvt_details_omp): Remove.
+	(get_nvts, get_nvts_omp): New function.  Rename from "nvt_details"
+	version.  Update callers.
+	(get_config_nvt_omp, get_config_family_omp): Replace get_nvt_details
+	command.  Add details attribute.
+	(delete_note_omp, save_note_omp, delete_override_omp): Replace
+	get_nvt_details in page name comparison.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (get_nvt_details): Remove.
+	(get_nvt): New template.  Renamed from get_nvt_details_response.
+	(html-config-family-table, html-config-nvt-table): Replace "nvt_details"
+	with "nvts".
+
 2010-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Rename ABORT_TASK to STOP_TASK.

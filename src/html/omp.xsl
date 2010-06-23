@@ -3189,7 +3189,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="config_id" value="{$config_id}"/>
             <input type="hidden" name="name" value="{$config_name}"/>
             <input type="hidden" name="family" value="{$family}"/>
-            <xsl:for-each select="all/get_nvt_details_response/nvt" >
+            <xsl:for-each select="all/get_nvts_response/nvt" >
               <xsl:variable name="current_name" select="name/text()"/>
               <xsl:variable name="id" select="@oid"/>
               <xsl:variable name="class">
@@ -3212,7 +3212,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:variable
                     name="timeout"
-                    select="../../../get_nvt_details_response/nvt[@oid=$id]/timeout"/>
+                    select="../../../get_nvts_response/nvt[@oid=$id]/timeout"/>
                   <xsl:choose>
                     <xsl:when test="string-length($timeout) &gt; 0">
                       <xsl:value-of select="$timeout"/>
@@ -3233,7 +3233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
                 <td style="text-align:center;">
                   <xsl:choose>
-                    <xsl:when test="../../../get_nvt_details_response/nvt[@oid=$id]">
+                    <xsl:when test="../../../get_nvts_response/nvt[@oid=$id]">
                       <input type="checkbox" name="nvt:{@oid}" value="1"
                              checked="1"/>
                     </xsl:when>
@@ -3258,7 +3258,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>
                 Total:
-                <xsl:value-of select="count(all/get_nvt_details_response/nvt)"/>
+                <xsl:value-of select="count(all/get_nvts_response/nvt)"/>
               </td>
               <td></td>
               <td></td>
@@ -3267,7 +3267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td></td>
               <td>
                 Total:
-                <xsl:value-of select="count(get_nvt_details_response/nvt)"/>
+                <xsl:value-of select="count(get_nvts_response/nvt)"/>
               </td>
               <td></td>
             </tr>
@@ -3282,7 +3282,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </form>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:for-each select="get_nvt_details_response/nvt" >
+          <xsl:for-each select="get_nvts_response/nvt" >
             <xsl:variable name="current_name" select="name/text()"/>
             <xsl:variable name="class">
               <xsl:choose>
@@ -3331,7 +3331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td>
               Total:
-              <xsl:value-of select="count(get_nvt_details_response/nvt)"/>
+              <xsl:value-of select="count(get_nvts_response/nvt)"/>
             </td>
             <td></td>
             <td></td>
@@ -3738,7 +3738,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <xsl:variable name="family">
-      <xsl:value-of select="get_nvt_details_response/nvt/family"/>
+      <xsl:value-of select="get_nvts_response/nvt/family"/>
     </xsl:variable>
     <div class="float_right">
       <xsl:choose>
@@ -3771,7 +3771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 
     <h2>Details</h2>
-    <xsl:apply-templates select="get_nvt_details_response/nvt"/>
+    <xsl:apply-templates select="get_nvts_response/nvt"/>
 
     <h2>Preferences</h2>
     <xsl:variable name="config" select="config"/>
@@ -3784,8 +3784,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="family" value="{$family}"/>
           <input type="hidden"
                  name="oid"
-                 value="{get_nvt_details_response/nvt/@oid}"/>
-          <xsl:for-each select="get_nvt_details_response/preferences">
+                 value="{get_nvts_response/nvt/@oid}"/>
+          <xsl:for-each select="get_nvts_response/preferences">
             <xsl:call-template name="preferences-edit-details">
               <xsl:with-param name="config" select="$config"/>
             </xsl:call-template>
@@ -3793,7 +3793,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="get_nvt_details_response/preferences">
+        <xsl:for-each select="get_nvts_response/preferences">
           <xsl:call-template name="preferences-details">
             <xsl:with-param name="config" select="$config"/>
           </xsl:call-template>
@@ -5393,7 +5393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_overrides_response">
 </xsl:template>
 
-<xsl:template match="get_nvt_details">
+<xsl:template match="get_nvts">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_note_response"/>
   <xsl:apply-templates select="commands_response/delete_override_response"/>
@@ -5408,7 +5408,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates
-        select="commands_response/get_nvt_details_response/nvt"/>
+        select="commands_response/get_nvts_response/nvt"/>
       <xsl:choose>
         <xsl:when test="count(commands_response/get_notes_response/note) = 0">
           <h1>Notes: None</h1>
@@ -5601,7 +5601,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
         <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
 
-        <!-- get_nvt_details param. -->
+        <!-- get_nvts param. -->
         <input type="hidden" name="oid" value="{nvt/@id}"/>
 
         <!-- get_tasks param. -->
@@ -5612,7 +5612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_notes_response/note/nvt"/>
-              <a href="?cmd=get_nvt_details&amp;oid={$nvt/@oid}">
+              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}">
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
@@ -5847,7 +5847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
@@ -5855,7 +5855,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -5888,7 +5888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
@@ -6241,7 +6241,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
         <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
 
-        <!-- get_nvt_details param. -->
+        <!-- get_nvts param. -->
         <input type="hidden" name="oid" value="{nvt/@id}"/>
 
         <!-- get_tasks param. -->
@@ -6252,7 +6252,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_overrides_response/override/nvt"/>
-              <a href="?cmd=get_nvt_details&amp;oid={$nvt/@oid}">
+              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}">
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
@@ -6506,7 +6506,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
          title="Delete Override" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
@@ -6514,7 +6514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvt_details&amp;oid={../../get_nvt_details_response/nvt/@oid}"
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -6547,7 +6547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
@@ -6950,7 +6950,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           NVT:
           <xsl:variable name="max" select="80"/>
-          <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
             <xsl:choose>
               <xsl:when test="string-length(nvt/name) &gt; $max">
                 <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
@@ -6961,7 +6961,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </a>
           (OID:
-           <a href="?cmd=get_nvt_details&amp;oid={nvt/@oid}">
+           <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
              <xsl:value-of select="nvt/@oid"/>
            </a>)
         </xsl:otherwise>
