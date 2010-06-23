@@ -1106,7 +1106,10 @@ get_nvts (credentials_t *credentials, const char *oid,
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "%s"
-                            "<get_nvts oid=\"%s\" details=\"1\"/>"
+                            "<get_nvts"
+                            " oid=\"%s\""
+                            " preferences=\"1\""
+                            " details=\"1\"/>"
                             "<get_notes sort_field=\"notes.text\">"
                             "<nvt id=\"%s\"/>"
                             "</get_notes>"
@@ -3543,6 +3546,7 @@ get_config_family_omp (credentials_t * credentials,
   if (openvas_server_sendf (&session,
                             "<get_nvts"
                             " config_id=\"%s\" details=\"1\" family=\"%s\""
+                            " timeout=\"1\" preference_count=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
                             family,
@@ -3580,6 +3584,7 @@ get_config_family_omp (credentials_t * credentials,
                                 "<get_nvts"
                                 " details=\"1\""
                                 " family=\"%s\""
+                                " preference_count=\"1\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
                                 family,
@@ -3759,11 +3764,10 @@ get_config_nvt_omp (credentials_t * credentials,
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" family=\"%s\" oid=\"%s\""
-                            " details=\"1\" sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " config_id=\"%s\" oid=\"%s\""
+                            " details=\"1\" preferences=\"1\""
+                            " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
-                            family,
                             nvt,
                             sort_field ? sort_field : "nvts.name",
                             sort_order ? sort_order : "ascending")

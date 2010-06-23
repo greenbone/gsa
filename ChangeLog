@@ -1,5 +1,10 @@
 2010-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_nvts, get_config_family_omp, get_config_family_omp)
+	(get_config_nvt_omp): Adjust get_nvts with new details flags.
+
+2010-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Rename GET_NVT_DETAILS to GET_NVTS.
 
 	* src/gsad.c (init_validator): Remove get_nvt_details.  Add get_nvts.
