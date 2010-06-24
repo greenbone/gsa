@@ -1,5 +1,12 @@
 2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (manager_connect): Note breakpoint method of pausing.
+
+	* src/gsad_oap.c (administrator_connect): Note breakpoint method of
+	pausing.
+
+2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-config-nvt-table): Select prefs from inside NVT.
 
 2010-06-23  Matthew Mundell <matthew.mundell@greenbone.net>

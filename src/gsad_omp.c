@@ -7331,6 +7331,8 @@ manager_connect (credentials_t *credentials, int *socket,
   /* Enable this if you need the CGI to sleep after launch. This can be useful
    * if you need to attach to manager process the CGI is talking to for
    * debugging purposes.
+   *
+   * An easier method is to run gsad under gdb and set a breakpoint here.
    */
   tracef ("Sleeping!");
   sleep (10);
