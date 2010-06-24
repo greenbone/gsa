@@ -4367,7 +4367,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                          "/omp?cmd=get_tasks");
 
   if (openvas_server_sendf (&session,
-                            "<get_report"
+                            "<get_reports"
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -4517,7 +4517,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         g_string_append (xml, "<all>");
 
         if (openvas_server_sendf (&session,
-                                  "<get_report"
+                                  "<get_reports"
                                   " report_id=\"%s\""
                                   " format=\"xml\""
                                   " first_result=\"%u\""
@@ -4979,7 +4979,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
   if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
 
   if (openvas_server_sendf (&session,
-                            "<get_report"
+                            "<get_reports"
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -5041,7 +5041,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
     g_string_append (xml, "<all>");
 
     if (openvas_server_sendf (&session,
-                              "<get_report"
+                              "<get_reports"
                               " report_id=\"%s\""
                               " format=\"xml\""
                               " first_result=\"%u\""
@@ -5198,7 +5198,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "<delete_note note_id=\"%s\" />"
-                                "<get_report"
+                                "<get_reports"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -5537,7 +5537,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_report"
+                                "<get_reports"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -6041,7 +6041,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
   if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
 
   if (openvas_server_sendf (&session,
-                            "<get_report"
+                            "<get_reports"
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -6103,7 +6103,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
     g_string_append (xml, "<all>");
 
     if (openvas_server_sendf (&session,
-                              "<get_report"
+                              "<get_reports"
                               " report_id=\"%s\""
                               " format=\"xml\""
                               " first_result=\"%u\""
@@ -6263,7 +6263,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "<delete_override override_id=\"%s\" />"
-                                "<get_report"
+                                "<get_reports"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -6609,7 +6609,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
-                                "<get_report"
+                                "<get_reports"
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""

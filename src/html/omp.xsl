@@ -6744,7 +6744,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN REPORT DETAILS -->
 
-<xsl:template match="get_report_response">
+<xsl:template match="get_reports_response">
   <xsl:choose>
     <xsl:when test="@status = '400'">
       <xsl:call-template name="command_result_dialog">
@@ -7042,7 +7042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <br/>
 </xsl:template>
 
-<xsl:template match="get_report_response/report" mode="overview">
+<xsl:template match="get_reports_response/report" mode="overview">
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>Host</td>
@@ -7124,7 +7124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="get_report_response/report" mode="details">
+<xsl:template match="get_reports_response/report" mode="details">
   <xsl:for-each select="host_start" >
     <xsl:variable name="current_host" select="host/text()"/>
     <a name="{$current_host}"></a>

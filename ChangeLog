@@ -1,5 +1,16 @@
 2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp, create_note_omp, delete_note_omp)
+	(save_note_omp, create_override_omp, delete_override_omp)
+	(save_override_omp): Replace get_report with get_reports.
+
+	* src/html/omp.xsl (get_report_response)
+	(get_report_response/report [overview, details): Remove.
+	(get_reports_response, get_reports_response/report [overview, details):
+	New templates.  Renamed from "get_report" counterparts.
+
+2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (manager_connect): Note breakpoint method of pausing.
 
 	* src/gsad_oap.c (administrator_connect): Note breakpoint method of
