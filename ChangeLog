@@ -1,3 +1,7 @@
+2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-config-nvt-table): Select prefs from inside NVT.
+
 2010-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_nvts, get_config_family_omp, get_config_family_omp)

@@ -3785,7 +3785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="oid"
                  value="{get_nvts_response/nvt/@oid}"/>
-          <xsl:for-each select="get_nvts_response/preferences">
+          <xsl:for-each select="get_nvts_response/nvt/preferences">
             <xsl:call-template name="preferences-edit-details">
               <xsl:with-param name="config" select="$config"/>
             </xsl:call-template>
@@ -3793,7 +3793,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:for-each select="get_nvts_response/preferences">
+        <xsl:for-each select="get_nvts_response/nvt/preferences">
           <xsl:call-template name="preferences-details">
             <xsl:with-param name="config" select="$config"/>
           </xsl:call-template>
