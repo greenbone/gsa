@@ -378,19 +378,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Threat Counts:</td>
           <td>
-            <xsl:value-of select="report/messages/hole"/>
+            <xsl:value-of select="report/result_count/hole"/>
           </td>
           <td>
-            <xsl:value-of select="report/messages/warning"/>
+            <xsl:value-of select="report/result_count/warning"/>
           </td>
           <td>
-            <xsl:value-of select="report/messages/info"/>
+            <xsl:value-of select="report/result_count/info"/>
           </td>
           <td>
-            <xsl:value-of select="report/messages/log"/>
+            <xsl:value-of select="report/result_count/log"/>
           </td>
           <td>
-            <xsl:value-of select="report/messages/hole + report/messages/warning + report/messages/info + report/messages/log"/>
+            <xsl:value-of select="report/result_count/hole + report/result_count/warning + report/result_count/info + report/result_count/log"/>
           </td>
         </tr>
       </table>
@@ -421,8 +421,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:if>
             Results <xsl:value-of select="report/results/@start"/> -
             <xsl:value-of select="$last"/>
-            of <xsl:value-of select="report/scan_result_count/filtered"/>
-            <xsl:if test = "$last &lt; report/scan_result_count/filtered">
+            of <xsl:value-of select="report/result_count/filtered"/>
+            <xsl:if test = "$last &lt; report/result_count/filtered">
               <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
             </xsl:if>
           </xsl:when>
@@ -1135,7 +1135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   L=<xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="messages">
+<xsl:template match="result_count">
   <div>
     <xsl:apply-templates/>
   </div>
@@ -1278,39 +1278,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="messages/hole &gt; 0">
+        <xsl:when test="result_count/hole &gt; 0">
           <img src="/img/high_big.png"
-               title="High={messages/hole} Medium={messages/warning} Low={messages/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
                alt="High"/>
         </xsl:when>
-        <xsl:when test="messages/warning &gt; 0">
+        <xsl:when test="result_count/warning &gt; 0">
           <img src="/img/medium_big.png"
-               title="High={messages/hole} Medium={messages/warning} Low={messages/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
                alt="Medium"/>
         </xsl:when>
-        <xsl:when test="messages/info &gt; 0">
+        <xsl:when test="result_count/info &gt; 0">
           <img src="/img/low_big.png"
-               title="High={messages/hole} Medium={messages/warning} Low={messages/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
                alt="Low"/>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/none_big.png"
-               title="High={messages/hole} Medium={messages/warning} Low={messages/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
                alt="None"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="messages/hole"/>
+      <xsl:value-of select="result_count/hole"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="messages/warning"/>
+      <xsl:value-of select="result_count/warning"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="messages/info"/>
+      <xsl:value-of select="result_count/info"/>
     </td>
     <td class="threat_info_table">
-      <xsl:value-of select="messages/log"/>
+      <xsl:value-of select="result_count/log"/>
     </td>
     <td>
       <div id="small_form">
@@ -1353,26 +1353,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- LAST_REPORT -->
 <xsl:template match="last_report">
   <xsl:choose>
-    <xsl:when test="report/messages/hole &gt; 0">
+    <xsl:when test="report/result_count/hole &gt; 0">
       <img src="/img/high_big.png"
-           title="High={report/messages/hole} Medium={report/messages/warning} Low={report/messages/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
            alt="High"/>
     </xsl:when>
-    <xsl:when test="report/messages/warning &gt; 0">
+    <xsl:when test="report/result_count/warning &gt; 0">
       <img src="/img/medium_big.png"
-           title="High={report/messages/hole} Medium={report/messages/warning} Low={report/messages/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
            alt="Medium"/>
     </xsl:when>
-    <xsl:when test="report/messages/info &gt; 0">
+    <xsl:when test="report/result_count/info &gt; 0">
       <img src="/img/low_big.png"
-           title="High={report/messages/hole} Medium={report/messages/warning} Low={report/messages/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
            alt="Low"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
         <xsl:when test="../status!='Running'">
           <img src="/img/none_big.png"
-               title="High={report/messages/hole} Medium={report/messages/warning} Low={report/messages/info}"
+               title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
                alt="None"/>
         </xsl:when>
       </xsl:choose>

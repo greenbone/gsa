@@ -1,3 +1,12 @@
+2010-06-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Rename report/messages to
+	report/result_count.  Rename report/scan_result_count to
+	report/result_count.
+	(report, last_report): Rename report/messages to report/result_count.
+	(messages): Remove.
+	(result_count): New template.  Rename from messages.
+
 2010-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp, create_note_omp, delete_note_omp)
