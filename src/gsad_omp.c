@@ -2818,6 +2818,7 @@ get_target_omp (credentials_t * credentials, const char * target_id,
   if (openvas_server_sendf (&session,
                             "<get_targets"
                             " target_id=\"%s\""
+                            " tasks=\"1\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
                             target_id,

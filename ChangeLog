@@ -1,5 +1,9 @@
 2010-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_target_omp): Add tasks attrib to GET_TARGETS.
+
+2010-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_override_omp): Remove apply_overrides flag.
 
 2010-06-26  Matthew Mundell <matthew.mundell@greenbone.net>
