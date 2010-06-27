@@ -5826,7 +5826,6 @@ new_override_omp (credentials_t *credentials, const char *oid,
                             " task_id=\"%s\""
                             " notes_details=\"1\""
                             " notes=\"1\""
-                            " apply_overrides=\"1\""
                             " overrides_details=\"1\""
                             " overrides=\"1\""
                             " result_hosts_only=\"1\"/>",
