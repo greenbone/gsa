@@ -1091,7 +1091,7 @@ start_task_omp (credentials_t * credentials, const char *task_id,
  */
 static char*
 get_nvts (credentials_t *credentials, const char *oid,
-                 const char *commands)
+          const char *commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -1107,15 +1107,14 @@ get_nvts (credentials_t *credentials, const char *oid,
                             "<commands>"
                             "%s"
                             "<get_nvts"
-                            " oid=\"%s\""
-                            " preferences=\"1\""
+                            " nvt_oid=\"%s\""
                             " details=\"1\"/>"
-                            "<get_notes sort_field=\"notes.text\">"
-                            "<nvt id=\"%s\"/>"
-                            "</get_notes>"
-                            "<get_overrides sort_field=\"overrides.text\">"
-                            "<nvt id=\"%s\"/>"
-                            "</get_overrides>"
+                            "<get_notes"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"notes.text\"/>"
+                            "<get_overrides"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"overrides.text\"/>"
                             "</commands>",
                             commands ? commands : "",
                             oid,
@@ -3765,7 +3764,7 @@ get_config_nvt_omp (credentials_t * credentials,
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" oid=\"%s\""
+                            " config_id=\"%s\" nvt_oid=\"%s\""
                             " details=\"1\" preferences=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
@@ -3946,7 +3945,7 @@ save_config_nvt_omp (credentials_t * credentials,
             ret = openvas_server_sendf (&session,
                                         "<modify_config config_id=\"%s\">"
                                         "<preference>"
-                                        "<nvt oid=\"%s\"/>"
+                                        "<nvt nvt_oid=\"%s\"/>"
                                         "<name>%s</name>"
                                         "<value>%s</value>"
                                         "</preference>"
@@ -4182,7 +4181,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
       if (openvas_server_sendf (&session,
                                 "<get_preferences"
                                 " config_id=\"%s\""
-                                " oid=\"%s\""
+                                " nvt_oid=\"%s\""
                                 " preference=\"%s\"/>",
                                 config_id,
                                 oid,

@@ -1,3 +1,10 @@
+2010-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_nvts): Align param.  Change GET_NVTS/@oid to
+	nvt_oid.  Move GET_NOTES and GET_OVERRIDES elements to attributes.
+	(get_config_nvt_omp, save_config_nvt_omp)
+	(export_preference_file_omp): Change GET_NVTS/@oid to nvt_oid.
+
 2010-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_target_omp): Add tasks attrib to GET_TARGETS.
