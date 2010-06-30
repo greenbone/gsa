@@ -1199,13 +1199,11 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 " apply_overrides=\"%i\""
                                 " details=\"1\" />"
                                 "<get_notes"
-                                " sort_field=\"notes.nvt, notes.text\">"
-                                "<task id=\"%s\"/>"
-                                "</get_notes>"
+                                " sort_field=\"notes.nvt, notes.text\""
+                                " task_id=\"%s\"/>"
                                 "<get_overrides"
-                                " sort_field=\"overrides.nvt, overrides.text\">"
-                                "<task id=\"%s\"/>"
-                                "</get_overrides>"
+                                " sort_field=\"overrides.nvt, overrides.text\""
+                                " task_id=\"%s\"/>"
                                 "</commands>",
                                 commands ? commands : "",
                                 task_id,

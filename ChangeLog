@@ -1,5 +1,10 @@
 2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_tasks): Move GET_NOTES and GET_OVERRIDES task ID
+	into attribute.
+
+2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-override-form): Ensure new threat offers
 	the existing value.
 
