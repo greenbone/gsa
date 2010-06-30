@@ -1,5 +1,12 @@
 2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Send USERNAME and PASSWORD inside
+	TARGET_LOCATOR.
+
+	* src/html/omp.xsl (target_locator [select]): Get name from entity.
+
+2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp, save_note_omp, create_override_omp)
 	(create_override_omp): Move TASK IDs from text into attribute.
 
