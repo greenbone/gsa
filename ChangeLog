@@ -1,3 +1,8 @@
+2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_note_omp, save_note_omp, create_override_omp)
+	(create_override_omp): Move NVT and RESULT IDs from text into attribute.
+
 2010-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_nvts): Align param.  Change GET_NVTS/@oid to

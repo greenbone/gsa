@@ -4928,13 +4928,13 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
       ret = openvas_server_sendf (&session,
                                   "<create_note>"
-                                  "<nvt>%s</nvt>"
+                                  "<nvt oid=\"%s\"/>"
                                   "<hosts>%s</hosts>"
                                   "<port>%s</port>"
                                   "<threat>%s</threat>"
                                   "<text>%s</text>"
                                   "<task>%s</task>"
-                                  "<result>%s</result>"
+                                  "<result id=\"%s\"/>"
                                   "</create_note>",
                                   oid,
                                   hosts,
@@ -5454,7 +5454,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                  "<threat>%s</threat>"
                                  "<text>%s</text>"
                                  "<task>%s</task>"
-                                 "<result>%s</result>"
+                                 "<result id=\"%s\"/>"
                                  "</modify_note>",
                                  note_id,
                                  hosts ? hosts : "",
@@ -5987,14 +5987,14 @@ create_override_omp (credentials_t *credentials, const char *oid,
 
       ret = openvas_server_sendf (&session,
                                   "<create_override>"
-                                  "<nvt>%s</nvt>"
+                                  "<nvt oid=\"%s\"/>"
                                   "<hosts>%s</hosts>"
                                   "<port>%s</port>"
                                   "<threat>%s</threat>"
                                   "<new_threat>%s</new_threat>"
                                   "<text>%s</text>"
                                   "<task>%s</task>"
-                                  "<result>%s</result>"
+                                  "<result id=\"%s\"/>"
                                   "</create_override>",
                                   oid,
                                   hosts,
@@ -6524,7 +6524,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                      "<new_threat>%s</new_threat>"
                                      "<text>%s</text>"
                                      "<task>%s</task>"
-                                     "<result>%s</result>"
+                                     "<result id=\"%s\"/>"
                                      "</modify_override>",
                                      override_id,
                                      hosts ? hosts : "",
