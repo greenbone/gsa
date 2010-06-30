@@ -6333,10 +6333,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <select name="new_threat">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-                <option value="Log" selected="1">Log</option>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'High'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_threat"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Medium'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_threat"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Low'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_threat"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Log'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_threat"/>
+                </xsl:call-template>
               </select>
             </td>
           </tr>

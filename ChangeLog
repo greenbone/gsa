@@ -1,5 +1,10 @@
 2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-override-form): Ensure new threat offers
+	the existing value.
+
+2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Send USERNAME and PASSWORD inside
 	TARGET_LOCATOR.
 
