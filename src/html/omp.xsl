@@ -98,62 +98,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="New Task">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
-      <div id="small_inline_form" style="display: inline">
+      <div id="small_inline_form" style="margin-left:40px; display: inline">
         <form method="get" action="">
-          <input type="image"
-                 src="/img/refresh.png"
-                 alt="Refresh" style="margin-left:3px;margin-right:3px;"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
           <input type="hidden" name="overrides" value="{$apply-overrides}"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">
-                <option value="0" selected="1">Manual</option>
+                <option value="0" selected="1">>No auto-refresh</option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="0">Manual</option>
+                <option value="0">No auto-refresh</option>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='10'">
-                <option value="10" selected="1">10 Sec.</option>
+                <option value="10" selected="1">>Refresh every 10 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="10">10 Sec.</option>
+                <option value="10">Refresh every 10 Sec.</option>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='30'">
-                <option value="30" selected="1">30 Sec.</option>
+                <option value="30" selected="1">>Refresh every 30 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="30">30 Sec.</option>
+                <option value="30">Refresh every 30 Sec.</option>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='60'">
-                <option value="60" selected="1">60 Sec.</option>
+                <option value="60" selected="1">>Refresh every 60 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
-                <option value="60">60 Sec.</option>
+                <option value="60">Refresh every 60 Sec.</option>
               </xsl:otherwise>
             </xsl:choose>
           </select>
-        </form>
-      </div>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <form action="" method="get">
-          <input type="hidden" name="cmd" value="get_tasks"/>
-          <xsl:choose>
-            <xsl:when test="$apply-overrides = 0">
-              <input type="checkbox" name="overrides" value="1"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="checkbox" name="overrides" value="1" checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          Apply overrides
-          <input type="submit" value="Update" title="Update"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="1">>No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">>Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
     </div>

@@ -1,3 +1,9 @@
+2010-07-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (html-task-table): Consolidate title bar actions.
+	Mark current setting with ">". Don't us checkbox for
+	nicer and consistent appearance.
+
 2010-07-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-task-table, html-report-details)
