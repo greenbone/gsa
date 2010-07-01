@@ -141,9 +141,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </select>
         </form>
       </div>
-    </div>
-    <div class="gb_window_part_content">
-      <div id="small_form">
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="cmd" value="get_tasks"/>
           <xsl:choose>
@@ -297,37 +295,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: View Report (View Report)">
         <img src="/img/help.png"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}">Back to Task</a>
-      </div>
-
-      <a name="summary"/>
-      <table border="0" cellspacing="0" cellpadding="3">
-        <tr>
-          <td><b>Result of Task:</b></td>
-          <td><b><xsl:value-of select="report/task/name"/></b></td>
-        </tr>
-        <tr>
-          <td>Order of results:</td>
-          <td>by host</td>
-        </tr>
-        <tr>
-          <td><b>Scan started:</b></td>
-          <td><b><xsl:value-of select="report/scan_start"/></b></td>
-        </tr>
-        <tr>
-          <td>Scan ended:</td>
-          <td><xsl:value-of select="report/scan_end"/></td>
-        </tr>
-        <tr>
-          <td>Final scan run status:</td>
-          <td><xsl:value-of select="report/scan_run_status"/></td>
-        </tr>
-      </table>
-      <br/>
-      <div id="small_form">
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -365,6 +333,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="submit" value="Update" title="Update"/>
         </form>
       </div>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}">Back to Task</a>
+      </div>
+
+      <a name="summary"/>
+      <table border="0" cellspacing="0" cellpadding="3">
+        <tr>
+          <td><b>Result of Task:</b></td>
+          <td><b><xsl:value-of select="report/task/name"/></b></td>
+        </tr>
+        <tr>
+          <td>Order of results:</td>
+          <td>by host</td>
+        </tr>
+        <tr>
+          <td><b>Scan started:</b></td>
+          <td><b><xsl:value-of select="report/scan_start"/></b></td>
+        </tr>
+        <tr>
+          <td>Scan ended:</td>
+          <td><xsl:value-of select="report/scan_end"/></td>
+        </tr>
+        <tr>
+          <td>Final scan run status:</td>
+          <td><xsl:value-of select="report/scan_run_status"/></td>
+        </tr>
+      </table>
       <br/>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
@@ -840,9 +837,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <div id="small_form">
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="cmd" value="get_tasks"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>

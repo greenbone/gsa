@@ -1,3 +1,9 @@
+2010-07-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-task-table, html-report-details)
+	(html-report-table): Move the "Apply overrides" checkbox into the table
+	heading.
+
 2010-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_tasks): Move GET_NOTES and GET_OVERRIDES task ID
