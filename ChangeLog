@@ -1,5 +1,10 @@
 2010-07-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table): Consolidate title
+	bar action.
+
+2010-07-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/omp.xsl (html-task-table): Use a hook to mark
         current selection in title bar. Well, officially its
         the radic symbol, but looks good.

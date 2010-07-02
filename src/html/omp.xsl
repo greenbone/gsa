@@ -853,23 +853,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#reports" title="Help: Reports (Reports)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
-        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="cmd" value="get_tasks"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
-          <xsl:choose>
-            <xsl:when test="$apply-overrides = 0">
-              <input type="checkbox" name="overrides" value="1"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="checkbox" name="overrides" value="1" checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          Apply overrides
-          <input type="submit" value="Update" title="Update"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="1">&#8730;No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
     </div>
