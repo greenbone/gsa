@@ -105,7 +105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">
-                <option value="0" selected="1">>No auto-refresh</option>
+                <option value="0" selected="1">&#8730;No auto-refresh</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="0">No auto-refresh</option>
@@ -113,7 +113,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='10'">
-                <option value="10" selected="1">>Refresh every 10 Sec.</option>
+                <option value="10" selected="1">&#8730;Refresh every 10 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="10">Refresh every 10 Sec.</option>
@@ -121,7 +121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='30'">
-                <option value="30" selected="1">>Refresh every 30 Sec.</option>
+                <option value="30" selected="1">&#8730;Refresh every 30 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="30">Refresh every 30 Sec.</option>
@@ -129,7 +129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='60'">
-                <option value="60" selected="1">>Refresh every 60 Sec.</option>
+                <option value="60" selected="1">&#8730;Refresh every 60 Sec.</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="60">Refresh every 60 Sec.</option>
@@ -139,12 +139,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">>No overrides</option>
+                <option value="0" selected="1">&#8730;No overrides</option>
                 <option value="1" >Apply overrides</option>
               </xsl:when>
               <xsl:otherwise>
                 <option value="0">No overrides</option>
-                <option value="1" selected="1">>Apply overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
               </xsl:otherwise>
             </xsl:choose>
           </select>
