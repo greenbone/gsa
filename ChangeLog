@@ -1,3 +1,21 @@
+2010-07-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add False Positive "threat" for overrides.
+
+	* src/gsad.c (init_validator): Add false positive to levels and threat.
+	Add level_false_positive.
+	(exec_omp_get): Add false positive to level string.
+
+	* src/html/omp.xsl (build-levels): Add False Positive.
+	(html-report-details): Add false positive column and filter.
+	(html-report-table): Add false positive column.
+	(false_positive): New template.
+	(report): Add FP to tool tip.  Fill false positive column.
+	(last_report): Add FP to tool tip.
+	(html-create-override-form, html-edit-override-form): Add False Positive
+	to New Threat.
+	(get_reports_response/report [overview]): Add false positive column.
+
 2010-07-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: GSA requires glib to be at least 2.14. Modified

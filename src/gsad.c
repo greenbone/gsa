@@ -285,7 +285,7 @@ init_validator ()
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
-  openvas_validator_add (validator, "levels",       "^(h|m|l|g){0,4}$");
+  openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
@@ -317,7 +317,7 @@ init_validator ()
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
-  openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|)$");
+  openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
@@ -342,6 +342,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_medium", "boolean");
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
+  openvas_validator_alias (validator, "level_false_positive", "boolean");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
@@ -2235,7 +2236,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *lsc_credential_id = NULL;
   const char *schedule_id  = NULL;
   const char *target_id  = NULL;
-  int high = 0, medium = 0, low = 0, log = 0;
+  int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
   credentials_t *credentials = NULL;
 
   const int CMD_MAX_SIZE = 22;
@@ -2496,6 +2497,14 @@ exec_omp_get (struct MHD_Connection *connection,
             log = 0;
           else
             log = atoi (level);
+
+          level = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "level_false_positive");
+          if (openvas_validate (validator, "level_false_positive", level))
+            false_positive = 0;
+          else
+            false_positive = atoi (level);
         }
 
       notes = MHD_lookup_connection_value (connection,
@@ -3095,6 +3104,7 @@ exec_omp_get (struct MHD_Connection *connection,
         if (medium) g_string_append (string, "m");
         if (low) g_string_append (string, "l");
         if (log) g_string_append (string, "g");
+        if (false_positive) g_string_append (string, "f");
         ret = get_report_omp (credentials, report_id, format, response_size,
                               (const unsigned int) first,
                               (const unsigned int) max,

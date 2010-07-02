@@ -272,6 +272,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="text()='Medium'">m</xsl:when>
       <xsl:when test="text()='Low'">l</xsl:when>
       <xsl:when test="text()='Log'">g</xsl:when>
+      <xsl:when test="text()='False Positive'">f</xsl:when>
     </xsl:choose>
   </xsl:for-each>
 </xsl:template>
@@ -368,6 +369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
           <td><img src="/img/low.png" alt="Low" title="Low"/></td>
           <td><img src="/img/log.png" alt="Log" title="Log"/></td>
+          <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
           <td>Total</td>
         </tr>
         <tr>
@@ -385,7 +387,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="report/result_count/log"/>
           </td>
           <td>
-            <xsl:value-of select="report/result_count/hole + report/result_count/warning + report/result_count/info + report/result_count/log"/>
+            <xsl:value-of select="report/result_count/false_positive"/>
+          </td>
+          <td>
+            <xsl:value-of select="report/result_count/hole + report/result_count/warning + report/result_count/info + report/result_count/log + report/result_count/false_positive"/>
           </td>
         </tr>
       </table>
@@ -689,6 +694,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:choose>
                       <img src="/img/log.png" alt="Log" title="Log"/>
                     </td>
+                    <td class="threat_info_table_h">
+                      <xsl:choose>
+                        <xsl:when test="report/filters/filter[text()='False Positive']">
+                          <input type="checkbox"
+                                 name="level_false_positive"
+                                 value="1"
+                                 checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="checkbox"
+                                 name="level_false_positive"
+                                 value="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
+                    </td>
                   </tr>
                 </table>
               </td>
@@ -858,7 +879,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td rowspan="2">Report</td>
             <td rowspan="2">Threat</td>
-            <td colspan="4">Scan Results</td>
+            <td colspan="5">Scan Results</td>
             <td rowspan="2">Download</td>
             <td rowspan="2">Actions</td>
           </tr>
@@ -874,6 +895,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td class="threat_info_table_h">
               <img src="/img/log.png" alt="Log" title="Log"/>
+            </td>
+            <td class="threat_info_table_h">
+              <img src="/img/false_positives.png" alt="False Positive" title="False Positive"/>
             </td>
           </tr>
           <xsl:apply-templates select="task/reports/report"/>
@@ -1128,6 +1152,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   L=<xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="false_positive">
+  F=<xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="result_count">
   <div>
     <xsl:apply-templates/>
@@ -1273,22 +1301,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="result_count/hole &gt; 0">
           <img src="/img/high_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
                alt="High"/>
         </xsl:when>
         <xsl:when test="result_count/warning &gt; 0">
           <img src="/img/medium_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
                alt="Medium"/>
         </xsl:when>
         <xsl:when test="result_count/info &gt; 0">
           <img src="/img/low_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
                alt="Low"/>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/none_big.png"
-               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info}"
+               title="High={result_count/hole} Medium={result_count/warning} Low={result_count/info} FP={result_count/false_positive}"
                alt="None"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -1304,6 +1332,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td class="threat_info_table">
       <xsl:value-of select="result_count/log"/>
+    </td>
+    <td class="threat_info_table">
+      <xsl:value-of select="result_count/false_positive"/>
     </td>
     <td>
       <div id="small_form">
@@ -1348,24 +1379,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="report/result_count/hole &gt; 0">
       <img src="/img/high_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
            alt="High"/>
     </xsl:when>
     <xsl:when test="report/result_count/warning &gt; 0">
       <img src="/img/medium_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
            alt="Medium"/>
     </xsl:when>
     <xsl:when test="report/result_count/info &gt; 0">
       <img src="/img/low_big.png"
-           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
+           title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
            alt="Low"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:choose>
         <xsl:when test="../status!='Running'">
           <img src="/img/none_big.png"
-               title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info}"
+               title="High={report/result_count/hole} Medium={report/result_count/warning} Low={report/result_count/info} FP={report/result_count/false_positive}"
                alt="None"/>
         </xsl:when>
       </xsl:choose>
@@ -6142,6 +6173,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
                 <option value="Log" selected="1">Log</option>
+                <option value="False Positive">False Positive</option>
               </select>
             </td>
           </tr>
@@ -6346,6 +6378,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'Log'"/>
+                  <xsl:with-param
+                    name="select-value"
+                    select="get_overrides_response/override/new_threat"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'False Positive'"/>
                   <xsl:with-param
                     name="select-value"
                     select="get_overrides_response/override/new_threat"/>
@@ -7065,6 +7103,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
       <td><img src="/img/low.png" alt="Low" title="Low"/></td>
       <td><img src="/img/log.png" alt="Log" title="Log"/></td>
+      <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
       <td>Total</td>
     </tr>
     <xsl:for-each select="host_start" >
@@ -7097,6 +7136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
         </td>
         <td>
+          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
+        </td>
+        <td>
           <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
         </td>
       </tr>
@@ -7116,6 +7158,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:value-of select="count(results/result[threat/text() = 'Log'])"/>
+      </td>
+      <td>
+        <xsl:value-of select="count(results/result[threat/text() = 'False Positive'])"/>
       </td>
       <td>
         <xsl:value-of select="count(results/result)"/>
