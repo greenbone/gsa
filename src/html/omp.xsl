@@ -2371,6 +2371,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <input type="radio" name="method" value="syslog syslog"/>
+                    System Logger (syslog)
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <input type="radio" name="method" value="syslog SNMP"/>
+                    SNMP
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
           <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Escalator"/>

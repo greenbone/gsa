@@ -2171,6 +2171,24 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
     {
       /* Create the escalator. */
 
+      /* Special case the syslog submethods, because HTTP only allows one
+       * value to vary per radio. */
+      if (strncmp (method, "syslog ", strlen ("syslog ")) == 0)
+        {
+          gchar *data;
+
+          data = g_strdup_printf ("submethod0%s",
+                                  method + strlen ("syslog "));
+          data[strlen ("submethod")] = '\0';
+
+          if (method_data == NULL)
+            method_data = g_array_new (TRUE, FALSE, sizeof (gchar*));
+
+          g_array_append_val (method_data, data);
+
+          method = "syslog";
+        }
+
       if (openvas_server_sendf (&session,
                                 "<create_escalator>"
                                 "<name>%s</name>"

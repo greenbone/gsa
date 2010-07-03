@@ -1,3 +1,13 @@
+2010-07-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Syslog and SNMP escalator methods.
+
+	* src/gsad_omp.c (create_escalator_omp): Extract the syslog "submethod"
+	data from the "method" param.
+
+	* src/html/omp.xsl (html-create-escalator-form): Add syslog and SNMP
+	methods.
+
 2010-07-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Consolidate title
@@ -11,8 +21,8 @@
 2010-07-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-task-table): Use a hook to mark
-        current selection in title bar. Well, officially its
-        the radic symbol, but looks good.
+	current selection in title bar. Well, officially its
+	the radic symbol, but looks good.
 
 2010-07-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
