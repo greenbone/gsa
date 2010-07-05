@@ -6207,8 +6207,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
-                <option value="Log" selected="1">Log</option>
-                <option value="False Positive">False Positive</option>
+                <option value="Log">Log</option>
+                <option value="False Positive" selected="1">False Positive</option>
               </select>
             </td>
           </tr>
