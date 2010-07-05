@@ -1,5 +1,9 @@
 2010-07-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/override.png, src/html/img/new_override.png: Updated.
+
+2010-07-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/false_positive.png: New.
 
 	* src/html/omp.xsl: Fix for consistent spelling of false_positive.png.
