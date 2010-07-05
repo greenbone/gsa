@@ -963,7 +963,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <td>NVT</td>
-            <td>New Threat</td>
+            <td>From</td>
+            <td>To</td>
             <td>Text</td>
             <td width="100">Actions</td>
           </tr>
@@ -6538,6 +6539,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="string-length(threat) = 0">
+          Any
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="threat"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:value-of select="new_threat"/>
     </td>
     <td>
@@ -6767,7 +6778,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <td>NVT</td>
-            <td>New Threat</td>
+            <td>From</td>
+            <td>To</td>
             <td>Text</td>
             <td width="100">Actions</td>
           </tr>
@@ -6952,7 +6964,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="override-detailed" match="override" mode="detailed">
   <xsl:param name="override-buttons">1</xsl:param>
   <div class="override_box_box">
-    <b>Override to <xsl:value-of select="new_threat"/></b><br/>
+    <b>
+      Override from
+      <xsl:choose>
+        <xsl:when test="string-length(threat) = 0">
+          Any
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="threat"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      to <xsl:value-of select="new_threat"/></b><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>

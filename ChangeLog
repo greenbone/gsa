@@ -1,5 +1,11 @@
 2010-07-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table, overide)
+	(html-overrides-table): Add From column.  Rename New Threat column to To.
+	(override-detailed): Add from threat to heading.
+
+2010-07-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-override-form): Select False Positive for
 	New Threat.
 
