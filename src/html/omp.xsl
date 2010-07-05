@@ -2379,7 +2379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td colspan="3" valign="top">
                     <input type="radio" name="method" value="syslog syslog"/>
-                    System Logger (syslog)
+                    System Logger (Syslog)
                   </td>
                 </tr>
               </table>
@@ -2519,11 +2519,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="method/text()"/>
       <xsl:choose>
-        <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
-          <br/>(To <xsl:value-of select="method/data[name='to_address']/text()"/>)
+        <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
+          SNMP
         </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="method/text()"/>
+          <xsl:choose>
+            <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
+              <br/>(To <xsl:value-of select="method/data[name='to_address']/text()"/>)
+            </xsl:when>
+          </xsl:choose>
+        </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
@@ -2608,7 +2615,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <table>
               <tr>
                 <td colspan="3">
-                  <xsl:value-of select="method/text()"/>
+                  <xsl:choose>
+                    <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
+                      SNMP
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="method/text()"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
               <xsl:choose>
