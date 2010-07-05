@@ -906,7 +906,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/log.png" alt="Log" title="Log"/>
             </td>
             <td class="threat_info_table_h">
-              <img src="/img/false_positives.png" alt="False Positive" title="False Positive"/>
+              <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
             </td>
           </tr>
           <xsl:apply-templates select="task/reports/report"/>

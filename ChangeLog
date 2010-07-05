@@ -1,3 +1,11 @@
+2010-07-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/false_positive.png: New.
+
+	* src/html/omp.xsl: Fix for consistent spelling of false_positive.png.
+
+	* src/CMakeLists.txt: Install the new graphics file.
+
 2010-07-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Syslog and SNMP escalator methods.
