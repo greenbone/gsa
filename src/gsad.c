@@ -562,6 +562,8 @@ struct gsad_connection_info
     char *apply_min_cvss_base; ///< Value of "apply_min_cvss_base" parameter.
     char *installer;     ///< Value of "installer" parameter.
     int installer_size;  ///< Size of "installer" parameter.
+    char *installer_sig; ///< Value of "installer_sig" parameter.
+    int installer_sig_size;  ///< Size of "installer_sig" parameter.
     char *howto_install; ///< Value of "howto_install" parameter.
     int howto_install_size; ///< Size of "howto_install" parameter.
     char *howto_use;     ///< Value of "howto_use" parameter.
@@ -767,6 +769,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.min_cvss_base);
   free (con_info->req_parms.apply_min_cvss_base);
   free (con_info->req_parms.installer);
+  free (con_info->req_parms.installer_sig);
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
   free (con_info->req_parms.year);
@@ -1226,6 +1229,17 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;
         }
+      if (!strcmp (key, "installer_sig"))
+        {
+          if (append_chunk_binary (data,
+                                   size,
+                                   off,
+                                   &con_info->req_parms.installer_sig,
+                                   &con_info->req_parms.installer_sig_size))
+            return MHD_NO;
+          con_info->answercode = MHD_HTTP_OK;
+          return MHD_YES;
+        }
       if (!strcmp (key, "howto_install"))
         {
           if (append_chunk_binary (data,
@@ -1578,6 +1592,8 @@ exec_omp_post (credentials_t * credentials,
                           con_info->req_parms.comment,
                           con_info->req_parms.installer,
                           con_info->req_parms.installer_size,
+                          con_info->req_parms.installer_sig,
+                          con_info->req_parms.installer_sig_size,
                           con_info->req_parms.howto_install,
                           con_info->req_parms.howto_install_size,
                           con_info->req_parms.howto_use,

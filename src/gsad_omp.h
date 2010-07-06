@@ -87,6 +87,7 @@ char * get_agents_omp (credentials_t *, const char *, const char *,
 char * create_agent_omp (credentials_t *, const char *, const char *,
                          const char *, int,
                          const char *, int,
+                         const char *, int,
                          const char *, int);
 char * delete_agent_omp (credentials_t *, const char *);
 

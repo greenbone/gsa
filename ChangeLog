@@ -1,3 +1,21 @@
+2010-07-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add agent installer signatures.
+
+	* src/gsad.c (struct req_parms): Add installer_sig fields.
+	(free_resources): Free installer_sig.
+	(serve_post): Fill installer_sig.
+	(exec_omp_post): Pass installer_sig fields to create_agent_omp.
+
+	* src/gsad_omp.c (create_agent_omp): Add installer_sig args.  Send
+	signature in CREATE_AGENT.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-agent-form): Add "Installer signature"
+	field.
+	(html-agents-table, agent): Add trust column.
+
 2010-07-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-create-escalator-form): Capitalize syslog.

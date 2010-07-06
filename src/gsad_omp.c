@@ -1742,6 +1742,8 @@ get_lsc_credentials_omp (credentials_t * credentials,
  * @param[in]  comment              Comment on agent.
  * @param[in]  installer            Installer, in base64.
  * @param[in]  installer_size       Size of \param installer .
+ * @param[in]  installer_sig        Installer signature, in base64.
+ * @param[in]  installer_sig_size   Size of \param installer_sig .
  * @param[in]  howto_install        Install HOWTO, in base64.
  * @param[in]  howto_install_size   Size of \param howto_install .
  * @param[in]  howto_use            Usage HOWTO, in base64.
@@ -1753,6 +1755,7 @@ char *
 create_agent_omp (credentials_t * credentials, const char *name,
                   const char *comment,
                   const char *installer, int installer_size,
+                  const char *installer_sig, int installer_sig_size,
                   const char *howto_install, int howto_install_size,
                   const char *howto_use, int howto_use_size)
 {
@@ -1774,7 +1777,7 @@ create_agent_omp (credentials_t * credentials, const char *name,
   else
     {
       int ret;
-      gchar *installer_64, *howto_install_64, *howto_use_64;
+      gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
 
       /* Create the agent. */
 
@@ -1782,6 +1785,11 @@ create_agent_omp (credentials_t * credentials, const char *name,
                      ? g_base64_encode ((guchar *) installer,
                                         installer_size)
                      : g_strdup ("");
+
+      installer_sig_64 = installer_sig_size
+                         ? g_base64_encode ((guchar *) installer_sig,
+                                            installer_sig_size)
+                         : g_strdup ("");
 
       howto_install_64 = howto_install_size
                          ? g_base64_encode ((guchar *) howto_install,
@@ -1797,7 +1805,10 @@ create_agent_omp (credentials_t * credentials, const char *name,
                                   "<create_agent>"
                                   "<name>%s</name>"
                                   "%s%s%s"
-                                  "<installer>%s</installer>"
+                                  "<installer>"
+                                  "%s"
+                                  "<signature>%s</signature>"
+                                  "</installer>"
                                   "<howto_install>%s</howto_install>"
                                   "<howto_use>%s</howto_use>"
                                   "</create_agent>",
@@ -1805,6 +1816,7 @@ create_agent_omp (credentials_t * credentials, const char *name,
                                   comment ? comment : "",
                                   comment ? "</comment>" : "",
                                   installer_64,
+                                  installer_sig_64,
                                   howto_install_64,
                                   howto_use_64);
 

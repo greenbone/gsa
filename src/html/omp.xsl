@@ -2106,6 +2106,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="125">Installer</td>
             <td><input type="file" name="installer" size="30"/></td>
           </tr>
+          <tr>
+            <td valign="top" width="125">Installer signature (optional)</td>
+            <td><input type="file" name="installer_sig" size="30"/></td>
+          </tr>
           <!--
           <tr>
             <td valign="top" width="125">Howto Install</td>
@@ -2144,6 +2148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>Name</td>
             <td>Comment</td>
+            <td>Trust</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="agent"/>
@@ -2198,6 +2203,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:value-of select="comment"/>
+    </td>
+    <td>
+      <xsl:value-of select="installer/trust"/>
     </td>
     <td>
       <xsl:choose>
