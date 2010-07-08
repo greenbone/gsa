@@ -418,6 +418,27 @@ validate_hosts_parameter (const char* hosts_parameter)
   return TRUE;
 }
 
+
+/**
+ * @brief Frees array and its gchar* contents.
+ *
+ * @param[in,out]  array  The GArray containing gchar*s to free.
+ */
+static void
+free_gchar_array (GArray ** array)
+{
+  if (*array)
+    {
+      gchar *item;
+      int index = 0;
+
+      while ((item = g_array_index (*array, gchar*, index++)))
+        g_free (item);
+
+      g_array_free (*array, TRUE);
+    }
+}
+
 /**
  * @param From a format string (like "exe"), set a content_type (like
  * @param GSAD_CONTENT_TYPE_APP_EXE).
@@ -773,26 +794,10 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
   free (con_info->req_parms.year);
-  if (con_info->req_parms.condition_data)
-    {
-      gchar *item;
-      int index = 0;
 
-      while ((item = g_array_index (con_info->req_parms.condition_data, gchar*, index++)))
-        g_free (item);
+  free_gchar_array (&con_info->req_parms.condition_data);
+  free_gchar_array (&con_info->req_parms.event_data);
 
-      g_array_free (con_info->req_parms.condition_data, TRUE);
-    }
-  if (con_info->req_parms.event_data)
-    {
-      gchar *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.event_data, gchar*, index++)))
-        g_free (item);
-
-      g_array_free (con_info->req_parms.event_data, TRUE);
-    }
   if (con_info->req_parms.files)
     {
       preference_t *item;
@@ -810,16 +815,9 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
       g_array_free (con_info->req_parms.files, TRUE);
     }
-  if (con_info->req_parms.method_data)
-    {
-      gchar *item;
-      int index = 0;
 
-      while ((item = g_array_index (con_info->req_parms.method_data, gchar*, index++)))
-        g_free (item);
+  free_gchar_array (&con_info->req_parms.method_data);
 
-      g_array_free (con_info->req_parms.method_data, TRUE);
-    }
   if (con_info->req_parms.preferences)
     {
       preference_t *item;
@@ -854,41 +852,10 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
       g_array_free (con_info->req_parms.passwords, TRUE);
     }
-  // Free gchar* arrays.
-  if (con_info->req_parms.nvts)
-    {
-      gchar *item;
-      int index = 0;
+  free_gchar_array (&con_info->req_parms.nvts);
+  free_gchar_array (&con_info->req_parms.selects);
+  free_gchar_array (&con_info->req_parms.trends);
 
-      while ((item = g_array_index (con_info->req_parms.nvts, gchar*, index++)))
-        g_free (item);
-
-      g_array_free (con_info->req_parms.nvts, TRUE);
-    }
-  if (con_info->req_parms.selects)
-    {
-      gchar *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.selects,
-                                    gchar*,
-                                    index++)))
-        g_free (item);
-
-      g_array_free (con_info->req_parms.selects, TRUE);
-    }
-  if (con_info->req_parms.trends)
-    {
-      gchar *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.trends,
-                                    gchar*,
-                                    index++)))
-        g_free (item);
-
-      g_array_free (con_info->req_parms.trends, TRUE);
-    }
   free (con_info);
   *con_cls = NULL;
 }
