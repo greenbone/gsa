@@ -1,3 +1,17 @@
+2010-07-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass agent installer filename in CREATE_AGENT OMP.
+
+	* src/gsad.c (struct req_parms): Add installer_filename field.
+	(free_resources): Free installer_filename.
+	(serve_post): Set installer_filename.
+	(exec_omp_post): Pass installer_filename to create_agent_omp.
+
+	* src/gsad_omp.c (create_agent_omp): Add installer_filename arg.  Send
+	filename in CREATE_AGENT.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2010-07-08  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added help for overrides.

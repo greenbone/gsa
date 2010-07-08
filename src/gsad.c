@@ -583,6 +583,7 @@ struct gsad_connection_info
     char *apply_min_cvss_base; ///< Value of "apply_min_cvss_base" parameter.
     char *installer;     ///< Value of "installer" parameter.
     int installer_size;  ///< Size of "installer" parameter.
+    char *installer_filename; ///< Filename of "installer" parameter.
     char *installer_sig; ///< Value of "installer_sig" parameter.
     int installer_sig_size;  ///< Size of "installer_sig" parameter.
     char *howto_install; ///< Value of "howto_install" parameter.
@@ -790,6 +791,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.min_cvss_base);
   free (con_info->req_parms.apply_min_cvss_base);
   free (con_info->req_parms.installer);
+  free (con_info->req_parms.installer_filename);
   free (con_info->req_parms.installer_sig);
   free (con_info->req_parms.howto_install);
   free (con_info->req_parms.howto_use);
@@ -1187,6 +1189,8 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
       if (!strcmp (key, "installer"))
         {
+          if (con_info->req_parms.installer_filename == NULL)
+            con_info->req_parms.installer_filename = g_strdup (filename);
           if (append_chunk_binary (data,
                                    size,
                                    off,
@@ -1559,6 +1563,7 @@ exec_omp_post (credentials_t * credentials,
                           con_info->req_parms.comment,
                           con_info->req_parms.installer,
                           con_info->req_parms.installer_size,
+                          con_info->req_parms.installer_filename,
                           con_info->req_parms.installer_sig,
                           con_info->req_parms.installer_sig_size,
                           con_info->req_parms.howto_install,
