@@ -1,5 +1,13 @@
 2010-07-08  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	Added help for overrides.
+
+	* src/html/help.xsl (contents.html): Added link to overrides-help.
+	(glossary.html): Included overrides.
+	(overrides.html): New, help for overrides.
+
+2010-07-08  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	* src/gsad.c (free_gchar_array): New function, extracted.
 	(free_resources): Extracted and call new function.
 
