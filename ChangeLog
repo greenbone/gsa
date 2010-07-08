@@ -1,3 +1,11 @@
+2010-07-08  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Make cmake environment more flexible as discussed on
+	openvas-devel: Set CMAKE_BUILD_TYPE only to "Debug" if it is not
+	already set. Do not set CMAKE_VERBOSE_MAKEFILE, let it default to OFF.
+	Remove redundant flags from CMAKE_C_FLAGS_DEBUG. Replace check for
+	PREPARE_RELEASE with check for CMAKE_BUILD_TYPE == "Release".
+
 2010-07-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add agent installer signatures.

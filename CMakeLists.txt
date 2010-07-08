@@ -36,7 +36,9 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 OLD)
 endif (POLICY CMP0005)
 
-set (CMAKE_BUILD_TYPE debug)
+if (NOT CMAKE_BUILD_TYPE)
+  set (CMAKE_BUILD_TYPE Debug)
+endif (NOT CMAKE_BUILD_TYPE)
 
 ## Check existence required tools
 
@@ -133,14 +135,14 @@ macro (Subversion_GET_REVISION dir variable)
     "\\2" ${variable} "${${variable}}")
 endmacro (Subversion_GET_REVISION)
 
-if (NOT PREPARE_RELEASE)
+if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
   if (SVN_EXECUTABLE)
     Subversion_GET_REVISION(. ProjectRevision)
     set (SVN_REVISION ".SVN.r${ProjectRevision}")
   else (SVN_EXECUTABLE)
     set (SVN_REVISION ".SVN")
   endif (SVN_EXECUTABLE)
-endif (NOT PREPARE_RELEASE)
+endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
 ## CPack configuration
 
@@ -232,9 +234,6 @@ set (OPENVAS_CA_CERTIFICATE     "${OPENVAS_STATE_DIR}/CA/cacert.pem")
 set (GSA_CONFIG_DIR         "${SYSCONFDIR}/openvas/")
 set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
 
-set (CMAKE_BUILD                Debug)
-set (CMAKE_VERBOSE_MAKEFILE     ON)
-
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 ## Version
@@ -250,7 +249,7 @@ configure_file (VERSION.in VERSION)
 
 ## Program
 
-set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG} -Wall")
+set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG}")
 set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} -Wall")
 
 add_subdirectory (src)
