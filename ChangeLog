@@ -1,3 +1,8 @@
+2010-07-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl: Completed and fixed help texts for
+	Overrides.
+
 2010-07-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Pass agent installer filename in CREATE_AGENT OMP.
