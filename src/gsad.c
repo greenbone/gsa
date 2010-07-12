@@ -2840,7 +2840,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_nvts",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, oid, NULL, NULL);
+                            NULL, NULL, oid, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -2872,12 +2872,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return edit_note_omp (credentials, note_id, "get_tasks",
                             /* Parameters for next page. */
-                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                            NULL, 0, 0, NULL, NULL, NULL, NULL, overrides, NULL,
                             NULL, NULL, NULL, task_id);
     }
 

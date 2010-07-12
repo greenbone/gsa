@@ -938,7 +938,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_notes_response/note">
             <xsl:call-template name="note">
-              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/></xsl:with-param>
+              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>

@@ -5340,7 +5340,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
   gnutls_session_t session;
   int socket;
 
-  if (note_id == NULL || min_cvss_base == NULL)
+  if (note_id == NULL)
     {
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "

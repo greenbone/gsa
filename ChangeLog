@@ -1,3 +1,15 @@
+2010-07-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_get): Pass oid to edit_note_omp "get_nvts" case
+	in correct parameter.  Pass overrides flag to edit_note_omp "get_tasks"
+	case.
+
+	* src/gsad_omp.c (edit_note_omp): Remove min_cvss_base NULL check, as
+	only some callers use it.
+
+	* src/html/omp.xsl (html-report-table): Add overrides flag to the request
+	parameters passed to the edit_note "get_tasks" case.
+
 2010-07-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl: Completed and fixed help texts for
