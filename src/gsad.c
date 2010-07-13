@@ -2982,7 +2982,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && ((agent_id == NULL && agent_format == NULL)
                || (agent_id && agent_format)))
     {
-      char *html;
+      char *html, *filename;
 
       if (agent_id == NULL)
         {
@@ -2992,7 +2992,8 @@ exec_omp_get (struct MHD_Connection *connection,
                           response_size,
                           sort_field,
                           sort_order,
-                          &html);
+                          &html,
+                          NULL);
           return html;
         }
 
@@ -3002,16 +3003,15 @@ exec_omp_get (struct MHD_Connection *connection,
                           response_size,
                           NULL,
                           NULL,
-                          &html))
+                          &html,
+                          &filename))
         return html;
 
-      /**
-       * @todo Get sizes from constants that are also used by gsad_params.
-       */
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
       free (*content_disposition);
-      *content_disposition = calloc (250, sizeof (char));
-      snprintf (*content_disposition, 250, "attachment; filename=agent.bin");
+      *content_disposition = g_strdup_printf ("attachment; filename=%s",
+                                              filename);
+      free (filename);
 
       return html;
     }

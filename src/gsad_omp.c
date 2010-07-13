@@ -1988,6 +1988,8 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
  * @param[in]   sort_field   Field to sort on, or NULL.
  * @param[in]   sort_order   "ascending", "descending", or NULL.
  * @param[out]  html         Result of XSL transformation.  Required.
+ * @param[out]  filename     Agent filename return.  NULL to skip.  Only set
+ *                           on success with agent_id.
  *
  * @return 0 success, 1 failure.
  */
@@ -1998,7 +2000,8 @@ get_agents_omp (credentials_t * credentials,
                 gsize *result_len,
                 const char * sort_field,
                 const char * sort_order,
-                char ** html)
+                char ** html,
+                char ** filename)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -2103,9 +2106,19 @@ get_agents_omp (credentials_t * credentials,
                   package_decoded = (gchar *) g_strdup ("");
                   *result_len = 0;
                 }
-              free_entity (entity);
               openvas_server_close (socket, session);
               *html = package_decoded;
+              if (filename)
+                {
+                  entity_t filename_entity;
+                  filename_entity = entity_child (package_entity,
+                                                  "filename");
+                  if (filename_entity)
+                    *filename = g_strdup (entity_text (filename_entity));
+                  else
+                    *filename = NULL;
+                }
+              free_entity (entity);
               return 0;
             }
           else
