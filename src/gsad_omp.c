@@ -1987,16 +1987,18 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
  * @param[out]  result_len   Length of result.
  * @param[in]   sort_field   Field to sort on, or NULL.
  * @param[in]   sort_order   "ascending", "descending", or NULL.
+ * @param[out]  html         Result of XSL transformation.  Required.
  *
- * @return Result of XSL transformation.
+ * @return 0 success, 1 failure.
  */
-char *
+int
 get_agents_omp (credentials_t * credentials,
                 const char * agent_id,
                 const char * format,
                 gsize *result_len,
                 const char * sort_field,
-                const char * sort_order)
+                const char * sort_order,
+                char ** html)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -2005,11 +2007,14 @@ get_agents_omp (credentials_t * credentials,
   *result_len = 0;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the agent list. "
-                         "The current list of agents is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_agents");
+    {
+      *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the agent list. "
+                            "The current list of agents is not available. "
+                            "Diagnostics: Failure to connect to manager daemon.",
+                            "/omp?cmd=get_agents");
+      return 1;
+    }
 
   /* Send the request. */
 
@@ -2022,11 +2027,12 @@ get_agents_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting agent list. "
-                               "The current list of agents is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_agents");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting agent list. "
+                                "The current list of agents is not available. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_agents");
+          return 1;
         }
     }
   else
@@ -2041,11 +2047,12 @@ get_agents_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting agent list. "
-                               "The current list of agents is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_agents");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting agent list. "
+                                "The current list of agents is not available. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_agents");
+          return 1;
         }
     }
 
@@ -2067,11 +2074,12 @@ get_agents_omp (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a agent. "
-                                   "The agent is not available. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_agents");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a agent. "
+                                    "The agent is not available. "
+                                    "Diagnostics: Failure to receive response from manager daemon.",
+                                    "/omp?cmd=get_agents");
+              return 1;
             }
 
           agent_entity = entity_child (entity, "agent");
@@ -2097,44 +2105,48 @@ get_agents_omp (credentials_t * credentials,
                 }
               free_entity (entity);
               openvas_server_close (socket, session);
-              return package_decoded;
+              *html = package_decoded;
+              return 0;
             }
           else
             {
               free_entity (entity);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a agent. "
-                                   "The agent could not be delivered. "
-                                   "Diagnostics: Failure to receive agent from manager daemon.",
-                                   "/omp?cmd=get_tasks");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a agent. "
+                                    "The agent could not be delivered. "
+                                    "Diagnostics: Failure to receive agent from manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              return 1;
             }
         }
       else
         {
           entity_t agent_entity = NULL;
 
-          /* A key. */
+          /* An error. */
 
           entity = NULL;
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a agent. "
-                                   "The agent could not be delivered. "
-                                   "Diagnostics: Failure to receive agent from manager daemon.",
-                                   "/omp?cmd=get_tasks");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a agent. "
+                                    "The agent could not be delivered. "
+                                    "Diagnostics: Failure to receive agent from manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              return 1;
             }
           openvas_server_close (socket, session);
 
           agent_entity = entity_child (entity, "agent");
           free_entity (entity);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a agent. "
-                               "The agent could not be delivered. "
-                               "Diagnostics: Failure to parse agent from manager daemon.",
-                               "/omp?cmd=get_tasks");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a agent. "
+                                "The agent could not be delivered. "
+                                "Diagnostics: Failure to parse agent from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          return 1;
         }
     }
   else
@@ -2147,16 +2159,18 @@ get_agents_omp (credentials_t * credentials,
       if (read_entity_and_text (&session, &entity, &text))
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting agent list. "
-                               "The current list of agents is not available. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting agent list. "
+                                "The current list of agents is not available. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          return 1;
         }
       free_entity (entity);
 
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, text);
+      *html = xsl_transform_omp (credentials, text);
+      return 0;
     }
 }
 

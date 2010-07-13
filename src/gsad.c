@@ -2982,13 +2982,28 @@ exec_omp_get (struct MHD_Connection *connection,
            && ((agent_id == NULL && agent_format == NULL)
                || (agent_id && agent_format)))
     {
+      char *html;
+
       if (agent_id == NULL)
-        return get_agents_omp (credentials,
-                               agent_id,
-                               agent_format,
-                               response_size,
-                               sort_field,
-                               sort_order);
+        {
+          get_agents_omp (credentials,
+                          agent_id,
+                          agent_format,
+                          response_size,
+                          sort_field,
+                          sort_order,
+                          &html);
+          return html;
+        }
+
+      if (get_agents_omp (credentials,
+                          agent_id,
+                          agent_format,
+                          response_size,
+                          NULL,
+                          NULL,
+                          &html))
+        return html;
 
       /**
        * @todo Get sizes from constants that are also used by gsad_params.
@@ -2998,13 +3013,7 @@ exec_omp_get (struct MHD_Connection *connection,
       *content_disposition = calloc (250, sizeof (char));
       snprintf (*content_disposition, 250, "attachment; filename=agent.bin");
 
-      /** @todo On fail, HTML ends up in file. */
-      return get_agents_omp (credentials,
-                             agent_id,
-                             agent_format,
-                             response_size,
-                             NULL,
-                             NULL);
+      return html;
     }
 
   else if ((!strcmp (cmd, "get_escalator")) && (escalator_id != NULL))
