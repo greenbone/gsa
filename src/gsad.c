@@ -3022,13 +3022,28 @@ exec_omp_get (struct MHD_Connection *connection,
            && ((lsc_credential_id == NULL && package_format == NULL)
                || (lsc_credential_id && package_format)))
     {
+      char *html;
+
       if (lsc_credential_id == NULL)
-        return get_lsc_credentials_omp (credentials,
-                                        lsc_credential_id,
-                                        package_format,
-                                        response_size,
-                                        sort_field,
-                                        sort_order);
+        {
+          get_lsc_credentials_omp (credentials,
+                                   lsc_credential_id,
+                                   package_format,
+                                   response_size,
+                                   sort_field,
+                                   sort_order,
+                                   &html);
+          return html;
+        }
+
+      if (get_lsc_credentials_omp (credentials,
+                                   lsc_credential_id,
+                                   package_format,
+                                   response_size,
+                                   NULL,
+                                   NULL,
+                                   &html))
+        return html;
 
       /**
        * @todo Get sizes from constants that are also used by gsad_params. */
@@ -3040,13 +3055,7 @@ exec_omp_get (struct MHD_Connection *connection,
                 lsc_credential_id,
                 (strcmp (package_format, "key") == 0 ? "pub" : package_format));
 
-      /** @todo On fail, HTML ends up in file. */
-      return get_lsc_credentials_omp (credentials,
-                                      lsc_credential_id,
-                                      package_format,
-                                      response_size,
-                                      NULL,
-                                      NULL);
+      return html;
     }
 
   else if ((!strcmp (cmd, "get_report")) && (report_id != NULL)

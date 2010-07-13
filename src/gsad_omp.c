@@ -1553,29 +1553,36 @@ get_lsc_credential_omp (credentials_t * credentials,
  * @param[out]  result_len         Length of result.
  * @param[in]   sort_field         Field to sort on, or NULL.
  * @param[in]   sort_order         "ascending", "descending", or NULL.
+ * @param[out]  html               Result of XSL transformation.
  *
- * @return Result of XSL transformation.
+ * @return 0 success, 1 failure.
  */
-char *
+int
 get_lsc_credentials_omp (credentials_t * credentials,
                          const char * lsc_credential_id,
                          const char * format,
                          gsize *result_len,
                          const char * sort_field,
-                         const char * sort_order)
+                         const char * sort_order,
+                         char ** html)
 {
   entity_t entity;
   gnutls_session_t session;
   int socket;
 
+  assert (html);
+
   *result_len = 0;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the credential list. "
-                         "The current list of credentials is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+    {
+      *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting the credential list. "
+                            "The current list of credentials is not available. "
+                            "Diagnostics: Failure to connect to manager daemon.",
+                            "/omp?cmd=get_targets");
+      return 1;
+    }
 
   /* Send the request. */
 
@@ -1590,11 +1597,12 @@ get_lsc_credentials_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting credential list. "
-                               "The current list of credentials is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting credential list. "
+                                "The current list of credentials is not available. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_targets");
+          return 1;
         }
     }
   else
@@ -1609,11 +1617,12 @@ get_lsc_credentials_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting credential list. "
-                               "The current list of credentials is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting credential list. "
+                                "The current list of credentials is not available. "
+                                "Diagnostics: Failure to send command to manager daemon.",
+                                "/omp?cmd=get_targets");
+          return 1;
         }
     }
 
@@ -1635,11 +1644,12 @@ get_lsc_credentials_omp (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a credential. "
-                                   "The credential is not available. "
-                                   "Diagnostics: Failure to receive response from manager daemon.",
-                                   "/omp?cmd=get_targets");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a credential. "
+                                    "The credential is not available. "
+                                    "Diagnostics: Failure to receive response from manager daemon.",
+                                    "/omp?cmd=get_targets");
+              return 1;
             }
 
           credential_entity = entity_child (entity, "lsc_credential");
@@ -1665,17 +1675,19 @@ get_lsc_credentials_omp (credentials_t * credentials,
                 }
               free_entity (entity);
               openvas_server_close (socket, session);
-              return package_decoded;
+              *html = package_decoded;
+              return 0;
             }
           else
             {
               free_entity (entity);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a credential. "
-                                   "The credential could not be delivered. "
-                                   "Diagnostics: Failure to receive credential from manager daemon.",
-                                   "/omp?cmd=get_tasks");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a credential. "
+                                    "The credential could not be delivered. "
+                                    "Diagnostics: Failure to receive credential from manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              return 1;
             }
         }
       else
@@ -1688,11 +1700,12 @@ get_lsc_credentials_omp (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a credential. "
-                                   "The credential could not be delivered. "
-                                   "Diagnostics: Failure to receive credential from manager daemon.",
-                                   "/omp?cmd=get_tasks");
+              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a credential. "
+                                    "The credential could not be delivered. "
+                                    "Diagnostics: Failure to receive credential from manager daemon.",
+                                    "/omp?cmd=get_tasks");
+              return 1;
             }
           openvas_server_close (socket, session);
 
@@ -1701,16 +1714,17 @@ get_lsc_credentials_omp (credentials_t * credentials,
             key_entity = entity_child (credential_entity, "public_key");
           if (key_entity != NULL)
             {
-              gchar* key = g_strdup (entity_text (key_entity));
+              *html = g_strdup (entity_text (key_entity));
               free_entity (entity);
-              return key;
+              return 0;
             }
           free_entity (entity);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a credential. "
-                               "The credential could not be delivered. "
-                               "Diagnostics: Failure to parse credential from manager daemon.",
-                               "/omp?cmd=get_tasks");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a credential. "
+                                "The credential could not be delivered. "
+                                "Diagnostics: Failure to parse credential from manager daemon.",
+                                "/omp?cmd=get_tasks");
+          return 1;
         }
     }
   else
@@ -1723,16 +1737,18 @@ get_lsc_credentials_omp (credentials_t * credentials,
       if (read_entity_and_text (&session, &entity, &text))
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting credential list. "
-                               "The current list of credentials is not available. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets");
+          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting credential list. "
+                                "The current list of credentials is not available. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_targets");
+          return 1;
         }
       free_entity (entity);
 
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, text);
+      *html = xsl_transform_omp (credentials, text);
+      return 0;
     }
 }
 

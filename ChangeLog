@@ -1,5 +1,16 @@
 2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Expect get_lsc_credentials_omp html in arg
+	return instead of in function return value.  Get credential before setting
+	response headers, in case of error.
+
+	* src/gsad_omp.c (get_lsc_credentials_omp): Add html return arg.  Return
+	success or failure.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_lsc_credential_omp): Correct comment.
 	(get_lsc_credentials_omp): Correct attribute name.
 
