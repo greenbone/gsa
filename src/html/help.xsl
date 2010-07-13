@@ -130,8 +130,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
       <h1>Configure Agents</h1>
       <p>
-       This feature allows to store agent tools accompanied with
-       respective documentation on how to install and use them.
+       This feature allows to store agent tools.
+       Basically it is a store with integrated signature verification.
+       Agents can be downloaded from here for manual installation on
+       target systems. This agents feature is unrelated to other
+       elements of the user interface.
       </p>
 
       <a name="new_agent"></a>
@@ -155,24 +158,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>yes</td>
           <td>80</td>
           <td>Alphanumeric</td>
-          <td>WinSLAD</td>
+          <td>WinSLAD Base 1.0</td>
         </tr>
         <tr class="even">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
           <td>Alphanumeric</td>
-          <td>This agent collects several plugins.</td>
+          <td>Base agent for Windows SLAD family.</td>
         </tr>
         <tr class="odd">
           <td>Installer</td>
           <td>yes</td>
           <td>--</td>
           <td>File</td>
-          <td>Upload the agent tool.</td>
+          <td>/tmp/WinSLAD-Base-1.0.exe</td>
         </tr>
-      <!-- TODO: installer, howto_install, howto_us -->
+        <tr class="even">
+          <td>Installer signature</td>
+          <td>no</td>
+          <td>--</td>
+          <td>File (armored GnuPG detached signature)</td>
+          <td>/tmp/WinSLAD-Base-1.0.exe</td>
+        </tr>
+      <!-- TODO: howto_install, howto_us -->
       </table>
+
+      <p>
+      In case a signature file is provided, the agent file will be
+      verified using this signature at upload time to determine the trust.
+      </p>
+
+      <p>
+      In case, no signature file is provided, a suitable signature is
+      searched for in the NVT Feed. If found, the trust is determined based
+      on this signature file.
+      </p>
 
       <a name="agents"></a>
       <h2>Agents</h2>
@@ -190,9 +211,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Name</td>
           <td>Shows name of the agent.</td>
         </tr>
-        <tr>
+        <tr class="even">
          <td>Comment</td>
          <td>Shows the comment that was provided for this agent.</td>
+        </tr>
+        <tr class="odd">
+         <td>Trust</td>
+         <td><b>yes</b>: the signature file that was uploaded or that was present
+             in the Feed proofs that the agent was not compromised at upload time<br/>
+             <b>no</b>: Signature and agent do not match or signature key is not trusted.<br/>
+             <b>unknown</b>: Any case where trust could not be tested adequately.<br/>
+         </td>
         </tr>
       </table>
 
