@@ -1,3 +1,8 @@
+2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_lsc_credential_omp): Correct comment.
+	(get_lsc_credentials_omp): Correct attribute name.
+
 2010-07-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Pass oid to edit_note_omp "get_nvts" case

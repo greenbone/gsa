@@ -1503,7 +1503,7 @@ get_lsc_credential_omp (credentials_t * credentials,
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_lsc_credentials");
 
-  /* Get the target. */
+  /* Get the LSC credential. */
 
   if (openvas_server_sendf (&session,
                             "<get_lsc_credentials"
@@ -1582,7 +1582,9 @@ get_lsc_credentials_omp (credentials_t * credentials,
   if (lsc_credential_id && format)
     {
       if (openvas_server_sendf (&session,
-                                "<get_lsc_credentials name=\"%s\" format=\"%s\"/>",
+                                "<get_lsc_credentials"
+                                " lsc_credential_id=\"%s\""
+                                " format=\"%s\"/>",
                                 lsc_credential_id,
                                 format)
           == -1)
