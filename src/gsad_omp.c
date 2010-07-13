@@ -1553,7 +1553,9 @@ get_lsc_credential_omp (credentials_t * credentials,
  * @param[out]  result_len         Length of result.
  * @param[in]   sort_field         Field to sort on, or NULL.
  * @param[in]   sort_order         "ascending", "descending", or NULL.
- * @param[out]  html               Result of XSL transformation.
+ * @param[out]  html               Result of XSL transformation.  Required.
+ * @param[out]  login              Login name return.  NULL to skip.  Only set
+ *                                 on success with lsc_credential_id.
  *
  * @return 0 success, 1 failure.
  */
@@ -1564,7 +1566,8 @@ get_lsc_credentials_omp (credentials_t * credentials,
                          gsize *result_len,
                          const char * sort_field,
                          const char * sort_order,
-                         char ** html)
+                         char ** html,
+                         char ** login)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -1673,9 +1676,18 @@ get_lsc_credentials_omp (credentials_t * credentials,
                   package_decoded = (gchar *) g_strdup ("");
                   *result_len = 0;
                 }
-              free_entity (entity);
               openvas_server_close (socket, session);
               *html = package_decoded;
+              if (login)
+                {
+                  entity_t login_entity;
+                  login_entity = entity_child (credential_entity, "login");
+                  if (login_entity)
+                    *login = g_strdup (entity_text (login_entity));
+                  else
+                    *login = NULL;
+                }
+              free_entity (entity);
               return 0;
             }
           else
@@ -1715,15 +1727,23 @@ get_lsc_credentials_omp (credentials_t * credentials,
           if (key_entity != NULL)
             {
               *html = g_strdup (entity_text (key_entity));
+              if (login)
+                {
+                  entity_t login_entity = entity_child (credential_entity, "login");
+                  if (login_entity)
+                    *login = g_strdup (entity_text (login_entity));
+                  else
+                    *login = NULL;
+                }
               free_entity (entity);
               return 0;
             }
-          free_entity (entity);
           *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to parse credential from manager daemon.",
                                 "/omp?cmd=get_tasks");
+          free_entity (entity);
           return 1;
         }
     }

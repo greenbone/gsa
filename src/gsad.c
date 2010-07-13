@@ -3022,7 +3022,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && ((lsc_credential_id == NULL && package_format == NULL)
                || (lsc_credential_id && package_format)))
     {
-      char *html;
+      char *html, *lsc_credential_login;
 
       if (lsc_credential_id == NULL)
         {
@@ -3032,7 +3032,8 @@ exec_omp_get (struct MHD_Connection *connection,
                                    response_size,
                                    sort_field,
                                    sort_order,
-                                   &html);
+                                   &html,
+                                   NULL);
           return html;
         }
 
@@ -3042,18 +3043,19 @@ exec_omp_get (struct MHD_Connection *connection,
                                    response_size,
                                    NULL,
                                    NULL,
-                                   &html))
+                                   &html,
+                                   &lsc_credential_login))
         return html;
 
-      /**
-       * @todo Get sizes from constants that are also used by gsad_params. */
       content_type_from_format_string (content_type, package_format);
       free (*content_disposition);
-      *content_disposition = calloc (250, sizeof (char));
-      snprintf (*content_disposition, 250,
-                "attachment; filename=openvas-lsc-target-%s_0.5-1.%s",
-                lsc_credential_id,
-                (strcmp (package_format, "key") == 0 ? "pub" : package_format));
+      *content_disposition = g_strdup_printf
+                              ("attachment; filename=openvas-lsc-target-%s.%s",
+                               lsc_credential_login,
+                               (strcmp (package_format, "key") == 0
+                                 ? "pub"
+                                 : package_format));
+      free (lsc_credential_login);
 
       return html;
     }
