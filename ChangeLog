@@ -4,6 +4,15 @@
 
 2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_system_reports_omp): Use new OMP for getting list.
+
+	* src/html/omp.xsl (system_report [image]): Remove mode.  Change path.
+	(system_report): Remove.
+	(get_system_reports_response, get_system_reports): New template.  Rename
+	from system_report.  Adjust path for flatter report type list.
+
+2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Get agent filename from get_agent_omp.
 
 	* src/gsad_omp.c (get_agents_omp): Add filename return arg.

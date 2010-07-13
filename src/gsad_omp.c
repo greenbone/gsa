@@ -7212,7 +7212,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
   /* Get the system reports. */
 
   if (openvas_server_sendf (&session,
-                            "<get_system_reports name=\"types\"/>")
+                            "<get_system_reports brief=\"1\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);

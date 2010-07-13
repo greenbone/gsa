@@ -7290,7 +7290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN SYSTEM REPORTS MANAGEMENT -->
 
-<xsl:template match="system_report" mode="image">
+<xsl:template match="system_report">
   <tr>
     <td>
       <h1><xsl:value-of select="title"/></h1>
@@ -7298,13 +7298,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
   <tr>
     <td>
-      <img src="/system_report/{name}/report.png?duration={../../../../duration}"/>
+      <img src="/system_report/{name}/report.png?duration={../../duration}"/>
     </td>
   </tr>
 </xsl:template>
 
-<xsl:template match="system_report">
-  <xsl:variable name="duration" select="../../duration"/>
+<xsl:template match="get_system_reports_response">
+  <xsl:variable name="duration" select="../duration"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -7369,7 +7369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
       <table>
-        <xsl:apply-templates select="report/system_report" mode="image"/>
+        <xsl:apply-templates select="system_report"/>
       </table>
     </div>
   </div>
@@ -7399,7 +7399,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="get_system_reports_response/system_report"/>
+      <xsl:apply-templates select="get_system_reports_response"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
