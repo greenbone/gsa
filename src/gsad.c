@@ -962,32 +962,30 @@ append_chunk_binary (const char *chunk_data,
 }
 
 /**
- * @brief Called once the post request handler has collected the multiple
- * @brief parts of a post request. Fills the req_params of an
- * @brief gsad_connection_info.
+ * @brief Serves part of a POST request.
  *
- * Implements a MHD_PostDataIterator, returning MHD_NO if iteration should
- * stop, MHD_YES if further key/value pairs should be looked at.
+ * Implements an MHD_PostDataIterator.
+ *
+ * Called one or more times to collect the multiple parts (key/value pairs)
+ * of a POST request.  Fills the req_params of a gsad_connection_info.
  *
  * After serve_post, the connection info is free'd.
  *
- * @todo Parameter documentation from microhttpd's documentation.
- *
- * @param[in,out]  coninfo_cls  User-specified closure (here: gsad_connection_info).
- * @param[in]      kind  Type of the value
- * @param[in]      key   0-terminated key for the value
- * @param[in]      filename     Name of the uploaded file, NULL if not known.
- * @param[in]      contenttype  Mime-type of the data, NULL if not known.
- * @param[in]      transfer_encoding Encoding of the data, NULL if not known.
- * @param[in]      data  Pointer to size bytes of data at the specified offset.
- * @param[in]      off   Offset of data in the overall value.
- * @param[in]      size  Number of bytes in data available.
+ * @param[in,out]  coninfo_cls   Connection info (a gsad_connection_info).
+ * @param[in]      kind          Type of request data (header, cookie, etc.).
+ * @param[in]      key           Name of data (name of request variable).
+ * @param[in]      filename      Name of uploaded file if any, else NULL.
+ * @param[in]      content_type  MIME type of data if known, else NULL.
+ * @param[in]      transfer_encoding  Transfer encoding if known, else NULL.
+ * @param[in]      data          Data.
+ * @param[in]      off           Offset into entire data.
+ * @param[in]      size          Size of data, in bytes.
  *
  * @return MHD_YES to continue iterating over post data, MHD_NO to stop.
  */
 int
 serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
-            const char *filename, const char *contenttype,
+            const char *filename, const char *content_type,
             const char *transfer_encoding, const char *data, uint64_t off,
             size_t size)
 {
@@ -3964,7 +3962,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
     {
       struct gsad_connection_info *con_info;
 
-      // @todo what frees this?
+      /* First call for this request, a GET. */
+
+      /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
       con_info = calloc (1, sizeof (struct gsad_connection_info));
       if (NULL == con_info)
         return MHD_NO;
@@ -4025,7 +4025,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (method, "GET"))
     {
-      /* This is a GET request. */
+      /* Second or later call for this request, a GET. */
+
       content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
 
       /* Check for authentication. */
@@ -4141,6 +4142,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
     {
       if (NULL == *con_cls)
         {
+          /* First call for this request, a POST. */
+
           struct gsad_connection_info *con_info;
 
           /* Check for authentication. */
@@ -4149,7 +4152,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                                         it is a const str */
             return send_http_authenticate_header (connection, REALM);
 
-          // @todo what frees this?
+          /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
           con_info = calloc (1, sizeof (struct gsad_connection_info));
           if (NULL == con_info)
             return MHD_NO;
@@ -4165,6 +4168,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           *con_cls = (void *) con_info;
           return MHD_YES;
         }
+
+      /* Second or later call for this request, a POST. */
 
       struct gsad_connection_info *con_info = *con_cls;
       if (0 != *upload_data_size)
