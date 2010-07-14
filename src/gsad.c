@@ -4695,8 +4695,6 @@ main (int argc, char **argv)
         }
       else
         {
-          /** @todo Add g_critical. */
-
           tracef ("GSAD started successfully and is listening on port %d.\n",
                   gsad_port);
         }
