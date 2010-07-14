@@ -1,5 +1,9 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (get_file_size): Remove.  Out of use.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (serve_post): Cleanup doc a bit.
 	(request_handler): Rename arg contenttype to content_type.  Cleanup doc a
 	bit.

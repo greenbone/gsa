@@ -3444,33 +3444,6 @@ check_is_dir (const char *name)
     }
 }
 
-
-/** @todo This function is never called, remove it? */
-/**
- * @brief Determines the size of a given file.
- *
- * @param[in]  filename  Path to file.
- *
- * @return Size of file \arg filename, or 0 if the file could not be opened.
- */
-long
-get_file_size (const char *filename)
-{
-  FILE *fp;
-  fp = fopen (filename, "rb");
-  if (fp)
-    {
-      long size;
-      if ((0 != fseek (fp, 0, SEEK_END)) || (-1 == (size = ftell (fp))))
-        size = 0;
-      fclose (fp);
-
-      return size;
-    }
-  else
-    return 0;
-}
-
 /**
  * @brief Callback iterator for MHD_get_connection_values
  *
