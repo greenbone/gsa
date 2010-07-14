@@ -1,5 +1,11 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(html-create-override-form, html-create-note-form): Ensure override and
+	note buttons are hidden.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Add overrides to refresh URLs.
 
 2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
