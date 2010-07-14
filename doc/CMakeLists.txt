@@ -30,31 +30,21 @@ if (NOT DOXYGEN_EXECUTABLE)
   message (FATAL_ERROR "Doxygen is required to build the HTML docs.")
 endif (NOT DOXYGEN_EXECUTABLE)
 
-## TODO make the doc target depend on all source and header files.
-
 add_custom_target (doc COMMENT "Building documentation..."
                    DEPENDS Doxyfile .built-html)
 
 add_custom_command (OUTPUT .built-html
                     COMMAND sh
 					ARGS -c \"cd .. && ${DOXYGEN_EXECUTABLE} doc/Doxyfile && touch doc/.built-html\;\"
-					DEPENDS Doxyfile
-							../README)
+					DEPENDS Doxyfile ../README ../src/*.c ../src/*.h)
 
 add_custom_target (doc-full COMMENT "Building documentation..."
                    DEPENDS Doxyfile_full .built-html_full)
 
-add_custom_command (OUTPUT .built-html
-                    COMMAND sh
-					ARGS -c \"cd .. && ${DOXYGEN_EXECUTABLE} doc/Doxyfile && touch doc/.built-html\;\"
-					DEPENDS Doxyfile
-							../README)
-
 add_custom_command (OUTPUT .built-html_full
                     COMMAND sh
 					ARGS -c \"cd .. && ${DOXYGEN_EXECUTABLE} doc/Doxyfile_full && touch doc/.built-html_full\;\"
-					DEPENDS Doxyfile_full
-							../README)
+					DEPENDS Doxyfile_full ../README ../src/*.c ../src/*.h)
 
 
 ## Install

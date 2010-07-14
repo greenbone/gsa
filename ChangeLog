@@ -1,6 +1,13 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/doc/
+	* doc/CMakeLists.txt (.build-html, .built-html_full): Remove duplicate
+	rule.  Depend on all source files.
+
+	* src/gsad.c, src/gsad_base.h, src/gsad_omp.c: Bring docs up to date.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* doc/Doxyfile.in, doc/Doxyfile_full.in: Turn off recursive file search.
 
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 

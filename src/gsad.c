@@ -351,17 +351,18 @@ init_validator ()
 }
 
 /**
- * @brief Checks whether an input string is valid according to a rule
- * @brief registered with \ref validator. Frees and NULLs \ref string if not.
+ * @brief Check validity of an input string.
+ *
+ * Checks whether an input string is valid according to a rule registered with
+ * \ref validator.  Frees and NULLs \p string if not.
  *
  * @param[in]      validator       Validator to use.
- * @param[in]      validator_rule  The rule with which to validate
- *                                 \ref string.
+ * @param[in]      validator_rule  The rule with which to validate \p string.
  * @param[in,out]  string          The string to validate. If invalid, memory
  *                                 location pointed to  will be freed and set
  *                                 to NULL.
  *
- * @return TRUE if \ref input was invalid and was freed, FALSE otherwise.
+ * @return TRUE if \p string was invalid and was freed, FALSE otherwise.
  */
 static gboolean
 validate (validator_t validator, const gchar* validator_rule, char** string)
@@ -380,7 +381,7 @@ validate (validator_t validator, const gchar* validator_rule, char** string)
 /**
  * @brief Returns TRUE no netmask in CIDR notation < 20 is given.
  *
- * @param host_parameter String containing hostnames, IPs etc.
+ * @param hosts_parameter String containing hostnames, IPs etc.
  *
  * @return TRUE if no netmask in CIDR notation < 20 was found in the
  *         input string.
@@ -440,8 +441,10 @@ free_gchar_array (GArray ** array)
 }
 
 /**
- * @param From a format string (like "exe"), set a content_type (like
- * @param GSAD_CONTENT_TYPE_APP_EXE).
+ * @brief Set a content type from a format string.
+ *
+ * For example set the content type to GSAD_CONTENT_TYPE_APP_DEB when given
+ * when given format "deb".
  *
  * @param[out]  content_type  Return location for the newly set content type,
  *                            defaults to GSAD_CONTENT_TYPE_APP_HTML.
@@ -865,11 +868,11 @@ free_resources (void *cls, struct MHD_Connection *connection,
 /**
  * @brief Append a chunk to a string parameter.
  *
- * @param[in]   chunk         Incoming chunk data.
+ * @param[in]   con_info      Connection info.
+ * @param[in]   chunk_data    Incoming chunk data.
  * @param[out]  chunk_size    Size of chunk.
  * @param[out]  chunk_offset  Offset into all data.
  * @param[out]  param         Parameter.
- * @param[out]  param_size    Parameter size.
  *
  * @return MHD_YES on success, MHD_NO on error.
  */
@@ -916,7 +919,7 @@ append_chunk_string (struct gsad_connection_info *con_info,
 /**
  * @brief Append a chunk to a binary parameter.
  *
- * @param[in]   chunk         Incoming chunk data.
+ * @param[in]   chunk_data    Incoming chunk data.
  * @param[out]  chunk_size    Size of chunk.
  * @param[out]  chunk_offset  Offset into all data.
  * @param[out]  param         Parameter.
@@ -3444,7 +3447,7 @@ check_is_dir (const char *name)
 }
 
 
-/** @TODO This function is never called, remove it? */
+/** @todo This function is never called, remove it? */
 /**
  * @brief Determines the size of a given file.
  *
@@ -3613,6 +3616,9 @@ send_http_authenticate_header (struct MHD_Connection *connection,
   return ret;
 }
 
+/**
+ * @brief Maximum length of the host portion of the redirect address.
+ */
 #define MAX_HOST_LEN 1000
 
 /**
@@ -3831,7 +3837,7 @@ file_content_response (struct MHD_Connection *connection, const char* url,
                                                 MHD_NO, MHD_YES);
         }
 
-      /** @TODO use glibs path functions */
+      /** @todo use glibs path functions */
       path = g_strconcat (default_file, NULL);
       tracef ("trying default file <%s>.\n", path);
       file = fopen (path, "r"); /* flawfinder: ignore, this file is just
@@ -4014,7 +4020,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   credentials = get_header_credentials (connection);
 
   /* Set HTTP Header values. */
-  /** @TODO What is that good for? */
+  /** @todo What is that good for? */
   MHD_get_connection_values (connection, MHD_HEADER_KIND, print_header, NULL);
 
   if (!strcmp (method, "GET"))

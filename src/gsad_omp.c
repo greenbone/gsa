@@ -425,7 +425,7 @@ new_task_omp (credentials_t * credentials, const char* message,
  * @param[in]  name          New task name.
  * @param[in]  comment       Comment on task.
  * @param[in]  target_id     Target for task.
- * @param[in]  scanconfig    Config for task.
+ * @param[in]  config_id     Config for task.
  * @param[in]  escalator_id  Escalator for task.
  * @param[in]  schedule_id   UUID of schedule for task.
  * @param[in]  apply_overrides   Whether to apply overrides.
@@ -1162,12 +1162,12 @@ get_nvts_omp (credentials_t *credentials, const char *oid)
 /**
  * @brief Get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  task_id           ID of task.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  command           Extra commands to run before the others.
+ * @param[in]  commands          Extra commands to run before the others.
  * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
@@ -2190,7 +2190,8 @@ get_agents_omp (credentials_t * credentials,
 /**
  * @brief Send data for an escalator.
  *
- * @param[out]  data  Data.
+ * @param[in]   session  GNUTLS session.
+ * @param[out]  data     Data.
  *
  * @return 0 on success, -1 on error.
  */
@@ -2475,7 +2476,7 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
 /**
  * @brief Get all escalators, reading the result into a string.
  *
- * @param[in]   session      GNUTLS session on success.
+ * @param[in]   session      GNUTLS session.
  * @param[out]  xml          String.
  * @param[in]   sort_field   Field to sort on, or NULL.
  * @param[in]   sort_order   "ascending", "descending", or NULL.
@@ -4514,7 +4515,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       if (strcmp (format, "xml") == 0)
         {
           /* Manager sends XML report as plain XML. */
-          /** @TODO Call g_string_sized_new with an appropriate size */
+          /** @todo Call g_string_sized_new with an appropriate size */
           xml = g_string_new ("");
           if (read_entity (&session, &entity))
             {
@@ -4813,10 +4814,12 @@ get_note_omp (credentials_t *credentials, const char *note_id)
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  oid            OID of NVT associated with note.
+ * @param[in]  hosts          Hosts to limit override to, "" for all.
  * @param[in]  port           Port to limit note to, "" for all.
  * @param[in]  threat         Threat to limit note to, "" for all.
  * @param[in]  task_id        ID of task to limit note to, "" for all.
  * @param[in]  task_name      Name of task to limit note to, task_id given.
+ * @param[in]  result_id      ID of result to limit note to, "" for all.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -5866,11 +5869,13 @@ get_override_omp (credentials_t *credentials, const char *override_id)
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  oid            OID of NVT associated with override.
+ * @param[in]  hosts          Hosts to limit override to, "" for all.
  * @param[in]  port           Port to limit override to, "" for all.
  * @param[in]  threat         Threat to limit override to, "" for all.
  * @param[in]  task_id        ID of task to limit override to, "" for all.
  * @param[in]  task_name      Name of task to limit override to, task_id given.
  * @param[in]  report_id      ID of report.
+ * @param[in]  result_id      ID of result to limit note to, "" for all.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
  * @param[in]  sort_field     Field to sort on, or NULL.

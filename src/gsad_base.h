@@ -67,6 +67,9 @@ char * xsl_transform (const char *);
 char * gsad_message (const char *, const char *, int, const char *,
                      const char *);
 
+/**
+ * @brief Content types.
+ */
 enum content_type
 {
   GSAD_CONTENT_TYPE_APP_DEB,
