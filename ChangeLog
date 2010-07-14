@@ -1,5 +1,11 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (print_header): Remove.  Now out of use.
+	(redirect_handler): Clarify freeing.
+	(request_handler): Remove print_header iteration.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (get_file_size): Remove.  Out of use.
 
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>

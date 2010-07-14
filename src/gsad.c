@@ -3445,25 +3445,6 @@ check_is_dir (const char *name)
 }
 
 /**
- * @brief Callback iterator for MHD_get_connection_values
- *
- * The current implementation is empty.
- *
- * @param[in]  cls    Not used for this callback.
- * @param[in]  kind   Not used for this callback.
- * @param[in]  key    Header key.
- * @param[in]  value  Header value.
- *
- * @return MHD_YES is always returned.
- */
-int
-print_header (void *cls, enum MHD_ValueKind kind, const char *key,
-              const char *value)
-{
-  return MHD_YES;
-}
-
-/**
  * @brief Sends a HTTP response.
  *
  * @param[in]  connection   The connection handle.
@@ -3624,7 +3605,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
     {
       struct gsad_connection_info *con_info;
 
-      // @todo what frees this?
+      /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
       con_info = calloc (1, sizeof (struct gsad_connection_info));
       if (NULL == con_info)
         return MHD_NO;
@@ -3993,8 +3974,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
   credentials = get_header_credentials (connection);
 
   /* Set HTTP Header values. */
-  /** @todo What is that good for? */
-  MHD_get_connection_values (connection, MHD_HEADER_KIND, print_header, NULL);
 
   if (!strcmp (method, "GET"))
     {
