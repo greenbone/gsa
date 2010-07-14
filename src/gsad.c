@@ -3576,7 +3576,8 @@ send_http_authenticate_header (struct MHD_Connection *connection,
 /**
  * @brief HTTP request handler for GSAD.
  *
- * This routine is the callback request handler for microhttpd.
+ * This routine is an MHD_AccessHandlerCallback, the request handler for
+ * microhttpd.
  *
  * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
@@ -3622,8 +3623,10 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
 
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
-    /** @todo return MHD_NO;? */
-    send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+    {
+      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+      return MHD_YES;
+    }
 
   /* Redirect every URL to the default file on the HTTPS port. */
   host = MHD_lookup_connection_value (connection,
@@ -3877,7 +3880,8 @@ file_content_response (struct MHD_Connection *connection, const char* url,
 /**
  * @brief HTTP request handler for GSAD.
  *
- * This routine is the callback request handler for microhttpd.
+ * This routine is an MHD_AccessHandlerCallback, the request handler for
+ * microhttpd.
  *
  * @param[in]  cls              Not used for this callback.
  * @param[in]  connection       Connection handle, e.g. used to send response.
@@ -3935,8 +3939,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
-    /** @todo return MHD_NO;? */
-    send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+    {
+      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+      return MHD_YES;
+    }
 
   /* Redirect any URL matching the base to the default file and
    * Treat logging out specially. */
@@ -4012,8 +4018,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
       else if (!strncmp (&url[0], "/system_report/",
-                    strlen ("/system_report/"))) /* flawfinder: ignore,
-                                                    it is a const str */
+                         strlen ("/system_report/"))) /* flawfinder: ignore,
+                                                         it is a const str */
         {
           gsize res_len;
           const char *duration;

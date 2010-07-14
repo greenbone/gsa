@@ -1,5 +1,11 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (send_http_authenticate_header): Doc MHD type.
+	(redirect_handler, request_handler): Return MHD_YES on method error, so
+	that the sender gets the response page.   Doc MHD type.  Align overhang.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report_omp): Remove TODO about g_string_new size, as
 	it's hard to tell how big or small the string will get.
 
