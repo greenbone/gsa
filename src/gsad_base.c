@@ -70,8 +70,6 @@ xsl_transform (const char *xml_text)
 
   tracef ("text to transform: [%s]\n", xml_text);
 
-  /** @todo Check all returns. */
-
   xmlSubstituteEntitiesDefault (1);
   xmlLoadExtDtdDefaultValue = 1;
   cur = xsltParseStylesheetFile ((const xmlChar *) XSL_PATH);
@@ -82,13 +80,18 @@ xsl_transform (const char *xml_text)
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
+  if (doc == NULL)
+    {
+      g_warning ("Failed to parse stylesheet " XSL_PATH);
+      xsltFreeStylesheet (cur);
+      return g_strdup (error_message);
+    }
 
   res = xsltApplyStylesheet (cur, doc, NULL);
   if (res == NULL)
     {
       g_warning ("Failed to apply stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
-      xmlFreeDoc (res);
       return g_strdup (error_message);
     }
 

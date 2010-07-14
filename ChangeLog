@@ -1,5 +1,10 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_base.c (xsl_transform): Check return value.  Remove premature
+	free.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (main): Remove TODO that referred to a pidfile_create.
 
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
