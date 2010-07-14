@@ -766,7 +766,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Reports (Task Summary)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
@@ -923,7 +923,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#notes" title="Help: Reports (Notes)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}"
+         title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
@@ -954,7 +955,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/reports.html#overrides" title="Help: Reports (Overrides)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}"
+         title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>

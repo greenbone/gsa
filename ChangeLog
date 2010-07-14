@@ -1,6 +1,6 @@
-2010-07-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/help.xsl (configure_agents.html): Updated help page on agents.
+	* src/html/omp.xsl (html-report-table): Add overrides to refresh URLs.
 
 2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
@@ -10,6 +10,10 @@
 	(system_report): Remove.
 	(get_system_reports_response, get_system_reports): New template.  Rename
 	from system_report.  Adjust path for flatter report type list.
+
+2010-07-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl (configure_agents.html): Updated help page on agents.
 
 2010-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
