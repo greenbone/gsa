@@ -4515,7 +4515,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       if (strcmp (format, "xml") == 0)
         {
           /* Manager sends XML report as plain XML. */
-          /** @todo Call g_string_sized_new with an appropriate size */
           xml = g_string_new ("");
           if (read_entity (&session, &entity))
             {

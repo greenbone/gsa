@@ -1,5 +1,10 @@
 2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Remove TODO about g_string_new size, as
+	it's hard to tell how big or small the string will get.
+
+2010-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_base.c (xsl_transform): Check return value.  Remove premature
 	free.
 
