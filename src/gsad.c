@@ -1704,13 +1704,7 @@ exec_omp_post (credentials_t * credentials,
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
       validate (validator, "login", &con_info->req_parms.login);
-      if (openvas_validate (validator,
-                            "password",
-                            con_info->req_parms.password))
-        {
-          /** @todo Free con_info->req_parms.password? */
-          con_info->req_parms.password = NULL;
-        }
+      validate (validator, "password", &con_info->req_parms.password);
       validate (validator, "role", &con_info->req_parms.role);
       validate (validator, "access_hosts", &con_info->req_parms.access_hosts);
       validate (validator, "hosts_allow", &con_info->req_parms.hosts_allow);
