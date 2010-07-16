@@ -1,3 +1,13 @@
+2010-07-16  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 1.0.0.rc1 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CMakeLists.txt: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Validate create_user password like other

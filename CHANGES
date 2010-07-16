@@ -1,3 +1,21 @@
+gsa 1.0.0.rc1 (2010-07-16)
+
+This is the first release candidate of the optional gsa module for the Open
+Vulnerability Assessment System (OpenVAS) leading up to the upcoming gsa 1.0.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix Wolfsteller.
+
+Main changes since 1.0.0-beta6:
+* Support for LDAP and ADS has been added.
+* A number of changes have been made to stay compatible with the updated OMP
+  specification.
+* Initial support for fetching targets from external sources has been added.
+* Support for threat overrides has been added.
+* Support for Syslog and SNMP escalators has been added.
+* Support for agents has been improved.
+
+
 gsa 1.0.0-beta7 (2010-05-28)
 
 This is the seventh beta release of the optional gsa module for the Open
