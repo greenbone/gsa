@@ -3731,7 +3731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <input type="text"
-                 name="preference:scanner[scanner]:timeout.{../nvt/@oid}"
+                 name="preference:scanner[scanner]:timeout.{../@oid}"
                  value="{timeout}"
                  size="30"
                  maxlength="400"/>
