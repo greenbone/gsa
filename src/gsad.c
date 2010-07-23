@@ -1383,6 +1383,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
           if (count == 0 && uuid_start > 0 && uuid_end > 0)
             {
               preference_t preference;
+              gboolean pref_already_in_array = FALSE;
 
               /* Just put the type in the nvt field for now, so that there
                * is something to free. */
@@ -1405,22 +1406,49 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
                   return MHD_NO;
                 }
 
-              preference.value = g_memdup (data, size);
-              preference.value_size = size;
+              if (con_info->req_parms.preferences != NULL)
+                {
+                  preference_t *item;
+                  int index = 0;
 
-              if (con_info->req_parms.preferences == NULL)
-                con_info->req_parms.preferences
-                 = g_array_new (TRUE,
-                                FALSE,
-                                sizeof (preference_t*));
+                  while ((item = g_array_index (con_info->req_parms.preferences,
+                                                preference_t*,
+                                                index++)))
+                    {
+                      if (g_ascii_strcasecmp (item->name, preference.name) == 0)
+                        {
+                          g_free (preference.nvt);
+                          g_free (preference.name);
 
-              {
-                gconstpointer p = g_memdup (&preference, sizeof (preference));
-                g_array_append_vals (con_info->req_parms.preferences,
-                                     &p,
-                                     1);
-              }
+                          if (append_chunk_binary (data, size, off,
+                                                   (char**) &item->value,
+                                                   &item->value_size))
+                            return MHD_NO;
 
+                          pref_already_in_array = TRUE;
+                          break;
+                        }
+                    }
+                }
+
+              if (pref_already_in_array == FALSE)
+                {
+                  gconstpointer p;
+
+                  preference.value = g_memdup (data, size);
+                  preference.value_size = size;
+
+                  if (con_info->req_parms.preferences == NULL)
+                    con_info->req_parms.preferences
+                      = g_array_new (TRUE,
+                                     FALSE,
+                                     sizeof (preference_t*));
+
+                  p = g_memdup (&preference, sizeof (preference));
+                  g_array_append_vals (con_info->req_parms.preferences,
+                                       &p,
+                                       1);
+                }
               con_info->answercode = MHD_HTTP_OK;
               return MHD_YES;
             }
