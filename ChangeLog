@@ -1,3 +1,8 @@
+2010-07-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (serve_post): Account for chunking in file and password
+	parsing.
+
 2010-07-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (serve_post): Account for chunking in preference parsing.
