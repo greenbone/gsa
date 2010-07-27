@@ -4045,13 +4045,13 @@ save_config_nvt_omp (credentials_t * credentials,
             ret = openvas_server_sendf (&session,
                                         "<modify_config config_id=\"%s\">"
                                         "<preference>"
-                                        "<nvt nvt_oid=\"%s\"/>"
+                                        "<nvt oid=\"%s\"/>"
                                         "<name>%s</name>"
                                         "<value>%s</value>"
                                         "</preference>"
                                         "</modify_config>",
                                         config_id,
-                                        preference->nvt,
+                                        nvt,
                                         preference->name,
                                         value);
 
