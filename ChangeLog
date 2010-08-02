@@ -1,5 +1,17 @@
 2010-08-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 1.0.0 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CMakeLists.txt: Updated version number.
+
+	* CHANGES: Updated.
+
+	* INSTALL: Updated prerequisites.
+
+2010-08-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* INSTALL: Updated prerequisites.
 
 	* CMakeLists.txt: Increased required openvas-libraries version.

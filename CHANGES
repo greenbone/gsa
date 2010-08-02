@@ -1,3 +1,44 @@
+gsa 1.0.0 (2010-08-02)
+
+This is the 1.0.0 release of GSA (Greenbone Security Assistant), an OMP web client
+for the Open Vulnerability Assessment System (OpenVAS).
+
+GSA 1.0 represents almost 2 years of intensive work. The mission of GSA is to be
+a web client to the OpenVAS Manager 1.0 via the OpenVAS Management Protocol (OMP).
+
+GSA offers a complete implementation of OMP in order to access all features
+to organize and manage OpenVAS vulnerability scans. Additionally, GSA
+optionally acts as a client for the upcoming openvas-administrator using the
+OpenVAS Administration Protocol (OAP) which allows e.g. management of scan users.
+
+Central features of Greenbone Security Assistant are:
+
+* Full OMP 1.0 client. The XML-based OMP responses are transformed into
+  web pages via XSLT.
+
+* No additional web-server required. The GSA daemon (gsad) uses microhttpd
+  to implement a HTTP service on its own.
+
+* Plain HTML. Neither cookies, JavaScript nor other dynamic elements are used.
+  GSA works stateless and uses HTTP Basic Auth.
+
+Greenbone Security Assistant is Free Software (Open Source), licensed
+under GNU General Public License Version 2 or any later version.
+
+The OpenVAS development team offers support for any efforts to create binary
+packages for the various Linux distributions in order have this new server
+readily available for users as soon as possible. Please use our openvas-distro
+mailing list for this purpose.
+
+
+Many thanks to everyone who has contributed to this release since 1.0.0.rc1:
+Matthew Mundell, Michael Wiegand.
+
+Main changes since 1.0.0.rc1:
+* A bug which caused NVT preferences to be saved incorrectly under certain
+  circumstances has been fixed.
+
+
 gsa 1.0.0.rc1 (2010-07-16)
 
 This is the first release candidate of the optional gsa module for the Open
