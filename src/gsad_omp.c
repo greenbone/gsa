@@ -4721,11 +4721,14 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     }
   else
     {
+      gchar *task_id = NULL;
+
       /* Format is NULL, send XSL transformed XML. */
 
-      xml = g_string_new ("<commands_response>");
+      xml = g_string_new ("<get_report>");
 
-      if (read_string (&session, &xml))
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -4733,6 +4736,51 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_tasks");
+        }
+
+      report_entity = entity_child (entity, "report");
+      if (report_entity)
+        report_entity = entity_child (report_entity, "report");
+      if (report_entity)
+        {
+          const char *id;
+          entity_t task_entity;
+
+          id = NULL;
+          task_entity = entity_child (report_entity, "task");
+          if (task_entity)
+            id = entity_attribute (task_entity, "id");
+          if (id)
+            task_id = g_strdup (id);
+          free_entity (entity);
+        }
+
+      if (task_id)
+        {
+          if (openvas_server_sendf (&session,
+                                    "<get_tasks task_id=\"%s\" details=\"0\" />",
+                                    task_id)
+              == -1)
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
+          if (read_string (&session, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
         }
 
       if (openvas_server_send (&session, "<get_report_formats"
@@ -4805,7 +4853,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         g_string_append (xml, "</all>");
       }
 
-      g_string_append (xml, "</commands_response>");
+      g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }

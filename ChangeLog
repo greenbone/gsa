@@ -1,5 +1,14 @@
 2010-08-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Wrap in GET_REPORT instead of COMMANDS.
+	Get the task summary as well as the report, for the task progress info.
+
+	* src/htmp/omp.xsl (html-report-details): Replace "Final scan run status"
+	field with "Scan status" and progress bar.
+	(get_report): New template.
+
+2010-08-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsa-style.css (small_form): Separate out input to add middle
 	vertical alignment.
 
