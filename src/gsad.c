@@ -273,7 +273,7 @@ init_validator ()
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
-  openvas_validator_add (validator, "family_page", "^[_[:alnum:] :]{1,40}$");
+  openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap)$");
