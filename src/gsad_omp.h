@@ -62,7 +62,7 @@ char * get_report_omp (credentials_t *, const char *, const char *,
                        gsize *, const unsigned int,
                        const unsigned int, const char *, const char *,
                        const char *, const char *, const char *, const char *,
-                       const char *, const char *);
+                       const char *, const char *, gchar **, char **);
 
 char * create_escalator_omp (credentials_t *, char *, char *, const char *,
                              GArray *, const char *, GArray *, const char *,
@@ -136,6 +136,8 @@ char * export_config_omp (credentials_t *, const char *, enum content_type*,
 char * export_preference_file_omp (credentials_t *, const char *, const char *,
                                    const char *, enum content_type *, char **,
                                    gsize *);
+char * export_report_format_omp (credentials_t *, const char *,
+                                 enum content_type *, char **, gsize *);
 
 char * get_notes_omp (credentials_t *);
 char * get_note_omp (credentials_t *, const char *);
@@ -206,6 +208,12 @@ char * save_override_omp (credentials_t *, const char *, const char *,
 char * get_system_reports_omp (credentials_t *, const char *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,
                               enum content_type*, char **, gsize *);
+
+char * get_report_format_omp (credentials_t *, const char *, const char *,
+                              const char *);
+char * get_report_formats_omp (credentials_t *, const char *, const char *);
+char * delete_report_format_omp (credentials_t *, const char *);
+char * import_report_format_omp (credentials_t *, char *);
 
 gboolean is_omp_authenticated (gchar *, gchar *);
 

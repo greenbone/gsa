@@ -466,12 +466,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
           <select name="format" style="margin-right:3px;" title="Download Format">
-            <option value="pdf">PDF</option>
-            <option value="html">HTML</option>
-            <option value="xml">XML</option>
-            <option value="ITG">ITG</option>
-            <option value="CPE">CPE</option>
-            <option value="nbe">NBE</option>
+            <xsl:for-each select="../../get_report_formats_response/report_format">
+              <xsl:choose>
+                <xsl:when test="name='PDF'">
+                  <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{name}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
           </select>
           <input type="submit" value="Download" title="Download"/>
         </form>
@@ -1360,12 +1364,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <select name="format"
                   style="margin-right:3px;"
                   title="Download Format">
-            <option value="pdf">PDF</option>
-            <option value="html">HTML</option>
-            <option value="xml">XML</option>
-            <option value="ITG">ITG</option>
-            <option value="CPE">CPE</option>
-            <option value="nbe">NBE</option>
+            <xsl:for-each select="../../../../get_report_formats_response/report_format">
+              <xsl:choose>
+                <xsl:when test="name='PDF'">
+                  <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{name}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
           </select>
           <input type="submit" value="Download" title="Download"/>
         </form>
@@ -6868,6 +6876,248 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END OVERRIDES MANAGEMENT -->
 
+<!-- BEGIN REPORT FORMATS MANAGEMENT -->
+
+<xsl:template name="html-report-formats-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Report Formats
+      <a href="/help/configure_report_formats.html#report_formats"
+         title="Help: Configure Report Formats (Report Formats)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Extension</td>
+            <td>Content Type</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="report_format"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-import-report-format-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Import Report Format
+      <a href="/help/configure_report_formats.html#import_report_format"
+         title="Help: Configure Report Formats (Import Report Formats)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="import_report_format"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">
+              Import XML report format
+            </td>
+            <td><input type="file" name="xml_file" size="30"/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Import Report Format"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_report_formats_response">
+</xsl:template>
+
+<!--     CREATE_REPORT_FORMAT_RESPONSE -->
+
+<xsl:template match="create_report_format_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Report Format</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_REPORT_FORMAT_RESPONSE -->
+
+<xsl:template match="delete_report_format_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Report Format
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     REPORT_FORMAT -->
+
+<xsl:template match="report_format">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="summary != ''">
+          <br/>(<xsl:value-of select="summary"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="extension"/></td>
+    <td><xsl:value-of select="content_type"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="global='0'">
+          <a href="/omp?cmd=delete_report_format&amp;report_format_id={@id}"
+             title="Delete Report Format" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}"
+         title="Report Format Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}"
+         title="Export Report Format XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="param-details" match="params" mode="details">
+  <div id="params">
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Value</td>
+        <td>Actions</td>
+      </tr>
+      <xsl:for-each select="param">
+        <xsl:variable name="class">
+          <xsl:choose>
+            <xsl:when test="position() mod 2 = 0">even</xsl:when>
+            <xsl:otherwise>odd</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <tr class="{$class}">
+          <td><xsl:value-of select="name"/></td>
+          <td><xsl:value-of select="value"/></td>
+          <td></td>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template match="report_format" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Report Format Details
+       <a href="/help/configure_report_formats.html#report_formatdetails"
+         title="Help: Configure Report Formats (Report Format Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_report_formats">Back to Report Formats</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Extension:</td>
+          <td><xsl:value-of select="extension"/></td>
+        </tr>
+        <tr>
+          <td>Content Type:</td>
+          <td><xsl:value-of select="content_type"/></td>
+        </tr>
+        <tr>
+          <td>Summary:</td>
+          <td><xsl:value-of select="summary"/></td>
+        </tr>
+      </table>
+      <h1>Description:</h1>
+      <pre><xsl:value-of select="description"/></pre>
+      <xsl:choose>
+        <xsl:when test="count(param) = 0">
+          <h1>Parameters: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Parameters:</h1>
+          <xsl:call-template name="param-details"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_REPORT_FORMAT -->
+
+<xsl:template match="get_report_format">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_report_format_response"/>
+  <xsl:apply-templates select="get_report_formats_response/report_format" mode="details"/>
+</xsl:template>
+
+<!--     GET_REPORT_FORMATS -->
+
+<xsl:template match="get_report_formats">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_report_format_response"/>
+  <xsl:apply-templates select="create_report_format_response"/>
+<!--
+  <xsl:call-template name="html-create-report-format-form"/>
+-->
+  <!-- The for-each makes the get_report_formats_response the current node. -->
+  <xsl:for-each select="get_report_formats_response | commands_response/get_report_formats_response">
+    <xsl:call-template name="html-import-report-format-form"/>
+    <xsl:call-template name="html-report-formats-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END REPORT FORMATS MANAGEMENT -->
+
 <!-- BEGIN REPORT DETAILS -->
 
 <xsl:template match="get_reports_response">
@@ -6886,7 +7136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="html-report-details"/>
+      <xsl:for-each select="report">
+        <xsl:call-template name="html-report-details"/>
+      </xsl:for-each>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -7178,7 +7430,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <br/>
 </xsl:template>
 
-<xsl:template match="get_reports_response/report" mode="overview">
+<xsl:template match="get_reports_response/report/report" mode="overview">
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>Host</td>
@@ -7267,7 +7519,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="get_reports_response/report" mode="details">
+<xsl:template match="get_reports_response/report/report" mode="details">
   <xsl:for-each select="host_start" >
     <xsl:variable name="current_host" select="host/text()"/>
     <a name="{$current_host}"></a>

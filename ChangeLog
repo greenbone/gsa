@@ -1,5 +1,43 @@
 2010-07-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add report formats.
+
+	* src/gsad_base.h (enum content_type): Add GSAD_CONTENT_TYPE_DONE.
+
+	* src/gsad.c (init_validator): Add report format commands and validators.
+	(exec_omp_post): Add handling for report format commands.
+	(exec_omp_get): Add arg for content type.  Let get_report_omp set the
+	content type if it wishes.  Add handling for report format commands.
+	(gsad_add_content_type_header): Add GSAD_CONTENT_TYPE_DONE case.
+	(request_handler): Set the content type for exec_omp_get if required.
+
+	* src/gsad_omp.c (get_tasks): Also get report formats.
+	(export_report_format_omp): New function.
+	(get_report_omp): Add content type and disposition args.  Set these
+	according to report format information.  Capitalise XML format name.  Also
+	get report formats.
+	(create_note_omp, delete_note_omp, save_note_omp, create_override_omp)
+	(delete_override_omp, save_override_omp): Capitalise XML format name.
+	(get_report_format_omp, get_report_format_omp, delete_report_format_omp)
+	(import_report_format_omp): New functions.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add "Report Formats" menu item.
+
+	* src/html/omp.xsl (html-report-details, report): Replace static report
+	names with dynamic ones.
+	(html-report-formats-table, html-import-report-format-form)
+	(get_report_formats_response)
+	(create_report_format_response, delete_report_format_response)
+	(report_format, param-details, report_format [details])
+	(get_report_format, get_report_formats): New templates.
+	(get_reports_response)
+	(get_reports_response/report [overview, details]): Account for extra
+	report wrapper element.
+
+2010-07-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add - to family_page.
 
 2010-08-02  Michael Wiegand <michael.wiegand@greenbone.net>

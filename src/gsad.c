@@ -197,6 +197,7 @@ init_validator ()
                          "|(delete_note)"
                          "|(delete_override)"
                          "|(delete_report)"
+                         "|(delete_report_format)"
                          "|(delete_schedule)"
                          "|(delete_target)"
                          "|(delete_task)"
@@ -211,6 +212,7 @@ init_validator ()
                          "|(edit_user)"
                          "|(export_config)"
                          "|(export_preference_file)"
+                         "|(export_report_format)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -227,6 +229,8 @@ init_validator ()
                          "|(get_override)"
                          "|(get_overrides)"
                          "|(get_report)"
+                         "|(get_report_format)"
+                         "|(get_report_formats)"
                          "|(get_settings)"
                          "|(get_schedule)"
                          "|(get_schedules)"
@@ -237,6 +241,7 @@ init_validator ()
                          "|(get_user)"
                          "|(get_users)"
                          "|(import_config)"
+                         "|(import_report_format)"
                          "|(modify_auth)"
                          "|(new_note)"
                          "|(new_override)"
@@ -312,6 +317,7 @@ init_validator ()
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   NULL);
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
@@ -2135,6 +2141,11 @@ exec_omp_post (credentials_t * credentials,
       con_info->response =
         import_config_omp (credentials, con_info->req_parms.xml_file);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "import_report_format"))
+    {
+      con_info->response =
+        import_report_format_omp (credentials, con_info->req_parms.xml_file);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "modify_auth"))
     {
       validate (validator, "group", &con_info->req_parms.group);
@@ -2254,6 +2265,7 @@ exec_omp_post (credentials_t * credentials,
  * @param[in]   connection           Connection.
  * @param[out]  content_type         Return location for the content type of
  *                                   the response.
+ * @param[out]  content_type_string  Return location for dynamic content type.
  * @param[out]  content_disposition  Return location for the
  *                                   content_disposition, if any.
  * @param[out]  response_size        Return location for response size, if any.
@@ -2263,6 +2275,7 @@ exec_omp_post (credentials_t * credentials,
 char *
 exec_omp_get (struct MHD_Connection *connection,
               enum content_type* content_type,
+              gchar **content_type_string,
               char** content_disposition,
               gsize* response_size)
 {
@@ -2275,6 +2288,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *task_id      = NULL;
   const char *result_id    = NULL;
   const char *report_id    = NULL;
+  const char *report_format_id = NULL;
   const char *note_id      = NULL;
   const char *note_task_id   = NULL;
   const char *note_result_id = NULL;
@@ -2375,6 +2389,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                "report_id");
       if (openvas_validate (validator, "report_id", report_id))
         report_id = NULL;
+
+      report_format_id = MHD_lookup_connection_value (connection,
+                                                      MHD_GET_ARGUMENT_KIND,
+                                                      "report_format_id");
+      if (openvas_validate (validator, "report_format_id", report_format_id))
+        report_format_id = NULL;
 
       note_id = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -2872,6 +2892,10 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (report_id) < VAL_MAX_SIZE))
     return delete_report_omp (credentials, report_id, task_id);
 
+  else if ((!strcmp (cmd, "delete_report_format"))
+           && (report_format_id != NULL))
+    return delete_report_format_omp (credentials, report_format_id);
+
   else if ((!strcmp (cmd, "delete_schedule"))
            && (schedule_id != NULL))
     return delete_schedule_omp (credentials, schedule_id);
@@ -3062,6 +3086,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                        content_type, content_disposition,
                                        response_size);
 
+  else if ((!strcmp (cmd, "export_report_format"))
+           && (report_format_id != NULL))
+    return export_report_format_omp (credentials, report_format_id,
+                                     content_type, content_disposition,
+                                     response_size);
+
   else if (0 == strcmp (cmd, "get_agents")
            && ((agent_id == NULL && agent_format == NULL)
                || (agent_id && agent_format)))
@@ -3156,15 +3186,60 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "get_report")) && (report_id != NULL)
            && (strlen (report_id) < VAL_MAX_SIZE))
     {
+      char *ret;
       unsigned int first;
       unsigned int max;
+      gchar *content_type_omp;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
         max = 1000;
 
-      if (format != NULL)
+      if (levels)
+        ret = get_report_omp (credentials, report_id, format, response_size,
+                              (const unsigned int) first,
+                              (const unsigned int) max,
+                              sort_field,
+                              sort_order,
+                              levels,
+                              notes,
+                              overrides,
+                              result_hosts_only,
+                              search_phrase,
+                              min_cvss_base,
+                              &content_type_omp,
+                              content_disposition);
+      else
+        {
+          GString *string = g_string_new ("");
+          if (high) g_string_append (string, "h");
+          if (medium) g_string_append (string, "m");
+          if (low) g_string_append (string, "l");
+          if (log) g_string_append (string, "g");
+          if (false_positive) g_string_append (string, "f");
+          ret = get_report_omp (credentials, report_id, format, response_size,
+                                (const unsigned int) first,
+                                (const unsigned int) max,
+                                sort_field,
+                                sort_order,
+                                string->str,
+                                notes,
+                                overrides,
+                                result_hosts_only,
+                                search_phrase,
+                                min_cvss_base,
+                                &content_type_omp,
+                                content_disposition);
+          g_string_free (string, TRUE);
+        }
+
+      if (content_type_omp)
+        {
+          *content_type = GSAD_CONTENT_TYPE_DONE;
+          *content_type_string = content_type_omp;
+        }
+      else if (format != NULL)
         {
           /**
            * @todo Get sizes from constants that are also used by gsad_params.
@@ -3177,41 +3252,7 @@ exec_omp_get (struct MHD_Connection *connection,
                     "attachment; filename=report-%s.%s", report_id, format);
         }
 
-      if (levels)
-        return get_report_omp (credentials, report_id, format, response_size,
-                               (const unsigned int) first,
-                               (const unsigned int) max,
-                               sort_field,
-                               sort_order,
-                               levels,
-                               notes,
-                               overrides,
-                               result_hosts_only,
-                               search_phrase,
-                               min_cvss_base);
-
-      {
-        char *ret;
-        GString *string = g_string_new ("");
-        if (high) g_string_append (string, "h");
-        if (medium) g_string_append (string, "m");
-        if (low) g_string_append (string, "l");
-        if (log) g_string_append (string, "g");
-        if (false_positive) g_string_append (string, "f");
-        ret = get_report_omp (credentials, report_id, format, response_size,
-                              (const unsigned int) first,
-                              (const unsigned int) max,
-                              sort_field,
-                              sort_order,
-                              string->str,
-                              notes,
-                              overrides,
-                              result_hosts_only,
-                              search_phrase,
-                              min_cvss_base);
-        g_string_free (string, TRUE);
-        return ret;
-      }
+      return ret;
     }
 
   else if ((!strcmp (cmd, "get_note"))
@@ -3227,6 +3268,13 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_overrides")))
     return get_overrides_omp (credentials);
+
+  else if ((!strcmp (cmd, "get_report_format")) && (report_format_id != NULL))
+    return get_report_format_omp (credentials, report_format_id, sort_field,
+                                  sort_order);
+
+  else if (!strcmp (cmd, "get_report_formats"))
+    return get_report_formats_omp (credentials, sort_field, sort_order);
 
   else if (!strcmp (cmd, "get_tasks"))
     return get_tasks_omp (credentials, NULL, sort_field, sort_order,
@@ -3803,6 +3851,8 @@ gsad_add_content_type_header (struct MHD_Response *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/plain; charset=utf-8");
         break;
+      case GSAD_CONTENT_TYPE_DONE:
+        break;
       default:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/plain; charset=utf-8");
@@ -4082,8 +4132,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* URL requests to run OMP or OAP command. */
 
           unsigned int res_len = 0;
-          res = exec_omp_get (connection, &content_type, &content_disposition,
-                              &response_size);
+          gchar *content_type_string = NULL;
+
+          res = exec_omp_get (connection, &content_type, &content_type_string,
+                              &content_disposition, &response_size);
           if (response_size > 0)
             {
               res_len = response_size;
@@ -4097,6 +4149,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data (res_len,
                                                     (void *) res,
                                                     MHD_NO, MHD_YES);
+          if (content_type_string)
+            {
+              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                       content_type_string);
+              g_free (content_type_string);
+            }
+
           free (res);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
