@@ -1,4 +1,12 @@
-2010-07-27  Matthew Mundell <matthew.mundell@greenbone.net>
+2010-08-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsa-style.css (small_form): Separate out input to add middle
+	vertical alignment.
+
+	* src/htmp/omp.xsl (html-report-details, report): Replace download button
+	with image input.
+
+2010-08-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add report formats.
 
