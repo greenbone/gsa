@@ -1,5 +1,9 @@
 2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad_omp.c: Reverted unrelated changes of recent backport.
+
+2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Backporting patch r8636 from trunk, comitted by Matthew Mundell.
 
 	* src/gsad_omp.c (get_report_omp): Wrap in GET_REPORT instead of COMMANDS.
