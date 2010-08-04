@@ -4593,11 +4593,14 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     }
   else
     {
+      gchar *task_id = NULL;
+
       /* Format is NULL, send XSL transformed XML. */
 
-      xml = g_string_new ("<commands_response>");
+      xml = g_string_new ("<get_report>");
 
-      if (read_string (&session, &xml))
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
           return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -4652,7 +4655,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         g_string_append (xml, "</all>");
       }
 
-      g_string_append (xml, "</commands_response>");
+      g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }

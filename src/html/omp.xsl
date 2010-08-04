@@ -363,8 +363,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="report/scan_end"/></td>
         </tr>
         <tr>
-          <td>Final scan run status:</td>
-          <td><xsl:value-of select="report/scan_run_status"/></td>
+          <td>Scan status:</td>
+          <td>
+            <xsl:call-template name="status_bar">
+              <xsl:with-param name="status">
+                <xsl:value-of select="report/scan_run_status"/>
+              </xsl:with-param>
+              <xsl:with-param name="progress">
+                <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </td>
         </tr>
       </table>
       <br/>
@@ -6889,6 +6898,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="html-report-details"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="get_report">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_reports_response"/>
 </xsl:template>
 
 <!--     CREATE_NOTE_RESPONSE -->

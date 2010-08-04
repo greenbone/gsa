@@ -1,4 +1,15 @@
-2010-07-27  Matthew Mundell <matthew.mundell@greenbone.net>
+2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backporting patch r8636 from trunk, comitted by Matthew Mundell.
+
+	* src/gsad_omp.c (get_report_omp): Wrap in GET_REPORT instead of COMMANDS.
+	Get the task summary as well as the report, for the task progress info.
+
+	* src/htmp/omp.xsl (html-report-details): Replace "Final scan run status"
+	field with "Scan status" and progress bar.
+	(get_report): New template.
+
+2010-08-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add - to family_page.
 
