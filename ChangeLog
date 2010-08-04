@@ -1,3 +1,8 @@
+2010-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_report_omp): Revert r8663.  All parts of the
+	patch are required.  Add portion missing from original backport (r8658).
+
 2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backporting patch r8645 from trunk, comitted by Matthew Mundell.
