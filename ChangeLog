@@ -1,3 +1,8 @@
+2010-08-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c: Backporting r8862 from trunk (mainpage directive for
+	documentation).
+
 2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad_omp.c: Reverted unrelated changes of recent backport.

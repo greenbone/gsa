@@ -36,6 +36,18 @@
  */
 
 /**
+ * \mainpage
+ * \section Introduction
+ * \verbinclude README
+ *
+ * \section Installation
+ * \verbinclude INSTALL
+ *
+ * \section copying License Information
+ * \verbinclude COPYING
+ */
+
+/**
  * @brief The Glib fatal mask, redefined to leave out G_LOG_FLAG_RECURSION.
  */
 #undef G_LOG_FATAL_MASK
