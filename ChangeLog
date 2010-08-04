@@ -1,3 +1,13 @@
+2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backporting patch r8645 from trunk, comitted by Matthew Mundell.
+
+	* src/html/gsa-style.css (small_form): Separate out input to add middle
+	vertical alignment.
+
+	* src/html/omp.xsl (html-report-details, report): Replace download button
+	with image input.
+
 2010-08-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c: Backporting r8862 from trunk (mainpage directive for

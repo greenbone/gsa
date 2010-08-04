@@ -474,7 +474,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
-          <select name="format" style="margin-right:3px;" title="Download Format">
+          <select name="format" title="Download Format">
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
             <option value="xml">XML</option>
@@ -482,7 +482,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <option value="CPE">CPE</option>
             <option value="nbe">NBE</option>
           </select>
-          <input type="submit" value="Download" title="Download"/>
+          <input type="image"
+                 name="submit"
+                 value="Download"
+                 title="Download"
+                 src="/img/download.png"
+                 border="0"
+                 style="margin-left:3px;"
+                 alt="Download"/>
         </form>
       </div>
 
@@ -1358,7 +1365,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="result_count/false_positive"/>
     </td>
     <td>
-      <div id="small_form">
+      <div id="small_form" style="float:right;">
         <form action="" method="get">
           <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="cmd" value="get_report"/>
@@ -1367,7 +1374,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="result_hosts_only" value="1"/>
           <input type="hidden" name="levels" value="hmlg"/>
           <select name="format"
-                  style="margin-right:3px;"
                   title="Download Format">
             <option value="pdf">PDF</option>
             <option value="html">HTML</option>
@@ -1376,7 +1382,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <option value="CPE">CPE</option>
             <option value="nbe">NBE</option>
           </select>
-          <input type="submit" value="Download" title="Download"/>
+          <input type="image"
+                 name="submit"
+                 value="Download"
+                 title="Download"
+                 src="/img/download.png"
+                 border="0"
+                 style="margin-left:3px;"
+                 alt="Download"/>
         </form>
       </div>
     </td>

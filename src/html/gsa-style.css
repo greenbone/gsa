@@ -466,8 +466,13 @@ table.odd {
 
 /* Small Form */
 
-#small_form select, #small_form input {
- font-size:10px;
+#small_form select {
+ font-size: 10px;
+}
+
+#small_form input {
+ font-size: 10px;
+ vertical-align: middle;
 }
 
 #small_inline_form select, #small_inline_form input {
