@@ -1,3 +1,7 @@
+2010-08-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c: Added mainpage directive for documentation.
+
 2010-08-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post branch version bump.
