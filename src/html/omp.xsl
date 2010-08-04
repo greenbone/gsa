@@ -789,6 +789,102 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+        <xsl:choose>
+          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
+            <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}"
+               title="Schedule Details">
+              <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="task/status='Running' or task/status='Requested'">
+            <a href="/omp?cmd=pause_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+               title="Pause Task">
+              <img src="/img/pause.png" border="0" alt="Pause"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="task/status='Stop Requested' or task/status='Delete Requested' or task/status='Pause Requested' or task/status = 'Paused' or task/status='Resume Requested'">
+            <img src="/img/start_inactive.png" border="0" alt="Start"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="/omp?cmd=start_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+               title="Start Task">
+              <img src="/img/start.png" border="0" alt="Start"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
+            <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:when test="task/status='Stopped'">
+            <a href="/omp?cmd=resume_stopped_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+               title="Resume Task">
+              <img src="/img/resume.png"
+                   border="0"
+                   alt="Resume"
+                   style="margin-left:3px;"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="task/status='Paused'">
+            <a href="/omp?cmd=resume_paused_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+               title="Resume Task">
+              <img src="/img/resume.png"
+                   border="0"
+                   alt="Resume"
+                   style="margin-left:3px;"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
+            <img src="/img/stop_inactive.png" border="0"
+                 alt="Stop"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:when test="task/status='New' or task/status='Requested' or task/status='Done' or task/status='Stopped' or task/status='Internal Error' or task/status='Pause Requested' or task/status='Stop Requested' or task/status='Resume Requested'">
+            <img src="/img/stop_inactive.png" border="0"
+                 alt="Stop"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="/omp?cmd=stop_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+               title="Stop Task">
+              <img src="/img/stop.png"
+                   border="0"
+                   alt="Stop"
+                   style="margin-left:3px;"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="task/status='Running' or task/status='Requested' or task/status='Pause Requested' or task/status='Stop Requested' or task/status='Resume Requested'">
+            <img src="/img/delete_inactive.png"
+                 border="0"
+                 alt="Delete"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="/omp?cmd=delete_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_tasks"
+               title="Delete Task"
+               style="margin-left:3px;">
+              <img src="/img/delete.png"
+                   border="0"
+                   alt="Delete"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+        <a href="/omp?cmd=edit_task&amp;task_id={task/@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={sort/field/order}&amp;sort_field={sort/field/text()}&amp;overrides={apply_overrides}"
+           title="Edit Task"
+           style="margin-left:3px;">
+          <img src="/img/edit.png" border="0" alt="Edit"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
@@ -1694,7 +1790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Running' or status='Requested'">
-              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;=get_tasks"
                  title="Pause Task">
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>
@@ -1703,7 +1799,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Start Task">
                 <img src="/img/start.png" border="0" alt="Start"/>
               </a>
@@ -1715,7 +1811,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:when test="status='Stopped'">
-              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -1724,7 +1820,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Paused'">
-              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -1749,7 +1845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Stop Task">
                 <img src="/img/stop.png"
                      border="0"
@@ -1766,7 +1862,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Delete Task"
                  style="margin-left:3px;">
                 <img src="/img/delete.png"

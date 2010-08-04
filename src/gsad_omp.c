@@ -520,59 +520,21 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next              Name of next page.
  *
  * @return Result of XSL transformation.
  */
 char *
 delete_task_omp (credentials_t * credentials, const char *task_id,
-                 const char *apply_overrides)
+                 int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a new task. "
-                         "The task is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a new task. "
-                           "The task is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a new task. "
-                           "It is unclear whether the task has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  char *ret;
+  gchar *delete_task;
+  delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, delete_task,
+                   apply_overrides);
+  g_free (delete_task);
+  return ret;
 }
 
 /**
@@ -767,6 +729,14 @@ save_task_omp (credentials_t * credentials, const char *task_id,
       return ret;
     }
 
+  if (strcmp (next, "get_task") == 0)
+    {
+      char *ret = get_tasks (credentials, task_id, sort_field, sort_order,
+                             refresh_interval, modify_task, apply_overrides);
+      g_free (modify_task);
+      return ret;
+    }
+
   g_free (modify_task);
   return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while saving a task. "
@@ -781,59 +751,31 @@ save_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next              Name of next page.
  *
  * @return Result of XSL transformation.
  */
 char *
 stop_task_omp (credentials_t * credentials, const char *task_id,
-                const char *apply_overrides)
+               int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  char *ret;
+  gchar *stop_task;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while stopping a task. "
-                         "The task is not stopped. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  stop_task = g_strdup_printf ("<stop_task task_id=\"%s\" />", task_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<stop_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
+  if (strcmp (next, "get_task") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while stoping a task. "
-                           "The task is not stopped. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+                             NULL, stop_task, apply_overrides);
+      g_free (stop_task);
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while stopping a task. "
-                           "It is unclear whether the task has been stoppeded or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, stop_task,
+                   apply_overrides);
+  g_free (stop_task);
+  return ret;
 }
 
 /**
@@ -842,59 +784,31 @@ stop_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next              Name of next page.
  *
  * @return Result of XSL transformation.
  */
 char *
 pause_task_omp (credentials_t * credentials, const char *task_id,
-                const char *apply_overrides)
+                int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  char *ret;
+  gchar *pause_task;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while pausing a task. "
-                         "The task was not paused. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  pause_task = g_strdup_printf ("<pause_task task_id=\"%s\" />", task_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<pause_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
+  if (strcmp (next, "get_task") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while pausing a task. "
-                           "The task was not paused. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+                             NULL, pause_task, apply_overrides);
+      g_free (pause_task);
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while pausing a task. "
-                           "It is unclear whether the task has been paused or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, pause_task,
+                   apply_overrides);
+  g_free (pause_task);
+  return ret;
 }
 
 /**
@@ -903,59 +817,32 @@ pause_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next              Name of next page.
  *
  * @return Result of XSL transformation.
  */
 char *
 resume_paused_task_omp (credentials_t * credentials, const char *task_id,
-                        const char *apply_overrides)
+                        int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  char *ret;
+  gchar *resume_paused_task;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while resuming a paused task. "
-                         "The task was not resumed. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  resume_paused_task = g_strdup_printf ("<resume_paused_task task_id=\"%s\" />",
+                                        task_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<resume_paused_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
+  if (strcmp (next, "get_task") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while resuming a paused task. "
-                           "The task was not resumed. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+                             NULL, resume_paused_task, apply_overrides);
+      g_free (resume_paused_task);
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while resuming a paused task. "
-                           "It is unclear whether the task has been resumed or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, resume_paused_task,
+                   apply_overrides);
+  g_free (resume_paused_task);
+  return ret;
 }
 
 /**
@@ -964,59 +851,32 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next              Name of next page.
  *
  * @return Result of XSL transformation.
  */
 char *
 resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
-                         const char *apply_overrides)
+                         int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  char *ret;
+  gchar *resume_stopped;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while resuming a stopped task. "
-                         "The task was not resumed. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  resume_stopped = g_strdup_printf ("<resume_stopped_task task_id=\"%s\" />",
+                                    task_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<resume_stopped_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
+  if (strcmp (next, "get_task") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while resuming a stopped task. "
-                           "The task was not resumed. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+                             NULL, resume_stopped, apply_overrides);
+      g_free (resume_stopped);
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while resuming a stopped task. "
-                           "It is unclear whether the task has been resumed or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, resume_stopped,
+                   apply_overrides);
+  g_free (resume_stopped);
+  return ret;
 }
 
 /**
@@ -1025,59 +885,31 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  task_id      ID of task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  next         Name of following page.
  *
  * @return Result of XSL transformation.
  */
 char *
 start_task_omp (credentials_t * credentials, const char *task_id,
-                const char *apply_overrides)
+                int apply_overrides, const char *next)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  char *ret;
+  gchar *start_task;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while starting a task. "
-                         "The task is not started. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  start_task = g_strdup_printf ("<start_task task_id=\"%s\" />", task_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<start_task task_id=\"%s\" />"
-                            "<get_tasks"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\""
-                            " apply_overrides=\"%s\"/>"
-                            "</commands>",
-                            task_id,
-                            apply_overrides)
-      == -1)
+  if (strcmp (next, "get_task") == 0)
     {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while starting a task. "
-                           "The task is not started. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+                             NULL, start_task, apply_overrides);
+      g_free (start_task);
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while starting a task. "
-                           "It is unclear whether the task has been started or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, start_task,
+                   apply_overrides);
+  g_free (start_task);
+  return ret;
 }
 
 /**

@@ -2733,8 +2733,12 @@ exec_omp_get (struct MHD_Connection *connection,
   /* Check cmd and precondition, start respective OMP command(s). */
   if ((!strcmp (cmd, "delete_task")) && (task_id != NULL)
       && (strlen (task_id) < VAL_MAX_SIZE)
+      && (next != NULL)
       && (overrides != NULL))
-    return delete_task_omp (credentials, task_id, overrides);
+    return delete_task_omp (credentials,
+                            task_id,
+                            overrides ? strcmp (overrides, "0") : 0,
+                            next);
 
   else if ((!strcmp (cmd, "new_task"))
            && (overrides != NULL))
@@ -2743,28 +2747,48 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "pause_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE)
+           && (next != NULL)
            && (overrides != NULL))
-    return pause_task_omp (credentials, task_id, overrides);
+    return pause_task_omp (credentials,
+                           task_id,
+                           overrides ? strcmp (overrides, "0") : 0,
+                           next);
 
   else if ((!strcmp (cmd, "resume_paused_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE)
+           && (next != NULL)
            && (overrides != NULL))
-    return resume_paused_task_omp (credentials, task_id, overrides);
+    return resume_paused_task_omp (credentials,
+                                   task_id,
+                                   overrides ? strcmp (overrides, "0") : 0,
+                                   next);
 
   else if ((!strcmp (cmd, "resume_stopped_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE)
+           && (next != NULL)
            && (overrides != NULL))
-    return resume_stopped_task_omp (credentials, task_id, overrides);
+    return resume_stopped_task_omp (credentials,
+                                    task_id,
+                                    overrides ? strcmp (overrides, "0") : 0,
+                                    next);
 
   else if ((!strcmp (cmd, "start_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE)
+           && (next != NULL)
            && (overrides != NULL))
-    return start_task_omp (credentials, task_id, overrides);
+    return start_task_omp (credentials,
+                           task_id,
+                           overrides ? strcmp (overrides, "0") : 0,
+                           next);
 
   else if ((!strcmp (cmd, "stop_task")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE)
+           && (next != NULL)
            && (overrides != NULL))
-    return stop_task_omp (credentials, task_id, overrides);
+    return stop_task_omp (credentials,
+                          task_id,
+                          overrides ? strcmp (overrides, "0") : 0,
+                          next);
 
   else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))
@@ -3078,8 +3102,9 @@ exec_omp_get (struct MHD_Connection *connection,
            && (task_id != NULL)
            && (next != NULL)
            && (overrides != NULL)
-           && (strcmp (next, "get_tasks") == 0))
-    return edit_task_omp (credentials, task_id, "get_tasks", refresh_interval,
+           && ((strcmp (next, "get_tasks") == 0)
+               || (strcmp (next, "get_task") == 0)))
+    return edit_task_omp (credentials, task_id, next, refresh_interval,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
 
@@ -3549,9 +3574,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "save_task"))
            && (task_id != NULL)
            && (next != NULL)
-           && (strcmp (next, "get_tasks") == 0))
+           && ((strcmp (next, "get_tasks") == 0)
+               || (strcmp (next, "get_task") == 0)))
     return save_task_omp (credentials, task_id, name, comment, escalator_id,
-                          schedule_id, "get_tasks", refresh_interval,
+                          schedule_id, next, refresh_interval,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
 
