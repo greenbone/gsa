@@ -1,3 +1,20 @@
+2010-08-05  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Add task control buttons to the task summary page. (Backport from
+	trunk; initially committed in r8684 by Matthew Mundell.)
+
+	* src/gsad.c (exec_omp_get): Pass next to task control functions.  Pass
+	overrides as ints to the same.
+
+	* src/gsad_omp.c (delete_task_omp, save_task_omp, stop_task_omp)
+	(pause_task_omp, resume_paused_task_omp, resume_stopped_task_omp)
+	(start_task_omp): Add next page handling.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/htmp/omp.xsl (html-report-table): Add task control buttons.
+	(task): Pass next page to task control pages.
+
 2010-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp): Revert r8663.  All parts of the
