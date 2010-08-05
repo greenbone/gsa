@@ -3719,11 +3719,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </xsl:when>
         <xsl:when test="type=''">
-          <input type="text"
-                 name="preference:scanner[scanner]:{name}"
-                 value="{value}"
-                 size="30"
-                 maxlength="400"/>
+          <xsl:choose>
+            <xsl:when test="name='ping_hosts' or name='reverse_lookup' or name='unscanned_closed' or name='nasl_no_signature_check' or name='ping_hosts' or name='reverse_lookup' or name='unscanned_closed' or name='auto_enable_dependencies' or name='kb_dont_replay_attacks' or name='kb_dont_replay_denials' or name='kb_dont_replay_info_gathering' or name='kb_dont_replay_scanners' or name='kb_restore' or name='log_whole_attack' or name='only_test_hosts_whose_kb_we_dont_have' or name='only_test_hosts_whose_kb_we_have' or name='optimize_test' or name='safe_checks' or name='save_knowledge_base' or name='silent_dependencies' or name='slice_network_addresses' or name='use_mac_addr'">
+              <xsl:choose>
+                <xsl:when test="value='yes'">
+                  <input type="radio" name="preference:scanner[scanner]:{name}"
+                         value="yes" checked="1"/>
+                  yes
+                  <input type="radio" name="preference:scanner[scanner]:{name}"
+                         value="no"/>
+                  no
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="preference:scanner[scanner]:{name}"
+                         value="yes"/>
+                  yes
+                  <input type="radio" name="preference:scanner[scanner]:{name}"
+                         value="no" checked="1"/>
+                  no
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="text"
+                     name="preference:scanner[scanner]:{name}"
+                     value="{value}"
+                     size="30"
+                     maxlength="400"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
           <input type="text"

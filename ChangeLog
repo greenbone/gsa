@@ -1,4 +1,9 @@
-2010-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
+2010-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (edit-config-preferences): Add yes/no radios for known
+	scanner yes/no prefs.
+
+2010-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add task control buttons to the task summary page.
 
