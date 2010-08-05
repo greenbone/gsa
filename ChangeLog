@@ -1,3 +1,9 @@
+2010-08-05  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* INSTALL: Added information on setting PKG_CONFIG_PATH. Updated and
+	rephrased section on custom paths for libraries and header files. Made
+	naming of the GSA consistent. Made text width consistent.
+
 2010-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (edit-config-preferences): Add yes/no radios for known
