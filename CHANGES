@@ -1,3 +1,24 @@
+gsa 1.0.1 (2010-08-06)
+
+This is the first maintenance release for the 1.0 series of GSA (Greenbone
+Security Assistant), an OMP web client for the Open Vulnerability Assessment
+System (OpenVAS).
+
+It addresses a few issues discovered after the release of GSA 1.0.0.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix Wolfsteller.
+
+Main changes since 1.0.0:
+* A bug which made it impossible to edit families containing a dash in their
+  name has been fixed.
+* The scan status and the progress bar are now displayed in the report view as
+  well.
+* Task control buttons are now visible on the task summary page as well.
+* Known scanner preferences are now displayed as yes/no radio buttons.
+* The installation instructions have been updated.
+
+
 gsa 1.0.0 (2010-08-02)
 
 This is the 1.0.0 release of GSA (Greenbone Security Assistant), an OMP web client

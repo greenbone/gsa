@@ -1,5 +1,22 @@
 2010-08-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 1.0.1 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CMakeLists.txt: Updated version number.
+
+	* CHANGES: Updated.
+
+	* ChangeLog: Fixed revision mentioned in entry from 2010-08-04.
+
+	* INSTALL: Added information on setting PKG_CONFIG_PATH. Updated and
+	rephrased section on custom paths for libraries and header files. Made
+	naming of the GSA consistent. Made text width consistent. (Backported
+	from trunk; initially committed in r8691.)
+
+2010-08-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/omp.xsl (edit-config-preferences): Add yes/no radios for known
 	scanner yes/no prefs. (Backport from trunk; initially committed in
 	r8690 and r8694 by Matthew Mundell.)
@@ -47,7 +64,7 @@
 
 2010-08-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	Backporting patch r8636 from trunk, comitted by Matthew Mundell.
+	Backporting patch r8646 from trunk, comitted by Matthew Mundell.
 
 	* src/gsad_omp.c (get_report_omp): Wrap in GET_REPORT instead of COMMANDS.
 	Get the task summary as well as the report, for the task progress info.
