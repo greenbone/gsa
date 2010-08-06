@@ -1,3 +1,9 @@
+2010-08-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/omp.xsl (edit-config-preferences): Add yes/no radios for known
+	scanner yes/no prefs. (Backport from trunk; initially committed in
+	r8690 and r8694 by Matthew Mundell.)
+
 2010-08-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Add task control buttons to the task summary page. (Backport from
