@@ -5166,6 +5166,31 @@ create_note_omp (credentials_t *credentials, const char *oid,
                            "/omp?cmd=get_tasks");
     }
 
+  if (openvas_server_send (&session, "<get_report_formats"
+                                     " sort_field=\"name\""
+                                     " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
   {
 
     /* As a temporary hack until there's a reasonable way to do it in the
@@ -5348,6 +5373,9 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                 " levels=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
+                                "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 note_id,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -5687,6 +5715,9 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                 " levels=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
+                                "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 modify_note,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -6229,6 +6260,31 @@ create_override_omp (credentials_t *credentials, const char *oid,
                            "/omp?cmd=get_tasks");
     }
 
+  if (openvas_server_send (&session, "<get_report_formats"
+                                     " sort_field=\"name\""
+                                     " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
   {
 
     /* As a temporary hack until there's a reasonable way to do it in the
@@ -6414,6 +6470,9 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                                 " levels=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
+                                "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 override_id,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -6760,6 +6819,9 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                 " levels=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
+                                "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 modify_override,
                                 strcmp (notes, "0") ? 1 : 0,

@@ -1,3 +1,9 @@
+2010-08-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_note_omp, delete_note_omp, save_note_omp)
+	(create_override_omp, delete_override_omp, save_override_omp): Get report
+	formats for download dropdown.
+
 2010-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (edit-config-preferences): Add drop_privileges to
