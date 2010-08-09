@@ -3086,12 +3086,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "edit_override"))
            && (override_id != NULL)
            && (next != NULL)
+           && (overrides != NULL)
            && (strcmp (next, "get_tasks") == 0)
            && (task_id != NULL))
     {
       return edit_override_omp (credentials, override_id, "get_tasks",
                                 /* Parameters for next page. */
-                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
+                                NULL, 0, 0, NULL, NULL, NULL, NULL, overrides, NULL,
                                 NULL, "-1", NULL, task_id);
     }
 

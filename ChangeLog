@@ -1,5 +1,13 @@
 2010-08-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Pass overrides flag to edit_override_omp in
+	get_tasks case.
+
+	* src/html/omp.xsl (html-report-table): Pass overrides param to override
+	template.
+
+2010-08-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp, delete_note_omp, save_note_omp)
 	(create_override_omp, delete_override_omp, save_override_omp): Get report
 	formats for download dropdown.
