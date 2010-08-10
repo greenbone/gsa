@@ -1201,7 +1201,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
         <div class="progressbar_text">
           <xsl:value-of select="$status"/>
-          at <xsl:value-of select="$progress"/> %
+          <xsl:if test="$progress &gt; 0">
+            at <xsl:value-of select="$progress"/> %
+          </xsl:if>
         </div>
       </div>
     </xsl:when>
@@ -1222,7 +1224,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_bar_request" style="width:{$progress}px;"></div>
         <div class="progressbar_text">
           <xsl:value-of select="$status"/>
-          at <xsl:value-of select="$progress"/> %
+          <xsl:if test="$progress &gt; 0">
+            at <xsl:value-of select="$progress"/> %
+          </xsl:if>
         </div>
       </div>
     </xsl:when>

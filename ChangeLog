@@ -1,5 +1,9 @@
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (status_bar): Just print status if the progress is -1.
+
+2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Show overrides consistently in links to get_tasks pages.
 
 	* src/html/gsad.xsl (html-gsa-logo, error_dialog): Pass overrides flag to
