@@ -1,5 +1,10 @@
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report): Only activate report delete button for
+	appropriate report states.
+
+2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Add missing URL param name.
 
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>

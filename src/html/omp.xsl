@@ -1508,11 +1508,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}"
-         title="Delete"
-         style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Pause Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested' or scan_run_status='Paused'">
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}"
+             title="Delete"
+             style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
