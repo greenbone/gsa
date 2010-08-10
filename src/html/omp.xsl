@@ -1795,7 +1795,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Running' or status='Requested'">
-              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;=get_tasks"
+              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Pause Task">
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>

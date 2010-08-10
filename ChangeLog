@@ -1,6 +1,10 @@
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/gsad.xsl (status_bar): Just print status if the progress is -1.
+	* src/html/omp.xsl (task): Add missing URL param name.
+
+2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (status_bar): Just print status if the progress is -1.
 
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
