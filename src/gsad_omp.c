@@ -4335,7 +4335,7 @@ delete_report_omp (credentials_t * credentials,
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  report_id      ID of report.
- * @param[in]  format         Format of report.
+ * @param[in]  format_id      ID of format of report.
  * @param[out] report_len     Length of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -4355,7 +4355,7 @@ delete_report_omp (credentials_t * credentials,
  */
 char *
 get_report_omp (credentials_t * credentials, const char *report_id,
-                const char *format, gsize *report_len,
+                const char *format_id, gsize *report_len,
                 const unsigned int first_result,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
@@ -4412,7 +4412,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
-                            " format=\"%s\""
+                            " format_id=\"%s\""
                             " first_result=\"%u\""
                             " max_results=\"%u\""
                             " sort_field=\"%s\""
@@ -4424,7 +4424,9 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
-                            format ? format : "XML",
+                            format_id
+                             ? format_id
+                             : "d5da9f67-8551-4e51-807b-b6a873d70e34",
                             first_result,
                             max_results,
                             sort_field ? sort_field : "type",
@@ -4447,9 +4449,9 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                            "/omp?cmd=get_tasks");
     }
 
-  if (format)
+  if (format_id)
     {
-      if (strcmp (format, "XML") == 0)
+      if (strcmp (format_id, "d5da9f67-8551-4e51-807b-b6a873d70e34") == 0)
         {
           const char *extension, *type;
           /* Manager sends XML report as plain XML. */

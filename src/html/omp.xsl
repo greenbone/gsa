@@ -474,14 +474,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
-          <select name="format" title="Download Format">
+          <select name="report_format_id" title="Download Format">
             <xsl:for-each select="../../get_report_formats_response/report_format">
               <xsl:choose>
-                <xsl:when test="name='PDF'">
-                  <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="{name}"><xsl:value-of select="name"/></option>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
@@ -1474,15 +1474,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="overrides" value="1"/>
           <input type="hidden" name="result_hosts_only" value="1"/>
           <input type="hidden" name="levels" value="hmlg"/>
-          <select name="format"
+          <select name="report_format_id"
                   title="Download Format">
             <xsl:for-each select="../../../../get_report_formats_response/report_format">
               <xsl:choose>
-                <xsl:when test="name='PDF'">
-                  <option value="{name}" selected="1"><xsl:value-of select="name"/></option>
+                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="{name}"><xsl:value-of select="name"/></option>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>

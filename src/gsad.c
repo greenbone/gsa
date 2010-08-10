@@ -3235,7 +3235,8 @@ exec_omp_get (struct MHD_Connection *connection,
         max = 1000;
 
       if (levels)
-        ret = get_report_omp (credentials, report_id, format, response_size,
+        ret = get_report_omp (credentials, report_id, report_format_id,
+                              response_size,
                               (const unsigned int) first,
                               (const unsigned int) max,
                               sort_field,
@@ -3256,7 +3257,8 @@ exec_omp_get (struct MHD_Connection *connection,
           if (low) g_string_append (string, "l");
           if (log) g_string_append (string, "g");
           if (false_positive) g_string_append (string, "f");
-          ret = get_report_omp (credentials, report_id, format, response_size,
+          ret = get_report_omp (credentials, report_id, report_format_id,
+                                response_size,
                                 (const unsigned int) first,
                                 (const unsigned int) max,
                                 sort_field,
@@ -3276,18 +3278,6 @@ exec_omp_get (struct MHD_Connection *connection,
         {
           *content_type = GSAD_CONTENT_TYPE_DONE;
           *content_type_string = content_type_omp;
-        }
-      else if (format != NULL)
-        {
-          /**
-           * @todo Get sizes from constants that are also used by gsad_params.
-           */
-          /* @todo name is now 80 */
-          content_type_from_format_string (content_type, format);
-          free (*content_disposition);
-          *content_disposition = calloc (70, sizeof (char));
-          snprintf (*content_disposition, 70,
-                    "attachment; filename=report-%s.%s", report_id, format);
         }
 
       return ret;

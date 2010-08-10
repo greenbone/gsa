@@ -1,3 +1,16 @@
+2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Refer to report formats by UUID in OMP GET_REPORTS.
+
+	* src/gsad.c (exec_omp_get): Expect report format ID instead of name for
+	get_report_omp.
+
+	* src/gsad_omp.c (get_report_omp): Pass UUID instead of name to
+	GET_REPORTS to identify report format.
+
+	* src/html/omp.xsl (html-report-details, report): Pass report format ID to
+	get_report instead of name.
+
 2010-08-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Pass overrides flag to edit_override_omp in
