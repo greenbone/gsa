@@ -1,5 +1,15 @@
 2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Show overrides consistently in links to get_tasks pages.
+
+	* src/html/gsad.xsl (html-gsa-logo, error_dialog): Pass overrides flag to
+	get_tasks.
+
+	* src/html/help.xsl: Flush trailing whitespace.
+	(reports.html, tasks.html): Pass overrides flag to get_tasks.
+
+2010-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Refer to report formats by UUID in OMP GET_REPORTS.
 
 	* src/gsad.c (exec_omp_get): Expect report format ID instead of name for

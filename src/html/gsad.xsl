@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="time"/>
   <div class="gsa-logo-header">
     <div class="logo_l">
-      <a href="/omp?cmd=get_tasks" title="Greenbone Security Assistant">
+      <a href="/omp?cmd=get_tasks&amp;overrides=1" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>
@@ -156,7 +156,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="error_dialog">
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
-  <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
+  <xsl:param name="backurl">/omp?cmd=get_tasks&amp;overrides=1</xsl:param>
   <center>
     <div class="envelope" style="width:500px;">
       <div class="gb_window" style="margin-top:150px;">

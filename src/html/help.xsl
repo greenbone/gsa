@@ -2323,7 +2323,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29">Jump to dialog with sample content</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2473,7 +2473,7 @@ Public License instead of this License.
        <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon a change is confirmed.
       </p>
       <p>
-       The selection that is active for the present page is marked with a hook (&#8730;). 
+       The selection that is active for the present page is marked with a hook (&#8730;).
       </p>
       <p>
        Note that leaving this page will reset the overrides selection to apply overrides.
@@ -3126,7 +3126,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;overrides=1">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3382,7 +3382,7 @@ Public License instead of this License.
        <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon.
       </p>
       <p>
-       The selection that is currently for the present page is marked with a hook (&#8730;). 
+       The selection that is currently for the present page is marked with a hook (&#8730;).
       </p>
       <p>
        Note that leaving this page will reset the refresh interval to manual refresh.
@@ -3399,7 +3399,7 @@ Public License instead of this License.
        <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon a change is confirmed.
       </p>
       <p>
-       The selection that is active for the present page is marked with a hook (&#8730;). 
+       The selection that is active for the present page is marked with a hook (&#8730;).
       </p>
       <p>
        Note that leaving this page will reset the overrides selection to apply overrides.
@@ -3526,7 +3526,7 @@ Public License instead of this License.
        <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon a change is confirmed.
       </p>
       <p>
-       The selection that is active for the present page is marked with a hook (&#8730;). 
+       The selection that is active for the present page is marked with a hook (&#8730;).
       </p>
       <p>
        Note that leaving this page will reset the overrides selection to apply overrides.
