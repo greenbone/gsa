@@ -4302,6 +4302,9 @@ delete_report_omp (credentials_t * credentials,
                             "<commands>"
                             "<delete_report report_id=\"%s\" />"
                             "<get_tasks task_id=\"%s\" details=\"1\" />"
+                            "<get_report_formats"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
                             "</commands>",
                             report_id,
                             task_id) == -1)
