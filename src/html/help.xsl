@@ -307,7 +307,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>no</td>
           <td>80</td>
           <td>Alphanumeric</td>
-          <td>jsmith</td>
+          <td>jsmith<br/>
+              myDomain/jsmith<br/>
+              jsmith@myDomain</td>
         </tr>
         <tr class="odd">
           <td>Comment</td>
