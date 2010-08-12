@@ -7052,6 +7052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Extension</td>
             <td>Content Type</td>
+            <td>Trust</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="report_format"/>
@@ -7148,6 +7149,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="extension"/></td>
     <td><xsl:value-of select="content_type"/></td>
+    <td><xsl:value-of select="trust"/></td>
     <td>
       <xsl:choose>
         <xsl:when test="global='0'">
@@ -7228,6 +7230,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Content Type:</td>
           <td><xsl:value-of select="content_type"/></td>
+        </tr>
+        <tr>
+          <td>Trust:</td>
+          <td><xsl:value-of select="trust"/></td>
         </tr>
         <tr>
           <td>Summary:</td>

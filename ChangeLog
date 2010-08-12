@@ -1,3 +1,8 @@
+2010-08-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-formats-table, report_format)
+	(report_format [details]): Add report format trust value.
+
 2010-08-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Corrected typo in domain example for credential
