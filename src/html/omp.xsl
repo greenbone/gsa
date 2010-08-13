@@ -7209,7 +7209,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Report Format Details
-       <a href="/help/configure_report_formats.html#report_formatdetails"
+       <a href="/help/configure_report_formats.html#report_format_details"
          title="Help: Configure Report Formats (Report Format Details)">
          <img src="/img/help.png"/>
        </a>

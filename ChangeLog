@@ -1,3 +1,16 @@
+2010-08-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add report formats help.
+
+	* src/html/help.xsl (configure_report_formats.html): New template.
+	(configure_scanconfigs.html, configure_targets.html): Correct spelling.
+	(contents.html, glossary.html): Add report formats item.
+	(reports.html): Refer to report formats page in download section.  Add TXT
+	format.
+	(view_report.html): Refer to report formats page in download section.
+
+	* src/html/omp.xsl (report_format [details]): Neaten URL name.
+
 2010-08-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-formats-table, report_format)

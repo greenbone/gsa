@@ -590,6 +590,121 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="configure_report_formats.html">
+  <div class="gb_window_part_center">Help: Configure Report Formats</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_report_formats">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Report Formats</h1>
+      <p>
+       <a href="glossary.html#report">Reports</a> can be downloaded in a number
+       of formats.
+       The configured <a href="glossary.html#report_format">report formats</a>
+       will appear for selection in the dialogs for downloading reports.
+      </p>
+
+      <a name="import_report_format"></a>
+      <h2>Import Report Format</h2>
+      <p>
+       To import a report format, select the import file and hit the
+       "Import Report Format" button to submit the report format.
+       The list of report formats will be updated.
+       Note that the import will fail with an error message if the report format
+       already exists on your system, or if an existing report format has the
+       same name.
+      </p>
+      <p>
+       To create a file that can be imported (e.g. if you have multiple GSAs
+       running on different machines), refer to the
+       <a href="#export">export action</a>.
+      </p>
+
+      <a name="report_format"></a>
+      <h2>Report Formats</h2>
+      <p>
+       This table provides an overview of all configured report formats.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the report format and,
+              if specified, the summary in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Extension</td>
+          <td>The file extension of the resulting report.</td>
+        </tr>
+        <tr class="odd">
+          <td>Content Type</td>
+          <td>The content type of the resulting report.</td>
+        </tr>
+        <tr class="even">
+         <td>Trust</td>
+         <td><b>yes</b>: the signature embedded in report format or that was present
+             in the Feed proves that the agent was not compromised at upload time<br/>
+             <b>no</b>: Signature and report format do not match or signature key is not trusted.<br/>
+             <b>unknown</b>: Any case where trust could not be tested adequately.<br/>
+         </td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       For Report Formats the following actions are available.
+      </p>
+
+      <h4>Delete Report Format</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       immediatly remove the entry and update the list.
+      </p>
+
+      <h4>Report Format Details</h4>
+      <p>
+       Activating the details icon
+       <img src="/img/details.png" alt="Report Format Details" title="Report Format Details" />
+       will open the <a href="#target_details">Report Format Details</a>
+       dialog to provide details of the report format.
+      </p>
+
+      <a name="export"></a>
+      <h4>Export Report Format XML</h4>
+      <p>
+       A Report Format can be saved to file, e.g. for sharing or backup.
+       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
+       will let you download a file describing this report format.
+      </p>
+      <p>
+       The file can later be imported by chosing to
+       <a href="#import_report_format">Import a Report Format</a>.
+      </p>
+
+      <a name="report_format_details"></a>
+      <h2>Report Format Details</h2>
+      <p>
+       Provides detailed information about the report format.
+      </p>
+
+      <h3>Parameters</h3>
+      <p>
+       This table provides a list of the parameters that control the creation
+       of reports that have this format.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="configure_scanconfigs.html">
   <div class="gb_window_part_center">Help: Configure Scan Configs</div>
   <div class="gb_window_part_content">
@@ -675,7 +790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>Name</td>
           <td>Shows name of the scan configuration and,
-              if specificied, the comment in brackets below
+              if specified, the comment in brackets below
               the name.</td>
         </tr>
         <tr>
@@ -1035,7 +1150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>Name</td>
           <td>Shows name of the target and,
-              if specificied, the comment in brackets below
+              if specified, the comment in brackets below
               the name.</td>
         </tr>
         <tr class="even">
@@ -1336,6 +1451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_agents.html">Configure Agents</a></li>
             <li> <a href="configure_escalators.html">Configure Escalators</a></li>
             <li> <a href="configure_schedules.html">Configure Schedules</a></li>
+            <li> <a href="configure_report_formats.html">Configure Report Formats</a></li>
           </ul>
           <li> Administration</li>
           <ul>
@@ -1539,6 +1655,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        associated task and can not be modified. Therefore,
        for any report it is ensured that its execution
        configuration is preserved and available.
+      </p>
+
+      <a name="report_format"></a>
+      <h2>Report Format</h2>
+      <p>
+       A format in which a <a href="#report">report</a> can be downloaded.
+      </p>
+      <p>
+       An example is "TXT", which has content type "text/plain", meaning that
+       the report is a plain text document.
       </p>
 
       <a name="scan"></a>
@@ -2422,7 +2548,10 @@ Public License instead of this License.
         </tr>
         <tr>
           <td>Download</td>
-          <td>This field offers to download the report in various formats:
+          <td>This field offers to download the report in various formats.
+              Formats can be configured on the
+              <a href="configure_report_formats.html">Report Formats</a>
+              page.  The predefined formats include:
             <br />
             <table>
               <tr><td valign="top">PDF:</td><td>
@@ -2438,6 +2567,9 @@ Public License instead of this License.
                   A single XML file is created from the report details.
                   This should be the basis for creating your own style
                   for a report or post-process the results in other ways.
+              </td></tr>
+              <tr><td valign="top">TXT:</td><td>
+                  A single plain text file is created from the report details.
               </td></tr>
               <tr><td valign="top">NBE:</td><td>
                   A single NBE file is created. This format is supported
@@ -3536,8 +3668,12 @@ Public License instead of this License.
 
       <h2>Download a report</h2>
       <p>
-       To download the currently shown report, the format can be chosen.
-       The download will start shortly after a click on the "Download" button.
+       To download the currently shown report, the <a href="glossary.html#report_format">format</a>
+       can be chosen.
+       The download will start shortly after a click on the "Download" button.  Report
+       formats can be configured on the
+       <a href="configure_report_formats.html">Report Formats</a>
+       page.
       </p>
 
       <h2>Notes</h2>
