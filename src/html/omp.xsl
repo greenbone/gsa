@@ -4126,24 +4126,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-<!-- TODO: Need to send $current_name and next page (get_config_family) somehow.
-          <input type="image"
-                 name="submit"
-                 value="{$current_name}"
-                 title="Save Config and View Family Details"
-                 src="/img/details.png"
-                 border="0"
-                 style="margin-left:3px;"
-                 alt="Details"/>
--->
-          <input type="image"
-                 name="submit"
-                 value="{$current_name}"
-                 title="Save Config and Edit Family Details"
-                 src="/img/edit.png"
-                 border="0"
-                 style="margin-left:3px;"
-                 alt="Edit"/>
+          <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}"
+             title="Edit Scan Config Family" style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="Edit"/>
+          </a>
         </td>
       </tr>
     </xsl:otherwise>
