@@ -1,3 +1,21 @@
+gsa 1.0.2 (2010-08-17)
+
+This is the second maintenance release for the 1.0 series of GSA (Greenbone
+Security Assistant), an OMP web client for the Open Vulnerability Assessment
+System (OpenVAS).
+
+It fixes an issue which caused users using Microsoft Internet Explorer to be
+unable to access individual NVT families from the "Edit Network Vulnerability
+Test Families" page.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix Wolfsteller.
+
+Main changes since 1.0.0:
+* An issue which caused NVT family to be improperly submitted when using
+  Microsoft Internet Explorer to edit NVT families has been fixed.
+
+
 gsa 1.0.1 (2010-08-06)
 
 This is the first maintenance release for the 1.0 series of GSA (Greenbone

@@ -1,5 +1,13 @@
 2010-08-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 1.0.2 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CHANGES: Updated.
+
+2010-08-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/omp.xsl (edit-families-family): Replace submit image with
 	link. (Backported from trunk; initially committed in r8817 by Matthew
 	Mundell.)
