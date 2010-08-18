@@ -1,3 +1,7 @@
+2010-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add - to credential_login.
+
 2010-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (edit-families-family): Replace submit image with link.
