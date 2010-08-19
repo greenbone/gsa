@@ -1,3 +1,9 @@
+2010-08-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-lsc-credential-form): Check password
+	instead of autogenerate.  (Backported from trunk; initially committed in
+	r8817.)
+
 2010-08-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
