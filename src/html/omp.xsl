@@ -1979,13 +1979,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base" value="gen" checked="1"/>
+                    <input type="radio" name="base" value="gen"/>
                     Autogenerate credential
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <input type="radio" name="base" value="pass"/>
+                    <input type="radio" name="base" value="pass" checked="1"/>
                     Password
                   </td>
                   <td>

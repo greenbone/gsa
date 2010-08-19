@@ -1,3 +1,8 @@
+2010-08-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-lsc-credential-form): Check password
+	instead of autogenerate.
+
 2010-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (configure_report_formats.html): Slight improvement
