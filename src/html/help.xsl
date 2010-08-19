@@ -617,8 +617,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        same name.
       </p>
       <p>
-       To create a file that can be imported (e.g. if you have multiple GSAs
-       running on different machines), refer to the
+       To create a file that can be imported in another installation, refer to the
        <a href="#export">export action</a>.
       </p>
 
