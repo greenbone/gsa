@@ -306,7 +306,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Login</td>
           <td>no</td>
           <td>80</td>
-          <td>Alphanumeric</td>
+          <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
           <td>jsmith<br/>
               myDomain\jsmith<br/>
               jsmith@myDomain</td>
@@ -321,8 +321,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>[password option]</td>
           <td>yes</td>
-          <td>"Autogenerate Credential" or a provided password</td>
-          <td>Alphanumeric</td>
+          <td>"Autogenerate Credential" or a provided password (40)</td>
+          <td>Alphanumeric and "-_@, ;:\./"</td>
           <td>"Autogenerate Credential", hx7ZgI2n</td>
         </tr>
       </table>
