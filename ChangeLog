@@ -1,5 +1,13 @@
 2010-08-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl: Consistent checked="1" everywhere.
+	This is just code polishing.
+
+	* src/html/gsad.xsl: Provide html tag with xml name space
+	attribute. This was complained by HTML checker.
+
+2010-08-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/gsad.c (init_validator): Allowed german umlauts for comment.
 
 2010-08-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

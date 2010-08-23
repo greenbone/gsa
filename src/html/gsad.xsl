@@ -307,7 +307,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="/">
-  <html>
+  <html xmlns="http://www.w3.org/1999/xhtml">
     <xsl:call-template name="html-head"/>
     <body>
       <center>
