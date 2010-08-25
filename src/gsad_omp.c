@@ -4444,8 +4444,6 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
       report_entity = entity_child (entity, "report");
       if (report_entity)
-        report_entity = entity_child (report_entity, "report");
-      if (report_entity)
         {
           const char *id;
           entity_t task_entity;

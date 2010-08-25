@@ -370,7 +370,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="report/scan_run_status"/>
               </xsl:with-param>
               <xsl:with-param name="progress">
-                <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                <xsl:value-of select="../get_tasks_response/task/progress/text()"/>
               </xsl:with-param>
             </xsl:call-template>
           </td>

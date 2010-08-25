@@ -1,5 +1,16 @@
 2010-08-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Further adjust backport of r8645 from trunk, to account for the extra
+	REPORT element introduced in GET_REPORTS in trunk.
+
+	* src/html/omp.xsl (html-report-details): Remove extra .. for new
+	trunk GET_REPORTS REPORT element.
+
+	* src/gsad_omp.c (get_report_omp): Remove extra entity_child call
+	for new trunk GET_REPORTS REPORT element.
+
+2010-08-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-lsc-credential-form): Check password
 	instead of autogenerate.  (Backported from trunk; initially committed in
 	r8817.)
