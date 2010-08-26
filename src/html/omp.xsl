@@ -7135,7 +7135,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="extension"/></td>
     <td><xsl:value-of select="content_type"/></td>
-    <td><xsl:value-of select="trust"/></td>
+    <td>
+      <xsl:value-of select="trust/text()"/>
+      <xsl:choose>
+        <xsl:when test="trust/time != ''">
+          <br/>(<xsl:value-of select="substring(trust/time,5,6)"/>
+                <xsl:value-of select="substring(trust/time,20,5)"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:choose>
         <xsl:when test="global='0'">
@@ -7224,7 +7233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Trust:</td>
-          <td><xsl:value-of select="trust"/></td>
+          <td><xsl:value-of select="trust/text()"/></td>
         </tr>
         <tr>
           <td>Summary:</td>

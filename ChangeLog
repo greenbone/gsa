@@ -1,5 +1,10 @@
 2010-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report_format): Add trust time under trust.
+	(report_format [details]): Extract text part of trust only.
+
+2010-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add verify buttons on the report formats page.
 
 	* src/html/omp.xsl (report_format): Add verify button.
