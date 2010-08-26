@@ -1,3 +1,10 @@
+2010-08-26  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/omp.xsl (task): Add missing URL param name. (Backported
+	from trunk; initially committed in r8767 by Matthew Mundell.)
+
+	* ChangeLog: Corrected original revision in commit message.
+
 2010-08-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Further adjust backport of r8645 from trunk, to account for the extra
@@ -13,7 +20,7 @@
 
 	* src/html/omp.xsl (html-create-lsc-credential-form): Check password
 	instead of autogenerate.  (Backported from trunk; initially committed in
-	r8817.)
+	r8852.)
 
 2010-08-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
