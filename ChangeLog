@@ -1,5 +1,11 @@
 2010-08-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/html/omp.xsl: Do not show the "Pause" button if the task is
+	still being requested. (Backported from trunk; initially committed in
+	r8896.)
+
+2010-08-26  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/omp.xsl (task): Add missing URL param name. (Backported
 	from trunk; initially committed in r8767 by Matthew Mundell.)
 
