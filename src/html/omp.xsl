@@ -797,13 +797,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
             </a>
           </xsl:when>
-          <xsl:when test="task/status='Running' or task/status='Requested'">
+          <xsl:when test="task/status='Running'">
             <a href="/omp?cmd=pause_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
                title="Pause Task">
               <img src="/img/pause.png" border="0" alt="Pause"/>
             </a>
           </xsl:when>
-          <xsl:when test="task/status='Stop Requested' or task/status='Delete Requested' or task/status='Pause Requested' or task/status = 'Paused' or task/status='Resume Requested'">
+          <xsl:when test="task/status='Stop Requested' or task/status='Delete Requested' or task/status='Pause Requested' or task/status = 'Paused' or task/status='Resume Requested' or task/status='Requested'">
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
           </xsl:when>
           <xsl:otherwise>
@@ -1804,13 +1804,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
               </a>
             </xsl:when>
-            <xsl:when test="status='Running' or status='Requested'">
+            <xsl:when test="status='Running'">
               <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
                  title="Pause Task">
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>
             </xsl:when>
-            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested'">
+            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
