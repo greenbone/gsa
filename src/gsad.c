@@ -272,7 +272,8 @@ init_validator ()
                          "|(save_user)"
                          "|(start_task)"
                          "|(stop_task)"
-                         "|(sync_feed)$");
+                         "|(sync_feed)"
+                         "|(verify_report_format)$");
 
 
   openvas_validator_add (validator, "agent_format", "^(installer)$");
@@ -3571,6 +3572,10 @@ exec_omp_get (struct MHD_Connection *connection,
                           schedule_id, next, refresh_interval,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
+
+  else if ((!strcmp (cmd, "verify_report_format"))
+           && (report_format_id != NULL))
+    return verify_report_format_omp (credentials, report_format_id);
 
   else
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,

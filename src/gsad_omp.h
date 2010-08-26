@@ -214,6 +214,7 @@ char * get_report_format_omp (credentials_t *, const char *, const char *,
 char * get_report_formats_omp (credentials_t *, const char *, const char *);
 char * delete_report_format_omp (credentials_t *, const char *);
 char * import_report_format_omp (credentials_t *, char *);
+char * verify_report_format_omp (credentials_t *, const char *);
 
 gboolean is_omp_authenticated (gchar *, gchar *);
 

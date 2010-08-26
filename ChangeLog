@@ -1,3 +1,15 @@
+2010-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add verify buttons on the report formats page.
+
+	* src/html/omp.xsl (report_format): Add verify button.
+
+	* src/gsad_omp.c (verify_report_format_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add verify command.
+
 2010-08-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/omp.xsl: Do not show the "Pause" button if the task is

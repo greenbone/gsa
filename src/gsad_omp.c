@@ -7718,6 +7718,64 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
+/**
+ * @brief Verify report format, get report formats, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  report_format_id  ID of report format.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+verify_report_format_omp (credentials_t * credentials,
+                          const char *report_format_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while verifying a report format. "
+                         "The report_format iss not verified. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_report_formats");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<verify_report_format report_format_id=\"%s\" />"
+                            "<get_report_formats"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            report_format_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying a report format. "
+                           "The report_format is not verified. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  xml = g_string_new ("<get_report_formats>");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying a report format. "
+                           "It is unclear whether the report format has been verified or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  g_string_append (xml, "</get_report_formats>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
 
 /* Manager communication. */
 

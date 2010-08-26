@@ -7160,6 +7160,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}"
+         title="Verify Report Format"
+         style="margin-left:3px;">
+        <img src="/img/new.png" border="0" alt="Verify Report Format"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
