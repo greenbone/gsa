@@ -327,6 +327,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
+      <p>
+        Note: According to documentation of Microsoft Domain Controller,
+        if your Login uses german umlaut, you can use "ss" for "ß", "a" for "ä" etc.
+        In other cases, Login names with german umlauts will not work.
+      </p>
+
       <a name="credentials"></a>
       <h2>Credentials for Local Security Checks</h2>
       <p>
