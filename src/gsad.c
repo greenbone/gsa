@@ -569,6 +569,7 @@ struct gsad_connection_info
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *schedule_id;   ///< Value of "schedule_id" parameter.
+    char *slave_id;      ///< Value of "slave_id" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
     char *sort_order;    ///< Value of "sort_order" parameter.
     char *target_id;     ///< Value of "target_id" parameter.
@@ -785,6 +786,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
   free (con_info->req_parms.schedule_id);
+  free (con_info->req_parms.slave_id);
   free (con_info->req_parms.target_id);
   free (con_info->req_parms.xml_file);
   free (con_info->req_parms.role);
@@ -1176,6 +1178,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "schedule_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.schedule_id);
+      if (!strcmp (key, "slave_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.slave_id);
       if (!strcmp (key, "sort_field"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.sort_field);
@@ -1785,6 +1790,15 @@ exec_omp_post (credentials_t * credentials,
           free (con_info->req_parms.schedule_id);
           con_info->req_parms.schedule_id  = NULL;
         }
+      if (con_info->req_parms.slave_id
+          && strcmp (con_info->req_parms.slave_id, "--")
+          && openvas_validate (validator,
+                               "target_id",
+                               con_info->req_parms.slave_id))
+        {
+          free (con_info->req_parms.slave_id);
+          con_info->req_parms.slave_id  = NULL;
+        }
       validate (validator, "overrides", &con_info->req_parms.overrides);
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.comment == NULL) ||
@@ -1792,6 +1806,7 @@ exec_omp_post (credentials_t * credentials,
           (con_info->req_parms.overrides == NULL) ||
           (con_info->req_parms.target_id == NULL) ||
           (con_info->req_parms.escalator_id == NULL) ||
+          (con_info->req_parms.slave_id == NULL) ||
           (con_info->req_parms.schedule_id == NULL))
         con_info->response
          = new_task_omp (credentials,
@@ -1807,6 +1822,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.config_id,
                            con_info->req_parms.escalator_id,
                            con_info->req_parms.schedule_id,
+                           con_info->req_parms.slave_id,
                            con_info->req_parms.overrides);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))

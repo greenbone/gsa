@@ -7917,6 +7917,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Slave (optional)</td>
+          <td>
+            <select name="slave_id">
+              <option value="--">--</option>
+              <xsl:apply-templates select="get_targets_response/target"
+                                   mode="newtask"/>
+            </select>
+          </td>
+        </tr>
+        <tr>
           <td colspan="2" style="text-align:right;">
             <input type="submit" name="submit" value="Create Task"/>
           </td>

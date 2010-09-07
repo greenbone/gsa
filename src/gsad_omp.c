@@ -428,6 +428,7 @@ new_task_omp (credentials_t * credentials, const char* message,
  * @param[in]  config_id     Config for task.
  * @param[in]  escalator_id  Escalator for task.
  * @param[in]  schedule_id   UUID of schedule for task.
+ * @param[in]  slave_id      UUID of slave for task.
  * @param[in]  apply_overrides   Whether to apply overrides.
  *
  * @return Result of XSL transformation.
@@ -435,14 +436,14 @@ new_task_omp (credentials_t * credentials, const char* message,
 char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
                  char *target_id, char *config_id, const char *escalator_id,
-                 const char *schedule_id, const char *apply_overrides)
+                 const char *schedule_id, const char *slave_id,
+                 const char *apply_overrides)
 {
   entity_t entity;
   gnutls_session_t session;
   char *text = NULL;
   int socket, ret;
-  gchar *schedule_element;
-  gchar *escalator_element;
+  gchar *schedule_element, *escalator_element, *slave_element;
 
   if (manager_connect (credentials, &socket, &session))
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
@@ -462,10 +463,16 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
     escalator_element = g_strdup_printf ("<escalator id=\"%s\"/>",
                                          escalator_id);
 
+  if (!slave_id || strcmp (slave_id, "--") == 0)
+    slave_element = g_strdup ("");
+  else
+    slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
+
   ret = openvas_server_sendf (&session,
                               "<commands>"
                               "<create_task>"
                               "<config id=\"%s\"/>"
+                              "%s"
                               "%s"
                               "%s"
                               "<target id=\"%s\"/>"
@@ -480,6 +487,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                               config_id,
                               schedule_element,
                               escalator_element,
+                              slave_element,
                               target_id,
                               name,
                               comment,
@@ -487,6 +495,7 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
 
   g_free (schedule_element);
   g_free (escalator_element);
+  g_free (slave_element);
 
   if (ret == -1)
     {

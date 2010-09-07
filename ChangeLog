@@ -1,8 +1,23 @@
+2010-09-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add associating of slave with task.
+
+	* src/gsad.c (gsad_connection_info, free_resources, serve_post): Add
+	slave_id attribute.
+	(exec_omp_post): Pass slave_id to create_task_omp.
+
+	* src/gsad_omp.c (create_task_omp): Add slave_id param.  Pass to
+	CREATE_TASK.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (new_task): Add slave input.
+
 2010-09-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (configure_credentials.html): Added
 	note on Umlauts and Domain Controller.
- 
+
 2010-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report_format): Add trust time under trust.
