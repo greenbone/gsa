@@ -106,6 +106,8 @@ add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 set_target_properties (gsad PROPERTIES LINK_FLAGS
                        "${OPENVAS_LDFLAGS} -pthread ")
 
+set_target_properties (gsad PROPERTIES LINK_FLAGS "${OPENVAS_LDFLAGS} -lexslt")
+
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
 

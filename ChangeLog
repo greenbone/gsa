@@ -1,4 +1,16 @@
 2010-09-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+  
+	Backporting patch r8997 from trunk by Matthew Mundell.
+
+ 	* src/CMakeLists.txt: Link gsad to libexslt.
+ 
+ 	* src/gsad_base.c (xsl_transform): Register exslt extensions.
+ 
+ 	* src/html/omp.xsl (wrap): Replace with line-tokenizing version which
+ 	calls line-wrap.
+ 	(line-wrap): New template.  Copy of old wrap.
+
+2010-09-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backporting patch r8994 from trunk by Matthew Mundell.
 

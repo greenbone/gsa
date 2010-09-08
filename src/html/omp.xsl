@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
     version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -42,6 +44,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
 
+  <xsl:for-each select="str:tokenize($string, '&#10;')">
+    <xsl:call-template name="wrap-line">
+      <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+</xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- This is called within a PRE. -->
+<xsl:template name="wrap-line">
+  <xsl:param name="string"></xsl:param>
+
   <xsl:variable name="to-next-newline">
     <xsl:value-of select="substring-before($string, '&#10;')"/>
   </xsl:variable>
@@ -54,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- A single line missing a newline, output up to the edge. -->
 <xsl:value-of select="substring($string, 1, 90)"/>
       <xsl:if test="string-length($string) &gt; 90">&#8629;
-<xsl:call-template name="wrap">
+<xsl:call-template name="wrap-line">
   <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
 </xsl:call-template>
       </xsl:if>
@@ -62,7 +77,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; 90)">
       <!-- There's a newline before the edge, so output the line. -->
 <xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
-<xsl:call-template name="wrap">
+<xsl:call-template name="wrap-line">
   <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
 </xsl:call-template>
     </xsl:when>
@@ -70,7 +85,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- Any newline comes after the edge, so output up to the edge. -->
 <xsl:value-of select="substring($string, 1, 90)"/>
       <xsl:if test="string-length($string) &gt; 90">&#8629;
-<xsl:call-template name="wrap">
+<xsl:call-template name="wrap-line">
   <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
 </xsl:call-template>
       </xsl:if>
