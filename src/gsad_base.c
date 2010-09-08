@@ -38,6 +38,7 @@
 #include "tracef.h"
 
 #include <glib.h>
+#include <libexslt/exslt.h>
 #include <string.h> /* for strlen() */
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
@@ -67,6 +68,8 @@ xsl_transform (const char *xml_text)
   int doc_txt_len;
 
   tracef ("text to transform: [%s]\n", xml_text);
+
+  exsltRegisterAll ();
 
   xmlSubstituteEntitiesDefault (1);
   xmlLoadExtDtdDefaultValue = 1;
