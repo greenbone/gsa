@@ -137,7 +137,25 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                          credentials->username,
                          xml);
   html = xsl_transform (res);
-
+  if (html == NULL)
+    {
+      res = g_strdup_printf ("<gsad_response>"
+                             "<title>Internal Error</title>"
+                             "<message>"
+                             "An internal server error has occurred during XSL"
+                             " transformation."
+                             "</message>"
+                             "<backurl>/omp?cmd=get_tasks</backurl>"
+                             "</gsad_response>");
+      html = xsl_transform (res);
+      if (html == NULL)
+        html = g_strdup ("<html>"
+                         "<body>"
+                         "An internal server error has occurred during XSL"
+                         " transformation."
+                         "</body>"
+                         "</html>");
+    }
   g_free (res);
   g_free (xml);
   return html;

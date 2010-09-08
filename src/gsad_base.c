@@ -56,7 +56,7 @@
  *
  * @param[in]  xml_text  The XML text to tranform.
  *
- * @return HTML output from XSL transformation.
+ * @return HTML output from XSL transformation, or NULL on error.
  */
 char *
 xsl_transform (const char *xml_text)
@@ -65,8 +65,6 @@ xsl_transform (const char *xml_text)
   xmlDocPtr doc, res;
   xmlChar *doc_txt_ptr = NULL;
   int doc_txt_len;
-  char *error_message =
-    "<html><body>An internal server error has occurred during XSL transformation.</body></html>";
 
   tracef ("text to transform: [%s]\n", xml_text);
 
@@ -76,7 +74,7 @@ xsl_transform (const char *xml_text)
   if (cur == NULL)
     {
       g_warning ("Failed to parse stylesheet " XSL_PATH);
-      return g_strdup (error_message);
+      return NULL;
     }
 
   doc = xmlParseMemory (xml_text, strlen (xml_text));
@@ -84,7 +82,7 @@ xsl_transform (const char *xml_text)
     {
       g_warning ("Failed to parse stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
-      return g_strdup (error_message);
+      return NULL;
     }
 
   res = xsltApplyStylesheet (cur, doc, NULL);
@@ -92,7 +90,7 @@ xsl_transform (const char *xml_text)
     {
       g_warning ("Failed to apply stylesheet " XSL_PATH);
       xsltFreeStylesheet (cur);
-      return g_strdup (error_message);
+      return NULL;
     }
 
   if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
@@ -101,7 +99,7 @@ xsl_transform (const char *xml_text)
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
       xmlFreeDoc (doc);
-      return g_strdup (error_message);
+      return NULL;
     }
 
   xsltFreeStylesheet (cur);
@@ -140,8 +138,15 @@ gsad_message (const char *title, const char *function, int line,
                                 function,
                                 line,
                                 msg,
-                                backurl ? backurl : "/omp?cmd=get_status");
+                                backurl ? backurl : "/omp?cmd=get_tasks");
   char *resp = xsl_transform (xml);
+  if (resp == NULL)
+    resp = g_strdup ("<html>"
+                     "<body>"
+                     "An internal server error has occurred during XSL"
+                     " transformation."
+                     "</body>"
+                     "</html>");
   g_free (xml);
   return resp;
 }

@@ -1,3 +1,14 @@
+2010-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_base.c (xsl_transform): Return NULL on error instead of HTML.
+	(gsad_message): Return basic HTML if transformation fails.
+
+	* src/gsad_oap.c (xsl_transform_oap): Try return error dialog page before
+	basic message, on transformation failure.
+
+	* src/gsad_omp.c (xsl_transform_omp): Try return error dialog page before
+	basic message, on transformation failure.
+
 2010-09-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Added check for subversion directory if build type
