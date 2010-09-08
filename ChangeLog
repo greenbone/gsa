@@ -1,3 +1,16 @@
+2010-09-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backporting patch r8994 from trunk by Matthew Mundell.
+
+ 	* src/gsad_base.c (xsl_transform): Return NULL on error instead of HTML.
+ 	(gsad_message): Return basic HTML if transformation fails.
+ 
+ 	* src/gsad_oap.c (xsl_transform_oap): Try return error dialog page before
+ 	basic message, on transformation failure.
+ 
+ 	* src/gsad_omp.c (xsl_transform_omp): Try return error dialog page before
+ 	basic message, on transformation failure.
+ 
 2010-08-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/omp.xsl: Do not show the "Pause" button if the task is
