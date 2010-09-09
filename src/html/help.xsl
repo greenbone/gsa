@@ -523,6 +523,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
+      <h3>Escalation Methods</h3>
+
+      <h4>HTTP Get</h4>
+
+      <p>
+      The URL will be issued as HTTP GET.
+      This can be used eg. to automatically send a SMS via
+      a HTTP GET gateway or automatically create a
+      bug report in an issue tracker.
+      </p>
+
+      <p>
+      The following replacements in the URL will be done:
+      </p>
+
+      <ul>
+      <li> $$: $ </li>
+      <li> $n: task name </li>
+      <li> $e: event description </li>
+      <li> $c: condition description </li>
+      </ul>
+
       <a name="escalators"></a>
       <h2>Escalators</h2>
       <p>

@@ -1,3 +1,8 @@
+2010-09-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl (configure_escalators.html): Added notes
+	about HTTP GET.
+
 2010-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (openvas_server_sendf_xml): New function.
