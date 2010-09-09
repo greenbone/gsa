@@ -1,3 +1,10 @@
+2010-09-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (openvas_server_sendf_xml): New function.
+	(send_escalator_data): Send with openvas_server_sendf_xml.
+
+	* src/html/omp.xsl (html-create-escalator-form): Add HTTP Get input.
+
 2010-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/CMakeLists.txt: Link gsad to libexslt.
@@ -5,8 +12,8 @@
 	* src/gsad_base.c (xsl_transform): Register exslt extensions.
 
 	* src/html/omp.xsl (wrap): Replace with line-tokenizing version which
-	calls line-wrap.
-	(line-wrap): New template.  Copy of old wrap.
+	calls wrap-line.
+	(wrap-line): New template.  Copy of old wrap.
 
 2010-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 

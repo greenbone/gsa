@@ -2050,6 +2050,28 @@ get_agents_omp (credentials_t * credentials,
 }
 
 /**
+ * @brief Format and send an XML string to the server.
+ *
+ * Escape XML in string and character args.
+ *
+ * @param[in]  session  Pointer to GNUTLS session.
+ * @param[in]  format   printf-style format string for message.
+ *
+ * @return 0 on success, -1 on error.
+ */
+int
+openvas_server_sendf_xml (gnutls_session_t * session, const char *format, ...)
+{
+  va_list args;
+  va_start (args, format);
+  gchar *msg = g_markup_vprintf_escaped (format, args);
+  int ret = openvas_server_send (session, msg);
+  g_free (msg);
+  va_end (args);
+  return ret;
+}
+
+/**
  * @brief Send data for an escalator.
  *
  * @param[in]   session  GNUTLS session.
@@ -2065,10 +2087,10 @@ send_escalator_data (gnutls_session_t *session, GArray *data)
 
   if (data)
     while ((element = g_array_index (data, gchar*, index++)))
-      if (openvas_server_sendf (session,
-                                "<data><name>%s</name>%s</data>",
-                                element,
-                                element + strlen (element) + 1))
+      if (openvas_server_sendf_xml (session,
+                                    "<data><name>%s</name>%s</data>",
+                                    element,
+                                    element + strlen (element) + 1))
         return -1;
 
   return 0;
