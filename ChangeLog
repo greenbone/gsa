@@ -1,5 +1,9 @@
 2010-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (status_bar): Also print percent if progress is 0.
+
+2010-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details, report): Only offer active report
 	formats for download.
 	(html-report-formats-table, report_format): Add active column.
