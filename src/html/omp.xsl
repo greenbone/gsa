@@ -490,7 +490,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  name="result_hosts_only"
                  value="{report/filters/result_hosts_only}"/>
           <select name="report_format_id" title="Download Format">
-            <xsl:for-each select="../../get_report_formats_response/report_format">
+            <xsl:for-each select="../../get_report_formats_response/report_format[active=1]">
               <xsl:choose>
                 <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
                   <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -1495,7 +1495,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="levels" value="hmlg"/>
           <select name="report_format_id"
                   title="Download Format">
-            <xsl:for-each select="../../../../get_report_formats_response/report_format">
+            <xsl:for-each select="../../../../get_report_formats_response/report_format[active=1]">
               <xsl:choose>
                 <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
                   <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -7087,6 +7087,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Extension</td>
             <td>Content Type</td>
             <td>Trust</td>
+            <td>Active</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="report_format"/>
@@ -7191,6 +7192,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="substring(trust/time,20,5)"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="active='0'">
+          no
+        </xsl:when>
+        <xsl:otherwise>
+          yes
+        </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
