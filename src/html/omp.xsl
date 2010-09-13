@@ -7635,14 +7635,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
   </xsl:for-each>
-  <a class="anchor" name="overrides-{@id}"/>
-  <xsl:for-each select="overrides/override">
-    <xsl:call-template name="override-detailed">
-      <xsl:with-param name="override-buttons">
-        <xsl:value-of select="$override-buttons"/>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:for-each>
+  <xsl:choose>
+    <xsl:when test="../../filters/apply_overrides = 1">
+      <a class="anchor" name="overrides-{@id}"/>
+      <xsl:for-each select="overrides/override">
+        <xsl:call-template name="override-detailed">
+          <xsl:with-param name="override-buttons">
+            <xsl:value-of select="$override-buttons"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
   <br/>
 </xsl:template>
 

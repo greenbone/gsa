@@ -1,3 +1,8 @@
+2010-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed): Only show override details when
+	applying overrides.
+
 2010-09-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (configure_escalators.html): Added notes
