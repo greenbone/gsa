@@ -7295,6 +7295,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="trust/text()"/></td>
         </tr>
         <tr>
+          <td>Active:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="active='0'">
+                no
+              </xsl:when>
+              <xsl:otherwise>
+                yes
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
           <td>Summary:</td>
           <td><xsl:value-of select="summary"/></td>
         </tr>
