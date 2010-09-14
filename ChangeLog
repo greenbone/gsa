@@ -1,3 +1,10 @@
+2010-09-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backporting patch r9022 from trunk by Matthew Mundell.
+
+	* src/html/omp.xsl (result-detailed): Only show override
+	details when applying overrides.
+
 2010-09-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
   
 	Backporting patch r8997 from trunk by Matthew Mundell.
