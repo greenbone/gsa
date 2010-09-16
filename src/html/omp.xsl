@@ -2407,6 +2407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-create-escalator-form">
   <xsl:param name="lsc-credentials"></xsl:param>
+  <xsl:param name="report-formats"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -2517,7 +2518,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">Format</td>
+                  <td width="100">Content</td>
                   <td>
                     <table>
                       <tr>
@@ -2529,7 +2530,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <tr>
                         <td colspan="3" valign="top">
                           <input type="radio" name="method_data:notice" value="0"/>
-                          Summary (can include vulnerability details)
+                          Include report
+                          <select name="method_data:notice_report_format">
+                            <xsl:for-each select="$report-formats/report_format">
+                              <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                <xsl:choose>
+                                  <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                    <option value="{@id}" selected="1">
+                                      <xsl:value-of select="name"/>
+                                    </option>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <option value="{@id}">
+                                      <xsl:value-of select="name"/>
+                                    </option>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </xsl:if>
+                            </xsl:for-each>
+                          </select>
                         </td>
                       </tr>
                     </table>
@@ -2925,6 +2944,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param
       name="lsc-credentials"
       select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="report-formats"
+      select="get_report_formats_response | commands_response/get_report_formats_response"/>
   </xsl:call-template>
   <!-- The for-each makes the get_escalators_response the current node. -->
   <xsl:for-each select="get_escalators_response | commands_response/get_escalators_response">
