@@ -1,5 +1,17 @@
 2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add verify buttons on the agents page.
+
+	* src/html/omp.xsl (agent): Add verify button.
+
+	* src/gsad_omp.c (verify_agent_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add verify command.
+
+2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (agent): Add time under trust value.
 
 2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>

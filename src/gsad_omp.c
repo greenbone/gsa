@@ -2050,6 +2050,63 @@ get_agents_omp (credentials_t * credentials,
 }
 
 /**
+ * @brief Verify agent, get agents, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  agent_id     ID of agent.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+verify_agent_omp (credentials_t * credentials, const char *agent_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while verifying an agent. "
+                         "The agent iss not verified. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_agents");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<verify_agent agent_id=\"%s\" />"
+                            "<get_agents"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            agent_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying an agent. "
+                           "The agent is not verified. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_agents");
+    }
+
+  xml = g_string_new ("<get_agents>");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while verifying an agent. "
+                           "It is unclear whether the agent has been verified or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_agents");
+    }
+
+  g_string_append (xml, "</get_agents>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Format and send an XML string to the server.
  *
  * Escape XML in string and character args.

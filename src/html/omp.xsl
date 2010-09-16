@@ -2389,6 +2389,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
+      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}"
+         title="Verify Agent"
+         style="margin-left:3px;">
+        <img src="/img/new.png" border="0" alt="Verify Agent"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

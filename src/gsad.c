@@ -273,6 +273,7 @@ init_validator ()
                          "|(start_task)"
                          "|(stop_task)"
                          "|(sync_feed)"
+                         "|(verify_agent)"
                          "|(verify_report_format)$");
 
 
@@ -3588,6 +3589,10 @@ exec_omp_get (struct MHD_Connection *connection,
                           schedule_id, next, refresh_interval,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
+
+  else if ((!strcmp (cmd, "verify_agent"))
+           && (agent_id != NULL))
+    return verify_agent_omp (credentials, agent_id);
 
   else if ((!strcmp (cmd, "verify_report_format"))
            && (report_format_id != NULL))
