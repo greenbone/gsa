@@ -2363,7 +2363,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="comment"/>
     </td>
     <td>
-      <xsl:value-of select="installer/trust"/>
+      <xsl:value-of select="installer/trust/text()"/>
+      <xsl:choose>
+        <xsl:when test="installer/trust/time != ''">
+          <br/>(<xsl:value-of select="substring(installer/trust/time,5,6)"/>
+                <xsl:value-of select="substring(installer/trust/time,20,5)"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:choose>

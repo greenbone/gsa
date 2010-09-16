@@ -1,5 +1,9 @@
 2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (agent): Add time under trust value.
+
+2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_escalators_omp): Also get report formats.
 
 	* src/html/omp.xsl (html-create-escalator-form): Convert format field of
