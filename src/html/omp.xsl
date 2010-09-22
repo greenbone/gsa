@@ -7197,6 +7197,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     EDITING REPORT FORMATS -->
+
+<xsl:template name="html-edit-report-format-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Report Format
+      <a href="/help/report_formats.html#edit_report_format"
+         title="Help: Edit Report Format">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="get">
+        <input type="hidden" name="cmd" value="save_report_format"/>
+        <input type="hidden"
+               name="report_format_id"
+               value="{commands_response/get_report_formats_response/report_format/@id}"/>
+        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+           <td valign="top" width="165">Name</td>
+           <td>
+             <input type="text"
+                    name="name"
+                    value="{commands_response/get_report_formats_response/report_format/name}"
+                    size="30"
+                    maxlength="80"/>
+           </td>
+          </tr>
+          <tr>
+            <td valign="top">Summary</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_report_formats_response/report_format/summary}"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Report Format"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_report_format">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-report-format-form"/>
+</xsl:template>
+
+<xsl:template match="modify_report_format_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Report Format</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     REPORT_FORMAT -->
 
 <xsl:template match="report_format">
@@ -7257,6 +7325,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Report Format Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
+      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;sort_order=ascending&amp;sort_field=name"
+         title="Edit Report Format" style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
       <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}"
          title="Export Report Format XML"
          style="margin-left:3px;">
@@ -7306,6 +7378,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Configure Report Formats (Report Format Details)">
          <img src="/img/help.png"/>
        </a>
+      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_format&amp;sort_order=ascending&amp;sort_field=name"
+         title="Edit Report Format"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
@@ -7366,7 +7443,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_report_format">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
-  <xsl:apply-templates select="get_report_formats_response/report_format" mode="details"/>
+  <xsl:apply-templates select="commands_response/modify_report_format_response"/>
+  <xsl:apply-templates select="modify_report_format_response"/>
+  <xsl:apply-templates select="commands_response/get_report_formats_response/report_format"
+                       mode="details"/>
 </xsl:template>
 
 <!--     GET_REPORT_FORMATS -->
@@ -7375,6 +7455,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
   <xsl:apply-templates select="create_report_format_response"/>
+  <xsl:apply-templates select="commands_response/modify_report_format_response"/>
+  <xsl:apply-templates select="modify_report_format_response"/>
 <!--
   <xsl:call-template name="html-create-report-format-form"/>
 -->

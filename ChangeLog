@@ -1,3 +1,26 @@
+2010-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add report format editing.
+
+	* src/html/src/omp.xsl (html-edit-report-format-form, edit_report_format)
+	(modify_report_format_response): New templates.
+	(report_format): Add edit report_format button.
+	(get_report_format): Apply modify response template.  Add COMMANDS to
+	GET_REPORT_FORMATS path.
+	(get_report_formats): Apply modify response template.
+
+	* src/gsad.c (init_validator): Add edit_report_format and
+	save_report_format commands.
+	(exec_omp_get): Add edit_report_format and save_report_format handling.
+
+	* src/gsad_omp.c (get_report_format, get_report_formats): New function.
+	_omp counterpart with commands arg.
+	(get_report_format_omp, get_report_formats_omp): Replace body with call.
+	(edit_report_format, edit_report_format_omp, save_report_format_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
 2010-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add verify buttons on the agents page.

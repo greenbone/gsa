@@ -7577,16 +7577,17 @@ get_system_report_omp (credentials_t *credentials, const char *url,
  * @brief Get one report format, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  UUID of report_format.
+ * @param[in]  report_format_id  UUID of report format.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  commands          Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_report_format_omp (credentials_t * credentials,
-                       const char * report_format_id, const char * sort_field,
-                       const char * sort_order)
+static char *
+get_report_format (credentials_t * credentials,
+                   const char * report_format_id, const char * sort_field,
+                   const char * sort_order, const char * commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7604,11 +7605,15 @@ get_report_format_omp (credentials_t * credentials,
   /* Get the report format. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_report_formats"
                             " report_format_id=\"%s\""
                             " params=\"1\""
                             " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " sort_order=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             report_format_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
@@ -7642,17 +7647,37 @@ get_report_format_omp (credentials_t * credentials,
 }
 
 /**
+ * @brief Get one report format, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  report_format_id  UUID of report_format.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_report_format_omp (credentials_t * credentials,
+                       const char * report_format_id, const char * sort_field,
+                       const char * sort_order)
+{
+  return get_report_format (credentials, report_format_id, sort_field,
+                            sort_order, NULL);
+}
+
+/**
  * @brief Get all report formats, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  sort_field   Field to sort on, or NULL.
  * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  commands     Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_report_formats_omp (credentials_t * credentials, const char * sort_field,
-                        const char * sort_order)
+static char *
+get_report_formats (credentials_t * credentials, const char * sort_field,
+                    const char * sort_order, const char * commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7670,9 +7695,13 @@ get_report_formats_omp (credentials_t * credentials, const char * sort_field,
   /* Get the report formats. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_report_formats"
                             " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " sort_order=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
@@ -7702,6 +7731,22 @@ get_report_formats_omp (credentials_t * credentials, const char * sort_field,
   g_string_append (xml, "</get_report_formats>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all report formats, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_report_formats_omp (credentials_t * credentials, const char * sort_field,
+                        const char * sort_order)
+{
+  return get_report_formats (credentials, sort_field, sort_order, NULL);
 }
 
 /**
@@ -7760,6 +7805,111 @@ delete_report_format_omp (credentials_t * credentials,
   g_string_append (xml, "</get_report_formats>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_report_format XML, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  report_format_id  UUID of report_format.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[in]  next              Name of next page.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+edit_report_format (credentials_t * credentials, const char *report_format_id,
+                    const char *extra_xml, const char *next,
+                    const char *sort_field, const char *sort_order)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (report_format_id == NULL || next == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a report format. "
+                         "The report format remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a report format. "
+                         "The report format remains as it was. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_report_formats");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_report_formats report_format_id=\"%s\" details=\"1\" />"
+                            "</commands>",
+                            report_format_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting report format info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<edit_report_format>"
+                          "<report_format id=\"%s\"/>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Passthroughs. */
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>",
+                          report_format_id,
+                          next,
+                          sort_field,
+                          sort_order);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting report format info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_report_format>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_report_format XML, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  report_format_id  UUID of report_format.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_report_format_omp (credentials_t * credentials,
+                        const char *report_format_id, const char *next,
+                        /* Parameters for get_report_formats. */
+                        const char *sort_field, const char *sort_order)
+{
+  return edit_report_format (credentials, report_format_id, NULL, next,
+                             sort_field, sort_order);
 }
 
 /**
@@ -7848,6 +7998,74 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
   g_string_append (xml, "</get_report_formats>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Save report_format, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  report_format_id  ID of report format.
+ * @param[in]  name              New name for report format.
+ * @param[in]  summary           New summary for report format.
+ * @param[in]  next              Name of next page.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_report_format_omp (credentials_t * credentials, const char *report_format_id,
+                        const char *name, const char *summary, const char *next,
+                        /* Parameters for get_report_formats. */
+                        const char *sort_field, const char *sort_order)
+{
+  gchar *modify_format;
+
+  if (summary == NULL || name == NULL)
+    return edit_report_format (credentials, report_format_id,
+                               GSAD_MESSAGE_INVALID_PARAM
+                                ("Save Report Format"),
+                               next, sort_field, sort_order);
+
+  if (next == NULL || sort_field == NULL || sort_order == NULL
+      || report_format_id == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a report format. "
+                         "The report format remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
+
+  modify_format = g_strdup_printf ("<modify_report_format"
+                                   " report_format_id=\"%s\">"
+                                   "<name>%s</name>"
+                                   "<summary>%s</summary>"
+                                   "</modify_report_format>",
+                                   report_format_id,
+                                   name,
+                                   summary);
+
+  if (strcmp (next, "get_report_formats") == 0)
+    {
+      char *ret = get_report_formats (credentials, sort_field, sort_order,
+                                      modify_format);
+      g_free (modify_format);
+      return ret;
+    }
+
+  if (strcmp (next, "get_report_format") == 0)
+    {
+      char *ret = get_report_format (credentials, report_format_id, sort_field,
+                                     sort_order, modify_format);
+      g_free (modify_format);
+      return ret;
+    }
+
+  g_free (modify_format);
+  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a report format. "
+                       "The report format remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_report_formats");
 }
 
 /**

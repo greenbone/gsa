@@ -219,6 +219,7 @@ init_validator ()
                          "|(edit_config_nvt)"
                          "|(edit_note)"
                          "|(edit_override)"
+                         "|(edit_report_format)"
                          "|(edit_settings)"
                          "|(edit_task)"
                          "|(edit_user)"
@@ -267,6 +268,7 @@ init_validator ()
                          "|(save_config_nvt)"
                          "|(save_note)"
                          "|(save_override)"
+                         "|(save_report_format)"
                          "|(save_settings)"
                          "|(save_task)"
                          "|(save_user)"
@@ -3114,6 +3116,14 @@ exec_omp_get (struct MHD_Connection *connection,
                                 NULL, "-1", NULL, task_id);
     }
 
+  else if ((!strcmp (cmd, "edit_report_format"))
+           && (report_format_id != NULL)
+           && (next != NULL)
+           && ((strcmp (next, "get_report_formats") == 0)
+               || (strcmp (next, "get_report_format") == 0)))
+    return edit_report_format_omp (credentials, report_format_id, next,
+                                   sort_field, sort_order);
+
   else if (!strcmp (cmd, "edit_settings"))
     return edit_settings_oap (credentials, sort_field, sort_order);
 
@@ -3579,6 +3589,14 @@ exec_omp_get (struct MHD_Connection *connection,
                                 NULL, NULL, NULL, NULL, overrides, NULL, NULL,
                                 NULL, NULL, task_id);
     }
+
+  else if ((!strcmp (cmd, "save_report_format"))
+           && (report_format_id != NULL)
+           && (next != NULL)
+           && ((strcmp (next, "get_report_formats") == 0)
+               || (strcmp (next, "get_report_format") == 0)))
+    return save_report_format_omp (credentials, report_format_id, name, comment,
+                                   next, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "save_task"))
            && (task_id != NULL)
