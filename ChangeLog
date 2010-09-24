@@ -1,3 +1,24 @@
+2010-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add "first class" slaves.
+
+	* src/gsad.c (init_validator): Add slave commands.  Add slave_id rule.
+	(req_parms, free_resources): Add host.
+	(serve_post, exec_omp_post, exec_omp_get): Add slave command handling.
+
+	* src/gsad_omp.c (new_task_omp): Also get slaves.
+	(create_slave_omp, delete_slave_omp, get_slave_omp, get_slaves_omp): New
+	functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/src/gsad.xsl (html-gsa-navigation): Add slaves item.
+
+	* src/html/src/omp.xsl (slave [newtask], html-create-slave-form)
+	(html-slaves-table, create_slave_response, delete_slave_response)
+	(slave, slave [details], get_slave, get_slaves): New templates.
+	(new_task): Get slaves from GET_SLAVES instead of from GET_TARGETS.
+
 2010-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add report format editing.

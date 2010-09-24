@@ -423,6 +423,33 @@ new_task_omp (credentials_t * credentials, const char* message,
                            "/omp?cmd=get_tasks");
     }
 
+  /* Get slaves to select in new task UI. */
+  if (openvas_server_send (&session,
+                           "<get_slaves"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the slave list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the slave list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
   if (message)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Task"));
   g_string_append_printf (xml,
@@ -7014,6 +7041,329 @@ save_override_omp (credentials_t * credentials, const char *override_id,
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, response);
+}
+
+/**
+ * @brief Create a slave, get all slaves, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  name         Name of new slave.
+ * @param[in]  comment      Comment on slave.
+ * @param[in]  host         Host associated with slave.
+ * @param[in]  port         Port on host.
+ * @param[in]  login        Login for host.
+ * @param[in]  password     Password for login.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_slave_omp (credentials_t *credentials, const char *name,
+                  const char *comment, const char *host, const char *port,
+                  const char *login, const char* password)
+{
+  gnutls_session_t session;
+  GString *xml;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new slave. "
+                         "No new slave was created. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_slaves");
+
+  xml = g_string_new ("<get_slaves>");
+
+  if (name == NULL || comment == NULL || host == NULL || port == NULL
+      || login == NULL || password == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Slave"));
+  else
+    {
+      int ret;
+
+      /* Create the slave. */
+
+      if (comment)
+        ret = openvas_server_sendf (&session,
+                                    "<create_slave>"
+                                    "<name>%s</name>"
+                                    "<comment>%s</comment>"
+                                    "<host>%s</host>"
+                                    "<port>%s</port>"
+                                    "<login>%s</login>"
+                                    "<password>%s</password>"
+                                    "</create_slave>",
+                                    name,
+                                    comment,
+                                    host,
+                                    port,
+                                    login,
+                                    password);
+      else
+        ret = openvas_server_sendf (&session,
+                                    "<create_slave>"
+                                    "<name>%s</name>"
+                                    "<host>%s</host>"
+                                    "<port>%s</port>"
+                                    "<login>%s</login>"
+                                    "<password>%s</password>"
+                                    "</create_slave>",
+                                    name,
+                                    host,
+                                    port,
+                                    login,
+                                    password);
+
+
+      if (ret == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new slave. "
+                               "No new slave was created. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_slaves");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new slave. "
+                               "It is unclear whether the slave has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_slaves");
+        }
+    }
+
+  /* Get all the slaves. */
+
+  if (openvas_server_send (&session,
+                           "<get_slaves"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new slave. "
+                           "A new slave was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new slave. "
+                           "A new slave was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_slaves>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Delete a slave, get all slaves, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  slave_id     UUID of slave.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_slave_omp (credentials_t * credentials, const char *slave_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a slave. "
+                         "The slave is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_slaves");
+
+  xml = g_string_new ("<get_slaves>");
+
+  /* Delete the slave and get all slaves. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<delete_slave slave_id=\"%s\"/>"
+                            "<get_slaves"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            slave_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a slave. "
+                           "The slave is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a slave. "
+                           "It is unclear whether the slave has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_slaves>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get one slave, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  slave_id     UUID of slave.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_slave_omp (credentials_t * credentials, const char * slave_id,
+               const char * sort_field, const char * sort_order)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting slaves list. "
+                         "The current list of slaves is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_slaves");
+
+  xml = g_string_new ("<get_slave>");
+
+  /* Get the slave. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_slaves"
+                            " slave_id=\"%s\""
+                            " tasks=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            slave_id,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_slave>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all slaves, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_slaves_omp (credentials_t * credentials, const char * sort_field,
+                 const char * sort_order)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting slaves list. "
+                         "The current list of slaves is not available. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_slaves");
+
+  xml = g_string_new ("<get_slaves>");
+
+  /* Get the slaves. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_slaves"
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_slaves>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**

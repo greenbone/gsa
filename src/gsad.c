@@ -199,6 +199,7 @@ init_validator ()
                          "|(create_note)"
                          "|(create_override)"
                          "|(create_schedule)"
+                         "|(create_slave)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(create_user)"
@@ -211,6 +212,7 @@ init_validator ()
                          "|(delete_report)"
                          "|(delete_report_format)"
                          "|(delete_schedule)"
+                         "|(delete_slave)"
                          "|(delete_target)"
                          "|(delete_task)"
                          "|(delete_user)"
@@ -247,6 +249,8 @@ init_validator ()
                          "|(get_settings)"
                          "|(get_schedule)"
                          "|(get_schedules)"
+                         "|(get_slave)"
+                         "|(get_slaves)"
                          "|(get_system_reports)"
                          "|(get_target)"
                          "|(get_targets)"
@@ -336,6 +340,7 @@ init_validator ()
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
@@ -584,6 +589,7 @@ struct gsad_connection_info
     char *xml_file;      ///< Value of "xml_file" parameter.
     char *role;          ///< Value of "role" parameter.
     char *submit;        ///< Value of "submit" parameter.
+    char *host;          ///< Value of "host" parameter.
     char *hosts;         ///< Value of "hosts" parameter.
     char *hosts_allow;   ///< Value of "hosts_allow" parameter.
     char *login;         ///< Value of "login" parameter.
@@ -794,6 +800,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.xml_file);
   free (con_info->req_parms.role);
   free (con_info->req_parms.submit);
+  free (con_info->req_parms.host);
   free (con_info->req_parms.hosts);
   free (con_info->req_parms.hosts_allow);
   free (con_info->req_parms.login);
@@ -1118,6 +1125,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "family"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.family);
+      if (!strcmp (key, "host"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.host);
       if (!strcmp (key, "hosts"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.hosts);
@@ -1796,7 +1806,7 @@ exec_omp_post (credentials_t * credentials,
       if (con_info->req_parms.slave_id
           && strcmp (con_info->req_parms.slave_id, "--")
           && openvas_validate (validator,
-                               "target_id",
+                               "slave_id",
                                con_info->req_parms.slave_id))
         {
           free (con_info->req_parms.slave_id);
@@ -1870,6 +1880,23 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.period_unit,
                              con_info->req_parms.duration,
                              con_info->req_parms.duration_unit);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_slave"))
+    {
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "host", &con_info->req_parms.host);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "login", &con_info->req_parms.login);
+      validate (validator, "password", &con_info->req_parms.password);
+      con_info->response =
+        create_slave_omp (credentials,
+                          con_info->req_parms.name,
+                          con_info->req_parms.comment,
+                          con_info->req_parms.host,
+                          con_info->req_parms.port,
+                          con_info->req_parms.login,
+                          con_info->req_parms.password);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
@@ -2353,6 +2380,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *duration     = NULL;
   const char *lsc_credential_id = NULL;
   const char *schedule_id  = NULL;
+  const char *slave_id   = NULL;
   const char *target_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
   credentials_t *credentials = NULL;
@@ -2570,6 +2598,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                        "lsc_credential_id");
       if (openvas_validate (validator, "lsc_credential_id", lsc_credential_id))
         lsc_credential_id = NULL;
+
+      slave_id = MHD_lookup_connection_value (connection,
+                                              MHD_GET_ARGUMENT_KIND,
+                                              "slave_id");
+      if (openvas_validate (validator, "slave_id", slave_id))
+        slave_id = NULL;
 
       target_id = MHD_lookup_connection_value (connection,
                                                MHD_GET_ARGUMENT_KIND,
@@ -2955,6 +2989,9 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_schedule"))
            && (schedule_id != NULL))
     return delete_schedule_omp (credentials, schedule_id);
+
+  else if ((!strcmp (cmd, "delete_slave")) && (slave_id != NULL))
+    return delete_slave_omp (credentials, slave_id);
 
   else if ((!strcmp (cmd, "delete_user")) && (name != NULL))
     return delete_user_oap (credentials, name);
@@ -3342,6 +3379,12 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "get_schedules"))
     return get_schedules_omp (credentials, sort_field, sort_order);
+
+  else if ((!strcmp (cmd, "get_slave")) && (slave_id != NULL))
+    return get_slave_omp (credentials, slave_id, sort_field, sort_order);
+
+  else if (!strcmp (cmd, "get_slaves"))
+    return get_slaves_omp (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "get_system_reports")))
     return get_system_reports_omp (credentials,

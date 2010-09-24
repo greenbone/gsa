@@ -206,6 +206,13 @@ char * save_override_omp (credentials_t *, const char *, const char *,
                           const char *, const char *, const char *,
                           const char *, const char *);
 
+char * get_slave_omp (credentials_t *, const char *, const char *,
+                      const char *);
+char * get_slaves_omp (credentials_t *, const char *, const char *);
+char * create_slave_omp (credentials_t *, const char *, const char *,
+                         const char *, const char*, const char*, const char*);
+char * delete_slave_omp (credentials_t *, const char *);
+
 char * get_system_reports_omp (credentials_t *, const char *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,
                               enum content_type*, char **, gsize *);

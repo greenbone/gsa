@@ -1173,6 +1173,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
+<xsl:template match="slave" mode="newtask">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
 <xsl:template name="status_bar">
   <xsl:param name="status">(Unknown)</xsl:param>
   <xsl:param name="progress">(Unknown)</xsl:param>
@@ -5630,6 +5634,275 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END SCHEDULES MANAGEMENT -->
 
+<!-- BEGIN SLAVES MANAGEMENT -->
+
+<xsl:template name="html-create-slave-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Slave
+      <a href="/help/configure_slaves.html#newslave"
+         title="Help: Configure Slaves (New Slave)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="create_slave"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name
+            </td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Host</td>
+            <td>
+              <input type="text" name="host" value="localhost" size="30"
+                      maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Port</td>
+            <td>
+              <input type="text" name="port" value="9390" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Login</td>
+            <td>
+              <input type="text" name="login" value="" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Password</td>
+            <td>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Slave"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-slaves-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Slaves
+      <a href="/help/configure_slaves.html#slaves"
+         title="Help: Configure Slaves (Slaves)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Host</td>
+            <td>Port</td>
+            <td>Login</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="slave"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     CREATE_SLAVE_RESPONSE -->
+
+<xsl:template match="create_slave_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Slave</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_SLAVE_RESPONSE -->
+
+<xsl:template match="delete_slave_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Slave
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     SLAVE -->
+
+<xsl:template match="slave">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="host"/></td>
+    <td><xsl:value-of select="port"/></td>
+    <td><xsl:value-of select="login"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_slave&amp;slave_id={@id}"
+             title="Delete Slave" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_slave&amp;slave_id={@id}"
+         title="Slave Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="slave" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Slave Details
+       <a href="/help/configure_slaves.html#slavedetails"
+         title="Help: Configure Slaves (Slave Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_slaves">Back to Slaves</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Host:</td>
+          <td><xsl:value-of select="host"/></td>
+        </tr>
+        <tr>
+          <td>Port:</td>
+          <td><xsl:value-of select="port"/></td>
+        </tr>
+        <tr>
+          <td>Login:</td>
+          <td><xsl:value-of select="login"/></td>
+        </tr>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count(tasks/task) = 0">
+          <h1>Tasks using this Slave: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks using this Slave</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="tasks/task">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_SLAVE -->
+
+<xsl:template match="get_slave">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_slave_response"/>
+  <xsl:apply-templates select="get_slaves_response/slave" mode="details"/>
+</xsl:template>
+
+<!--     GET_SLAVES -->
+
+<xsl:template match="get_slaves">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_slave_response"/>
+  <xsl:apply-templates select="create_slave_response"/>
+  <xsl:call-template name="html-create-slave-form"/>
+  <!-- The for-each makes the get_slaves_response the current node. -->
+  <xsl:for-each select="get_slaves_response | commands_response/get_slaves_response">
+    <xsl:call-template name="html-slaves-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END SLAVES MANAGEMENT -->
+
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
@@ -8115,7 +8388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <select name="slave_id">
               <option value="--">--</option>
-              <xsl:apply-templates select="get_targets_response/target"
+              <xsl:apply-templates select="get_slaves_response/slave"
                                    mode="newtask"/>
             </select>
           </td>
