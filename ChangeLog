@@ -1,6 +1,19 @@
 2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/src/omp.xsl
+	Add slave to task editing.
+
+	* src/gsad.c (exec_omp_get): Pass slave ID to save_task_omp.
+
+	* src/gsad_omp.c (edit_task): Get slaves too.
+	(save_task_omp): Add slave arg.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/src/omp.xsl (html-edit-task-form): Add slave field.
+
+2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/src/omp.xsl (html-report-table): Add slave to Task Summary.
 
 2010-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
 

@@ -1717,6 +1717,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td>Slave (optional)</td>
+            <td>
+              <select name="slave_id">
+                <xsl:variable name="slave_id">
+                  <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="string-length ($slave_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="commands_response/get_slaves_response/slave">
+                  <xsl:choose>
+                    <xsl:when test="@id = $slave_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save Task"/>
             </td>

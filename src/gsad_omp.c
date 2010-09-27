@@ -645,6 +645,7 @@ edit_task (credentials_t * credentials, const char *task_id,
                             "<get_schedules"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
+                            "<get_slaves/>"
                             "</commands>",
                             task_id)
       == -1)
@@ -731,6 +732,7 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  comment           New comment for task.
  * @param[in]  escalator_id      New escalator for task.
  * @param[in]  schedule_id       New schedule for task.
+ * @param[in]  slave_id          New slave for task.
  * @param[in]  next              Name of next page.
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
  * @param[in]  sort_field        Field to sort on, or NULL.
@@ -742,7 +744,8 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
 char *
 save_task_omp (credentials_t * credentials, const char *task_id,
                const char *name, const char *comment, const char *escalator_id,
-               const char *schedule_id, const char *next,
+               const char *schedule_id, const char *slave_id,
+               const char *next,
                /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
                const char *sort_order, int apply_overrides)
@@ -755,8 +758,9 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                       refresh_interval, sort_field, sort_order,
                       apply_overrides);
 
-  if (escalator_id == NULL || schedule_id == NULL || next == NULL
-      || sort_field == NULL || sort_order == NULL || task_id == NULL)
+  if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
+      || next == NULL || sort_field == NULL || sort_order == NULL
+      || task_id == NULL)
     return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
                          "The task remains the same. "
@@ -768,12 +772,14 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                                  "<comment>%s</comment>"
                                  "<escalator id=\"%s\"/>"
                                  "<schedule id=\"%s\"/>"
+                                 "<slave id=\"%s\"/>"
                                  "</modify_task>",
                                  task_id,
                                  name,
                                  comment,
                                  escalator_id,
-                                 schedule_id);
+                                 schedule_id,
+                                 slave_id);
 
   if (strcmp (next, "get_tasks") == 0)
     {

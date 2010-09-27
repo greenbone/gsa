@@ -3647,7 +3647,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && ((strcmp (next, "get_tasks") == 0)
                || (strcmp (next, "get_task") == 0)))
     return save_task_omp (credentials, task_id, name, comment, escalator_id,
-                          schedule_id, next, refresh_interval,
+                          schedule_id, slave_id, next, refresh_interval,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
 
