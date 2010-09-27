@@ -1,5 +1,10 @@
 2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_escalator_omp, delete_escalator_omp)
+	(test_escalator_omp): Also get the report formats.
+
+2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_escalator_omp): Also get report formats.
 
 	* src/html/src/omp.xsl (escalator [details]): Give email case same

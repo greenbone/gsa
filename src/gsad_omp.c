@@ -2308,7 +2308,35 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalators. "
+                           "An internal error occurred while creating a new escalator. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  /* Get report formats. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_report_formats"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalator. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_escalators");
@@ -2351,6 +2379,9 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
                             "<commands>"
                             "<delete_escalator escalator_id=\"%s\"/>"
                             "<get_escalators"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "<get_report_formats"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
@@ -2634,6 +2665,34 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return ret;
+    }
+
+  /* Get report formats. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_report_formats"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalator. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new escalator. "
+                           "A new escalator was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_escalators");
     }
 
   /* Cleanup, and return transformed XML. */
