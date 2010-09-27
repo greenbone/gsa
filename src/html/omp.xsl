@@ -959,6 +959,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Slave:</td>
+          <td>
+            <a href="/omp?cmd=get_slave&amp;slave_id={task/slave/@id}">
+              <xsl:value-of select="task/slave/name"/>
+            </a>
+          </td>
+        </tr>
+        <tr>
           <td>Status:</td>
           <td>
             <xsl:call-template name="status_bar">
