@@ -2908,11 +2908,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </tr>
                   <tr>
                     <td width="45"></td>
-                    <td>Format:</td>
+                    <td>Content:</td>
                     <td>
                       <xsl:choose>
                         <xsl:when test="method/data[name='notice']/text() = '0'">
-                          Summary (can include vulnerability details)
+                          Include report
+                          <xsl:variable name="id"
+                                        select="method/data[name='notice_report_format']/text()"/>
+                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
                         <xsl:otherwise>
                           Simple notice

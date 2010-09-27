@@ -2440,6 +2440,30 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
                            "/omp?cmd=get_escalators");
     }
 
+  /* Get the report formats. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_report_formats/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting an escalator. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting an escalator. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_escalator>");
