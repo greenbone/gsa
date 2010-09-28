@@ -1,3 +1,22 @@
+2010-09-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a slave option to the Performance page.
+
+	* src/gsad.c (exec_omp_get): Pass slave ID to get_system_reports_omp.
+	(request_handler): Pass slave ID to get_system_report_omp.
+
+	* src/gsad_omp.c (get_system_reports_omp): Add slave ID arg.  Also get
+	slaves.
+	(get_system_report_omp): Add slave ID arg.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add slave_id to performance
+	URL.
+
+	* src/html/omp.xsl (system_report): Add slave_id to system report IMG.
+	(get_system_reports_response): Add slave field.
+
 2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_escalator_omp, delete_escalator_omp)

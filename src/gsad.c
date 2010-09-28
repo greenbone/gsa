@@ -3386,10 +3386,12 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_slaves"))
     return get_slaves_omp (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "get_system_reports")))
+  else if ((!strcmp (cmd, "get_system_reports"))
+           && (slave_id != NULL))
     return get_system_reports_omp (credentials,
-                                   (duration == NULL || (*duration == '\0'))
-                                    ? "0" : duration);
+                                   ((duration == NULL || (*duration == '\0'))
+                                     ? "0" : duration),
+                                   slave_id);
 
   else if ((!strcmp (cmd, "get_target")) && (target_id != NULL))
     return get_target_omp (credentials, target_id, sort_field, sort_order);
@@ -4280,7 +4282,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                          it is a const str */
         {
           gsize res_len;
-          const char *duration;
+          const char *duration, *slave_id;
 
           duration = MHD_lookup_connection_value (connection,
                                                   MHD_GET_ARGUMENT_KIND,
@@ -4288,9 +4290,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
           if (openvas_validate (validator, "duration", duration))
             duration = NULL;
 
+          slave_id = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "slave_id");
+          if (slave_id && openvas_validate (validator, "slave_id", slave_id))
+            return MHD_NO;
+
           res = get_system_report_omp (credentials,
                                        &url[0] + strlen ("/system_report/"),
                                        duration,
+                                       slave_id,
                                        &content_type,
                                        &content_disposition,
                                        &res_len);

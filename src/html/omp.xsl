@@ -8230,7 +8230,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
   <tr>
     <td>
-      <img src="/system_report/{name}/report.png?duration={../../duration}"/>
+      <img src="/system_report/{name}/report.png?duration={../../duration}&amp;slave_id={../../slave/@id}"/>
     </td>
   </tr>
 </xsl:template>
@@ -8297,6 +8297,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <a href="/omp?cmd=get_system_reports&amp;duration={31536000}">year</a>
               </xsl:otherwise>
             </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Reports for slave:
+          </td>
+          <td>
+            <div id="small_form" style="float:left;">
+              <form action="" method="get">
+                <input type="hidden" name="cmd" value="get_system_reports"/>
+                <input type="hidden" name="duration" value="{$duration}"/>
+                <select name="slave_id">
+                  <xsl:variable name="slave_id">
+                    <xsl:value-of select="../slave/@id"/>
+                  </xsl:variable>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($slave_id) &gt; 0">
+                      <option value="0">--</option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="0" selected="1">--</option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:for-each select="../get_slaves_response/slave">
+                    <xsl:choose>
+                      <xsl:when test="@id = $slave_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <input type="image"
+                       name="Update"
+                       src="/img/refresh.png"
+                       alt="Update" style="margin-left:3px;margin-right:3px;"/>
+              </form>
+            </div>
           </td>
         </tr>
       </table>

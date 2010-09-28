@@ -7862,12 +7862,14 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
  * @brief Get all system reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]   duration    Duration of reports, in seconds.
+ * @param[in]  duration     Duration of reports, in seconds.
+ * @param[in]  slave_id     ID of slave.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (credentials_t * credentials, const char * duration)
+get_system_reports_omp (credentials_t * credentials, const char * duration,
+                        const char * slave_id)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7881,13 +7883,45 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
                          "/omp?cmd=get_tasks");
 
   xml = g_string_new ("<get_system_reports>");
-  g_string_append_printf (xml, "<duration>%s</duration>",
-                          duration ? duration : "86400");
+  g_string_append_printf (xml,
+                          "<duration>%s</duration>"
+                          "<slave id=\"%s\"/>",
+                          duration ? duration : "86400",
+                          slave_id ? slave_id : "0");
 
   /* Get the system reports. */
 
   if (openvas_server_sendf (&session,
-                            "<get_system_reports brief=\"1\"/>")
+                            "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
+                            slave_id ? slave_id : "0")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the system reports. "
+                           "The current list of system reports is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the system reports. "
+                           "The current list of system reports is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Get the slaves. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_slaves"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -7923,6 +7957,7 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
  * @param[in]   credentials          Credentials of user issuing the action.
  * @param[in]   url                  URL of report image.
  * @param[in]   duration             Duration of report, in seconds.
+ * @param[in]   slave_id             ID of slave.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
@@ -7931,7 +7966,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration)
  */
 char *
 get_system_report_omp (credentials_t *credentials, const char *url,
-                       const char *duration, enum content_type *content_type,
+                       const char *duration, const char *slave_id,
+                       enum content_type *content_type,
                        char **content_disposition, gsize *content_length)
 {
   entity_t entity;
@@ -7953,9 +7989,12 @@ get_system_report_omp (credentials_t *credentials, const char *url,
 
       if (openvas_server_sendf (&session,
                                 "<get_system_reports"
-                                " name=\"%s\" duration=\"%s\"/>",
+                                " name=\"%s\""
+                                " duration=\"%s\""
+                                " slave_id=\"%s\"/>",
                                 name,
-                                duration ? duration : "86400")
+                                duration ? duration : "86400",
+                                slave_id ? slave_id : "0")
           == -1)
         {
           openvas_server_close (socket, session);
