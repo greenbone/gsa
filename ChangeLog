@@ -1,5 +1,17 @@
 2010-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add editing of report format active flag.
+
+	* src/gsad.c (exec_omp_post): Pass enable param to save_report_format_omp.
+
+	* src/gsad_omp.c (save_report_format_omp): Add active arg.  Save active flag.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-edit-report-format-form): Add active radio.
+
+2010-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add simple editing of report format params.
 
 	* src/gsad.c (struct gsad_connection_info, free_resources)

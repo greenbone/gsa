@@ -7548,6 +7548,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_report_formats_response/report_format/summary}"/>
             </td>
           </tr>
+          <tr>
+            <td valign="top">Active</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
+                  <input type="radio" name="enable" value="1" checked="1"/>
+                  yes
+                  <input type="radio" name="enable" value="0"/>
+                  no
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="enable" value="1"/>
+                  yes
+                  <input type="radio" name="enable" value="0" checked="1"/>
+                  no
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
           <xsl:for-each select="commands_response/get_report_formats_response/report_format">
             <tr>
               <td valign="top" colspan="2">

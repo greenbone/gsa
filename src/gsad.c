@@ -2287,12 +2287,14 @@ exec_omp_post (credentials_t * credentials,
                 &con_info->req_parms.report_format_id);
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "enable", &con_info->req_parms.enable);
       validate (validator, "page", &con_info->req_parms.next);
       con_info->response =
         save_report_format_omp (credentials,
                                 con_info->req_parms.report_format_id,
                                 con_info->req_parms.name,
                                 con_info->req_parms.comment,
+                                con_info->req_parms.enable,
                                 con_info->req_parms.preferences,
                                 con_info->req_parms.next,
                                 con_info->req_parms.sort_field,

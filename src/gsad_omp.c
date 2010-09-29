@@ -8545,6 +8545,7 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
  * @param[in]  report_format_id  ID of report format.
  * @param[in]  name              New name for report format.
  * @param[in]  summary           New summary for report format.
+ * @param[in]  active            Whether the report format is active.
  * @param[in]  params            New params for report format.
  * @param[in]  next              Name of next page.
  * @param[in]  sort_field        Field to sort on, or NULL.
@@ -8555,8 +8556,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
 char *
 save_report_format_omp (credentials_t * credentials,
                         const char *report_format_id, const char *name,
-                        const char *summary, GArray *params,
-                        const char *next,
+                        const char *summary, const char *active,
+                        GArray *params, const char *next,
                         /* Parameters for get_report_formats. */
                         const char *sort_field, const char *sort_order)
 {
@@ -8645,10 +8646,12 @@ save_report_format_omp (credentials_t * credentials,
                                    " report_format_id=\"%s\">"
                                    "<name>%s</name>"
                                    "<summary>%s</summary>"
+                                   "<active>%s</active>"
                                    "</modify_report_format>",
                                    report_format_id,
                                    name,
-                                   summary);
+                                   summary,
+                                   active);
 
   if (strcmp (next, "get_report_formats") == 0)
     {
