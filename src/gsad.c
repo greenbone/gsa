@@ -576,6 +576,7 @@ struct gsad_connection_info
     char *lsc_credential_id; ///< Value of "lsc_credential_id" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
+    char *next;          ///< Value of "next" parameter.
     char *schedule_id;   ///< Value of "schedule_id" parameter.
     char *slave_id;      ///< Value of "slave_id" parameter.
     char *sort_field;    ///< Value of "sort_field" parameter.
@@ -607,6 +608,7 @@ struct gsad_connection_info
     char *text;          ///< Value of "text" parameter.
     char *task_id;       ///< Value of "task_id" parameter.
     char *result_id;     ///< Value of "result_id" parameter.
+    char *report_format_id;     ///< Value of "report_format_id" parameter.
     char *report_id;     ///< Value of "report_id" parameter.
     char *first_result;  ///< Value of "first_result" parameter.
     char *max_results;   ///< Value of "max_results" parameter.
@@ -794,6 +796,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
+  free (con_info->req_parms.next);
   free (con_info->req_parms.schedule_id);
   free (con_info->req_parms.slave_id);
   free (con_info->req_parms.target_id);
@@ -818,6 +821,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.text);
   free (con_info->req_parms.task_id);
   free (con_info->req_parms.result_id);
+  free (con_info->req_parms.report_format_id);
   free (con_info->req_parms.report_id);
   free (con_info->req_parms.first_result);
   free (con_info->req_parms.max_results);
@@ -1113,6 +1117,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "login"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.login);
+      if (!strcmp (key, "next"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.next);
       if (!strcmp (key, "period"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.period);
@@ -1179,6 +1186,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "result_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.result_id);
+      if (!strcmp (key, "report_format_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.report_format_id);
       if (!strcmp (key, "report_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.report_id);
@@ -2270,6 +2280,23 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.files,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
+    {
+      validate (validator, "report_format_id",
+                &con_info->req_parms.report_format_id);
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "page", &con_info->req_parms.next);
+      con_info->response =
+        save_report_format_omp (credentials,
+                                con_info->req_parms.report_format_id,
+                                con_info->req_parms.name,
+                                con_info->req_parms.comment,
+                                con_info->req_parms.preferences,
+                                con_info->req_parms.next,
+                                con_info->req_parms.sort_field,
+                                con_info->req_parms.sort_order);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_settings"))
     {
@@ -3634,14 +3661,6 @@ exec_omp_get (struct MHD_Connection *connection,
                                 NULL, NULL, NULL, NULL, overrides, NULL, NULL,
                                 NULL, NULL, task_id);
     }
-
-  else if ((!strcmp (cmd, "save_report_format"))
-           && (report_format_id != NULL)
-           && (next != NULL)
-           && ((strcmp (next, "get_report_formats") == 0)
-               || (strcmp (next, "get_report_format") == 0)))
-    return save_report_format_omp (credentials, report_format_id, name, comment,
-                                   next, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "save_task"))
            && (task_id != NULL)

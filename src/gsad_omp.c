@@ -247,6 +247,63 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
   return NULL;
 }
 
+/**
+ * @brief Check a modify_report_format response.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  session      Session with manager.
+ * @param[in]  function     Function for error message.
+ * @param[in]  line         Line number for error message.
+ *
+ * @return XSL transformed error message on failure, NULL on success.
+ */
+static char *
+check_modify_report_format (credentials_t *credentials, gnutls_session_t *session,
+                            const char *function, int line)
+{
+  entity_t entity;
+  const char *status_text;
+
+  /** @todo This would be much easier with real error codes. */
+
+  /* Read the response. */
+
+  if (read_entity (session, &entity))
+    {
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a report format. "
+                           "It is unclear whether the entire report format has been saved. "
+                           "Diagnostics: Failure to read command to manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  /* Check the response. */
+
+  status_text = entity_attribute (entity, "status_text");
+  if (status_text == NULL)
+    {
+      free_entity (entity);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a report format. "
+                           "It is unclear whether the entire report format has been saved. "
+                           "Diagnostics: Failure to parse status_text from response.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  if (strcmp (status_text, "OK"))
+    {
+      free_entity (entity);
+      /** @todo Put in XML for "result of previous..." window. */
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a report format. "
+                           "It is unclear whether the entire report format has been saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_report_formats");
+    }
+
+  return NULL;
+}
+
 
 /* Page handlers. */
 
@@ -8322,7 +8379,10 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<get_report_formats report_format_id=\"%s\" details=\"1\" />"
+                            "<get_report_formats"
+                            " report_format_id=\"%s\""
+                            " params=\"1\""
+                            " details=\"1\" />"
                             "</commands>",
                             report_format_id)
       == -1)
@@ -8485,6 +8545,7 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
  * @param[in]  report_format_id  ID of report format.
  * @param[in]  name              New name for report format.
  * @param[in]  summary           New summary for report format.
+ * @param[in]  params            New params for report format.
  * @param[in]  next              Name of next page.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
@@ -8492,12 +8553,17 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
  * @return Result of XSL transformation.
  */
 char *
-save_report_format_omp (credentials_t * credentials, const char *report_format_id,
-                        const char *name, const char *summary, const char *next,
+save_report_format_omp (credentials_t * credentials,
+                        const char *report_format_id, const char *name,
+                        const char *summary, GArray *params,
+                        const char *next,
                         /* Parameters for get_report_formats. */
                         const char *sort_field, const char *sort_order)
 {
+  preference_t *param;
   gchar *modify_format;
+  int index, socket;
+  gnutls_session_t session;
 
   if (summary == NULL || name == NULL)
     return edit_report_format (credentials, report_format_id,
@@ -8512,6 +8578,68 @@ save_report_format_omp (credentials_t * credentials, const char *report_format_i
                          "The report format remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_report_formats");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a report format. "
+                         "The report format remains the same. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_report_formats");
+
+  index = 0;
+  while ((param = g_array_index (params,
+                                 preference_t*,
+                                 index++)))
+    {
+      int type_start, type_end, count;
+      /* LDAPsearch[entry]:Timeout value */
+      count = sscanf (param->name,
+                      "%*[^[][%n%*[^]]%n]:",
+                      &type_start,
+                      &type_end);
+      if (count == 0 && type_start > 0 && type_end > 0)
+        {
+          gchar *value;
+          char *check_ret;
+
+          value = param->value_size
+                  ? g_base64_encode ((guchar *) param->value,
+                                     param->value_size)
+                  : g_strdup ("");
+
+          if (openvas_server_sendf (&session,
+                                    "<modify_report_format"
+                                    " report_format_id=\"%s\">"
+                                    "<param>"
+                                    "<name>%s</name>"
+                                    "<value>%s</value>"
+                                    "</param>"
+                                    "</modify_report_format>",
+                                    report_format_id,
+                                    param->name + type_end + 2,
+                                    value)
+              == -1)
+            {
+              g_free (value);
+              openvas_server_close (socket, session);
+              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while saving a report format. "
+                                   "It is unclear whether the entire report format has been saved. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_report_formats");
+            }
+          g_free (value);
+
+          check_ret = check_modify_report_format (credentials, &session,
+                                                  __FUNCTION__, __LINE__);
+          if (check_ret)
+            {
+              openvas_server_close (socket, session);
+              return check_ret;
+            }
+        }
+    }
+  openvas_server_close (socket, session);
 
   modify_format = g_strdup_printf ("<modify_report_format"
                                    " report_format_id=\"%s\">"
@@ -8541,7 +8669,7 @@ save_report_format_omp (credentials_t * credentials, const char *report_format_i
   g_free (modify_format);
   return gsad_message ("Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while saving a report format. "
-                       "The report format remains the same. "
+                       "It is unclear whether the entire report format has been saved. "
                        "Diagnostics: Error in parameter next.",
                        "/omp?cmd=get_report_formats");
 }

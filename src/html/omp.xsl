@@ -7522,7 +7522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="get">
+      <form action="" method="post">
         <input type="hidden" name="cmd" value="save_report_format"/>
         <input type="hidden"
                name="report_format_id"
@@ -7548,6 +7548,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_report_formats_response/report_format/summary}"/>
             </td>
           </tr>
+          <xsl:for-each select="commands_response/get_report_formats_response/report_format">
+            <tr>
+              <td valign="top" colspan="2">
+                <xsl:choose>
+                  <xsl:when test="count(param) = 0">
+                    <h1>Parameters: None</h1>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <h1>Parameters:</h1>
+                    <xsl:call-template name="param-edit"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:for-each>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save Report Format"/>
@@ -7653,6 +7668,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template name="param-edit" match="params" mode="edit">
+  <div>
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Value</td>
+      </tr>
+      <xsl:for-each select="param">
+        <xsl:variable name="class">
+          <xsl:choose>
+            <xsl:when test="position() mod 2 = 0">even</xsl:when>
+            <xsl:otherwise>odd</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <tr class="{$class}">
+          <td>
+            <xsl:value-of select="name"/>
+          </td>
+          <td>
+            <input type="text" name="preference:nvt[string]:{name}" value="{value}" size="30"
+                   maxlength="80"/>
+          </td>
+        </tr>
+      </xsl:for-each>
+    </table>
+  </div>
 </xsl:template>
 
 <xsl:template name="param-details" match="params" mode="details">
