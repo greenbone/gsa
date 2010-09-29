@@ -7432,7 +7432,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Extension</td>
             <td>Content Type</td>
-            <td>Trust</td>
+            <td>Trust (last verified)</td>
             <td>Active</td>
             <td width="100">Actions</td>
           </tr>

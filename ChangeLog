@@ -1,5 +1,10 @@
 2010-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-formats-table): Add "(last verified)" to
+	trust heading.
+
+2010-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add editing of report format active flag.
 
 	* src/gsad.c (exec_omp_post): Pass enable param to save_report_format_omp.
