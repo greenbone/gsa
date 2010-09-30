@@ -1,3 +1,8 @@
+2010-09-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (param-edit): Make input field match param type.
+	(param-details): Make value column match param type.
+
 2010-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-formats-table): Add "(last verified)" to

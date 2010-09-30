@@ -7708,8 +7708,56 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="name"/>
           </td>
           <td>
-            <input type="text" name="preference:nvt[string]:{name}" value="{value}" size="30"
-                   maxlength="80"/>
+            <xsl:choose>
+              <xsl:when test="type/text() = 'selection'">
+                <select name="preference:nvt[selection]:{name}">
+                  <xsl:variable name="value">
+                    <xsl:value-of select="value"/>
+                  </xsl:variable>
+                  <xsl:for-each select="options/option">
+                    <xsl:choose>
+                      <xsl:when test=". = $value">
+                        <option value="{.}" selected="1"><xsl:value-of select="."/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{.}"><xsl:value-of select="."/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+              </xsl:when>
+              <xsl:when test="type/text() = 'boolean'">
+                <xsl:choose>
+                  <xsl:when test="value='0'">
+                    <input type="radio" name="preference:nvt[radio]:{name}" value="1"/>
+                    yes
+                    <input type="radio" name="preference:nvt[radio]:{name}" value="0" checked="1"/>
+                    no
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="preference:nvt[radio]:{name}" value="1" checked="1"/>
+                    yes
+                    <input type="radio" name="preference:nvt[radio]:{name}" value="0"/>
+                    no
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:when test="type/text() = 'integer'">
+                <input type="text" name="preference:nvt[string]:{name}" value="{value}" size="30"
+                       maxlength="80"/>
+              </xsl:when>
+              <xsl:when test="type/text() = 'string'">
+                <input type="text" name="preference:nvt[string]:{name}" value="{value}" size="30"
+                       maxlength="80"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- Presume type "text". -->
+                <textarea name="preference:nvt[string]:{name}" value="{value}" rows="5"
+                          cols="80">
+                  <xsl:value-of select="value"/>
+                </textarea>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </xsl:for-each>
@@ -7734,7 +7782,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:variable>
         <tr class="{$class}">
           <td><xsl:value-of select="name"/></td>
-          <td><xsl:value-of select="value"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="type/text() = 'selection'">
+                <xsl:value-of select="value"/>
+              </xsl:when>
+              <xsl:when test="type/text() = 'boolean'">
+                <xsl:choose>
+                  <xsl:when test="value='0'">
+                    no
+                  </xsl:when>
+                  <xsl:otherwise>
+                    yes
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:when test="type/text() = 'integer'">
+                <xsl:value-of select="value"/>
+              </xsl:when>
+              <xsl:when test="type/text() = 'string'">
+                <xsl:value-of select="value"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- Presume type "text". -->
+                <pre><xsl:value-of select="value"/></pre>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
           <td></td>
         </tr>
       </xsl:for-each>
