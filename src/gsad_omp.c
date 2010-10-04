@@ -8588,58 +8588,59 @@ save_report_format_omp (credentials_t * credentials,
                          "/omp?cmd=get_report_formats");
 
   index = 0;
-  while ((param = g_array_index (params,
-                                 preference_t*,
-                                 index++)))
-    {
-      int type_start, type_end, count;
-      /* LDAPsearch[entry]:Timeout value */
-      count = sscanf (param->name,
-                      "%*[^[][%n%*[^]]%n]:",
-                      &type_start,
-                      &type_end);
-      if (count == 0 && type_start > 0 && type_end > 0)
-        {
-          gchar *value;
-          char *check_ret;
+  if (params)
+    while ((param = g_array_index (params,
+                                   preference_t*,
+                                   index++)))
+      {
+        int type_start, type_end, count;
+        /* LDAPsearch[entry]:Timeout value */
+        count = sscanf (param->name,
+                        "%*[^[][%n%*[^]]%n]:",
+                        &type_start,
+                        &type_end);
+        if (count == 0 && type_start > 0 && type_end > 0)
+          {
+            gchar *value;
+            char *check_ret;
 
-          value = param->value_size
-                  ? g_base64_encode ((guchar *) param->value,
-                                     param->value_size)
-                  : g_strdup ("");
+            value = param->value_size
+                    ? g_base64_encode ((guchar *) param->value,
+                                       param->value_size)
+                    : g_strdup ("");
 
-          if (openvas_server_sendf (&session,
-                                    "<modify_report_format"
-                                    " report_format_id=\"%s\">"
-                                    "<param>"
-                                    "<name>%s</name>"
-                                    "<value>%s</value>"
-                                    "</param>"
-                                    "</modify_report_format>",
-                                    report_format_id,
-                                    param->name + type_end + 2,
-                                    value)
-              == -1)
-            {
-              g_free (value);
-              openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while saving a report format. "
-                                   "It is unclear whether the entire report format has been saved. "
-                                   "Diagnostics: Failure to send command to manager daemon.",
-                                   "/omp?cmd=get_report_formats");
-            }
-          g_free (value);
+            if (openvas_server_sendf (&session,
+                                      "<modify_report_format"
+                                      " report_format_id=\"%s\">"
+                                      "<param>"
+                                      "<name>%s</name>"
+                                      "<value>%s</value>"
+                                      "</param>"
+                                      "</modify_report_format>",
+                                      report_format_id,
+                                      param->name + type_end + 2,
+                                      value)
+                == -1)
+              {
+                g_free (value);
+                openvas_server_close (socket, session);
+                return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                                     "An internal error occurred while saving a report format. "
+                                     "It is unclear whether the entire report format has been saved. "
+                                     "Diagnostics: Failure to send command to manager daemon.",
+                                     "/omp?cmd=get_report_formats");
+              }
+            g_free (value);
 
-          check_ret = check_modify_report_format (credentials, &session,
-                                                  __FUNCTION__, __LINE__);
-          if (check_ret)
-            {
-              openvas_server_close (socket, session);
-              return check_ret;
-            }
-        }
-    }
+            check_ret = check_modify_report_format (credentials, &session,
+                                                    __FUNCTION__, __LINE__);
+            if (check_ret)
+              {
+                openvas_server_close (socket, session);
+                return check_ret;
+              }
+          }
+      }
   openvas_server_close (socket, session);
 
   modify_format = g_strdup_printf ("<modify_report_format"
