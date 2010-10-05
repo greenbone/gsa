@@ -290,6 +290,14 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
                            "/omp?cmd=get_report_formats");
     }
 
+  if (strcmp (status_text, "Parameter validation failed") == 0)
+    {
+      GString *xml;
+      free_entity (entity);
+      xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Save Report Format"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
   if (strcmp (status_text, "OK"))
     {
       free_entity (entity);

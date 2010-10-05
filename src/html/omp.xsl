@@ -7747,8 +7747,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        maxlength="80"/>
               </xsl:when>
               <xsl:when test="type/text() = 'string'">
-                <input type="text" name="preference:nvt[string]:{name}" value="{value}" size="30"
-                       maxlength="80"/>
+                <xsl:choose>
+                  <xsl:when test="string-length (type/max) &gt; 0">
+                    <input type="text" name="preference:nvt[string]:{name}" value="{value}"
+                           size="30" maxlength="{type/max}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="preference:nvt[string]:{name}" value="{value}"
+                           size="30"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 <!-- Presume type "text". -->

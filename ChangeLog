@@ -1,3 +1,10 @@
+2010-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (check_modify_report_format): Add validation error check.
+
+	* src/html/omp.xsl (param-edit): Set text input size according to param
+	type.
+
 2010-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_report_format_omp): Add NULL gaurd around param
