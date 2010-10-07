@@ -1,3 +1,13 @@
+2010-10-07  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Allow & in LSC passwords; adapted from commit for r9175 by Matthew
+	Mundell.
+
+	* src/gsad.c (init_validator): Add & to lsc_password.
+
+	* src/gsad_omp.c (openvas_server_sendf_xml): New.
+	(create_lsc_credential_omp): Send with openvas_server_sendf_xml.
+
 2010-09-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backporting patch r9022 from trunk by Matthew Mundell.
