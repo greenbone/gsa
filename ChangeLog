@@ -1,5 +1,9 @@
 2010-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (edit_lsc_credential, edit_report_format): Doc next arg.
+
+2010-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/src/omp.xsl (html-edit-lsc-credential-form): Replace login
 	with credential_login.
 

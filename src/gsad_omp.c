@@ -1910,6 +1910,7 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  lsc_credential_id  UUID of lsc_credential.
+ * @param[in]  next              Name of next page.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
  *
@@ -8737,6 +8738,7 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  report_format_id  UUID of report_format.
+ * @param[in]  next              Name of next page.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
  *
