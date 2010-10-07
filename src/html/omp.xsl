@@ -2163,12 +2163,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
-                  <input type="text" name="login_off" size="30" maxlength="400"
+                  <input type="text" name="credential_login_off" size="30" maxlength="400"
                          disabled="1"
                          value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="text" name="login" size="30" maxlength="400"
+                  <input type="text" name="credential_login" size="30" maxlength="400"
                          value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
                 </xsl:otherwise>
               </xsl:choose>

@@ -387,8 +387,8 @@ init_validator ()
  *
  * @param[in]      validator       Validator to use.
  * @param[in]      validator_rule  The rule with which to validate \p string.
- * @param[in,out]  string          The string to validate. If invalid, memory
- *                                 location pointed to  will be freed and set
+ * @param[in,out]  string          The string to validate.  If invalid, memory
+ *                                 location pointed to will be freed and set
  *                                 to NULL.
  *
  * @return TRUE if \p string was invalid and was freed, FALSE otherwise.
@@ -1754,16 +1754,8 @@ exec_omp_post (credentials_t * credentials,
     {
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "comment", &con_info->req_parms.comment);
-      if (openvas_validate (validator,
-                            "credential_login",
-                            con_info->req_parms.credential_login))
-        {
-          /** @todo Maybe resolve discord between rule and params
-           *  (con_info->req_parms.credential_login vs
-           *  con_info->req_parms.name) */
-          free (con_info->req_parms.name);
-          con_info->req_parms.name = NULL;
-        }
+      validate (validator, "credential_login",
+                &con_info->req_parms.credential_login);
       validate (validator, "lsc_password", &con_info->req_parms.password);
       validate (validator, "create_credentials_type",
                 &con_info->req_parms.base);
@@ -2290,7 +2282,9 @@ exec_omp_post (credentials_t * credentials,
                 &con_info->req_parms.lsc_credential_id);
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "login", &con_info->req_parms.login);
+      if (change_login)
+        validate (validator, "credential_login",
+                  &con_info->req_parms.credential_login);
       if (con_info->req_parms.enable)
         validate (validator, "lsc_password", &con_info->req_parms.password);
       con_info->response =
@@ -2299,7 +2293,7 @@ exec_omp_post (credentials_t * credentials,
                                  con_info->req_parms.name,
                                  con_info->req_parms.comment,
                                  change_login,
-                                 con_info->req_parms.login,
+                                 con_info->req_parms.credential_login,
                                  con_info->req_parms.enable ? 1 : 0,
                                  con_info->req_parms.password,
                                  con_info->req_parms.next,
