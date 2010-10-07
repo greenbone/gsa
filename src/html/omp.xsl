@@ -2080,7 +2080,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Login</td>
             <td>Comment</td>
-            <td width="115">Actions</td>
+            <td width="135">Actions</td>
           </tr>
           <xsl:apply-templates select="lsc_credential"/>
         </table>
@@ -2110,6 +2110,112 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="operation">
       Delete Credential
     </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     EDITING LSC CREDENTIALS -->
+
+<xsl:template name="html-edit-lsc-credential-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Credential
+      <a href="/help/lsc_credentials.html#edit_lsc_credential"
+         title="Help: Edit Credential">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post">
+        <input type="hidden" name="cmd" value="save_lsc_credential"/>
+        <input type="hidden"
+               name="lsc_credential_id"
+               value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
+        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text"
+                     name="name"
+                     value="{commands_response/get_lsc_credentials_response/lsc_credential/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Comment</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_lsc_credentials_response/lsc_credential/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Login</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                  <input type="text" name="login_off" size="30" maxlength="400"
+                         disabled="1"
+                         value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="login" size="30" maxlength="400"
+                         value="{commands_response/get_lsc_credentials_response/lsc_credential/login}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Password</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                  <input type="checkbox" name="enable_off" value="yes"
+                         disabled="1"/>
+                  Replace existing value with:
+                  <br/>
+                  <input type="text" name="login" size="30" maxlength="400"
+                         disabled="1" value=""/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="enable" value="yes"/>
+                  Replace existing value with:
+                  <br/>
+                  <input type="password" name="password" size="30" maxlength="400"
+                         value=""/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Credential"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_lsc_credential">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-lsc-credential-form"/>
+</xsl:template>
+
+<xsl:template match="modify_lsc_credential_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Credential</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -2155,6 +2261,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Credential Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
+      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credentials"
+         title="Edit Credential" style="margin-left:3px;">
+        <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
       <xsl:if test="type='gen'">
         <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=rpm"
            title="Download RPM package" style="margin-left:3px;">
@@ -2186,6 +2296,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/configure_credentials.html#credentialdetails"
          title="Help: Configure Agents (Credential Details)">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credential&amp;sort_order=ascending&amp;sort_field=name"
+         title="Edit Credential"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -2250,7 +2365,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_lsc_credential">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
-  <xsl:apply-templates select="get_lsc_credentials_response/lsc_credential" mode="details"/>
+  <xsl:apply-templates select="commands_response/modify_lsc_credential_response"/>
+  <xsl:apply-templates select="commands_response/get_lsc_credentials_response/lsc_credential"
+                       mode="details"/>
 </xsl:template>
 
 <!--     GET_LSC_CREDENTIALS_RESPONSE -->

@@ -1465,14 +1465,16 @@ delete_lsc_credential_omp (credentials_t * credentials,
  * @param[in]   lsc_credential_id  UUID of LSC credential.
  * @param[in]   sort_field         Field to sort on, or NULL.
  * @param[in]   sort_order         "ascending", "descending", or NULL.
+ * @param[in]   commands           Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_lsc_credential_omp (credentials_t * credentials,
-                        const char * lsc_credential_id,
-                        const char * sort_field,
-                        const char * sort_order)
+static char *
+get_lsc_credential (credentials_t * credentials,
+                    const char * lsc_credential_id,
+                    const char * sort_field,
+                    const char * sort_order,
+                    const char * commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
@@ -1488,10 +1490,14 @@ get_lsc_credential_omp (credentials_t * credentials,
   /* Get the LSC credential. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_lsc_credentials"
                             " lsc_credential_id=\"%s\""
                             " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " sort_order=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             lsc_credential_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
@@ -1525,6 +1531,26 @@ get_lsc_credential_omp (credentials_t * credentials,
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
+/**
+ * @brief Get one LSC credential, XSL transform the result.
+ *
+ * @param[in]   credentials        Username and password for authentication.
+ * @param[in]   lsc_credential_id  UUID of LSC credential.
+ * @param[in]   sort_field         Field to sort on, or NULL.
+ * @param[in]   sort_order         "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_lsc_credential_omp (credentials_t * credentials,
+                        const char * lsc_credential_id,
+                        const char * sort_field,
+                        const char * sort_order)
+{
+  return get_lsc_credential (credentials, lsc_credential_id, sort_field,
+                             sort_order, NULL);
+}
+
 /** @todo Do package download somewhere else. */
 /**
  * @brief Get one or all LSC credentials, XSL transform the result.
@@ -1538,18 +1564,21 @@ get_lsc_credential_omp (credentials_t * credentials,
  * @param[out]  html               Result of XSL transformation.  Required.
  * @param[out]  login              Login name return.  NULL to skip.  Only set
  *                                 on success with lsc_credential_id.
+ * @param[in]   commands           Extra commands to run before the others when
+ *                                 lsc_credential_id is NULL.
  *
  * @return 0 success, 1 failure.
  */
-int
-get_lsc_credentials_omp (credentials_t * credentials,
-                         const char * lsc_credential_id,
-                         const char * format,
-                         gsize *result_len,
-                         const char * sort_field,
-                         const char * sort_order,
-                         char ** html,
-                         char ** login)
+static int
+get_lsc_credentials (credentials_t * credentials,
+                     const char * lsc_credential_id,
+                     const char * format,
+                     gsize *result_len,
+                     const char * sort_field,
+                     const char * sort_order,
+                     char ** html,
+                     char ** login,
+                     const char *commands)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -1557,7 +1586,7 @@ get_lsc_credentials_omp (credentials_t * credentials,
 
   assert (html);
 
-  *result_len = 0;
+  if (result_len) *result_len = 0;
 
   if (manager_connect (credentials, &socket, &session))
     {
@@ -1594,9 +1623,11 @@ get_lsc_credentials_omp (credentials_t * credentials,
     {
       if (openvas_server_sendf (&session,
                                 "<commands>"
+                                "%s"
                                 "<get_lsc_credentials"
                                 " sort_field=\"%s\" sort_order=\"%s\"/>"
                                 "</commands>",
+                                commands ? commands : "",
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
           == -1)
@@ -1642,22 +1673,24 @@ get_lsc_credentials_omp (credentials_t * credentials,
             package_entity = entity_child (credential_entity, "package");
           if (package_entity != NULL)
             {
+              gsize len;
               package_encoded = entity_text (package_entity);
               if (strlen (package_encoded))
                 {
                   package_decoded = (gchar *) g_base64_decode (package_encoded,
-                                                               result_len);
+                                                               &len);
                   if (package_decoded == NULL)
                     {
                       package_decoded = (gchar *) g_strdup ("");
-                      *result_len = 0;
+                      len = 0;
                     }
                 }
               else
                 {
                   package_decoded = (gchar *) g_strdup ("");
-                  *result_len = 0;
+                  len = 0;
                 }
+              if (result_len) *result_len = len;
               openvas_server_close (socket, session);
               *html = package_decoded;
               if (login)
@@ -1752,6 +1785,267 @@ get_lsc_credentials_omp (credentials_t * credentials,
       *html = xsl_transform_omp (credentials, text);
       return 0;
     }
+}
+
+/**
+ * @brief Get one or all LSC credentials, XSL transform the result.
+ *
+ * @param[in]   credentials        Username and password for authentication.
+ * @param[in]   lsc_credential_id  UUID of LSC credential.
+ * @param[in]   format             Format of result
+ * @param[out]  result_len         Length of result.
+ * @param[in]   sort_field         Field to sort on, or NULL.
+ * @param[in]   sort_order         "ascending", "descending", or NULL.
+ * @param[out]  html               Result of XSL transformation.  Required.
+ * @param[out]  login              Login name return.  NULL to skip.  Only set
+ *                                 on success with lsc_credential_id.
+ *
+ * @return 0 success, 1 failure.
+ */
+int
+get_lsc_credentials_omp (credentials_t * credentials,
+                         const char * lsc_credential_id,
+                         const char * format,
+                         gsize *result_len,
+                         const char * sort_field,
+                         const char * sort_order,
+                         char ** html,
+                         char ** login)
+{
+  return get_lsc_credentials (credentials, lsc_credential_id, format,
+                              result_len, sort_field, sort_order, html,
+                              login, NULL);
+}
+
+/**
+ * @brief Setup edit_lsc_credential XML, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  lsc_credential_id  UUID of lsc_credential.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[in]  next              Name of next page.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
+                    const char *extra_xml, const char *next,
+                    const char *sort_field, const char *sort_order)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (lsc_credential_id == NULL || next == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a credential. "
+                         "The credential remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_lsc_credentials");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a credential. "
+                         "The credential remains as it was. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_lsc_credentials");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_lsc_credentials"
+                            " lsc_credential_id=\"%s\""
+                            " params=\"1\""
+                            " details=\"1\" />"
+                            "</commands>",
+                            lsc_credential_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credential info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_lsc_credentials");
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<edit_lsc_credential>"
+                          "<lsc_credential id=\"%s\"/>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Passthroughs. */
+                          "<sort_field>%s</sort_field>"
+                          "<sort_order>%s</sort_order>",
+                          lsc_credential_id,
+                          next,
+                          sort_field,
+                          sort_order);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credential info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_lsc_credentials");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_lsc_credential>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_lsc_credential XML, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  lsc_credential_id  UUID of lsc_credential.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_lsc_credential_omp (credentials_t * credentials,
+                        const char *lsc_credential_id, const char *next,
+                        /* Parameters for get_lsc_credentials. */
+                        const char *sort_field, const char *sort_order)
+{
+  return edit_lsc_credential (credentials, lsc_credential_id, NULL, next,
+                             sort_field, sort_order);
+}
+
+/**
+ * @brief Save lsc_credential, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  lsc_credential_id  ID of LSC credential.
+ * @param[in]  name              New name for LSC credential.
+ * @param[in]  comment           New comment for LSC credential.
+ * @param[in]  change_login      Whether to change login.
+ * @param[in]  login             New login for LSC credential.
+ * @param[in]  change_password   Whether to change password.
+ * @param[in]  password          New password for LSC credential.
+ * @param[in]  next              Name of next page.
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_lsc_credential_omp (credentials_t * credentials,
+                         const char *lsc_credential_id, const char *name,
+                         const char *comment, int change_login,
+                         const char *login, int change_password,
+                         const char *password, const char *next,
+                         /* Parameters for get_lsc_credentials. */
+                         const char *sort_field, const char *sort_order)
+{
+  gchar *modify;
+  int socket;
+  gnutls_session_t session;
+
+  if (comment == NULL || name == NULL || (change_password && password == NULL)
+      || (change_login && login == NULL))
+    return edit_lsc_credential (credentials, lsc_credential_id,
+                                GSAD_MESSAGE_INVALID_PARAM
+                                 ("Save Credential"),
+                                next, sort_field, sort_order);
+
+  if (next == NULL || sort_field == NULL || sort_order == NULL
+      || lsc_credential_id == NULL)
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a credential. "
+                         "The credential remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_lsc_credentials");
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a credential. "
+                         "The credential remains the same. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_lsc_credentials");
+
+  if (change_login && change_password)
+    modify = g_markup_printf_escaped ("<modify_lsc_credential"
+                                      " lsc_credential_id=\"%s\">"
+                                      "<name>%s</name>"
+                                      "<comment>%s</comment>"
+                                      "<login>%s</login>"
+                                      "<password>%s</password>"
+                                      "</modify_lsc_credential>",
+                                      lsc_credential_id,
+                                      name,
+                                      comment,
+                                      login,
+                                      password);
+  else if (change_login)
+    modify = g_strdup_printf ("<modify_lsc_credential"
+                              " lsc_credential_id=\"%s\">"
+                              "<name>%s</name>"
+                              "<comment>%s</comment>"
+                              "<login>%s</login>"
+                              "</modify_lsc_credential>",
+                              lsc_credential_id,
+                              name,
+                              comment,
+                              login);
+  else if (change_password)
+    modify = g_strdup_printf ("<modify_lsc_credential"
+                              " lsc_credential_id=\"%s\">"
+                              "<name>%s</name>"
+                              "<comment>%s</comment>"
+                              "<password>%s</password>"
+                              "</modify_lsc_credential>",
+                              lsc_credential_id,
+                              name,
+                              comment,
+                              password);
+  else
+    modify = g_strdup_printf ("<modify_lsc_credential"
+                              " lsc_credential_id=\"%s\">"
+                              "<name>%s</name>"
+                              "<comment>%s</comment>"
+                              "</modify_lsc_credential>",
+                              lsc_credential_id,
+                              name,
+                              comment);
+
+  if (strcmp (next, "get_lsc_credentials") == 0)
+    {
+      char *ret;
+      get_lsc_credentials (credentials, NULL, NULL, NULL, sort_field,
+                           sort_order, &ret, NULL, modify);
+      g_free (modify);
+      return ret;
+    }
+
+  if (strcmp (next, "get_lsc_credential") == 0)
+    {
+      char *ret = get_lsc_credential (credentials, lsc_credential_id,
+                                      sort_field, sort_order,
+                                      modify);
+      g_free (modify);
+      return ret;
+    }
+
+  g_free (modify);
+  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a credential. "
+                       "It is unclear whether the entire credential has been saved. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_lsc_credentials");
 }
 
 /**

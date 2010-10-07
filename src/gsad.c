@@ -219,6 +219,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(edit_lsc_credential)"
                          "|(edit_note)"
                          "|(edit_override)"
                          "|(edit_report_format)"
@@ -270,6 +271,7 @@ init_validator ()
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
+                         "|(save_lsc_credential)"
                          "|(save_note)"
                          "|(save_override)"
                          "|(save_report_format)"
@@ -2281,6 +2283,29 @@ exec_omp_post (credentials_t * credentials,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "save_lsc_credential"))
+    {
+      int change_login = &con_info->req_parms.login ? 1 : 0;
+      validate (validator, "lsc_credential_id",
+                &con_info->req_parms.lsc_credential_id);
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "login", &con_info->req_parms.login);
+      if (con_info->req_parms.enable)
+        validate (validator, "lsc_password", &con_info->req_parms.password);
+      con_info->response =
+        save_lsc_credential_omp (credentials,
+                                 con_info->req_parms.lsc_credential_id,
+                                 con_info->req_parms.name,
+                                 con_info->req_parms.comment,
+                                 change_login,
+                                 con_info->req_parms.login,
+                                 con_info->req_parms.enable ? 1 : 0,
+                                 con_info->req_parms.password,
+                                 con_info->req_parms.next,
+                                 con_info->req_parms.sort_field,
+                                 con_info->req_parms.sort_order);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
     {
       validate (validator, "report_format_id",
@@ -3041,6 +3066,14 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "edit_config_nvt"))
     return get_config_nvt_omp (credentials, config_id, name, family, oid,
                                sort_field, sort_order, 1);
+
+  else if ((!strcmp (cmd, "edit_lsc_credential"))
+           && (lsc_credential_id != NULL)
+           && (next != NULL)
+           && ((strcmp (next, "get_lsc_credentials") == 0)
+               || (strcmp (next, "get_lsc_credential") == 0)))
+    return edit_lsc_credential_omp (credentials, lsc_credential_id, next,
+                                    sort_field, sort_order);
 
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)

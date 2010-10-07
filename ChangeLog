@@ -1,5 +1,29 @@
 2010-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add LSC credential editing.
+
+	* src/html/src/omp.xsl (html-lsc-credentials-table): Increase action
+	column width.
+	(html-edit-lsc-credential-form, edit_lsc_credential)
+	(modify_lsc_credential_response): New templates.
+	(get_lsc_credential): Add COMMANDS to GET_LSC_CREDENTIALS path.  Apply
+	modify response template.
+
+	* src/gsad.c (init_validator): Add edit_lsc_credential and
+	save_lsc_credential commands.
+	(exec_omp_get): Add edit_lsc_credential and save_lsc_credential handling.
+
+	* src/gsad_omp.c (get_lsc_credential, get_lsc_credentials): New function.
+	From _omp counterpart, with commands arg.  In get_lsc_credentials allow
+	result_len to be NULL.
+	(get_lsc_credential_omp, get_lsc_credentials_omp): Replace body with call.
+	(edit_lsc_credential, edit_lsc_credential_omp)
+	(save_lsc_credential_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+2010-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add & to lsc_password.
 
 	* src/gsad_omp.c (openvas_server_sendf_xml): Move up in file.
