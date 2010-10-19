@@ -406,49 +406,6 @@ validate (validator_t validator, const gchar* validator_rule, char** string)
   return FALSE;
 }
 
-
-/**
- * @brief Returns TRUE no netmask in CIDR notation < 20 is given.
- *
- * @param hosts_parameter String containing hostnames, IPs etc.
- *
- * @return TRUE if no netmask in CIDR notation < 20 was found in the
- *         input string.
- */
-static gboolean
-validate_hosts_parameter (const char* hosts_parameter)
-{
-  char* slashpos = NULL;
-  char* commapos = NULL;
-  char* copy     = g_strdup (hosts_parameter);
-  int cidr_mask = 32;
-
-  slashpos = strchr (copy, '/');
-  while (slashpos)
-    {
-      commapos = strchr (slashpos, ',');
-      if (commapos != NULL)
-        commapos[0] = '\0';
-      if (slashpos[1] != '\0')
-        cidr_mask = atoi (slashpos + 1);
-      else
-        {
-          g_free (copy);
-          return TRUE;
-        }
-      if (cidr_mask < 20)
-        {
-          g_free (copy);
-          return FALSE;
-        }
-      slashpos = strchr (slashpos + 1, '/');
-    }
-
-  g_free (copy);
-  return TRUE;
-}
-
-
 /**
  * @brief Frees array and its gchar* contents.
  *
@@ -1905,14 +1862,7 @@ exec_omp_post (credentials_t * credentials,
   else if (!strcmp (con_info->req_parms.cmd, "create_target"))
     {
       validate (validator, "name", &con_info->req_parms.name);
-      if (openvas_validate (validator,
-                            "hosts",
-                            con_info->req_parms.hosts)
-          || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE)
-        {
-          free (con_info->req_parms.hosts);
-          con_info->req_parms.hosts = NULL;
-        }
+      validate (validator, "hosts", &con_info->req_parms.hosts);
       validate (validator, "comment", &con_info->req_parms.comment);
       validate (validator, "lsc_credential_id",
                 &con_info->req_parms.lsc_credential_id);
@@ -1969,10 +1919,9 @@ exec_omp_post (credentials_t * credentials,
         }
 
       if (strcmp (con_info->req_parms.hosts, "")
-          && (openvas_validate (validator,
-                                "hosts",
-                                con_info->req_parms.hosts)
-              || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE))
+          && openvas_validate (validator,
+                               "hosts",
+                               con_info->req_parms.hosts))
         {
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;
@@ -2097,10 +2046,9 @@ exec_omp_post (credentials_t * credentials,
         }
 
       if (strcmp (con_info->req_parms.hosts, "")
-          && (openvas_validate (validator,
-                                "hosts",
-                                con_info->req_parms.hosts)
-              || validate_hosts_parameter (con_info->req_parms.hosts) == FALSE))
+          && openvas_validate (validator,
+                               "hosts",
+                               con_info->req_parms.hosts))
         {
           free (con_info->req_parms.hosts);
           con_info->req_parms.hosts = NULL;

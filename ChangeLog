@@ -1,5 +1,10 @@
 2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (validate_hosts_parameter): Remove.  Now in Manager.
+	(exec_omp_post): Remove validate_hosts_parameter calls.
+
+2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Increase hosts length.
 
 	* src/html/omp.xsl (html-create-target-form): Increase hosts length.
