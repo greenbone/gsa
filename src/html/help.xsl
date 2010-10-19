@@ -1067,15 +1067,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Note on <b>Hosts</b>:
         <ul>
-          <li> Larger networks can either be specified as a comma-separated list of
-               IPs (e.g. <tt>192.168.13.1, 192.168.13.2, ...</tt>), hostnames (e.g.
-               <tt>myhost1.domain, myhost2.domain</tt> or using the CIDR notation
-               (e.g. <tt>192.168.13.0/24</tt>). These options can be mixed.
-               Note that the netmask in CIDR notation is limited to 20 (4095 hosts).
+          <li>
+            The hosts parameter is a comma-separated list of values.  Each value
+            can be
+            <ul>
+              <li>an IP (e.g. <tt>192.168.13.1</tt>)</li>
+              <li>a hostname (e.g. <tt>myhost1.domain</tt>)</li>
+              <li>an IP range in long format
+                  (e.g. <tt>192.168.1.116-192.168.1.124</tt>)</li>
+              <li>an IP range in short format
+                  (e.g. <tt>192.168.1.116-124</tt>)</li>
+              <li>an IP range in CIDR notation
+                  (e.g. <tt>192.168.13.0/24</tt>).</li>
+            </ul>
+            These options can be mixed (e.g.
+            <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
           </li>
-          <li> Incorrect syntax for Hosts will not be warned but rather accepted.
-               When applied for a scan, only correct entries will be used and the rest
-               will be ignored.</li>
+          <li>
+            The netmask in CIDR notation is limited to 20 (4095 hosts).
+          </li>
         </ul>
       </p>
 
@@ -1097,7 +1107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>Hosts</td>
           <td>yes</td>
-          <td>80</td>
+          <td>200</td>
           <td>Comma separated list of IPs and/or hostnames</td>
           <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
         </tr>

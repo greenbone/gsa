@@ -1,5 +1,10 @@
 2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (configure_targets.html): Add IP ranges to hosts note.
+	Increase hosts length.
+
+2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (validate_hosts_parameter): Remove.  Now in Manager.
 	(exec_omp_post): Remove validate_hosts_parameter calls.
 
