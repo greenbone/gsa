@@ -1,10 +1,16 @@
+2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Increase hosts length.
+
+	* src/html/omp.xsl (html-create-target-form): Increase hosts length.
+
 2010-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (edit_lsc_credential, edit_report_format): Doc next arg.
 
 2010-10-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/src/omp.xsl (html-edit-lsc-credential-form): Replace login
+	* src/html/omp.xsl (html-edit-lsc-credential-form): Replace login
 	with credential_login.
 
 	* src/gsad.c (validate): Neaten doc.
@@ -15,7 +21,7 @@
 
 	Add LSC credential editing.
 
-	* src/html/src/omp.xsl (html-lsc-credentials-table): Increase action
+	* src/html/omp.xsl (html-lsc-credentials-table): Increase action
 	column width.
 	(html-edit-lsc-credential-form, edit_lsc_credential)
 	(modify_lsc_credential_response): New templates.
@@ -123,7 +129,7 @@
 
 	* src/gsad_omp.c (get_escalator_omp): Also get report formats.
 
-	* src/html/src/omp.xsl (escalator [details]): Give email case same
+	* src/html/omp.xsl (escalator [details]): Give email case same
 	details as new escalator form.
 
 2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
@@ -137,11 +143,11 @@
 
 	* src/gsad_omp.h: Update header accordingly.
 
-	* src/html/src/omp.xsl (html-edit-task-form): Add slave field.
+	* src/html/omp.xsl (html-edit-task-form): Add slave field.
 
 2010-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/src/omp.xsl (html-report-table): Add slave to Task Summary.
+	* src/html/omp.xsl (html-report-table): Add slave to Task Summary.
 
 2010-09-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
@@ -157,9 +163,9 @@
 
 	* src/gsad_omp.h: Add headers accordingly.
 
-	* src/html/src/gsad.xsl (html-gsa-navigation): Add slaves item.
+	* src/html/gsad.xsl (html-gsa-navigation): Add slaves item.
 
-	* src/html/src/omp.xsl (slave [newtask], html-create-slave-form)
+	* src/html/omp.xsl (slave [newtask], html-create-slave-form)
 	(html-slaves-table, create_slave_response, delete_slave_response)
 	(slave, slave [details], get_slave, get_slaves): New templates.
 	(new_task): Get slaves from GET_SLAVES instead of from GET_TARGETS.
@@ -168,7 +174,7 @@
 
 	Add report format editing.
 
-	* src/html/src/omp.xsl (html-edit-report-format-form, edit_report_format)
+	* src/html/omp.xsl (html-edit-report-format-form, edit_report_format)
 	(modify_report_format_response): New templates.
 	(report_format): Add edit report_format button.
 	(get_report_format): Apply modify response template.  Add COMMANDS to
@@ -1209,7 +1215,7 @@
 
 	* src/html/gsad.xsl (html-gsa-navigation): Add "Notes" menu item.
 
-	* src/html/src/gsa-style.css (.override_box_box, .override_top_line): New
+	* src/html/gsa-style.css (.override_box_box, .override_top_line): New
 	styles.
 
 2010-06-10  Felix Wolfsteller <felix.wolfsteller@greenbone.net>

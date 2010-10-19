@@ -3170,7 +3170,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <input type="hidden" name="target_source" value="manual"/>
                 <input type="text" name="hosts" value="localhost" size="30"
-                        maxlength="80"/>
+                        maxlength="200"/>
               </td>
             </xsl:when>
             <xsl:otherwise>
