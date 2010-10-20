@@ -1078,7 +1078,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <li>an IPv4 address range in short format
                   (e.g. <tt>192.168.1.116-124</tt>)</li>
               <li>an IPv4 address range in CIDR notation
-                  (e.g. <tt>192.168.13.0/24</tt>).</li>
+                  (e.g. <tt>192.168.13.0/24</tt>)</li>
               <li>an IPv6 address
                   (e.g. <tt>fe80::222:64ff:fe76:4cea/64</tt>).</li>
             </ul>

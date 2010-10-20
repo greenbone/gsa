@@ -1,5 +1,9 @@
 2010-10-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (configure_targets.html): Remove dot from hosts note.
+
+2010-10-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (configure_targets.html): Add IPv6 to hosts note.
 
 2010-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
