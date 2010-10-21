@@ -1,5 +1,16 @@
 2010-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* CMakeLists.txt, ChangeLog, doc/CMakeLists.txt, src/gsad.c,
+	src/gsad_base.c, src/gsad_base.h, src/gsad_oap.c, src/gsad_oap.h,
+	src/gsad_omp.c, src/gsad_omp.h, src/html/gsa-style.css, src/html/gsad.xsl,
+	src/html/help.xsl, src/html/oap.xsl, src/html/omp.xsl, src/tracef.h,
+	src/validator.c, src/validator.h: Switch all Intevation addresses to
+	Greenbone addresses.
+
+	* src/CMakeLists.txt: Switch UKFSN address to Greenbone one.
+
+2010-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (modify_note_response, modify_override_response): New
 	templates.
 	(get_notes, get_overrides): Apply modify response, to confirm save.
@@ -2018,7 +2029,7 @@
 
 	* doc/.built-html: Removed superfluous file.
 
-2010-04-15  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help.xsl: Corrected the maximum comment length.
 	(glossary.html): Added entry for schedule to glossary.
@@ -2026,12 +2037,12 @@
 	schedule field.
 	(reports.html): Updated help for report summary.
 
-2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-14  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help.xsl (tasks.html): Updated help for tasks list with
 	new features and elements.
 
-2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-14  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Set the GSA to use UTC as timezone to stay consistent with the manager
 	when scheduling.
@@ -2042,17 +2053,17 @@
 
 	* src/html/src/gsad.xsl (html-gsa-logo): Mark time as UTC.
 
-2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-14  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help.xsl (configure_escalators.html): Comments are
 	not mandatory for escalators.
 
-2010-04-14  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-14  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help.xsl (configure_schedules.html): Added help for
 	scheduling.
 
-2010-04-13  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-13  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help.xsl: Flush trailing whitespace.
 
@@ -2134,20 +2145,20 @@
 
 	* src/CMakeLists.txt: Add support for out-of-source builds.
 
-2010-04-06  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/oap.xsl (html-feed-form): Display feed version.
 
-2010-04-01  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/about.htm4: Make sure that supporters are in
 	alphabetical order.
 
-2010-04-01  Michael Wiegand <michael.wiegand@intevation.de>
+2010-04-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/omp.xsl (nvt): Display NVT tags if they are set.
 
-2010-03-30  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp): Add TIME to ENVELOPE.
 
@@ -2157,11 +2168,11 @@
 	(time): New template.
 	(envelope): Pass time to html-gsa-logo.
 
-2010-03-30  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Add NULL guard for duration.
 
-2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_schedules_omp, create_schedule_omp)
 	(delete_schedule_omp): Add TIME to GET_SCHEDULES.
@@ -2170,7 +2181,7 @@
 	(html-create-schedule-form): Create first time input via "opt" so that
 	currect time is selected.
 
-2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_task): New function.  Body from edit_task_omp.  Add
 	extra_xml arg.
@@ -2178,7 +2189,7 @@
 	(save_task_omp): For comment or name error, put up the parameter error
 	message on the edit_task page.
 
-2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-edit-task-form): Make escalator editable.
 
@@ -2190,19 +2201,19 @@
 	* src/gsad_omp.c (save_task_omp): Add schedule_id arg.  Include in
 	MODIFY_TASK command.
 
-2010-03-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-schedule-form): Remove minute units
 	from period and duration.
 	(html-edit-task-form): Add "(immutable)" to target and config input names.
 
-2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_task_omp): Add next and refresh_interval NULL
 	checks.
 	(save_task_omp): Remove refresh_interval NULL enforcement.
 
-2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add basic task editing.
 
@@ -2221,19 +2232,19 @@
 
 	* src/gsad_omp.h: Add headers accordingly.
 
-2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (gsad_newtask): Add comment entry.
 
 	* src/gsad.c (exec_omp_post): Pass comment from request to
 	create_task_omp.
 
-2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-table): Add comment field.
 	(task): Add comment under name.
 
-2010-03-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Display schedule intervals in unit format.
 
@@ -2241,7 +2252,7 @@
 	(schedule): Call interval-with-unit for intervals.
 	(schedule [details]): Display unit interval instead of just seconds.
 
-2010-03-27  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-schedule-form): Add odd row
 	background colours.  Switch period and duration input to time and unit
@@ -2261,31 +2272,31 @@
 
 	* src/gsad_omp.h: Update header accordingly.
 
-2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (schedule [details]): Add units to period and
 	duration.
 
-2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (schedule): Correct delete URL.
 
-2010-03-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-schedule-form): Add "(optional)" to
 	period and duration fields.
 
-2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (schedule [details]): Get next_time for next time,
 	instead of first_time.
 
-2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-table): Get next time for "Next due",
 	instead of name.
 
-2010-03-24  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add schedule input to "New Task" page.
 
@@ -2301,7 +2312,7 @@
 	* src/html/src/omp.xsl (schedule [newtask]): New template.
 	(gsad_newtask): Add schedule field.
 
-2010-03-23  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add schedule creation.
 
@@ -2320,7 +2331,7 @@
 	* src/html/src/omp.xsl (html-create-schedule-form): Add schedule params.
 	(get_schedules): Add call to html-create-schedule-form.
 
-2010-03-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Complete support for removing schedules.
 
@@ -2331,7 +2342,7 @@
 
 	* src/gsad_omp.h: Add header accordingly.
 
-2010-03-21  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (delete_note_omp): Remove openvas_server_close called
 	before session is open.  Closes #1334 (http://bugs.openvas.org/1334).
@@ -2340,11 +2351,11 @@
 
 	* src/CMakeLists.txt: Install gsad into ${SBINDIR} since it is a service.
 
-2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-table): Add schedule.
 
-2010-03-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Start list and details pages for schedules.
 
@@ -2362,7 +2373,7 @@
 
 	* src/html/header.m4, src/html/src/gsad.xsl: Add "Schedules" menu item.
 
-2010-03-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (task): Always grey resume and stop buttons for
 	scheduled tasks.  Replace start button with scheduled button for scheduled
@@ -2371,22 +2382,22 @@
 	* src/html/src/img/scheduled.png, src/html/src/img/scheduled_inactive.png:
 	New files.  Created by Karl-Heinz Ruskowski.
 
-2010-03-16  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/img/resume.png, src/html/src/img/resume_inactive.png: Make
 	right margin wider.  Thanks to Karl-Heinz Ruskowski.
 
-2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (DEFAULT_GSAD_PORT): Remove.
 	(DEFAULT_GSAD_HTTP_PORT, DEFAULT_GSAD_HTTPS_PORT): New defines.
 	(main): Use appropriate define for gsad_port, depending on http_only.
 
-2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/help/scanconfig_details.htm4: Close tags properly.
 
-2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (task): Use details button instead of list button
 	for summary link.  Always enable this details button.
@@ -2398,14 +2409,14 @@
 	* src/html/src/help/scanconfig_details.htm4,
 	src/html/src/help/scanconfig_editor.htm4: Switch to details button.
 
-2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Complete last commit: Add Manager-side task resuming.
 
 	* src/html/src/omp.xsl (resume_stopped_task_response): New template.
 	(task): Add resume button.
 
-2010-03-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add command resume_stopped_task.
 	(exec_omp_get): Add resume_stopped_task handling.
@@ -2419,29 +2430,29 @@
 	* src/html/src/img/resume.png, src/html/src/img/resume_inactive.png: New
 	files.  Created by Karl-Heinz Ruskowski.
 
-2010-03-08  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-08  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/omp.xsl: Enable all levels for report downloads in the
 	task summary.
 
-2010-03-08  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-08  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help/reports.htm4: Corrected image filenames.
 
-2010-03-08  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (report): Add ITG and CPE to download formats.
 
-2010-03-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_config_family_omp, get_config_family_omp)
 	(get_config_nvt_omp): Add table qualifier to GET_NVT_DETAILS sort field.
 
-2010-03-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (trend_meter): Get trend from OMP.
 
-2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -2449,7 +2460,7 @@
 
 	* src/html/src/about.htm4: Updated version number.
 
-2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 1.0.0-beta5 release, part two.
 
@@ -2463,11 +2474,11 @@
 
 	* CHANGES: Updated and improved a bit for beta4.
 
-2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help/reports.htm4: Added help texts for ITG and CPE.
 
-2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 1.0.0-beta5 release, part one.
 
@@ -2475,13 +2486,13 @@
 
 	* CHANGES: Updated.
 
-2010-03-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-03-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Add format for CPE inventory report.
 
 	* src/html/src/omp.xsl (html-report-details): Add report format "CPE".
 
-2010-03-03  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add format for IT-Grundschutz (German FSI IT baseline protection) report.
 
@@ -2491,12 +2502,12 @@
 
 	* src/html/src/omp.xsl (html-report-details): Add report format "ITG".
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (DATE_2822_LEN): New define.
 	(file_content_response): Add Last-Modified and Expires headers.
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (get_nvt_details): Add a help button.
 
@@ -2504,21 +2515,21 @@
 
 	* src/html/src/help/contents.htm4: Link to NVT Details in NVT help.
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (wrap): Select substring correctly after wrap.
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-edit-note-form): Add NVT name row before
 	constraint rows.
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-edit-note-form): Add details button.
 	(note [details]): Correct alignment.
 
-2010-03-02  Matthew Mundell <matthew.mundell@intevation.de>
+2010-03-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add edit button to get_note page.
 
@@ -2532,16 +2543,16 @@
 	* src/html/src/omp.xsl (note [details]): Add edit button.
 	(get_note): Expect get_notes_response in a commands_response.
 
-2010-02-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (serve_post): Use append_chunk_string to setup string request
 	parameters.
 
-2010-02-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (html-users-table): Sort by role then name.
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add notes help.
 
@@ -2560,24 +2571,24 @@
 	* src/html/src/omp.xsl (html-report-table): Link help to reports help.
 	(note [details], html-notes-table): Link help to notes.html.
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note [details]): Label task and result in orphans,
 	otherwise they show as "Any".
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note, note [nvt-details]): Mark orphans.
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsa-style.css (.issue_box_head): Remove stray colon.
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note-detailed): Use normal delete button.
 
-2010-02-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add note editing.
 
@@ -2593,34 +2604,34 @@
 
 	* src/gsad_omp.h: Add headers accordingly.
 
-2010-02-23  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (result-detailed): Compare note count with 0
 	instead of 1.
 
-2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add DVI to "format".
 
 	* src/gsad_omp.c (get_report_omp): Allow DVI as format.
 
-2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note): Decrease max to 35 so NVT name always fits
 	on a single line.
 
-2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note-detailed): Put the "Last modified" line
 	after the button float, so that Konqueror keeps the buttons inside the
 	box.
 
-2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-note-form): Check the more specific
 	option in most constraints instead of the general option.
 
-2010-02-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-note-form): Replace "All" with "Any".
 	(note) [details]: Capitalise "any".
@@ -2630,12 +2641,12 @@
 	* src/html/src/omp.xsl (html-report-details): Prevent unnecessary
 	wrapping.
 
-2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (wrap): Handle the case of a single line that must
 	wrap.
 
-2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Use fixed max_results values for notes.
 
@@ -2643,16 +2654,16 @@
 	passthrough.
 	(note-detailed, result-detailed): Remove max_results from requests.
 
-2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (new_note_omp): Check all args.
 
-2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (get_nvt_details): Only add notes table when there
 	are notes.
 
-2010-02-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add delete buttons on all note lists.
 
@@ -2677,61 +2688,61 @@
 	(get_notes): Expect entites in a commands_response.
 	(note-detailed): Add next page to request.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_nvt_details_omp, get_status_omp, get_notes_omp): Add
 	GET_NOTES sort fields.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-note-form): Refer to anchor in query.
 	(note-detailed): Refer to anchor in delete_note query.
 	(result-detailed): Add anchor.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (result-detailed): Add notes button.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note-detailed): Add details button.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_status_omp): Request notes with task.
 
 	* src/html/src/omp.xsl (html-report-table): Add notes window.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Extend the "port" rule to allow ports like
 	"port-name (111/tcp)".
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-details, report, task)
 	(html-create-note-form, note-detailed, result-detailed): Pass the "notes"
 	flag when requesting a report.  Preserve the notes flag across new_note
 	and delete_note.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-details): Test filters/notes directly
 	instead of counting it.
 
-2010-02-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-config-family-table): Count in
 	get_nvt_details_response instead of all/get_nvt_details_response, in
 	view case.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsa-style.css (.note_top_line): New style.
 
 	* src/html/src/omp.xsl (note) [details]: Put note text in yellow box.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a note details page.
 
@@ -2747,7 +2758,7 @@
 	(note) [details]: New template.
 	(get_note): New template.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_nvt_details_omp): Also request notes for the NVT.
 
@@ -2756,7 +2767,7 @@
 	(note, html-notes-table): Replace OID column with text column.
 	(note) [nvt-details]: New template.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add notes management page.
 
@@ -2771,7 +2782,7 @@
 
 	* src/html/header.m4, src/html/src/gsad.xsl: Add "Notes" menu item.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add note filtering in reports.
 
@@ -2788,7 +2799,7 @@
 
 	* src/gsad_omp.h: Update headers accordingly.
 
-2010-02-17  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Put result on "New Note" page.
 
@@ -2801,7 +2812,7 @@
 
 	* src/gsad_omp.c (new_note_omp): Include result in response.
 
-2010-02-16  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/img/new_note.png, src/html/src/img/delete_note.png,
 	src/html/src/img/note.png: New files.
@@ -2816,7 +2827,7 @@
 	intervals. When selecting 60 seconds, the GUI applied 60
 	but showed 30.
 
-2010-02-15  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add note constraints.
 
@@ -2835,7 +2846,7 @@
 	* src/html/src/omp.xsl (html-create-note-form): Add contraint input.
 	(new_note): Pass contraint values to new_note.
 
-2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add adding of notes.
 
@@ -2858,7 +2869,7 @@
 	(note) [detailed]: Wrap note text.  Pass get_report params to delete_note.
 	(result) [detailed]: Add "new note" button.
 
-2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add removal of notes.
 
@@ -2873,7 +2884,7 @@
 	* src/html/src/omp.xsl (delete_note_response): New template.
 	(note) [detailed]: Add delete button.
 
-2010-02-12  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (note) [detailed]: New template.
 	(result) [detailed]: Apply any notes.
@@ -2883,7 +2894,7 @@
 
 	* src/gsad_omp.c (get_report_omp): Request notes.
 
-2010-02-10  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (escalator) [details]: Remove greying of method
 	background.
@@ -2892,11 +2903,11 @@
 
 	* src/gsad.c: Fixed couple of leaks reported by cppcheck.
 
-2010-02-05  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (wrap): Lower wrap column to 90.
 
-2010-02-05  Michael Wiegand <michael.wiegand@intevation.de>
+2010-02-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -2904,7 +2915,7 @@
 
 	* src/html/src/about.htm4: Updated version number.
 
-2010-02-05  Michael Wiegand <michael.wiegand@intevation.de>
+2010-02-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 1.0.0-beta4 release.
 
@@ -2912,7 +2923,7 @@
 
 	* CHANGES: Updated.
 
-2010-02-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Wrap lines of result descriptions during the XSL transform.
 
@@ -2923,19 +2934,19 @@
 	* src/html/src/gsa-style.css (.issue_box_box): Remove white-space and
 	font-family.
 
-2010-02-04  Michael Wiegand <michael.wiegand@intevation.de>
+2010-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/omp.xsl: Reconciled value of of increment with max value
 	in exec_omp_get in gsad.c to repair pagination.
 
-2010-02-03  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (result) [detailed]: Remove PRE from description.
 
 	* src/html/src/gsa-style.css (.issue_box_box): Add line wrapping, space
 	preservation and PRE like font.
 
-2010-02-01  Matthew Mundell <matthew.mundell@intevation.de>
+2010-02-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (lsc_credential) [details]: Remove colon from
 	heading.
@@ -2945,7 +2956,7 @@
 	* src/html/src/omp.xsl: Made file entries have same length
 	as text entries.
 
-2010-01-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (get_status_response): Correct substring args.
 	(html-create-lsc-credential-form): Add empty values to some empty inputs.
@@ -2955,17 +2966,17 @@
 	* src/gsad_oap.c (save_user_oap): Correct comment.
 	(get_feed_oap): Correct message texts.
 
-2010-01-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (describe_feed_response): Check for failure.
 	(html-feed-form): Add details if sync in progress.  Correct button
 	greying test.
 
-2010-01-29  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Format last entry better.
 
-2010-01-28  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-28  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_oap.c (create_user_oap, save_user_oap, delete_user_oap)
 	(edit_user_oap, get_user_oapt_users_oap, get_feed_oap, sync_feed_oap)
@@ -2983,24 +2994,24 @@
 	library read_string function to access only the string of gnutls
 	session.
 
-2010-01-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (send_redirect_header)
 	(create_http_authenticate_response): Add Expires and Cache-Control
 	headers.
 	(file_content_response): Use MHD defines for header names.
 
-2010-01-28  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (file_content_response): Indent args.  Downcase @todos.
 	Move fopen return check for default_file into block that does fopen.
 	Add Expires and Cache-Control headers if path matches default_file.
 
-2010-01-28  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-28  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (request_handler): Simplified conditional.
 
-2010-01-27  Michael Wiegand <michael.wiegand@intevation.de>
+2010-01-27  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -3008,7 +3019,7 @@
 
 	* src/html/src/about.htm4: Updated version number.
 
-2010-01-27  Michael Wiegand <michael.wiegand@intevation.de>
+2010-01-27  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 1.0.0-beta3 release.
 
@@ -3016,11 +3027,11 @@
 
 	* CHANGES: Updated.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* README: Updated.
 
-2010-01-27  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add option to run in chroot.  Most of work by Felix Wolfsteller.
 
@@ -3033,12 +3044,12 @@
 
 	* src/gsad_base.c (XSL_PATH): Make relative.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (request_handler): Collapse two conditionals with
 	identical body.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Basic input checking when serving files. Set content type for images.
 
@@ -3051,7 +3062,7 @@
 	(request_handler): Pass content type and disposition to
 	file_content_response.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (create_http_authenticate_response): New, extracted from
 	(send_http_authenticate_header).
@@ -3060,11 +3071,11 @@
 	variable to store the response code instead of immediate sending
 	responses.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c: Added TODOs.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Set content-type header for error pages.
 
@@ -3072,7 +3083,7 @@
 	(send_redirect_header, send_http_authenticate_header): Use
 	libmicrohttpd macros.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Further removal of global variables, closing mem leaks.
 
@@ -3082,7 +3093,7 @@
 	(request_handler): Added local variables as replacements for the global
 	ones, pass as new parameter to functions.
 
-2010-01-27  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-27  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Switched from using dynamic strings as http header content-type field
 	to static strings, resolving a mem leak and possible contention issues.
@@ -3132,7 +3143,7 @@
 
 	* CHANGES: Updated.
 
-2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Add options --alisten and --mlisten.
 
@@ -3149,21 +3160,21 @@
 
 	* src/gsad_oap.h: Update header accordingly.
 
-2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (gsad_address): New variable.
 	(main): Add --listen option.  Pass address to MHD_start_daemon.
 
-2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Neaten MHD_start_daemon calls.
 
-2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-26  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/src/help/configure_targets.htm4: Removed part about
 	definition of ip-ranges and noted the cidr-netmask limit.
 
-2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-26  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (serve_post): Own conditional for host parameter
 	validation.
@@ -3171,33 +3182,33 @@
 	(validate_hosts_parameter): Use gchar and respective function instead
 	of char.
 
-2010-01-26  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-26  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (validate_hosts_parameter): New function, checks cidr
 	netmasks.
 	(serve_post): Call new validation function for hosts parameter.
 
-2010-01-26  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Add option --http-only.
 
-2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp): Do not close the server connection
 	a second time in error case.
 
-2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp): Just send the xml describing the
 	report if xml report is requested.
 
-2010-01-25  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report_omp): If the format is XML send the plain
 	XML, and if the format is NULL send the XSL transformed XML (that is,
 	send the HTML page).
 
-2010-01-25  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-25  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Updated help.
 
@@ -3206,13 +3217,13 @@
 	src/html/help/configure_users.htm4,
 	src/html/help/glossray.htm4: Updated help.
 
-2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsa-style.css (.gb_window_part_center)
 	(.gb_window_part_center_error, .logo_l, .logo_r, .logout_panel): Set
 	colours so that text shows up when images are off in the browser.
 
-2010-01-22  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Remain on the task page after deleting the task's last report.
 
@@ -3225,36 +3236,36 @@
 	for task/reports instead of a task/report.
 	(commands_response/get_status_response): Remove, redundant.
 
-2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (redirect_pid): New variable.
 	(gsad_cleanup): Kill redirect child in parent.
 	(main): Set redirect_pid in parent.  Set SIGCHLD to SIG_IGN.  Remove
 	pidfile creation from redirect child.
 
-2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (user) [edit]: Switch the modify_password values.
 
-2010-01-21  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (user): Account for "custom" access rules.
 
-2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (user) [edit]: Make the Host Access radios match
 	the user's rights.
 
-2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Revert create_target hosts validator to
 	"hosts".
 
-2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl: Make all alt's "Details" for details buttons.
 
-2010-01-20  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add user details page and editing of user details.
 
@@ -3276,7 +3287,7 @@
 	(user) [details] [edit]: New templates.
 	(edit_user, get_user): New templates.
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add user host access to user list.  Make "Allow All" possible when
 	creating a user.
@@ -3299,7 +3310,7 @@
 	* src/html/src/gsad.xsl, src/html/src/about.htm4: Extending Copyright
 	to 2010.
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add setting of user host access.
 
@@ -3315,38 +3326,38 @@
 
 	* src/html/src/oap.xsl (html-create-user-form): Add "Host Access" input.
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Make create_user "name" a "login".
 
 	* src/html/src/oap.xsl (html-create-user-form): Relabel "Name" as
 	"Login Name", and make the input name "login".
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add \ to credential_login characters.
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (user): Grey delete button for current user.
 
-2010-01-19  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add \ to lsc_password characters.
 
-2010-01-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/oap.xsl (scanner_settings): Only enable edit button if
 	settings are editable.
 
-2010-01-18  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (get_status_response)
 	(commands_response/get_status_response): Add error check.
 
 	* src/html/src/oap.xsl (get_settings_response): Indent by 2 like rest.
 
-2010-01-14  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add editing of scanner settings.
 
@@ -3370,12 +3381,12 @@
 	* src/html/src/img/bsi-logo.png, src/html/src/img/gb-logo.png,
 	src/html/src/img/intevation-logo.png: New.
 
-2010-01-13  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_oap.c (sync_feed_oap): Add DESCRIBE_FEED to COMMANDS so that
 	the sync result comes back on the Feed Management page.
 
-2010-01-13  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-13  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Updated help.
 
@@ -3395,7 +3406,7 @@
 	* src/html/src/help/contents.htm4: Indention for subgroups.
 	Added a link for each separate file.
 
-2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Updated help.
 
@@ -3407,7 +3418,7 @@
 
 	* src/html/src/omp.xsl: Added links to new help pages.
 
-2010-01-12  Michael Wiegand <michael.wiegand@intevation.de>
+2010-01-12  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -3415,7 +3426,7 @@
 
 	* src/html/src/about.htm4: Updated.
 
-2010-01-12  Michael Wiegand <michael.wiegand@intevation.de>
+2010-01-12  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 1.0.0-beta1 release.
 
@@ -3425,7 +3436,7 @@
 
 	* CHANGES: New.
 
-2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Minor help improvements and fixes.
 
@@ -3434,7 +3445,7 @@
 	* src/html/src/help/scanconfig_editor_nvt_families.htm4: Added links
 	to glossary.
 
-2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added help and some fixes.
 
@@ -3450,7 +3461,7 @@
 
 	* src/html/src/omp.xsl: Added link to new help page.
 
-2010-01-12  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-12  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added help.
 
@@ -3462,7 +3473,7 @@
 
 	* src/html/src/omp.xsl: Added link to new help page.
 
-2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add text phrase filtering to report results.
 
@@ -3482,11 +3493,11 @@
 	* src/html/src/help/reports.htm4: Try improve some descriptions.  Correct
 	typos.  Describe text phrase filtering.
 
-2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Pass gsize to get_system_report_omp.
 
-2010-01-11  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-11  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Updated help.
 
@@ -3497,7 +3508,7 @@
 
 	* src/html/src/omp.xsl: Link from pages to new help texts.
 
-2010-01-11  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (result) [detailed]: Add NVT name.
 
@@ -3517,7 +3528,7 @@
 	* src/html/src/help/configure_escalators.htm4: Added section
 	on test escalator.
 
-2010-01-09  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsa-style.css (small_inline_form): New style.
 
@@ -3530,15 +3541,15 @@
 
 	* src/html/src/help/reports.htm4: Correct phrase.
 
-2010-01-09  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (get_system_reports): Add failure message.
 
-2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/help/performance.htm4: New file.
 
-2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_lsc_credential_omp): Add check for password
 	validation failure.
@@ -3547,7 +3558,7 @@
 	(exec_omp_post): Verify create_lsc_credential_omp password with
 	"lsc_password".
 
-2010-01-08  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add HTTP to HTTPS redirection.
 
@@ -3557,7 +3568,7 @@
 	(main): Add options --rport and --redirect.  If --redirect is present then
 	fork an HTTP server that redirects any request to the HTTPS server.
 
-2010-01-07  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add performance reports page.
 
@@ -3575,37 +3586,37 @@
 
 	* src/html/header.m4, src/html/src/gsad.xsl: Add "Performance" menu item.
 
-2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/src/help/configure_scanconfigs.htm4: Added help text about
 	import and export scan configs, removed text about importing openvasrc.
 
 	* src/html/src/omp.xsl: Link to new help section.
 
-2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Resolved compile issues on 64bit systems.
 
 	* src/gsad.c (serve_post): Cast size_t to int (.* format expects
 	integer).
 
-2010-01-06  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (create_config_response): Pass config name in
 	result details.
 
-2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/src/omp.xsl: Fixed TODO: pre-select the chosen refresh
 	interval in task overview table.
 
-2010-01-06  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Corrected libopenvas version check.
 
 	* ChangeLog: Corrected date.
 
-2010-01-05  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add XML config importing.  Remove RC file importing.
 
@@ -3626,7 +3637,7 @@
 	(html-import-config-form): New template.
 	(get_configs_response): Call html-import-config-form.
 
-2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Added basic auto-refresh functionality for the tasks table.
 
@@ -3651,21 +3662,21 @@
 
 	* src/html/make_html: Removed second newline at end of file.
 
-2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Corrected version check for libopenvas, required
 	version is now 3.0.1.
 
-2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Added clumsy libopenvas required version check and
 	TODO regarding possible improvements.
 
-2010-01-05  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2010-01-05  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Lowercased some cmake commands.
 
-2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add config exporting.
 
@@ -3678,7 +3689,7 @@
 
 	* src/html/src/omp.xsl (config): Add an export button.
 
-2010-01-04  Matthew Mundell <matthew.mundell@intevation.de>
+2010-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add email rule.
 	(escalator_data): New function.
@@ -3687,7 +3698,7 @@
 	* src/html/src/omp.xsl (html-create-escalator-form): Match email length to
 	validator.
 
-2009-12-31  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add test escalator buttons to the escalators page.  Add "From
 	Address" to escalator email input.
@@ -3707,7 +3718,7 @@
 	(escalator mode=details): Add from address.
 	(get_escalators): Apply test_escalator_response.
 
-2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Updated help texts.
 
@@ -3715,7 +3726,7 @@
 	src/html/src/configure_credentials.htm4,
 	src/html/src/configure_targets.htm4: Updated.
 
-2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/src/omp.xsl: Link help from scanconfig details page.
 
@@ -3724,7 +3735,7 @@
 	* src/html/src/help/configure_scanconfigs.htm4: Slightly improved, link
 	to new help page.
 
-2009-12-31  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-31  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* ChangeLog: Corrected paths.
 
@@ -3741,7 +3752,7 @@
 	* src/html/src/help/tasks.htm4: Added information to
 	status "Stopped".
 
-2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-30  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/src/help/configure_agents.htm4,
 	src/html/src/help/configure_credentials.htm4,
@@ -3749,31 +3760,31 @@
 	src/html/src/help/configure_users.htm4,
 	src/html/src/help/tasks.htm4: Fixed typo.
 
-2009-12-30  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-30  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Adjusted todo, as check for libmicrohttpd is already
 	done.
 
 	* src/CMakeLists.txt: Declared libraries as static.
 
-2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/help/contents.htm4: Add a "you".
 
 	* src/html/src/help/tasks.htm4: Correct a few typos.
 
-2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c: Clean and add some todos and comments.
 	(exec_omp_post): Format strcmp like others.
 	(free_resources): Remove NULL checks from around frees.
 
-2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (nvt, get_nvt_details_response): Match to other
 	details pages.
 
-2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a escalator details page.
 
@@ -3788,7 +3799,7 @@
 	(escalator): Add details button.
 	(escalator mode=details, get_escalator): New templates.
 
-2009-12-29  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Handle the OMP MODIFY_CONFIG "config in use" error with a small error
 	dialog instead of a generic big dialog.
@@ -3797,7 +3808,7 @@
 	(save_config_omp, save_config_family_omp, save_config_nvt_omp): Call
 	check_modify_config instead of check_response to check response.
 
-2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a credential details page.
 
@@ -3813,17 +3824,17 @@
 	(lsc_credential): Add details button.
 	(lsc_credential mode=details, get_lsc_credential): New templates.
 
-2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Repair after last commit.
 
-2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-create-escalator-form): Add 'Threat level
 	at least' condition.
 	(escalator): Print level with 'Threat level at least' condition.
 
-2009-12-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a target details page.
 
@@ -3838,7 +3849,7 @@
 	(target): Add details button.
 	(target mode=details, get_target): New templates.
 
-2009-12-24  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Escalators.
 
@@ -3875,11 +3886,11 @@
 
 	* src/gsad_omp.h: Updated according to last commit.
 
-2009-12-22  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_agents_omp): Change result_len to gsize.
 
-2009-12-22  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Fixed variable types for 64bit compatibility in Base64 decoding.
 
@@ -3891,7 +3902,7 @@
 	* src/gsad.c: Changed response_size and header_auth_decoded_len to
 	gsize.
 
-2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -3899,18 +3910,18 @@
 
 	* src/html/src/about.htm4: Updated.
 
-2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 0.8.3 release.
 
 	* src/html/src/about.htm4: Updated.
 
-2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Don't ignore necessary files when creating the source
 	tarball.
 
-2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/help/contents.htm4: Added agent help to help contents.
 
@@ -3918,12 +3929,12 @@
 
 	* src/html/src/img/agent.png: New.
 
-2009-12-21  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/oap.xsl: Include settings error message if there is one.
 	Make sure filename is correctly aligned, even in Konqueror.
 
-2009-12-21  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (append_chunk_binary): New function.
 	(serve_post): Use append_chunk_binary for binary keys.
@@ -3932,7 +3943,7 @@
 
 	* src/html/src/omp.xsl (html-create-agent-form): Comment out the HOWTOs.
 
-2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Enable agent download button.
 
@@ -3957,7 +3968,7 @@
 
 	* src/CMakeLists.txt: Neaten heading description.
 
-2009-12-18  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/CMakeLists.txt: Remove HEADERS_TEMP and LIBS_TEMP as the OpenVAS
 	flags are provided by other variables.  Set OpenVAS compile flags on
@@ -3983,18 +3994,18 @@
 
 	* src/html/src/help/configure_agents.htm4: New.
 
-2009-12-18  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-18  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt, src/CMakeLists.txt: Added checks for gnutls, libxml
 	and libxslt. Tried to use "elegant" cmake mechanisms to add the
 	respective linker and compiler flags, but failed.
 	Todo with link to workaround added.
 
-2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-config-table): Bold name.
 
-2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Improve cross referencing.
 
@@ -4026,7 +4037,7 @@
 
 	* src/html/header.m4: Added new menu item.
 
-2009-12-17  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add sort buttons for task and status to the get_status page.
 
@@ -4036,7 +4047,7 @@
 	* src/gsad.c (init_validator): Add '_' to sort_field.
 	(exec_omp_post): Pass sort field and order to get_status_omp.
 
-2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-17  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	Use versioning mechanism as in the other OpenVAS CMake-based projects,
 	added files and targets to generate documentation.
@@ -4052,7 +4063,7 @@
 	* CMakeLists.txt: Added versioning and documentation mechanism from
 	openvas-manager.
 
-2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-17  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Fixed formatting by adding missing quotes.
 
@@ -4066,7 +4077,7 @@
 	* src/gsad.c (exec_omp_get): Maximum result count back down
 	to 1000 as we have pagination acticated.
 
-2009-12-17  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-17  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Use pkg-config module to check for correct
 	libmicrohttpd version.
@@ -4075,23 +4086,23 @@
 	the same mechanism as in the top-level CMakeLists.txt and to use
 	the proper variables at compiling and linking step.
 
-2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Increase credential_login max size to 40.
 
-2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-details): Align table better.  Move
 	per-host summary into filtered results.  Add a summary of total threat
 	counts.  Rename the "Results per Host" window "Filtered Results".
 
-2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-report-details): Only display result range
 	and result headings when there are results.  Add first_result to download
 	URL.
 
-2009-12-16  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Separate credential name from credential login name.
 
@@ -4111,27 +4122,27 @@
 	(html-lsc-credentials-table): Add Login heading.
 	(lsc_credential): Add Login column.
 
-2009-12-15  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c: Order authors alphabetically by surname.
 
 	* ChangeLog: Improve formatting.
 
-2009-12-15  Matthew Mundell <matthew.mundell@intevation.de>
+2009-12-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c: Correct doc.  Neaten comments.  Format strcmp conditionals
 	consistently.
 
-2009-12-10  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-10  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (exec_omp_get): Increased maximum result count.
 
-2009-12-09  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/header.m4: Adjusted menu to dynamic pages. (use plural
 	"Scan Configs").
 
-2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-08  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
 
@@ -4141,7 +4152,7 @@
 
 	* src/html/src/about.htm4: Updated.
 
-2009-12-08  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-08  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Preparing the gsa 0.8.2 release.
 
@@ -4151,7 +4162,7 @@
 
 	* src/html/src/about.htm4: Updated.
 
-2009-12-07  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Fixed a bug which caused the GSA to hang or crash when editing the
 	configuration for a family containing ":".
@@ -4160,17 +4171,17 @@
 	family names.
 	(exec_omp_post): Repaired validator usage.
 
-2009-12-07  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Improved checks for pkg-config and libopenvas-config,
 	Intention was to first collect missing tools and then report on them to
 	avoid configure-install cycles.
 
-2009-12-07  Felix Wolfsteller <felix.wolfsteller@intevation.de>
+2009-12-07  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* CMakeLists.txt: Added checks for pkg-config and libopenvas-config.
 
-2009-12-03  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-03  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Added initial NVT feed synchronization support.
 
@@ -4243,7 +4254,7 @@
 
 	* src/CMakeLists.txt: Reformatted.
 
-2009-12-02  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/src/omp.xsl: Make 'Full and fast' accessible again as a scan
 	config template.
@@ -4253,7 +4264,7 @@
 	* VERSION, CMakeLists.txt, src/html/src/about.htm4: Version set
 	to 0.8.2.SVN.
 
-2009-12-01  Michael Wiegand <michael.wiegand@intevation.de>
+2009-12-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Add support for new empty scan config template.
 
@@ -4265,13 +4276,13 @@
 
 	* src/html/src/omp.xsl: Grey out Stop/Delete in case a Task is "Requested".
 
-2009-11-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.h, src/gsad_omp.c: New files.
 
 	* src/CMakeLists.txt: Add static analysis rules.
 
-2009-11-27  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl (html-config-nvt-table): Always show the
 	preferences, as there is always the timeout preference.
@@ -4290,16 +4301,16 @@
 	* src/html/src/login/login.html,
 	src/html/src/help/error_messages.htm4: New.
 
-2009-11-26  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl: Match input widths to validator widths.
 	(get_targets): Apply gsad_msg.
 
-2009-11-26  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/omp.xsl: Convert tabs to spaces.
 
-2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add per-NVT timeout support.
 
@@ -4308,7 +4319,7 @@
 	[details, edit-details] (preferences): Add always-present timeout
 	preference.
 
-2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_base.c (gsad_message): Add function and line arguments.  Free
 	the allocated XML.
@@ -4317,12 +4328,12 @@
 
 	* src/gsad_oap.c: New file.
 
-2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl:
 	Convert tabs to spaces.
 
-2009-11-24  Matthew Mundell <matthew.mundell@intevation.de>
+2009-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/src/gsad.xsl, src/html/src/omp.xsl, src/html/src/oap.xsl: New
 	files.

@@ -3,7 +3,7 @@
  * Description: String validator.
  *
  * Authors:
- * Matthew Mundell <matthew.mundell@intevation.de>
+ * Matthew Mundell <matthew.mundell@greenbone.net>
  * Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
  *
  * Copyright:

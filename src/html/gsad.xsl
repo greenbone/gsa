@@ -14,9 +14,9 @@ $Id$
 Description: Main stylesheet
 
 Authors:
-Matthew Mundell <matthew.mundell@intevation.de>
+Matthew Mundell <matthew.mundell@greenbone.net>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
-Michael Wiegand <michael.wiegand@intevation.de>
+Michael Wiegand <michael.wiegand@greenbone.net>
 Hartmut Goebel <h.goebel@goebel-consult.de>
 
 Copyright:

@@ -14,7 +14,7 @@ $Id$
 Description: Help documents for GSA.
 
 Authors:
-Matthew Mundell <matthew.mundell@intevation.de>
+Matthew Mundell <matthew.mundell@greenbone.net>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@greenbone.net>
 

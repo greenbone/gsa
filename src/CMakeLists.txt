@@ -3,8 +3,8 @@
 # Description: CMakefile for GSAD sources.
 #
 # Authors:
-# Matthew Mundell <matthew.mundell@intevation.de>
-# Michael Wiegand <michael.wiegand@intevation.de>
+# Matthew Mundell <matthew.mundell@greenbone.net>
+# Michael Wiegand <michael.wiegand@greenbone.net>
 #
 # Copyright:
 # Copyright (C) 2009 Greenbone Networks GmbH
