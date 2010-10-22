@@ -1,3 +1,9 @@
+2010-10-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (file_content_response): Properly cast pointer to
+	callback function so that gsa compiles with libmicrohttpd >= 0.9.2.
+	(Backport from trunk; initially committed in r9259).
+
 2010-10-07  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Allow & in LSC passwords; adapted from commit for r9175 by Matthew
