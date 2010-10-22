@@ -1,3 +1,8 @@
+2010-10-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (file_content_response): Properly cast pointer to
+	callback function so that gsa compiles with libmicrohttpd >= 0.9.2.
+
 2010-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* CMakeLists.txt, ChangeLog, doc/CMakeLists.txt, src/gsad.c,

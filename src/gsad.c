@@ -4090,7 +4090,7 @@ file_content_response (struct MHD_Connection *connection, const char* url,
     }
 
   response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
-                                                &file_reader,
+                                                (MHD_ContentReaderCallback) &file_reader,
                                                 file,
                                                 (MHD_ContentReaderFreeCallback)
                                                 &fclose);
