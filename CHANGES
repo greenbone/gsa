@@ -1,3 +1,27 @@
+gsa 1.0.3 (2010-10-29)
+
+This is the third maintenance release for the 1.0 series of GSA (Greenbone
+Security Assistant), an OMP web client for the Open Vulnerability Assessment
+System (OpenVAS).
+
+It addresses a number of issues in the user interface and improves stability
+during XSL transformations. GSA now builds with the latest libmicrohttpd release
+(0.9.2) as well.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 1.0.2:
+* When creating new credentials, password authentication is now the default.
+* A bug which caused the "Pause" button not to work under certain circumstances
+  has been fixed.
+* The handling of errors during the XSL transformation has been improved.
+* The handling of long lines in the XSL transformation has been improved.
+* The range of characters allowed for LSC passwords has been extended.
+* An issue which prevented gsa from building with libmicrohttpd 0.9.2 has been
+  fixed.
+
+
 gsa 1.0.2 (2010-08-17)
 
 This is the second maintenance release for the 1.0 series of GSA (Greenbone
