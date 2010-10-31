@@ -1,3 +1,8 @@
+2010-10-31  Stephan Kleine
+
+	* src/CMakeLists.txt: Link against exslt to fix some 
+	  undefined reference to 'exsltRegisterAll' in gsad_base.c
+
 2010-10-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (file_content_response): Properly cast pointer to
