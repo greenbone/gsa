@@ -1,7 +1,14 @@
+2010-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Increase hosts length to 2000.
+
+	* src/html/omp.xsl (html-create-target-form): Increase hosts fields to
+	2000.
+
 2010-10-31  Stephan Kleine
 
-	* src/CMakeLists.txt: Link against exslt to fix some 
-	  undefined reference to 'exsltRegisterAll' in gsad_base.c
+	* src/CMakeLists.txt: Link against exslt to fix some undefined reference
+	to 'exsltRegisterAll' in gsad_base.c
 
 2010-10-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
