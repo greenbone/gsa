@@ -4047,7 +4047,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>NVT</td>
         <td>Name</td>
         <td>Value</td>
-        <td>Actions</td>
+        <td width="60">Actions</td>
       </tr>
       <xsl:for-each select="preference[string-length(./nvt)&gt;0]">
         <xsl:call-template name="preference">

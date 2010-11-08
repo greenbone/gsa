@@ -1,8 +1,12 @@
+2010-11-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (preferences): Set action column width.
+
 2010-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Increase hosts length to 2000.
 
-	* src/html/omp.xsl (html-create-target-form): Increase hosts fields to
+	* src/html/omp.xsl (html-create-target-form): Increase hosts field to
 	2000.
 
 2010-10-31  Stephan Kleine
