@@ -8719,8 +8719,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td valign="top">Scan Config</td>
           <td>
             <select name="config_id">
-              <xsl:apply-templates select="get_configs_response/config"
-                                   mode="newtask"/>
+              <!-- Skip the "empty" config. -->
+              <xsl:apply-templates
+                select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea']"
+                mode="newtask"/>
             </select>
           </td>
         </tr>

@@ -1,5 +1,9 @@
 2010-11-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (new_task): Skip the empty config.
+
+2010-11-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (preferences): Set action column width.
 
 2010-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
