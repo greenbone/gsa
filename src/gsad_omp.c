@@ -50,7 +50,7 @@
 #include "gsad_omp.h"
 #include "tracef.h"
 
-#include <openvas/openvas_server.h>
+#include <openvas/misc/openvas_server.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
 

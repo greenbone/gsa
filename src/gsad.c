@@ -60,7 +60,7 @@
 #include <glib.h>
 #include <gnutls/gnutls.h>
 #include <netinet/in.h>
-#include <openvas_logging.h>
+#include <openvas/misc/openvas_logging.h>
 #include <openvas/base/pidfile.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */

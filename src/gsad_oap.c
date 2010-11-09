@@ -41,7 +41,7 @@
 #include "gsad_base.h" /* for credentials_t */
 #include "tracef.h" /* for tracef */
 
-#include <openvas/openvas_server.h> /* for openvas_server_open */
+#include <openvas/misc/openvas_server.h> /* for openvas_server_open */
 #include <openvas/omp/omp.h> /* for omp_authenticate */
 
 #undef G_LOG_DOMAIN
