@@ -81,7 +81,7 @@ endif (MANDATORY_TOOL_MISSING)
 
 ## Check for existance of required libraries
 pkg_check_modules (LIBS REQUIRED libmicrohttpd>=0.4.2 libxml-2.0 glib-2.0>=2.14
-                   gthread-2.0)
+                   gthread-2.0 libexslt)
 
 pkg_check_modules (GSAD_LIBS REQUIRED libxslt gnutls)
 

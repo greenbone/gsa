@@ -1,3 +1,14 @@
+2010-11-19  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Added proper setup for existing libexslt dependency.
+
+	* CMakeList.txt: Added check for libexslt.
+
+	* src/CMakeList.txt: Set LINK_FLAGS for gsad properly, avoid overwrite
+	of the existing value.
+
+	* INSTALL: Document libexslt dependency.
+
 2010-11-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c, src/gsad_omp.c, src/gsad_oap.c: Adjusted include

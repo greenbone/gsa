@@ -12,6 +12,7 @@ Prerequisites:
 * libxml
 * libxslt
 * libmicrohttpd
+* libexslt
 
 Prerequisites for building documentation:
 * Doxygen

@@ -104,9 +104,7 @@ add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 ## flags. Unfortunately it boils down to this problem:
 ## http://www.cmake.org/pipermail/cmake/2009-June/030108.html
 set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${OPENVAS_LDFLAGS} -pthread ")
-
-set_target_properties (gsad PROPERTIES LINK_FLAGS "${OPENVAS_LDFLAGS} -lexslt")
+                       "${OPENVAS_LDFLAGS} -pthread -lexslt")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
