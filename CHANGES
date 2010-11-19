@@ -1,3 +1,31 @@
+gsa 2.0+beta1 (2010-11-19)
+
+This is the first beta version of the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes
+the full feature set of OpenVAS Manager available in a web browser.
+Release 2.0 is part of OpenVAS 4, the next generation
+of the Open Vulnerability Assessment System.
+
+GSA 2.0 implements all of the new features of the protocol OMP 2.0.
+This include the plugin based report format framework, the master-slave
+mode and many other changes and improvements.
+
+Many thanks to everyone who has contributed to this release:
+Stephan Kleine, Matthew Mundell, Jan-Oliver Wagner, Michael Wiegand and Felix
+Wolfsteller.
+
+Central new features of Greenbone Security Assistant 2.0:
+
+* Support for report format plugin framework has been added.
+* Support for master-slave mode has been added.
+* Support for editing credentials has been added.
+* Support for agent verification has been added.
+* Input validation for user names and passwords has been improved.
+* Support for Microsoft Internet Explorer has been improved.
+* The usability and layout of the web interface has been improved.
+* GSA now builds with libmicrohttpd 0.9.2 and above.
+
+
 gsa 1.0.0 (2010-08-02)
 
 This is the 1.0.0 release of GSA (Greenbone Security Assistant), an OMP web client
