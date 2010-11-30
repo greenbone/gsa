@@ -8076,7 +8076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_reports_response">
   <xsl:choose>
-    <xsl:when test="@status = '400'">
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
         <xsl:with-param name="operation">
           Get Report
