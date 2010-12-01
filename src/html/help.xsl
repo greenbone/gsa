@@ -232,7 +232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the entry and update the list.
+       will immediately remove the entry and update the list.
       </p>
 
       <h4>Download Installer Package</h4>
@@ -372,7 +372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the entry and update the list.
+       will immediately remove the entry and update the list.
       </p>
 
       <h4>Credential Details</h4>
@@ -581,7 +581,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the escalator and update the list.
+       will immediately remove the escalator and update the list.
       </p>
       <p>
        It is not possible to remove an escalator that is in use by a task.
@@ -1012,7 +1012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the schedule and update the list.
+       will immediately remove the schedule and update the list.
       </p>
       <p>
        It is not possible to remove an schedule that is in use by a task.
@@ -1027,13 +1027,154 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="scheduledetails"></a>
       <h2>Schedule Details</h2>
       <p>
-       Provides information about an schedule like the name, comment, the first
+       Provides information about a schedule like the name, comment, the first
        and next time the schedule will be executed, the period and the duration.
       </p>
 
       <h3>Tasks using this Schedules</h3>
       <p>
        This table provides an overview of the tasks associated with this schedule.
+       Details of these tasks can be seen after a click on the Details
+       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="configure_slaves.html">
+  <div class="gb_window_part_center">Help: Configure Slave</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_slaves">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Slaves</h1>
+      <p>
+        <a href="glossary.html#task">Tasks</a> can be configured to run on slave
+        manager servers.
+      </p>
+
+      <a name="newslave"></a>
+      <h2>New Slave</h2>
+
+      <p>
+       To create a slave the dialog offers these entries.
+       Hit the button "Create Slave" to submit the new slave.
+       The list of slaves will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Rome</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Host</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>192.0.32.10</td>
+        </tr>
+        <tr class="even">
+          <td>Port</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Integer</td>
+          <td>9390</td>
+        </tr>
+        <tr class="odd">
+          <td>Login</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>sally</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Password</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Text</td>
+          <td></td>
+        </tr>
+      </table>
+
+      <a name="slaves"></a>
+      <h2>Slaves</h2>
+      <p>
+       This table provides an overview of all created slaves.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>User-given name of the slave.</td>
+        </tr>
+        <tr class="even">
+          <td>Host</td>
+          <td>The host address of the slave manager.</td>
+        </tr>
+        <tr class="odd">
+          <td>Port</td>
+          <td>Port on which the slave manager is running.</td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>Login name on the slave manager.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete Slave</h4>
+      <p>
+       Pressing the delete icon
+       <img src="/img/delete.png" alt="Delete" title="Delete" />
+       will immediately remove the slave and update the list.
+      </p>
+      <p>
+       It is not possible to remove a slave that is associated with a task.
+      </p>
+
+      <h4>Slave Details</h4>
+      <p>
+       Details of a slave can be seen by clicking on the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />.
+      </p>
+
+      <a name="slavedetails"></a>
+      <h2>Slave Details</h2>
+      <p>
+       Provides information about a slave like the name, comment, host,
+       login and password.
+      </p>
+
+      <h3>Tasks using this Slaves</h3>
+      <p>
+       This table provides an overview of the tasks associated with this slave.
        Details of these tasks can be seen after a click on the Details
        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
@@ -1226,7 +1367,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the entry and update the list.
+       will immediately remove the entry and update the list.
       </p>
       <p>
        Note that if a target is associated with at least one task, it is not possible
@@ -1429,7 +1570,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the delete icon
        <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immedialy remove the user and update the list.
+       will immediately remove the user and update the list.
       </p>
       <p>
        It is not possible to remove the last Administrator, which
@@ -1473,7 +1614,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <li> <a href="reports.html">Reports</a></li>
               <li> <a href="view_report.html">View Report</a></li>
             </ul>
-            <li> <a href="new_task.html">New task</a></li>
+            <li> <a href="new_task.html">New Task</a></li>
             <li> <a href="notes.html">Notes</a></li>
             <li> <a href="overrides.html">Overrides</a></li>
             <li> <a href="performance.html">Performance</a></li>
@@ -1495,6 +1636,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_escalators.html">Configure Escalators</a></li>
             <li> <a href="configure_schedules.html">Configure Schedules</a></li>
             <li> <a href="configure_report_formats.html">Configure Report Formats</a></li>
+            <li> <a href="configure_slaves.html">Configure Slaves</a></li>
           </ul>
           <li> Administration</li>
           <ul>
@@ -2129,6 +2271,84 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 </pre>
 
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_task.html">
+  <div class="gb_window_part_center">Help: New Task</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>New Task</h1>
+
+      <p>
+       To create a task, this dialog offers the following entries.
+       Hit the button "Create Task" to create the new task.
+       The list of tasks will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Rome</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Scan Config</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Full and fast</td>
+        </tr>
+        <tr class="even">
+          <td>Scan Targets</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td>Localhost</td>
+        </tr>
+        <tr class="odd">
+          <td>Escalator</td>
+          <td>no</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Schedule</td>
+          <td>no</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Slave</td>
+          <td>no</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+      </table>
     </div>
   </div>
 </xsl:template>
