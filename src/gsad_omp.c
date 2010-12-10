@@ -1321,26 +1321,22 @@ create_lsc_credential_omp (credentials_t * credentials,
         ret = openvas_server_sendf_xml (&session,
                                         "<create_lsc_credential>"
                                         "<name>%s</name>"
-                                        "%s%s%s"
+                                        "<comment>%s</comment>"
                                         "<login>%s</login>"
                                         "</create_lsc_credential>",
                                         name,
-                                        comment ? "<comment>" : "",
                                         comment ? comment : "",
-                                        comment ? "</comment>" : "",
                                         login);
       else
         ret = openvas_server_sendf_xml (&session,
                                         "<create_lsc_credential>"
                                         "<name>%s</name>"
-                                        "%s%s%s"
+                                        "<comment>%s</comment>"
                                         "<login>%s</login>"
                                         "<password>%s</password>"
                                         "</create_lsc_credential>",
                                         name,
-                                        comment ? "<comment>" : "",
                                         comment ? comment : "",
-                                        comment ? "</comment>" : "",
                                         login,
                                         password ? password : "");
 

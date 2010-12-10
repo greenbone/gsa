@@ -1,3 +1,8 @@
+2010-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_lsc_credential_omp): Put comment tag directly
+	in command string, otherwise the send function escapes brackets.
+
 2010-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (configure_slaves.html, new_task.html): New templates.
