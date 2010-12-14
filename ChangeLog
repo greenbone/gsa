@@ -1,3 +1,16 @@
+2010-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Switch table line to full report
+	with download column.
+	(html-report-table, report): Replace download column with download action.
+
+	* src/html/help.xsl (configure_report_formats.html): Move predefined
+	report details here.
+	(reports.html): Remove predefined report details.  Add report download
+	action.
+	(view_report.html): Add descriptions of windows, in order to describe new
+	download option.
+
 2010-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (req_parms, free_resources): Add lsc_smb_credential_id.

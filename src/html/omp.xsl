@@ -401,9 +401,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><img src="/img/log.png" alt="Log" title="Log"/></td>
           <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
           <td>Total</td>
+          <td>Download</td>
         </tr>
         <tr>
-          <td>Threat Counts:</td>
+          <td>Full report:</td>
           <td>
             <xsl:value-of select="report/result_count/hole"/>
           </td>
@@ -421,6 +422,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
           <td>
             <xsl:value-of select="report/result_count/hole + report/result_count/warning + report/result_count/info + report/result_count/log + report/result_count/false_positive"/>
+          </td>
+          <td>
+            <div id="small_form" style="float:right;">
+              <form action="" method="get">
+                <input type="hidden" name="report_id" value="{report/@id}"/>
+                <input type="hidden" name="cmd" value="get_report"/>
+                <input type="hidden" name="notes" value="1"/>
+                <input type="hidden" name="overrides" value="1"/>
+                <input type="hidden" name="result_hosts_only" value="1"/>
+                <input type="hidden" name="levels" value="hmlg"/>
+                <select name="report_format_id"
+                        title="Download Format">
+                  <xsl:for-each select="../../get_report_formats_response/report_format[active=1]">
+                    <xsl:choose>
+                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <input type="image"
+                       name="submit"
+                       value="Download"
+                       title="Download"
+                       src="/img/download.png"
+                       border="0"
+                       style="margin-left:3px;"
+                       alt="Download"/>
+              </form>
+            </div>
           </td>
         </tr>
       </table>
@@ -1028,7 +1062,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td rowspan="2">Report</td>
             <td rowspan="2">Threat</td>
             <td colspan="5">Scan Results</td>
-            <td rowspan="2">Download</td>
             <td rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
@@ -1497,39 +1530,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="result_count/false_positive"/>
     </td>
     <td>
-      <div id="small_form" style="float:right;">
-        <form action="" method="get">
-          <input type="hidden" name="report_id" value="{@id}"/>
-          <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="notes" value="1"/>
-          <input type="hidden" name="overrides" value="1"/>
-          <input type="hidden" name="result_hosts_only" value="1"/>
-          <input type="hidden" name="levels" value="hmlg"/>
-          <select name="report_format_id"
-                  title="Download Format">
-            <xsl:for-each select="../../../../get_report_formats_response/report_format[active=1]">
-              <xsl:choose>
-                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </select>
-          <input type="image"
-                 name="submit"
-                 value="Download"
-                 title="Download"
-                 src="/img/download.png"
-                 border="0"
-                 style="margin-left:3px;"
-                 alt="Download"/>
-        </form>
-      </div>
-    </td>
-    <td>
       <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1"
          title="Details"
          style="margin-left:3px;">
@@ -1550,6 +1550,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;levels=hmlg&amp;report_format_id=d5da9f67-8551-4e51-807b-b6a873d70e34"
+         title="Export Task XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

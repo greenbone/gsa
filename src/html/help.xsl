@@ -634,6 +634,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will appear for selection in the dialogs for downloading reports.
       </p>
 
+      <a name="predefined_report_formats"></a>
+      <h2>Predefined Report Formats</h2>
+      <p>
+        The predefined formats include:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Name</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>PDF</td>
+          <td>
+            A single PDF file is created from the report details.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>HTML</td>
+          <td>
+            A single HTML file is created from the report details.
+            This is similar to the page created via action "Details"
+            but is an self-contained document that could be viewed
+            independent of GSA.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>XML</td>
+          <td>
+            A single XML file is created from the report details.
+            This should be the basis for creating your own style
+            for a report or post-process the results in other ways.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>TXT</td>
+          <td>
+            A single plain text file is created from the report details.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>NBE</td>
+          <td>
+            A single NBE file is created. This format is supported
+            by OpenVAS-Client and in the past often used for
+            post-processing the results. It is offered primarily
+            for compatibility purposes. It is recommended to
+            set up post-processing based on the XML file, not
+            based on the NBE file.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>ITG</td>
+          <td>
+            Any tabular results of IT-Grundschutz scans are collected
+            from the report and assembled to a single CSV file for
+            simple integration into spreadsheet applications or
+            databases.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>CPE</td>
+          <td>
+            Any tabular results of CPE inventory scans are collected
+            from the report and assembled to a single CSV file for
+            simple integration into spreadsheet applications or
+            databases.
+          </td>
+        </tr>
+      </table>
+
       <a name="import_report_format"></a>
       <h2>Import Report Format</h2>
       <p>
@@ -2820,54 +2891,6 @@ Public License instead of this License.
             </table>
           </td>
         </tr>
-        <tr>
-          <td>Download</td>
-          <td>This field offers to download the report in various formats.
-              Formats can be configured on the
-              <a href="configure_report_formats.html">Report Formats</a>
-              page.  The predefined formats include:
-            <br />
-            <table>
-              <tr><td valign="top">PDF:</td><td>
-                  A single PDF file is created from the report details.
-              </td></tr>
-              <tr><td valign="top">HTML:</td><td>
-                  A single HTML file is created from the report details.
-                  This is similar to the page created via action "Details"
-                  but is an self-contained document that could be viewed
-                  independent of GSA.
-              </td></tr>
-              <tr><td valign="top">XML:</td><td>
-                  A single XML file is created from the report details.
-                  This should be the basis for creating your own style
-                  for a report or post-process the results in other ways.
-              </td></tr>
-              <tr><td valign="top">TXT:</td><td>
-                  A single plain text file is created from the report details.
-              </td></tr>
-              <tr><td valign="top">NBE:</td><td>
-                  A single NBE file is created. This format is supported
-                  by OpenVAS-Client and in the past often used for
-                  post-processing the results. It is offered primarily
-                  for compatibility purposes. It is recommended to
-                  set up post-processing based on the XML file, not
-                  based on the NBE file.
-              </td></tr>
-              <tr><td valign="top">ITG:</td><td>
-                  Any tabular results of IT-Grundschutz scans are collected
-                  from the report and assembled to a single CSV file for
-                  simple integration into spreadsheet applications or
-                  databases.
-              </td></tr>
-              <tr><td valign="top">CPE:</td><td>
-                  Any tabular results of CPE inventory scans are collected
-                  from the report and assembled to a single CSV file for
-                  simple integration into spreadsheet applications or
-                  databases.
-              </td></tr>
-            </table>
-          </td>
-        </tr>
       </table>
 
       <a name="overrides"></a>
@@ -2902,6 +2925,16 @@ Public License instead of this License.
       <p>
        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
        remove the report immediately. The list of reports will be updated.
+      </p>
+
+      <h4>Download a report</h4>
+      <p>
+       To download the full report in XML format click on the download
+       <img src="/img/download.png" alt="Download" title="Download" />
+       icon.  Report formats can be configured on the
+       <a href="configure_report_formats.html">Report Formats</a>
+       page.  Other formats are available for download on the
+       <a href="/help/view_report.html">report details</a> page.
       </p>
 
       <a name="notes"></a>
@@ -3925,7 +3958,25 @@ Public License instead of this License.
       </p>
 
       <a name="overrides"></a>
-      <h2>Overrides Selection</h2>
+      <h2>Report Summary</h2>
+      <p>
+        The Report Summary window shows key details of the report, like the name
+        of the task that produced the report, and the time the task started.
+      </p>
+
+      <p>
+        This window also contains a table of threat counts for the full report.
+        To download the full report, the <a href="glossary.html#report_format">format</a>
+        can be chosen in the Download column.
+        The download will start shortly after a click on the download
+        <img src="/img/download.png" alt="Download" title="Download" />
+        icon.  Report formats can be configured on the
+        <a href="configure_report_formats.html">Report Formats</a>
+        page.
+      </p>
+
+      <a name="overrides"></a>
+      <h3>Overrides Selection</h3>
       <p>
        By default the configured <a href="glossary.html#override">overrides</a> are applied.
        The selection allows to switch to a view without applying overrides.
@@ -3940,17 +3991,33 @@ Public License instead of this License.
        Note that leaving this page will reset the overrides selection to apply overrides.
       </p>
 
-      <h2>Download a report</h2>
+      <a name="result_filtering"></a>
+      <h2>Result Filtering</h2>
+      <p>
+        The Result Filtering window shows how the results of the scan have been
+        filtered to produce the report.  Modifying any of the values and clicking
+        the "Apply" button will update the report.
+      </p>
+
+      <h3>Download the filtered report</h3>
       <p>
        To download the currently shown report, the <a href="glossary.html#report_format">format</a>
        can be chosen.
-       The download will start shortly after a click on the "Download" button.  Report
-       formats can be configured on the
+       The download will start shortly after a click on the download
+       <img src="/img/download.png" alt="Download" title="Download" />
+       icon.  Report formats can be configured on the
        <a href="configure_report_formats.html">Report Formats</a>
        page.
       </p>
 
-      <h2>Notes</h2>
+      <a name="result_filtering"></a>
+      <h2>Filtering Results</h2>
+      <p>
+        The Filtering Results window shows the results of the report, filtered
+        according to the Result Filtering window.
+      </p>
+
+      <h3>Notes</h3>
       <p>
        Any <a href="/help/glossary.html#note">notes</a> that apply to a result are
        displayed under the result.  The notes for a result are sorted most recently
@@ -3976,7 +4043,7 @@ Public License instead of this License.
        which is helpful if the result has a very long description.
       </p>
 
-      <h2>Overrides</h2>
+      <h3>Overrides</h3>
       <p>
        If activated, any <a href="/help/glossary.html#override">overrides</a>
        that apply to a result are displayed under the result.
@@ -4000,7 +4067,7 @@ Public License instead of this License.
        which is helpful if the result has a very long description.
       </p>
 
-      <h2>Result Sorting</h2>
+      <h3>Result Sorting</h3>
       <p>
        Results shown on the page can be sorted either by the port number or by threat
        level, and ascending or descending.
@@ -4008,7 +4075,7 @@ Public License instead of this License.
        "threat ascending").
       </p>
 
-      <h2>Result Filtering</h2>
+      <h3>Result Filtering</h3>
       <p>
        A checkbox for each threat level (High, Medium, Low and Log) can be ticked
        or unticked to
