@@ -1551,7 +1551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;levels=hmlg&amp;report_format_id=d5da9f67-8551-4e51-807b-b6a873d70e34"
-         title="Export Task XML"
+         title="Export as XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
