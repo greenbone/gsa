@@ -3155,7 +3155,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_target"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-            <td valign="top" width="125">Name
+            <td valign="top" width="175">Name
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -3163,7 +3163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-          <td valign="top" width="125">Hosts</td>
+          <td valign="top" width="175">Hosts</td>
           <xsl:choose>
             <xsl:when test="not ($target-sources/target_locator)">
               <!-- No target locator(s) given. -->
@@ -3234,15 +3234,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           </tr>
           <tr>
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="175">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Credential (optional)</td>
+            <td valign="top" width="175">SSH Credential (optional)</td>
             <td>
               <select name="lsc_credential_id">
+                <option value="--">--</option>
+                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">SMB Credential (optional)</td>
+            <td>
+              <select name="lsc_smb_credential_id">
                 <option value="--">--</option>
                 <xsl:apply-templates select="$lsc-credentials" mode="select"/>
               </select>
@@ -3276,7 +3285,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Hosts</td>
             <td>IPs</td>
-            <td>Credential</td>
+            <td>SSH Credential</td>
+            <td>SMB Credential</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="target"/>
@@ -3338,8 +3348,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={lsc_credential/@id}">
-        <xsl:value-of select="lsc_credential/name"/>
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}">
+        <xsl:value-of select="ssh_lsc_credential/name"/>
+      </a>
+    </td>
+    <td>
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}">
+        <xsl:value-of select="smb_lsc_credential/name"/>
       </a>
     </td>
     <td>
@@ -3398,10 +3413,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="max_hosts"/></td>
         </tr>
         <tr>
-          <td>Credential:</td>
+          <td>SSH Credential:</td>
           <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={lsc_credential/@id}">
-              <xsl:value-of select="lsc_credential/name"/>
+            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}">
+              <xsl:value-of select="ssh_lsc_credential/name"/>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>SMB Credential:</td>
+          <td>
+            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}">
+              <xsl:value-of select="smb_lsc_credential/name"/>
             </a>
           </td>
         </tr>

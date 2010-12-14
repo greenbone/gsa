@@ -1266,11 +1266,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Covers both of our web staging systems</td>
         </tr>
         <tr class="even">
-          <td>Credential (optional)</td>
+          <td>SSH Credential</td>
           <td>no</td>
           <td>--</td>
           <td>Any of the <a href="configure_credentials.html">configured credentials</a>.</td>
-          <td>Security Scan Account</td>
+          <td>Security Scan Account for SSH</td>
+        </tr>
+        <tr class="even">
+          <td>SMB Credential</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_credentials.html">configured credentials</a>.</td>
+          <td>Security Scan Account for SMB</td>
         </tr>
       </table>
 
@@ -1348,8 +1355,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               hosts specification.</td>
         </tr>
         <tr class="even">
-          <td>Credentials</td>
-          <td>List of associated credentials, that can be clicked on to view details.</td>
+          <td>SSH Credential</td>
+          <td>Associated SSH credential, that can be clicked on to view details.</td>
+        </tr>
+        <tr class="even">
+          <td>SMB Credential</td>
+          <td>Associated SMB credential, that can be clicked on to view details.</td>
         </tr>
       </table>
 
@@ -1387,9 +1398,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Provides detailed information about the target.
        This includes the name, comment and the maximum number of hosts to scan.
-       If credentials are associated with this target, its name can be seen. A click
-       on the credentials name will show more information about the associated
-       credentials.
+       If credentials are associated with this target, their names can be seen. A click
+       on a credential name will show more information about the associated
+       credential.
       </p>
 
       <h3>Tasks using this Target</h3>

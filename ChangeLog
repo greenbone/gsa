@@ -1,3 +1,18 @@
+2010-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (req_parms, free_resources): Add lsc_smb_credential_id.
+	(serve_post): Pass two credentials to create_target_omp.
+
+	* src/gsad_omp.c (create_target_omp): Split credential into SSH and SMB
+	credentials.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/help.xsl (configure_targets.html): Update for dual credential.
+
+	* src/html/omp.xsl (html-create-target-form, html-targets-table, target)
+	(target [details]): Split into two credentials.
+
 2010-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_lsc_credential_omp): Put comment tag directly

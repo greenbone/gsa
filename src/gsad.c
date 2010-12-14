@@ -533,6 +533,7 @@ struct gsad_connection_info
     char *hour;          ///< Value of "hour" parameter.
     char *ldaphost;      ///< Value of "ldaphost" parameter.
     char *lsc_credential_id; ///< Value of "lsc_credential_id" parameter.
+    char *lsc_smb_credential_id; ///< Value of "lsc_smb_credential_id" parameter.
     char *modify_password; ///< Value of "modify_password" parameter.
     char *method;        ///< Value of "event" parameter.
     char *next;          ///< Value of "next" parameter.
@@ -751,6 +752,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.group);
   free (con_info->req_parms.hour);
   free (con_info->req_parms.lsc_credential_id);
+  free (con_info->req_parms.lsc_smb_credential_id);
   free (con_info->req_parms.minute);
   free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
@@ -1055,6 +1057,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "lsc_credential_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.lsc_credential_id);
+      if (!strcmp (key, "lsc_smb_credential_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.lsc_smb_credential_id);
       if (!strcmp (key, "minute"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.minute);
@@ -1866,6 +1871,8 @@ exec_omp_post (credentials_t * credentials,
       validate (validator, "comment", &con_info->req_parms.comment);
       validate (validator, "lsc_credential_id",
                 &con_info->req_parms.lsc_credential_id);
+      validate (validator, "lsc_credential_id",
+                &con_info->req_parms.lsc_smb_credential_id);
       validate (validator, "target_locator",
                 &con_info->req_parms.target_locator);
       validate (validator, "lsc_password", &con_info->req_parms.password);
@@ -1875,6 +1882,7 @@ exec_omp_post (credentials_t * credentials,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
                            con_info->req_parms.lsc_credential_id,
+                           con_info->req_parms.lsc_smb_credential_id,
                            con_info->req_parms.target_locator,
                            con_info->req_parms.login,
                            con_info->req_parms.password);
