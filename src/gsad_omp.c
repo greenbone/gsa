@@ -3065,6 +3065,7 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
  * @param[in]  name         Name of new target.
  * @param[in]  hosts        Hosts associated with target.
  * @param[in]  comment      Comment on target.
+ * @param[in]  port_range   Range of ports to be scanned.
  * @param[in]  target_credential      UUID of SSH credential for target.
  * @param[in]  target_smb_credential  UUID of SMB credential for target.
  * @param[in]  target_locator Target locator to pull targets from.
@@ -3075,7 +3076,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
  */
 char *
 create_target_omp (credentials_t * credentials, char *name, char *hosts,
-                   char *comment, const char *target_credential,
+                   char *comment, const char *port_range,
+                   const char *target_credential,
                    const char *target_smb_credential,
                    const char* target_locator, const char* username,
                    const char* password)
@@ -3094,7 +3096,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
   xml = g_string_new ("<get_targets>");
 
   if (name == NULL || (hosts == NULL && target_locator == NULL)
-      || comment == NULL || target_credential == NULL
+      || comment == NULL || port_range == NULL || target_credential == NULL
       || target_smb_credential == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
   else
@@ -3141,12 +3143,14 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
                                   "<create_target>"
                                   "<name>%s</name>"
                                   "<hosts>%s</hosts>"
+                                  "<port_range>%s</port_range>"
                                   "%s%s%s%s"
                                   "</create_target>",
                                   name,
                                   (strcmp (source_element, "") == 0)
                                     ? hosts
                                     : "",
+                                  port_range,
                                   comment_element,
                                   source_element,
                                   credentials_element,

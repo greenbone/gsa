@@ -334,6 +334,7 @@ init_validator ()
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
+  openvas_validator_add (validator, "port_range", "^(default)|([-0-9,]{1,400})$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
@@ -562,6 +563,7 @@ struct gsad_connection_info
     char *pw;            ///< Value of "pw" parameter.
     char *password;      ///< Value of "password" parameter.
     char *port;          ///< Value of "port" parameter.
+    char *port_range;    ///< Value of "port_range" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
     char *threat;        ///< Value of "threat" parameter.
     char *new_threat;    ///< Value of "new_threat" parameter.
@@ -773,6 +775,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.pw);
   free (con_info->req_parms.password);
   free (con_info->req_parms.port);
+  free (con_info->req_parms.port_range);
   free (con_info->req_parms.oid);
   free (con_info->req_parms.sort_field);
   free (con_info->req_parms.sort_order);
@@ -1135,6 +1138,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "port"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.port);
+      if (!strcmp (key, "port_range"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.port_range);
       if (!strcmp (key, "threat"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.threat);
@@ -1869,6 +1875,7 @@ exec_omp_post (credentials_t * credentials,
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "hosts", &con_info->req_parms.hosts);
       validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "port_range", &con_info->req_parms.port_range);
       validate (validator, "lsc_credential_id",
                 &con_info->req_parms.lsc_credential_id);
       validate (validator, "lsc_credential_id",
@@ -1881,6 +1888,7 @@ exec_omp_post (credentials_t * credentials,
         create_target_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
+                           con_info->req_parms.port_range,
                            con_info->req_parms.lsc_credential_id,
                            con_info->req_parms.lsc_smb_credential_id,
                            con_info->req_parms.target_locator,

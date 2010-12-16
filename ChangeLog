@@ -1,3 +1,19 @@
+2010-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Move port range from config into target.
+
+	* src/gsad.c (init_validator): Add port range validator.
+	(req_parms, free_resources): Add port range.
+	(serve_post): Handle port range.
+	(exec_omp_post): Pass port range to create_target_omp.
+
+	* src/gsad_omp.c (create_target_omp): Add port range arg.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-target-form): Add port range input.
+	(html-targets-table, target, target [details]): Show port range.
+
 2010-12-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Add a collection of code hardening flags to

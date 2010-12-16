@@ -3245,6 +3245,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td valign="top" width="175">Port Range</td>
+            <td>
+              <input type="text" name="port_range" value="default" size="30"
+                     maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="175">SSH Credential (optional)</td>
             <td>
               <select name="lsc_credential_id">
@@ -3290,6 +3297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Hosts</td>
             <td>IPs</td>
+            <td>Port Range</td>
             <td>SSH Credential</td>
             <td>SMB Credential</td>
             <td width="100">Actions</td>
@@ -3352,6 +3360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
+    <td><xsl:value-of select="port_range"/></td>
     <td>
       <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}">
         <xsl:value-of select="ssh_lsc_credential/name"/>
@@ -3416,6 +3425,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Maximum number of hosts:</td>
           <td><xsl:value-of select="max_hosts"/></td>
+        </tr>
+        <tr>
+          <td>Port Range:</td>
+          <td><xsl:value-of select="port_range"/></td>
         </tr>
         <tr>
           <td>SSH Credential:</td>
