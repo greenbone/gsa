@@ -1,5 +1,10 @@
 2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add filtered result row to
+	report summary.
+
+2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (configure_targets.html): Add port range.
 
 2010-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
