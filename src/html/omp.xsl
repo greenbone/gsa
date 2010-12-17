@@ -530,6 +530,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </td>
         </tr>
+        <tr>
+          <td>
+            <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
+            Filtered results
+            <xsl:value-of select="report/results/@start"/>
+            -
+            <xsl:value-of select="$last"/>:</td>
+          <td>
+            <xsl:value-of select="count(report/results/result[threat/text() = 'High'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count(report/results/result[threat/text() = 'Medium'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count(report/results/result[threat/text() = 'Low'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count(report/results/result[threat/text() = 'Log'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count(report/results/result[threat/text() = 'False Positive'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count(report/results/result)"/>
+          </td>
+          <td>
+            <div id="small_form" class="float_right">
+              <form action="" method="get">
+                <input type="hidden" name="cmd" value="get_report"/>
+                <input type="hidden" name="report_id" value="{report/@id}"/>
+                <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                <input type="hidden" name="levels" value="{$levels}"/>
+                <input type="hidden"
+                       name="search_phrase"
+                       value="{report/filters/phrase}"/>
+                <input type="hidden"
+                       name="apply_min_cvss_base"
+                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                <input type="hidden"
+                       name="min_cvss_base"
+                       value="{report/filters/min_cvss_base}"/>
+                <input type="hidden"
+                       name="sort_field"
+                       value="{report/sort/field/text()}"/>
+                <input type="hidden"
+                       name="sort_order"
+                       value="{report/sort/field/order}"/>
+                <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                <input type="hidden"
+                       name="overrides"
+                       value="{$apply-overrides}"/>
+                <input type="hidden"
+                       name="result_hosts_only"
+                       value="{report/filters/result_hosts_only}"/>
+                <select name="report_format_id" title="Download Format">
+                  <xsl:for-each select="../../get_report_formats_response/report_format[active=1]">
+                    <xsl:choose>
+                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <input type="image"
+                       name="submit"
+                       value="Download"
+                       title="Download"
+                       src="/img/download.png"
+                       border="0"
+                       style="margin-left:3px;"
+                       alt="Download"/>
+              </form>
+            </div>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -547,80 +625,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       -->
     </div>
     <div class="gb_window_part_content">
-      <div style="float:left;">
-        <xsl:choose>
-          <xsl:when test="count(report/results/result) &gt; 0">
-            <!-- This must match the max value in exec_omp_get in gsad.c. -->
-            <xsl:variable name="increment">1000</xsl:variable>
-            <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
-            <xsl:if test = "report/results/@start &gt; 1">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
-            </xsl:if>
-            Results <xsl:value-of select="report/results/@start"/> -
-            <xsl:value-of select="$last"/>
-            of <xsl:value-of select="report/result_count/filtered"/>
-            <xsl:if test = "$last &lt; report/result_count/filtered">
-              <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
-      <div id="small_form" class="float_right">
-        <form action="" method="get">
-          This report as:
-          <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="report_id" value="{report/@id}"/>
-          <input type="hidden" name="first_result" value="{report/results/@start}"/>
-          <input type="hidden" name="levels" value="{$levels}"/>
-          <input type="hidden"
-                 name="search_phrase"
-                 value="{report/filters/phrase}"/>
-          <input type="hidden"
-                 name="apply_min_cvss_base"
-                 value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-          <input type="hidden"
-                 name="min_cvss_base"
-                 value="{report/filters/min_cvss_base}"/>
-          <input type="hidden"
-                 name="sort_field"
-                 value="{report/sort/field/text()}"/>
-          <input type="hidden"
-                 name="sort_order"
-                 value="{report/sort/field/order}"/>
-          <input type="hidden" name="notes" value="{report/filters/notes}"/>
-          <input type="hidden"
-                 name="overrides"
-                 value="{$apply-overrides}"/>
-          <input type="hidden"
-                 name="result_hosts_only"
-                 value="{report/filters/result_hosts_only}"/>
-          <select name="report_format_id" title="Download Format">
-            <xsl:for-each select="../../get_report_formats_response/report_format[active=1]">
-              <xsl:choose>
-                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </select>
-          <input type="image"
-                 name="submit"
-                 value="Download"
-                 title="Download"
-                 src="/img/download.png"
-                 border="0"
-                 style="margin-left:3px;"
-                 alt="Download"/>
-        </form>
-      </div>
-
       <!-- TODO: Move to template. -->
-      <br/>
       <p><table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
           <td>
@@ -876,6 +881,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Filtered Results
+
+      <xsl:choose>
+        <xsl:when test="count(report/results/result) &gt; 0">
+          <!-- This must match the max value in exec_omp_get in gsad.c. -->
+          <xsl:variable name="increment">1000</xsl:variable>
+          <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
+          <xsl:if test = "report/results/@start &gt; 1">
+            <a class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
+          </xsl:if>
+          <xsl:value-of select="report/results/@start"/> -
+          <xsl:value-of select="$last"/>
+          of <xsl:value-of select="report/result_count/filtered"/>
+          <xsl:if test = "$last &lt; report/result_count/filtered">
+            <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+
       <!--
       <a href="/help/view_report.html#viewreport"
          title="Help: View Report (Results per Host)">
