@@ -428,6 +428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <form action="" method="get">
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="cmd" value="get_report"/>
+                <input type="hidden" name="max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
                 <input type="hidden" name="notes" value="1"/>
                 <input type="hidden" name="overrides" value="1"/>
                 <input type="hidden" name="result_hosts_only" value="1"/>
@@ -483,6 +484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                <input type="hidden" name="max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
                 <input type="hidden" name="levels" value="{$levels}"/>
                 <input type="hidden"
                        name="search_phrase"

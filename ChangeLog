@@ -1,5 +1,10 @@
 2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Pass max_results to full and
+	"all filtered" downloads, otherwise 1000 is used.
+
+2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Only display current filtered
 	results range when there are results.
 
