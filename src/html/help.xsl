@@ -1336,6 +1336,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Alphanumeric</td>
           <td>Covers both of our web staging systems</td>
         </tr>
+        <tr class="odd">
+          <td>Port Range</td>
+          <td>yes</td>
+          <td>400</td>
+          <td>Comma separated list of port ranges</td>
+          <td>0-1000,1649,2102-2104</td>
+        </tr>
         <tr class="even">
           <td>SSH Credential</td>
           <td>no</td>
@@ -1426,6 +1433,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               hosts specification.</td>
         </tr>
         <tr class="even">
+          <td>Port Range</td>
+          <td>The comma separated list of target ports.</td>
+        </tr>
+        <tr class="odd">
           <td>SSH Credential</td>
           <td>Associated SSH credential, that can be clicked on to view details.</td>
         </tr>

@@ -1,3 +1,7 @@
+2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (configure_targets.html): Add port range.
+
 2010-12-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move port range from config into target.
