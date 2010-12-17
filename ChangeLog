@@ -1,5 +1,10 @@
 2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add space to port_range, grouping
+	explicitly.
+
+2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add filtered result row to
 	report summary.
 
