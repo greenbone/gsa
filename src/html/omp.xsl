@@ -533,10 +533,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
-            Filtered results
-            <xsl:value-of select="report/results/@start"/>
-            -
-            <xsl:value-of select="$last"/>:</td>
+            <xsl:choose>
+              <xsl:when test="count(report/results/result) &gt; 0">
+                Filtered results
+                <xsl:value-of select="report/results/@start"/>
+                -
+                <xsl:value-of select="$last"/>:
+              </xsl:when>
+              <xsl:otherwise>
+                Filtered results:
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
           <td>
             <xsl:value-of select="count(report/results/result[threat/text() = 'High'])"/>
           </td>

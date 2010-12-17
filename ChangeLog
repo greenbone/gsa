@@ -1,5 +1,10 @@
 2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Only display current filtered
+	results range when there are results.
+
+2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add current filtered results row
 	to report summary.  Remove download button from filtering window.  Move
 	result pager from filtering window to filtered window.
