@@ -433,7 +433,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="notes" value="1"/>
                 <input type="hidden" name="overrides" value="1"/>
                 <input type="hidden" name="result_hosts_only" value="1"/>
-                <input type="hidden" name="levels" value="hmlg"/>
+                <input type="hidden" name="levels" value="hmlgf"/>
                 <select name="report_format_id"
                         title="Download Format">
                   <xsl:for-each select="../../get_report_formats_response/report_format[active=1]">
