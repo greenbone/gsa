@@ -1,3 +1,9 @@
+2010-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): In full download, put cmd first
+	like other downloads, add a first_result, and get the counts from the
+	correct entity.
+
 2010-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Pass max_results to full and
