@@ -1,3 +1,13 @@
+2010-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 2.0+rc1 release.
+
+	* src/html/help.xsl: Updated version number.
+
+	* CMakeLists.txt: Updated version number.
+
+	* CHANGES: Updated.
+
 2010-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add false positive to full

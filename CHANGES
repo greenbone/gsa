@@ -1,3 +1,28 @@
+gsa 2.0+rc1 (2010-12-21)
+
+This is the first release candidate for the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes the full
+feature set of OpenVAS Manager available in a web browser.  Release 2.0 is part
+of OpenVAS 4, the next generation of the Open Vulnerability Assessment System.
+
+This release adds support for separate SMB and SSH credentials and for setting
+per-target port ranges. It improves the user interface for displaying filtered
+reports and for report downloads.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 2.0+beta1:
+* Error handling for reports has been improved.
+* A bug which cause credential comments to be ignored when creating new LSC
+  credentials has been fixed.
+* Target credentials for SMB and SSH are now separated.
+* The user interface for displaying filtered reports and for report downloads
+  has been improved.
+* Hardening flags are now enabled during compile time to increase code quality.
+* Support for setting the port range for a target has been added.
+
+
 gsa 2.0+beta1 (2010-11-19)
 
 This is the first beta version of the upcoming 2.0 release of the
