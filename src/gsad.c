@@ -316,7 +316,7 @@ init_validator ()
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   /** @todo Because we fear injections, we're requiring weaker passwords! */
-  openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:]&@, ;:\\./\\\\]{0,40}$");
+  openvas_validator_add (validator, "lsc_password", "^[-_[:alnum:]&@, ;:\\./\\\\!]{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
   openvas_validator_add (validator, "month",      "^(0[0-9]{1,1})|10|11|12$");
