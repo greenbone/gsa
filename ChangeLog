@@ -1,5 +1,11 @@
 2011-01-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Allow any character in LSC passwords.
+
+	* src/html/help.xsl (configure_credentials.html): Update lsc_password.
+
+2011-01-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Create target locator string with
 	g_markup_escape_text, as password may contain a &.
 

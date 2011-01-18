@@ -322,7 +322,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>[password option]</td>
           <td>yes</td>
           <td>"Autogenerate Credential" or a provided password (40)</td>
-          <td>Alphanumeric and "-_@, ;:\./!"</td>
+          <td>Free form text</td>
           <td>"Autogenerate Credential", hx7ZgI2n</td>
         </tr>
       </table>
