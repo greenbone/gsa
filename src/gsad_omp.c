@@ -3112,14 +3112,14 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         comment_element = g_strdup ("");
 
       if (target_locator != NULL && strcmp (target_locator, "--") != 0)
-        source_element = g_strdup_printf ("<target_locator>"
-                                          "%s"
-                                          "<username>%s</username>"
-                                          "<password>%s</password>"
-                                          "</target_locator>",
-                                          target_locator,
-                                          username ? username : "",
-                                          password ? password : "");
+        source_element = g_markup_printf_escaped ("<target_locator>"
+                                                  "%s"
+                                                  "<username>%s</username>"
+                                                  "<password>%s</password>"
+                                                  "</target_locator>",
+                                                  target_locator,
+                                                  username ? username : "",
+                                                  password ? password : "");
       else
         source_element = g_strdup ("");
 

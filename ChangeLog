@@ -1,3 +1,8 @@
+2011-01-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_target_omp): Create target locator string with
+	g_markup_escape_text, as password may contain a &.
+
 2011-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (configure_credentials.html): Add ! to lsc_password
