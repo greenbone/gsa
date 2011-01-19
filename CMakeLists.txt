@@ -143,6 +143,15 @@ if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
                        "libraries and run cmake again.")
 endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
 
+# TODO: Unclear why the pkg-based test above does not work.
+# Also, minimum version checking would be nice.
+message (STATUS "Looking for microhttpd...")
+find_library (MICROHTTPD microhttpd)
+message (STATUS "Looking for microhttpd... ${MICROHTTPD}")
+if (NOT MICROHTTPD)
+  message (FATAL_ERROR "The microhttpd library is required.")
+endif (NOT MICROHTTPD)
+
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
 find_program (SVN_EXECUTABLE svn DOC "subversion command line client")
