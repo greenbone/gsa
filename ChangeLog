@@ -1,3 +1,7 @@
+2011-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (request_handler): Neaten formatting.
+
 2011-01-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Added check for microhttpd library.

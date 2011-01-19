@@ -4334,10 +4334,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
               gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
-              time_t now = time(NULL);
-              gchar *xml = g_strdup_printf ("<envelope><time>%s</time><login>%s</login>"
-                                            "<help><%s/></help></envelope>",
-                                            ctime(&now), credentials->username, page);
+              time_t now = time (NULL);
+              gchar *xml = g_strdup_printf ("<envelope>"
+                                            "<time>%s</time>"
+                                            "<login>%s</login>"
+                                            "<help><%s/></help>"
+                                            "</envelope>",
+                                            ctime (&now),
+                                            credentials->username,
+                                            page);
               g_free (page);
               res = xsl_transform (xml);
             }
