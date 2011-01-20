@@ -1,3 +1,8 @@
+# GSA logging configuration
+#
+# WARNING: Setting the level of any of the library groups or the "*"
+#          group to include debug may reveal passwords in the logs.
+
 [gsad main]
 prepend=%t %p
 prepend_time_format=%Y-%m-%d %Hh%M.%S %Z

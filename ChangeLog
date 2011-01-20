@@ -1,3 +1,7 @@
+2011-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsa_log_conf.cmake_in: Add warning about passwords.
+
 2011-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (openvas_server_sendf_xml): Remove.
