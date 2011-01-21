@@ -70,7 +70,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
       <img align="right" src="/img/gsa_splash.png"/>
 
-      <h1>Greenbone Security Assistant Version 2.0+rc2</h1>
+      <h1>Greenbone Security Assistant Version 2.0+rc3</h1>
 
       <p>
       The Greenbone Security Assistant is a web-based graphical
