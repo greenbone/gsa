@@ -1,3 +1,14 @@
+2011-01-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Ensure gsa tries to bind to the appropriate privileged ports first and
+	falls back to an unprivileged default port if it did not work and no
+	custom port was specified.
+
+	* src/gsad.c: Change DEFAULT_GSAD_HTTP_PORT to 80, add
+	DEFAULT_GSAD_PORT with value 9392 as fallback.
+	(main): Retry binding to DEFAULT_GSAD_PORT if launching the MHD daemon
+	failed and no custom port was specified.
+
 2011-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsa_log_conf.cmake_in: Add warning about passwords.

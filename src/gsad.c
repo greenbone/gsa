@@ -90,7 +90,12 @@
 /**
  * @brief Fallback GSAD port for HTTP.
  */
-#define DEFAULT_GSAD_HTTP_PORT 9392
+#define DEFAULT_GSAD_HTTP_PORT 80
+
+/**
+ * @brief Fallback unprivileged GSAD port.
+ */
+#define DEFAULT_GSAD_PORT 9392
 
 /**
  * @brief Fallback GSAD port.
@@ -4940,6 +4945,39 @@ main (int argc, char **argv)
                               MHD_OPTION_SOCK_ADDR, &gsad_address,
                               /* End marker option. */
                               MHD_OPTION_END);
+
+          if (gsad_daemon == NULL && gsad_port_string == NULL)
+            {
+              gsad_port = DEFAULT_GSAD_PORT;
+              gsad_address.sin_family = AF_INET;
+              gsad_address.sin_port = htons (gsad_port);
+              if (gsad_address_string)
+                {
+                  if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
+                    {
+                      g_critical ("%s: failed to create GSAD address %s\n",
+                                  __FUNCTION__,
+                                  gsad_address_string);
+                      exit (EXIT_FAILURE);
+                    }
+                }
+              else
+                gsad_address.sin_addr.s_addr = INADDR_ANY;
+
+              gsad_daemon =
+                MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
+                                  | MHD_USE_DEBUG,
+                                  gsad_port,
+                                  NULL, /* Policy callback. */
+                                  NULL, /* Policy callback arg. */
+                                  &request_handler,
+                                  NULL, /* Access callback arg. */
+                                  /* Option value(s) pairs. */
+                                  MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+                                  MHD_OPTION_SOCK_ADDR, &gsad_address,
+                                  /* End marker option. */
+                                  MHD_OPTION_END);
+            }
         }
       else
         {
@@ -4980,6 +5018,43 @@ main (int argc, char **argv)
                               MHD_OPTION_SOCK_ADDR, &gsad_address,
                               /* End marker option. */
                               MHD_OPTION_END);
+
+          if (gsad_daemon == NULL && gsad_port_string == NULL)
+            {
+              gsad_port = DEFAULT_GSAD_PORT;
+              gsad_address.sin_family = AF_INET;
+              gsad_address.sin_port = htons (gsad_port);
+              if (gsad_address_string)
+                {
+                  if (!inet_aton (gsad_address_string, &gsad_address.sin_addr))
+                    {
+                      g_critical ("%s: failed to create GSAD address %s\n",
+                                  __FUNCTION__,
+                                  gsad_address_string);
+                      exit (EXIT_FAILURE);
+                    }
+                }
+              else
+                gsad_address.sin_addr.s_addr = INADDR_ANY;
+
+              gsad_daemon =
+                MHD_start_daemon (MHD_USE_THREAD_PER_CONNECTION
+                                  | MHD_USE_DEBUG
+                                  | MHD_USE_SSL,
+                                  gsad_port,
+                                  NULL, /* Policy callback. */
+                                  NULL, /* Policy callback arg. */
+                                  &request_handler,
+                                  NULL, /* Access callback arg. */
+                                  /* Option value(s) pairs. */
+                                  MHD_OPTION_HTTPS_MEM_KEY, ssl_private_key,
+                                  MHD_OPTION_HTTPS_MEM_CERT, ssl_certificate,
+                                  MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
+                                  MHD_OPTION_SOCK_ADDR, &gsad_address,
+                                  /* End marker option. */
+                                  MHD_OPTION_END);
+            }
+
         }
 
       if (gsad_daemon == NULL)
