@@ -1,5 +1,11 @@
 2011-01-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 2.0+rc2 release.
+
+	* CHANGES: Updated.
+
+2011-01-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Ensure gsa tries to bind to the appropriate privileged ports first and
 	falls back to an unprivileged default port if it did not work and no
 	custom port was specified.

@@ -1,3 +1,26 @@
+gsa 2.0+rc2 (2011-01-21)
+
+This is the second release candidate for the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes the full
+feature set of OpenVAS Manager available in a web browser.  Release 2.0 is part
+of OpenVAS 4, the next generation of the Open Vulnerability Assessment System.
+
+This release extends the range of valid characters for LSC credential passwords,
+improves the behavior if no port is specified and makes the output of --version
+compliant with the GNU Coding Standards.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 2.0+rc1:
+* The output of --version now complies with the GNU Coding Standards.
+* The range of valid characters for LSC credential passwords has been extended
+  further.
+* If no port is specified, GSA will now attempt to listen on the appropriate
+  privileged port (80 or 443) and fall back to listening on its default port
+  (9392) if those are unavailable.
+
+
 gsa 2.0+rc1 (2010-12-21)
 
 This is the first release candidate for the upcoming 2.0 release of the
