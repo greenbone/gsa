@@ -138,7 +138,7 @@ else (PATH_TO_LIBOPENVASCONFIG)
 endif (PATH_TO_LIBOPENVASCONFIG)
 
 if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
-  message (FATAL_ERROR "One or more reguired libraries was not found "
+  message (FATAL_ERROR "One or more required libraries was not found "
                        "(see message above), please install the missing "
                        "libraries and run cmake again.")
 endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
