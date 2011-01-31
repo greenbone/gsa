@@ -1,3 +1,8 @@
+2011-01-31  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (main): Log a message if binding to a port failed before
+	trying the fallback port.
+
 2011-01-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Fixed minor string typo.

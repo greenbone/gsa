@@ -4948,6 +4948,8 @@ main (int argc, char **argv)
 
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
+              g_warning ("Binding to port %d failed, trying default port %d next.",
+                         gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address.sin_family = AF_INET;
               gsad_address.sin_port = htons (gsad_port);
@@ -5021,6 +5023,8 @@ main (int argc, char **argv)
 
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
+              g_warning ("Binding to port %d failed, trying default port %d next.",
+                         gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address.sin_family = AF_INET;
               gsad_address.sin_port = htons (gsad_port);
