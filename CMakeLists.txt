@@ -61,18 +61,10 @@ if (NOT PATH_TO_PKGCONFIG)
   set (MANDATORY_TOOL_MISSING TRUE)
 endif (NOT PATH_TO_PKGCONFIG)
 
-message (STATUS "Looking for libopenvas-config... ${PATH_TO_LIBOPENVASCONFIG}")
-if (NOT PATH_TO_LIBOPENVASCONFIG)
-  set (MANDATORY_TOOL_MISSING TRUE)
-endif (NOT PATH_TO_LIBOPENVASCONFIG)
-
 if (MANDATORY_TOOL_MISSING)
   if (NOT PATH_TO_PKGCONFIG)
     message ("The pkg-config tool is required.")
   endif (NOT PATH_TO_PKGCONFIG)
-  if (NOT PATH_TO_LIBOPENVASCONFIG)
-     message ("The libopenvas-config tool is required (part of openvas-libraries).")
-  endif (NOT PATH_TO_LIBOPENVASCONFIG)
   message (FATAL_ERROR "One or more tools or libraries could not be found on "
                       "your system. Please check the logs above.")
 endif (MANDATORY_TOOL_MISSING)
@@ -81,76 +73,15 @@ endif (MANDATORY_TOOL_MISSING)
 
 ## Check for existance of required libraries
 pkg_check_modules (LIBS REQUIRED libmicrohttpd>=0.4.2 libxml-2.0 glib-2.0>=2.14
-                   gthread-2.0 libexslt)
+                   gthread-2.0 libexslt libopenvas>=4.0.0)
 
 pkg_check_modules (GSAD_LIBS REQUIRED libxslt gnutls)
 
-# TODO The version check of libopenvas will probably be required by other
-# modules, too (e.g. openvas-manager). Either
-# 1) Move to the next CMake version with built-in version comparison functions
-# 2) Use the pkg-config configuration file that kost provided when installing
-#    openvas-libraries
-# 3) Move following checks in an own CMake- module to reuse. Other parts of
-#    the various CMakeLists.txt could be moved in a common ("openvas") module,
-#    too.
-
-## Check version of libopenvas
-# Obtain libopenvas version number
-find_program (PATH_TO_LIBOPENVASCONFIG libopenvas-config DOC "libopenvas-config program"
-                        " to retrieve information about installed"
-                        " openvas-libraries in the system.")
-if (PATH_TO_LIBOPENVASCONFIG)
-  # Obtain libopenvas version number
-  execute_process (COMMAND libopenvas-config --version
-    OUTPUT_VARIABLE LIBOPENVAS_VERSION
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-  # Make a (per definition: semicolon separated) list of it
-  string (REGEX REPLACE "\\." ";" LO_VER ${LIBOPENVAS_VERSION})
-  list (GET LO_VER 0 LO_MAJOR_VER)
-  list (GET LO_VER 1 LO_MINOR_VER)
-  list (GET LO_VER 2 LO_PATCH_VER)
-  set (LIBOPENVAS_SUFFICIENT TRUE)
-  # TODO Would like something like set (MIN_LO_VER "3" "0" "1")
-  #      which would then make it easier to modify these. However, had serious
-  #      issues with the conditionals, thus this clumsy implementation.
-  set (LO_MAJOR_MIN_VER 4)
-  set (LO_MINOR_MIN_VER 0)
-  set (LO_PATCH_MIN_VER 0)
-  set (LO_MAJOR_VER_FAIL FALSE)
-  set (LO_MINOR_VER_FAIL FALSE)
-  set (LO_PATCH_VER_FAIL FALSE)
-  if (${LO_MAJOR_VER} LESS ${LO_MAJOR_MIN_VER})
-    set (LO_MAJOR_VER_FAIL TRUE)
-  endif (${LO_MAJOR_VER} LESS ${LO_MAJOR_MIN_VER})
-  if (${LO_MAJOR_VER} EQUAL ${LO_MAJOR_MIN_VER} AND ${LO_MINOR_VER} LESS ${LO_MINOR_MIN_VER})
-    set (LO_MINOR_VER_FAIL TRUE)
-  endif (${LO_MAJOR_VER} EQUAL ${LO_MAJOR_MIN_VER} AND ${LO_MINOR_VER} LESS ${LO_MINOR_MIN_VER})
-  if (${LO_MAJOR_VER} EQUAL ${LO_MAJOR_MIN_VER} AND ${LO_MINOR_VER} EQUAL ${LO_MINOR_MIN_VER} AND ${LO_PATCH_VER} LESS ${LO_PATCH_MIN_VER})
-    set (LO_PATCH_VER_FAIL TRUE)
-  endif (${LO_MAJOR_VER} EQUAL ${LO_MAJOR_MIN_VER} AND ${LO_MINOR_VER} EQUAL ${LO_MINOR_MIN_VER} AND ${LO_PATCH_VER} LESS ${LO_PATCH_MIN_VER})
-  if (LO_MAJOR_VER_FAIL OR LO_MINOR_VER_FAIL OR LO_PATCH_VER_FAIL)
-    set (LIBOPENVAS_SUFFICIENT FALSE)
-    message ("openvas-libraries version >= ${LO_MAJOR_MIN_VER}.${LO_MINOR_MIN_VER}.${LO_PATCH_MIN_VER} not found.")
-  endif (LO_MAJOR_VER_FAIL OR LO_MINOR_VER_FAIL OR LO_PATCH_VER_FAIL)
-else (PATH_TO_LIBOPENVASCONFIG)
-   set (LIBOPENVAS_SUFFICIENT FALSE)
-   message ("Could not determine openvas-libraries version.")
-endif (PATH_TO_LIBOPENVASCONFIG)
-
-if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
+if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
   message (FATAL_ERROR "One or more required libraries was not found "
                        "(see message above), please install the missing "
                        "libraries and run cmake again.")
-endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND OR NOT LIBOPENVAS_SUFFICIENT)
-
-# TODO: Unclear why the pkg-based test above does not work.
-# Also, minimum version checking would be nice.
-message (STATUS "Looking for microhttpd...")
-find_library (MICROHTTPD microhttpd)
-message (STATUS "Looking for microhttpd... ${MICROHTTPD}")
-if (NOT MICROHTTPD)
-  message (FATAL_ERROR "The microhttpd library is required.")
-endif (NOT MICROHTTPD)
+endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo

@@ -1,3 +1,15 @@
+2011-02-01  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Switch gsa to pkg-config.
+
+	* CMakeLists.txt: Move check for openvas-libraries to pkg-config.
+	Remove duplicate libmicrohttpd check.
+
+	* INSTALL: Update requirements and installation instructions.
+
+	* src/CMakeLists.txt: Replace calls to libopenvas-config with the
+	appropriate pkg-config calls.
+
 2011-01-31  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (main): Log a message if binding to a port failed before

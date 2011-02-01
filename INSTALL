@@ -13,19 +13,16 @@ Prerequisites:
 * libxslt
 * libmicrohttpd
 * libexslt
+* pkg-config
 
 Prerequisites for building documentation:
 * Doxygen
 
-Ensure that the command libopenvas-config is in your search path.
+If you have installed required libraries to a non-standard location, remember to
+set the PKG_CONFIG_PATH environment variable to the location of you pkg-config
+files before configuring:
 
-    $ export PATH=$PATH:/path/to/your/installation/bin/
-
-If you have installed libmicrohttpd from source and configured it with a prefix,
-you will have to set the PKG_CONFIG_PATH environment variable before configuring
-the Greenbone Security Assistant:
-
-    $ export PKG_CONFIG_PATH=/path/to/your/installation/lib/pkgconfig
+    $ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/your/location/lib/pkgconfig
 
 Then configure the build with
 

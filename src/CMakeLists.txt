@@ -33,11 +33,11 @@ link_directories    (${LIBS_LIBRARY_DIRS} ${GSAD_LIBS_LIBRARY_DIRS})
 ## TODO use pkg_check_modules instead of manual invocation (as in top-level
 ## CMakeLists.txt)
 
-exec_program (libopenvas-config
-              ARGS --cflags
+exec_program (pkg-config
+              ARGS --cflags libopenvas
               OUTPUT_VARIABLE OPENVAS_CFLAGS)
-exec_program (libopenvas-config
-              ARGS --libs
+exec_program (pkg-config
+              ARGS --libs libopenvas
               OUTPUT_VARIABLE OPENVAS_LDFLAGS)
 
 ## Libraries
@@ -185,7 +185,7 @@ install (FILES gsad_log.conf
 ## Static analysis
 
 add_custom_target (splint COMMENT "Running splint..."
-                   COMMAND sh -c \"splint -booltype gboolean -predboolint +unixlib +export-header `pkg-config --cflags glib-2.0` `libopenvas-config --cflags` *.c\")
+                   COMMAND sh -c \"splint -booltype gboolean -predboolint +unixlib +export-header `pkg-config --cflags glib-2.0` `pkg-config --cflags libopenvas` *.c\")
 
 add_custom_target (rats COMMENT "Running rats..."
                    COMMAND sh -c \"rats --warning 2 *.[ch]\")
