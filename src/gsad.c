@@ -62,6 +62,7 @@
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
 #include <openvas/base/pidfile.h>
+#include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
 #include <signal.h>
@@ -113,11 +114,6 @@
 #define DEFAULT_OPENVAS_MANAGER_PORT 9390
 
 /**
- * @brief HTTP basic authentication realm.
- */
-#define REALM "\"Greenbone Security Assistant\""
-
-/**
  * @brief Buffer size for POST processor.
  */
 #define POST_BUFFER_SIZE 500000
@@ -126,6 +122,11 @@
  * @brief Maximum length of "file name" for /help/ URLs.
  */
 #define MAX_HELP_NAME_SIZE 128
+
+/**
+ * @brief Max number of seconds between activity in a session.
+ */
+#define SESSION_LENGTH 900
 
 /**
  * @brief Libgcrypt thread callback definition.
@@ -181,6 +182,145 @@ GSList *log_config = NULL;
  * @brief Verbose output flag.
  */
 int verbose = 0;
+
+/**
+ * @brief User session data.
+ */
+GPtrArray *users = NULL;
+
+/**
+ * @brief User information structure, for sessions.
+ */
+struct user
+{
+  char *token;        ///< Session token.
+  gchar *username;    ///< Login name.
+  gchar *password;    ///< Password.
+  time_t time;        ///< Login time.
+};
+
+/**
+ * @brief User information type, for sessions.
+ */
+typedef struct user user_t;
+
+/**
+ * @brief Mutex to prevent concurrent access to user information.
+ */
+static GMutex *mutex = NULL;
+
+/**
+ * @brief Add a user.
+ *
+ * It's up to the caller to release the returned user.
+ *
+ * @param[in]  username  Name of user.
+ * @param[in]  password  Password for user.
+ *
+ * @return Added user.
+ */
+user_t *
+user_add (const gchar *username, const gchar *password)
+{
+  user_t *user = NULL;
+  int index;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, username) == 0)
+        {
+          user = item;
+          break;
+        }
+    }
+  if (user)
+    {
+      free (user->token);
+      user->token = openvas_uuid_make ();
+      g_free (user->password);
+      user->password = g_strdup (password);
+    }
+  else
+    {
+      user = g_malloc (sizeof (user_t));
+      user->token = openvas_uuid_make ();
+      user->username = g_strdup (username);
+      user->password = g_strdup (password);
+      g_ptr_array_add (users, (gpointer) user);
+    }
+  user->time = time (NULL);
+  return user;
+}
+
+/**
+ * @brief Add a user.
+ *
+ * If a user is returned, it's up to the caller to release the user.
+ *
+ * @param[in]   token        Token.
+ * @param[out]  user_return  User.
+ *
+ * @return 0 ok (user in user_return), 1 bad token, 2 expired token.
+ */
+int
+token_user (const gchar *token, user_t **user_return)
+{
+  int ret;
+  user_t *user = NULL;
+  int index;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->token, token) == 0)
+        {
+          user = item;
+          break;
+        }
+    }
+  if (user)
+    {
+      if (time (NULL) - user->time > SESSION_LENGTH)
+        ret = 2;
+      else
+        {
+          *user_return = user;
+          ret = 0;
+          user->time = time (NULL);
+          return ret;
+        }
+    }
+  else
+    ret = 2;
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Release a user_t returned by user_add or token_user.
+ *
+ * @param[in]  user  User.
+ */
+void
+user_release (user_t *user)
+{
+  g_mutex_unlock (mutex);
+}
+
+/**
+ * @brief Remove a user from the session "database", releasing the user_t too.
+ *
+ * @param[in]  user  User.
+ */
+void
+user_remove (user_t *user)
+{
+  g_ptr_array_remove (users, (gpointer) user);
+  g_mutex_unlock (mutex);
+}
 
 /**
  * @brief Parameter validator.
@@ -357,6 +497,7 @@ init_validator ()
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
+  openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
@@ -518,6 +659,8 @@ struct gsad_connection_info
    */
   struct req_parms
   {
+    char *token;         ///< Value of "token" parameter.
+
     char *access_hosts;  ///< Value of "access_hosts" parameter.
     char *authdn;        ///< Value of "authdn" parameter.
     char *base;          ///< Value of "base" parameter.
@@ -605,92 +748,6 @@ struct gsad_connection_info
 };
 
 /**
- * @brief Parse name and password from Base64 HTTP Basic Auth string.
- *
- * @param[in]  connection  Connection.
- *
- * @return Credentials on success, else NULL.
- */
-credentials_t *
-get_header_credentials (struct MHD_Connection * connection)
-{
-  const char *header_auth;
-  guchar *header_auth_decoded = NULL;
-  const char *strbase = "Basic ";
-  gsize header_auth_decoded_len;
-  gchar **auth_split;
-
-  header_auth = MHD_lookup_connection_value (connection,
-                                             MHD_HEADER_KIND, "Authorization");
-  if (header_auth == NULL)
-    return NULL;
-
-  if (strncmp (header_auth, strbase, strlen (strbase)) != 0)
-    return NULL;
-
-  header_auth_decoded = g_base64_decode (header_auth + strlen (strbase),
-                                         &header_auth_decoded_len);
-  /* g_base64_decode can return NULL (Glib 2.12.4-2), at least
-   * when header_auth_decoded_len is zero. */
-  if (header_auth_decoded == NULL)
-    {
-      header_auth_decoded = (guchar *) g_strdup ("");
-      header_auth_decoded_len = 0;
-    }
-
-#if 0
-  /* For debug purposes. */
-  tracef ("Somebody is trying to authenticate with:"
-          " %s, which is %s decoded\n",
-          header_auth + strlen (strbase),
-          header_auth_decoded);
-#endif
-
-  auth_split = g_strsplit ((gchar *) header_auth_decoded, ":", 0);
-  g_free (header_auth_decoded);
-
-  if (g_strv_length (auth_split) != 2)
-    {
-      g_warning ("%s: Could not get credentials from header! (Colons in credentials?)\n",
-                 __FUNCTION__);
-      g_strfreev (auth_split);
-      return NULL;
-    }
-  else
-    {
-      credentials_t *creds = malloc (sizeof (credentials_t));
-      if (creds == NULL) abort ();
-      creds->username = strdup (auth_split[0]);
-      creds->password = strdup (auth_split[1]);
-      g_strfreev (auth_split);
-      return creds;
-    }
-}
-
-/**
- * @brief Checks whether an HTTP client is authenticated.
- *
- * @todo: Checks with the manager _every_ time, which makes it quite slow.
- *
- * @param[in]  connection  Connection.
- *
- * @return MHD_YES if authenticated, else MHD_NO.
- */
-int
-is_http_authenticated (struct MHD_Connection *connection)
-{
-  credentials_t *creds = get_header_credentials (connection);
-
-  if (creds == NULL)
-    return MHD_NO;
-
-  if (is_omp_authenticated (creds->username, creds->password))
-    return MHD_YES;
-
-  return MHD_NO;
-}
-
-/**
  * @brief Reads from a file.
  *
  * @param[in]  cls  File.
@@ -741,6 +798,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
+  free (con_info->req_parms.token);
+
   free (con_info->req_parms.access_hosts);
   free (con_info->req_parms.base);
   free (con_info->req_parms.cmd);
@@ -1002,6 +1061,10 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
+      if (!strcmp (key, "token"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.token);
+
       /**
        * @todo Accept only the parameters that the command uses.
        *
@@ -1647,18 +1710,137 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  * parameters and calls the appropriate OAP or OMP function (like
  * create_task_omp).
  *
- * @param[in]  credentials  User credentials sent by client.
  * @param[in]  con_info     Connection info.
  *
- * @return MHD_YES.
+ * @return NULL usually, user on successful login.
  */
-int
-exec_omp_post (credentials_t * credentials,
-               struct gsad_connection_info *con_info)
+user_t *
+exec_omp_post (struct gsad_connection_info *con_info)
 {
+  int ret;
+  user_t *user;
+  credentials_t *credentials = NULL;
+
+  /* Handle the login command specially. */
+
+  if (con_info->req_parms.cmd && !strcmp (con_info->req_parms.cmd, "login"))
+    {
+      validate (validator, "login", &con_info->req_parms.login);
+      validate (validator, "password", &con_info->req_parms.password);
+      if (con_info->req_parms.login && con_info->req_parms.password)
+        {
+          if (is_omp_authenticated (con_info->req_parms.login,
+                                    con_info->req_parms.password))
+            {
+              user_t *user;
+              user = user_add (con_info->req_parms.login,
+                               con_info->req_parms.password);
+              /* Redirect to get_tasks. */
+              return user;
+            }
+          else
+            {
+              time_t now;
+              gchar *xml;
+              char *res;
+
+              xml = g_strdup_printf ("<login_page>"
+                                     "<message>"
+                                     "Login failed."
+                                     "</message>"
+                                     "<token></token>"
+                                     "<time>%s</time>"
+                                     "</login_page>",
+                                     ctime (&now));
+              res = xsl_transform (xml);
+              g_free (xml);
+              con_info->response = res;
+            }
+        }
+      else
+        {
+          con_info->response = gsad_message (credentials,
+                                             "Internal error",
+                                             __FUNCTION__,
+                                             __LINE__,
+                                             "An internal error occured inside GSA daemon. "
+                                             "Diagnostics: Login or password missing.",
+                                             "/omp?cmd=get_tasks");
+        }
+      con_info->answercode = MHD_HTTP_OK;
+      return NULL;
+    }
+
+  /* Check the session. */
+
+  if (openvas_validate (validator, "token", con_info->req_parms.token))
+    con_info->req_parms.token = NULL;
+
+  if (con_info->req_parms.token == NULL)
+    {
+      con_info->response
+       = gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occured inside GSA daemon. "
+                       "Diagnostics: Token missing or bad.",
+                       "/omp?cmd=get_tasks");
+      con_info->answercode = MHD_HTTP_OK;
+      return NULL;
+    }
+
+  ret = token_user (con_info->req_parms.token, &user);
+  if (ret == 1)
+    {
+      con_info->response
+       = gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occured inside GSA daemon. "
+                       "Diagnostics: Bad token.",
+                       "/omp?cmd=get_tasks");
+      con_info->answercode = MHD_HTTP_OK;
+      return NULL;
+    }
+
+  if (ret == 2)
+    {
+      time_t now;
+      gchar *xml;
+
+      xml = g_strdup_printf ("<login_page>"
+                             "<message>"
+                             "Session has expired.  Please login again."
+                             "</message>"
+                             "<token></token>"
+                             "<time>%s</time>"
+                             "</login_page>",
+                             ctime (&now));
+      con_info->response = xsl_transform (xml);
+      g_free (xml);
+      con_info->answercode = MHD_HTTP_OK;
+      return NULL;
+    }
+
+  credentials = malloc (sizeof (credentials_t));
+  if (credentials == NULL)
+    {
+      user_release (user);
+      abort ();
+    }
+  assert (user->username);
+  assert (user->password);
+  assert (user->token);
+  credentials->username = strdup (user->username);
+  credentials->password = strdup (user->password);
+  credentials->token = strdup (user->token);
+
+  user_release (user);
+
+  /* Handle the usual commands. */
+
   if (!con_info->req_parms.cmd)
     {
-      con_info->response = gsad_message ("Internal error",
+      con_info->response = gsad_message (credentials,
+                                         "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
                                          "An internal error occured inside GSA daemon. "
@@ -2320,7 +2502,8 @@ exec_omp_post (credentials_t * credentials,
     }
   else
     {
-      con_info->response = gsad_message ("Internal error",
+      con_info->response = gsad_message (credentials,
+                                         "Internal error",
                                          __FUNCTION__,
                                          __LINE__,
                                          "An internal error occured inside GSA daemon. "
@@ -2329,7 +2512,7 @@ exec_omp_post (credentials_t * credentials,
     }
 
   con_info->answercode = MHD_HTTP_OK;
-  return MHD_YES;
+  return NULL;
 }
 
 /**
@@ -2339,6 +2522,7 @@ exec_omp_post (credentials_t * credentials,
  * issue an omp command (via *_omp functions).
  *
  * @param[in]   connection           Connection.
+ * @param[in]   credentials          User credentials.
  * @param[out]  content_type         Return location for the content type of
  *                                   the response.
  * @param[out]  content_type_string  Return location for dynamic content type.
@@ -2350,6 +2534,7 @@ exec_omp_post (credentials_t * credentials,
  */
 char *
 exec_omp_get (struct MHD_Connection *connection,
+              credentials_t *credentials,
               enum content_type* content_type,
               gchar **content_type_string,
               char** content_disposition,
@@ -2400,17 +2585,9 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *slave_id   = NULL;
   const char *target_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
-  credentials_t *credentials = NULL;
 
   const int CMD_MAX_SIZE = 22;
   const int VAL_MAX_SIZE = 100;
-
-  credentials = get_header_credentials (connection);
-  if (credentials == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occured inside GSA daemon. "
-                         "Diagnostics: Missing credentials for OMP request.",
-                         "/login.html");
 
   cmd =
     (char *) MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
@@ -2793,7 +2970,8 @@ exec_omp_get (struct MHD_Connection *connection,
         text = "";
     }
   else
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occured inside GSA daemon. "
                          "Diagnostics: No valid command for omp.",
                          "/omp?cmd=get_tasks");
@@ -3679,7 +3857,8 @@ exec_omp_get (struct MHD_Connection *connection,
     return verify_report_format_omp (credentials, report_format_id);
 
   else
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occured inside GSA daemon. "
                          "Diagnostics: Unknown command.",
                          "/omp?cmd=get_tasks");
@@ -3765,71 +3944,6 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
 
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
-  MHD_destroy_response (response);
-  return ret;
-}
-
-/**
- * @brief Creates an empty response with basic http auth header.
- *
- * @param[in]  realm  Realm for which to authenticate.
- *
- * @return Response (send with MHD_HTTP_UNAUTHORIZED to force
- *         reauthentification), NULL in case of errors.
- */
-static struct MHD_Response*
-create_http_authenticate_response (const char *realm)
-{
-  int ret;
-  gchar *headervalue;
-  struct MHD_Response *response =
-    MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
-
-  if (!response)
-    return NULL;
-
-  headervalue = g_strconcat ("Basic realm=", realm, NULL);
-  if (!headervalue)
-    {
-      MHD_destroy_response (response);
-      return NULL;
-    }
-
-  ret = MHD_add_response_header (response, MHD_HTTP_HEADER_WWW_AUTHENTICATE,
-                                 headervalue);
-  g_free (headervalue);
-  if (!ret)
-    {
-      MHD_destroy_response (response);
-      return NULL;
-    }
-
-  MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-  MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
-
-  return response;
-}
-
-/**
- * @brief Sends HTTP header requesting the browser to authenticate itself.
- *
- * @param[in]  connection  The connection object.
- * @param[in]  realm       Name of the realm that was authenticated for.
- *
- * @return MHD_NO in case of an error. Else the result of queueing
- *         the response.
- */
-int
-send_http_authenticate_header (struct MHD_Connection *connection,
-                               const char *realm)
-{
-  int ret;
-  struct MHD_Response *response = create_http_authenticate_response (realm);
-
-  if (response == NULL)
-    return MHD_NO;
-
-  ret = MHD_queue_response (connection, MHD_HTTP_UNAUTHORIZED, response);
   MHD_destroy_response (response);
   return ret;
 }
@@ -4006,6 +4120,7 @@ gsad_add_content_type_header (struct MHD_Response *response,
  * If the file does not exist, but user is logged in, refuse credentials
  * ("logout"). Otherwise, serve the default (login) page.
  *
+ * @param[in]   credentials          User authentication information.
  * @param[in]   connection           Connection.
  * @param[in]   url                  Requested URL.
  * @param[out]  http_response_code   Return location for response code.
@@ -4016,7 +4131,8 @@ gsad_add_content_type_header (struct MHD_Response *response,
  *         if file information could not be retrieved.
  */
 static struct MHD_Response*
-file_content_response (struct MHD_Connection *connection, const char* url,
+file_content_response (credentials_t *credentials,
+                       struct MHD_Connection *connection, const char* url,
                        int* http_response_code, enum content_type* content_type,
                        char** content_disposition)
 {
@@ -4041,41 +4157,37 @@ file_content_response (struct MHD_Connection *connection, const char* url,
       if (*url == '/') relative_url = url + 1;
       path = g_strconcat (relative_url, NULL);
     }
+
+  if (!strcmp (path, default_file))
+    {
+      time_t now;
+      gchar *xml;
+      char *res;
+
+      xml = g_strdup_printf ("<login_page>"
+                             "<token></token>"
+                             "<time>%s</time>"
+                             "</login_page>",
+                             ctime (&now));
+      res = xsl_transform (xml);
+      response = MHD_create_response_from_data (strlen (res), res,
+                                                MHD_NO, MHD_YES);
+      g_free (xml);
+      return response;
+    }
+
   file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                 read and sent */
 
-  /* In case the file is not found, logout if logged in, else always
-   * the default file. */
   if (file == NULL)
     {
       tracef ("File %s failed, ", path);
       g_free (path);
 
-      if (is_http_authenticated (connection))
-        {
-          char *res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
-                                    "The requested page does not exist.",
-                                    NULL);
-          return MHD_create_response_from_data (strlen (res), (void *) res,
-                                                MHD_NO, MHD_YES);
-        }
-
-      /** @todo use glibs path functions */
-      path = g_strconcat (default_file, NULL);
-      tracef ("trying default file <%s>.\n", path);
-      file = fopen (path, "r"); /* flawfinder: ignore, this file is just
-                                   read and sent */
-      if (file == NULL)
-        {
-          /* Even the default file failed. */
-          tracef ("Default file failed.\n");
-          *http_response_code = MHD_HTTP_NOT_FOUND;
-          g_free (path);
-          return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
-                                                (void *) FILE_NOT_FOUND,
-                                                MHD_NO,
-                                                MHD_YES);
-        }
+      return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
+                                            (void *) FILE_NOT_FOUND,
+                                            MHD_NO,
+                                            MHD_YES);
     }
 
   /* Guess content type. */
@@ -4103,7 +4215,8 @@ file_content_response (struct MHD_Connection *connection, const char* url,
   /* Make sure the requested path really is a file. */
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
-      char *res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
+      char *res = gsad_message (credentials,
+                                "Invalid request", __FUNCTION__, __LINE__,
                                 "The requested page does not exist.",
                                 NULL);
       return MHD_create_response_from_data (strlen (res), (void *) res,
@@ -4115,15 +4228,6 @@ file_content_response (struct MHD_Connection *connection, const char* url,
                                                 file,
                                                 (MHD_ContentReaderFreeCallback)
                                                 &fclose);
-
-  if (strcmp (path, default_file) == 0)
-    {
-      /* Try prevent the browser from automatically sending the
-       * authentication header. */
-      MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
-      MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL,
-                               "no-cache");
-    }
 
   mtime = localtime (&buf.st_mtime);
   if (mtime
@@ -4143,6 +4247,34 @@ file_content_response (struct MHD_Connection *connection, const char* url,
   g_free (path);
   *http_response_code = MHD_HTTP_OK;
   return response;
+}
+
+/**
+ * @brief Send response for request_handler.
+ *
+ * @param[in]  connection     Connection handle, e.g. used to send response.
+ * @param[in]  response       Response.
+ * @param[in]  content_type         Content type.
+ * @param[in]  content_disposition  Content disposition.
+ * @param[in]  http_response_code   Response code.
+ */
+static int
+handler_send_response (struct MHD_Connection *connection,
+                       struct MHD_Response *response,
+                       enum content_type *content_type,
+                       char *content_disposition,
+                       int http_response_code)
+{
+  gsad_add_content_type_header (response, content_type);
+  if (content_disposition != NULL)
+    {
+      MHD_add_response_header (response, "Content-Disposition",
+                               content_disposition);
+      free (content_disposition);
+    }
+  MHD_queue_response (connection, http_response_code, response);
+  MHD_destroy_response (response);
+  return MHD_YES;
 }
 
 /**
@@ -4181,7 +4313,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
   struct MHD_Response *response = NULL;
   int ret;
   char *res;
-  credentials_t *credentials;
+  credentials_t *credentials = NULL;
+
 
   /* Never respond on first call of a GET. */
   if ((!strcmp (method, "GET")) && *con_cls == NULL)
@@ -4212,28 +4345,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
       return MHD_YES;
     }
 
-  /* Redirect any URL matching the base to the default file and
-   * Treat logging out specially. */
-  if ((!strcmp (&url[0], url_base))
-      || ((!strcmp (method, "GET"))
-           && (!strncmp (&url[0], "/logout", strlen ("/logout"))))) /* flawfinder: ignore,
-                                                                 it is a const str */
+  /* Redirect the base URL to the login page.  Serve the login page
+   * even if the user is already logged in.
+   *
+   * This might make users think that they have been logged out.  The only
+   * way to logout, however, is with a token.  I guess this is where a cookie
+   * would be useful. */
+
+  if (!strcmp (&url[0], url_base))
     {
-      /**
-       * @todo The problem is the URL is still "/logout" after the
-       *       authentication, so this just keeps sending the auth header.
-       *       All the user can do is cancel so the browser clears the
-       *       credentials.  Perhaps the only way to do this is to keep
-       *       state across requests. */
-      if (is_http_authenticated (connection))
-        {
-          return send_http_authenticate_header (connection, REALM);
-        }
-      else
-        {
-          send_redirect_header (connection, default_file);
-          return MHD_YES;
-        }
+      send_redirect_header (connection, default_file);
+      return MHD_YES;
     }
 
   if ((!strcmp (method, "GET"))
@@ -4245,21 +4367,160 @@ request_handler (void *cls, struct MHD_Connection *connection,
       return MHD_YES;
     }
 
-  credentials = get_header_credentials (connection);
-
   /* Set HTTP Header values. */
 
   if (!strcmp (method, "GET"))
     {
+      const char *token  = NULL;
+      user_t *user;
+
       /* Second or later call for this request, a GET. */
 
       content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
 
-      /* Check for authentication. */
-      if ((!is_http_authenticated (connection))
-          && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
-                                                                    it is a const str */
-        return send_http_authenticate_header (connection, REALM);
+      /* Special case the login page, stylesheet and icon. */
+
+      if (!strcmp (url, default_file)
+          || !strcmp (url, "/gsa-style.css")
+          || !strcmp (url, "/favicon.gif"))
+        {
+          response = file_content_response (credentials,
+                                            connection, url,
+                                            &http_response_code,
+                                            &content_type,
+                                            &content_disposition);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      /* Allow the decorative images and help to anyone. */
+
+      if (strncmp (url, "/img/", strlen ("/img/")) == 0)
+        {
+          response = file_content_response (credentials,
+                                            connection, url,
+                                            &http_response_code,
+                                            &content_type,
+                                            &content_disposition);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      /* Setup credentials from token. */
+
+      token = MHD_lookup_connection_value (connection,
+                                           MHD_GET_ARGUMENT_KIND,
+                                           "token");
+      if (openvas_validate (validator, "token", token))
+        token = NULL;
+
+      if (token == NULL)
+        {
+          res = gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occured inside GSA daemon. "
+                              "Diagnostics: Token missing or bad.",
+                              "/omp?cmd=get_tasks");
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      ret = token_user (token, &user);
+      if (ret == 1)
+        {
+          res =  gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occured inside GSA daemon. "
+                               "Diagnostics: Bad token.",
+                               "/omp?cmd=get_tasks");
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      if (ret == 2)
+        {
+          time_t now;
+          gchar *xml;
+          char *res;
+
+          xml = g_strdup_printf ("<login_page>"
+                                 "<message>"
+                                 "%s"
+                                 "</message>"
+                                 "<token></token>"
+                                 "<time>%s</time>"
+                                 "</login_page>",
+                                 (strncmp (url, "/logout", strlen ("/logout"))
+                                   ? "Session has expired.  Please login again."
+                                   : "Already logged out."),
+                                 ctime (&now));
+          res = xsl_transform (xml);
+          g_free (xml);
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      /* flawfinder: ignore, it is a const str */
+      if (!strncmp (url, "/logout", strlen ("/logout")))
+        {
+          time_t now;
+          gchar *xml;
+          char *res;
+
+          user_remove (user);
+
+          xml = g_strdup_printf ("<login_page>"
+                                 "<message>"
+                                 "Successfully logged out."
+                                 "</message>"
+                                 "<token></token>"
+                                 "<time>%s</time>"
+                                 "</login_page>",
+                                 ctime (&now));
+          res = xsl_transform (xml);
+          g_free (xml);
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
+        }
+
+      credentials = malloc (sizeof (credentials_t));
+      if (credentials == NULL) abort ();
+      assert (user->username);
+      assert (user->password);
+      assert (user->token);
+      credentials->username = strdup (user->username);
+      credentials->password = strdup (user->password);
+      credentials->token = strdup (user->token);
+
+      user_release (user);
+
+      /* Serve the request. */
 
       if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base))
           || !strncmp (&url[0], oap_cgi_base, strlen (oap_cgi_base)))
@@ -4269,8 +4530,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
           unsigned int res_len = 0;
           gchar *content_type_string = NULL;
 
-          res = exec_omp_get (connection, &content_type, &content_type_string,
-                              &content_disposition, &response_size);
+          res = exec_omp_get (connection, credentials, &content_type,
+                              &content_type_string, &content_disposition,
+                              &response_size);
           if (response_size > 0)
             {
               res_len = response_size;
@@ -4330,7 +4592,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           if (! g_ascii_isalpha (url[6]))
             {
-              res = gsad_message ("Invalid request", __FUNCTION__, __LINE__,
+              res = gsad_message (credentials,
+                                  "Invalid request", __FUNCTION__, __LINE__,
                                   "The requested help page does not exist.",
                                   "/help/contents.html");
             }
@@ -4340,11 +4603,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
               time_t now = time (NULL);
+              assert (credentials->token);
               gchar *xml = g_strdup_printf ("<envelope>"
+                                            "<token>%s</token>"
                                             "<time>%s</time>"
                                             "<login>%s</login>"
                                             "<help><%s/></help>"
                                             "</envelope>",
+                                            credentials->token,
                                             ctime (&now),
                                             credentials->username,
                                             page);
@@ -4359,7 +4625,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* URL requests neither an OMP command nor a special GSAD command,
            * so it is a simple file. */
           /* Serve a file. */
-          response = file_content_response (connection, url,
+          response = file_content_response (credentials,
+                                            connection, url,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
@@ -4367,16 +4634,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       if (response)
         {
-          gsad_add_content_type_header (response, &content_type);
-          if (content_disposition != NULL)
-            {
-              MHD_add_response_header (response, "Content-Disposition",
-                                       content_disposition);
-              free (content_disposition);
-            }
-          ret = MHD_queue_response (connection, http_response_code, response);
-          MHD_destroy_response (response);
-          return MHD_YES;
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code);
         }
       else
         {
@@ -4387,17 +4649,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (method, "POST"))
     {
+      user_t *user;
+
       if (NULL == *con_cls)
         {
           /* First call for this request, a POST. */
 
           struct gsad_connection_info *con_info;
-
-          /* Check for authentication. */
-          if ((!is_http_authenticated (connection))
-              && (strncmp (&url[0], "/login/", strlen ("/login/")))) /* flawfinder: ignore,
-                                                                        it is a const str */
-            return send_http_authenticate_header (connection, REALM);
 
           /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
           con_info = calloc (1, sizeof (struct gsad_connection_info));
@@ -4426,7 +4684,19 @@ request_handler (void *cls, struct MHD_Connection *connection,
           *upload_data_size = 0;
           return MHD_YES;
         }
-      exec_omp_post (credentials, con_info);
+
+      user = exec_omp_post (con_info);
+      if (user)
+        {
+          gchar *url;
+          url = g_strdup_printf ("/omp?cmd=get_tasks&overrides=1&token=%s",
+                                 user->token);
+          user_release (user);
+          send_redirect_header (connection, url);
+          g_free (url);
+          return MHD_YES;
+        }
+
       send_response (connection, con_info->response, MHD_HTTP_OK);
       return MHD_YES;
     }
@@ -4473,6 +4743,9 @@ gsad_init (void)
 
   /* Init Glib. */
   if (!g_thread_supported ()) g_thread_init (NULL);
+  if (mutex == NULL)
+    mutex = g_mutex_new ();
+  users = g_ptr_array_new ();
 
   /* Check for required files. */
   if (check_is_dir (GSA_STATE_DIR) < 1)

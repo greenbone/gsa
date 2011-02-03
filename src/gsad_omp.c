@@ -127,12 +127,16 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   gchar *res;
   char *html;
 
+  assert (credentials);
+
   now = time (NULL);
   res = g_strdup_printf ("<envelope>"
+                         "<token>%s</token>"
                          "<time>%s</time>"
                          "<login>%s</login>"
                          "%s"
                          "</envelope>",
+                         credentials->token,
                          ctime (&now),
                          credentials->username,
                          xml);
@@ -202,7 +206,8 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 
   if (read_entity (session, &entity))
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to read command to manager daemon.",
@@ -215,7 +220,8 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
   if (status_text == NULL)
     {
       free_entity (entity);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to parse status_text from response.",
@@ -237,7 +243,8 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
     {
       free_entity (entity);
       /** @todo Put in XML for "result of previous..." window. */
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -270,7 +277,8 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
 
   if (read_entity (session, &entity))
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a report format. "
                            "It is unclear whether the entire report format has been saved. "
                            "Diagnostics: Failure to read command to manager daemon.",
@@ -283,7 +291,8 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
   if (status_text == NULL)
     {
       free_entity (entity);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a report format. "
                            "It is unclear whether the entire report format has been saved. "
                            "Diagnostics: Failure to parse status_text from response.",
@@ -302,7 +311,8 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
     {
       free_entity (entity);
       /** @todo Put in XML for "result of previous..." window. */
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a report format. "
                            "It is unclear whether the entire report format has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -372,7 +382,8 @@ new_task_omp (credentials_t * credentials, const char* message,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting targets list. "
                          "The current list of targets is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -389,7 +400,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -400,7 +412,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -416,7 +429,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -427,7 +441,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting config list. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -443,7 +458,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -454,7 +470,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -470,7 +487,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -481,7 +499,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "The current list of schedules is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -497,7 +516,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the slave list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -508,7 +528,8 @@ new_task_omp (credentials_t * credentials, const char* message,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the slave list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -556,7 +577,8 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   gchar *schedule_element, *escalator_element, *slave_element;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new task. "
                          "The task is not created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -610,7 +632,8 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   if (ret == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new task. "
                            "The task is not created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -621,7 +644,8 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new task. "
                            "It is unclear whether the task has been created or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -682,14 +706,16 @@ edit_task (credentials_t * credentials, const char *task_id,
   int socket;
 
   if (task_id == NULL || next == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a task. "
                          "The task remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a task. "
                          "The task remains as it was. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -717,7 +743,8 @@ edit_task (credentials_t * credentials, const char *task_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -751,7 +778,8 @@ edit_task (credentials_t * credentials, const char *task_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting task info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -826,7 +854,8 @@ save_task_omp (credentials_t * credentials, const char *task_id,
   if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
       || task_id == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
                          "The task remains the same. "
                          "Diagnostics: Required parameter was NULL.",
@@ -863,7 +892,8 @@ save_task_omp (credentials_t * credentials, const char *task_id,
     }
 
   g_free (modify_task);
-  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while saving a task. "
                        "The task remains the same. "
                        "Diagnostics: Error in parameter next.",
@@ -1055,7 +1085,8 @@ get_nvts (credentials_t *credentials, const char *oid,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting nvt details. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
@@ -1080,7 +1111,8 @@ get_nvts (credentials_t *credentials, const char *oid,
         == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting nvt details. "
                             "Diagnostics: Failure to send command to manager daemon.",
                             "/omp?cmd=get_tasks");
@@ -1091,7 +1123,8 @@ get_nvts (credentials_t *credentials, const char *oid,
     {
       openvas_server_close (socket, session);
       g_string_free (xml, TRUE);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting nvt details. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -1140,7 +1173,8 @@ get_tasks (credentials_t * credentials, const char *task_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the status. "
                          "No update on status can be retrieved. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -1173,7 +1207,8 @@ get_tasks (credentials_t * credentials, const char *task_id,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the status. "
                                "No update on the requested task can be retrieved. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -1197,7 +1232,8 @@ get_tasks (credentials_t * credentials, const char *task_id,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the status. "
                                "No update of the list of tasks can be retrieved. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -1213,7 +1249,8 @@ get_tasks (credentials_t * credentials, const char *task_id,
     {
       openvas_server_close (socket, session);
       g_string_free (xml, TRUE);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the status. "
                            "No update of the status can be retrieved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -1277,7 +1314,8 @@ create_lsc_credential_omp (credentials_t * credentials,
   GString *xml;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new credential. "
                          "No new credential was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -1322,7 +1360,8 @@ create_lsc_credential_omp (credentials_t * credentials,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new credential. "
                                "No new credential was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -1333,7 +1372,8 @@ create_lsc_credential_omp (credentials_t * credentials,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new credential. "
                                "It is unclear whether the credential has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -1350,7 +1390,8 @@ create_lsc_credential_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while listing credentials. "
                            "The credential has, however, been created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -1361,7 +1402,8 @@ create_lsc_credential_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while listing credentials. "
                            "The credential has, however, been created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -1393,7 +1435,8 @@ delete_lsc_credential_omp (credentials_t * credentials,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting an credential. "
                          "The credential was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -1409,7 +1452,8 @@ delete_lsc_credential_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an credential. "
                            "The credential was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -1420,7 +1464,8 @@ delete_lsc_credential_omp (credentials_t * credentials,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an credential. "
                            "It is unclear whether the credential has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -1455,7 +1500,8 @@ get_lsc_credential (credentials_t * credentials,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a credential. "
                          "The credential is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -1478,7 +1524,8 @@ get_lsc_credential (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a credential. "
                            "The credential is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -1491,7 +1538,8 @@ get_lsc_credential (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a credential. "
                            "The credential is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -1564,7 +1612,8 @@ get_lsc_credentials (credentials_t * credentials,
 
   if (manager_connect (credentials, &socket, &session))
     {
-      *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the credential list. "
                             "The current list of credentials is not available. "
                             "Diagnostics: Failure to connect to manager daemon.",
@@ -1585,7 +1634,8 @@ get_lsc_credentials (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting credential list. "
                                 "The current list of credentials is not available. "
                                 "Diagnostics: Failure to send command to manager daemon.",
@@ -1607,7 +1657,8 @@ get_lsc_credentials (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting credential list. "
                                 "The current list of credentials is not available. "
                                 "Diagnostics: Failure to send command to manager daemon.",
@@ -1634,7 +1685,8 @@ get_lsc_credentials (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a credential. "
                                     "The credential is not available. "
                                     "Diagnostics: Failure to receive response from manager daemon.",
@@ -1683,7 +1735,8 @@ get_lsc_credentials (credentials_t * credentials,
             {
               free_entity (entity);
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a credential. "
                                     "The credential could not be delivered. "
                                     "Diagnostics: Failure to receive credential from manager daemon.",
@@ -1701,7 +1754,8 @@ get_lsc_credentials (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a credential. "
                                     "The credential could not be delivered. "
                                     "Diagnostics: Failure to receive credential from manager daemon.",
@@ -1727,7 +1781,8 @@ get_lsc_credentials (credentials_t * credentials,
               free_entity (entity);
               return 0;
             }
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
                                 "Diagnostics: Failure to parse credential from manager daemon.",
@@ -1746,7 +1801,8 @@ get_lsc_credentials (credentials_t * credentials,
       if (read_entity_and_text (&session, &entity, &text))
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting credential list. "
                                 "The current list of credentials is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
@@ -1813,14 +1869,16 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
   int socket;
 
   if (lsc_credential_id == NULL || next == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a credential. "
                          "The credential remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_lsc_credentials");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a credential. "
                          "The credential remains as it was. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -1838,7 +1896,8 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting credential info. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_lsc_credentials");
@@ -1866,7 +1925,8 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting credential info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_lsc_credentials");
@@ -1939,14 +1999,16 @@ save_lsc_credential_omp (credentials_t * credentials,
 
   if (next == NULL || sort_field == NULL || sort_order == NULL
       || lsc_credential_id == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a credential. "
                          "The credential remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_lsc_credentials");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a credential. "
                          "The credential remains the same. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2016,7 +2078,8 @@ save_lsc_credential_omp (credentials_t * credentials,
     }
 
   g_free (modify);
-  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while saving a credential. "
                        "It is unclear whether the entire credential has been saved. "
                        "Diagnostics: Error in parameter next.",
@@ -2055,7 +2118,8 @@ create_agent_omp (credentials_t * credentials, const char *name,
   GString *xml;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new agent. "
                          "No new agent was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2121,7 +2185,8 @@ create_agent_omp (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new agent. "
                                "No new agent was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -2132,7 +2197,8 @@ create_agent_omp (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new agent. "
                                "It is unclear whether the agent has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -2149,7 +2215,8 @@ create_agent_omp (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while listing agents. "
                            "The agent has, however, been created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2160,7 +2227,8 @@ create_agent_omp (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while listing agents. "
                            "The agent has, however, been created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -2191,7 +2259,8 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting an agent. "
                          "The agent was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2207,7 +2276,8 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an agent. "
                            "The agent was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2217,7 +2287,8 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an agent. "
                            "It is unclear whether the agent has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -2262,7 +2333,8 @@ get_agents_omp (credentials_t * credentials,
 
   if (manager_connect (credentials, &socket, &session))
     {
-      *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
                             "An internal error occurred while getting the agent list. "
                             "The current list of agents is not available. "
                             "Diagnostics: Failure to connect to manager daemon.",
@@ -2281,7 +2353,8 @@ get_agents_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting agent list. "
                                 "The current list of agents is not available. "
                                 "Diagnostics: Failure to send command to manager daemon.",
@@ -2301,7 +2374,8 @@ get_agents_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting agent list. "
                                 "The current list of agents is not available. "
                                 "Diagnostics: Failure to send command to manager daemon.",
@@ -2328,7 +2402,8 @@ get_agents_omp (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a agent. "
                                     "The agent is not available. "
                                     "Diagnostics: Failure to receive response from manager daemon.",
@@ -2376,7 +2451,8 @@ get_agents_omp (credentials_t * credentials,
             {
               free_entity (entity);
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a agent. "
                                     "The agent could not be delivered. "
                                     "Diagnostics: Failure to receive agent from manager daemon.",
@@ -2394,7 +2470,8 @@ get_agents_omp (credentials_t * credentials,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
-              *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              *html = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
                                     "An internal error occurred while getting a agent. "
                                     "The agent could not be delivered. "
                                     "Diagnostics: Failure to receive agent from manager daemon.",
@@ -2405,7 +2482,8 @@ get_agents_omp (credentials_t * credentials,
 
           agent_entity = entity_child (entity, "agent");
           free_entity (entity);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
                                 "Diagnostics: Failure to parse agent from manager daemon.",
@@ -2423,7 +2501,8 @@ get_agents_omp (credentials_t * credentials,
       if (read_entity_and_text (&session, &entity, &text))
         {
           openvas_server_close (socket, session);
-          *html = gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting agent list. "
                                 "The current list of agents is not available. "
                                 "Diagnostics: Failure to receive response from manager daemon.",
@@ -2453,7 +2532,8 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
   gnutls_session_t session;
   int socket;
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while verifying an agent. "
                          "The agent iss not verified. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2470,7 +2550,8 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
                            "The agent is not verified. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2483,7 +2564,8 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying an agent. "
                            "It is unclear whether the agent has been verified or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -2546,7 +2628,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new target. "
                          "No new target was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2601,7 +2684,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new escalator. "
                                "No new escalator was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -2612,7 +2696,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new escalator. "
                                "It is unclear whether the escalator has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -2630,7 +2715,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2641,7 +2727,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -2658,7 +2745,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2669,7 +2757,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -2699,7 +2788,8 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a escalator. "
                          "The escalator is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2724,7 +2814,8 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an escalator. "
                            "The escalator was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2735,7 +2826,8 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an escalator. "
                            "It is unclear whether the escalator has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -2768,7 +2860,8 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting an escalator. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_escalators");
@@ -2789,7 +2882,8 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an escalator. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_escalators");
@@ -2799,7 +2893,8 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an escalator. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_escalators");
@@ -2813,7 +2908,8 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an escalator. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_escalators");
@@ -2823,7 +2919,8 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting an escalator. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_escalators");
@@ -2839,6 +2936,7 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
 /**
  * @brief Get all escalators, reading the result into a string.
  *
+ * @param[in]   credentials  User authentication information.
  * @param[in]   session      GNUTLS session.
  * @param[out]  xml          String.
  * @param[in]   sort_field   Field to sort on, or NULL.
@@ -2847,8 +2945,9 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
  * @return Result of XSL transformation on error, NULL on success.
  */
 char *
-get_escalators_xml (gnutls_session_t *session, GString *xml,
-                    const char *sort_field, const char *sort_order)
+get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
+                    GString *xml, const char *sort_field,
+                    const char *sort_order)
 {
   if (openvas_server_sendf (session,
                             "<get_escalators"
@@ -2857,14 +2956,16 @@ get_escalators_xml (gnutls_session_t *session, GString *xml,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting escalators list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to send command to manager daemon.",
                          "/omp?cmd=get_tasks");
 
   if (read_string (session, &xml))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting escalators list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to receive response from manager daemon.",
@@ -2892,7 +2993,8 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
   char *ret;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting escalator list. "
                          "The current list of escalators is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -2900,7 +3002,7 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
 
   xml = g_string_new ("<get_escalators>");
 
-  ret = get_escalators_xml (&session, xml, sort_field, sort_order);
+  ret = get_escalators_xml (credentials, &session, xml, sort_field, sort_order);
   if (ret)
     {
       g_string_free (xml, TRUE);
@@ -2916,7 +3018,8 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -2927,7 +3030,8 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the escalator list. "
                            "The current list of escalators is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -2959,7 +3063,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
   char *ret;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while testing an escalator. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_escalators");
@@ -2975,7 +3080,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an escalator. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_targets");
@@ -2985,7 +3091,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while testing an escalator. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
@@ -2993,7 +3100,7 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
 
   /* Get all escalators. */
 
-  ret = get_escalators_xml (&session, xml, sort_field, sort_order);
+  ret = get_escalators_xml (credentials, &session, xml, sort_field, sort_order);
   if (ret)
     {
       g_string_free (xml, TRUE);
@@ -3011,7 +3118,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3022,7 +3130,8 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new escalator. "
                            "A new escalator was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3065,7 +3174,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new target. "
                          "No new target was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3143,7 +3253,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new target. "
                                "No new target was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -3154,7 +3265,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new target. "
                                "It is unclear whether the target has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -3172,7 +3284,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3183,7 +3296,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3198,7 +3312,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3209,7 +3324,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3226,7 +3342,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3237,7 +3354,8 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new target. "
                            "A new target was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3267,7 +3385,8 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a target. "
                          "The target is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3293,7 +3412,8 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a target. "
                            "The target is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3304,7 +3424,8 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a target. "
                            "It is unclear whether the target has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -3337,7 +3458,8 @@ get_target_omp (credentials_t * credentials, const char * target_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting targets list. "
                          "The current list of targets is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3360,7 +3482,8 @@ get_target_omp (credentials_t * credentials, const char * target_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3371,7 +3494,8 @@ get_target_omp (credentials_t * credentials, const char * target_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3403,7 +3527,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting targets list. "
                          "The current list of targets is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3423,7 +3548,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3434,7 +3560,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3451,7 +3578,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3462,7 +3590,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting targets list. "
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3476,7 +3605,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the list "
                            "of target locators. "
                            "The current list of schedules is not available. "
@@ -3488,7 +3618,8 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the list "
                            "of target locators. "
                            "The current list of schedules is not available. "
@@ -3522,7 +3653,8 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new config. "
                          "No new config was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3550,7 +3682,8 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new config. "
                                "No new config was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -3561,7 +3694,8 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new config. "
                                "It is unclear whether the config has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -3579,7 +3713,8 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new config. "
                            "The new config was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3590,7 +3725,8 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new config. "
                            "The new config was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3620,7 +3756,8 @@ import_config_omp (credentials_t * credentials, char *xml_file)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while importing a config. "
                          "No new config was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3639,7 +3776,8 @@ import_config_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a config. "
                            "No new config was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3650,7 +3788,8 @@ import_config_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a config. "
                            "It is unclear whether the config has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3667,7 +3806,8 @@ import_config_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a config. "
                            "The new config was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3678,7 +3818,8 @@ import_config_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a config. "
                            "The new config was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3711,7 +3852,8 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting list of configs. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3727,7 +3869,8 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3738,7 +3881,8 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3769,7 +3913,8 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
   assert (config_id);
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting list of configs. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3790,7 +3935,8 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3801,7 +3947,8 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the config. "
                            "The config is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -3816,7 +3963,8 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the config. "
                                "The config is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -3827,7 +3975,8 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the config. "
                                "The config is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -3873,7 +4022,8 @@ save_config_omp (credentials_t * credentials,
   char *ret;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a config. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -3911,7 +4061,8 @@ save_config_omp (credentials_t * credentials,
             {
               g_free (value);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
@@ -3941,7 +4092,8 @@ save_config_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -3965,7 +4117,8 @@ save_config_omp (credentials_t * credentials,
             == -1)
           {
             openvas_server_close (socket, session);
-            return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving a config. "
                                  "It is unclear whether the entire config has been saved. "
                                  "Diagnostics: Failure to send command to manager daemon.",
@@ -3991,7 +4144,8 @@ save_config_omp (credentials_t * credentials,
               == -1)
             {
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
@@ -4006,7 +4160,8 @@ save_config_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4057,7 +4212,8 @@ get_config_family_omp (credentials_t * credentials,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting list of configs. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4089,7 +4245,8 @@ get_config_family_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4100,7 +4257,8 @@ get_config_family_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -4127,7 +4285,8 @@ get_config_family_omp (credentials_t * credentials,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -4138,7 +4297,8 @@ get_config_family_omp (credentials_t * credentials,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting list of configs. "
                                "The current list of configs is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -4181,7 +4341,8 @@ save_config_family_omp (credentials_t * credentials,
   char *ret;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a config. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4198,7 +4359,8 @@ save_config_family_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4213,7 +4375,8 @@ save_config_family_omp (credentials_t * credentials,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a config. "
                                "It is unclear whether the entire config has been saved. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -4226,7 +4389,8 @@ save_config_family_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a config. "
                            "It is unclear whether the entire config has been saved. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4277,7 +4441,8 @@ get_config_nvt_omp (credentials_t * credentials,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting list of configs. "
                          "The current list of configs is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4308,7 +4473,8 @@ get_config_nvt_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4319,7 +4485,8 @@ get_config_nvt_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting list of configs. "
                            "The current list of configs is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -4370,7 +4537,8 @@ save_config_nvt_omp (credentials_t * credentials,
       /* Save preferences. */
 
       if (manager_connect (credentials, &socket, &session))
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting list of configs. "
                              "The current list of configs is not available. "
                              "Diagnostics: Failure to connect to manager daemon.",
@@ -4492,7 +4660,8 @@ save_config_nvt_omp (credentials_t * credentials,
             {
               g_free (value);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while saving a config. "
                                    "It is unclear whether the entire config has been saved. "
                                    "Diagnostics: Failure to send command to manager daemon.",
@@ -4535,7 +4704,8 @@ delete_config_omp (credentials_t * credentials, const char *config_id)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a config. "
                          "The config is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4552,7 +4722,8 @@ delete_config_omp (credentials_t * credentials, const char *config_id)
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a config. "
                            "The config is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4563,7 +4734,8 @@ delete_config_omp (credentials_t * credentials, const char *config_id)
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a config. "
                            "It is unclear whether the config has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -4601,7 +4773,8 @@ export_config_omp (credentials_t * credentials, const char *config_id,
   *content_length = 0;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a config. "
                          "The config could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4622,7 +4795,8 @@ export_config_omp (credentials_t * credentials, const char *config_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -4634,7 +4808,8 @@ export_config_omp (credentials_t * credentials, const char *config_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -4659,7 +4834,8 @@ export_config_omp (credentials_t * credentials, const char *config_id,
           free_entity (entity);
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a config. "
                                "The config could not be delivered. "
                                "Diagnostics: Failure to receive config from manager daemon.",
@@ -4699,7 +4875,8 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
   *content_length = 0;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a preference file. "
                          "The file could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4723,7 +4900,8 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -4735,7 +4913,8 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -4760,7 +4939,8 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
           free_entity (entity);
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a preference file. "
                                "The file could not be delivered. "
                                "Diagnostics: Failure to receive file from manager daemon.",
@@ -4800,7 +4980,8 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
   *content_length = 0;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report format. "
                          "The report format could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4821,7 +5002,8 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report format. "
                                "The report format could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -4833,7 +5015,8 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report format. "
                                "The report format could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -4858,7 +5041,8 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
           free_entity (entity);
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report format. "
                                "The report format could not be delivered. "
                                "Diagnostics: Failure to receive report format from manager daemon.",
@@ -4890,7 +5074,8 @@ delete_report_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a report. "
                          "The report is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -4908,7 +5093,8 @@ delete_report_omp (credentials_t * credentials,
                             task_id) == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a report. "
                            "The report is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -4919,7 +5105,8 @@ delete_report_omp (credentials_t * credentials,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a report. "
                            "It is unclear whether the report has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -4998,7 +5185,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     result_hosts_only = "1";
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report. "
                          "The report could not be delivered. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -5043,7 +5231,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -5062,7 +5251,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
@@ -5074,7 +5264,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               free_entity (entity);
               g_string_free (xml, TRUE);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Response from manager daemon did not contain a report.",
@@ -5105,7 +5296,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive response from manager daemon.",
@@ -5146,7 +5338,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
               free_entity (entity);
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to receive report from manager daemon.",
@@ -5166,7 +5359,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -5199,7 +5393,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
@@ -5210,7 +5405,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
-              return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
                                    "The report could not be delivered. "
                                    "Diagnostics: Failure to send command to manager daemon.",
@@ -5225,7 +5421,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -5236,7 +5433,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -5267,7 +5465,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
           {
             g_string_free (xml, TRUE);
             openvas_server_close (socket, session);
-            return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting a report. "
                                  "The report could not be delivered. "
                                  "Diagnostics: Failure to send command to manager daemon.",
@@ -5278,7 +5477,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
           {
             g_string_free (xml, TRUE);
             openvas_server_close (socket, session);
-            return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while getting a report. "
                                  "The report could not be delivered. "
                                  "Diagnostics: Failure to receive response from manager daemon.",
@@ -5310,7 +5510,8 @@ get_notes (credentials_t *credentials, const char *commands)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the notes. "
                          "The list of notes is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -5330,7 +5531,8 @@ get_notes (credentials_t *credentials, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the notes. "
                            "The list of notes is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -5341,7 +5543,8 @@ get_notes (credentials_t *credentials, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the notes. "
                            "The list of notes is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -5385,7 +5588,8 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the note. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
@@ -5407,7 +5611,8 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the note. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -5417,7 +5622,8 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the note. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -5497,7 +5703,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -5515,7 +5722,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
                            "No new note was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -5569,7 +5777,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new note. "
                            "It is unclear whether the note has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -5626,28 +5835,32 @@ create_note_omp (credentials_t *credentials, const char *oid,
   int socket;
 
   if (search_phrase == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
                          "Diagnostics: Search phrase was NULL.",
                          "/omp?cmd=get_notes");
 
   if (oid == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_notes");
 
   if (threat == NULL || port == NULL || hosts == NULL || min_cvss_base == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_notes");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
                          "No new note was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -5685,7 +5898,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
                                "No new note was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -5696,7 +5910,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new note. "
                                "It is unclear whether the note has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -5751,7 +5966,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report. "
                            "The new note was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -5762,7 +5978,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report. "
                            "The new note was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -5776,7 +5993,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -5787,7 +6005,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -5820,7 +6039,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
       {
         g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the report. "
                              "The new note was, however, created. "
                              "Diagnostics: Failure to send command to manager daemon.",
@@ -5831,7 +6051,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
       {
         g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the report. "
                              "The new note was, however, created. "
                              "Diagnostics: Failure to receive response from manager daemon.",
@@ -5888,7 +6109,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   int socket;
 
   if (next == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a note. "
                          "The note remains intact. "
                          "Diagnostics: Required parameter was NULL.",
@@ -5900,7 +6122,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       char *ret;
 
       if (oid == NULL)
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting a note. "
                              "The note remains intact. "
                              "Diagnostics: Required parameter was NULL.",
@@ -5930,7 +6153,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a note. "
                          "The note was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -5941,7 +6165,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while deleting a note. "
                                "The note remains intact. "
                                "Diagnostics: Required parameter was NULL.",
@@ -6000,7 +6225,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while deleting a note. "
                                "It is unclear whether the note has been deleted or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -6010,7 +6236,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   else
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a note. "
                            "The note remains intact. "
                            "Diagnostics: Error in parameter next.",
@@ -6021,7 +6248,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a note. "
                            "It is unclear whether the note has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6073,7 +6301,8 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
 
   if (note_id == NULL)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
@@ -6081,7 +6310,8 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a note. "
                          "The note remains as it was. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -6096,7 +6326,8 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -6144,7 +6375,8 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing a note. "
                            "The note remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6207,7 +6439,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   gchar *modify_note;
 
   if (next == NULL || note_task_id == NULL || note_result_id == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a note. "
                          "The note remains the same. "
                          "Diagnostics: Required parameter was NULL.",
@@ -6236,7 +6469,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       if (oid == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a note. "
                                "The note remains the same. "
                                "Diagnostics: Required parameter was NULL.",
@@ -6272,7 +6506,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a note. "
                          "The note was not saved. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -6283,7 +6518,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a note. "
                                "The note remains the same. "
                                "Diagnostics: Required parameter was NULL.",
@@ -6343,7 +6579,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
         {
           g_free (modify_note);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a note. "
                                "It is unclear whether the note has been saved or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -6355,7 +6592,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
     {
       g_free (modify_note);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a note. "
                            "The note remains the same. "
                            "Diagnostics: Error in parameter next.",
@@ -6366,7 +6604,8 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a note. "
                            "It is unclear whether the note has been saved or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6394,7 +6633,8 @@ get_overrides (credentials_t *credentials, const char *commands)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the overrides. "
                          "The list of overrides is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -6415,7 +6655,8 @@ get_overrides (credentials_t *credentials, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the overrides. "
                            "The list of overrides is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -6426,7 +6667,8 @@ get_overrides (credentials_t *credentials, const char *commands)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the overrides. "
                            "The list of overrides is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6471,7 +6713,8 @@ get_override (credentials_t *credentials, const char *override_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the override. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
@@ -6493,7 +6736,8 @@ get_override (credentials_t *credentials, const char *override_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the override. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -6503,7 +6747,8 @@ get_override (credentials_t *credentials, const char *override_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the override. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -6584,7 +6829,8 @@ new_override_omp (credentials_t *credentials, const char *oid,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -6604,7 +6850,8 @@ new_override_omp (credentials_t *credentials, const char *oid,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
                            "No new override was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -6658,7 +6905,8 @@ new_override_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new override. "
                            "It is unclear whether the override has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6717,14 +6965,16 @@ create_override_omp (credentials_t *credentials, const char *oid,
   int socket;
 
   if (search_phrase == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: Search phrase was NULL.",
                          "/omp?cmd=get_overrides");
 
   if (oid == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: OID was NULL.",
@@ -6732,14 +6982,16 @@ create_override_omp (credentials_t *credentials, const char *oid,
 
   if (threat == NULL || new_threat == NULL || port == NULL || hosts == NULL
       || min_cvss_base == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_overrides");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -6779,7 +7031,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
                                "No new override was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -6790,7 +7043,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new override. "
                                "It is unclear whether the override has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -6845,7 +7099,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report. "
                            "The new override was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -6856,7 +7111,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report. "
                            "The new override was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6870,7 +7126,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -6881,7 +7138,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
                            "The report could not be delivered. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -6914,7 +7172,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
       {
         g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the report. "
                              "The new override was, however, created. "
                              "Diagnostics: Failure to send command to manager daemon.",
@@ -6925,7 +7184,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
       {
         g_string_free (xml, TRUE);
         openvas_server_close (socket, session);
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the report. "
                              "The new override was, however, created. "
                              "Diagnostics: Failure to receive response from manager daemon.",
@@ -6982,7 +7242,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   int socket;
 
   if (next == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting an override. "
                          "The override remains intact. "
                          "Diagnostics: Required parameter was NULL.",
@@ -6994,7 +7255,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       char *ret;
 
       if (oid == NULL)
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting an override. "
                              "The override remains intact. "
                              "Diagnostics: Required parameter was NULL.",
@@ -7027,7 +7289,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting an override. "
                          "The override was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7038,7 +7301,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while deleting an override. "
                                "The override remains intact. "
                                "Diagnostics: Required parameter was NULL.",
@@ -7097,7 +7361,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
           == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while deleting an override. "
                                "It is unclear whether the override has been deleted or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -7107,7 +7372,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   else
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an override. "
                            "The override remains intact. "
                            "Diagnostics: Error in parameter next.",
@@ -7118,7 +7384,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting an override. "
                            "It is unclear whether the override has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7171,7 +7438,8 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
 
   if (override_id == NULL || min_cvss_base == NULL)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
@@ -7179,7 +7447,8 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing an override. "
                          "The override remains as it was. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7194,7 +7463,8 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -7242,7 +7512,8 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while editing an override. "
                            "The override remains as it was. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7309,7 +7580,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
 
   if (next == NULL || override_task_id == NULL || override_result_id == NULL
       || new_threat == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving an override. "
                          "The override remains the same. "
                          "Diagnostics: Required parameter was NULL.",
@@ -7340,7 +7612,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       if (oid == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving an override. "
                                "The override remains the same. "
                                "Diagnostics: Required parameter was NULL.",
@@ -7376,7 +7649,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
     }
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving an override. "
                          "The override was not saved. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7387,7 +7661,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       if (search_phrase == NULL || min_cvss_base == NULL)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving an override. "
                                "The override remains the same. "
                                "Diagnostics: Required parameter was NULL.",
@@ -7447,7 +7722,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
         {
           g_free (modify_override);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving an override. "
                                "It is unclear whether the override has been saved or not. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -7459,7 +7735,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
     {
       g_free (modify_override);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving an override. "
                            "The override remains the same. "
                            "Diagnostics: Error in parameter next.",
@@ -7470,7 +7747,8 @@ save_override_omp (credentials_t * credentials, const char *override_id,
   if (read_entity_and_text (&session, &entity, &response))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving an override. "
                            "It is unclear whether the override has been saved or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7505,7 +7783,8 @@ create_slave_omp (credentials_t *credentials, const char *name,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new slave. "
                          "No new slave was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7558,7 +7837,8 @@ create_slave_omp (credentials_t *credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new slave. "
                                "No new slave was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -7569,7 +7849,8 @@ create_slave_omp (credentials_t *credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new slave. "
                                "It is unclear whether the slave has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -7587,7 +7868,8 @@ create_slave_omp (credentials_t *credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new slave. "
                            "A new slave was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -7598,7 +7880,8 @@ create_slave_omp (credentials_t *credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new slave. "
                            "A new slave was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7628,7 +7911,8 @@ delete_slave_omp (credentials_t * credentials, const char *slave_id)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a slave. "
                          "The slave is not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7650,7 +7934,8 @@ delete_slave_omp (credentials_t * credentials, const char *slave_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a slave. "
                            "The slave is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -7661,7 +7946,8 @@ delete_slave_omp (credentials_t * credentials, const char *slave_id)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a slave. "
                            "It is unclear whether the slave has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -7694,7 +7980,8 @@ get_slave_omp (credentials_t * credentials, const char * slave_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting slaves list. "
                          "The current list of slaves is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7717,7 +8004,8 @@ get_slave_omp (credentials_t * credentials, const char * slave_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting slaves list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -7728,7 +8016,8 @@ get_slave_omp (credentials_t * credentials, const char * slave_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting slaves list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7760,7 +8049,8 @@ get_slaves_omp (credentials_t * credentials, const char * sort_field,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting slaves list. "
                          "The current list of slaves is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -7780,7 +8070,8 @@ get_slaves_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting slaves list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -7791,7 +8082,8 @@ get_slaves_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting slaves list. "
                            "The current list of slaves is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -7824,7 +8116,8 @@ get_schedule_omp (credentials_t * credentials, const char * schedule_id,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a schedule. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_schedules");
@@ -7846,7 +8139,8 @@ get_schedule_omp (credentials_t * credentials, const char * schedule_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a schedule. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_schedules");
@@ -7856,7 +8150,8 @@ get_schedule_omp (credentials_t * credentials, const char * schedule_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a schedule. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_schedules");
@@ -7889,7 +8184,8 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
   struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the schedule list. "
                          "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
@@ -7929,7 +8225,8 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -7939,7 +8236,8 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the schedule list. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
@@ -7987,7 +8285,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
   struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new schedule. "
                          "No new schedule was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8067,7 +8366,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new schedule. "
                                "No new schedule was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
@@ -8078,7 +8378,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new schedule. "
                                "It is unclear whether the schedule has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
@@ -8097,7 +8398,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new schedule. "
                            "A new schedule was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8108,7 +8410,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new schedule. "
                            "A new schedule was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8140,7 +8443,8 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
   struct tm *now_broken;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a schedule. "
                          "The schedule was not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8183,7 +8487,8 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a schedule. "
                            "The schedule was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8194,7 +8499,8 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a schedule. "
                            "It is unclear whether the schedule has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
@@ -8226,7 +8532,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the system reports. "
                          "The current list of system reports is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8248,7 +8555,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8259,7 +8567,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8276,7 +8585,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8287,7 +8597,8 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the system reports. "
                            "The current list of system reports is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8422,7 +8733,8 @@ get_report_format (credentials_t * credentials,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the report formats. "
                          "The current list of report formats is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8449,7 +8761,8 @@ get_report_format (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report formats. "
                            "The current list of report_formats is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8460,7 +8773,8 @@ get_report_format (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report formats. "
                            "The current list of report_formats is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8512,7 +8826,8 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting the report formats. "
                          "The current list of report formats is not available. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8536,7 +8851,8 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report formats. "
                            "The current list of report formats is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8547,7 +8863,8 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the report formatss. "
                            "The current list of report formats is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8593,7 +8910,8 @@ delete_report_format_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a report format. "
                          "The report_format iss not deleted. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8610,7 +8928,8 @@ delete_report_format_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a report format. "
                            "The report_format is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8623,7 +8942,8 @@ delete_report_format_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a report format. "
                            "It is unclear whether the report format has been deleted or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8657,14 +8977,16 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
   int socket;
 
   if (report_format_id == NULL || next == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a report format. "
                          "The report format remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_report_formats");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a report format. "
                          "The report format remains as it was. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8682,7 +9004,8 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting report format info. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_report_formats");
@@ -8710,7 +9033,8 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting report format info. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_report_formats");
@@ -8760,7 +9084,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
   int socket;
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while importing a report format. "
                          "No new report format was created. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8779,7 +9104,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a report format. "
                            "No new report format was created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8790,7 +9116,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a report format. "
                            "It is unclear whether the report format has been created or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8807,7 +9134,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a report format. "
                            "The new report format was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -8818,7 +9146,8 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while importing a report format. "
                            "The new report format was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -8868,14 +9197,16 @@ save_report_format_omp (credentials_t * credentials,
 
   if (next == NULL || sort_field == NULL || sort_order == NULL
       || report_format_id == NULL)
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a report format. "
                          "The report format remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_report_formats");
 
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a report format. "
                          "The report format remains the same. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -8918,7 +9249,8 @@ save_report_format_omp (credentials_t * credentials,
               {
                 g_free (value);
                 openvas_server_close (socket, session);
-                return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+                return gsad_message (credentials,
+                                     "Internal error", __FUNCTION__, __LINE__,
                                      "An internal error occurred while saving a report format. "
                                      "It is unclear whether the entire report format has been saved. "
                                      "Diagnostics: Failure to send command to manager daemon.",
@@ -8965,7 +9297,8 @@ save_report_format_omp (credentials_t * credentials,
     }
 
   g_free (modify_format);
-  return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while saving a report format. "
                        "It is unclear whether the entire report format has been saved. "
                        "Diagnostics: Error in parameter next.",
@@ -8988,7 +9321,8 @@ verify_report_format_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   if (manager_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while verifying a report format. "
                          "The report_format iss not verified. "
                          "Diagnostics: Failure to connect to manager daemon.",
@@ -9005,7 +9339,8 @@ verify_report_format_omp (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying a report format. "
                            "The report_format is not verified. "
                            "Diagnostics: Failure to send command to manager daemon.",
@@ -9018,7 +9353,8 @@ verify_report_format_omp (credentials_t * credentials,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while verifying a report format. "
                            "It is unclear whether the report format has been verified or not. "
                            "Diagnostics: Failure to receive response from manager daemon.",
@@ -9042,7 +9378,7 @@ verify_report_format_omp (credentials_t * credentials,
  * @return TRUE if valid, FALSE otherwise.
  */
 gboolean
-is_omp_authenticated (gchar * username, gchar * password)
+is_omp_authenticated (const gchar * username, const gchar * password)
 {
   gnutls_session_t session;
   int socket;

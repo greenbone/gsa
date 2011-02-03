@@ -43,13 +43,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New User
-      <a href="/help/configure_users.html#newuser"
+      <a href="/help/configure_users.html?token={/envelope/token}#newuser"
          title="Help: Configure Users (New User)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_user"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
@@ -106,7 +107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Users
-      <a href="/help/configure_users.html#users"
+      <a href="/help/configure_users.html?token={/envelope/token}#users"
          title="Help: Configure Users (Users)">
         <img src="/img/help.png"/>
       </a>
@@ -199,19 +200,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/oap?cmd=delete_user&amp;name={name}"
+          <a href="/oap?cmd=delete_user&amp;name={name}&amp;token={/envelope/token}"
              title="Delete User"
              style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/oap?cmd=get_user&amp;name={name}"
+      <a href="/oap?cmd=get_user&amp;name={name}&amp;token={/envelope/token}"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/oap?cmd=edit_user&amp;name={name}"
+      <a href="/oap?cmd=edit_user&amp;name={name}&amp;token={/envelope/token}"
          title="Edit User"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -226,14 +227,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        User Details
-       <a href="/help/configure_users.html#userdetails"
+       <a href="/help/configure_users.html?token={/envelope/token}#userdetails"
          title="Help: Configure Users (User Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_users">Back to Users</a>
+        <a href="?cmd=get_users&amp;token={/envelope/token}">Back to Users</a>
       </div>
       <table>
         <tr>
@@ -289,7 +290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Reports">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Reports">
                     <img src="/img/list.png"
                          border="0"
                          alt="Reports"
@@ -312,16 +313,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Edit User
-       <a href="/help/configure_users.html#userdetails"
+       <a href="/help/configure_users.html?token={/envelope/token}#userdetails"
          title="Help: Configure Users (Edit User)">
          <img src="/img/help.png"/>
        </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_users">Back to Users</a>
+        <a href="?cmd=get_users&amp;token={/envelope/token}">Back to Users</a>
       </div>
       <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_user"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
@@ -460,13 +462,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">NVT Feed Management
-      <a href="/help/feed_management.html"
+      <a href="/help/feed_management.html?token={/envelope/token}"
          title="Help: NVT Feed Management">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="sync_feed"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -532,7 +535,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:otherwise>
               </xsl:choose>
               <p>
-                <a href="/help/feed_management.html#consequences" title="Help: Feed Management">Learn about the consequences of feed synchronization</a>
+                <a href="/help/feed_management.html?token={/envelope/token}#consequences" title="Help: Feed Management">Learn about the consequences of feed synchronization</a>
               </p>
             </td>
           </tr>
@@ -571,12 +574,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Scanner Settings
-      <a href="/help/settings.html"
+      <a href="/help/settings.html?token={/envelope/token}"
          title="Help: Settings">
         <img src="/img/help.png"/>
       </a>
       <xsl:if test="@editable=1">
-        <a href="/oap?cmd=edit_settings"
+        <a href="/oap?cmd=edit_settings&amp;token={/envelope/token}"
            title="Edit Settings"
            style="margin-left:3px;">
           <img src="/img/edit.png"/>
@@ -603,7 +606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Scanner Settings
-      <a href="/help/settings.html"
+      <a href="/help/settings.html?token={/envelope/token}"
          title="Help: Settings">
         <img src="/img/help.png"/>
       </a>
@@ -612,6 +615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div style="text-align:left">From file: <xsl:value-of select="@sourcefile"/></div>
       <div id="settings">
         <form action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_settings"/>
           <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
             <tr class="gbntablehead2">
@@ -721,13 +725,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@name='method:ads'">
           ADS Authentication
-          <a href="/help/configure_users.html#adsauthentication"
+          <a href="/help/configure_users.html?token={/envelope/token}#adsauthentication"
             title="Help: Configure Users (ADS Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:otherwise>
           LDAP Authentication
-          <a href="/help/configure_users.html#ldapauthentication"
+          <a href="/help/configure_users.html?token={/envelope/token}#ldapauthentication"
             title="Help: Configure Users (LDAP Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:otherwise>
@@ -736,6 +740,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <form action="/oap" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="modify_auth"/>
           <!-- group name is e.g. of method:ldap -->
           <input type="hidden" name="group" value="{@name}"/>

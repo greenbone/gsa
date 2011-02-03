@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         The help page you requested could not be found. If you have followed a
         link and got this page, the location of the help page may have changed.
-        In this case, please use the <a href="contents.html">table of
+        In this case, please use the <a href="contents.html?token={/envelope/token}">table of
           contents</a> to navigate to the page you were looking for.
       </p>
 
@@ -85,7 +85,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
       License: GNU General Public License version 2 or any later version
-      (<a href="gplv2.html">full license text</a>)
+      (<a href="gplv2.html?token={/envelope/token}">full license text</a>)
       </p>
 
       <p>
@@ -124,8 +124,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_agents.html">
   <div class="gb_window_part_center">Help: Configure Agents</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_agents">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
       <br/>
       <h1>Configure Agents</h1>
@@ -249,8 +249,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_credentials.html">
   <div class="gb_window_part_center">Help: Configure Credentials</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_lsc_credentials">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -258,7 +258,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
        Credentials for local security checks are required to allow
-       <a href="glossary.html#nvt">NVTs</a> to log into target systems
+       <a href="glossary.html?token={/envelope/token}#nvt">NVTs</a> to log into target systems
        for the purpose of locally check there e.g. for the presence
        of all vendor security patches.
       </p>
@@ -274,7 +274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        <b>Please note</b> that you will need to associate one or more
-       <a href="glossary.html#target">targets</a> with the credential you installed
+       <a href="glossary.html?token={/envelope/token}#target">targets</a> with the credential you installed
        on them.
        Only this finally allows the scan engine to apply the suitable credentials.
       </p>
@@ -454,14 +454,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_escalators.html">
   <div class="gb_window_part_center">Help: Configure Escalator</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_escalators">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Escalators</h1>
       <p>
-       Escalators can be added to <a href="glossary.html#task">tasks</a>.
+       Escalators can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
        Escalators are hooked into the system. Whenever a configured event happens
        (e.g. a task finished), a chosen condition is checked (e.g. vulnerability
        with high threat level detected).
@@ -621,16 +621,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_report_formats.html">
   <div class="gb_window_part_center">Help: Configure Report Formats</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report_formats">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Report Formats</h1>
       <p>
-       <a href="glossary.html#report">Reports</a> can be downloaded in a number
+       <a href="glossary.html?token={/envelope/token}#report">Reports</a> can be downloaded in a number
        of formats.
-       The configured <a href="glossary.html#report_format">report formats</a>
+       The configured <a href="glossary.html?token={/envelope/token}#report_format">report formats</a>
        will appear for selection in the dialogs for downloading reports.
       </p>
 
@@ -806,17 +806,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_scanconfigs.html">
   <div class="gb_window_part_center">Help: Configure Scan Configs</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_configs">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Scan Configs</h1>
       <p>
-       Any <a href="glossary.html#task">task</a> is associated with
-       a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       Any <a href="glossary.html?token={/envelope/token}#task">task</a> is associated with
+       a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
        The configured Scan Configs will appear as selection
-       in the dialog for creating a <a href="new_task.html">new task</a>.
+       in the dialog for creating a <a href="new_task.html?token={/envelope/token}">new task</a>.
       </p>
 
       <a name="newconfig"></a>
@@ -947,7 +947,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Issueing the details icon
        <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
-       will open the <a href="scanconfig_details.html">Scan Config Details</a>
+       will open the <a href="scanconfig_details.html?token={/envelope/token}">Scan Config Details</a>
        dialog to provide details on the configuration
        such as the selected NVTs and applied settings.
       </p>
@@ -957,7 +957,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        A Scan Config can be modified if it is not currently in use by a task.
        A click on the edit icon
        <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will open the <a href="scanconfig_editor.html">Scan Config Editor</a> dialog
+       will open the <a href="scanconfig_editor.html?token={/envelope/token}">Scan Config Editor</a> dialog
        with details on the configuration
        such as the selected NVTs and applied settings and allow modifications of it.
        If the Scan Config is currently in use by a task, the icon will appear greyed
@@ -981,14 +981,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_schedules.html">
   <div class="gb_window_part_center">Help: Configure Schedule</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_schedules">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Schedules</h1>
       <p>
-        Schedules can be added to <a href="glossary.html#task">tasks</a>.
+        Schedules can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
         They can be used to start a task at a pre-defined time, to repeat a task
         after a certain interval or to limit the maximum duration of a task.
       </p>
@@ -1115,14 +1115,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_slaves.html">
   <div class="gb_window_part_center">Help: Configure Slave</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_slaves">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Slaves</h1>
       <p>
-        <a href="glossary.html#task">Tasks</a> can be configured to run on slave
+        <a href="glossary.html?token={/envelope/token}#task">Tasks</a> can be configured to run on slave
         manager servers.
       </p>
 
@@ -1256,17 +1256,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_targets.html">
   <div class="gb_window_part_center">Help: Configure Targets</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_targets">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Configure Targets</h1>
       <p>
-       Any <a href="glossary.html#task">task</a> is associated with
-       a <a href="glossary.html#target">target</a>.
+       Any <a href="glossary.html?token={/envelope/token}#task">task</a> is associated with
+       a <a href="glossary.html?token={/envelope/token}#target">target</a>.
        The configured targets will appear as selection
-       in the dialog for creating a <a href="new_task.html">new task</a>.
+       in the dialog for creating a <a href="new_task.html?token={/envelope/token}">new task</a>.
       </p>
 
       <a name="newtarget"></a>
@@ -1347,14 +1347,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>SSH Credential</td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="configure_credentials.html">configured credentials</a>.</td>
+          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SSH</td>
         </tr>
         <tr class="even">
           <td>SMB Credential</td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="configure_credentials.html">configured credentials</a>.</td>
+          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
       </table>
@@ -1499,8 +1499,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configure_users.html">
   <div class="gb_window_part_center">Help: Configure Users</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_users">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_users&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1693,7 +1693,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h1>Contents</h1>
       <p>
        This is the help system of Greenbone Security Assistant.
-       Small <a href="/help/contents.html" title="Help"><img src="/img/help.png"/></a>
+       Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.png"/></a>
        icons all over the web interface will jump you into the respective contents.
        Alternatively you can browse the following structure.
       </p>
@@ -1702,46 +1702,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <ul>
           <li> Scan Management</li>
           <ul>
-            <li> <a href="tasks.html">Tasks</a></li>
+            <li> <a href="tasks.html?token={/envelope/token}">Tasks</a></li>
             <ul>
-              <li> <a href="reports.html">Reports</a></li>
-              <li> <a href="view_report.html">View Report</a></li>
+              <li> <a href="reports.html?token={/envelope/token}">Reports</a></li>
+              <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
             </ul>
-            <li> <a href="new_task.html">New Task</a></li>
-            <li> <a href="notes.html">Notes</a></li>
-            <li> <a href="overrides.html">Overrides</a></li>
-            <li> <a href="performance.html">Performance</a></li>
+            <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
+            <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
+            <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
+            <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
-            <li> <a href="configure_scanconfigs.html">Configure Scan Configs</a></li>
+            <li> <a href="configure_scanconfigs.html?token={/envelope/token}">Configure Scan Configs</a></li>
             <ul>
-              <li> <a href="scanconfig_details.html">Scan Config Details</a></li>
-              <li> <a href="scanconfig_family_details.html">Scan Config Family Details</a></li>
-              <li> <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a></li>
-              <li> <a href="scanconfig_editor.html">Scan Config Editor</a></li>
-              <li> <a href="scanconfig_editor_nvt_families.html">Scan Config Family Editor</a></li>
-              <li> <a href="scanconfig_editor_nvt.html">Scan Config NVT Editor</a></li>
+              <li> <a href="scanconfig_details.html?token={/envelope/token}">Scan Config Details</a></li>
+              <li> <a href="scanconfig_family_details.html?token={/envelope/token}">Scan Config Family Details</a></li>
+              <li> <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a></li>
+              <li> <a href="scanconfig_editor.html?token={/envelope/token}">Scan Config Editor</a></li>
+              <li> <a href="scanconfig_editor_nvt_families.html?token={/envelope/token}">Scan Config Family Editor</a></li>
+              <li> <a href="scanconfig_editor_nvt.html?token={/envelope/token}">Scan Config NVT Editor</a></li>
             </ul>
-            <li> <a href="configure_targets.html">Configure Targets</a></li>
-            <li> <a href="configure_credentials.html">Configure Credentials</a></li>
-            <li> <a href="configure_agents.html">Configure Agents</a></li>
-            <li> <a href="configure_escalators.html">Configure Escalators</a></li>
-            <li> <a href="configure_schedules.html">Configure Schedules</a></li>
-            <li> <a href="configure_report_formats.html">Configure Report Formats</a></li>
-            <li> <a href="configure_slaves.html">Configure Slaves</a></li>
+            <li> <a href="configure_targets.html?token={/envelope/token}">Configure Targets</a></li>
+            <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
+            <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
+            <li> <a href="configure_escalators.html?token={/envelope/token}">Configure Escalators</a></li>
+            <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
+            <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
+            <li> <a href="configure_slaves.html?token={/envelope/token}">Configure Slaves</a></li>
           </ul>
           <li> Administration</li>
           <ul>
-            <li> <a href="configure_users.html">Configure Users</a></li>
-            <li> <a href="feed_management.html">NVT Feed Management</a></li>
-            <li> <a href="settings.html">Settings</a></li>
+            <li> <a href="configure_users.html?token={/envelope/token}">Configure Users</a></li>
+            <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
+            <li> <a href="settings.html?token={/envelope/token}">Settings</a></li>
           </ul>
           <li> Miscellaneous</li>
           <ul>
-            <li> <a href="nvts.html">NVT Details</a></li>
-            <li> <a href="error_messages.html">Error Messages</a></li>
-            <li> <a href="glossary.html">Glossary</a></li>
+            <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
+            <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
           </ul>
         </ul>
       </div>
@@ -1752,8 +1752,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="error_messages.html">
   <div class="gb_window_part_center">Help: Error Messages</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=unknown_cmd">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=unknown_cmd?token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
     <div style="text-align:left">
 
       <br/>
@@ -1817,8 +1817,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="feed_management.html">
   <div class="gb_window_part_center">Help: NVT Feed Management</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_feed">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1856,7 +1856,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_center">Help: Glossary</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1954,7 +1954,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        The status of all active scan can be seen
-       in the <a href="/omp?cmd=get_tasks">task overview</a>.
+       in the <a href="/omp?cmd=get_tasks?token={/envelope/token}">task overview</a>.
        The progress is shown as a percentage of
        total number of tests to be executed. The
        duration of a scan is determined by the number
@@ -2371,8 +2371,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="new_task.html">
   <div class="gb_window_part_center">Help: New Task</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2449,8 +2449,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="notes.html">
   <div class="gb_window_part_center">Help: Notes</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_notes">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2458,7 +2458,7 @@ Public License instead of this License.
       <h1>Notes</h1>
       <p>
        This table provides an overview of all
-       <a href="glossary.html#note">notes</a> and summarizes
+       <a href="glossary.html?token={/envelope/token}#note">notes</a> and summarizes
        the essential aspects of each.
       </p>
 
@@ -2595,7 +2595,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="nvts.html">
   <div class="gb_window_part_center">Help: NVTs</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2603,7 +2603,7 @@ Public License instead of this License.
       <h1>Network Vulnerability Tests (NVTs)</h1>
       <p>
        Currently, there is one page in the web interface
-       about <a href="glossary.html#nvt">NVT</a>s.
+       about <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s.
       </p>
 
       <a name="nvtdetails"></a>
@@ -2620,8 +2620,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="performance.html">
   <div class="gb_window_part_center">Help: Performance</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2643,8 +2643,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="overrides.html">
   <div class="gb_window_part_center">Help: Overrides</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_overrides">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2652,7 +2652,7 @@ Public License instead of this License.
       <h1>Overrides</h1>
       <p>
        This table provides an overview of all
-       <a href="glossary.html#override">overrides</a> and summarizes
+       <a href="glossary.html?token={/envelope/token}#override">overrides</a> and summarizes
        the essential aspects of each.
       </p>
 
@@ -2806,8 +2806,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="reports.html">
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1">Jump to dialog with sample content</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2816,10 +2816,10 @@ Public License instead of this License.
       <p>
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.
-       It also lists the <a href="glossary.html#scanconfig">Scan Config</a>,
-       <a href="glossary.html#escalator">Escalator</a>,
-       <a href="glossary.html#schedule">Schedule</a> and
-       <a href="glossary.html#target">Target</a> for the shown report, if
+       It also lists the <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Config</a>,
+       <a href="glossary.html?token={/envelope/token}#escalator">Escalator</a>,
+       <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
+       <a href="glossary.html?token={/envelope/token}#target">Target</a> for the shown report, if
        any were chosen. Information about the chosen Scan Config, Escalator,
        Schedule or Target is accessible by clicking on the respective items
        name.
@@ -2829,7 +2829,7 @@ Public License instead of this License.
       <h1>Reports</h1>
       <p>
        This table provides an overview of all
-       <a href="glossary.html#report">reports</a>
+       <a href="glossary.html?token={/envelope/token}#report">reports</a>
        for the selected task (see Task Summary box).
       </p>
 
@@ -2907,7 +2907,7 @@ Public License instead of this License.
       <a name="overrides"></a>
       <h3>Overrides</h3>
       <p>
-       By default the configured <a href="glossary.html#override">overrides</a> are applied.
+       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
        The selection allows to switch to a view without applying overrides.
        In the table view, threat and scan results numbers might change
        when switching this selection.
@@ -2929,7 +2929,7 @@ Public License instead of this License.
        Pressing the details icon
        <img src="/img/details.png" alt="Details" title="Details" /> will
        display all report details on a new page
-       <a href="/help/view_report.html">View Report</a>.
+       <a href="/help/view_report.html?token={/envelope/token}">View Report</a>.
       </p>
 
       <h4>Delete Report</h4>
@@ -2943,27 +2943,27 @@ Public License instead of this License.
        To download the full report in XML format click on the download
        <img src="/img/download.png" alt="Download" title="Download" />
        icon.  Report formats can be configured on the
-       <a href="configure_report_formats.html">Report Formats</a>
+       <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
        page.  Other formats are available for download on the
-       <a href="/help/view_report.html">report details</a> page.
+       <a href="/help/view_report.html?token={/envelope/token}">report details</a> page.
       </p>
 
       <a name="notes"></a>
       <h1>Notes</h1>
       <p>
        This table provides an overview of all
-       <a href="glossary.html#note">notes</a>
+       <a href="glossary.html?token={/envelope/token}#note">notes</a>
        that apply to any result generated by the task.
-       It is formatted much like the <a href="notes.html">Notes</a> page.
+       It is formatted much like the <a href="notes.html?token={/envelope/token}">Notes</a> page.
       </p>
 
       <a name="overrides"></a>
       <h1>Overrides</h1>
       <p>
        This table provides an overview of all
-       <a href="glossary.html#override">overrides</a>
+       <a href="glossary.html?token={/envelope/token}#override">overrides</a>
        that apply to any result generated by the task.
-       It is formatted much like the <a href="overrides.html">Overrides</a> page.
+       It is formatted much like the <a href="overrides.html?token={/envelope/token}">Overrides</a> page.
       </p>
     </div>
   </div>
@@ -2972,15 +2972,15 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_details.html">
   <div class="gb_window_part_center">Help: Scan Config Details</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast">Jump to example dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast&amp;token={/envelope/token}">Jump to example dialog</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Scan Config Details</h1>
       <p>
        This dialog shows the name and comment of a given
-       <a href="glossary.html#scanconfig">Scan Configuration</a> together with the
+       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a> together with the
        associated configuration parameters itself.
       </p>
 
@@ -3028,7 +3028,7 @@ Public License instead of this License.
       <h4>Scan Config Family Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will show an intermediate detailed <a href="scanconfig_family_details.html">list of NVTs</a> and its preferences.
+       will show an intermediate detailed <a href="scanconfig_family_details.html?token={/envelope/token}">list of NVTs</a> and its preferences.
       </p>
 
       <h2>Scanner Preferences</h2>
@@ -3083,7 +3083,7 @@ Public License instead of this License.
       <p>
        A click on the details icon
        <img src="/img/details.png" alt="Details" title="Details" /> will open the
-       <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
+       <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
        and all its preferences.
       </p>
 
@@ -3091,7 +3091,7 @@ Public License instead of this License.
       <p>
        The tasks that use the shown config are listed.
        A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
-       the <a href="reports.html#tasksummary">Task summary</a> page.
+       the <a href="reports.html?token={/envelope/token}#tasksummary">Task summary</a> page.
       </p>
     </div>
   </div>
@@ -3100,27 +3100,27 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_editor.html">
   <div class="gb_window_part_center">Help: Scan Config Editor</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Scan Config Editor</h1>
       <p>
        The Scan Config Editor allows modification of all parameters of a
-       <a href="glossary.html#scanconfig">Scan Configuration</a>.
-       These include a selection of <a href="glossary.html#nvt">NVT</a>s and the
+       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+       These include a selection of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s and the
        specifications how the selection should automatically updated, NVT Preferences
        and Timeouts and advanced Scanner Preferences.
       </p>
       <p>
        Note that only Scan Configurations that are not currently in use by a
-       <a href="glossary.html#task">Task</a> allow modifications.
+       <a href="glossary.html?token={/envelope/token}#task">Task</a> allow modifications.
       </p>
 
       <h1>Edit Scan Config Details</h1>
       <p>
        This dialog shows the name and comment of a given
-       <a href="glossary.html#scanconfig">Scan Configuration</a> together with the
+       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a> together with the
        associated configuration parameters itself.
        It allows to adjust all parameters of the Scan Configuration.
       </p>
@@ -3174,7 +3174,7 @@ Public License instead of this License.
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
        will save the modifications and show the
-       <a href="scanconfig_editor_nvt_families.html">Edit Scan Config Family Details</a>
+       <a href="scanconfig_editor_nvt_families.html?token={/envelope/token}">Edit Scan Config Family Details</a>
        page which shows details about NVTs within the family and allows to select or
        deselect individual NVTs.
       </p>
@@ -3233,7 +3233,7 @@ Public License instead of this License.
       <p>
        A click on the details icon
        <img src="/img/details.png" alt="Details" title="Details" /> will open the
-       <a href="scanconfig_nvt_details.html">Scan Config NVT Details</a> dialog
+       <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog
        with detailed information about a certain NVT and all its preferences.
       </p>
 
@@ -3241,7 +3241,7 @@ Public License instead of this License.
 
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will open the <a href="scanconfig_editor_nvt.html">Edit Scan Config NVT Details</a>
+       will open the <a href="scanconfig_editor_nvt.html?token={/envelope/token}">Edit Scan Config NVT Details</a>
        dialog with detailed information about a certain NVT and all its preferences.
        This page will provide an overview over all preferences and the currently set
        Timeout for this NVT and allow modifications.
@@ -3251,7 +3251,7 @@ Public License instead of this License.
       <p>
        The tasks that use the shown config are listed.
        A click on the list icon <img src="/img/list.png" alt="List" title="List" /> will open
-       the <a href="reports.html#tasksummary">Task summary</a> page.
+       the <a href="reports.html?token={/envelope/token}#tasksummary">Task summary</a> page.
       </p>
     </div>
   </div>
@@ -3260,15 +3260,15 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_editor_nvt_families.html">
   <div class="gb_window_part_center">Help: Scan Config Editor NVT Families</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
       <a name="editscanconfigfamilydetails"></a>
       <h1>Edit Scan Config Family Details</h1>
       <p>
-       This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
-       family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
+       family in a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
       </p>
 
       <h2>Edit Network Vulnerability Tests</h2>
@@ -3319,13 +3319,13 @@ Public License instead of this License.
       <h4>NVT Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
+       will lead to the page listing <a href="scanconfig_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
 
       <h4>Select and Edit NVT Details</h4>
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />will add the NVT to the selection
-       and lead to a page that lists <a href="scanconfig_editor_nvt.html">NVT details and allows to modify preferences</a> and
+       and lead to a page that lists <a href="scanconfig_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
        the timeout.
       </p>
     </div>
@@ -3335,15 +3335,15 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_editor_nvt.html">
   <div class="gb_window_part_center">Help: Scan Config editor NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Edit Scan Config NVT Details</h1>
       <p>
-       This dialog shows information of a single <a href="glossary.html#nvt">NVT</a>
+       This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-        <a href="glossary.html#scanconfig">Scan Configuration</a>.
+        <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
       </p>
 
       <h2>Edit Network Vulnerability Test</h2>
@@ -3393,15 +3393,15 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_family_details.html">
   <div class="gb_window_part_center">Help: Scan Config Family Details</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
       <a name="scanconfigfamilydetails"></a>
       <h1>Scan Config Family Details</h1>
       <p>
-       This page gives an overview of <a href="glossary.html#nvt">NVT</a>s of one
-       family in a <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
+       family in a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
       </p>
 
       <h2>Network Vulnerability Tests</h2>
@@ -3446,7 +3446,7 @@ Public License instead of this License.
       <h4>NVT Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will lead to the page listing <a href="scanconfig_nvt_details.html">NVT details</a>.
+       will lead to the page listing <a href="scanconfig_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
     </div>
   </div>
@@ -3455,15 +3455,15 @@ Public License instead of this License.
 <xsl:template mode="help" match="scanconfig_nvt_details.html">
   <div class="gb_window_part_center">Help: Scan Config NVT Details</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
       <h1>Scan Config NVT Details</h1>
       <p>
-       This dialog shows information of a single <a href="glossary.html#nvt">NVT</a>
+       This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-       <a href="glossary.html#scanconfig">Scan Configuration</a>.
+       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
       </p>
 
       <h2>Network Vulnerability Test</h2>
@@ -3557,8 +3557,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="settings.html">
   <div class="gb_window_part_center">Help: Settings</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_settings">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_settings&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3577,8 +3577,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="tasks.html">
   <div class="gb_window_part_center">Help: Tasks</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;overrides=1">Jump to dialog</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3586,7 +3586,7 @@ Public License instead of this License.
       <h1>Tasks</h1>
       <p>
        This table provides an overview of all configured
-       <a href="glossary.html#task">tasks</a> and summarizes
+       <a href="glossary.html?token={/envelope/token}#task">tasks</a> and summarizes
        the essential aspects of each.
       </p>
 
@@ -3843,7 +3843,7 @@ Public License instead of this License.
       <a name="overrides"></a>
       <h3>Overrides</h3>
       <p>
-       By default the configured <a href="glossary.html#override">overrides</a> are applied.
+       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
        The selection allows to switch to a view without applying overrides.
        In the table view, threat, threat numbers and trend might change
        when switching this selection.
@@ -3945,7 +3945,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="view_report.html">
   <div class="gb_window_part_center">Help: View Report</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html">Help Contents</a></div>
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
@@ -3954,7 +3954,7 @@ Public License instead of this License.
       <h1>View Report</h1>
       <p>
        This "View Report" page summarizes all information the selected
-       <a href="/help/glossary.html#report">report</a> contains.
+       <a href="/help/glossary.html?token={/envelope/token}#report">report</a> contains.
        This page is structured and designed like the
        download formats HTML and PDF.
       </p>
@@ -3964,8 +3964,8 @@ Public License instead of this License.
        For example, the host names in the "Host" table link to the host
        results further down the page.
        The exception is the "Back to Tasks" link that refers to the
-       <a href="/help/glossary.html#task">task</a>'s
-       <a href="/help/reports.html">list of reports</a>.
+       <a href="/help/glossary.html?token={/envelope/token}#task">task</a>'s
+       <a href="/help/reports.html?token={/envelope/token}">list of reports</a>.
       </p>
 
       <a name="overrides"></a>
@@ -3977,19 +3977,19 @@ Public License instead of this License.
 
       <p>
         This window also contains a table of threat counts for the full report.
-        To download the full report, the <a href="glossary.html#report_format">format</a>
+        To download the full report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
         can be chosen in the Download column.
         The download will start shortly after a click on the download
         <img src="/img/download.png" alt="Download" title="Download" />
         icon.  Report formats can be configured on the
-        <a href="configure_report_formats.html">Report Formats</a>
+        <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
         page.
       </p>
 
       <a name="overrides"></a>
       <h3>Overrides Selection</h3>
       <p>
-       By default the configured <a href="glossary.html#override">overrides</a> are applied.
+       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
        The selection allows to switch to a view without applying overrides.
        In the table views, scan results numbers might change when switching this selection.
        By pressing the refresh
@@ -4012,12 +4012,12 @@ Public License instead of this License.
 
       <h3>Download the filtered report</h3>
       <p>
-       To download the currently shown report, the <a href="glossary.html#report_format">format</a>
+       To download the currently shown report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
        can be chosen.
        The download will start shortly after a click on the download
        <img src="/img/download.png" alt="Download" title="Download" />
        icon.  Report formats can be configured on the
-       <a href="configure_report_formats.html">Report Formats</a>
+       <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
        page.
       </p>
 
@@ -4030,7 +4030,7 @@ Public License instead of this License.
 
       <h3>Notes</h3>
       <p>
-       Any <a href="/help/glossary.html#note">notes</a> that apply to a result are
+       Any <a href="/help/glossary.html?token={/envelope/token}#note">notes</a> that apply to a result are
        displayed under the result.  The notes for a result are sorted most recently
        created first.
       </p>
@@ -4039,7 +4039,7 @@ Public License instead of this License.
        <img src="/img/delete.png" alt="Delete" title="Delete" />
        <img src="/img/details.png" alt="Details" title="Details" />
        <img src="/img/edit.png" alt="Edit" title="Edit" />
-       which affect the note as on the <a href="notes.html">Notes</a> page.
+       which affect the note as on the <a href="notes.html?token={/envelope/token}">Notes</a> page.
       </p>
       <p>
        To add a note to an NVT, click the new note button
@@ -4056,7 +4056,7 @@ Public License instead of this License.
 
       <h3>Overrides</h3>
       <p>
-       If activated, any <a href="/help/glossary.html#override">overrides</a>
+       If activated, any <a href="/help/glossary.html?token={/envelope/token}#override">overrides</a>
        that apply to a result are displayed under the result.
       </p>
       <p>
@@ -4064,7 +4064,7 @@ Public License instead of this License.
        <img src="/img/delete.png" alt="Delete" title="Delete" />
        <img src="/img/details.png" alt="Details" title="Details" />
        <img src="/img/edit.png" alt="Edit" title="Edit" />
-       which affect the override as on the <a href="overrides.html">Overrides</a> page.
+       which affect the override as on the <a href="overrides.html?token={/envelope/token}">Overrides</a> page.
       </p>
       <p>
        To add a override to an NVT, click the new override button

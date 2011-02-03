@@ -150,10 +150,12 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
 
   now = time (NULL);
   res = g_strdup_printf ("<envelope>"
+                         "<token>%s</token>"
                          "<time>%s</time>"
                          "<login>%s</login>"
                          "%s"
                          "</envelope>",
+                         credentials->token,
                          ctime (&now),
                          credentials->username,
                          xml);
@@ -206,7 +208,8 @@ create_user_oap (credentials_t * credentials, const char *name,
   int socket;
 
   if (administrator_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new user. "
                          "No new user has been created. "
                          "Diagnostics: Failure to connect to administrator daemon.",
@@ -251,7 +254,8 @@ create_user_oap (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new user. "
                                "No new user has been created. "
                                "Diagnostics: Failure to send command to administrator daemon.",
@@ -262,7 +266,8 @@ create_user_oap (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while creating a new user. "
                                "It is unclear whether the user has been created or not. "
                                "Diagnostics: Failure to receive response from administrator daemon.",
@@ -276,7 +281,8 @@ create_user_oap (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new user. "
                            "The new user has, however, been created. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -287,7 +293,8 @@ create_user_oap (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while creating a new user. "
                            "The new user has, however, been created. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -326,7 +333,8 @@ save_user_oap (credentials_t * credentials, const char *name,
   int socket;
 
   if (administrator_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a user. "
                          "No saving has been done. "
                          "Diagnostics: Failure to connect to administrator daemon.",
@@ -374,7 +382,8 @@ save_user_oap (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a user. "
                                "No saving has been done. "
                                "Diagnostics: Failure to send command to administrator daemon.",
@@ -385,7 +394,8 @@ save_user_oap (credentials_t * credentials, const char *name,
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a user. "
                                "It is unclear whether the user has been modified. "
                                "Diagnostics: Failure to receive response from administrator daemon.",
@@ -399,7 +409,8 @@ save_user_oap (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a user. "
                            "The user has, however, been saving. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -410,7 +421,8 @@ save_user_oap (credentials_t * credentials, const char *name,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving a user. "
                            "The user has, however, been saved. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -441,7 +453,8 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
   int socket;
 
   if (administrator_connect (credentials, &socket, &session))
-    return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a user. "
                          "The user is not deleted. "
                          "Diagnostics: Failure to connect to administrator daemon.",
@@ -453,7 +466,8 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
        user_name) == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a user. "
                            "The user is not deleted. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -463,7 +477,8 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while deleting a user. "
                            "It is unclear whether the user has been deleted or not. "
                            "Diagnostics: Failure to read response from administrator daemon.",
@@ -495,7 +510,8 @@ edit_user_oap (credentials_t * credentials, const char * name)
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user. "
                              "Diagnostics: Failure to connect to administrator daemon.",
                              "/omp?cmd=get_users");
@@ -514,7 +530,8 @@ edit_user_oap (credentials_t * credentials, const char * name)
                             name)
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_users");
@@ -526,7 +543,8 @@ edit_user_oap (credentials_t * credentials, const char * name)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting user. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_users");
@@ -558,7 +576,8 @@ get_user_oap (credentials_t * credentials, const char * name)
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user. "
                              "Diagnostics: Failure to connect to administrator daemon.",
                              "/omp?cmd=get_users");
@@ -577,7 +596,8 @@ get_user_oap (credentials_t * credentials, const char * name)
                             name)
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_users");
@@ -589,7 +609,8 @@ get_user_oap (credentials_t * credentials, const char * name)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting user. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_users");
@@ -622,7 +643,8 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user list. "
                              "The current list of users is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -647,7 +669,8 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
                             sort_order ? sort_order : "ascending")
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
                            "The current list of users is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -657,7 +680,8 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
                            "The current list of users is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -692,7 +716,8 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the feed list. "
                              "The current list of feeds is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -713,7 +738,8 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
                             "</commands>")
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed list. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -723,7 +749,8 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed. "
                            "The current list of feeds is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -755,7 +782,8 @@ sync_feed_oap (credentials_t * credentials)
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while synchronizing with the NVT feed. "
                              "Feed synchronization is currently not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -777,7 +805,8 @@ sync_feed_oap (credentials_t * credentials)
                             "</commands>")
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the NVT feed. "
                            "Feed synchronization is currently not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -787,7 +816,8 @@ sync_feed_oap (credentials_t * credentials)
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the NVT feed. "
                            "Feed synchronization is currently not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -822,7 +852,8 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user list. "
                              "The current list of settings is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -843,7 +874,8 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                             "</commands>")
       == -1)
     {
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -853,7 +885,8 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -886,7 +919,8 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the settings. "
                              "The current list of settings is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -905,7 +939,8 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
@@ -918,7 +953,8 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
@@ -954,7 +990,8 @@ save_settings_oap (credentials_t * credentials,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the settings. "
                              "The settings have not been saved. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -976,7 +1013,8 @@ save_settings_oap (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving the settings. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_configs");
@@ -998,7 +1036,8 @@ save_settings_oap (credentials_t * credentials,
             == -1)
           {
             openvas_server_close (socket, session);
-            return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
                                  "An internal error occurred while saving the settings. "
                                  "Diagnostics: Failure to send command to administrator daemon.",
                                  "/omp?cmd=get_configs");
@@ -1009,7 +1048,8 @@ save_settings_oap (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving the settings. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_configs");
@@ -1022,7 +1062,8 @@ save_settings_oap (credentials_t * credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_tasks");
@@ -1031,7 +1072,8 @@ save_settings_oap (credentials_t * credentials,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the settings. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_tasks");
@@ -1075,7 +1117,8 @@ modify_ldap_auth_oap (credentials_t* credentials,
   switch (administrator_connect (credentials, &socket, &session))
     {
       case -1:
-        return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the ldap settings. "
                              "The settings have not been saved. "
                              "Diagnostics: Failure to connect to administrator daemon.",
@@ -1102,7 +1145,8 @@ modify_ldap_auth_oap (credentials_t* credentials,
            == -1)
         {
           openvas_server_close (socket, session);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the users list. "
                                "Diagnostics: Failure to send command to administrator daemon.",
                                "/omp?cmd=get_tasks");
@@ -1115,7 +1159,8 @@ modify_ldap_auth_oap (credentials_t* credentials,
         {
           openvas_server_close (socket, session);
           g_string_free (xml, TRUE);
-          return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the users list. "
                                "Diagnostics: Failure to receive response from administrator daemon.",
                                "/omp?cmd=get_tasks");
@@ -1147,7 +1192,8 @@ modify_ldap_auth_oap (credentials_t* credentials,
       == -1)
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving the ldap settings. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_configs");
@@ -1156,7 +1202,8 @@ modify_ldap_auth_oap (credentials_t* credentials,
   if (read_entity_and_text (&session, &entity, &text))
     {
       openvas_server_close (socket, session);
-      return gsad_message ("Internal error", __FUNCTION__, __LINE__,
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the ldap settings. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_tasks");

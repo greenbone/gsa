@@ -1,3 +1,64 @@
+2011-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Replace HTTP Basic Auth based session management with token based
+	session management.  In the process close the cross site request
+	forgery hole that affected every URL.
+
+	* src/gsad.c (REALM): Remove.
+	(SESSION_LENGTH): New define.
+	(users, mutex): New variables.
+	(struct user, user_t): New type.
+	(user_add, token_user, user_release, user_remove): New functions.
+	(init_validator): Add "token".
+	(struct req_parms, free_resources, serve_post): Add token param.
+	(get_header_credentials, is_http_authenticated)
+	(create_http_authenticate_response, send_http_authenticate_header): Remove.
+	Part of Basic Auth.
+	(exec_omp_post): Remove credentials arg.  Setup credentials from "users"
+	via the "token" request param.  Add a login command.
+	(exec_omp_get): Add credentials arg because the caller does all the
+	request param parsing, and so the caller must get the token and setup the
+	credentials.  Update single caller.
+	(file_content_response): Add credentials arg for gsad_message.  Serve the
+	login page via an XSL transform instead of via a static page.  For "file
+	not found" errors, simply serve the error, instead of also logging out
+	the user (which would require a token).  Remove Basic Auth related
+	header additions.  Update single caller.
+	(handler_send_response): New function.  Helper for request_handler.
+	(request_handler): Simply redirect the base url to the login page, instead
+	of logging the user out first.  Serve the elements of the login page and
+	the decorative images before checking authentication.  Replace the GET
+	Basic Auth check with a check based on the token request param.  Add
+	explicit logout handling.  Add the token to ENVELOPE in the XML.  Redirect
+	to the tasks page if the exec_omp_post return indicates a successful
+	login.
+	(gsad_init): Init mutex and users.
+
+	* src/gsad_base.c (gsad_message): Add credentials arg, and add token to
+	GSAD_RESPONSE XML.  The token is for the logout and assumed sane state
+	links.  Update all callers.
+
+	* src/gsad_base.h: Update header accordingly.
+	(credentials_t): Add token.
+
+	* src/gsad_oap.c (xsl_transform_oap): Add token to ENVELOPE XML.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add token to ENVELOPE XML.
+	(is_omp_authenticated): Add const to args.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/gsad.xsl: Add token to every internal HREF, both GET and POST.
+	(error_dialog): Ditto.  If the token is missing, add a login link instead
+	of a logout link.
+	(login_page, token): New templates.
+
+	* src/html/help.xsl: Add token to every internal HREF.
+
+	* src/html/oap.xsl: Add token to every internal HREF, both GET and POST.
+
+	* src/html/omp.xsl: Add token to every internal HREF, both GET and POST.
+
 2011-02-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Switch gsa to pkg-config.
@@ -46,7 +107,7 @@
 
 2011-01-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsa_log_conf.cmake_in: Add warning about passwords.
+	* src/gsad_log_conf.cmake_in: Add warning about passwords.
 
 2011-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
 

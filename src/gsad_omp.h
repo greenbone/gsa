@@ -237,7 +237,7 @@ char * save_report_format_omp (credentials_t *, const char *, const char *,
                                const char *, const char *, const char *);
 char * verify_report_format_omp (credentials_t *, const char *);
 
-gboolean is_omp_authenticated (gchar *, gchar *);
+gboolean is_omp_authenticated (const gchar *, const gchar *);
 
 char * get_nvts_omp (credentials_t *, const char *);
 

@@ -50,6 +50,7 @@ typedef struct
 {
   char *username;  ///< Name of user.
   char *password;  ///< User's password.
+  char *token;     ///< Session token.
 } credentials_t;
 
 /**
@@ -64,8 +65,8 @@ typedef struct
 } preference_t;
 
 char * xsl_transform (const char *);
-char * gsad_message (const char *, const char *, int, const char *,
-                     const char *);
+char * gsad_message (credentials_t *, const char *, const char *, int,
+                     const char *, const char *);
 
 /**
  * @brief Content types.

@@ -119,6 +119,7 @@ xsl_transform (const char *xml_text)
  *
  * @todo Make it accept formatted strings.
  *
+ * @param[in]  credentials  User authentication information.
  * @param[in]  title     The title for the message.
  * @param[in]  function  The function in which the error occurred.
  * @param[in]  line      The line number at which the error occurred.
@@ -129,20 +130,25 @@ xsl_transform (const char *xml_text)
  * @return An HTML document as a newly allocated string.
  */
 char *
-gsad_message (const char *title, const char *function, int line,
-              const char *msg, const char *backurl)
+gsad_message (credentials_t *credentials, const char *title,
+              const char *function, int line, const char *msg,
+              const char *backurl)
 {
-  gchar *xml = g_strdup_printf ("<gsad_response>"
-                                "<title>%s: %s:%i</title>"
-                                "<message>%s</message>"
-                                "<backurl>%s</backurl>"
-                                "</gsad_response>",
-                                title,
-                                function,
-                                line,
-                                msg,
-                                backurl ? backurl : "/omp?cmd=get_tasks");
-  char *resp = xsl_transform (xml);
+  gchar *xml, *resp;
+
+  xml = g_strdup_printf ("<gsad_response>"
+                         "<title>%s: %s:%i</title>"
+                         "<message>%s</message>"
+                         "<backurl>%s</backurl>"
+                         "<token>%s</token>"
+                         "</gsad_response>",
+                         title,
+                         function,
+                         line,
+                         msg,
+                         backurl ? backurl : "/omp?cmd=get_tasks",
+                         credentials ? credentials->token : "");
+  resp = xsl_transform (xml);
   if (resp == NULL)
     resp = g_strdup ("<html>"
                      "<body>"

@@ -106,15 +106,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Tasks
-      <a href="/help/tasks.html" title="Help: Tasks">
+      <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
-      <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}"
+      <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
          title="New Task">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <div id="small_inline_form" style="margin-left:40px; display: inline">
         <form method="get" action="">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
           <input type="hidden" name="overrides" value="{$apply-overrides}"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
@@ -183,7 +184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;token={/envelope/token}"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -191,7 +192,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;token={/envelope/token}"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -202,13 +203,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;token={/envelope/token}"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;token={/envelope/token}"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"
@@ -226,7 +227,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;token={/envelope/token}"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -234,7 +235,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;token={/envelope/token}"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -247,13 +248,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;token={/envelope/token}"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;token={/envelope/token}"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"
@@ -305,12 +306,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report Summary
-      <a href="/help/view_report.html#viewreport"
+      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (View Report)">
         <img src="/img/help.png"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
           <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -356,7 +358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}">Back to Task</a>
+        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Task</a>
       </div>
 
       <a name="summary"/>
@@ -426,6 +428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <div id="small_form" style="float:right;">
               <form action="" method="get">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="first_result" value="1"/>
@@ -482,6 +485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <div id="small_form" style="float:right;">
               <form action="" method="get">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -569,6 +573,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <div id="small_form" class="float_right">
               <form action="" method="get">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -629,7 +634,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Result Filtering
       <!--
-      <a href="/help/view_report.html#viewreport"
+      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (Result Filtering)">
         <img src="/img/help.png"/>
       </a>
@@ -648,7 +653,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">port ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -657,7 +662,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">port descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port descending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -666,7 +671,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">threat ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -675,7 +680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">threat descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat descending</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -691,6 +696,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:variable>
         <div id="small_form">
           <form action="" method="get">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="get_report"/>
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
@@ -899,13 +905,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="increment">1000</xsl:variable>
           <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
           <xsl:if test = "report/results/@start &gt; 1">
-            <a class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&lt;&lt;</a>
+            <a class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&lt;&lt;</a>
           </xsl:if>
           <xsl:value-of select="report/results/@start"/> -
           <xsl:value-of select="$last"/>
           of <xsl:value-of select="report/result_count/filtered"/>
           <xsl:if test = "$last &lt; report/result_count/filtered">
-            <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}">&gt;&gt;</a>
+            <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&gt;&gt;</a>
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
@@ -913,7 +919,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
 
       <!--
-      <a href="/help/view_report.html#viewreport"
+      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (Results per Host)">
         <img src="/img/help.png"/>
       </a>
@@ -940,23 +946,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Task Summary
-      <a href="/help/reports.html#tasksummary"
+      <a href="/help/reports.html?token={/envelope/token}#tasksummary"
          title="Help: Reports (Task Summary)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}" title="Refresh">
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <xsl:choose>
           <xsl:when test="string-length(task/schedule/@id) &gt; 0">
-            <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}"
+            <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}&amp;token={/envelope/token}"
                title="Schedule Details">
               <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
             </a>
           </xsl:when>
           <xsl:when test="task/status='Running'">
-            <a href="/omp?cmd=pause_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+            <a href="/omp?cmd=pause_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
                title="Pause Task">
               <img src="/img/pause.png" border="0" alt="Pause"/>
             </a>
@@ -965,7 +971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=start_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+            <a href="/omp?cmd=start_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
                title="Start Task">
               <img src="/img/start.png" border="0" alt="Start"/>
             </a>
@@ -977,7 +983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:when test="task/status='Stopped'">
-            <a href="/omp?cmd=resume_stopped_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+            <a href="/omp?cmd=resume_stopped_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
                title="Resume Task">
               <img src="/img/resume.png"
                    border="0"
@@ -986,7 +992,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:when>
           <xsl:when test="task/status='Paused'">
-            <a href="/omp?cmd=resume_paused_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+            <a href="/omp?cmd=resume_paused_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
                title="Resume Task">
               <img src="/img/resume.png"
                    border="0"
@@ -1011,7 +1017,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=stop_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task"
+            <a href="/omp?cmd=stop_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
                title="Stop Task">
               <img src="/img/stop.png"
                    border="0"
@@ -1028,7 +1034,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=delete_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_tasks"
+            <a href="/omp?cmd=delete_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                title="Delete Task"
                style="margin-left:3px;">
               <img src="/img/delete.png"
@@ -1037,7 +1043,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/omp?cmd=edit_task&amp;task_id={task/@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={sort/field/order}&amp;sort_field={sort/field/text()}&amp;overrides={apply_overrides}"
+        <a href="/omp?cmd=edit_task&amp;task_id={task/@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={sort/field/order}&amp;sort_field={sort/field/text()}&amp;overrides={apply_overrides}&amp;token={/envelope/token}"
            title="Edit Task"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -1046,7 +1052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="/omp?cmd=get_tasks">Back to Tasks</a>
+        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">Back to Tasks</a>
       </div>
       <table>
         <tr>
@@ -1060,7 +1066,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Config:</td>
           <td>
-            <a href="/omp?cmd=get_config&amp;config_id={task/config/@id}">
+            <a href="/omp?cmd=get_config&amp;config_id={task/config/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="task/config/name"/>
             </a>
           </td>
@@ -1069,7 +1075,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Escalator:</td>
           <td>
             <xsl:if test="task/escalator">
-              <a href="/omp?cmd=get_escalator&amp;escalator_id={task/escalator/@id}">
+              <a href="/omp?cmd=get_escalator&amp;escalator_id={task/escalator/@id}&amp;token={/envelope/token}">
                 <xsl:value-of select="task/escalator/name"/>
               </a>
             </xsl:if>
@@ -1079,7 +1085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Schedule:</td>
           <td>
             <xsl:if test="task/schedule">
-              <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}">
+              <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}&amp;token={/envelope/token}">
                 <xsl:value-of select="task/schedule/name"/>
               </a>
               <xsl:choose>
@@ -1096,7 +1102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Target:</td>
           <td>
-            <a href="/omp?cmd=get_target&amp;target_id={task/target/@id}">
+            <a href="/omp?cmd=get_target&amp;target_id={task/target/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="task/target/name"/>
             </a>
           </td>
@@ -1104,7 +1110,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Slave:</td>
           <td>
-            <a href="/omp?cmd=get_slave&amp;slave_id={task/slave/@id}">
+            <a href="/omp?cmd=get_slave&amp;slave_id={task/slave/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="task/slave/name"/>
             </a>
           </td>
@@ -1138,11 +1144,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Reports for "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html#reports" title="Help: Reports (Reports)">
+      <a href="/help/reports.html?token={/envelope/token}#reports" title="Help: Reports (Reports)">
         <img src="/img/help.png"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
           <select style="margin-bottom: 0px;" name="overrides" size="1">
@@ -1201,10 +1208,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Notes on Results of "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html#notes" title="Help: Reports (Notes)">
+      <a href="/help/reports.html?token={/envelope/token}#notes" title="Help: Reports (Notes)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}"
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
          title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -1233,10 +1240,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Overrides on Results of "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html#overrides" title="Help: Reports (Overrides)">
+      <a href="/help/reports.html?token={/envelope/token}#overrides" title="Help: Reports (Overrides)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}"
+      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
          title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -1639,7 +1646,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="result_count/false_positive"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;token={/envelope/token}"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -1652,14 +1659,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}"
+          <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}&amp;token={/envelope/token}"
              title="Delete"
              style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;levels=hmlg&amp;report_format_id=d5da9f67-8551-4e51-807b-b6a873d70e34"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;levels=hmlg&amp;report_format_id=d5da9f67-8551-4e51-807b-b6a873d70e34&amp;token={/envelope/token}"
          title="Export as XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -1703,12 +1710,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Task
-      <a href="/help/tasks.html#edit_task" title="Help: Edit Task">
+      <a href="/help/tasks.html?token={/envelope/token}#edit_task" title="Help: Edit Task">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_task"/>
         <input type="hidden"
                name="task_id"
@@ -1930,7 +1938,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}">
+              <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -1943,14 +1951,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="last_report/report/@id = first_report/report/@id">
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1">
+              <a href="/omp?cmd=get_report&amp;report_id={first_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}&amp;token={/envelope/token}">
                 <xsl:call-template name="short_timestamp_first"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
         </td>
         <td style="font-size:10px;">
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}&amp;token={/envelope/token}">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -1968,13 +1976,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
-              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}"
+              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
                  title="Schedule Details">
                 <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
               </a>
             </xsl:when>
             <xsl:when test="status='Running'">
-              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Pause Task">
                 <img src="/img/pause.png" border="0" alt="Pause"/>
               </a>
@@ -1983,7 +1991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Start Task">
                 <img src="/img/start.png" border="0" alt="Start"/>
               </a>
@@ -1995,7 +2003,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:when test="status='Stopped'">
-              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -2004,7 +2012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Paused'">
-              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Resume Task">
                 <img src="/img/resume.png"
                      border="0"
@@ -2029,7 +2037,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Stop Task">
                 <img src="/img/stop.png"
                      border="0"
@@ -2046,7 +2054,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks"
+              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Delete Task"
                  style="margin-left:3px;">
                 <img src="/img/delete.png"
@@ -2055,14 +2063,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:otherwise>
           </xsl:choose>
-          <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}"
+          <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
              title="Details">
             <img src="/img/details.png"
                  border="0"
                  alt="Details"
                  style="margin-left:3px;"/>
           </a>
-          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={../apply_overrides}"
+          <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
              title="Edit Task"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -2112,13 +2120,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       New Credential for Local Security Checks
-      <a href="/help/configure_credentials.html#new_lsc_credential"
+      <a href="/help/configure_credentials.html?token={/envelope/token}#new_lsc_credential"
          title="Help: Configure Credentials (New Credential)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_lsc_credential"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -2182,7 +2191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Credentials for Local Security Checks
-      <a href="/help/configure_credentials.html#credentials"
+      <a href="/help/configure_credentials.html?token={/envelope/token}#credentials"
          title="Help: Configure Credentials (Credentials)">
         <img src="/img/help.png"/>
       </a>
@@ -2240,13 +2249,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Credential
-      <a href="/help/lsc_credentials.html#edit_lsc_credential"
+      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential"
          title="Help: Edit Credential">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_lsc_credential"/>
         <input type="hidden"
                name="lsc_credential_id"
@@ -2361,7 +2371,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_lsc_credential&amp;lsc_credential_id={@id}"
+          <a href="/omp?cmd=delete_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
              title="Delete Credential" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -2371,28 +2381,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}"
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
          title="Credential Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credentials"
+      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credentials&amp;token={/envelope/token}"
          title="Edit Credential" style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
       <xsl:if test="type='gen'">
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=rpm"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
            title="Download RPM package" style="margin-left:3px;">
           <img src="/img/rpm.png" border="0" alt="Download RPM"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=deb"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
            title="Download Debian package" style="margin-left:3px;">
           <img src="/img/deb.png" border="0" alt="Download Deb"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=exe"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
            title="Download Exe package" style="margin-left:3px;">
           <img src="/img/exe.png" border="0" alt="Download Exe"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=key"
+        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
            title="Download Public Key" style="margin-left:3px;">
           <img src="/img/key.png" border="0" alt="Download Public Key"/>
         </a>
@@ -2407,11 +2417,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Credential Details
-      <a href="/help/configure_credentials.html#credentialdetails"
+      <a href="/help/configure_credentials.html?token={/envelope/token}#credentialdetails"
          title="Help: Configure Agents (Credential Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credential&amp;sort_order=ascending&amp;sort_field=name"
+      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credential&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
          title="Edit Credential"
          style="margin-left:3px;">
         <img src="/img/edit.png"/>
@@ -2419,7 +2429,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_lsc_credentials">Back to Credentials</a>
+        <a href="?cmd=get_lsc_credentials&amp;token={/envelope/token}">Back to Credentials</a>
       </div>
       <table>
         <tr>
@@ -2457,7 +2467,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_target&amp;target_id={@id}"
+                  <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
                      title="Target Details">
                     <img src="/img/details.png"
                          border="0"
@@ -2509,13 +2519,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       New Agent
-      <a href="/help/configure_agents.html#new_agent"
+      <a href="/help/configure_agents.html?token={/envelope/token}#new_agent"
          title="Help: Configure Agents (New Agent)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_agent"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -2566,7 +2577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Agents
-      <a href="/help/configure_agents.html#agents"
+      <a href="/help/configure_agents.html?token={/envelope/token}#agents"
          title="Help: Configure Agents (Agents)">
         <img src="/img/help.png"/>
       </a>
@@ -2646,7 +2657,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_agent&amp;agent_id={@id}"
+          <a href="/omp?cmd=delete_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
              title="Delete Agent" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -2656,11 +2667,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_agents&amp;agent_id={@id}&amp;agent_format=installer"
+      <a href="/omp?cmd=get_agents&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
-      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}"
+      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Agent"/>
@@ -2695,13 +2706,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Escalator
-      <a href="/help/configure_escalators.html#newescalator"
+      <a href="/help/configure_escalators.html?token={/envelope/token}#newescalator"
          title="Help: Configure Escalators (New Escalator)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_escalator"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
@@ -2902,7 +2914,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Escalators
-      <a href="/help/configure_escalators.html#escalators"
+      <a href="/help/configure_escalators.html?token={/envelope/token}#escalators"
          title="Help: Configure Escalators (Escalators)">
         <img src="/img/help.png"/>
       </a>
@@ -3024,7 +3036,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_escalator&amp;escalator_id={@id}"
+          <a href="/omp?cmd=delete_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
              title="Delete Escalator" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -3036,11 +3048,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_escalator&amp;escalator_id={@id}"
+      <a href="/omp?cmd=get_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
          title="Escalator Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=test_escalator&amp;escalator_id={@id}"
+      <a href="/omp?cmd=test_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
          title="Test Escalator" style="margin-left:3px;">
         <img src="/img/start.png" border="0" alt="Test"/>
       </a>
@@ -3054,14 +3066,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Escalator Details
-      <a href="/help/configure_escalators.html#escalatordetails"
+      <a href="/help/configure_escalators.html?token={/envelope/token}#escalatordetails"
          title="Help: Configure Escalators (Escalator Details)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_escalators">Back to Escalators</a>
+        <a href="?cmd=get_escalators&amp;token={/envelope/token}">Back to Escalators</a>
       </div>
       <table>
         <tr>
@@ -3195,7 +3207,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -3259,13 +3271,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Target
-      <a href="/help/configure_targets.html#newtarget"
+      <a href="/help/configure_targets.html?token={/envelope/token}#newtarget"
          title="Help: Configure Targets (New Target)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -3394,7 +3407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Targets
-      <a href="/help/configure_targets.html#targets"
+      <a href="/help/configure_targets.html?token={/envelope/token}#targets"
          title="Help: Configure Targets (Targets)">
         <img src="/img/help.png"/>
       </a>
@@ -3471,19 +3484,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="max_hosts"/></td>
     <td><xsl:value-of select="port_range"/></td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}">
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
         <xsl:value-of select="ssh_lsc_credential/name"/>
       </a>
     </td>
     <td>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}">
+      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
         <xsl:value-of select="smb_lsc_credential/name"/>
       </a>
     </td>
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_target&amp;target_id={@id}"
+          <a href="/omp?cmd=delete_target&amp;target_id={@id}&amp;token={/envelope/token}"
              title="Delete Target" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -3495,7 +3508,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_target&amp;target_id={@id}"
+      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
          title="Target Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -3509,14 +3522,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Target Details
-       <a href="/help/configure_targets.html#targetdetails"
+       <a href="/help/configure_targets.html?token={/envelope/token}#targetdetails"
          title="Help: Configure Targets (Target Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_targets">Back to Targets</a>
+        <a href="?cmd=get_targets&amp;token={/envelope/token}">Back to Targets</a>
       </div>
       <table>
         <tr>
@@ -3542,7 +3555,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>SSH Credential:</td>
           <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}">
+            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="ssh_lsc_credential/name"/>
             </a>
           </td>
@@ -3550,7 +3563,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>SMB Credential:</td>
           <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}">
+            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="smb_lsc_credential/name"/>
             </a>
           </td>
@@ -3578,7 +3591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -3632,13 +3645,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       New Scan Config
-      <a href="/help/configure_scanconfigs.html#newconfig"
+      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#newconfig"
          title="Help: Configure Scan Configs (New Scan Config)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_config"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -3694,13 +3708,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Import Scan Config
-      <a href="/help/configure_scanconfigs.html#importconfig"
+      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#importconfig"
          title="Help: Configure Scan Configs (Import Scan Config)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_config"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -3737,14 +3752,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         Edit Scan Config Family Details
-        <a href="/help/scanconfig_editor_nvt_families.html"
+        <a href="/help/scanconfig_editor_nvt_families.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config Family Details
-        <a href="/help/scanconfig_family_details.html"
+        <a href="/help/scanconfig_family_details.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
@@ -3755,12 +3770,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
-          <a href="?cmd=edit_config&amp;config_id={config/@id}">
+          <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
             Back to Config Details
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="?cmd=get_config&amp;config_id={config/@id}">
+          <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
             Back to Config Details
           </a>
         </xsl:otherwise>
@@ -3802,6 +3817,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="edit">
           <form action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="save_config_family"/>
             <input type="hidden" name="config_id" value="{$config_id}"/>
             <input type="hidden" name="name" value="{$config_name}"/>
@@ -3860,11 +3876,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </td>
                 <td>
-                  <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}"
+                  <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
                      title="NVT Details" style="margin-left:3px;">
                     <img src="/img/details.png" border="0" alt="Details"/>
                   </a>
-                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}"
+                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
                      title="Select and Edit NVT Details"
                      style="margin-left:3px;">
                     <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -3938,7 +3954,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </td>
               <td>
-                <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}"
+                <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
                    title="NVT Details" style="margin-left:3px;">
                   <img src="/img/details.png" border="0" alt="Details"/>
                 </a>
@@ -3991,19 +4007,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:if test="string-length($config_id) &gt; 0">
-        <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}"
+        <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
            title="Scan Config NVT Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
       </xsl:if>
       <xsl:if test="string-length($edit) &gt; 0">
-        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}"
+        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
            title="Edit Scan Config NVT Details" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
-        <a href="/omp?cmd=export_preference_file&amp;config_id={$config_id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+        <a href="/omp?cmd=export_preference_file&amp;config_id={$config_id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
            title="Export File"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export File"/>
@@ -4035,7 +4051,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
-        <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+        <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
            title="Export File"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export File"/>
@@ -4167,14 +4183,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:if test="$for_config_details">
-        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}"
+        <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}&amp;token={/envelope/token}"
            title="Edit NVT Details" style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
         </a>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$config and type='file' and (string-length(value) &gt; 0)">
-          <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}"
+          <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
              title="Export File"
              style="margin-left:3px;">
             <img src="/img/download.png" border="0" alt="Export File"/>
@@ -4363,14 +4379,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         Edit Scan Config NVT Details
-        <a href="/help/scanconfig_editor_nvt.html"
+        <a href="/help/scanconfig_editor_nvt.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Edit Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config NVT Details
-        <a href="/help/scanconfig_nvt_details.html"
+        <a href="/help/scanconfig_nvt_details.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
@@ -4384,12 +4400,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right">
       <xsl:choose>
         <xsl:when test="edit">
-          <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}">
+          <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
             Back to Config Family Details
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}">
+          <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
             Back to Config Family Details
           </a>
         </xsl:otherwise>
@@ -4419,6 +4435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config_nvt"/>
           <input type="hidden" name="config_id" value="{config/@id}"/>
           <input type="hidden" name="name" value="{config/name}"/>
@@ -4541,7 +4558,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}"
+          <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}&amp;token={/envelope/token}"
              title="Edit Scan Config Family" style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
@@ -4600,7 +4617,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_config_family&amp;config_id={../../@id}&amp;name={../../name}&amp;family={$current_name}"
+          <a href="/omp?cmd=get_config_family&amp;config_id={../../@id}&amp;name={../../name}&amp;family={$current_name}&amp;token={/envelope/token}"
              title="Scan Config Family Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
@@ -4763,14 +4780,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="edit">
       Edit Scan Config Details
-      <a href="/help/scanconfig_editor.html"
+      <a href="/help/scanconfig_editor.html?token={/envelope/token}"
          title="Help: Edit Scan Configs Details (Scan Configs)">
         <img src="/img/help.png"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       Scan Config Details
-      <a href="/help/scanconfig_details.html"
+      <a href="/help/scanconfig_details.html?token={/envelope/token}"
          title="Help: Scan Configs Details (Scan Configs)">
         <img src="/img/help.png"/>
       </a>
@@ -4780,7 +4797,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <xsl:variable name="config" select="get_configs_response/config"/>
     <div class="float_right">
-      <a href="?cmd=get_configs">Back to Configs</a>
+      <a href="?cmd=get_configs&amp;token={/envelope/token}">Back to Configs</a>
     </div>
     <br/>
 
@@ -4797,6 +4814,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         <form action="" method="post">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config"/>
           <input type="hidden" name="config_id" value="{$config/@id}"/>
           <input type="hidden" name="name" value="{$config/name}"/>
@@ -4882,7 +4900,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{$class}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
-                <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                   <img src="/img/details.png"
                        border="0"
                        alt="Details"
@@ -4903,7 +4921,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Scan Configs
-      <a href="/help/configure_scanconfigs.html#scanconfigs"
+      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#scanconfigs"
          title="Help: Configure Scan Configs (Scan Configs)">
         <img src="/img/help.png"/>
       </a>
@@ -5041,7 +5059,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_config&amp;config_id={@id}"
+          <a href="/omp?cmd=delete_config&amp;config_id={@id}&amp;token={/envelope/token}"
              title="Delete Scan Config" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -5051,14 +5069,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_config&amp;config_id={@id}"
+      <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;token={/envelope/token}"
          title="Scan Config Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=edit_config&amp;config_id={@id}"
+          <a href="/omp?cmd=edit_config&amp;config_id={@id}&amp;token={/envelope/token}"
              title="Edit Scan Config"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -5069,7 +5087,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=export_config&amp;config_id={@id}"
+      <a href="/omp?cmd=export_config&amp;config_id={@id}&amp;token={/envelope/token}"
          title="Export Scan Config XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -5127,13 +5145,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Schedule
-      <a href="/help/configure_schedules.html#newschedule"
+      <a href="/help/configure_schedules.html?token={/envelope/token}#newschedule"
          title="Help: Configure Schedules (New Schedule)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
@@ -5610,7 +5629,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Schedules
-      <a href="/help/configure_schedules.html#schedules"
+      <a href="/help/configure_schedules.html?token={/envelope/token}#schedules"
          title="Help: Configure Schedules (Schedules)">
         <img src="/img/help.png"/>
       </a>
@@ -5786,7 +5805,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_schedule&amp;schedule_id={@id}"
+          <a href="/omp?cmd=delete_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
              title="Delete Schedule" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -5798,7 +5817,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}"
+      <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
          title="Schedule Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -5812,14 +5831,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Schedule Details
-       <a href="/help/configure_schedules.html#scheduledetails"
+       <a href="/help/configure_schedules.html?token={/envelope/token}#scheduledetails"
          title="Help: Configure Schedules (Schedule Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_schedules">Back to Schedules</a>
+        <a href="?cmd=get_schedules&amp;token={/envelope/token}">Back to Schedules</a>
       </div>
       <table>
         <tr>
@@ -5901,7 +5920,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -5947,13 +5966,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Slave
-      <a href="/help/configure_slaves.html#newslave"
+      <a href="/help/configure_slaves.html?token={/envelope/token}#newslave"
          title="Help: Configure Slaves (New Slave)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_slave"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -6014,7 +6034,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Slaves
-      <a href="/help/configure_slaves.html#slaves"
+      <a href="/help/configure_slaves.html?token={/envelope/token}#slaves"
          title="Help: Configure Slaves (Slaves)">
         <img src="/img/help.png"/>
       </a>
@@ -6091,7 +6111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_slave&amp;slave_id={@id}"
+          <a href="/omp?cmd=delete_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
              title="Delete Slave" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -6103,7 +6123,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_slave&amp;slave_id={@id}"
+      <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
          title="Slave Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -6117,14 +6137,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Slave Details
-       <a href="/help/configure_slaves.html#slavedetails"
+       <a href="/help/configure_slaves.html?token={/envelope/token}#slavedetails"
          title="Help: Configure Slaves (Slave Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_slaves">Back to Slaves</a>
+        <a href="?cmd=get_slaves&amp;token={/envelope/token}">Back to Slaves</a>
       </div>
       <table>
         <tr>
@@ -6170,7 +6190,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}" title="Details">
+                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -6297,7 +6317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">NVT Details
-      <a href="/help/nvts.html#nvtdetails"
+      <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
          title="Help: NVTS (NVT Details)">
         <img src="/img/help.png"/>
       </a>
@@ -6352,7 +6372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Note
-      <a href="/help/notes.html#newnote"
+      <a href="/help/notes.html?token={/envelope/token}#newnote"
          title="Help: Notes (New Note)">
         <img src="/img/help.png"/>
       </a>
@@ -6361,6 +6381,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp#result-{result/@id}"
             method="post"
             enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -6467,11 +6488,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Note
-      <a href="/help/notes.html#editnote"
+      <a href="/help/notes.html?token={/envelope/token}#editnote"
          title="Help: Notes (Edit Note)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}"
+      <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}&amp;token={/envelope/token}"
          title="Note Details"
          style="margin-left:3px;">
         <img src="/img/details.png"/>
@@ -6479,6 +6500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_note"/>
         <input type="hidden" name="note_id"
                value="{get_notes_response/note/@id}"/>
@@ -6509,7 +6531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_notes_response/note/nvt"/>
-              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}">
+              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
@@ -6708,15 +6730,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next={$next}"
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;note_id={@id}"
+      <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next={$next}"
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -6745,15 +6767,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
+      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
          title="Delete Note" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;note_id={@id}"
+      <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -6768,11 +6790,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Note Details
-      <a href="/help/notes.html#notedetails"
+      <a href="/help/notes.html?token={/envelope/token}#notedetails"
         title="Help: Notes (Note Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_note"
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_note&amp;token={/envelope/token}"
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png"/>
@@ -6780,13 +6802,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_notes">Back to Notes</a>
+        <a href="?cmd=get_notes&amp;token={/envelope/token}">Back to Notes</a>
       </div>
       <table>
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
+            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
@@ -6862,7 +6884,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_tasks&amp;task_id={task/@id}">
+                <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
                   <xsl:value-of select="task/name"/>
                 </a>
               </xsl:when>
@@ -6904,7 +6926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Notes
-      <a href="/help/notes.html"
+      <a href="/help/notes.html?token={/envelope/token}"
          title="Help: Notes">
         <img src="/img/help.png"/>
       </a>
@@ -6996,7 +7018,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Override
-      <a href="/help/overrides.html#newoverride"
+      <a href="/help/overrides.html?token={/envelope/token}#newoverride"
          title="Help: Overrides (New Override)">
         <img src="/img/help.png"/>
       </a>
@@ -7005,6 +7027,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp#result-{result/@id}"
             method="post"
             enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_override"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -7125,11 +7148,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Override
-      <a href="/help/overrides.html#editoverride"
+      <a href="/help/overrides.html?token={/envelope/token}#editoverride"
          title="Help: Overrides (Edit Override)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}"
+      <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}&amp;token={/envelope/token}"
          title="Override Details"
          style="margin-left:3px;">
         <img src="/img/details.png"/>
@@ -7137,6 +7160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_override"/>
         <input type="hidden" name="override_id"
                value="{get_overrides_response/override/@id}"/>
@@ -7167,7 +7191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_overrides_response/override/nvt"/>
-              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}">
+              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
@@ -7418,15 +7442,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next={$next}"
+      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
          title="Delete Override" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_override&amp;override_id={@id}"
+      <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}"
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -7458,15 +7482,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
+      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
          title="Delete Override" style="margin-left:3px;">
         <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
-      <a href="/omp?cmd=get_override&amp;override_id={@id}"
+      <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}"
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -7481,11 +7505,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Override Details
-      <a href="/help/overrides.html#overridedetails"
+      <a href="/help/overrides.html?token={/envelope/token}#overridedetails"
         title="Help: Overrides (Override Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_override"
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_override&amp;token={/envelope/token}"
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png"/>
@@ -7493,13 +7517,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_overrides">Back to Overrides</a>
+        <a href="?cmd=get_overrides&amp;token={/envelope/token}">Back to Overrides</a>
       </div>
       <table>
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
+            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
@@ -7581,7 +7605,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_tasks&amp;task_id={task/@id}">
+                <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
                   <xsl:value-of select="task/name"/>
                 </a>
               </xsl:when>
@@ -7623,7 +7647,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Overrides
-      <a href="/help/overrides.html"
+      <a href="/help/overrides.html?token={/envelope/token}"
          title="Help: Overrides">
         <img src="/img/help.png"/>
       </a>
@@ -7717,7 +7741,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Report Formats
-      <a href="/help/configure_report_formats.html#report_formats"
+      <a href="/help/configure_report_formats.html?token={/envelope/token}#report_formats"
          title="Help: Configure Report Formats (Report Formats)">
         <img src="/img/help.png"/>
       </a>
@@ -7746,13 +7770,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Import Report Format
-      <a href="/help/configure_report_formats.html#import_report_format"
+      <a href="/help/configure_report_formats.html?token={/envelope/token}#import_report_format"
          title="Help: Configure Report Formats (Import Report Formats)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_report_format"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -7813,13 +7838,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Report Format
-      <a href="/help/report_formats.html#edit_report_format"
+      <a href="/help/report_formats.html?token={/envelope/token}#edit_report_format"
          title="Help: Edit Report Format">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_report_format"/>
         <input type="hidden"
                name="report_format_id"
@@ -7952,7 +7978,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="global='0'">
-          <a href="/omp?cmd=delete_report_format&amp;report_format_id={@id}"
+          <a href="/omp?cmd=delete_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
              title="Delete Report Format" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -7964,20 +7990,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}"
+      <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
          title="Report Format Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;sort_order=ascending&amp;sort_field=name"
+      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
          title="Edit Report Format" style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
-      <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}"
+      <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
          title="Export Report Format XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}"
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
          title="Verify Report Format"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Report Format"/>
@@ -8127,11 +8153,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Report Format Details
-       <a href="/help/configure_report_formats.html#report_format_details"
+       <a href="/help/configure_report_formats.html?token={/envelope/token}#report_format_details"
          title="Help: Configure Report Formats (Report Format Details)">
          <img src="/img/help.png"/>
        </a>
-      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_format&amp;sort_order=ascending&amp;sort_field=name"
+      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_format&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
          title="Edit Report Format"
          style="margin-left:3px;">
         <img src="/img/edit.png"/>
@@ -8139,7 +8165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_report_formats">Back to Report Formats</a>
+        <a href="?cmd=get_report_formats&amp;token={/envelope/token}">Back to Report Formats</a>
       </div>
       <table>
         <tr>
@@ -8329,15 +8355,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}&amp;token={/envelope/token}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
-        <a href="/omp?cmd=get_note&amp;note_id={@id}"
+        <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
            title="Edit Note"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -8371,15 +8397,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$override-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}"
+        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}&amp;token={/envelope/token}"
            title="Delete Override" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
-        <a href="/omp?cmd=get_override&amp;override_id={@id}"
+        <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
            title="Override Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}"
+        <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
            title="Edit Override"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -8447,7 +8473,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           NVT:
           <xsl:variable name="max" select="80"/>
-          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
+          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
             <xsl:choose>
               <xsl:when test="string-length(nvt/name) &gt; $max">
                 <xsl:value-of select="substring(nvt/name, 0, $max)"/>...
@@ -8458,7 +8484,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </a>
           (OID:
-           <a href="?cmd=get_nvts&amp;oid={nvt/@oid}">
+           <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
              <xsl:value-of select="nvt/@oid"/>
            </a>)
         </xsl:otherwise>
@@ -8476,13 +8502,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:choose>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
+            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
+            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -8500,13 +8526,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:choose>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
+            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}"
+            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
@@ -8671,7 +8697,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
   <tr>
     <td>
-      <img src="/system_report/{name}/report.png?duration={../../duration}&amp;slave_id={../../slave/@id}"/>
+      <img src="/system_report/{name}/report.png?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;token={/envelope/token}"/>
     </td>
   </tr>
 </xsl:template>
@@ -8682,7 +8708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Performance
-      <a href="/help/performance.html"
+      <a href="/help/performance.html?token={/envelope/token}"
          title="Help: Performance">
         <img src="/img/help.png"/>
       </a>
@@ -8699,7 +8725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 hour
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={3600}">hour</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;token={/envelope/token}">hour</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8708,7 +8734,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 day
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={86400}">day</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;token={/envelope/token}">day</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8717,7 +8743,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 week
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={604800}">week</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;token={/envelope/token}">week</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8726,7 +8752,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 month
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}">month</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;token={/envelope/token}">month</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8735,7 +8761,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 year
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}">year</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;token={/envelope/token}">year</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -8747,6 +8773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <div id="small_form" style="float:left;">
               <form action="" method="get">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_system_reports"/>
                 <input type="hidden" name="duration" value="{$duration}"/>
                 <select name="slave_id">
@@ -8832,6 +8859,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="backurl">
       <xsl:value-of select="backurl"/>
     </xsl:with-param>
+    <xsl:with-param name="token">
+      <xsl:value-of select="token"/>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -8843,12 +8873,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">New Task
-    <a href="/help/new_task.html#newtask" title="Help: New Task">
+    <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
   </div>
   <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
       <input type="hidden" name="overrides" value="{apply_overrides}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">

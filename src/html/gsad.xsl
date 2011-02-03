@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="time"/>
   <div class="gsa-logo-header">
     <div class="logo_l">
-      <a href="/omp?cmd=get_tasks&amp;overrides=1" title="Greenbone Security Assistant">
+      <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>
       </a>
     </div>
@@ -83,7 +83,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Logged in as <b><xsl:value-of select="$username"/></b> |
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/logout" title="Logout" style="margin-left:3px;">Logout</a>
+        <a href="/logout?token={/envelope/token}" title="Logout" style="margin-left:3px;">Logout</a>
         <br/>
         <br/>
         <xsl:value-of select="$time"/> (UTC)
@@ -111,39 +111,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li>
             Scan Management
             <ul>
-              <li><a href="/omp?cmd=get_tasks&amp;overrides=1">Tasks</a></li>
-              <li><a href="/omp?cmd=new_task&amp;overrides=1">New Task</a></li>
-              <li><a href="/omp?cmd=get_notes">Notes</a></li>
-              <li><a href="/omp?cmd=get_overrides">Overrides</a></li>
-              <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0">Performance</a></li>
+              <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
+              <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
+              <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
+              <li><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+              <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
             </ul>
           </li>
           <li>
             Configuration
             <ul>
-              <li><a href="/omp?cmd=get_configs">Scan Configs</a></li>
-              <li><a href="/omp?cmd=get_targets">Targets</a></li>
-              <li><a href="/omp?cmd=get_lsc_credentials">Credentials</a></li>
-              <li><a href="/omp?cmd=get_agents">Agents</a></li>
-              <li><a href="/omp?cmd=get_escalators">Escalators</a></li>
-              <li><a href="/omp?cmd=get_schedules">Schedules</a></li>
-              <li><a href="/omp?cmd=get_report_formats">Report Formats</a></li>
-              <li><a href="/omp?cmd=get_slaves">Slaves</a></li>
+              <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
+              <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
+              <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
+              <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+              <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
+              <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
+              <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
+              <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
             </ul>
           </li>
           <li>
             Administration
             <ul>
-              <li><a href="/oap?cmd=get_users">Users</a></li>
-              <li><a href="/oap?cmd=get_feed">NVT Feed</a></li>
-              <li><a href="/oap?cmd=get_settings">Settings</a></li>
+              <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
+              <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
+              <li><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
             </ul>
           </li>
           <li>
             Help
             <ul>
-              <li><a href="/help/contents.html">Contents</a></li>
-              <li><a href="/help/about.html">About</a></li>
+              <li><a href="/help/contents.html?token={/envelope/token}">Contents</a></li>
+              <li><a href="/help/about.html?token={/envelope/token}">About</a></li>
             </ul>
           </li>
         </ul>
@@ -158,6 +158,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="backurl">/omp?cmd=get_tasks&amp;overrides=1</xsl:param>
+  <xsl:param name="token"></xsl:param>
   <center>
     <div class="envelope" style="width:500px;">
       <div class="gb_window" style="margin-top:150px;">
@@ -166,7 +167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_center_error">Error Message</div>
         <div class="gb_window_part_content_error" style="text-align:center;">
           <div class="float_right">
-            <a href="/help/error_messages.html" title="Help: Error Message">
+            <a href="/help/error_messages.html?token={/envelope/token}" title="Help: Error Message">
               <img src="/img/help.png"/>
             </a>
           </div>
@@ -182,9 +183,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </span>
           <div style="margin-top:10px;">
             Your options (not all may work):<br/>
-            'Back' button of browser |
-            <a href="{$backurl}">Assumed sane state</a> |
-            <a href="/login.html">Logout</a>
+            'Back' button of browser
+            <xsl:choose>
+              <xsl:when test="string-length ($token) &gt; 0">
+                | <a href="{$backurl}&amp;token={$token}">Assumed sane state</a>
+                | <a href="/logout?token={$token}">Logout</a>
+              </xsl:when>
+              <xsl:otherwise>
+                | <a href="/login/login.html">Login</a>
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </div>
       </div>
@@ -275,7 +283,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:include href="help.xsl"/>
 
+<!-- Login page -->
+
+<xsl:template match="login_page">
+  <div style="width:315px;margin-top:5px;">
+    <div class="gb_window">
+      <div class="gb_window_part_left"></div>
+      <div class="gb_window_part_right"></div>
+      <div class="gb_window_part_center">Greenbone Security Assistant</div>
+      <div class="gb_window_part_content">
+        <img src="/img/gsa_splash.png" alt="" />
+        <center>
+          <div style="color: red"><xsl:value-of select="message"/></div>
+          <form action="/omp" method="post" enctype="multipart/formdata">
+            <input type="hidden" name="cmd" value="login" />
+            <table>
+              <tr>
+                <td>Username</td>
+                <td><input type="text" name="login" value="" /></td>
+              </tr>
+              <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" value="" /></td>
+              </tr>
+            </table>
+            <div style="text-align:center;float:center;"><input type="submit" value="Login" /></div>
+            <br clear="all" />
+          </form>
+        </center>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <!-- ROOT, ENVELOPE -->
+
+<xsl:template match="token">
+</xsl:template>
 
 <xsl:template match="login">
 </xsl:template>
