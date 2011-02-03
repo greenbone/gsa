@@ -1,4 +1,9 @@
-2011-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
+2011-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (login_page): Turn off autocomplete on input fields,
+	to prevent some of the password completion performed by some browsers.
+
+2011-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Replace HTTP Basic Auth based session management with token based
 	session management.  In the process close the cross site request
