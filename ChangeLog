@@ -1,5 +1,9 @@
 2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* README: Fix typo, strip now redundant part from example.
+
+2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Add man page to gsad.
 
 	* doc/gsad.8.xml: New. Source file for the gsad man page.

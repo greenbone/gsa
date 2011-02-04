@@ -9,7 +9,7 @@ vulnerability management.
 Greenbone Security Assistant is licensed under GNU General Public License
 Version 2 or any later version. Please see file COPYING for details.
 
-All parts of Greenbone Security Assitant are
+All parts of Greenbone Security Assistant are
 Copyright (C) by Greenbone Networks GmbH (see http://www.greenbone.net).
 
 
@@ -20,7 +20,7 @@ For example, if openvasmd (OpenVAS Manager daemon) is running on
 port 9390, the following command starts Greenbone Security
 Assistant daemon on port 443.
 
-    gsad --mport 9391
+    gsad
 
 
 The program usage message follows.
