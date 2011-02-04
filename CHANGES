@@ -1,3 +1,26 @@
+gsa 2.0+rc3 (2011-02-04)
+
+This is the third release candidate for the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes the full
+feature set of OpenVAS Manager available in a web browser.  Release 2.0 is part
+of OpenVAS 4, the next generation of the Open Vulnerability Assessment System.
+
+This release features a complete replacement of the HTTP Basic Auth based
+session management with a token based session management. It also contains
+improved documentation and improvements to the build environment.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 2.0+rc2:
+* A notice is added to the log if binding to the default port failed and the
+  fallback port was used.
+* GSA now uses pkg-config to find required libraries.
+* The HTTP Basic Auth based session management has been replace with a token
+  based session management.
+* GSA now provides a manual page for the gsad binary.
+
+
 gsa 2.0+rc2 (2011-01-21)
 
 This is the second release candidate for the upcoming 2.0 release of the

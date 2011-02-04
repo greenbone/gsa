@@ -1,5 +1,11 @@
 2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 2.0+rc3 release.
+
+	* CHANGES: Updated.
+
+2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* README: Fix typo, strip now redundant part from example.
 
 2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
