@@ -2973,7 +2973,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Scan Config Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_config&amp;name=Full%20and%20fast&amp;token={/envelope/token}">Jump to example dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_config&amp;config_id=daba56c8-73ec-11df-a475-002264764cea&amp;token={/envelope/token}">Jump to example dialog</a></div>
     <div style="text-align:left">
 
       <br/>
