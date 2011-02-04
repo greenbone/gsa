@@ -17,6 +17,7 @@ Prerequisites:
 
 Prerequisites for building documentation:
 * Doxygen
+* xmltoman (optional, for building man page)
 
 If you have installed required libraries to a non-standard location, remember to
 set the PKG_CONFIG_PATH environment variable to the location of you pkg-config

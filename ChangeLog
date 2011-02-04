@@ -1,3 +1,20 @@
+2011-02-04  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Add man page to gsad.
+
+	* doc/gsad.8.xml: New. Source file for the gsad man page.
+
+	* doc/gsad.8: New. Pregenerated man page as troff document.
+
+	* doc/gsad.html: New. Pregenerated man page as HTML document.
+
+	* doc/CMakeLists.txt: Add support for man page generation and
+	installation.
+
+	* CMakeLists.txt: Define DATADIR.
+
+	* INSTALL: Updated prerequisites.
+
 2011-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (login_page): Turn off autocomplete on input fields,

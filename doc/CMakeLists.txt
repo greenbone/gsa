@@ -46,7 +46,60 @@ else (NOT DOXYGEN_EXECUTABLE)
     DEPENDS Doxyfile_full ../README ../src/*.c ../src/*.h)
 endif (NOT DOXYGEN_EXECUTABLE)
 
+## Find xml2man
+
+message (STATUS "Looking for xmltoman...")
+
+find_program (XMLTOMAN_EXECUTABLE xmltoman
+  PATHS /bin /usr/bin /usr/local/bin/
+  DOC "xmltoman location")
+
+message (STATUS "Looking for xmltoman... ${XMLTOMAN_EXECUTABLE}")
+
+find_program (XMLMANTOHTML_EXECUTABLE xmlmantohtml
+  PATHS /bin /usr/bin /usr/local/bin/
+  DOC "xmlmantohtml location")
+
+message (STATUS "Looking for xmlmantohtml... ${XMLMANTOHTML_EXECUTABLE}")
+
+# FIX find_program seems to follow symlink
+if (XMLMANTOHTML_EXECUTABLE)
+  set (XMLMANTOHTML_EXECUTABLE xmlmantohtml)
+endif (XMLMANTOHTML_EXECUTABLE)
+
+if (XMLTOMAN_EXECUTABLE)
+  add_custom_target (man COMMENT "Building manual page..."
+    DEPENDS gsad.8)
+
+  add_custom_command (OUTPUT gsad.8
+    COMMAND sh
+    ARGS -c \"${XMLTOMAN_EXECUTABLE} gsad.8.xml > gsad.8\;\"
+    DEPENDS gsad.8.xml)
+else (XMLTOMAN_EXECUTABLE)
+  message (STATUS "WARNING: xmltoman is required to generate manpage.")
+  add_custom_command (OUTPUT gsad.8
+    COMMAND echo "[Error: xmltoman required to see manpage here]" > gsad.8)
+endif (XMLTOMAN_EXECUTABLE)
+
+if (XMLMANTOHTML_EXECUTABLE)
+  add_custom_target (man-html COMMENT "Building manual page HTML..."
+    DEPENDS gsad.html)
+
+  add_custom_command (OUTPUT gsad.html
+    COMMAND sh
+    ARGS -c \"${XMLMANTOHTML_EXECUTABLE} gsad.8.xml > gsad.html\;\"
+    DEPENDS gsad.8.xml)
+else (XMLMANTOHTML_EXECUTABLE)
+  message (STATUS "WARNING: xmlmantohtml is required for manpage in HTML docs.")
+  add_custom_command (OUTPUT gsad.html
+    COMMAND echo "[Error: xmlmantohtml required to see manpage here]" > gsad.html)
+endif (XMLMANTOHTML_EXECUTABLE)
+
 
 ## Install
 
 file (MAKE_DIRECTORY generated/)
+
+install (FILES gsad.8
+  DESTINATION ${DATADIR}/man/man8 )
+
