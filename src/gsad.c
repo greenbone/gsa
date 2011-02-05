@@ -4748,9 +4748,9 @@ gsad_init (void)
   users = g_ptr_array_new ();
 
   /* Check for required files. */
-  if (check_is_dir (GSA_STATE_DIR) < 1)
+  if (check_is_dir (GSA_DATA_DIR) < 1)
     {
-      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_STATE_DIR);
+      g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_DATA_DIR);
       return MHD_NO;
     }
 
@@ -5133,7 +5133,7 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
 
-      if (chroot (GSA_STATE_DIR))
+      if (chroot (GSA_DATA_DIR))
         {
           g_critical ("%s: Failed to chroot: %s\n",
                       __FUNCTION__,
@@ -5151,9 +5151,9 @@ main (int argc, char **argv)
           exit (EXIT_FAILURE);
         }
     }
-  else if (chdir (GSA_STATE_DIR))
+  else if (chdir (GSA_DATA_DIR))
     {
-      g_critical ("%s: failed change to state dir (" GSA_STATE_DIR ")\n",
+      g_critical ("%s: failed change to state dir (" GSA_DATA_DIR ")\n",
                   __FUNCTION__);
       exit (EXIT_FAILURE);
     }

@@ -1,3 +1,11 @@
+2011-02-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c (gsad_init, main): Replace GSA_STATE_DIR by GSA_DATA_DIR.
+
+	* src/CMakeLists.txt: Replace GSA_STATE_DIR by GSA_DATA_DIR.
+
+	* CMakeLists.txt: Replace GSA_STATE_DIR by GSA_DATA_DIR.
+
 2011-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (save_note_omp): Remove premature openvas_server_close.

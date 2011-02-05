@@ -84,9 +84,9 @@ if (OPENVAS_CA_CERTIFICATE)
   add_definitions (-DOPENVAS_CA_CERTIFICATE=\\\"${OPENVAS_CA_CERTIFICATE}\\\")
 endif (OPENVAS_CA_CERTIFICATE)
 
-if (GSA_STATE_DIR)
-  add_definitions (-DGSA_STATE_DIR=\\\"${GSA_STATE_DIR}\\\")
-endif (GSA_STATE_DIR)
+if (GSA_DATA_DIR)
+  add_definitions (-DGSA_DATA_DIR=\\\"${GSA_DATA_DIR}\\\")
+endif (GSA_DATA_DIR)
 
 if (GSAD_PID_DIR)
   add_definitions (-DGSAD_PID_DIR=\\\"${GSAD_PID_DIR}\\\")
@@ -122,19 +122,19 @@ install (TARGETS gsad
 install (FILES html/favicon.gif html/gsad.xsl html/gsa-style.css
                html/help.xsl  html/oap.xsl  html/omp.xsl
                html/IE6fixes.css
-         DESTINATION ${GSA_STATE_DIR})
+         DESTINATION ${GSA_DATA_DIR})
 
 install (FILES html/login/login.html html/gsa-style.css
                html/favicon.gif html/IE6fixes.css
-         DESTINATION ${GSA_STATE_DIR}/login)
+         DESTINATION ${GSA_DATA_DIR}/login)
 
 install (FILES html/img/gsa_splash.png
-         DESTINATION ${GSA_STATE_DIR}/login/img)
+         DESTINATION ${GSA_DATA_DIR}/login/img)
 
 install (FILES html/img/style/window_dec_a.png
                html/img/style/window_dec_b.png
                html/img/style/window_dec_c.png
-         DESTINATION ${GSA_STATE_DIR}/login/img/style)
+         DESTINATION ${GSA_DATA_DIR}/login/img/style)
 
 install (FILES html/img/agent.png html/img/descending.png
                html/img/key.png html/img/p_bar_bg.png
@@ -168,7 +168,7 @@ install (FILES html/img/agent.png html/img/descending.png
                html/img/scheduled.png html/img/pause.png
                html/img/override.png html/img/new_override.png
                html/img/pause_inactive.png html/img/false_positive.png
-         DESTINATION ${GSA_STATE_DIR}/img)
+         DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
                html/img/style/window_dec_a.png
@@ -177,7 +177,18 @@ install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
                html/img/style/window_dec_a_error.png
                html/img/style/window_dec_b_error.png
                html/img/style/window_dec_c_error.png
-         DESTINATION ${GSA_STATE_DIR}/img/style)
+         DESTINATION ${GSA_DATA_DIR}/img/style)
+
+install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
+               html/img/icons/delete_16x16.png html/img/icons/delete_text.png
+               html/img/icons/start_32x32_shiny.png html/img/icons/stop_32x32.png
+               html/img/icons/delete_24x24.png html/img/icons/start_16x16.png
+               html/img/icons/start_text.png html/img/icons/stop_32x32_shiny.png
+               html/img/icons/delete_32x32.png html/img/icons/start_24x24.png
+               html/img/icons/stop_16x16.png html/img/icons/stop_text.png
+               html/img/icons/delete_32x32_shiny.png html/img/icons/start_32x32.png
+               html/img/icons/stop_24x24.png
+         DESTINATION ${GSA_DATA_DIR}/img/icons)
 
 install (FILES gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
