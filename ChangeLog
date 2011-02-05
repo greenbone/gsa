@@ -1,3 +1,7 @@
+2011-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (save_note_omp): Remove premature openvas_server_close.
+
 2011-02-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (scanconfig_details.html): Replace name in get_config

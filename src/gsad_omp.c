@@ -6468,7 +6468,6 @@ save_note_omp (credentials_t * credentials, const char *note_id,
 
       if (oid == NULL)
         {
-          openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while saving a note. "
