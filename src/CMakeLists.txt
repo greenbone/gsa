@@ -179,17 +179,6 @@ install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
                html/img/style/window_dec_c_error.png
          DESTINATION ${GSA_DATA_DIR}/img/style)
 
-install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
-               html/img/icons/delete_16x16.png html/img/icons/delete_text.png
-               html/img/icons/start_32x32_shiny.png html/img/icons/stop_32x32.png
-               html/img/icons/delete_24x24.png html/img/icons/start_16x16.png
-               html/img/icons/start_text.png html/img/icons/stop_32x32_shiny.png
-               html/img/icons/delete_32x32.png html/img/icons/start_24x24.png
-               html/img/icons/stop_16x16.png html/img/icons/stop_text.png
-               html/img/icons/delete_32x32_shiny.png html/img/icons/start_32x32.png
-               html/img/icons/stop_24x24.png
-         DESTINATION ${GSA_DATA_DIR}/img/icons)
-
 install (FILES gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 
