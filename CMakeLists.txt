@@ -72,16 +72,78 @@ endif (MANDATORY_TOOL_MISSING)
 # TODO: Check for (optional) rats, flawfinder, splint, doxygen.
 
 ## Check for existance of required libraries
-pkg_check_modules (LIBS REQUIRED libmicrohttpd>=0.4.2 libxml-2.0 glib-2.0>=2.14
-                   gthread-2.0 libexslt libopenvas>=4.0.0)
+pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.4.2)
+pkg_check_modules (LIBXML REQUIRED libxml-2.0)
+pkg_check_modules (GLIB REQUIRED glib-2.0>=2.14)
+pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
+pkg_check_modules (LIBEXSLT REQUIRED libexslt)
+pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=4.0.0)
+pkg_check_modules (LIBXSLT REQUIRED libxslt)
+pkg_check_modules (GNUTLS REQUIRED gnutls)
 
-pkg_check_modules (GSAD_LIBS REQUIRED libxslt gnutls)
+execute_process (COMMAND pkg-config --cflags libmicrohttpd
+  OUTPUT_VARIABLE LIBMICROHTTPD_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libmicrohttpd
+  OUTPUT_VARIABLE LIBMICROHTTPD_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-if (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
+execute_process (COMMAND pkg-config --cflags libxml-2.0
+  OUTPUT_VARIABLE LIBXML_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libxml-2.0
+  OUTPUT_VARIABLE LIBXML_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags glib-2.0
+  OUTPUT_VARIABLE GLIB_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs glib-2.0
+  OUTPUT_VARIABLE GLIB_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags gthread-2.0
+  OUTPUT_VARIABLE GTHREAD_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs gthread-2.0
+  OUTPUT_VARIABLE GTHREAD_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags libexslt
+  OUTPUT_VARIABLE LIBEXSLT_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libexslt
+  OUTPUT_VARIABLE LIBEXSLT_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags libopenvas
+  OUTPUT_VARIABLE OPENVAS_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libopenvas
+  OUTPUT_VARIABLE OPENVAS_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags libxslt
+  OUTPUT_VARIABLE LIBXSLT_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs libxslt
+  OUTPUT_VARIABLE LIBXSLT_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process (COMMAND pkg-config --cflags gnutls
+  OUTPUT_VARIABLE GNUTLS_CFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process (COMMAND pkg-config --libs gnutls
+  OUTPUT_VARIABLE GNUTLS_LDFLAGS
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR NOT GTHREAD_FOUND OR
+    NOT LIBEXSLT_FOUND OR NOT LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND)
   message (FATAL_ERROR "One or more required libraries was not found "
-                       "(see message above), please install the missing "
-                       "libraries and run cmake again.")
-endif (NOT LIBS_FOUND OR NOT GSAD_LIBS_FOUND)
+    "(see message above), please install the missing "
+    "libraries and run cmake again.")
+endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR NOT GTHREAD_FOUND OR
+  NOT LIBEXSLT_FOUND OR NOT LIBOPENVAS_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
@@ -211,7 +273,72 @@ string (REPLACE "
 configure_file (doc/Doxyfile.in doc/Doxyfile)
 configure_file (doc/Doxyfile_full.in doc/Doxyfile_full)
 configure_file (VERSION.in VERSION)
+configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
+## Install
+
+install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
+               src/html/help.xsl  src/html/oap.xsl  src/html/omp.xsl
+               src/html/IE6fixes.css
+         DESTINATION ${GSA_DATA_DIR})
+
+install (FILES src/html/login/login.html src/html/gsa-style.css
+               src/html/favicon.gif src/html/IE6fixes.css
+         DESTINATION ${GSA_DATA_DIR}/login)
+
+install (FILES src/html/img/gsa_splash.png
+         DESTINATION ${GSA_DATA_DIR}/login/img)
+
+install (FILES src/html/img/style/window_dec_a.png
+               src/html/img/style/window_dec_b.png
+               src/html/img/style/window_dec_c.png
+         DESTINATION ${GSA_DATA_DIR}/login/img/style)
+
+install (FILES src/html/img/agent.png src/html/img/descending.png
+               src/html/img/key.png src/html/img/p_bar_bg.png
+               src/html/img/start_inactive.png src/html/img/alert_sign.png
+               src/html/img/details.png src/html/img/list_inactive.png
+               src/html/img/p_bar_done.png src/html/img/start.png
+               src/html/img/ascending_inactive.png src/html/img/download.png
+               src/html/img/list.png src/html/img/p_bar_error.png
+               src/html/img/stop_inactive.png src/html/img/ascending.png
+               src/html/img/edit_inactive.png src/html/img/log.png
+               src/html/img/p_bar_new.png src/html/img/stop.png
+               src/html/img/bsi-logo.png src/html/img/edit.png
+               src/html/img/low_big.png src/html/img/p_bar.png
+               src/html/img/bullet2.png src/html/img/exe.png
+               src/html/img/low.png src/html/img/p_bar_request.png
+               src/html/img/trend_down.png src/html/img/bullet.png
+               src/html/img/gb-logo.png src/html/img/medium_big.png
+               src/html/img/refresh.png src/html/img/trend_less.png
+               src/html/img/deb.png src/html/img/gsa_splash.png
+               src/html/img/medium.png src/html/img/resume_inactive.png
+               src/html/img/trend_more.png src/html/img/delete_inactive.png
+               src/html/img/help.png src/html/img/new_note.png
+               src/html/img/resume.png src/html/img/trend_nochange.png
+               src/html/img/delete_note.png src/html/img/high_big.png
+               src/html/img/new.png src/html/img/rpm.png
+               src/html/img/trend_up.png src/html/img/delete.png
+               src/html/img/high.png src/html/img/none_big.png
+               src/html/img/scheduled_inactive.png
+               src/html/img/descending_inactive.png
+               src/html/img/intevation-logo.png src/html/img/note.png
+               src/html/img/scheduled.png src/html/img/pause.png
+               src/html/img/override.png src/html/img/new_override.png
+               src/html/img/pause_inactive.png src/html/img/false_positive.png
+         DESTINATION ${GSA_DATA_DIR}/img)
+
+install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
+               src/html/img/style/window_dec_a.png
+               src/html/img/style/window_dec_b.png
+               src/html/img/style/window_dec_c.png src/html/img/style/logo_m.png
+               src/html/img/style/window_dec_a_error.png
+               src/html/img/style/window_dec_b_error.png
+               src/html/img/style/window_dec_c_error.png
+         DESTINATION ${GSA_DATA_DIR}/img/style)
+
+install (FILES src/gsad_log.conf
+         DESTINATION ${GSA_CONFIG_DIR})
 
 ## Program
 

@@ -25,39 +25,30 @@
 
 ## Config
 
-add_definitions (-Werror)
-
-include_directories (${LIBS_INCLUDE_DIRS} ${GSAD_LIBS_INCLUDE_DIRS})
-link_directories    (${LIBS_LIBRARY_DIRS} ${GSAD_LIBS_LIBRARY_DIRS})
-
-## TODO use pkg_check_modules instead of manual invocation (as in top-level
-## CMakeLists.txt)
-
-exec_program (pkg-config
-              ARGS --cflags libopenvas
-              OUTPUT_VARIABLE OPENVAS_CFLAGS)
-exec_program (pkg-config
-              ARGS --libs libopenvas
-              OUTPUT_VARIABLE OPENVAS_LDFLAGS)
+#TODO: Unify this with the target properties for gsad below
+include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS} ${GLIB_INCLUDE_DIRS} ${GTHREAD_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS} ${OPENVAS_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS} ${GNUTLS_INCLUDE_DIRS})
+link_directories    (${LIBMICROHTTPD_LIBRARY_DIRS} ${LIBXML_LIBRARY_DIRS} ${GLIB_LIBRARY_DIRS} ${GTHREAD_LIBRARY_DIRS} ${LIBEXSLT_LIBRARY_DIRS} ${OPENVAS_LIBRARY_DIRS} ${LIBXSLT_LIBRARY_DIRS} ${GNUTLS_LIBRARY_DIRS})
 
 ## Libraries
 
+#TODO: Unify this with the target properties for gsad below
 add_library (gsad_base STATIC gsad_base.c)
 set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_base ${LIBS_LIBRARIES} exslt)
+target_link_libraries (gsad_base ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES})
 
 add_library (gsad_omp STATIC gsad_omp.c)
 set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_omp ${LIBS_LIBRARIES} openvas_omp)
+target_link_libraries (gsad_omp ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES} openvas_omp)
 
 add_library (gsad_oap STATIC gsad_oap.c)
 set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_oap ${LIBS_LIBRARIES})
+target_link_libraries (gsad_oap ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES})
 
 ## Program
 
+#TODO: Unify this with the target properties for gsad below
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_oap gsad_base ${GSAD_LIBS_LIBRARIES})
+target_link_libraries (gsad gsad_omp gsad_oap gsad_base ${LIBXSLT_LIBRARIES} ${GNUTLS_LIBRARIES})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (GSAD_VERSION)
@@ -99,18 +90,11 @@ endif (GSA_CONFIG_DIR)
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
-## TODO In the top-level CMakeLists.txt, microhttpd is searched for using
-## pkg_check_modules. Use variables set by this function as linker and compiler
-## flags. Unfortunately it boils down to this problem:
-## http://www.cmake.org/pipermail/cmake/2009-June/030108.html
 set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${OPENVAS_LDFLAGS} -pthread -lexslt")
+                       "${OPENVAS_LDFLAGS} ${LIBMICROHTTPD_LDFLAGS} ${LIBEXSLT_LDFLAGS}")
 
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
                        "${OPENVAS_CFLAGS}")
-
-configure_file (gsad_log_conf.cmake_in
-                "${CMAKE_CURRENT_SOURCE_DIR}/gsad_log.conf")
 
 ## Install
 
@@ -118,69 +102,6 @@ install (TARGETS gsad
          RUNTIME DESTINATION ${SBINDIR}
          LIBRARY DESTINATION ${LIBDIR}
          ARCHIVE DESTINATION ${LIBDIR}/static)
-
-install (FILES html/favicon.gif html/gsad.xsl html/gsa-style.css
-               html/help.xsl  html/oap.xsl  html/omp.xsl
-               html/IE6fixes.css
-         DESTINATION ${GSA_DATA_DIR})
-
-install (FILES html/login/login.html html/gsa-style.css
-               html/favicon.gif html/IE6fixes.css
-         DESTINATION ${GSA_DATA_DIR}/login)
-
-install (FILES html/img/gsa_splash.png
-         DESTINATION ${GSA_DATA_DIR}/login/img)
-
-install (FILES html/img/style/window_dec_a.png
-               html/img/style/window_dec_b.png
-               html/img/style/window_dec_c.png
-         DESTINATION ${GSA_DATA_DIR}/login/img/style)
-
-install (FILES html/img/agent.png html/img/descending.png
-               html/img/key.png html/img/p_bar_bg.png
-               html/img/start_inactive.png html/img/alert_sign.png
-               html/img/details.png html/img/list_inactive.png
-               html/img/p_bar_done.png html/img/start.png
-               html/img/ascending_inactive.png html/img/download.png
-               html/img/list.png html/img/p_bar_error.png
-               html/img/stop_inactive.png html/img/ascending.png
-               html/img/edit_inactive.png html/img/log.png
-               html/img/p_bar_new.png html/img/stop.png
-               html/img/bsi-logo.png html/img/edit.png
-               html/img/low_big.png html/img/p_bar.png
-               html/img/bullet2.png html/img/exe.png
-               html/img/low.png html/img/p_bar_request.png
-               html/img/trend_down.png html/img/bullet.png
-               html/img/gb-logo.png html/img/medium_big.png
-               html/img/refresh.png html/img/trend_less.png
-               html/img/deb.png html/img/gsa_splash.png
-               html/img/medium.png html/img/resume_inactive.png
-               html/img/trend_more.png html/img/delete_inactive.png
-               html/img/help.png html/img/new_note.png
-               html/img/resume.png html/img/trend_nochange.png
-               html/img/delete_note.png html/img/high_big.png
-               html/img/new.png html/img/rpm.png
-               html/img/trend_up.png html/img/delete.png
-               html/img/high.png html/img/none_big.png
-               html/img/scheduled_inactive.png
-               html/img/descending_inactive.png
-               html/img/intevation-logo.png html/img/note.png
-               html/img/scheduled.png html/img/pause.png
-               html/img/override.png html/img/new_override.png
-               html/img/pause_inactive.png html/img/false_positive.png
-         DESTINATION ${GSA_DATA_DIR}/img)
-
-install (FILES html/img/style/logo_l.png html/img/style/logo_r.png
-               html/img/style/window_dec_a.png
-               html/img/style/window_dec_b.png
-               html/img/style/window_dec_c.png html/img/style/logo_m.png
-               html/img/style/window_dec_a_error.png
-               html/img/style/window_dec_b_error.png
-               html/img/style/window_dec_c_error.png
-         DESTINATION ${GSA_DATA_DIR}/img/style)
-
-install (FILES gsad_log.conf
-         DESTINATION ${GSA_CONFIG_DIR})
 
 ## Static analysis
 
