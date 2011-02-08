@@ -3957,31 +3957,28 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
 
   /* Get all the families. */
 
-  if (edit)
+  if (openvas_server_sendf (&session, "<get_nvt_families/>") == -1)
     {
-      if (openvas_server_sendf (&session, "<get_nvt_families/>") == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the config. "
-                               "The config is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs");
-        }
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the config. "
+                           "The config is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
 
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the config. "
-                               "The config is not available. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_configs");
-        }
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the config. "
+                           "The config is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
     }
 
   /* Cleanup, and return transformed XML. */

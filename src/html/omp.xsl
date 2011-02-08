@@ -4657,8 +4657,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr>
         <td>Total: <xsl:value-of select="count(families/family)"/></td>
         <td>
-          <xsl:value-of select="known_nvt_count/text()"/>
-          of <xsl:value-of select="max_nvt_count/text()"/>
+          <table>
+            <tr>
+              <td style="margin-right:10px;">
+                <xsl:value-of select="known_nvt_count/text()"/>
+              </td>
+              <td>
+                <div style="margin-left:6px;">
+                  of <xsl:value-of select="max_nvt_count/text()"/> in selected families<br/>
+                  of <xsl:value-of select="sum(../../get_nvt_families_response/families/family/max_nvt_count)"/> in total
+                </div>
+              </td>
+            </tr>
+          </table>
         </td>
         <td>
           <xsl:choose>
