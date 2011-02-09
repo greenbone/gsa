@@ -5108,7 +5108,7 @@ main (int argc, char **argv)
         }
     }
 
-  if (gsad_redirect_port_string)
+  if (redirect)
     {
       /* Fork for the redirect server. */
       tracef ("Forking for redirect...\n");

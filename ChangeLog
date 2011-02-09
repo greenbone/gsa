@@ -1,5 +1,10 @@
 2011-02-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (main): Check the --redirect flag, instead of the --rport
+	variable, to see whether to redirect.
+
+2011-02-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	For GET requests when the session expires, go to the requested page after
 	logging in.
 
