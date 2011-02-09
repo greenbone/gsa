@@ -297,6 +297,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="color: red"><xsl:value-of select="message"/></div>
           <form action="/omp" method="post" enctype="multipart/formdata">
             <input type="hidden" name="cmd" value="login" />
+            <xsl:choose>
+              <xsl:when test="string-length(url) = 0">
+                <input type="hidden" name="text" value="/omp?cmd=get_tasks&amp;overrides=1" />
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="text" value="{url}" />
+              </xsl:otherwise>
+            </xsl:choose>
             <table>
               <tr>
                 <td>Username</td>

@@ -1,3 +1,14 @@
+2011-02-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	For GET requests when the session expires, go to the requested page after
+	logging in.
+
+	* src/gsad.c (append_param): New function.
+	(request_handler): Add next URL to login page XML when the session has
+	expired.  Redirect to the next URL on successful login.
+
+	* src/html/gsad.xsl (login_page): Use next URL from XML if there is one.
+
 2011-02-08  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Consolidation: Move most of configuration and installation handling to

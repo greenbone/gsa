@@ -4278,6 +4278,30 @@ handler_send_response (struct MHD_Connection *connection,
 }
 
 /**
+ * @brief Append a request param to a string.
+ *
+ * @param[in]  string  String.
+ * @param[in]  kind    Kind of request data.
+ * @param[in]  key     Key.
+ * @param[in]  value   Value.
+ *
+ * @return MHD_YES.
+ */
+static int
+append_param (void *string, enum MHD_ValueKind kind, const char *key,
+              const char *value)
+{
+  if (strcmp (key, "token"))
+    {
+      g_string_append ((GString*) string, key);
+      g_string_append ((GString*) string, "=");
+      g_string_append ((GString*) string, value);
+      g_string_append ((GString*) string, "&");
+    }
+  return MHD_YES;
+}
+
+/**
  * @brief HTTP request handler for GSAD.
  *
  * This routine is an MHD_AccessHandlerCallback, the request handler for
@@ -4458,18 +4482,33 @@ request_handler (void *cls, struct MHD_Connection *connection,
           time_t now;
           gchar *xml;
           char *res;
+          GString *full_url;
 
-          xml = g_strdup_printf ("<login_page>"
-                                 "<message>"
-                                 "%s"
-                                 "</message>"
-                                 "<token></token>"
-                                 "<time>%s</time>"
-                                 "</login_page>",
-                                 (strncmp (url, "/logout", strlen ("/logout"))
-                                   ? "Session has expired.  Please login again."
-                                   : "Already logged out."),
-                                 ctime (&now));
+          full_url = g_string_new (url);
+          g_string_append (full_url, "?");
+
+
+          MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
+                                     append_param, full_url);
+
+          if (full_url->str[strlen (full_url->str) - 1] == '&')
+            full_url->str[strlen (full_url->str) - 1] = '\0';
+
+          xml = g_markup_printf_escaped
+                 ("<login_page>"
+                  "<message>"
+                  "%s"
+                  "</message>"
+                  "<token></token>"
+                  "<time>%s</time>"
+                  "<url>%s</url>"
+                  "</login_page>",
+                  (strncmp (url, "/logout", strlen ("/logout"))
+                    ? "Session has expired.  Please login again."
+                    : "Already logged out."),
+                  ctime (&now),
+                  full_url->str);
+          g_string_free (full_url, TRUE);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -4689,7 +4728,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (user)
         {
           gchar *url;
-          url = g_strdup_printf ("/omp?cmd=get_tasks&overrides=1&token=%s",
+          /* @todo Validate con_info->req_parms.text. */
+          url = g_strdup_printf ("%s&token=%s",
+                                 con_info->req_parms.text,
                                  user->token);
           user_release (user);
           send_redirect_header (connection, url);
