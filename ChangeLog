@@ -1,5 +1,16 @@
 2011-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a JavaScript indicator.
+
+	* src/html/gsa-style.css (.status_panel): New rule.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add icon next to login panel that
+	indicates whether JavaScript is enabled.
+
+	* src/html/help.xsl (javascript.html): New template.
+
+2011-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (autorefresh): Add token to URL.
 
 2011-02-09  Matthew Mundell <matthew.mundell@greenbone.net>

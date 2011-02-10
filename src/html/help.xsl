@@ -121,6 +121,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="javascript.html">
+  <div class="gb_window_part_center">Help: JavaScript</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+      <br/>
+      <h1>JavaScript</h1>
+      <p>
+        An icon in the page heading indicates whether JavaScript is enabled in the browser.
+      </p>
+      <p>
+        Javascript is either off
+        <img src="/img/trend_down.png" alt="JavaScript is off" title="JavaScript is off" />
+        or on
+        <img src="/img/trend_up.png" alt="JavaScript is on" title="JavaScript is on" />
+        .
+      </p>
+      <p>
+        Enabling JavaScript exposes the GSA to cross site scripting attacks, so it
+        is encouraged to turn off JavaScript when using GSA.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="configure_agents.html">
   <div class="gb_window_part_center">Help: Configure Agents</div>
   <div class="gb_window_part_content">
@@ -1740,6 +1765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Miscellaneous</li>
           <ul>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
           </ul>
