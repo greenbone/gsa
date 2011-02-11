@@ -1,3 +1,8 @@
+2011-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (fallback): New template.
+	(get_system_reports): Show the fallback report on error.
+
 2011-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a JavaScript indicator.
