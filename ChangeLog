@@ -1,5 +1,14 @@
 2011-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make the fallback report more like the others.
+
+	* src/html/omp.xsl (system_report): Include the contents of the report if
+	it's text.
+	(fallback): Remove.
+	(get_system_reports): Remove fallback check.
+
+2011-02-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (fallback): New template.
 	(get_system_reports): Show the fallback report on error.
 

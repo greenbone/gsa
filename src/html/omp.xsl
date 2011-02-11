@@ -8708,7 +8708,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
   <tr>
     <td>
-      <img src="/system_report/{name}/report.png?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;token={/envelope/token}"/>
+      <xsl:choose>
+        <xsl:when test="report/@format = 'txt'">
+          <pre style="margin-left: 5%"><xsl:value-of select="report/text()"/></pre>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/system_report/{name}/report.{report/@format}?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;token={/envelope/token}"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -8826,59 +8833,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="fallback">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Performance
-      <a href="/help/performance.html?token={/envelope/token}"
-         title="Help: Performance">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <p>
-        There was an error getting the performance results.  This is likely to indicate
-        that a comprehensive reporting tool is not installed.  Please contact your system
-        adminstrator for further details.  What follows is an basic alternate report.
-      </p>
-      <h1>Fallback report</h1>
-      <pre>
-        <xsl:value-of select="text()"/>
-      </pre>
-    </div>
-  </div>
-</xsl:template>
-
 <!--     GET_SYSTEM_REPORTS -->
 
 <xsl:template match="get_system_reports">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:choose>
     <xsl:when test="get_system_reports_response/@status = '500'">
-      <xsl:choose>
-        <xsl:when test="get_system_reports_response/fallback">
-          <xsl:apply-templates select="get_system_reports_response/fallback"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="command_result_dialog">
-            <xsl:with-param name="operation">
-              Get System Reports
-            </xsl:with-param>
-            <xsl:with-param name="status">
-              <xsl:value-of select="500"/>
-            </xsl:with-param>
-            <xsl:with-param name="msg">
-              <xsl:value-of select="get_system_reports_response/@status_text"/>
-            </xsl:with-param>
-            <xsl:with-param name="details">
-              There was an error getting the performance results.  Please ensure that
-              there is a system reporting program installed with the Manager, and that
-              this program is configured correctly.
-            </xsl:with-param>
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get System Reports
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="500"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="get_system_reports_response/@status_text"/>
+        </xsl:with-param>
+        <xsl:with-param name="details">
+          There was an error getting the performance results.  Please ensure that
+          there is a system reporting program installed with the Manager, and that
+          this program is configured correctly.
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="get_system_reports_response"/>
