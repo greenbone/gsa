@@ -8743,7 +8743,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 hour
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;token={/envelope/token}">hour</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}">hour</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8752,7 +8752,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 day
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;token={/envelope/token}">day</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}">day</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8761,7 +8761,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 week
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;token={/envelope/token}">week</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}">week</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8770,7 +8770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 month
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;token={/envelope/token}">month</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}">month</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -8779,7 +8779,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 year
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;token={/envelope/token}">year</a>
+                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}">year</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
