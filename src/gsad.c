@@ -4641,16 +4641,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
               // be generalized with the other transforms.
               time_t now = time (NULL);
               assert (credentials->token);
-              gchar *xml = g_strdup_printf ("<envelope>"
-                                            "<token>%s</token>"
-                                            "<time>%s</time>"
-                                            "<login>%s</login>"
-                                            "<help><%s/></help>"
-                                            "</envelope>",
-                                            credentials->token,
-                                            ctime (&now),
-                                            credentials->username,
-                                            page);
+              gchar *xml = g_markup_printf_escaped ("<envelope>"
+                                                    "<token>%s</token>"
+                                                    "<time>%s</time>"
+                                                    "<login>%s</login>"
+                                                    "<help><%s/></help>"
+                                                    "</envelope>",
+                                                    credentials->token,
+                                                    ctime (&now),
+                                                    credentials->username,
+                                                    page);
               g_free (page);
               res = xsl_transform (xml);
             }

@@ -136,8 +136,8 @@ oap_init (const gchar *address_administrator, int port_administrator)
 /**
  * @brief Wrap some XML in an envelope and XSL transform the envelope.
  *
- * @param[in]  credentials  Username and password for authentication
- * @param[in]  xml          XML string.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  xml          XML string.  Freed before exit.
  *
  * @return Result of XSL transformation.
  */
@@ -146,20 +146,27 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
 {
   time_t now;
   gchar *res;
+  GString *string;
   char *html;
 
+  assert (credentials);
+
   now = time (NULL);
-  res = g_strdup_printf ("<envelope>"
-                         "<token>%s</token>"
-                         "<time>%s</time>"
-                         "<login>%s</login>"
-                         "%s"
-                         "</envelope>",
-                         credentials->token,
-                         ctime (&now),
-                         credentials->username,
-                         xml);
-  html = xsl_transform (res);
+  string = g_string_new ("");
+
+  res = g_markup_printf_escaped ("<envelope>"
+                                 "<token>%s</token>"
+                                 "<time>%s</time>"
+                                 "<login>%s</login>",
+                                 credentials->token,
+                                 ctime (&now),
+                                 credentials->username);
+  g_string_append (string, res);
+  g_free (res);
+  g_string_append_printf (string, "%s</envelope>", xml);
+
+  html = xsl_transform (string->str);
+  g_string_free (string, TRUE);
   if (html == NULL)
     {
       res = g_strdup_printf ("<gsad_response>"
@@ -178,8 +185,8 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
                          " transformation."
                          "</body>"
                          "</html>");
+      g_free (res);
     }
-  g_free (res);
   g_free (xml);
   return html;
 }
