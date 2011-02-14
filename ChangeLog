@@ -1,5 +1,10 @@
 2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (xsl_transform_omp): Print XML with g_markup_printf_escaped
+	in case login contains special XML chars.
+
+2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Remove password and username validation
 	erroneously added with token session management on 2011-02-03.
 
