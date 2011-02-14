@@ -4506,7 +4506,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     ? "Session has expired.  Please login again."
                     : "Already logged out."),
                   ctime (&now),
-                  full_url->str);
+                  (strncmp (url, "/logout", strlen ("/logout"))
+                    ? full_url->str
+                    : ""));
           g_string_free (full_url, TRUE);
           res = xsl_transform (xml);
           g_free (xml);
