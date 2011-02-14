@@ -4289,7 +4289,7 @@ static int
 append_param (void *string, enum MHD_ValueKind kind, const char *key,
               const char *value)
 {
-  if (strcmp (key, "token"))
+  if (strcmp (key, "token") && strcmp (key, "r"))
     {
       g_string_append ((GString*) string, key);
       g_string_append ((GString*) string, "=");
@@ -4485,7 +4485,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           full_url = g_string_new (url);
           /* To simplify appending the token later, ensure there is at least
            * one param. */
-          g_string_append (full_url, "?r=1");
+          g_string_append (full_url, "?r=1&");
 
           MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
                                      append_param, full_url);

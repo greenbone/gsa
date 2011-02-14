@@ -1,5 +1,10 @@
 2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (append_param): Skip "r" too.
+	(request_handler): Add "&" to dummy param, so that next param gets it.
+
+2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Skip follow on page when logging out.
 
 2011-02-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
