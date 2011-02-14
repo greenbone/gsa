@@ -1725,8 +1725,6 @@ exec_omp_post (struct gsad_connection_info *con_info)
 
   if (con_info->req_parms.cmd && !strcmp (con_info->req_parms.cmd, "login"))
     {
-      validate (validator, "login", &con_info->req_parms.login);
-      validate (validator, "password", &con_info->req_parms.password);
       if (con_info->req_parms.login && con_info->req_parms.password)
         {
           if (is_omp_authenticated (con_info->req_parms.login,
