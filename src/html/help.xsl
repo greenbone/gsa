@@ -68,19 +68,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">About GSA</div>
   <div class="gb_window_part_content">
     <div style="text-align:left">
-      <img align="right" src="/img/gsa_splash.png"/>
+      <table><tr><td valign="top">
 
-      <h1>Greenbone Security Assistant Version 2.0+rc4</h1>
+      <h1>Greenbone Security Assistant</h1>
+      <h3>Version 2.0+rc4</h3>
 
       <p>
-      The Greenbone Security Assistant is a web-based graphical
-      user interface for OpenVAS Manager. It offers a straight-forward,
+      The Greenbone Security Assistant (GSA) is the web-based graphical
+      user interface of the Open Vulnerability Assessment System (OpenVAS).
+      GSA connects to OpenVAS Manager via the OpenVAS Management Protocol (OMP).
+      By implementing the full feature set of OMP, GSA offers a straight-forward,
       yet powerful method to manage network vulnerability scans.
       </p>
 
       <p>
-      Copyright 2009, 2010 by Greenbone Networks GmbH,
-      <a href="http://www.greenbone.net">www.greenbone.net</a>
+      Copyright 2009-2011 by <a href="http://www.greenbone.net">Greenbone Networks GmbH</a>
       </p>
 
       <p>
@@ -89,34 +91,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      Contact: For updates, feature proposals and bug reports please
-      contact <a href="mailto:info@greenbone.net">info@greenbone.net</a>.
+      Contact: For updates, feature proposals and bug reports
+      contact the <a href="http://www.greenbone.net/company/contact.html">Greenbone
+      team</a> or visit the <a href="http://www.openvas.org">OpenVAS homepage</a>.
       </p>
 
-      <table width="100%"><tr><td valign="top">
-      <p>
-      Main Authors (in alphabetical order):
-      </p>
-
-      <ul>
-      <li> Matthew Mundell </li>
-      <li> Karl-Heinz Ruskowski </li>
-      <li> Jan-Oliver Wagner </li>
-      <li> Michael Wiegand </li>
-      <li> Felix Wolfsteller </li>
-      </ul>
       </td><td valign="top">
-      <p>
-      Supported by (in alphabetical order):
-      </p>
-
-      <table><tr valign="center">
-      <td><img src="/img/bsi-logo.png"/></td>
-      <td><img src="/img/gb-logo.png"/></td>
-      <td><img src="/img/intevation-logo.png"/></td>
+      <img border="5" src="/img/gsa_splash.png"/>
+      </td>
       </tr></table>
-
-      </td></tr></table>
     </div>
   </div>
 </xsl:template>

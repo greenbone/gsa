@@ -1,3 +1,12 @@
+2011-02-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl: Reworked about dialog (authors and logos out).
+
+	* src/html/img/intevation-logo.png, src/html/img/gb-logo.png,
+	src/html/img/bsi-logo.png: Removed.
+
+	* CMakeLists.txt: Don't install the logo's anymore.
+
 2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): When generating the follow on URL, ensure

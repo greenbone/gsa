@@ -304,12 +304,12 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/stop_inactive.png src/html/img/ascending.png
                src/html/img/edit_inactive.png src/html/img/log.png
                src/html/img/p_bar_new.png src/html/img/stop.png
-               src/html/img/bsi-logo.png src/html/img/edit.png
+               src/html/img/edit.png
                src/html/img/low_big.png src/html/img/p_bar.png
                src/html/img/bullet2.png src/html/img/exe.png
                src/html/img/low.png src/html/img/p_bar_request.png
                src/html/img/trend_down.png src/html/img/bullet.png
-               src/html/img/gb-logo.png src/html/img/medium_big.png
+               src/html/img/medium_big.png
                src/html/img/refresh.png src/html/img/trend_less.png
                src/html/img/deb.png src/html/img/gsa_splash.png
                src/html/img/medium.png src/html/img/resume_inactive.png
@@ -322,7 +322,7 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/high.png src/html/img/none_big.png
                src/html/img/scheduled_inactive.png
                src/html/img/descending_inactive.png
-               src/html/img/intevation-logo.png src/html/img/note.png
+               src/html/img/note.png
                src/html/img/scheduled.png src/html/img/pause.png
                src/html/img/override.png src/html/img/new_override.png
                src/html/img/pause_inactive.png src/html/img/false_positive.png
