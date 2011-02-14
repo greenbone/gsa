@@ -4483,8 +4483,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
           GString *full_url;
 
           full_url = g_string_new (url);
-          g_string_append (full_url, "?");
-
+          /* To simplify appending the token later, ensure there is at least
+           * one param. */
+          g_string_append (full_url, "?r=1");
 
           MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
                                      append_param, full_url);

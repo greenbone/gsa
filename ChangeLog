@@ -1,5 +1,10 @@
 2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): When generating the follow on URL, ensure
+	that there is at least one parameter, to simplify appending the token.
+
+2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Print XML with g_markup_printf_escaped
 	in case login contains special XML chars.
 
