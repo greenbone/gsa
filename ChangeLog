@@ -1,3 +1,8 @@
+2011-02-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (exec_omp_get): Have sane default parameters for system
+	parameters in case they are not supplied.
+
 2011-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (append_param): Skip "r" too.

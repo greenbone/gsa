@@ -3587,12 +3587,12 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_slaves"))
     return get_slaves_omp (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "get_system_reports"))
-           && (slave_id != NULL))
+  else if (!strcmp (cmd, "get_system_reports"))
     return get_system_reports_omp (credentials,
                                    ((duration == NULL || (*duration == '\0'))
-                                     ? "0" : duration),
-                                   slave_id);
+                                     ? "86400" : duration),
+                                   ((slave_id == NULL || (*slave_id == '\0'))
+                                     ? "0" : slave_id));
 
   else if ((!strcmp (cmd, "get_target")) && (target_id != NULL))
     return get_target_omp (credentials, target_id, sort_field, sort_order);
