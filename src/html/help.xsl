@@ -2630,7 +2630,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Help: Performance</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
