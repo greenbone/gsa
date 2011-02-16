@@ -1,3 +1,8 @@
+2011-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_override_omp): Remove premature
+	openvas_server_close.
+
 2011-02-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/help.xsl (performance.html): Add missing slave_id
@@ -136,7 +141,7 @@
 
 2011-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/help.xsl (save_note_omp): Remove premature openvas_server_close.
+	* src/gsad_omp.c (save_note_omp): Remove premature openvas_server_close.
 
 2011-02-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
