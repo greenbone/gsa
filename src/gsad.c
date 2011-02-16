@@ -59,6 +59,7 @@
 #include <gcrypt.h>
 #include <glib.h>
 #include <gnutls/gnutls.h>
+#include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
 #include <openvas/base/pidfile.h>
@@ -184,6 +185,13 @@ GSList *log_config = NULL;
 int verbose = 0;
 
 /**
+ * @brief Whether to use a secure cookie.
+ *
+ * This is always true when using HTTPS.
+ */
+int use_secure_cookie = 1;
+
+/**
  * @brief User session data.
  */
 GPtrArray *users = NULL;
@@ -193,7 +201,8 @@ GPtrArray *users = NULL;
  */
 struct user
 {
-  char *token;        ///< Session token.
+  char *cookie;       ///< Cookie token.
+  char *token;        ///< Request session token.
   gchar *username;    ///< Login name.
   gchar *password;    ///< Password.
   time_t time;        ///< Login time.
@@ -239,12 +248,15 @@ user_add (const gchar *username, const gchar *password)
     {
       free (user->token);
       user->token = openvas_uuid_make ();
+      free (user->cookie);
+      user->cookie = openvas_uuid_make ();
       g_free (user->password);
       user->password = g_strdup (password);
     }
   else
     {
       user = g_malloc (sizeof (user_t));
+      user->cookie = openvas_uuid_make ();
       user->token = openvas_uuid_make ();
       user->username = g_strdup (username);
       user->password = g_strdup (password);
@@ -259,13 +271,15 @@ user_add (const gchar *username, const gchar *password)
  *
  * If a user is returned, it's up to the caller to release the user.
  *
- * @param[in]   token        Token.
+ * @param[in]   cookie       Token in cookie.
+ * @param[in]   token        Token request parameter.
  * @param[out]  user_return  User.
  *
- * @return 0 ok (user in user_return), 1 bad token, 2 expired token.
+ * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
+ *         3 bad/missing cookie.
  */
 int
-token_user (const gchar *token, user_t **user_return)
+token_user (const gchar *cookie, const gchar *token, user_t **user_return)
 {
   int ret;
   user_t *user = NULL;
@@ -277,6 +291,16 @@ token_user (const gchar *token, user_t **user_return)
       item = (user_t*) g_ptr_array_index (users, index);
       if (strcmp (item->token, token) == 0)
         {
+          if ((cookie == NULL) || strcmp (item->cookie, cookie))
+            {
+              /* Check if the session has expired. */
+              if (time (NULL) - user->time > SESSION_LENGTH)
+                /* Probably the browser removed the cookie. */
+                ret = 2;
+              else
+                ret = 3;
+              break;
+            }
           user = item;
           break;
         }
@@ -659,6 +683,7 @@ struct gsad_connection_info
    */
   struct req_parms
   {
+    char *cookie;        ///< Value of "SID" cookie.
     char *token;         ///< Value of "token" parameter.
 
     char *access_hosts;  ///< Value of "access_hosts" parameter.
@@ -798,6 +823,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
+  free (con_info->req_parms.cookie);
   free (con_info->req_parms.token);
 
   free (con_info->req_parms.access_hosts);
@@ -1061,6 +1087,10 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
+      if (!strcmp (key, "cookie"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.cookie);
+
       if (!strcmp (key, "token"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.token);
@@ -1786,7 +1816,8 @@ exec_omp_post (struct gsad_connection_info *con_info)
       return NULL;
     }
 
-  ret = token_user (con_info->req_parms.token, &user);
+  ret = token_user (con_info->req_parms.cookie, con_info->req_parms.token,
+                    &user);
   if (ret == 1)
     {
       con_info->response
@@ -1817,6 +1848,28 @@ exec_omp_post (struct gsad_connection_info *con_info)
       con_info->answercode = MHD_HTTP_OK;
       return NULL;
     }
+
+  if (ret == 3)
+    {
+      time_t now;
+      gchar *xml;
+
+      xml = g_strdup_printf ("<login_page>"
+                             "<message>"
+                             "Cookie missing or bad.  Please login again."
+                             "</message>"
+                             "<token></token>"
+                             "<time>%s</time>"
+                             "</login_page>",
+                             ctime (&now));
+      con_info->response = xsl_transform (xml);
+      g_free (xml);
+      con_info->answercode = MHD_HTTP_OK;
+      return NULL;
+    }
+
+  if (ret)
+    abort ();
 
   credentials = malloc (sizeof (credentials_t));
   if (credentials == NULL)
@@ -3913,15 +3966,22 @@ send_response (struct MHD_Connection *connection, const char *page,
 }
 
 /**
+ * @brief Max length of cookie expires param.
+ */
+#define EXPIRES_LENGTH 100
+
+/**
  * @brief Sends a HTTP redirection.
  *
  * @param[in]  connection  The connection handle.
  * @param[in]  location    The URL to redirect to.
+ * @param[in]  user        User to add cookie for, or NULL.
  *
  * @return MHD_NO in case of a problem. Else MHD_YES.
  */
 int
-send_redirect_header (struct MHD_Connection *connection, const char *location)
+send_redirect_header (struct MHD_Connection *connection, const char *location,
+                      user_t *user)
 {
   int ret;
   struct MHD_Response *response;
@@ -3936,6 +3996,47 @@ send_redirect_header (struct MHD_Connection *connection, const char *location)
     {
       MHD_destroy_response (response);
       return MHD_NO;
+    }
+
+  if (user)
+    {
+      int ret;
+      gchar *value;
+      char *locale;
+      char expires[EXPIRES_LENGTH + 1];
+      struct tm expire_time_broken;
+      time_t expire_time;
+
+      /* Set up the expires param. */
+
+      locale = setlocale (LC_ALL, "C");
+
+      expire_time = user->time + SESSION_LENGTH + 30;
+      if (localtime_r (&expire_time, &expire_time_broken) == NULL)
+        abort ();
+      ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+                      &expire_time_broken);
+      if (ret == 0)
+        abort ();
+
+      setlocale (LC_ALL, locale);
+
+      /* Add the cookie.
+       *
+       * Tim Brown's suggested cookie included a domain attribute.  How would
+       * we get the domain in here?  Maybe a --domain option. */
+
+      value = g_strdup_printf ("SID=%s; expires=%s; path=/; %sHTTPonly",
+                               user->cookie,
+                               expires,
+                               (use_secure_cookie ? "secure; " : ""));
+      ret = MHD_add_response_header (response, "Set-Cookie", value);
+      g_free (value);
+      if (!ret)
+        {
+          MHD_destroy_response (response);
+          return MHD_NO;
+        }
     }
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
@@ -4017,7 +4118,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
     location = g_strdup_printf (redirect_location, name);
   else
     location = g_strdup_printf (redirect_location, host);
-  if (send_redirect_header (connection, location) == MHD_NO)
+  if (send_redirect_header (connection, location, NULL) == MHD_NO)
     {
       g_free (location);
       return MHD_NO;
@@ -4376,7 +4477,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (&url[0], url_base))
     {
-      send_redirect_header (connection, default_file);
+      send_redirect_header (connection, default_file, NULL);
       return MHD_YES;
     }
 
@@ -4385,7 +4486,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                                     it is a const str */
         && ! url[strlen ("/login/")])
     {
-      send_redirect_header (connection, default_file);
+      send_redirect_header (connection, default_file, NULL);
       return MHD_YES;
     }
 
@@ -4394,6 +4495,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "GET"))
     {
       const char *token  = NULL;
+      const char *cookie = NULL;
       user_t *user;
 
       /* Second or later call for this request, a GET. */
@@ -4458,7 +4560,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         http_response_code);
         }
 
-      ret = token_user (token, &user);
+      cookie = MHD_lookup_connection_value (connection,
+                                            MHD_COOKIE_KIND,
+                                            "SID");
+      if (openvas_validate (validator, "token", cookie))
+        cookie = NULL;
+
+      ret = token_user (cookie, token, &user);
       if (ret == 1)
         {
           res =  gsad_message (credentials,
@@ -4475,7 +4583,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         http_response_code);
         }
 
-      if (ret == 2)
+      if ((ret == 2) || (ret == 3))
         {
           time_t now;
           gchar *xml;
@@ -4502,9 +4610,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
                   "<time>%s</time>"
                   "<url>%s</url>"
                   "</login_page>",
-                  (strncmp (url, "/logout", strlen ("/logout"))
-                    ? "Session has expired.  Please login again."
-                    : "Already logged out."),
+                  ((ret == 2)
+                    ? (strncmp (url, "/logout", strlen ("/logout"))
+                        ? "Session has expired.  Please login again."
+                        : "Already logged out.")
+                    : "Cookie missing or bad.  Please login again."),
                   ctime (&now),
                   (strncmp (url, "/logout", strlen ("/logout"))
                     ? full_url->str
@@ -4520,6 +4630,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         content_disposition,
                                         http_response_code);
         }
+
+      if (ret)
+        abort ();
 
       /* flawfinder: ignore, it is a const str */
       if (!strncmp (url, "/logout", strlen ("/logout")))
@@ -4734,7 +4847,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  con_info->req_parms.text,
                                  user->token);
           user_release (user);
-          send_redirect_header (connection, url);
+          send_redirect_header (connection, url, user);
           g_free (url);
           return MHD_YES;
         }
@@ -4926,6 +5039,7 @@ main (int argc, char **argv)
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
   static gboolean redirect = FALSE;
+  static gboolean secure_cookie = FALSE;
   static gchar *gsad_address_string = NULL;
   static gchar *gsad_manager_address_string = NULL;
   static gchar *gsad_administrator_address_string = NULL;
@@ -4984,6 +5098,9 @@ main (int argc, char **argv)
     {"do-chroot", '\0',
      0, G_OPTION_ARG_NONE, &do_chroot,
      "Do chroot and drop privileges.", NULL},
+    {"secure-cookie", '\0',
+     0, G_OPTION_ARG_NONE, &secure_cookie,
+     "Use a secure cookie (implied when using HTTPS).", NULL},
     {NULL}
   };
 
@@ -5035,6 +5152,8 @@ main (int argc, char **argv)
   g_log_set_always_fatal (G_LOG_FATAL_MASK);
 
   /* Finish processing the command line options. */
+
+  use_secure_cookie = secure_cookie;
 
   gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;
 
@@ -5300,6 +5419,8 @@ main (int argc, char **argv)
         {
           gchar *ssl_private_key = NULL;
           gchar *ssl_certificate = NULL;
+
+          use_secure_cookie = 1;
 
           if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
                                     NULL, NULL))

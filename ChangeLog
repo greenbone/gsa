@@ -1,5 +1,26 @@
 2011-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add cookie based session identification.
+
+	* src/gsad.c (use_secure_cookie): New variable.
+	(struct user): Add cookie.
+	(user_add): Set cookie.
+	(token_user): Add cookie arg.  Check if browser ID matches server ID.
+	(struct req_parms): Add cookie.
+	(free_resources): Free cookie.
+	(serve_post): Read cookie.
+	(exec_omp_post): Pass cookie to token_user and go to login if cookie
+	missing or bad.
+	(EXPIRES_LENGTH): New define.
+	(send_redirect_header): Add user arg.  Send cookie if arg set.  Update all
+	callers.
+	(request_handler): For GET, read cookie and pass to token_user.  Handle
+	new return.
+	(main): Add --secure-cookie.  If given with --http-only use a secure
+	cookie.
+
+2011-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_override_omp): Remove premature
 	openvas_server_close.
 
