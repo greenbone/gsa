@@ -1092,10 +1092,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
-      if (!strcmp (key, "cookie"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.cookie);
-
       if (!strcmp (key, "token"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.token);
@@ -4808,6 +4804,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "POST"))
     {
       user_t *user;
+      const char *cookie;
 
       if (NULL == *con_cls)
         {
@@ -4842,6 +4839,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
           *upload_data_size = 0;
           return MHD_YES;
         }
+
+      cookie = MHD_lookup_connection_value (connection,
+                                            MHD_COOKIE_KIND,
+                                            "SID");
+      if (openvas_validate (validator, "token", cookie))
+        con_info->req_parms.cookie = NULL;
+      else
+        con_info->req_parms.cookie = g_strdup (cookie);
 
       user = exec_omp_post (con_info);
       if (user)
