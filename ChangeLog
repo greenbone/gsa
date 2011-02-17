@@ -1,3 +1,9 @@
+2011-02-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 2.0+rc4 release.
+
+	* CHANGES: Updated.
+
 2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (SESSION_LENGTH): Remove.

@@ -1,3 +1,29 @@
+gsa 2.0+rc4 (2011-02-17)
+
+This is the fourth release candidate for the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes the full
+feature set of OpenVAS Manager available in a web browser.  Release 2.0 is part
+of OpenVAS 4, the next generation of the Open Vulnerability Assessment System.
+
+This release features a new cookie based session identification infrastructure,
+several improvements to user interface, documentation and build environment and
+adds support for fallback system reports.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 2.0+rc3:
+* The documentation and the build environment have been updated.
+* The scan config overview now shows the number of selected NVT through family
+  selection as well.
+* A JavaScript indicator has been added.
+* Support for fallback system reports has been added.
+* An issue which caused logins to fail under certain circumstances due to overly
+  strict input validation has been fixed.
+* The "About" page has been reworked.
+* Cookie base session identification has been added.
+
+
 gsa 2.0+rc3 (2011-02-04)
 
 This is the third release candidate for the upcoming 2.0 release of the
