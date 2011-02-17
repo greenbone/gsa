@@ -125,9 +125,9 @@
 #define MAX_HELP_NAME_SIZE 128
 
 /**
- * @brief Max number of seconds between activity in a session.
+ * @brief Max number of minutes between activity in a session.
  */
-#define SESSION_LENGTH 900
+#define SESSION_TIMEOUT 15
 
 /**
  * @brief Libgcrypt thread callback definition.
@@ -190,6 +190,11 @@ int verbose = 0;
  * This is always true when using HTTPS.
  */
 int use_secure_cookie = 1;
+
+/**
+ * @brief Maximum number of minutes of user idle time.
+ */
+int session_timeout;
 
 /**
  * @brief User session data.
@@ -294,7 +299,7 @@ token_user (const gchar *cookie, const gchar *token, user_t **user_return)
           if ((cookie == NULL) || strcmp (item->cookie, cookie))
             {
               /* Check if the session has expired. */
-              if (time (NULL) - user->time > SESSION_LENGTH)
+              if (time (NULL) - user->time > (session_timeout * 60))
                 /* Probably the browser removed the cookie. */
                 ret = 2;
               else
@@ -307,7 +312,7 @@ token_user (const gchar *cookie, const gchar *token, user_t **user_return)
     }
   if (user)
     {
-      if (time (NULL) - user->time > SESSION_LENGTH)
+      if (time (NULL) - user->time > (session_timeout * 60))
         ret = 2;
       else
         {
@@ -4011,7 +4016,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
 
       locale = setlocale (LC_ALL, "C");
 
-      expire_time = user->time + SESSION_LENGTH + 30;
+      expire_time = user->time + (session_timeout * 60) + 30;
       if (localtime_r (&expire_time, &expire_time_broken) == NULL)
         abort ();
       ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
@@ -5040,6 +5045,7 @@ main (int argc, char **argv)
   static gboolean print_version = FALSE;
   static gboolean redirect = FALSE;
   static gboolean secure_cookie = FALSE;
+  static int timeout = SESSION_TIMEOUT;
   static gchar *gsad_address_string = NULL;
   static gchar *gsad_manager_address_string = NULL;
   static gchar *gsad_administrator_address_string = NULL;
@@ -5101,6 +5107,9 @@ main (int argc, char **argv)
     {"secure-cookie", '\0',
      0, G_OPTION_ARG_NONE, &secure_cookie,
      "Use a secure cookie (implied when using HTTPS).", NULL},
+    {"timeout", '\0',
+     0, G_OPTION_ARG_INT, &timeout,
+     "Minutes of user idle time before session expires.", "<number>"},
     {NULL}
   };
 
@@ -5154,6 +5163,14 @@ main (int argc, char **argv)
   /* Finish processing the command line options. */
 
   use_secure_cookie = secure_cookie;
+
+  if ((timeout < 1) || (timeout > 1440))
+    {
+      g_critical ("%s: Timeout must be a number from 1 to 1440\n",
+                  __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
+  session_timeout = timeout;
 
   gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;
 

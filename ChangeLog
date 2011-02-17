@@ -1,5 +1,14 @@
 2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (SESSION_LENGTH): Remove.
+	(SESSION_TIMEOUT): New define to replace SESSION_LENGTH.
+	(session_timeout): New variable
+	(token_user, send_redirect_header): Read timeout as minutes from
+	session_timeout.
+	(main): Add --timeout.
+
+2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add a dedicated icon for the JavaScript indicator.  Display the icon only
 	when JavaScript is on.
 
