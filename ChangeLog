@@ -1,3 +1,17 @@
+2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a dedicated icon for the JavaScript indicator.  Display the icon only
+	when JavaScript is on.
+
+	* CMakeLists.txt: Install the new icon.
+
+	* src/html/gsad.xsl (html-gsa-logo): Only display icon when JavaScript is
+	on.
+
+	* src/html/help.xsl (javascript.html): Update accordingly.
+
+	* src/html/img/indicator_js.png: New icon.
+
 2011-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add cookie based session identification.

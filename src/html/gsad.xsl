@@ -91,11 +91,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="status_panel">
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
-            document.write ("&lt;img src=\"/img/trend_up.png\" alt=\"Warning: JavaScript is on\" title=\"Warning: JavaScript is on\"/&gt;");
+            document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"Warning: JavaScript is on\" title=\"Warning: JavaScript is on\"/&gt;");
           </script>
-          <noscript>
-            <img src="/img/trend_down.png" border="0" alt="JavaScript is off" title="JavaScript is off"/>
-          </noscript>
+          <noscript></noscript>
         </a>
       </div>
     </div>
