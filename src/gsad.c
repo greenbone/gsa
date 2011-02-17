@@ -1741,12 +1741,16 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  * parameters and calls the appropriate OAP or OMP function (like
  * create_task_omp).
  *
- * @param[in]  con_info     Connection info.
+ * @param[in]   con_info     Connection info.
+ * @param[out]  user_return  User after successful login.
+ * @param[out]  new_sid      SID when appropriate to attach.
  *
- * @return NULL usually, user on successful login.
+ * @return 0 after authenticated page, 1 after login, 2 after logout,
+ *         3 after internal error or login failure.
  */
-user_t *
-exec_omp_post (struct gsad_connection_info *con_info)
+int
+exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
+               gchar **new_sid)
 {
   int ret;
   user_t *user;
@@ -1765,7 +1769,8 @@ exec_omp_post (struct gsad_connection_info *con_info)
               user = user_add (con_info->req_parms.login,
                                con_info->req_parms.password);
               /* Redirect to get_tasks. */
-              return user;
+              *user_return = user;
+              return 1;
             }
           else
             {
@@ -1797,7 +1802,7 @@ exec_omp_post (struct gsad_connection_info *con_info)
                                              "/omp?cmd=get_tasks");
         }
       con_info->answercode = MHD_HTTP_OK;
-      return NULL;
+      return 3;
     }
 
   /* Check the session. */
@@ -1814,7 +1819,7 @@ exec_omp_post (struct gsad_connection_info *con_info)
                        "Diagnostics: Token missing or bad.",
                        "/omp?cmd=get_tasks");
       con_info->answercode = MHD_HTTP_OK;
-      return NULL;
+      return 3;
     }
 
   ret = token_user (con_info->req_parms.cookie, con_info->req_parms.token,
@@ -1828,7 +1833,7 @@ exec_omp_post (struct gsad_connection_info *con_info)
                        "Diagnostics: Bad token.",
                        "/omp?cmd=get_tasks");
       con_info->answercode = MHD_HTTP_OK;
-      return NULL;
+      return 3;
     }
 
   if (ret == 2)
@@ -1847,7 +1852,7 @@ exec_omp_post (struct gsad_connection_info *con_info)
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
-      return NULL;
+      return 2;
     }
 
   if (ret == 3)
@@ -1866,11 +1871,13 @@ exec_omp_post (struct gsad_connection_info *con_info)
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
-      return NULL;
+      return 2;
     }
 
   if (ret)
     abort ();
+
+  /* From here, the user is authenticated. */
 
   credentials = malloc (sizeof (credentials_t));
   if (credentials == NULL)
@@ -1884,6 +1891,8 @@ exec_omp_post (struct gsad_connection_info *con_info)
   credentials->username = strdup (user->username);
   credentials->password = strdup (user->password);
   credentials->token = strdup (user->token);
+
+  if (new_sid) *new_sid = g_strdup (user->cookie);
 
   user_release (user);
 
@@ -2564,7 +2573,7 @@ exec_omp_post (struct gsad_connection_info *con_info)
     }
 
   con_info->answercode = MHD_HTTP_OK;
-  return NULL;
+  return 0;
 }
 
 /**
@@ -3942,17 +3951,69 @@ check_is_dir (const char *name)
 }
 
 /**
+ * @brief Max length of cookie expires param.
+ */
+#define EXPIRES_LENGTH 100
+
+/**
+ * @brief Attach SID cookie to a response, resetting "expire" arg
+ *
+ * @param[in]  response  Response.
+ * @param[in]  sid       Session ID.
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
+ */
+int
+attach_sid (struct MHD_Response *response, const char *sid)
+{
+  int ret;
+  gchar *value;
+  char *locale;
+  char expires[EXPIRES_LENGTH + 1];
+  struct tm expire_time_broken;
+  time_t now, expire_time;
+
+  /* Set up the expires param. */
+
+  locale = setlocale (LC_ALL, "C");
+  now = time (NULL);
+  expire_time = now + (session_timeout * 60) + 30;
+  if (localtime_r (&expire_time, &expire_time_broken) == NULL)
+    abort ();
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+                  &expire_time_broken);
+  if (ret == 0)
+    abort ();
+
+  setlocale (LC_ALL, locale);
+
+  /* Add the cookie.
+   *
+   * Tim Brown's suggested cookie included a domain attribute.  How would
+   * we get the domain in here?  Maybe a --domain option. */
+
+  value = g_strdup_printf ("SID=%s; expires=%s; path=/; %sHTTPonly",
+                           sid,
+                           expires,
+                           (use_secure_cookie ? "secure; " : ""));
+  ret = MHD_add_response_header (response, "Set-Cookie", value);
+  g_free (value);
+  return ret;
+}
+
+/**
  * @brief Sends a HTTP response.
  *
  * @param[in]  connection   The connection handle.
  * @param[in]  page         The HTML page content.
  * @param[in]  status_code  The HTTP status code.
+ * @param[in]  sid          Session ID, or NULL.
  *
- * @return The result of MHD_queue_response.
+ * @return MHD_YES on success, MHD_NO on error.
  */
 int
 send_response (struct MHD_Connection *connection, const char *page,
-               int status_code)
+               int status_code, const gchar *sid)
 {
   struct MHD_Response *response;
   int ret;
@@ -3961,15 +4022,18 @@ send_response (struct MHD_Connection *connection, const char *page,
                                             (void *) page, MHD_NO, MHD_YES);
   MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                            "text/html; charset=utf-8");
+  if (sid)
+    {
+      if (attach_sid (response, sid) == MHD_NO)
+        {
+          MHD_destroy_response (response);
+          return MHD_NO;
+        }
+    }
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
 }
-
-/**
- * @brief Max length of cookie expires param.
- */
-#define EXPIRES_LENGTH 100
 
 /**
  * @brief Sends a HTTP redirection.
@@ -4001,39 +4065,7 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
 
   if (user)
     {
-      int ret;
-      gchar *value;
-      char *locale;
-      char expires[EXPIRES_LENGTH + 1];
-      struct tm expire_time_broken;
-      time_t expire_time;
-
-      /* Set up the expires param. */
-
-      locale = setlocale (LC_ALL, "C");
-
-      expire_time = user->time + (session_timeout * 60) + 30;
-      if (localtime_r (&expire_time, &expire_time_broken) == NULL)
-        abort ();
-      ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
-                      &expire_time_broken);
-      if (ret == 0)
-        abort ();
-
-      setlocale (LC_ALL, locale);
-
-      /* Add the cookie.
-       *
-       * Tim Brown's suggested cookie included a domain attribute.  How would
-       * we get the domain in here?  Maybe a --domain option. */
-
-      value = g_strdup_printf ("SID=%s; expires=%s; path=/; %sHTTPonly",
-                               user->cookie,
-                               expires,
-                               (use_secure_cookie ? "secure; " : ""));
-      ret = MHD_add_response_header (response, "Set-Cookie", value);
-      g_free (value);
-      if (!ret)
+      if (attach_sid (response, user->cookie) == MHD_NO)
         {
           MHD_destroy_response (response);
           return MHD_NO;
@@ -4104,7 +4136,8 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
+                     NULL);
       return MHD_YES;
     }
 
@@ -4357,6 +4390,8 @@ file_content_response (credentials_t *credentials,
  * @param[in]  content_type         Content type.
  * @param[in]  content_disposition  Content disposition.
  * @param[in]  http_response_code   Response code.
+ *
+ * @return MHD_YES on success, else MHD_NO.
  */
 static int
 handler_send_response (struct MHD_Connection *connection,
@@ -4465,7 +4500,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE);
+      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
+                     NULL);
       return MHD_YES;
     }
 
@@ -4498,6 +4534,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       const char *token  = NULL;
       const char *cookie = NULL;
       user_t *user;
+      gchar *sid;
 
       /* Second or later call for this request, a GET. */
 
@@ -4635,6 +4672,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (ret)
         abort ();
 
+      /* From here on, the user is authenticated. */
+
       /* flawfinder: ignore, it is a const str */
       if (!strncmp (url, "/logout", strlen ("/logout")))
         {
@@ -4671,6 +4710,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->username = strdup (user->username);
       credentials->password = strdup (user->password);
       credentials->token = strdup (user->token);
+
+      sid = g_strdup (user->cookie);
 
       user_release (user);
 
@@ -4727,7 +4768,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                   MHD_GET_ARGUMENT_KIND,
                                                   "slave_id");
           if (slave_id && openvas_validate (validator, "slave_id", slave_id))
-            return MHD_NO;
+            {
+              g_free (sid);
+              return MHD_NO;
+            }
 
           res = get_system_report_omp (credentials,
                                        &url[0] + strlen ("/system_report/"),
@@ -4736,7 +4780,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        &content_type,
                                        &content_disposition,
                                        &res_len);
-          if (res == NULL) return MHD_NO;
+          if (res == NULL)
+            {
+              g_free (sid);
+              return MHD_NO;
+            }
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
         }
@@ -4788,6 +4836,14 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       if (response)
         {
+          if (attach_sid (response, sid) == MHD_NO)
+            {
+              g_free (sid);
+              MHD_destroy_response (response);
+              return MHD_NO;
+            }
+          g_free (sid);
+
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4796,7 +4852,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
       else
         {
-          // Severe memory or file access problem.
+          /* Severe memory or file access problem. */
+          g_free (sid);
           return MHD_NO;
         }
     }
@@ -4804,7 +4861,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (!strcmp (method, "POST"))
     {
       user_t *user;
-      const char *cookie;
+      const char *sid;
+      gchar *new_sid;
 
       if (NULL == *con_cls)
         {
@@ -4840,16 +4898,18 @@ request_handler (void *cls, struct MHD_Connection *connection,
           return MHD_YES;
         }
 
-      cookie = MHD_lookup_connection_value (connection,
-                                            MHD_COOKIE_KIND,
-                                            "SID");
-      if (openvas_validate (validator, "token", cookie))
+      sid = MHD_lookup_connection_value (connection,
+                                         MHD_COOKIE_KIND,
+                                         "SID");
+      if (openvas_validate (validator, "token", sid))
         con_info->req_parms.cookie = NULL;
       else
-        con_info->req_parms.cookie = g_strdup (cookie);
+        con_info->req_parms.cookie = g_strdup (sid);
 
-      user = exec_omp_post (con_info);
-      if (user)
+      new_sid = NULL;
+      ret = exec_omp_post (con_info, &user, &new_sid);
+
+      if (ret == 1)
         {
           gchar *url;
           /* @todo Validate con_info->req_parms.text. */
@@ -4862,8 +4922,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
           return MHD_YES;
         }
 
-      send_response (connection, con_info->response, MHD_HTTP_OK);
-      return MHD_YES;
+      ret = send_response (connection, con_info->response, MHD_HTTP_OK,
+                           new_sid);
+      g_free (new_sid);
+      return ret;
     }
   return MHD_NO;
 }

@@ -1,5 +1,22 @@
 2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Set the session cookie for every authenticated page, so that the
+	expiration time is updated.
+
+	* src/gsad.c (exec_omp_post): Move user return into arg.  Add return
+	value.  Add new_sid return arg which contains the new SID where
+	appropriate.
+	(EXPIRES_LENGTH): Move up in file.
+	(attach_sid): New function.  Body from send_redirect_header.  Use current
+	time instead of time in user struct for simplicity.
+	(send_response): Add sid arg.  Set SID cookie if given.  Update callers.
+	(send_redirect_header): Move SID cookie setting out to attach_sid.
+	(handler_send_response): Doc return.
+	(request_handler): For both GET and POST, set the SID cookie when the user
+	is authentic.
+
+2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (serve_post): Remove erroneous cookie parsing.
 	(request_handler): Parse the cookie with the correct name from the
 	connection.
