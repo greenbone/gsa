@@ -1,3 +1,13 @@
+2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Remove the session cookie on logout.
+
+	* src/gsad.c (attach_sid): Neaten doc.  Make static.
+	(remove_sid): New function.
+	(send_response): If sid is 0, remove cookie.
+	(handler_send_response): Add remove_cookie arg.  Update callers.
+	(request_handler): Flag cookie removal where appropriate.
+
 2011-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Set the session cookie for every authenticated page, so that the

@@ -3956,14 +3956,14 @@ check_is_dir (const char *name)
 #define EXPIRES_LENGTH 100
 
 /**
- * @brief Attach SID cookie to a response, resetting "expire" arg
+ * @brief Attach SID cookie to a response, resetting "expire" arg.
  *
  * @param[in]  response  Response.
  * @param[in]  sid       Session ID.
  *
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
-int
+static int
 attach_sid (struct MHD_Response *response, const char *sid)
 {
   int ret;
@@ -4002,6 +4002,49 @@ attach_sid (struct MHD_Response *response, const char *sid)
 }
 
 /**
+ * @brief Attach expired SID cookie to response.
+ *
+ * @param[in]  response  Response.
+ *
+ * @return MHD_NO in case of problems. MHD_YES if all is OK.
+ */
+static int
+remove_sid (struct MHD_Response *response)
+{
+  int ret;
+  gchar *value;
+  char *locale;
+  char expires[EXPIRES_LENGTH + 1];
+  struct tm expire_time_broken;
+  time_t expire_time;
+
+  /* Set up the expires param. */
+
+  locale = setlocale (LC_ALL, "C");
+  expire_time = time (NULL);
+  if (localtime_r (&expire_time, &expire_time_broken) == NULL)
+    abort ();
+  ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
+                  &expire_time_broken);
+  if (ret == 0)
+    abort ();
+
+  setlocale (LC_ALL, locale);
+
+  /* Add the cookie.
+   *
+   * Tim Brown's suggested cookie included a domain attribute.  How would
+   * we get the domain in here?  Maybe a --domain option. */
+
+  value = g_strdup_printf ("SID=0; expires=%s; path=/; %sHTTPonly",
+                           expires,
+                           (use_secure_cookie ? "secure; " : ""));
+  ret = MHD_add_response_header (response, "Set-Cookie", value);
+  g_free (value);
+  return ret;
+}
+
+/**
  * @brief Sends a HTTP response.
  *
  * @param[in]  connection   The connection handle.
@@ -4024,10 +4067,21 @@ send_response (struct MHD_Connection *connection, const char *page,
                            "text/html; charset=utf-8");
   if (sid)
     {
-      if (attach_sid (response, sid) == MHD_NO)
+      if (strcmp (sid, "0"))
         {
-          MHD_destroy_response (response);
-          return MHD_NO;
+          if (attach_sid (response, sid) == MHD_NO)
+            {
+              MHD_destroy_response (response);
+              return MHD_NO;
+            }
+        }
+      else
+        {
+          if (remove_sid (response) == MHD_NO)
+            {
+              MHD_destroy_response (response);
+              return MHD_NO;
+            }
         }
     }
   ret = MHD_queue_response (connection, status_code, response);
@@ -4390,6 +4444,7 @@ file_content_response (credentials_t *credentials,
  * @param[in]  content_type         Content type.
  * @param[in]  content_disposition  Content disposition.
  * @param[in]  http_response_code   Response code.
+ * @param[in]  remove_cookie        Whether to remove SID cookie.
  *
  * @return MHD_YES on success, else MHD_NO.
  */
@@ -4398,8 +4453,15 @@ handler_send_response (struct MHD_Connection *connection,
                        struct MHD_Response *response,
                        enum content_type *content_type,
                        char *content_disposition,
-                       int http_response_code)
+                       int http_response_code,
+                       int remove_cookie)
 {
+  if (remove_cookie)
+    if (remove_sid (response) == MHD_NO)
+      {
+        MHD_destroy_response (response);
+        return MHD_NO;
+      }
   gsad_add_content_type_header (response, content_type);
   if (content_disposition != NULL)
     {
@@ -4542,8 +4604,22 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       /* Special case the login page, stylesheet and icon. */
 
-      if (!strcmp (url, default_file)
-          || !strcmp (url, "/gsa-style.css")
+      if (!strcmp (url, default_file))
+        {
+          response = file_content_response (credentials,
+                                            connection, url,
+                                            &http_response_code,
+                                            &content_type,
+                                            &content_disposition);
+          return handler_send_response (connection,
+                                        response,
+                                        &content_type,
+                                        content_disposition,
+                                        http_response_code,
+                                        1);
+        }
+
+      if (!strcmp (url, "/gsa-style.css")
           || !strcmp (url, "/favicon.gif"))
         {
           response = file_content_response (credentials,
@@ -4555,7 +4631,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        0);
         }
 
       /* Allow the decorative images and help to anyone. */
@@ -4571,7 +4648,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        0);
         }
 
       /* Setup credentials from token. */
@@ -4595,7 +4673,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        1);
         }
 
       cookie = MHD_lookup_connection_value (connection,
@@ -4618,7 +4697,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        1);
         }
 
       if ((ret == 2) || (ret == 3))
@@ -4666,7 +4746,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        1);
         }
 
       if (ret)
@@ -4699,7 +4780,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        1);
         }
 
       credentials = malloc (sizeof (credentials_t));
@@ -4848,7 +4930,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         response,
                                         &content_type,
                                         content_disposition,
-                                        http_response_code);
+                                        http_response_code,
+                                        0);
         }
       else
         {
@@ -4923,7 +5006,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
 
       ret = send_response (connection, con_info->response, MHD_HTTP_OK,
-                           new_sid);
+                           new_sid ? new_sid : "0");
       g_free (new_sid);
       return ret;
     }
