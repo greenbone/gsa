@@ -1,3 +1,23 @@
+gsa 2.0+rc5 (2011-02-18)
+
+This is the fifth release candidate for the upcoming 2.0 release of the
+Greenbone Security Assistant (GSA). It is the web client that makes the full
+feature set of OpenVAS Manager available in a web browser.  Release 2.0 is part
+of OpenVAS 4, the next generation of the Open Vulnerability Assessment System.
+
+This release fixes an issue which caused some actions in the GSA to fail due to
+an error in the cookie base session identification and improves the handling of
+relogins after expired sessions.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell.
+
+Main changes since 2.0+rc4:
+* The cookie base session identification has been improved.
+* An issue with parsing the session cookie has been fixed.
+* The handling of POST requests after a relogin has been improved.
+
+
 gsa 2.0+rc4 (2011-02-17)
 
 This is the fourth release candidate for the upcoming 2.0 release of the

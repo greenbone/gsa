@@ -1,3 +1,9 @@
+2011-02-18  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 2.0+rc5 release.
+
+	* CHANGES: Updated.
+
 2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	On relogin after a POST request due to expired session, return to the page
