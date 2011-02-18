@@ -139,7 +139,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<time>%s</time>"
                                  "<login>%s</login>",
                                  credentials->token,
-                                 credentials->caller,
+                                 credentials->caller ? credentials->caller : "",
                                  ctime (&now),
                                  credentials->username);
   g_string_append (string, res);

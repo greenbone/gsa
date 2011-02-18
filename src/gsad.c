@@ -1903,6 +1903,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->username = strdup (user->username);
   credentials->password = strdup (user->password);
   credentials->token = strdup (user->token);
+  credentials->caller = NULL;
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
 
