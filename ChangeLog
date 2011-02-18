@@ -1,3 +1,7 @@
+2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (javascript.html): Correct typos.
+
 2011-02-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/indicator_js.png: Replaced temporary icon with

@@ -117,8 +117,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         is displayed in the page heading when JavaScript is activated in the browser.
       </p>
       <p>
-        GSA itself works without any active content such as JavaScript. So, it is save
-        to disable JavaScript when using GSA. You will not loose functionality.
+        GSA itself works without any active content such as JavaScript. So, it is safe
+        to disable JavaScript when using GSA. You will not lose functionality.
       </p>
       <p>
         If JavaScript is enabled it is highly recommended to not visit untrusted web pages
