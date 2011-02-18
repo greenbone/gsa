@@ -114,11 +114,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         The JavaScript indicator icon
         <img src="/img/indicator_js.png" alt="JavaScript is enabled" title="JavaScript is enabled" />
-        is displayed in the page heading when JavaScript is enabled in the browser.
+        is displayed in the page heading when JavaScript is activated in the browser.
       </p>
       <p>
-        Enabling JavaScript exposes the GSA to cross site scripting attacks, so it
-        is encouraged to turn off JavaScript when using the GSA.
+        GSA itself works without any active content such as JavaScript. So, it is save
+        to disable JavaScript when using GSA. You will not loose functionality.
+      </p>
+      <p>
+        If JavaScript is enabled it is highly recommended to not visit untrusted web pages
+        as these could contain JavaScript code trying to run exploits or attacks against
+        other web services you have currently opened in your browser.
       </p>
     </div>
   </div>

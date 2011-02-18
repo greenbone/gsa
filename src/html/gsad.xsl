@@ -91,7 +91,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="status_panel">
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
-            document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"Warning: JavaScript is on\" title=\"Warning: JavaScript is on\"/&gt;");
+            document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"JavaScript is active\" title=\"JavaScript is active\"/&gt;");
           </script>
           <noscript></noscript>
         </a>
@@ -103,7 +103,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-footer">
   <div class="gsa_footer">
-    Greenbone Security Assistant (GSA) Copyright 2009, 2010 by Greenbone Networks
+    Greenbone Security Assistant (GSA) Copyright 2009-2011 by Greenbone Networks
     GmbH, <a href="http://www.greenbone.net">www.greenbone.net</a>
   </div>
 </xsl:template>
