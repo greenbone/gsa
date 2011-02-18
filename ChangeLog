@@ -1,5 +1,10 @@
 2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (verify_report_format_response): New template.
+	(get_report_formats): Match the verify response too.
+
+2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Init credentials caller.
 
 	* src/gsad_oap.c, src/gsad_omp.c (xsl_transform_oap): Check caller before

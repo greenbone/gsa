@@ -8257,12 +8257,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     GET_REPORT_FORMATS -->
 
+<xsl:template match="verify_report_format_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Verify Report Format</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="get_report_formats">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
   <xsl:apply-templates select="create_report_format_response"/>
   <xsl:apply-templates select="commands_response/modify_report_format_response"/>
   <xsl:apply-templates select="modify_report_format_response"/>
+  <xsl:apply-templates select="verify_report_format_response"/>
+  <xsl:apply-templates select="commands_response/verify_report_format_response"/>
 <!--
   <xsl:call-template name="html-create-report-format-form"/>
 -->
