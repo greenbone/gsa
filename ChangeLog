@@ -1,5 +1,27 @@
 2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	On relogin after a POST request due to expired session, return to the page
+	that held the POST form.
+
+	* src/gsad.c (req_parms, free_resources, serve_post): Add caller.
+	(exec_omp_post): Add URL based on caller param to expired case of
+	LOGIN_PAGE.  Support for URL exists already, from similarly patch for GET.
+	(reconstruct_url): New function.
+	(request_handler): Replace GET URL reconstruction with function call.
+	Setup caller field in credentials for page handlers.
+
+	* src/gsad_base.h (credentials_t): Add caller.
+
+	* src/gsad_oap.c, src/gsad_omp.c (xsl_transform_oap): Add CALLER to
+	ENVELOPE.
+
+	* src/html/gsad.xsl (caller): New template.
+
+	* src/html/oap.xsl, src/html/omp.xsl: Add hidden caller field to every
+	POST form from ENVELOPE.
+
+2011-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Remove the session cookie on logout.
 
 	* src/gsad.c (attach_sid): Neaten doc.  Make static.

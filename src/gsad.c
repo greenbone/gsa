@@ -691,6 +691,8 @@ struct gsad_connection_info
     char *cookie;        ///< Value of "SID" cookie.
     char *token;         ///< Value of "token" parameter.
 
+    char *caller;        ///< Value of "caller" parameter.
+
     char *access_hosts;  ///< Value of "access_hosts" parameter.
     char *authdn;        ///< Value of "authdn" parameter.
     char *base;          ///< Value of "base" parameter.
@@ -830,6 +832,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
     }
   free (con_info->req_parms.cookie);
   free (con_info->req_parms.token);
+
+  free (con_info->req_parms.caller);
 
   free (con_info->req_parms.access_hosts);
   free (con_info->req_parms.base);
@@ -1095,6 +1099,10 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "token"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.token);
+
+      if (!strcmp (key, "caller"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.caller);
 
       /**
        * @todo Accept only the parameters that the command uses.
@@ -1841,14 +1849,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       time_t now;
       gchar *xml;
 
-      xml = g_strdup_printf ("<login_page>"
-                             "<message>"
-                             "Session has expired.  Please login again."
-                             "</message>"
-                             "<token></token>"
-                             "<time>%s</time>"
-                             "</login_page>",
-                             ctime (&now));
+      xml = g_markup_printf_escaped ("<login_page>"
+                                     "<message>"
+                                     "Session has expired.  Please login again."
+                                     "</message>"
+                                     "<token></token>"
+                                     "<time>%s</time>"
+                                     "<url>%s</url>"
+                                     "</login_page>",
+                                     ctime (&now),
+                                     con_info->req_parms.caller
+                                      ? con_info->req_parms.caller
+                                      : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -4499,6 +4511,33 @@ append_param (void *string, enum MHD_ValueKind kind, const char *key,
 }
 
 /**
+ * @brief Reconstruct the URL for a connection.
+ *
+ * @param[in]  connection  Connection.
+ * @param[in]  url         Base part of URL.
+ *
+ * @return URL.
+ */
+static gchar *
+reconstruct_url (struct MHD_Connection *connection, const char *url)
+{
+  GString *full_url;
+
+  full_url = g_string_new (url);
+  /* To simplify appending the token later, ensure there is at least
+   * one param. */
+  g_string_append (full_url, "?r=1&");
+
+  MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
+                             append_param, full_url);
+
+  if (full_url->str[strlen (full_url->str) - 1] == '&')
+    full_url->str[strlen (full_url->str) - 1] = '\0';
+
+  return g_string_free (full_url, FALSE);
+}
+
+/**
  * @brief HTTP request handler for GSAD.
  *
  * This routine is an MHD_AccessHandlerCallback, the request handler for
@@ -4706,19 +4745,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
           time_t now;
           gchar *xml;
           char *res;
-          GString *full_url;
+          gchar *full_url;
 
-          full_url = g_string_new (url);
-          /* To simplify appending the token later, ensure there is at least
-           * one param. */
-          g_string_append (full_url, "?r=1&");
-
-          MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
-                                     append_param, full_url);
-
-          if (full_url->str[strlen (full_url->str) - 1] == '&')
-            full_url->str[strlen (full_url->str) - 1] = '\0';
-
+          full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
                  ("<login_page>"
                   "<message>"
@@ -4735,9 +4764,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     : "Cookie missing or bad.  Please login again."),
                   ctime (&now),
                   (strncmp (url, "/logout", strlen ("/logout"))
-                    ? full_url->str
+                    ? full_url
                     : ""));
-          g_string_free (full_url, TRUE);
+          g_free (full_url);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -4792,6 +4821,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->username = strdup (user->username);
       credentials->password = strdup (user->password);
       credentials->token = strdup (user->token);
+      credentials->caller = reconstruct_url (connection, url);
 
       sid = g_strdup (user->cookie);
 

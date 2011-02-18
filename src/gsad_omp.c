@@ -135,9 +135,11 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
 
   res = g_markup_printf_escaped ("<envelope>"
                                  "<token>%s</token>"
+                                 "<caller>%s</caller>"
                                  "<time>%s</time>"
                                  "<login>%s</login>",
                                  credentials->token,
+                                 credentials->caller,
                                  ctime (&now),
                                  credentials->username);
   g_string_append (string, res);

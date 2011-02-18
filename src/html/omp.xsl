@@ -2129,6 +2129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_lsc_credential"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -2258,6 +2259,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_lsc_credential"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="lsc_credential_id"
                value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
@@ -2528,6 +2530,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_agent"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -2715,6 +2718,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_escalator"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125">Name</td>
@@ -3280,6 +3284,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name
@@ -3654,6 +3659,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_config"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name</td>
@@ -3717,6 +3723,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_config"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -3819,6 +3826,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="save_config_family"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="hidden" name="config_id" value="{$config_id}"/>
             <input type="hidden" name="name" value="{$config_name}"/>
             <input type="hidden" name="family" value="{$family}"/>
@@ -4437,6 +4445,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config_nvt"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="config_id" value="{config/@id}"/>
           <input type="hidden" name="name" value="{config/name}"/>
           <input type="hidden" name="family" value="{$family}"/>
@@ -4827,6 +4836,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="post">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_config"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="config_id" value="{$config/@id}"/>
           <input type="hidden" name="name" value="{$config/name}"/>
 
@@ -5165,6 +5175,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
             <td valign="top" width="125">Name</td>
@@ -5986,6 +5997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_slave"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">Name
@@ -6394,6 +6406,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_note"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
@@ -7040,6 +7053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_override"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
@@ -7790,6 +7804,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_report_format"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -7858,6 +7873,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form action="" method="post">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_report_format"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="report_format_id"
                value="{commands_response/get_report_formats_response/report_format/@id}"/>
@@ -8899,6 +8915,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="overrides" value="{apply_overrides}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>

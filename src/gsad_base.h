@@ -44,13 +44,14 @@
   "</gsad_msg>"
 
 /**
- *  @brief Structure that combines username and password
+ *  @brief Structure of credential related information.
  */
 typedef struct
 {
   char *username;  ///< Name of user.
   char *password;  ///< User's password.
   char *token;     ///< Session token.
+  char *caller;    ///< Caller URL, for POST relogin.
 } credentials_t;
 
 /**
