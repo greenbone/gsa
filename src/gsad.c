@@ -4675,7 +4675,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         0);
         }
 
-      /* Allow the decorative images and help to anyone. */
+      /* Allow the decorative images to anyone. */
 
       if (strncmp (url, "/img/", strlen ("/img/")) == 0)
         {
@@ -5313,6 +5313,15 @@ main (int argc, char **argv)
          "There is NO WARRANTY, to the extent permitted by law.\n\n");
       exit (EXIT_SUCCESS);
     }
+
+  switch (gsad_base_init ())
+    {
+      case 1:
+        g_critical ("%s: libxml must be compiled with thread support\n",
+                    __FUNCTION__);
+        exit (EXIT_FAILURE);
+    }
+
 
   if ((redirect || gsad_redirect_port_string) && http_only)
     {

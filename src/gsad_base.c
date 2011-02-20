@@ -38,6 +38,7 @@
 #include "tracef.h"
 
 #include <glib.h>
+#include <libxml/parser.h>
 #include <libexslt/exslt.h>
 #include <string.h> /* for strlen() */
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
@@ -49,6 +50,21 @@
  * @brief GLib log domain.
  */
 #define G_LOG_DOMAIN "gsad base"
+
+/**
+ * @brief Base init.
+ *
+ * @return 0 success, 1 XML needs thread support.
+ */
+int
+gsad_base_init ()
+{
+  if (!xmlHasFeature (XML_WITH_THREAD))
+    return 1;
+  /* Required by libxml for thread safety. */
+  xmlInitParser ();
+  return 0;
+}
 
 /**
  * @brief XSL Transformation.

@@ -65,6 +65,7 @@ typedef struct
   int value_size;  ///< Size of value.
 } preference_t;
 
+int gsad_base_init ();
 char * xsl_transform (const char *);
 char * gsad_message (credentials_t *, const char *, const char *, int,
                      const char *, const char *);
