@@ -1,3 +1,13 @@
+2011-02-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 2.0.0 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
 2011-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Set caller to previous caller, as this is
