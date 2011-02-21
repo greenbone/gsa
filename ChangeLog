@@ -1,3 +1,8 @@
+2011-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Set caller to previous caller, as this is
+	usually the case.
+
 2011-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Correct comment.

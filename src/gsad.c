@@ -1849,6 +1849,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       time_t now;
       gchar *xml;
 
+      /* @todo Validate caller. */
+
       xml = g_markup_printf_escaped ("<login_page>"
                                      "<message>"
                                      "Session has expired.  Please login again."
@@ -1903,7 +1905,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->username = strdup (user->username);
   credentials->password = strdup (user->password);
   credentials->token = strdup (user->token);
-  credentials->caller = NULL;
+  /* The caller of a POST is usually the caller of the page that the POST form
+   * was on. */
+  /* @todo Validate caller. */
+  credentials->caller = strdup (con_info->req_parms.caller);
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
 
