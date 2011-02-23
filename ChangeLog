@@ -1,3 +1,13 @@
+2011-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_base.c (ctime_r_strip_newline): New function.
+
+	* src/gsad_base.h: Add header accordingly.
+
+	* src/gsad.c, src/gsad_omp.c, src/gsad_oap.c: Replace every use of ctime
+	with ctime_r_strip_newline, which is reentrant and removes the trailing
+	newline.  In some cases also add the missing time call.
+
 2011-02-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.

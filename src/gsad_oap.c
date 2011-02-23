@@ -148,10 +148,13 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
   gchar *res;
   GString *string;
   char *html;
+  char ctime_now[27];
 
   assert (credentials);
 
   now = time (NULL);
+  ctime_r_strip_newline (&now, ctime_now);
+
   string = g_string_new ("");
 
   res = g_markup_printf_escaped ("<envelope>"
@@ -161,7 +164,7 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
                                  "<login>%s</login>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
-                                 ctime (&now),
+                                 ctime_now,
                                  credentials->username);
   g_string_append (string, res);
   g_free (res);

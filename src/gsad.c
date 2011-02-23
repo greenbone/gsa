@@ -1785,6 +1785,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               time_t now;
               gchar *xml;
               char *res;
+              char ctime_now[27];
+
+              now = time (NULL);
+              ctime_r_strip_newline (&now, ctime_now);
 
               xml = g_strdup_printf ("<login_page>"
                                      "<message>"
@@ -1793,7 +1797,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "</login_page>",
-                                     ctime (&now));
+                                     ctime_now);
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
@@ -1848,6 +1852,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       time_t now;
       gchar *xml;
+      char ctime_now[27];
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
 
       /* @todo Validate caller. */
 
@@ -1859,7 +1867,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<time>%s</time>"
                                      "<url>%s</url>"
                                      "</login_page>",
-                                     ctime (&now),
+                                     ctime_now,
                                      con_info->req_parms.caller
                                       ? con_info->req_parms.caller
                                       : "");
@@ -1873,6 +1881,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       time_t now;
       gchar *xml;
+      char ctime_now[27];
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
 
       xml = g_strdup_printf ("<login_page>"
                              "<message>"
@@ -1881,7 +1893,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "<token></token>"
                              "<time>%s</time>"
                              "</login_page>",
-                             ctime (&now));
+                             ctime_now);
       con_info->response = xsl_transform (xml);
       g_free (xml);
       con_info->answercode = MHD_HTTP_OK;
@@ -4368,12 +4380,16 @@ file_content_response (credentials_t *credentials,
       time_t now;
       gchar *xml;
       char *res;
+      char ctime_now[27];
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
 
       xml = g_strdup_printf ("<login_page>"
                              "<token></token>"
                              "<time>%s</time>"
                              "</login_page>",
-                             ctime (&now));
+                             ctime_now);
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
@@ -4752,6 +4768,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
           gchar *xml;
           char *res;
           gchar *full_url;
+          char ctime_now[27];
+
+          now = time (NULL);
+          ctime_r_strip_newline (&now, ctime_now);
 
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
@@ -4768,7 +4788,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                         ? "Session has expired.  Please login again."
                         : "Already logged out.")
                     : "Cookie missing or bad.  Please login again."),
-                  ctime (&now),
+                  ctime_now,
                   (strncmp (url, "/logout", strlen ("/logout"))
                     ? full_url
                     : ""));
@@ -4796,6 +4816,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
           time_t now;
           gchar *xml;
           char *res;
+          char ctime_now[27];
+
+          now = time (NULL);
+          ctime_r_strip_newline (&now, ctime_now);
 
           user_remove (user);
 
@@ -4806,7 +4830,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  "<token></token>"
                                  "<time>%s</time>"
                                  "</login_page>",
-                                 ctime (&now));
+                                 ctime_now);
           res = xsl_transform (xml);
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
@@ -4922,18 +4946,26 @@ request_handler (void *cls, struct MHD_Connection *connection,
               gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
-              time_t now = time (NULL);
+              time_t now;
+              char ctime_now[27];
+              gchar *xml;
+
               assert (credentials->token);
-              gchar *xml = g_markup_printf_escaped ("<envelope>"
-                                                    "<token>%s</token>"
-                                                    "<time>%s</time>"
-                                                    "<login>%s</login>"
-                                                    "<help><%s/></help>"
-                                                    "</envelope>",
-                                                    credentials->token,
-                                                    ctime (&now),
-                                                    credentials->username,
-                                                    page);
+
+              now = time (NULL);
+              ctime_r_strip_newline (&now, ctime_now);
+
+              xml = g_markup_printf_escaped ("<envelope>"
+                                             "<token>%s</token>"
+                                             "<time>%s</time>"
+                                             "<login>%s</login>"
+                                             "<help><%s/></help>"
+                                             "</envelope>",
+                                             credentials->token,
+                                             ctime_now,
+                                             credentials->username,
+                                             page);
+
               g_free (page);
               res = xsl_transform (xml);
             }

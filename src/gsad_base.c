@@ -67,6 +67,23 @@ gsad_base_init ()
 }
 
 /**
+ * @brief Return string from ctime_r with newline replaces with terminator.
+ *
+ * @param[in]  time    Time.
+ * @param[out] string  Time string.
+ *
+ * @return Return from ctime_r applied to time, with newline stripped off.
+ */
+char*
+ctime_r_strip_newline (time_t *time, char *string)
+{
+  char* ret = ctime_r (time, string);
+  if (ret && strlen (ret) > 0)
+    ret[strlen (ret) - 1] = '\0';
+  return ret;
+}
+
+/**
  * @brief XSL Transformation.
  *
  * Does the transformation from XML to HTML applying omp.xsl.
