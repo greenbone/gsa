@@ -4440,6 +4440,7 @@ file_content_response (credentials_t *credentials,
                                 "Invalid request", __FUNCTION__, __LINE__,
                                 "The requested page does not exist.",
                                 NULL);
+      fclose (file);
       return MHD_create_response_from_data (strlen (res), (void *) res,
                                             MHD_NO, MHD_YES);
     }

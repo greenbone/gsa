@@ -1,3 +1,8 @@
+2011-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (file_content_response): Add fclose before error return.
+	Spotted by Felix Wolfsteller.
+
 2011-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_base.c (ctime_r_strip_newline): New function.
