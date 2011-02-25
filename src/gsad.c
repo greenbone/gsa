@@ -4393,6 +4393,7 @@ file_content_response (credentials_t *credentials,
       res = xsl_transform (xml);
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
+      g_free (path);
       g_free (xml);
       return response;
     }
@@ -4440,6 +4441,7 @@ file_content_response (credentials_t *credentials,
                                 "Invalid request", __FUNCTION__, __LINE__,
                                 "The requested page does not exist.",
                                 NULL);
+      g_free (path);
       fclose (file);
       return MHD_create_response_from_data (strlen (res), (void *) res,
                                             MHD_NO, MHD_YES);

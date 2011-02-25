@@ -5398,6 +5398,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                     task_id)
               == -1)
             {
+              g_free (task_id);
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return gsad_message (credentials,
@@ -5410,6 +5411,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
           if (read_string (&session, &xml))
             {
+              g_free (task_id);
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return gsad_message (credentials,
@@ -5419,6 +5421,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                    "Diagnostics: Failure to send command to manager daemon.",
                                    "/omp?cmd=get_tasks");
             }
+
+          g_free (task_id);
         }
 
       if (openvas_server_send (&session, "<get_report_formats"

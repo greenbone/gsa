@@ -1,3 +1,11 @@
+2011-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Close some leaks found by Pavel Sejnoha.
+
+	* src/gsad.c (file_content_response): Free path in error cases.
+
+	* src/gsad_omp.c (get_report_omp): Free task_id.
+
 2011-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (file_content_response): Add fclose before error return.
