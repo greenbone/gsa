@@ -1,3 +1,18 @@
+2011-03-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch to doing the XSL transform in a separate process, keeping the
+	libxslt based transform as a configure time option.  This protects the
+	GSA from threading and memory errors in libxslt and libxml.
+
+	* CMakeLists.txt: Set USE_LIBXSLT.  Require xsltproc if appropriate.
+
+	* src/CMakeLists.txt: Set USE_LIBXSLT directive.
+
+	* src/gsad.c (main): Set SIGCHLD to SIG_DFL for glib.
+
+	* src/gsad_base (gsad_base_init, xsl_transform): Add alternative for doing
+	XSL transform in separate process.
+
 2011-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Close some leaks found by Pavel Sejnoha.

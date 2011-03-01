@@ -51,6 +51,13 @@ add_executable (gsad gsad.c validator.c)
 target_link_libraries (gsad gsad_omp gsad_oap gsad_base ${LIBXSLT_LIBRARIES} ${GNUTLS_LIBRARIES})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
+if (USE_LIBXSLT)
+  message (STATUS "Internal XSL transformations, with libxslt.")
+  add_definitions (-DUSE_LIBXSLT)
+else (USE_LIBXSLT)
+  message (STATUS "External XSL transformations, with xsltproc.")
+endif (USE_LIBXSLT)
+
 if (GSAD_VERSION)
   add_definitions (-DGSAD_VERSION=\\\"${GSAD_VERSION}\\\")
 endif (GSAD_VERSION)

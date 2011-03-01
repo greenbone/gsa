@@ -38,12 +38,18 @@
 #include "tracef.h"
 
 #include <glib.h>
+#ifdef USE_LIBXSLT
 #include <libxml/parser.h>
 #include <libexslt/exslt.h>
 #include <string.h> /* for strlen() */
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
 #include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
+#else
+#include <string.h>
+#include <sys/wait.h>
+#include <errno.h>
+#endif
 
 #undef G_LOG_DOMAIN
 /**
@@ -59,10 +65,12 @@
 int
 gsad_base_init ()
 {
+#ifdef USE_LIBXSLT
   if (!xmlHasFeature (XML_WITH_THREAD))
     return 1;
   /* Required by libxml for thread safety. */
   xmlInitParser ();
+#endif
   return 0;
 }
 
@@ -95,6 +103,7 @@ ctime_r_strip_newline (time_t *time, char *string)
 char *
 xsl_transform (const char *xml_text)
 {
+#ifdef USE_LIBXSLT
   xsltStylesheetPtr cur = NULL;
   xmlDocPtr doc, res;
   xmlChar *doc_txt_ptr = NULL;
@@ -145,6 +154,88 @@ xsl_transform (const char *xml_text)
   xsltCleanupGlobals ();
   xmlCleanupParser ();
   return (char *) doc_txt_ptr;
+#else
+  int content_fd;
+  gint exit_status;
+  gchar **cmd;
+  gboolean success = TRUE;
+  gchar *standard_out = NULL;
+  gchar *standard_err = NULL;
+  char content_file[] = "/tmp/gsa_xsl_transform_XXXXXX";
+  GError *error;
+
+  /* Create a temporary file. */
+
+  content_fd = mkstemp (content_file);
+  if (content_fd == -1)
+    {
+      g_warning ("%s: mkstemp: %s\n", __FUNCTION__, strerror (errno));
+      return NULL;
+    }
+
+  /* Copy text to temporary file. */
+
+  error = NULL;
+  g_file_set_contents (content_file, xml_text, strlen (xml_text), &error);
+  if (error)
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      unlink (content_file);
+      close (content_fd);
+      return NULL;
+    }
+
+  /* Run xsltproc on the temporary file. */
+
+  cmd = (gchar **) g_malloc (4 * sizeof (gchar *));
+  cmd[0] = g_strdup ("xsltproc");
+  cmd[1] = g_strdup (XSL_PATH);
+  cmd[2] = g_strdup (content_file);
+  cmd[3] = NULL;
+  g_debug ("%s: Spawning in parent dir: %s %s %s\n",
+           __FUNCTION__, cmd[0], cmd[1], cmd[2]);
+  if ((g_spawn_sync (NULL,
+                     cmd,
+                     NULL,                  /* Environment. */
+                     G_SPAWN_SEARCH_PATH,
+                     NULL,                  /* Setup function. */
+                     NULL,
+                     &standard_out,
+                     &standard_err,
+                     &exit_status,
+                     NULL)
+       == FALSE)
+      || (WIFEXITED (exit_status) == 0)
+      || WEXITSTATUS (exit_status))
+    {
+      g_debug ("%s: failed to transform the xml: %d (WIF %i, WEX %i)",
+               __FUNCTION__,
+               exit_status,
+               WIFEXITED (exit_status),
+               WEXITSTATUS (exit_status));
+      g_debug ("%s: stderr: %s\n", __FUNCTION__, standard_err);
+      g_debug ("%s: stdout: %s\n", __FUNCTION__, standard_out);
+      success = FALSE;
+    }
+
+  /* Cleanup. */
+
+  g_free (cmd[0]);
+  g_free (cmd[1]);
+  g_free (cmd[2]);
+  g_free (cmd);
+  g_free (standard_err);
+
+  unlink (content_file);
+  close (content_fd);
+
+  if (success)
+    return standard_out;
+
+  g_free (standard_out);
+  return NULL;
+#endif
 }
 
 /**

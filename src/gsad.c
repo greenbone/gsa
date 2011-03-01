@@ -5514,7 +5514,11 @@ main (int argc, char **argv)
   if (signal (SIGTERM, handle_sigterm) == SIG_ERR   /* RATS: ignore, only one function per signal */
       || signal (SIGINT, handle_sigint) == SIG_ERR  /* RATS: ignore, only one function per signal */
       || signal (SIGHUP, handle_sighup) == SIG_ERR  /* RATS: ignore, only one function per signal */
+#ifdef USE_LIBXSLT
       || signal (SIGCHLD, SIG_IGN) == SIG_ERR)      /* RATS: ignore, only one function per signal */
+#else
+      || signal (SIGCHLD, SIG_DFL) == SIG_ERR)      /* RATS: ignore, only one function per signal */
+#endif
     {
       g_critical ("%s: Failed to register signal handlers!\n", __FUNCTION__);
       exit (EXIT_FAILURE);
