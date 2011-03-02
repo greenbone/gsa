@@ -1,3 +1,23 @@
+gsa 2.0.1 (2011-03-02)
+
+This is the first maintenance release of the Greenbone Security Assistant (GSA)
+2.0 module for the Open Vulnerability Assessment System release 4 (OpenVAS-4).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes three memory and resource leaks discovered after the release
+of GSA 2.0.0. It also switches XSL transformations to a separate process, which
+protects the GSA from threading and memory errors in libxslt and libxml.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Pavel Sejnoha, Michael Wiegand and Felix Wolfsteller.
+
+Main changes since 2.0.0:
+* Two memory leaks discovered by Pavel Sejnoha and one resource leak discovered
+  by Felix Wolfsteller have been closed.
+* GSA now does XSL transformation in a separate process by default.
+
+
 gsa 2.0.0 (2011-02-21)
 
 This is the first release of the Greenbone Security Assistant (GSA) 2.0 module

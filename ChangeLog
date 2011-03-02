@@ -1,3 +1,11 @@
+2011-03-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 2.0.1 release.
+
+	* CHANGES: Updated.
+
+	* INSTALL: Updated prerequisites.
+
 2011-03-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch to doing the XSL transform in a separate process, keeping the

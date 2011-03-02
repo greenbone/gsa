@@ -14,6 +14,7 @@ Prerequisites:
 * libmicrohttpd
 * libexslt
 * pkg-config
+* xsltproc
 
 Prerequisites for building documentation:
 * Doxygen
