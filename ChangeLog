@@ -1,3 +1,11 @@
+2011-03-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Post branch version bump.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
 2011-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (view_report.html): Add token to jump link.
