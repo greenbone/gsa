@@ -1028,18 +1028,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="task/status='Running' or task/status='Requested' or task/status='Pause Requested' or task/status='Stop Requested' or task/status='Resume Requested'">
-            <img src="/img/delete_inactive.png"
+            <img src="/img/trashcan_inactive.png"
                  border="0"
-                 alt="Delete"
+                 alt="To Trashcan"
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=delete_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-               title="Delete Task"
+               title="Move Task to Trashcan"
                style="margin-left:3px;">
-              <img src="/img/delete.png"
+              <img src="/img/trashcan.png"
                    border="0"
-                   alt="Delete"/>
+                   alt="To Trashcan"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
@@ -2055,11 +2055,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Delete Task"
+                 title="Move Task to Trashcan"
                  style="margin-left:3px;">
                 <img src="/img/trashcan.png"
                      border="0"
-                     alt="Move Task to Trashcan"/>
+                     alt="To Trashcan"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>

@@ -1,5 +1,10 @@
 2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-report-table): Use trashcan button in header.
+	(task): Improve trashcan link text.
+
+2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add a trashcan.
 
 	* src/html/img/trashcan.png, src/html/img/trashcan_inactive.png: New
