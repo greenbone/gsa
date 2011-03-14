@@ -95,6 +95,9 @@ int manager_connect (credentials_t *, int *, gnutls_session_t *);
 static char *get_tasks (credentials_t *, const char *, const char *,
                         const char *, const char *, const char *, int);
 
+static char *get_trash (credentials_t *, const char *, const char *,
+                        const char *);
+
 
 /* Helpers. */
 
@@ -3447,6 +3450,714 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
   g_string_append (xml, "</get_targets>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Delete a trash agent, get all agents, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  agent_id     UUID of agent.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_agent_omp (credentials_t * credentials, const char *agent_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an agent. "
+                         "The agent is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the agent and get all agents. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_agent"
+                            " agent_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            agent_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an agent. "
+                           "The agent is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an agent. "
+                           "It is unclear whether the agent has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash config, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  config_id    UUID of config.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_config_omp (credentials_t * credentials, const char *config_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a config. "
+                         "The config is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the config. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_config"
+                            " config_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            config_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a config. "
+                           "The config is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a config. "
+                           "It is unclear whether the config has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash escalator, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  escalator_id    UUID of escalator.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_escalator_omp (credentials_t * credentials, const char *escalator_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a escalator. "
+                         "The escalator is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the escalator. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_escalator"
+                            " escalator_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            escalator_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a escalator. "
+                           "The escalator is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a escalator. "
+                           "It is unclear whether the escalator has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash LSC credential, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials        Username and password for authentication.
+ * @param[in]  lsc_credential_id  UUID of LSC credential.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_lsc_credential_omp (credentials_t * credentials,
+                                 const char *lsc_credential_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an LSC credential. "
+                         "The LSC credential is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the lsc_credential. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_lsc_credential"
+                            " lsc_credential_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            lsc_credential_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an LSC credential. "
+                           "The LSC credential is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting an LSC credential. "
+                           "It is unclear whether the LSC credential has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash report format, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  report_format_id    UUID of report format.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_report_format_omp (credentials_t * credentials, const char *report_format_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a report format. "
+                         "The report format is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the report format. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_report_format"
+                            " report_format_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            report_format_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a report format. "
+                           "The report format is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a report format. "
+                           "It is unclear whether the report format has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash schedule, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  schedule_id    UUID of schedule.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_schedule_omp (credentials_t * credentials, const char *schedule_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a schedule. "
+                         "The schedule is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the schedule. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_schedule"
+                            " schedule_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            schedule_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a schedule. "
+                           "The schedule is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a schedule. "
+                           "It is unclear whether the schedule has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash slave, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  slave_id    UUID of slave.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_slave_omp (credentials_t * credentials, const char *slave_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a slave. "
+                         "The slave is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the slave. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_slave"
+                            " slave_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            slave_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a slave. "
+                           "The slave is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a slave. "
+                           "It is unclear whether the slave has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash target, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  target_id    UUID of target.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_target_omp (credentials_t * credentials, const char *target_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a target. "
+                         "The target is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the target. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_target"
+                            " target_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            target_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a target. "
+                           "The target is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a target. "
+                           "It is unclear whether the target has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Delete a trash task, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  task_id      UUID of task.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_task_omp (credentials_t * credentials, const char *task_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a task. "
+                         "The task is not deleted. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Delete the task. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_task"
+                            " task_id=\"%s\""
+                            " ultimate=\"1\"/>",
+                            task_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a task. "
+                           "The task is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a task. "
+                           "It is unclear whether the task has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Restore a resource, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  target_id    UUID of resource.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+restore_omp (credentials_t * credentials, const char *target_id)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while restoring a resource. "
+                         "The resource was not restored. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Restore the resource. */
+
+  if (openvas_server_sendf (&session,
+                            "<restore"
+                            " id=\"%s\"/>",
+                            target_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while restoring a resource. "
+                           "The resource was not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while restoring a resource. "
+                           "It is unclear whether the resource has been restored or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return trash page. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
+}
+
+/**
+ * @brief Empty the trashcan, get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+empty_trashcan_omp (credentials_t * credentials)
+{
+  GString *xml;
+  gchar *ret;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while emptying the trashcan. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_trash");
+
+  xml = g_string_new ("");
+
+  /* Empty the trash. */
+
+  if (openvas_server_sendf (&session,
+                            "<empty_trashcan/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while emptying the trashcan. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while emptying the trashcan. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_trash");
+    }
+
+  /* Cleanup, and return trash page. */
+
+  openvas_server_close (socket, session);
+  ret = get_trash (credentials, NULL, NULL, xml->str);
+  g_string_free (xml, FALSE);
+  return ret;
 }
 
 /**
@@ -9373,6 +10084,353 @@ verify_report_format_omp (credentials_t * credentials,
   g_string_append (xml, "</get_report_formats>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup trash page XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_trash (credentials_t * credentials, const char * sort_field,
+           const char * sort_order, const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+
+  if (manager_connect (credentials, &socket, &session))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the trash. "
+                         "Diagnostics: Failure to connect to manager daemon.",
+                         "/omp?cmd=get_tasks");
+
+  xml = g_string_new ("<get_trash>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  /* Get the agents. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_agents"
+                            " trash=\"1\""
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting agent list. "
+                           "The current list of agents is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting agent list. "
+                           "The current list of agents is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Get the configs. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_configs"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting configs list. "
+                           "The current list of configs is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting configs list. "
+                           "The current list of configs is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  /* Get the credentials. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_lsc_credentials"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credentials list. "
+                           "The current list of credentials is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credentials list. "
+                           "The current list of credentials is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Get the escalators. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_escalators"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalators list. "
+                           "The current list of escalators is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting escalators list. "
+                           "The current list of escalators is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_escalators");
+    }
+
+  /* Get the report formats. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_report_formats"
+                            " trash=\"1\""
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting report format list. "
+                           "The current list of report formats is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting report format list. "
+                           "The current list of report formats is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Get the schedules. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_schedules"
+                            " details=\"1\""
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting schedules list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting schedules list. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_schedules");
+    }
+
+  /* Get the slaves. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_slaves"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting slaves list. "
+                           "The current list of slaves is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_slaves");
+    }
+
+  /* Get the targets. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_targets"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  /* Get the tasks. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_tasks"
+                            " trash=\"1\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tasks list. "
+                           "The current list of tasks is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tasks list. "
+                           "The current list of tasks is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_trash>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all trash, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  sort_field   Field to sort on, or NULL.
+ * @param[in]  sort_order   "ascending", "descending", or NULL.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_trash_omp (credentials_t * credentials, const char * sort_field,
+               const char * sort_order)
+{
+  return get_trash (credentials, sort_field, sort_order, NULL);
 }
 
 

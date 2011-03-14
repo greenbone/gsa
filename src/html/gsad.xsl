@@ -148,6 +148,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </ul>
           </li>
           <li>
+            Miscellaneous
+            <ul>
+              <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+            </ul>
+          </li>
+          <li>
             Help
             <ul>
               <li><a href="/help/contents.html?token={/envelope/token}">Contents</a></li>

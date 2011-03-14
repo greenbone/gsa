@@ -42,6 +42,7 @@ void omp_init (const gchar *, int);
 char * create_task_omp (credentials_t *, char *, char *, char *, char *,
                         const char *, const char *, const char *, const char *);
 char * delete_task_omp (credentials_t *, const char *, int, const char *);
+char * delete_trash_task_omp (credentials_t *, const char *);
 char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
                       const char *, const char *, int);
 char * new_task_omp (credentials_t *, const char *, int);
@@ -68,6 +69,7 @@ char * create_escalator_omp (credentials_t *, char *, char *, const char *,
                              GArray *, const char *, GArray *, const char *,
                              GArray *);
 char * delete_escalator_omp (credentials_t *, const char *);
+char * delete_trash_escalator_omp (credentials_t *, const char *);
 char * test_escalator_omp (credentials_t *, const char *, const char *,
                            const char *);
 char * get_escalator_omp (credentials_t *, const char *, const char *,
@@ -82,6 +84,7 @@ int get_lsc_credentials_omp (credentials_t *, const char *, const char *,
 char * create_lsc_credential_omp (credentials_t *, char *, char *,
                                   const char *, const char *, const char *);
 char * delete_lsc_credential_omp (credentials_t *, const char *);
+char * delete_trash_lsc_credential_omp (credentials_t *, const char *);
 char * edit_lsc_credential_omp (credentials_t *, const char *, const char *,
                                 const char *, const char *);
 char * save_lsc_credential_omp (credentials_t *, const char *, const char *,
@@ -98,6 +101,7 @@ char * create_agent_omp (credentials_t *, const char *, const char *,
                          const char *, int,
                          const char *, int);
 char * delete_agent_omp (credentials_t *, const char *);
+char * delete_trash_agent_omp (credentials_t *, const char *);
 char * verify_agent_omp (credentials_t *, const char *);
 
 char * create_schedule_omp (credentials_t *, const char *, const char *,
@@ -106,6 +110,7 @@ char * create_schedule_omp (credentials_t *, const char *, const char *,
                             const char *, const char *, const char *);
 
 char * delete_schedule_omp (credentials_t *, const char *);
+char * delete_trash_schedule_omp (credentials_t *, const char *);
 char * get_schedule_omp (credentials_t *, const char *, const char *,
                          const char *);
 char * get_schedules_omp (credentials_t *, const char *, const char *);
@@ -117,6 +122,7 @@ char * create_target_omp (credentials_t *, char *, char *, char *, const char*,
                           const char *, const char *, const char*, const char*,
                           const char*);
 char * delete_target_omp (credentials_t *, const char *);
+char * delete_trash_target_omp (credentials_t *, const char *);
 
 char * get_config_omp (credentials_t *, const char *, int);
 char * get_configs_omp (credentials_t *, const char *, const char *);
@@ -138,6 +144,7 @@ char * save_config_nvt_omp (credentials_t *, const char *, const char *,
 char * create_config_omp (credentials_t *, char *, char *, const char *);
 char * import_config_omp (credentials_t *, char *);
 char * delete_config_omp (credentials_t *, const char *);
+char * delete_trash_config_omp (credentials_t *, const char *);
 char * export_config_omp (credentials_t *, const char *, enum content_type*,
                           char **, gsize *);
 
@@ -219,6 +226,7 @@ char * get_slaves_omp (credentials_t *, const char *, const char *);
 char * create_slave_omp (credentials_t *, const char *, const char *,
                          const char *, const char*, const char*, const char*);
 char * delete_slave_omp (credentials_t *, const char *);
+char * delete_trash_slave_omp (credentials_t *, const char *);
 
 char * get_system_reports_omp (credentials_t *, const char *, const char *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,
@@ -229,6 +237,7 @@ char * get_report_format_omp (credentials_t *, const char *, const char *,
                               const char *);
 char * get_report_formats_omp (credentials_t *, const char *, const char *);
 char * delete_report_format_omp (credentials_t *, const char *);
+char * delete_trash_report_format_omp (credentials_t *, const char *);
 char * edit_report_format_omp (credentials_t *, const char *, const char *,
                                const char *, const char *);
 char * import_report_format_omp (credentials_t *, char *);
@@ -236,6 +245,10 @@ char * save_report_format_omp (credentials_t *, const char *, const char *,
                                const char *, const char *, GArray *,
                                const char *, const char *, const char *);
 char * verify_report_format_omp (credentials_t *, const char *);
+
+char * get_trash_omp (credentials_t *, const char *, const char *);
+char * restore_omp (credentials_t *, const char *);
+char * empty_trashcan_omp (credentials_t *);
 
 gboolean is_omp_authenticated (const gchar *, const gchar *);
 

@@ -2048,18 +2048,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           <xsl:choose>
             <xsl:when test="status='Running' or status='Requested' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
-              <img src="/img/delete_inactive.png"
+              <img src="/img/trashcan_inactive.png"
                    border="0"
-                   alt="Delete"
+                   alt="To Trashcan"
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
                  title="Delete Task"
                  style="margin-left:3px;">
-                <img src="/img/delete.png"
+                <img src="/img/trashcan.png"
                      border="0"
-                     alt="Delete"/>
+                     alt="Move Task to Trashcan"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
@@ -2079,6 +2079,86 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="task" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="status_bar">
+        <xsl:with-param name="status">
+          <xsl:value-of select="status"/>
+        </xsl:with-param>
+        <xsl:with-param name="progress">
+          <xsl:value-of select="progress/text()"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </td>
+    <td style="text-align:right;font-size:10px;">
+      <xsl:choose>
+        <xsl:when test="report_count &gt; 0">
+          <xsl:value-of select="report_count/finished"/>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td style="font-size:10px;">
+      <xsl:choose>
+        <xsl:when test="last_report/report/@id = first_report/report/@id">
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="short_timestamp_first"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td style="font-size:10px;">
+      <xsl:call-template name="short_timestamp_last"/>
+    </td>
+    <td style="text-align:center;">
+      <xsl:choose>
+        <xsl:when test="last_report">
+          <xsl:apply-templates select="last_report"/>
+        </xsl:when>
+      </xsl:choose>
+    </td>
+    <td style="text-align:center;">
+      <!-- Trend -->
+      <xsl:call-template name="trend_meter"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0')  and (escalator/trash = '0')">
+          <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+             title="Restore Task" style="margin-left:3px;">
+            <img src="/img/resume.png" border="0" alt="Restore"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/resume_inactive.png" border="0" alt="Restore"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=delete_trash_task&amp;task_id={@id}&amp;token={/envelope/token}"
+         title="Delete Task" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
+      </a>
+    </td>
+  </tr>
 </xsl:template>
 
 <!-- GET_TASKS_RESPONSE -->
@@ -2374,12 +2454,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
-             title="Delete Credential" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
+             title="Move Credential to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -2409,6 +2489,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/key.png" border="0" alt="Download Public Key"/>
         </a>
       </xsl:if>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="lsc_credential" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+    </td>
+    <td>
+      <xsl:value-of select="login"/>
+    </td>
+    <td>
+      <xsl:value-of select="comment"/>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Credential" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
+             title="Delete Credential" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -2661,12 +2779,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
-             title="Delete Agent" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
+             title="Move Agent to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="To Trashcan"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -2678,6 +2798,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Agent"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="agent" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+    </td>
+    <td>
+      <xsl:value-of select="comment"/>
+    </td>
+    <td>
+      <xsl:value-of select="installer/trust/text()"/>
+      <xsl:choose>
+        <xsl:when test="installer/trust/time != ''">
+          <br/>(<xsl:value-of select="substring(installer/trust/time,5,6)"/>
+                <xsl:value-of select="substring(installer/trust/time,20,5)"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Agent" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <a href="/omp?cmd=delete_trash_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
+         title="Delete Agent" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
     </td>
   </tr>
@@ -3041,14 +3198,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
-             title="Delete Escalator" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
+             title="Move Escalator to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/trashcan_inactive.png"
                border="0"
-               alt="Delete"
+               alt="To Trashcan"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -3060,6 +3217,80 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Test Escalator" style="margin-left:3px;">
         <img src="/img/start.png" border="0" alt="Test"/>
       </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="escalator" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="event/text()"/>
+      <xsl:choose>
+        <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
+          <br/>(to <xsl:value-of select=" event/data[name='status']/text()"/>)
+        </xsl:when>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="condition/text()"/>
+      <xsl:choose>
+        <xsl:when test="condition/text()='Threat level at least' and string-length(condition/data[name='level']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='level']/text()"/>)
+        </xsl:when>
+        <xsl:when test="condition/text()='Threat level changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+          <br/>(<xsl:value-of select="condition/data[name='direction']/text()"/>)
+        </xsl:when>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
+          SNMP
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="method/text()"/>
+          <xsl:choose>
+            <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
+              <br/>(To <xsl:value-of select="method/data[name='to_address']/text()"/>)
+            </xsl:when>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Escalator" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
+             title="Delete Escalator" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -3502,6 +3733,87 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_target&amp;target_id={@id}&amp;token={/envelope/token}"
+             title="Move Target to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="To Trashcan"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Target Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="target" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="hosts"/></td>
+    <td><xsl:value-of select="max_hosts"/></td>
+    <td><xsl:value-of select="port_range"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="ssh_lsc_credential/trash = '1'">
+          <xsl:value-of select="ssh_lsc_credential/name"/>
+          <br/>(in trashcan)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="ssh_lsc_credential/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="smb_lsc_credential/trash = '1'">
+          <xsl:value-of select="smb_lsc_credential/name"/>
+          <br/>(in trashcan)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={smb_lsc_credential/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="smb_lsc_credential/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1'">
+          <img src="/img/resume_inactive.png" border="0" alt="Restore"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+             title="Restore Target" style="margin-left:3px;">
+            <img src="/img/resume.png" border="0" alt="Restore"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_target&amp;target_id={@id}&amp;token={/envelope/token}"
              title="Delete Target" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -3513,10 +3825,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Target Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -5081,12 +5389,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_config&amp;config_id={@id}&amp;token={/envelope/token}"
-             title="Delete Scan Config" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
+             title="Move Scan Config to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+          <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -5113,6 +5421,99 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="config" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="family_count/text()='-1'">
+          N/A
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="family_count/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td style="text-align:center;">
+      <xsl:choose>
+        <xsl:when test="family_count/growing='1'">
+          <img src="/img/trend_more.png"
+               alt="Grows"
+               title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+        </xsl:when>
+        <xsl:when test="family_count/growing='0'">
+          <img src="/img/trend_nochange.png"
+               alt="Static"
+               title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="nvt_count/text()='-1'">
+          N/A
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="nvt_count/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td style="text-align:center;">
+      <xsl:choose>
+        <xsl:when test="nvt_count/growing='1'">
+          <img src="/img/trend_more.png"
+               alt="Dynamic"
+               title="The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered."/>
+        </xsl:when>
+        <xsl:when test="nvt_count/growing='0'">
+          <img src="/img/trend_nochange.png"
+               alt="Static"
+               title="The NVT selection is STATIC. New NVTs will NOT automatically be added or considered."/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Config" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_config&amp;config_id={@id}&amp;token={/envelope/token}"
+             title="Delete Scan Config" style="margin-left:3px;">
+            <img src="/img/delete.png" border="0" alt="Delete"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png" border="0" alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -5828,6 +6229,95 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
+             title="Move Schedule to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
+         title="Schedule Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="schedule" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="first_time"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="next_time &gt; 0">
+          <xsl:value-of select="next_time"/>
+        </xsl:when>
+        <xsl:otherwise>-</xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="period = 0 and period_months = 0">
+          Once
+        </xsl:when>
+        <xsl:when test="period = 0 and period_months = 1">
+          1 month
+        </xsl:when>
+        <xsl:when test="period = 0">
+          <xsl:value-of select="period_months"/> months
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="interval-with-unit">
+            <xsl:with-param name="interval">
+              <xsl:value-of select="period"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="duration = 0">
+          Entire Operation
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="interval-with-unit">
+            <xsl:with-param name="interval">
+              <xsl:value-of select="duration"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Schedule" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
              title="Delete Schedule" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -5839,10 +6329,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
-         title="Schedule Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -6135,6 +6621,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <a href="/omp?cmd=delete_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
+             title="Move Slave to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="To Trashcan"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
+         title="Slave Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="slave" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="host"/></td>
+    <td><xsl:value-of select="port"/></td>
+    <td><xsl:value-of select="login"/></td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Slave" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=delete_trash_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
              title="Delete Slave" style="margin-left:3px;">
             <img src="/img/delete.png" border="0" alt="Delete"/>
           </a>
@@ -6146,10 +6679,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-         title="Slave Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -8006,14 +8535,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="global='0'">
           <a href="/omp?cmd=delete_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
-             title="Delete Report Format" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
+             title="Move Report Format to Trashcan" style="margin-left:3px;">
+            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/trashcan_inactive.png"
                border="0"
-               alt="Delete"
+               alt="To Trashcan"
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -8034,6 +8563,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Verify Report Format"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Report Format"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="report_format" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="summary != ''">
+          <br/>(<xsl:value-of select="summary"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="extension"/></td>
+    <td><xsl:value-of select="content_type"/></td>
+    <td>
+      <xsl:value-of select="trust/text()"/>
+      <xsl:choose>
+        <xsl:when test="trust/time != ''">
+          <br/>(<xsl:value-of select="substring(trust/time,5,6)"/>
+                <xsl:value-of select="substring(trust/time,20,5)"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="active='0'">
+          no
+        </xsl:when>
+        <xsl:otherwise>
+          yes
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="Restore Report Format" style="margin-left:3px;">
+        <img src="/img/resume.png" border="0" alt="Restore"/>
+      </a>
+      <a href="/omp?cmd=delete_trash_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
+         title="Delete Report Format" style="margin-left:3px;">
+        <img src="/img/delete.png" border="0" alt="Delete"/>
       </a>
     </td>
   </tr>
@@ -8893,6 +9474,340 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END SYSTEM REPORTS MANAGEMENT -->
+
+<!-- BEGIN TRASH MANAGEMENT -->
+
+<xsl:template match="empty_trashcan_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Empty Trashcan
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="restore_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Restore
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-agents-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Comment</td>
+        <td>Trust</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="agent" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-configs-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td rowspan="2">Name</td>
+        <td colspan="2">Families</td>
+        <td colspan="2">NVTs</td>
+        <td width="100" rowspan="2">Actions</td>
+      </tr>
+      <tr class="gbntablehead2">
+        <td width="1" style="font-size:10px;">Total</td>
+        <td width="1" style="font-size:10px;">Trend</td>
+        <td width="1" style="font-size:10px;">Total</td>
+        <td width="1" style="font-size:10px;">Trend</td>
+      </tr>
+      <xsl:apply-templates select="config" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-escalators-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Event</td>
+        <td>Condition</td>
+        <td>Method</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="escalator" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-lsc-credentials-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Login</td>
+        <td>Comment</td>
+        <td width="135">Actions</td>
+      </tr>
+      <xsl:apply-templates select="lsc_credential" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-report-formats-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Extension</td>
+        <td>Content Type</td>
+        <td>Trust (last verified)</td>
+        <td>Active</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="report_format" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-schedules-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>First Run</td>
+        <td>Next Run</td>
+        <td>Period</td>
+        <td>Duration (s)</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="schedule" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-slaves-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Host</td>
+        <td>Port</td>
+        <td>Login</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="slave" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-targets-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Hosts</td>
+        <td>IPs</td>
+        <td>Port Range</td>
+        <td>SSH Credential</td>
+        <td>SMB Credential</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="target" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-tasks-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td rowspan="2">Task</td>
+        <td width="1" rowspan="2">Status</td>
+        <td colspan="3">Reports</td>
+        <td rowspan="2">Threat</td>
+        <td rowspan="2">Trend</td>
+        <td width="115" rowspan="2">Actions</td>
+      </tr>
+      <tr class="gbntablehead2">
+        <td width="1" style="font-size:10px;">Total</td>
+        <td  style="font-size:10px;">First</td>
+        <td  style="font-size:10px;">Last</td>
+      </tr>
+      <xsl:apply-templates select="task" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_trash">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_agent_response"/>
+  <xsl:apply-templates select="delete_config_response"/>
+  <xsl:apply-templates select="delete_escalator_response"/>
+  <xsl:apply-templates select="delete_lsc_credential_response"/>
+  <xsl:apply-templates select="delete_schedule_response"/>
+  <xsl:apply-templates select="delete_slave_response"/>
+  <xsl:apply-templates select="delete_target_response"/>
+  <xsl:apply-templates select="delete_task_response"/>
+  <xsl:apply-templates select="empty_trashcan_response"/>
+  <xsl:apply-templates select="restore_response"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Trashcan
+      <a href="/help/trashcan.html&amp;token={/envelope/token}"
+         title="Help: Trashcan">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="text-align:right">
+        <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="empty_trashcan"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="submit"
+                 name="submit"
+                 value="Empty Trashcan"
+                 title="Empty Trashcan"/>
+        </form>
+      </div>
+
+      <xsl:choose>
+        <xsl:when test="count(get_agents_response/agent) = 0">
+          <h1>Agents: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Agents</h1>
+          <!-- The for-each makes the get_agents_response the current node. -->
+          <xsl:for-each select="get_agents_response">
+            <xsl:call-template name="html-agents-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_configs_response/config) = 0">
+          <h1>Configs: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Configs</h1>
+          <!-- The for-each makes the get_configs_response the current node. -->
+          <xsl:for-each select="get_configs_response">
+            <xsl:call-template name="html-configs-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_lsc_credentials_response/lsc_credential) = 0">
+          <h1>Credentials: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Credentials</h1>
+          <!-- The for-each makes the get_lsc_credentials_response the current node. -->
+          <xsl:for-each select="get_lsc_credentials_response">
+            <xsl:call-template name="html-lsc-credentials-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_escalators_response/escalator) = 0">
+          <h1>Escalators: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Escalators</h1>
+          <!-- The for-each makes the get_escalators_response the current node. -->
+          <xsl:for-each select="get_escalators_response">
+            <xsl:call-template name="html-escalators-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_report_formats_response/report_format) = 0">
+          <h1>Report Formats: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Report Formats</h1>
+          <!-- The for-each makes the get_report_formats_response the current node. -->
+          <xsl:for-each select="get_report_formats_response">
+            <xsl:call-template name="html-report-formats-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_schedules_response/schedule) = 0">
+          <h1>Schedules: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Schedules</h1>
+          <!-- The for-each makes the get_schedules_response the current node. -->
+          <xsl:for-each select="get_schedules_response">
+            <xsl:call-template name="html-schedules-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_slaves_response/slave) = 0">
+          <h1>Slaves: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Slaves</h1>
+          <!-- The for-each makes the get_slaves_response the current node. -->
+          <xsl:for-each select="get_slaves_response">
+            <xsl:call-template name="html-slaves-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_targets_response/target) = 0">
+          <h1>Targets: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Targets</h1>
+          <!-- The for-each makes the get_targets_response the current node. -->
+          <xsl:for-each select="get_targets_response">
+            <xsl:call-template name="html-targets-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(get_tasks_response/task) = 0">
+          <h1>Tasks: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Tasks</h1>
+          <!-- The for-each makes the get_tasks_response the current node. -->
+          <xsl:for-each select="get_tasks_response">
+            <xsl:call-template name="html-tasks-trash-table"/>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!-- END TRASH MANAGEMENT -->
 
 <!-- GSAD_RESPONSE -->
 

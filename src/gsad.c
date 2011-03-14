@@ -389,6 +389,15 @@ init_validator ()
                          "|(delete_slave)"
                          "|(delete_target)"
                          "|(delete_task)"
+                         "|(delete_trash_agent)"
+                         "|(delete_trash_config)"
+                         "|(delete_trash_escalator)"
+                         "|(delete_trash_lsc_credential)"
+                         "|(delete_trash_report_format)"
+                         "|(delete_trash_schedule)"
+                         "|(delete_trash_slave)"
+                         "|(delete_trash_target)"
+                         "|(delete_trash_task)"
                          "|(delete_user)"
                          "|(edit_config)"
                          "|(edit_config_family)"
@@ -400,6 +409,7 @@ init_validator ()
                          "|(edit_settings)"
                          "|(edit_task)"
                          "|(edit_user)"
+                         "|(empty_trashcan)"
                          "|(export_config)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
@@ -430,6 +440,7 @@ init_validator ()
                          "|(get_target)"
                          "|(get_targets)"
                          "|(get_tasks)"
+                         "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
                          "|(import_config)"
@@ -439,6 +450,7 @@ init_validator ()
                          "|(new_override)"
                          "|(new_task)"
                          "|(pause_task)"
+                         "|(restore)"
                          "|(resume_paused_task)"
                          "|(resume_stopped_task)"
                          "|(test_escalator)"
@@ -2429,6 +2441,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.search_phrase,
                              con_info->req_parms.min_cvss_base);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "empty_trashcan"))
+    {
+      con_info->response =
+        empty_trashcan_omp (credentials);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "get_tasks"))
     {
       con_info->response
@@ -2677,7 +2694,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *target_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
 
-  const int CMD_MAX_SIZE = 22;
+  const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   const int VAL_MAX_SIZE = 100;
 
   cmd =
@@ -3285,6 +3302,38 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "delete_target")) && (target_id != NULL))
     return delete_target_omp (credentials, target_id);
 
+  else if ((!strcmp (cmd, "restore")) && (target_id != NULL))
+    return restore_omp (credentials, target_id);
+
+  else if ((!strcmp (cmd, "delete_trash_agent")) && (agent_id != NULL))
+    return delete_trash_agent_omp (credentials, agent_id);
+
+  else if ((!strcmp (cmd, "delete_trash_config")) && (config_id != NULL))
+    return delete_trash_config_omp (credentials, config_id);
+
+  else if ((!strcmp (cmd, "delete_trash_escalator")) && (escalator_id != NULL))
+    return delete_trash_escalator_omp (credentials, escalator_id);
+
+  else if ((!strcmp (cmd, "delete_trash_lsc_credential"))
+           && (lsc_credential_id != NULL))
+    return delete_trash_lsc_credential_omp (credentials, lsc_credential_id);
+
+  else if ((!strcmp (cmd, "delete_trash_report_format"))
+           && (report_format_id != NULL))
+    return delete_trash_report_format_omp (credentials, report_format_id);
+
+  else if ((!strcmp (cmd, "delete_trash_schedule")) && (schedule_id != NULL))
+    return delete_trash_schedule_omp (credentials, schedule_id);
+
+  else if ((!strcmp (cmd, "delete_trash_slave")) && (slave_id != NULL))
+    return delete_trash_slave_omp (credentials, slave_id);
+
+  else if ((!strcmp (cmd, "delete_trash_target")) && (target_id != NULL))
+    return delete_trash_target_omp (credentials, target_id);
+
+  else if ((!strcmp (cmd, "delete_trash_task")) && (task_id != NULL))
+    return delete_trash_task_omp (credentials, task_id);
+
   else if ((!strcmp (cmd, "delete_config")) && (config_id != NULL))
     return delete_config_omp (credentials, config_id);
 
@@ -3692,6 +3741,9 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "get_targets"))
     return get_targets_omp (credentials, sort_field, sort_order);
+
+  else if (!strcmp (cmd, "get_trash"))
+    return get_trash_omp (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "get_user")) && (name != NULL))
     return get_user_oap (credentials, name);

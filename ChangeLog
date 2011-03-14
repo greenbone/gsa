@@ -1,3 +1,39 @@
+2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a trashcan.
+
+	* src/html/img/trashcan.png, src/html/img/trashcan_inactive.png: New
+	files.
+
+	* src/CMakeLists.txt: Install trashcan icons.
+
+	* src/gsad.c (init_validator): Add trashcan commands.
+	(exec_omp_post): Add empty_trashcan handling.
+	(exec_omp_get): Increase CMD_MAX_SIZE.  Add trashcan command handling.
+
+	* src/gsad_omp.c (delete_trash_agent_omp, delete_trash_config_omp)
+	(delete_trash_target_omp, delete_trash_lsc_credential_omp)
+	(delete_trash_report_format_omp, delete_trash_schedule_omp)
+	(delete_trash_slave_omp, delete_trash_target_omp)
+	(delete_trash_task_omp, restore_omp, empty_trashcan_omp, get_trash)
+	(get_trash_omp): New functions.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add Miscellaneous section with
+	Trashcan.
+
+	* src/html/omp.xsl (task, lsc_credential, agent, escalator, target)
+	(config, schedule, slave, report): Replace Delete with To Trashcan.
+	(task [trash], lsc_credential [trash], agent [trash], escalator [trash])
+	(target [trash], config [trash], schedule [trash], slave [trash])
+	(report [trash], empty_trashcan_response, restore_response)
+	(html-agents-trash-table, html-configs-trash-table)
+	(html-escalators-trash-table, html-lsc-credentials-trash-table)
+	(html-report-formats-trash-table, html-schedules-trash-table)
+	(html-slaves-trash-table, html-targets-trash-table)
+	(html-tasks-trash-table, get_trash): New templates.
+
 2011-03-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post branch version bump.
