@@ -1,6 +1,11 @@
 2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/gsad.xsl (html-report-table): Use trashcan button in header.
+	* src/html/omp.xsl (note [details], override [details]): Indicate if task
+	is in trashcan.
+
+2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-table): Use trashcan button in header.
 	(task): Improve trashcan link text.
 
 2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>

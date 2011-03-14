@@ -7437,9 +7437,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="task/name"/>
-                </a>
+                <xsl:choose>
+                  <xsl:when test="task/trash = '1'">
+                    <xsl:value-of select="task/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="task/name"/>
+                    </a>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 Any
@@ -8159,9 +8166,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <b>Orphan</b>
               </xsl:when>
               <xsl:when test="task and string-length(task/@id) &gt; 0">
-                <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="task/name"/>
-                </a>
+                <xsl:choose>
+                  <xsl:when test="task/trash = '1'">
+                    <xsl:value-of select="task/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
+                      <xsl:value-of select="task/name"/>
+                    </a>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 Any
