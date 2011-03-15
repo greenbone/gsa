@@ -1,5 +1,9 @@
 2011-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Add contents table.
+
+2011-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_trash): Always print headers.
 
 2011-03-14  Matthew Mundell <matthew.mundell@greenbone.net>

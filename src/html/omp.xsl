@@ -9689,7 +9689,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right" style="text-align:right">
+      <div style="text-align:right">
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="empty_trashcan"/>
@@ -9701,54 +9701,104 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </div>
 
+      <div style="margin-top: 10px; margin-left: 15%; margin-right: 15%">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="even">
+            <td><a href="#agents">Agents</a></td>
+            <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
+          </tr>
+          <tr class="odd">
+            <td><a href="#configs">Configs</a></td>
+            <td><xsl:value-of select="count(get_configs_response/config)"/></td>
+          </tr>
+          <tr class="even">
+            <td><a href="#credentials">Credentials</a></td>
+            <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
+          </tr>
+          <tr class="odd">
+            <td><a href="#escalators">Escalators</a></td>
+            <td><xsl:value-of select="count(get_escalators_response/escalator)"/></td>
+          </tr>
+          <tr class="even">
+            <td><a href="#report_formats">Report Formats</a></td>
+            <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
+          </tr>
+          <tr class="odd">
+            <td><a href="#schedules">Schedules</a></td>
+            <td><xsl:value-of select="count(get_schedules_response/schedules)"/></td>
+          </tr>
+          <tr class="even">
+            <td><a href="#slaves">Slaves</a></td>
+            <td><xsl:value-of select="count(get_slaves_formats_response/slave)"/></td>
+          </tr>
+          <tr class="odd">
+            <td><a href="#targets">Targets</a></td>
+            <td><xsl:value-of select="count(get_targets_formats_response/target)"/></td>
+          </tr>
+          <tr class="even">
+            <td><a href="#tasks">Tasks</a></td>
+            <td><xsl:value-of select="count(get_tasks_formats_response/task)"/></td>
+          </tr>
+        </table>
+      </div>
+
+      <a name="agents"></a>
       <h1>Agents</h1>
       <!-- The for-each makes the get_agents_response the current node. -->
       <xsl:for-each select="get_agents_response">
         <xsl:call-template name="html-agents-trash-table"/>
       </xsl:for-each>
 
+      <a name="configs"></a>
       <h1>Configs</h1>
       <!-- The for-each makes the get_configs_response the current node. -->
       <xsl:for-each select="get_configs_response">
         <xsl:call-template name="html-configs-trash-table"/>
       </xsl:for-each>
 
+      <a name="credentials"></a>
       <h1>Credentials</h1>
       <!-- The for-each makes the get_lsc_credentials_response the current node. -->
       <xsl:for-each select="get_lsc_credentials_response">
         <xsl:call-template name="html-lsc-credentials-trash-table"/>
       </xsl:for-each>
 
+      <a name="escalators"></a>
       <h1>Escalators</h1>
       <!-- The for-each makes the get_escalators_response the current node. -->
       <xsl:for-each select="get_escalators_response">
         <xsl:call-template name="html-escalators-trash-table"/>
       </xsl:for-each>
 
+      <a name="report_formats"></a>
       <h1>Report Formats</h1>
       <!-- The for-each makes the get_report_formats_response the current node. -->
       <xsl:for-each select="get_report_formats_response">
         <xsl:call-template name="html-report-formats-trash-table"/>
       </xsl:for-each>
 
+      <a name="schedules"></a>
       <h1>Schedules</h1>
       <!-- The for-each makes the get_schedules_response the current node. -->
       <xsl:for-each select="get_schedules_response">
         <xsl:call-template name="html-schedules-trash-table"/>
       </xsl:for-each>
 
+      <a name="slaves"></a>
       <h1>Slaves</h1>
       <!-- The for-each makes the get_slaves_response the current node. -->
       <xsl:for-each select="get_slaves_response">
         <xsl:call-template name="html-slaves-trash-table"/>
       </xsl:for-each>
 
+      <a name="targets"></a>
       <h1>Targets</h1>
       <!-- The for-each makes the get_targets_response the current node. -->
       <xsl:for-each select="get_targets_response">
         <xsl:call-template name="html-targets-trash-table"/>
       </xsl:for-each>
 
+      <a name="tasks"></a>
       <h1>Tasks</h1>
       <!-- The for-each makes the get_tasks_response the current node. -->
       <xsl:for-each select="get_tasks_response">
