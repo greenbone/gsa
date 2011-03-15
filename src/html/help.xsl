@@ -236,11 +236,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Delete Agent</h4>
+      <h4>Move Agent to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the entry and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
 
       <h4>Download Installer Package</h4>
@@ -376,11 +376,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Details actions are available.
       </p>
 
-      <h4>Delete Credential</h4>
+      <h4>Move Credential to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the entry and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
 
       <h4>Credential Details</h4>
@@ -585,11 +585,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Delete Escalator</h4>
+      <h4>Move Escalator to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the escalator and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        It is not possible to remove an escalator that is in use by a task.
@@ -769,11 +769,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        For Report Formats the following actions are available.
       </p>
 
-      <h4>Delete Report Format</h4>
+      <h4>Move Report Format to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" /> will
-       immediatly remove the entry and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
 
       <h4>Report Format Details</h4>
@@ -939,16 +939,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        For Scan Configurations the following actions are available.
       </p>
 
-      <h4>Delete Scan Config</h4>
+      <h4>Move Scan Config to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" /> will
-       immediatly remove the entry and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        Note that if a scan config is associated with at least one task,
-       it is not possible to delete it. In this case the button is greyed
-       out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+       it is not possible to move it. In this case the button is greyed
+       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
       </p>
 
       <h4>Scan Config Details</h4>
@@ -1087,11 +1087,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Delete Schedule</h4>
+      <h4>Move Schedule to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the schedule and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        It is not possible to remove an schedule that is in use by a task.
@@ -1228,11 +1228,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Delete Slave</h4>
+      <h4>Move Slave to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the slave and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        It is not possible to remove a slave that is associated with a task.
@@ -1464,16 +1464,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        with a different name.
       </p>
 
-      <h4>Delete Target</h4>
+      <h4>Move Target to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the entry and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        Note that if a target is associated with at least one task, it is not possible
-       to delete it. In this case the button is greyed
-       out <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />.
+       to move it. In this case the button is greyed
+       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
       </p>
 
       <h4>Target Details</h4>
@@ -1667,11 +1667,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Delete User</h4>
+      <h4>Move User to Trashcan</h4>
       <p>
-       Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete" />
-       will immediately remove the user and update the list.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
       </p>
       <p>
        It is not possible to remove the last Administrator, which
@@ -1747,6 +1747,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
           <li> Miscellaneous</li>
           <ul>
+            <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
@@ -3920,11 +3921,12 @@ Public License instead of this License.
        This action is only available if the task status shows a progress bar.
       </p>
 
-      <h4>Delete Task</h4>
+      <h4>Move Task to Trashcan</h4>
       <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
-       remove the task immediately. The list of tasks will be updated. Note that also all
-       of the reports associated with this task will be removed.
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan. The list of tasks will be updated. Note that also all
+       of the reports associated with this task will be moved to the trashcan.
       </p>
       <p>
        This action is only available if the task has status "New" or "Done".
@@ -3947,6 +3949,49 @@ Public License instead of this License.
        switch to an overview of the configuration for this task and allows
        editing of some of the tasks properties.
       </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="trashcan.html">
+  <div class="gb_window_part_center">Help: Trashcan</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Trashcan</h1>
+      <p>
+        This page lists all resources that are currently in the trashcan.
+        The listing is grouped by resource type.
+        There is a summary table at the top of the page with item counts
+        and links into the groups.
+      </p>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Delete</h4>
+      <p>
+       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
+       remove the resource entirely from the system, immediately.  The
+       trashcan will be updated.  The icon will be greyed out
+       <img src="/img/delete_inactive.png" alt="Delete" title="Delete" />
+       when some other resource in the trashcan depends on the resource.
+      </p>
+
+      <h4>Restore</h4>
+      <p>
+       Pressing the restore icon
+       <img src="/img/resume.png" alt="Restore" title="Restore" />
+       will move the resource out of the trashcan and back into normal
+       operation.  The trashcan will be updated.  The icon will be greyed out
+       <img src="/img/resume_inactive.png" alt="Restore" title="Restore" />
+       when the resource depends on some other resource that
+       is in the trashcan.
+      </p>
+
     </div>
   </div>
 </xsl:template>

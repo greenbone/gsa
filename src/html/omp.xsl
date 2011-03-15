@@ -9683,7 +9683,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Trashcan
-      <a href="/help/trashcan.html&amp;token={/envelope/token}"
+      <a href="/help/trashcan.html?token={/envelope/token}"
          title="Help: Trashcan">
         <img src="/img/help.png"/>
       </a>
