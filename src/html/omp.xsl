@@ -9701,122 +9701,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </div>
 
-      <xsl:choose>
-        <xsl:when test="count(get_agents_response/agent) = 0">
-          <h1>Agents: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Agents</h1>
-          <!-- The for-each makes the get_agents_response the current node. -->
-          <xsl:for-each select="get_agents_response">
-            <xsl:call-template name="html-agents-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Agents</h1>
+      <!-- The for-each makes the get_agents_response the current node. -->
+      <xsl:for-each select="get_agents_response">
+        <xsl:call-template name="html-agents-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_configs_response/config) = 0">
-          <h1>Configs: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Configs</h1>
-          <!-- The for-each makes the get_configs_response the current node. -->
-          <xsl:for-each select="get_configs_response">
-            <xsl:call-template name="html-configs-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Configs</h1>
+      <!-- The for-each makes the get_configs_response the current node. -->
+      <xsl:for-each select="get_configs_response">
+        <xsl:call-template name="html-configs-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_lsc_credentials_response/lsc_credential) = 0">
-          <h1>Credentials: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Credentials</h1>
-          <!-- The for-each makes the get_lsc_credentials_response the current node. -->
-          <xsl:for-each select="get_lsc_credentials_response">
-            <xsl:call-template name="html-lsc-credentials-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Credentials</h1>
+      <!-- The for-each makes the get_lsc_credentials_response the current node. -->
+      <xsl:for-each select="get_lsc_credentials_response">
+        <xsl:call-template name="html-lsc-credentials-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_escalators_response/escalator) = 0">
-          <h1>Escalators: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Escalators</h1>
-          <!-- The for-each makes the get_escalators_response the current node. -->
-          <xsl:for-each select="get_escalators_response">
-            <xsl:call-template name="html-escalators-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Escalators</h1>
+      <!-- The for-each makes the get_escalators_response the current node. -->
+      <xsl:for-each select="get_escalators_response">
+        <xsl:call-template name="html-escalators-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_report_formats_response/report_format) = 0">
-          <h1>Report Formats: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Report Formats</h1>
-          <!-- The for-each makes the get_report_formats_response the current node. -->
-          <xsl:for-each select="get_report_formats_response">
-            <xsl:call-template name="html-report-formats-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Report Formats</h1>
+      <!-- The for-each makes the get_report_formats_response the current node. -->
+      <xsl:for-each select="get_report_formats_response">
+        <xsl:call-template name="html-report-formats-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_schedules_response/schedule) = 0">
-          <h1>Schedules: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Schedules</h1>
-          <!-- The for-each makes the get_schedules_response the current node. -->
-          <xsl:for-each select="get_schedules_response">
-            <xsl:call-template name="html-schedules-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Schedules</h1>
+      <!-- The for-each makes the get_schedules_response the current node. -->
+      <xsl:for-each select="get_schedules_response">
+        <xsl:call-template name="html-schedules-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_slaves_response/slave) = 0">
-          <h1>Slaves: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Slaves</h1>
-          <!-- The for-each makes the get_slaves_response the current node. -->
-          <xsl:for-each select="get_slaves_response">
-            <xsl:call-template name="html-slaves-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Slaves</h1>
+      <!-- The for-each makes the get_slaves_response the current node. -->
+      <xsl:for-each select="get_slaves_response">
+        <xsl:call-template name="html-slaves-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_targets_response/target) = 0">
-          <h1>Targets: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Targets</h1>
-          <!-- The for-each makes the get_targets_response the current node. -->
-          <xsl:for-each select="get_targets_response">
-            <xsl:call-template name="html-targets-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Targets</h1>
+      <!-- The for-each makes the get_targets_response the current node. -->
+      <xsl:for-each select="get_targets_response">
+        <xsl:call-template name="html-targets-trash-table"/>
+      </xsl:for-each>
 
-      <xsl:choose>
-        <xsl:when test="count(get_tasks_response/task) = 0">
-          <h1>Tasks: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Tasks</h1>
-          <!-- The for-each makes the get_tasks_response the current node. -->
-          <xsl:for-each select="get_tasks_response">
-            <xsl:call-template name="html-tasks-trash-table"/>
-          </xsl:for-each>
-        </xsl:otherwise>
-      </xsl:choose>
+      <h1>Tasks</h1>
+      <!-- The for-each makes the get_tasks_response the current node. -->
+      <xsl:for-each select="get_tasks_response">
+        <xsl:call-template name="html-tasks-trash-table"/>
+      </xsl:for-each>
     </div>
   </div>
 </xsl:template>
