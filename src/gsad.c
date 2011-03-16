@@ -1802,7 +1802,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "</login_page>",
-                                     ret == 2 ? "  Manager is down." : "",
+                                     ret == 2 ? "  OMP service is down." : "",
                                      ctime_now);
               res = xsl_transform (xml);
               g_free (xml);

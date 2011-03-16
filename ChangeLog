@@ -1,5 +1,9 @@
 2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Reword down message slightly.
+
+2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Tell the user when the login fails because the manager is down.
 
 	* src/gsad.c (exec_omp_post): Update authenticate call.  Add message if
