@@ -1,5 +1,11 @@
 2011-03-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/indicator_software_update.png,
+	src/html/img/indicator_software_update_inactive.png: New. Indicator
+	Icon for availability of software update.
+
+2011-03-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/os_apple.png, src/html/img/os_debian.png,
 	src/html/img/os_centos.png, src/html/img/os_gentoo.png,
 	src/html/img/os_unknown.png, src/html/img/os_windows.png,
