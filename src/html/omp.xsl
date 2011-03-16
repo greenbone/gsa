@@ -9810,25 +9810,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END TRASH MANAGEMENT -->
 
-<!-- GSAD_RESPONSE -->
-
-<xsl:template match="gsad_response">
-  <xsl:call-template name="error_dialog">
-    <xsl:with-param name="title">
-      <xsl:value-of select="title"/>
-    </xsl:with-param>
-    <xsl:with-param name="message">
-      <xsl:value-of select="message"/>
-    </xsl:with-param>
-    <xsl:with-param name="backurl">
-      <xsl:value-of select="backurl"/>
-    </xsl:with-param>
-    <xsl:with-param name="token">
-      <xsl:value-of select="token"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
 <!-- NEW_TASK -->
 
 <xsl:template match="new_task">
