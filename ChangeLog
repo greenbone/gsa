@@ -1,5 +1,17 @@
 2011-03-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/os_apple.png, src/html/img/os_debian.png,
+	src/html/img/os_centos.png, src/html/img/os_gentoo.png,
+	src/html/img/os_unknown.png, src/html/img/os_windows.png,
+	src/html/img/os_fedora.png, src/html/img/os_mandriva.png,
+	src/html/img/os_suse.png, src/html/img/os_trustix.png,
+	src/html/img/os_novell.png, src/html/img/os_conflict.png,
+	src/html/img/os_sun.png, src/html/img/os_hp.png,
+	src/html/img/os_redhat.png: New. Icons to mark IPs with the
+	detected Operating System.
+
+2011-03-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/restore.png: New. Restore Icon for the Trashcan.
 
 2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
