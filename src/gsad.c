@@ -4827,9 +4827,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
           char *res;
           gchar *full_url;
           char ctime_now[27];
+          const char *cmd;
+          int export;
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
+
+          cmd = MHD_lookup_connection_value (connection,
+                                             MHD_GET_ARGUMENT_KIND,
+                                             "cmd");
+          export = (cmd && (strncmp (cmd, "export", strlen ("export")) == 0));
 
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
@@ -4847,7 +4854,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                         : "Already logged out.")
                     : "Cookie missing or bad.  Please login again."),
                   ctime_now,
-                  (strncmp (url, "/logout", strlen ("/logout"))
+                  (((export == 0)
+                    && strncmp (url, "/logout", strlen ("/logout")))
                     ? full_url
                     : ""));
           g_free (full_url);

@@ -1,5 +1,12 @@
 2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): In the GET case when the session has
+	expired, skip passing the next page down to the XSL when the command is
+	an export command.  This prevents the login page from simply serving the
+	exported file.
+
+2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Reword down message slightly.
 
 2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
