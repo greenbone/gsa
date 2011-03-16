@@ -250,7 +250,7 @@ char * get_trash_omp (credentials_t *, const char *, const char *);
 char * restore_omp (credentials_t *, const char *);
 char * empty_trashcan_omp (credentials_t *);
 
-gboolean is_omp_authenticated (const gchar *, const gchar *);
+int authenticate_omp (const gchar *, const gchar *);
 
 char * get_nvts_omp (credentials_t *, const char *);
 

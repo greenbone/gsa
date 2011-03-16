@@ -1782,17 +1782,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (con_info->req_parms.login && con_info->req_parms.password)
         {
-          if (is_omp_authenticated (con_info->req_parms.login,
-                                    con_info->req_parms.password))
-            {
-              user_t *user;
-              user = user_add (con_info->req_parms.login,
-                               con_info->req_parms.password);
-              /* Redirect to get_tasks. */
-              *user_return = user;
-              return 1;
-            }
-          else
+          int ret;
+          ret = authenticate_omp (con_info->req_parms.login,
+                                  con_info->req_parms.password);
+          if (ret)
             {
               time_t now;
               gchar *xml;
@@ -1804,15 +1797,25 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
               xml = g_strdup_printf ("<login_page>"
                                      "<message>"
-                                     "Login failed."
+                                     "Login failed.%s"
                                      "</message>"
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "</login_page>",
+                                     ret == 2 ? "  Manager is down." : "",
                                      ctime_now);
               res = xsl_transform (xml);
               g_free (xml);
               con_info->response = res;
+            }
+          else
+            {
+              user_t *user;
+              user = user_add (con_info->req_parms.login,
+                               con_info->req_parms.password);
+              /* Redirect to get_tasks. */
+              *user_return = user;
+              return 1;
             }
         }
       else

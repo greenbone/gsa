@@ -10442,10 +10442,10 @@ get_trash_omp (credentials_t * credentials, const char * sort_field,
  * @param[in]  username  Username.
  * @param[in]  password  Password.
  *
- * @return TRUE if valid, FALSE otherwise.
+ * @return 0 if valid, 1 failed, 2 manager down.
  */
-gboolean
-is_omp_authenticated (const gchar * username, const gchar * password)
+int
+authenticate_omp (const gchar * username, const gchar * password)
 {
   gnutls_session_t session;
   int socket;
@@ -10458,8 +10458,8 @@ is_omp_authenticated (const gchar * username, const gchar * password)
                                 manager_port);
   if (socket == -1)
     {
-      tracef ("is_omp_authenticated failed to acquire socket!\n");
-      return FALSE;
+      tracef ("%s failed to acquire socket!\n", __FUNCTION__);
+      return 2;
     }
 
 #ifdef DEBUG_AUTH
@@ -10478,12 +10478,12 @@ is_omp_authenticated (const gchar * username, const gchar * password)
   if (auth == 0)
     {
       openvas_server_close (socket, session);
-      return TRUE;
+      return 0;
     }
   else
     {
       openvas_server_close (socket, session);
-      return FALSE;
+      return 1;
     }
 }
 

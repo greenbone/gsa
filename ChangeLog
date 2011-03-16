@@ -1,5 +1,18 @@
 2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Tell the user when the login fails because the manager is down.
+
+	* src/gsad.c (exec_omp_post): Update authenticate call.  Add message if
+	manager is down.
+
+	* src/gsad_omp.c (is_omp_authenticated): Remove.  Now authenticate_omp.
+	(authenticate_omp): New function.  Was is_omp_authenticated.  Add "manager
+	down" return.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+2011-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (error_dialog): Get token from param.
 	(gsad_response): New template.  From omp.xsl.
 
