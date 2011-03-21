@@ -1,5 +1,14 @@
 2011-03-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/restore_inactive.png: New. Interims icon.
+
+	* CMakeLists.txt: Install restore icons.
+
+	* src/html/omp.xsl: Apply new restore icon where resume
+	was used for the time being.
+
+2011-03-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/omp.xsl (get_trash): Make overview table use
 	full width and add title for this contents.
 

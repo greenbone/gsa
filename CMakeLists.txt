@@ -334,7 +334,8 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/override.png src/html/img/new_override.png
                src/html/img/pause_inactive.png src/html/img/false_positive.png
                src/html/img/trashcan.png src/html/img/trashcan_inactive.png
-			   src/html/img/indicator_js.png
+               src/html/img/indicator_js.png
+               src/html/img/restore.png src/html/img/restore_inactive.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
