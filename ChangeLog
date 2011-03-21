@@ -1,5 +1,10 @@
 2011-03-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Added a header line for contents
+	table.
+
+2011-03-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/restore_inactive.png: New. Interims icon.
 
 	* CMakeLists.txt: Install restore icons.

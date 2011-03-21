@@ -9728,6 +9728,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Trashcan Contents</h1>
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+        <tr class="gbntablehead2">
+          <td>Type</td>
+          <td>Items</td>
+      </tr>
         <tr class="even">
           <td><a href="#agents">Agents</a></td>
           <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
