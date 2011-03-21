@@ -9211,6 +9211,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>Host</td>
+      <td>OS</td>
       <td>Start</td>
       <td>End</td>
       <td><img src="/img/high.png" alt="High" title="High"/></td>
@@ -9225,6 +9226,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr>
         <td>
           <a href="#{$current_host}"><xsl:value-of select="$current_host"/></a>
+        </td>
+        <td>
+          <!-- Check for detected operating system(s) -->
+          <xsl:variable name="cpes" select="count(../host[ip/text() = $current_host]/detail[name/text() = 'OS'][contains(value/text(), 'cpe:/o:')])"/>
+          <xsl:choose>
+            <xsl:when test="$cpes = 0">
+              <!-- nothing detected or matched by our CPE database -->
+              <img src="/img/os_unknown.png" alt="No information on Operating System. This happens for scans without credentials or when the OS was not identified." title="No information on Operating System. This happens for scans without credentials or when the OS was not identified."/>
+            </xsl:when>
+            <xsl:when test="$cpes = 1">
+              <!-- One system detected: display the corresponding icon and name from our database -->
+              <xsl:for-each select="../host[ip/text() = $current_host]/detail[name/text() = 'OS']">
+                <xsl:variable name="report" select="value"/>
+                <xsl:variable name="os_name" select="document('os.xml')//os_vendors/vendor[contains($report, @pattern)]/@name"/>
+                <xsl:variable name="os_icon" select="document('os.xml')//os_vendors/vendor[contains($report, @pattern)]/@icon"/>
+                <img src="/img/{$os_icon}" alt="{$os_name}" title="{$os_name}"/>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- too many OS detected! Report the conflict -->
+              <img src="/img/os_conflict.png" alt="OS conflict! We have detected several OS's running on this host!" title="OS conflict! We have detected several OS's running on this host!"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </td>
         <td>
           <xsl:value-of select="substring(text(),5,6)"/>, <xsl:value-of select="substring(text(),12,8)"/>
@@ -9259,6 +9283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:for-each>
     <tr>
       <td>Total: <xsl:value-of select="count(host_start)"/></td>
+      <td></td>
       <td></td>
       <td></td>
       <td>

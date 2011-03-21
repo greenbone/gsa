@@ -1,3 +1,13 @@
+2011-03-21  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl: mark IPs with an icon representing the detected
+	Operating System.
+
+	* src/html/os.xml: New. Database to retrieve the OS icon and title to
+	display for a given CPE.
+
+	* CMakeLists.txt: consider the new files during the installation.
+
 2011-03-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/indicator_software_update.png,

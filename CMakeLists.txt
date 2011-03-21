@@ -286,7 +286,7 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
                src/html/help.xsl  src/html/oap.xsl  src/html/omp.xsl
-               src/html/IE6fixes.css
+               src/html/IE6fixes.css src/html/os.xml
          DESTINATION ${GSA_DATA_DIR})
 
 install (FILES src/html/login/login.html src/html/gsa-style.css
@@ -345,6 +345,23 @@ install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
                src/html/img/style/window_dec_b_error.png
                src/html/img/style/window_dec_c_error.png
          DESTINATION ${GSA_DATA_DIR}/img/style)
+
+install (FILES  src/html/img/os_apple.png
+                src/html/img/os_centos.png
+                src/html/img/os_conflict.png
+                src/html/img/os_debian.png
+                src/html/img/os_fedora.png
+                src/html/img/os_gentoo.png
+                src/html/img/os_hp.png
+                src/html/img/os_mandriva.png
+                src/html/img/os_novell.png
+                src/html/img/os_redhat.png
+                src/html/img/os_sun.png
+                src/html/img/os_suse.png
+                src/html/img/os_trustix.png
+                src/html/img/os_unknown.png
+                src/html/img/os_windows.png
+         DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})

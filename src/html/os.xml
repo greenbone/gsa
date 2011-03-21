@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Greenbone Security Assistant
+$Id$
+Description: CPE based OS reporting system
+
+Authors:
+Henri Doreau <henri.doreau@greenbone.net>
+
+Copyright:
+Copyright (C) 2011 Greenbone Networks GmbH
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2,
+or, at your option, any later version as published by the Free
+Software Foundation
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<os_vendors>
+  <!--
+  name: full name of the operating system as we want it to be reported to the user
+  pattern: cpe pattern to match
+  icon: the icon to display for this OS (from the img/ directory)
+  -->
+  
+  <!-- APPLE -->
+  <vendor name="Apple MAC OS X" pattern="cpe:/o:apple:mac_os_x" icon="os_apple.png"/>
+
+  <!-- CENT OS -->
+  <vendor name="CentOS 2" pattern="cpe:/o:centos:centos:2" icon="os_centos.png"/>
+  <vendor name="CentOS 3" pattern="cpe:/o:centos:centos:3" icon="os_centos.png"/>
+  <vendor name="CentOS 4" pattern="cpe:/o:centos:centos:4" jcon="os_centos.png"/>
+  <vendor name="CentOS 5" pattern="cpe:/o:centos:centos:5" icon="os_centos.png"/>
+  <vendor name="CentOS" pattern="cpe:/o:centos:centos" icon="os_centos.png"/>
+
+  <!-- DEBIAN -->
+  <vendor name="Debian GNU/Linux 2.2" pattern="cpe:/o:debian:debian_linux:2.2" icon="os_debian.png"/>
+  <vendor name="Debian GNU/Linux 3.0" pattern="cpe:/o:debian:debian_linux:3.0" icon="os_debian.png"/>
+  <vendor name="Debian GNU/Linux 3.1" pattern="cpe:/o:debian:debian_linux:3.1" icon="os_debian.png"/>
+  <vendor name="Debian GNU/Linux 4.0" pattern="cpe:/o:debian:debian_linux:4.0" icon="os_debian.png"/>
+  <vendor name="Debian GNU/Linux 5.0" pattern="cpe:/o:debian:debian_linux:5.0" icon="os_debian.png"/>
+  <vendor name="Debian GNU/Linux" pattern="cpe:/o:debian:debian_linux" icon="os_debian.png"/>
+
+  <!-- FEDORA -->
+  <vendor name="Fedora" pattern="cpe:/o:fedora_project" icon="os_fedora.png"/>
+
+  <!-- GENTOO -->
+  <vendor name="Gentoo" pattern="cpe:/o:gentoo:linux" icon="os_gentoo.png"/>
+
+  <!-- HP -->
+  <vendor name="HP UX" pattern="cpe:/o:hp:hp-ux" icon="os_hp.png"/>
+
+  <!-- MANDRIVA -->
+  <vendor name="Mandriva" pattern="cpe:/o:mandriva" icon="os_mandriva.png"/>
+  <vendor name="Mandrake" pattern="cpe:/o:mandrakesoft" icon="os_mandriva.png"/>
+
+  <!-- NOVELL -->
+  <vendor name="Novell" pattern="cpe:/o:novell" icon="os_novell.png"/>
+
+  <!-- REDHAT -->
+  <vendor name="RedHat Enterprise Linux" pattern="cpe:/o:redhat" icon="os_redhat.png"/>
+
+  <!-- SUN -->
+  <vendor name="Sun Solaris" pattern="cpe:/o:sun" icon="os_sun.png"/>
+
+  <!-- SUSE -->
+  <vendor name="Suse" pattern="cpe:/o:suse" icon="os_suse.png"/>
+
+  <!-- TRUSTIX -->
+  <vendor name="Trustix Secure Linux" pattern="cpe:/o:trustix" icon="os_trustix.png"/>
+
+  <!-- WINDOWS -->
+  <vendor name="Microsoft Windows" pattern="cpe:/o:microsoft" icon="os_windows.png"/>
+</os_vendors>
+
