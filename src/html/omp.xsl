@@ -9754,19 +9754,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td><a href="#schedules">Schedules</a></td>
-          <td><xsl:value-of select="count(get_schedules_response/schedules)"/></td>
+          <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
         </tr>
         <tr class="even">
           <td><a href="#slaves">Slaves</a></td>
-          <td><xsl:value-of select="count(get_slaves_formats_response/slave)"/></td>
+          <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
         </tr>
         <tr class="odd">
           <td><a href="#targets">Targets</a></td>
-          <td><xsl:value-of select="count(get_targets_formats_response/target)"/></td>
+          <td><xsl:value-of select="count(get_targets_response/target)"/></td>
         </tr>
         <tr class="even">
           <td><a href="#tasks">Tasks</a></td>
-          <td><xsl:value-of select="count(get_tasks_formats_response/task)"/></td>
+          <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
         </tr>
       </table>
 

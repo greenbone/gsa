@@ -1,5 +1,9 @@
 2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Correct count selects.
+
+2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Log the user out when connecting to the Manager fails.
 
 	* src/gsad.c (user_find): New function.  Was token_user.  Update callers.
