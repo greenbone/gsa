@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <!--
 Greenbone Security Assistant
@@ -26,60 +26,322 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<os_vendors>
+<!-- This file has been generated automatically from cpe.inc and the official CPE dictionnary -->
+
+
+<operating_systems>
   <!--
-  name: full name of the operating system as we want it to be reported to the user
   pattern: cpe pattern to match
+  title: full name of the operating system as we want it to be reported to the user
   icon: the icon to display for this OS (from the img/ directory)
   -->
-  
-  <!-- APPLE -->
-  <vendor name="Apple MAC OS X" pattern="cpe:/o:apple:mac_os_x" icon="os_apple.png"/>
-
-  <!-- CENT OS -->
-  <vendor name="CentOS 2" pattern="cpe:/o:centos:centos:2" icon="os_centos.png"/>
-  <vendor name="CentOS 3" pattern="cpe:/o:centos:centos:3" icon="os_centos.png"/>
-  <vendor name="CentOS 4" pattern="cpe:/o:centos:centos:4" jcon="os_centos.png"/>
-  <vendor name="CentOS 5" pattern="cpe:/o:centos:centos:5" icon="os_centos.png"/>
-  <vendor name="CentOS" pattern="cpe:/o:centos:centos" icon="os_centos.png"/>
-
-  <!-- DEBIAN -->
-  <vendor name="Debian GNU/Linux 2.2" pattern="cpe:/o:debian:debian_linux:2.2" icon="os_debian.png"/>
-  <vendor name="Debian GNU/Linux 3.0" pattern="cpe:/o:debian:debian_linux:3.0" icon="os_debian.png"/>
-  <vendor name="Debian GNU/Linux 3.1" pattern="cpe:/o:debian:debian_linux:3.1" icon="os_debian.png"/>
-  <vendor name="Debian GNU/Linux 4.0" pattern="cpe:/o:debian:debian_linux:4.0" icon="os_debian.png"/>
-  <vendor name="Debian GNU/Linux 5.0" pattern="cpe:/o:debian:debian_linux:5.0" icon="os_debian.png"/>
-  <vendor name="Debian GNU/Linux" pattern="cpe:/o:debian:debian_linux" icon="os_debian.png"/>
-
-  <!-- FEDORA -->
-  <vendor name="Fedora" pattern="cpe:/o:fedora_project" icon="os_fedora.png"/>
-
-  <!-- GENTOO -->
-  <vendor name="Gentoo" pattern="cpe:/o:gentoo:linux" icon="os_gentoo.png"/>
-
-  <!-- HP -->
-  <vendor name="HP UX" pattern="cpe:/o:hp:hp-ux" icon="os_hp.png"/>
-
-  <!-- MANDRIVA -->
-  <vendor name="Mandriva" pattern="cpe:/o:mandriva" icon="os_mandriva.png"/>
-  <vendor name="Mandrake" pattern="cpe:/o:mandrakesoft" icon="os_mandriva.png"/>
-
-  <!-- NOVELL -->
-  <vendor name="Novell" pattern="cpe:/o:novell" icon="os_novell.png"/>
-
-  <!-- REDHAT -->
-  <vendor name="RedHat Enterprise Linux" pattern="cpe:/o:redhat" icon="os_redhat.png"/>
-
-  <!-- SUN -->
-  <vendor name="Sun Solaris" pattern="cpe:/o:sun" icon="os_sun.png"/>
-
-  <!-- SUSE -->
-  <vendor name="Suse" pattern="cpe:/o:suse" icon="os_suse.png"/>
-
-  <!-- TRUSTIX -->
-  <vendor name="Trustix Secure Linux" pattern="cpe:/o:trustix" icon="os_trustix.png"/>
-
-  <!-- WINDOWS -->
-  <vendor name="Microsoft Windows" pattern="cpe:/o:microsoft" icon="os_windows.png"/>
-</os_vendors>
-
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt</pattern><title>Microsoft Windows NT</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_2000</pattern><title>Microsoft Windows 2000</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_server_2000</pattern><title>Microsoft Windows Server 2000</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_xp</pattern><title>Microsoft Windows XP</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_server_2003</pattern><title>Microsoft Windows Server 2003</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp1</pattern><title>Microsoft Windows 4.0 sp1</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp2</pattern><title>Microsoft Windows 4.0 sp2</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp3</pattern><title>Microsoft Windows 4.0 sp3</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp4</pattern><title>Microsoft Windows 4.0 sp4</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp5</pattern><title>Microsoft Windows 4.0 sp5</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_nt:4.0:sp6</pattern><title>Microsoft Windows 4.0 sp6</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_xp::sp1</pattern><title>Microsoft windows xp_sp1</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_xp::sp2</pattern><title>Microsoft Windows XP Service Pack 2</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_xp::sp3</pattern><title>Microsoft Windows XP Service Pack 3</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_server_2003::sp1</pattern><title>Microsoft Windows Server 2003 Service Pack 1</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:microsoft:windows_server_2003::sp2</pattern><title>Microsoft Windows Server 2003 Service Pack 2</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:linux:7.3</pattern><title>Red Hat Linux 7.3</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:linux:8.0</pattern><title>Red Hat Linux 8.0</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:linux:9</pattern><title>Red Hat Linux 9.0</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:1</pattern><title>Fedora Core 1</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:2</pattern><title>Fedora Core 2</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:3</pattern><title>Fedora Core 3</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:4</pattern><title>Fedora Core 4</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:5</pattern><title>Fedora Core 5</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora_core:6</pattern><title>Fedora Core 6</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:7</pattern><title>Fedora 7</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:8</pattern><title>Fedora 8</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:9</pattern><title>Fedora 9</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:10</pattern><title>Fedora 10</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:11</pattern><title>Fedora 11</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:12</pattern><title>Fedora 12</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:2.1</pattern><title>Red Hat Enterprise Linux 2.1</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:3</pattern><title>Red Hat Enterprise Linux 3</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:4</pattern><title>Red Hat Enterprise Linux 4</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:5</pattern><title>Red Hat Enterprise Linux 5</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2009.0</pattern><title>Mandriva Linux 2009.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2009.1</pattern><title>Mandriva Linux 2009.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2008.1</pattern><title>Mandrake Linux 2008.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2008.0</pattern><title>Mandriva Linux 2008.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2007.1</pattern><title>Mandriva Linux 2007.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2007.0</pattern><title>Mandriva Linux 2007.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2006.0</pattern><title>Mandriva Linux 2006.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:10.2</pattern><title>MandrakeSoft Mandrake Linux 10.2</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:10.1</pattern><title>MandrakeSoft Mandrake Linux 10.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:10.0</pattern><title>MandrakeSoft Mandrake Linux 10.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:9.2</pattern><title>MandrakeSoft Mandrake Linux 9.2</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:9.1</pattern><title>MandrakeSoft Mandrake Linux 9.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:8.1</pattern><title>MandrakeSoft Mandrake Linux 8.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:8.0</pattern><title>MandrakeSoft Mandrake Linux 8.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux:7.2</pattern><title>MandrakeSoft Mandrake Linux 7.2</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos:5</pattern><title>CentOS-5</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos:4</pattern><title>CentOS-4</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos:3</pattern><title>CentOS-3</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos:2</pattern><title>CentOS-2</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:2.2</pattern><title>Debian Debian Linux 2.2</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:3.0</pattern><title>Debian Debian Linux 3.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:3.1</pattern><title>Debian Debian Linux 3.1</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:4.0</pattern><title>Debian GNU/Linux 4.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:5.0</pattern><title>Debian GNU/Linux 5.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:suse:linux_enterprise_server:11</pattern><title>SuSE Linux Enterprise Server 11</title><icon>os_suse.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:suse:linux_enterprise_server:10</pattern><title>SuSE Linux Enterprise Server 10</title><icon>os_suse.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:suse:linux_enterprise_server:9</pattern><title>SuSE Linux Enterprise Server 9</title><icon>os_suse.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:11.2</pattern><title>Novell openSUSE 11.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:11.1</pattern><title>Novell openSUSE 11.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:11.0</pattern><title>Novell opensuse 11.0</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:10.3</pattern><title>Novell opensuse 10.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:10.2</pattern><title>Novell openSUSE 10.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:11.0</pattern><title>Novell SUSE Linux 11.0</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:10.3</pattern><title>Novell SUSE Linux 10.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:10.2</pattern><title>Novell SUSE Linux 10.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:10.1</pattern><title>Novell SUSE Linux 10.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:9.3</pattern><title>Novell SUSE Linux 9.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:9.2</pattern><title>Novell SUSE Linux 9.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:9.1</pattern><title>Novell SUSE Linux 9.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:9.0</pattern><title>Novell SUSE Linux 9.0</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:8.2</pattern><title>Novell SUSE Linux 8.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:8.1</pattern><title>Novell SUSE Linux 8.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:8.0</pattern><title>Novell SUSE Linux 8.0</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:suse_linux:7.3</pattern><title>Novell SUSE Linux 7.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:3.0.5</pattern><title>Trustix Secure Linux 3.0.5</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:3.0</pattern><title>Trustix Secure Linux 3.0</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:2.2</pattern><title>Trustix Secure Linux 2.2</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:2.1</pattern><title>Trustix Secure Linux 2.1</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:2.0</pattern><title>Trustix Secure Linux 2.0</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:1.5</pattern><title>Trustix Secure Linux 1.5</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:1.2</pattern><title>Trustix Secure Linux 1.2</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux:1.1</pattern><title>Trustix Secure Linux 1.1</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:gentoo:linux</pattern><title>Gentoo Linux</title><icon>os_gentoo.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:10.01</pattern><title>HP HP-UX 10.01</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:10.10</pattern><title>HP HP-UX 10.10</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:10.20</pattern><title>HP HP-UX 10.20</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:10.24</pattern><title>HP HP-UX 10.24</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:10.26</pattern><title>HP HP-UX 10.26</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.00</pattern><title>HP-UX 11.00</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.0.4</pattern><title>HP HP-UX 11.0.4</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.11</pattern><title>HP-UX 11.11</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.20</pattern><title>HP-UX 11i v1.5</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.22</pattern><title>HP-UX 11i v1.6</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.23</pattern><title>HP-UX 11i v2</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.31</pattern><title>HP-UX 11i v3</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:hp:hp-ux:11.23</pattern><title>HP-UX 11i v2</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:sun:solaris</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:apple:mac_os_x</pattern><title>Apple Mac OS X</title><icon>os_apple.png</icon>
+    </operating_system>
+</operating_systems>

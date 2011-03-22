@@ -9239,8 +9239,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <!-- One system detected: display the corresponding icon and name from our database -->
               <xsl:for-each select="../host[ip/text() = $current_host]/detail[name/text() = 'OS']">
                 <xsl:variable name="report" select="value"/>
-                <xsl:variable name="os_name" select="document('os.xml')//os_vendors/vendor[contains($report, @pattern)]/@name"/>
-                <xsl:variable name="os_icon" select="document('os.xml')//os_vendors/vendor[contains($report, @pattern)]/@icon"/>
+                <xsl:variable name="os_name" select="document('os.xml')//operating_systems/operating_system[contains($report, pattern)]/title"/>
+                <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($report, pattern)]/icon"/>
                 <img src="/img/{$os_icon}" alt="{$os_name}" title="{$os_name}"/>
               </xsl:for-each>
             </xsl:when>

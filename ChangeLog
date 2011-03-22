@@ -1,3 +1,11 @@
+2011-03-22  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/os.xml: complete regeneration to include every CPEs present
+	in cpe.inc and their official CPE titles. Also changed the format to use
+	XML entities instead of attributes.
+
+	* src/html/omp.xsl: modified to use the new format of os.xml.
+
 2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Log the user out when connecting to the Administrator fails.
