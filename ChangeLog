@@ -1,3 +1,9 @@
+2011-03-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl: Renamed "Trashcan Contents" to "Contents".
+
+	* src/html/help.xsl: Fixed icons for restore.
+
 2011-03-22  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: complete regeneration to include every CPEs present

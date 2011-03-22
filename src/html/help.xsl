@@ -3984,10 +3984,10 @@ Public License instead of this License.
       <h4>Restore</h4>
       <p>
        Pressing the restore icon
-       <img src="/img/resume.png" alt="Restore" title="Restore" />
+       <img src="/img/restore.png" alt="Restore" title="Restore" />
        will move the resource out of the trashcan and back into normal
        operation.  The trashcan will be updated.  The icon will be greyed out
-       <img src="/img/resume_inactive.png" alt="Restore" title="Restore" />
+       <img src="/img/restore_inactive.png" alt="Restore" title="Restore" />
        when the resource depends on some other resource that
        is in the trashcan.
       </p>
