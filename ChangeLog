@@ -1,5 +1,13 @@
 2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Log the user out when connecting to the Administrator fails.
+
+	* src/gsad_oap.c (administrator_connect): If connecting to adminstrator
+	fails, log user out and return login page in new html param.  Update all
+	callers to return this html when appropriate.
+
+2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_trash): Correct count selects.
 
 2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>

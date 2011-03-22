@@ -65,18 +65,22 @@ gchar *administrator_address = NULL;
  */
 int administrator_port = 9393;
 
+int
+token_user_remove (const char *);
+
 /**
  * @brief Connect to OpenVAS Administrator daemon.
  *
  * @param[in]   credentials  Username and password for authentication
  * @param[out]  socket       Administrator socket on success.
  * @param[out]  session      GNUTLS session on success.
+ * @param[out]  html         HTML on failure to connect if possible, else NULL.
  *
  * @return 0 success, -1 failed to connect, -2 authentication failed.
  */
 int
 administrator_connect (credentials_t *credentials, int *socket,
-                       gnutls_session_t *session)
+                       gnutls_session_t *session, gchar **html)
 {
   *socket = openvas_server_open (session,
                                  administrator_address
@@ -85,7 +89,40 @@ administrator_connect (credentials_t *credentials, int *socket,
                                  administrator_port);
   if (*socket == -1)
     {
+      time_t now;
+      gchar *xml;
+      char *res;
+      char ctime_now[27];
+      int ret;
+
       tracef ("socket is not there!\n");
+
+      if (html == NULL)
+        return -1;
+
+      *html = NULL;
+
+      if (credentials->token == NULL)
+        return -1;
+
+      ret = token_user_remove (credentials->token);
+      if (ret)
+        return -1;
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
+
+      xml = g_strdup_printf ("<login_page>"
+                             "<message>"
+                             "Logged out. OAP service is down."
+                             "</message>"
+                             "<token></token>"
+                             "<time>%s</time>"
+                             "</login_page>",
+                             ctime_now);
+      res = xsl_transform (xml);
+      g_free (xml);
+      *html = res;
       return -1;
     }
 
@@ -218,14 +255,24 @@ create_user_oap (credentials_t * credentials, const char *name,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  if (administrator_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new user. "
-                         "No new user has been created. "
-                         "Diagnostics: Failure to connect to administrator daemon.",
-                         "/oap?cmd=get_users");
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new user. "
+                             "No new user has been created. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/oap?cmd=get_users");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -343,14 +390,24 @@ save_user_oap (credentials_t * credentials, const char *name,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  if (administrator_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a user. "
-                         "No saving has been done. "
-                         "Diagnostics: Failure to connect to administrator daemon.",
-                         "/oap?cmd=get_users");
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a user. "
+                             "No saving has been done. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/oap?cmd=get_users");
+    }
 
   xml = g_string_new ("<get_users>");
 
@@ -463,14 +520,24 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (administrator_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a user. "
-                         "The user is not deleted. "
-                         "Diagnostics: Failure to connect to administrator daemon.",
-                         "/oap?cmd=get_users");
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a user. "
+                             "The user is not deleted. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/oap?cmd=get_users");
+    }
 
   if (openvas_server_sendf
       (&session,
@@ -516,12 +583,15 @@ edit_user_oap (credentials_t * credentials, const char * name)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   assert (name);
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user. "
@@ -582,12 +652,15 @@ get_user_oap (credentials_t * credentials, const char * name)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   assert (name);
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user. "
@@ -651,10 +724,13 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user list. "
@@ -724,10 +800,13 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the feed list. "
@@ -790,10 +869,13 @@ sync_feed_oap (credentials_t * credentials)
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while synchronizing with the NVT feed. "
@@ -860,10 +942,13 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the user list. "
@@ -927,10 +1012,13 @@ edit_settings_oap (credentials_t * credentials, const char * sort_field,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting the settings. "
@@ -998,10 +1086,13 @@ save_settings_oap (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   char *text = NULL;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the settings. "
@@ -1125,10 +1216,13 @@ modify_ldap_auth_oap (credentials_t* credentials,
   char *text = NULL;
   char* truefalse = (enable && strcmp (enable, "1") == 0) ? "true" : "false";
   GString* xml = NULL;
+  gchar *html;
 
-  switch (administrator_connect (credentials, &socket, &session))
+  switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case -1:
+        if (html)
+          return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving the ldap settings. "
