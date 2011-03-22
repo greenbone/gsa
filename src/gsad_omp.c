@@ -90,7 +90,7 @@ int manager_port = 9390;
 
 /* Headers. */
 
-int manager_connect (credentials_t *, int *, gnutls_session_t *);
+int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
 static char *get_tasks (credentials_t *, const char *, const char *,
                         const char *, const char *, const char *, int);
@@ -393,14 +393,24 @@ new_task_omp (credentials_t * credentials, const char* message,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting targets list. "
-                         "The current list of targets is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting targets list. "
+                             "The current list of targets is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<new_task>");
 
@@ -588,14 +598,24 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   char *text = NULL;
   int socket, ret;
   gchar *schedule_element, *escalator_element, *slave_element;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new task. "
-                         "The task is not created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new task. "
+                             "The task is not created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (!schedule_id || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
@@ -717,6 +737,7 @@ edit_task (credentials_t * credentials, const char *task_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (task_id == NULL || next == NULL)
     return gsad_message (credentials,
@@ -726,13 +747,22 @@ edit_task (credentials_t * credentials, const char *task_id,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a task. "
-                         "The task remains as it was. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a task. "
+                             "The task remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -1096,13 +1126,23 @@ get_nvts (credentials_t *credentials, const char *oid,
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting nvt details. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting nvt details. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -1184,14 +1224,24 @@ get_tasks (credentials_t * credentials, const char *task_id,
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the status. "
-                         "No update on status can be retrieved. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the status. "
+                             "No update on status can be retrieved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (task_id)
     {
@@ -1325,14 +1375,24 @@ create_lsc_credential_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   GString *xml;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new credential. "
-                         "No new credential was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_lsc_credentials");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new credential. "
+                             "No new credential was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -1446,14 +1506,24 @@ delete_lsc_credential_omp (credentials_t * credentials,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an credential. "
-                         "The credential was not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_lsc_credentials");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an credential. "
+                             "The credential was not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -1511,14 +1581,24 @@ get_lsc_credential (credentials_t * credentials,
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a credential. "
-                         "The credential is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_lsc_credentials");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a credential. "
+                             "The credential is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+    }
 
   /* Get the LSC credential. */
 
@@ -1618,20 +1698,31 @@ get_lsc_credentials (credentials_t * credentials,
   entity_t entity;
   gnutls_session_t session;
   int socket;
+  gchar *connect_html;
 
   assert (html);
 
   if (result_len) *result_len = 0;
 
-  if (manager_connect (credentials, &socket, &session))
+  switch (manager_connect (credentials, &socket, &session, &connect_html))
     {
-      *html = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while getting the credential list. "
-                            "The current list of credentials is not available. "
-                            "Diagnostics: Failure to connect to manager daemon.",
-                            "/omp?cmd=get_targets");
-      return 1;
+      case 0:
+        break;
+      case -1:
+        if (connect_html)
+          {
+            *html = connect_html;
+            return 1;
+          }
+        /* Fall through. */
+      default:
+        *html = gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting the credential list. "
+                              "The current list of credentials is not available. "
+                              "Diagnostics: Failure to connect to manager daemon.",
+                              "/omp?cmd=get_targets");
+        return 1;
     }
 
   /* Send the request. */
@@ -1880,6 +1971,7 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (lsc_credential_id == NULL || next == NULL)
     return gsad_message (credentials,
@@ -1889,13 +1981,22 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_lsc_credentials");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a credential. "
-                         "The credential remains as it was. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_lsc_credentials");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a credential. "
+                             "The credential remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -2002,6 +2103,7 @@ save_lsc_credential_omp (credentials_t * credentials,
   gchar *modify;
   int socket;
   gnutls_session_t session;
+  gchar *html;
 
   if (comment == NULL || name == NULL || (change_password && password == NULL)
       || (change_login && login == NULL))
@@ -2019,13 +2121,22 @@ save_lsc_credential_omp (credentials_t * credentials,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_lsc_credentials");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a credential. "
-                         "The credential remains the same. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_lsc_credentials");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a credential. "
+                             "The credential remains the same. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_lsc_credentials");
+    }
 
   if (change_login && change_password)
     modify = g_markup_printf_escaped ("<modify_lsc_credential"
@@ -2129,14 +2240,24 @@ create_agent_omp (credentials_t * credentials, const char *name,
   gnutls_session_t session;
   int socket;
   GString *xml;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new agent. "
-                         "No new agent was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_agents");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new agent. "
+                             "No new agent was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_agents");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -2270,14 +2391,24 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an agent. "
-                         "The agent was not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_agents");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an agent. "
+                             "The agent was not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_agents");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -2341,18 +2472,31 @@ get_agents_omp (credentials_t * credentials,
   entity_t entity;
   gnutls_session_t session;
   int socket;
+  gchar *connect_html;
 
   *result_len = 0;
 
-  if (manager_connect (credentials, &socket, &session))
+  switch (manager_connect (credentials, &socket, &session, &connect_html))
     {
-      *html = gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while getting the agent list. "
-                            "The current list of agents is not available. "
-                            "Diagnostics: Failure to connect to manager daemon.",
-                            "/omp?cmd=get_agents");
-      return 1;
+      case 0:
+        break;
+      case -1:
+        if (connect_html)
+          {
+            *html = connect_html;
+            return 1;
+          }
+        /* Fall through. */
+      default:
+        {
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting the agent list. "
+                                "The current list of agents is not available. "
+                                "Diagnostics: Failure to connect to manager daemon.",
+                                "/omp?cmd=get_agents");
+          return 1;
+        }
     }
 
   /* Send the request. */
@@ -2544,13 +2688,24 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
   GString *xml;
   gnutls_session_t session;
   int socket;
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while verifying an agent. "
-                         "The agent iss not verified. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_agents");
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying an agent. "
+                             "The agent iss not verified. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_agents");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -2639,14 +2794,24 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new target. "
-                         "No new target was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new target. "
+                             "No new target was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
 
   xml = g_string_new ("<get_escalators>");
 
@@ -2799,14 +2964,24 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a escalator. "
-                         "The escalator is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_escalators");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a escalator. "
+                             "The escalator is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_escalators");
+    }
 
   xml = g_string_new ("<get_escalators>");
 
@@ -2871,13 +3046,23 @@ get_escalator_omp (credentials_t * credentials, const char * escalator_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an escalator. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_escalators");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting an escalator. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_escalators");
+    }
 
   xml = g_string_new ("<get_escalator>");
 
@@ -3004,14 +3189,24 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
   gnutls_session_t session;
   int socket;
   char *ret;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting escalator list. "
-                         "The current list of escalators is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting escalator list. "
+                             "The current list of escalators is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_escalators>");
 
@@ -3074,13 +3269,23 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
   gnutls_session_t session;
   int socket;
   char *ret;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while testing an escalator. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_escalators");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while testing an escalator. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_escalators");
+    }
 
   xml = g_string_new ("<get_escalators>");
 
@@ -3185,14 +3390,24 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new target. "
-                         "No new target was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new target. "
+                             "No new target was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
 
   xml = g_string_new ("<get_targets>");
 
@@ -3396,14 +3611,24 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a target. "
-                         "The target is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a target. "
+                             "The target is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
 
   xml = g_string_new ("<get_targets>");
 
@@ -3467,14 +3692,24 @@ delete_trash_agent_omp (credentials_t * credentials, const char *agent_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an agent. "
-                         "The agent is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an agent. "
+                             "The agent is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3532,14 +3767,24 @@ delete_trash_config_omp (credentials_t * credentials, const char *config_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a config. "
-                         "The config is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a config. "
+                             "The config is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3597,14 +3842,24 @@ delete_trash_escalator_omp (credentials_t * credentials, const char *escalator_i
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a escalator. "
-                         "The escalator is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a escalator. "
+                             "The escalator is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3663,14 +3918,24 @@ delete_trash_lsc_credential_omp (credentials_t * credentials,
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an LSC credential. "
-                         "The LSC credential is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an LSC credential. "
+                             "The LSC credential is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3728,14 +3993,24 @@ delete_trash_report_format_omp (credentials_t * credentials, const char *report_
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a report format. "
-                         "The report format is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a report format. "
+                             "The report format is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3793,14 +4068,24 @@ delete_trash_schedule_omp (credentials_t * credentials, const char *schedule_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a schedule. "
-                         "The schedule is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a schedule. "
+                             "The schedule is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3858,14 +4143,24 @@ delete_trash_slave_omp (credentials_t * credentials, const char *slave_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a slave. "
-                         "The slave is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a slave. "
+                             "The slave is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3923,14 +4218,24 @@ delete_trash_target_omp (credentials_t * credentials, const char *target_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a target. "
-                         "The target is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a target. "
+                             "The target is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -3988,14 +4293,24 @@ delete_trash_task_omp (credentials_t * credentials, const char *task_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a task. "
-                         "The task is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a task. "
+                             "The task is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -4053,14 +4368,24 @@ restore_omp (credentials_t * credentials, const char *target_id)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while restoring a resource. "
-                         "The resource was not restored. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while restoring a resource. "
+                             "The resource was not restored. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -4116,13 +4441,23 @@ empty_trashcan_omp (credentials_t * credentials)
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while emptying the trashcan. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_trash");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while emptying the trashcan. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_trash");
+    }
 
   xml = g_string_new ("");
 
@@ -4177,14 +4512,24 @@ get_target_omp (credentials_t * credentials, const char * target_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting targets list. "
-                         "The current list of targets is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting targets list. "
+                             "The current list of targets is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
 
   xml = g_string_new ("<get_target>");
 
@@ -4246,14 +4591,24 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting targets list. "
-                         "The current list of targets is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_targets");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting targets list. "
+                             "The current list of targets is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
 
   xml = g_string_new ("<get_targets>");
 
@@ -4372,14 +4727,24 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new config. "
-                         "No new config was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new config. "
+                             "No new config was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -4475,14 +4840,24 @@ import_config_omp (credentials_t * credentials, char *xml_file)
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while importing a config. "
-                         "No new config was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a config. "
+                             "No new config was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -4571,14 +4946,24 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting list of configs. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting list of configs. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -4630,16 +5015,26 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   assert (config_id);
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting list of configs. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting list of configs. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   xml = g_string_new ("<get_config_response>");
   if (edit) g_string_append (xml, "<edit/>");
@@ -4738,14 +5133,24 @@ save_config_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   char *ret;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a config. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a config. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   /* Save preferences. */
 
@@ -4928,14 +5333,24 @@ get_config_family_omp (credentials_t * credentials,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting list of configs. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting list of configs. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   xml = g_string_new ("<get_config_family_response>");
   if (edit) g_string_append (xml, "<edit/>");
@@ -5057,14 +5472,24 @@ save_config_family_omp (credentials_t * credentials,
   gchar *nvt;
   int socket, index = 0;
   char *ret;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a config. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a config. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   /* Set the NVT selection. */
 
@@ -5157,14 +5582,24 @@ get_config_nvt_omp (credentials_t * credentials,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting list of configs. "
-                         "The current list of configs is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting list of configs. "
+                             "The current list of configs is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   xml = g_string_new ("<get_config_nvt_response>");
   if (edit) g_string_append (xml, "<edit/>");
@@ -5251,16 +5686,26 @@ save_config_nvt_omp (credentials_t * credentials,
       gnutls_session_t session;
       preference_t *preference;
       int socket, index = 0;
+      gchar *html;
 
       /* Save preferences. */
 
-      if (manager_connect (credentials, &socket, &session))
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting list of configs. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs");
+      switch (manager_connect (credentials, &socket, &session, &html))
+        {
+          case 0:
+            break;
+          case -1:
+            if (html)
+              return html;
+            /* Fall through. */
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while getting list of configs. "
+                                 "The current list of configs is not available. "
+                                 "Diagnostics: Failure to connect to manager daemon.",
+                                 "/omp?cmd=get_configs");
+        }
 
       while ((preference = g_array_index (preferences,
                                           preference_t*,
@@ -5420,14 +5865,24 @@ delete_config_omp (credentials_t * credentials, const char *config_id)
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a config. "
-                         "The config is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_configs");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a config. "
+                             "The config is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_configs");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -5487,16 +5942,26 @@ export_config_omp (credentials_t * credentials, const char *config_id,
   gnutls_session_t session;
   int socket;
   char *content = NULL;
+  gchar *html;
 
   *content_length = 0;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a config. "
-                         "The config could not be delivered. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a config. "
+                             "The config could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_configs_response>");
 
@@ -5589,16 +6054,26 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
   entity_t entity, preference_entity, value_entity;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   *content_length = 0;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a preference file. "
-                         "The file could not be delivered. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a preference file. "
+                             "The file could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_preferences_response>");
 
@@ -5694,16 +6169,26 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
   gnutls_session_t session;
   int socket;
   char *content = NULL;
+  gchar *html;
 
   *content_length = 0;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a report format. "
-                         "The report format could not be delivered. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a report format. "
+                             "The report format could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   xml = g_string_new ("<get_report_formats>");
 
@@ -5791,13 +6276,24 @@ delete_report_omp (credentials_t * credentials,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a report. "
-                         "The report is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a report. "
+                             "The report is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -5877,6 +6373,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
   entity_t report_entity;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   *content_type = NULL;
   *report_len = 0;
@@ -5902,13 +6399,22 @@ get_report_omp (credentials_t * credentials, const char *report_id,
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a report. "
-                         "The report could not be delivered. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a report. "
+                             "The report could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
@@ -6230,14 +6736,24 @@ get_notes (credentials_t *credentials, const char *commands)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the notes. "
-                         "The list of notes is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the notes. "
+                             "The list of notes is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_notes>");
 
@@ -6308,13 +6824,23 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the note. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the note. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_note>");
 
@@ -6412,6 +6938,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (first_result == NULL || max_results == NULL || hosts == NULL
       || levels == NULL || notes == NULL || oid == NULL || port == NULL
@@ -6424,13 +6951,22 @@ new_note_omp (credentials_t *credentials, const char *oid,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new note. "
-                         "No new note was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_notes");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new note. "
+                             "No new note was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_notes");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_results"
@@ -6555,6 +7091,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
   if (search_phrase == NULL)
     return gsad_message (credentials,
@@ -6580,13 +7117,22 @@ create_note_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_notes");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new note. "
-                         "No new note was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_notes");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new note. "
+                             "No new note was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_notes");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -6829,6 +7375,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (next == NULL)
     return gsad_message (credentials,
@@ -6874,13 +7421,22 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       return ret;
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a note. "
-                         "The note was not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a note. "
+                             "The note was not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -7020,6 +7576,7 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (note_id == NULL)
     {
@@ -7031,13 +7588,22 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                            "/omp?cmd=get_notes");
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a note. "
-                         "The note remains as it was. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_notes");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a note. "
+                             "The note remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_notes");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_notes"
@@ -7159,6 +7725,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   gnutls_session_t session;
   int socket;
   gchar *modify_note;
+  gchar *html;
 
   if (next == NULL || note_task_id == NULL || note_result_id == NULL)
     return gsad_message (credentials,
@@ -7226,13 +7793,22 @@ save_note_omp (credentials_t * credentials, const char *note_id,
       return ret;
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a note. "
-                         "The note was not saved. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a note. "
+                             "The note was not saved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -7352,14 +7928,24 @@ get_overrides (credentials_t *credentials, const char *commands)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the overrides. "
-                         "The list of overrides is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the overrides. "
+                             "The list of overrides is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_overrides>");
 
@@ -7432,13 +8018,23 @@ get_override (credentials_t *credentials, const char *override_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the override. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the override. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_override>");
 
@@ -7537,6 +8133,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (first_result == NULL || max_results == NULL || hosts == NULL
       || levels == NULL || notes == NULL || oid == NULL || port == NULL
@@ -7549,13 +8146,22 @@ new_override_omp (credentials_t *credentials, const char *oid,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new override. "
-                         "No new override was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_overrides");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new override. "
+                             "No new override was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_overrides");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_results"
@@ -7684,6 +8290,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
   if (search_phrase == NULL)
     return gsad_message (credentials,
@@ -7710,13 +8317,22 @@ create_override_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_overrides");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new override. "
-                         "No new override was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_overrides");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new override. "
+                             "No new override was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_overrides");
+    }
 
   xml = g_string_new ("<commands_response>");
 
@@ -7961,6 +8577,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   char *text = NULL;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (next == NULL)
     return gsad_message (credentials,
@@ -8009,13 +8626,22 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       return ret;
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an override. "
-                         "The override was not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an override. "
+                             "The override was not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -8156,6 +8782,7 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (override_id == NULL || min_cvss_base == NULL)
     {
@@ -8167,13 +8794,22 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
                            "/omp?cmd=get_overrides");
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing an override. "
-                         "The override remains as it was. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_overrides");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing an override. "
+                             "The override remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_overrides");
+    }
 
   if (openvas_server_sendf (&session,
                             "<get_overrides"
@@ -8298,6 +8934,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
   gnutls_session_t session;
   int socket;
   gchar *modify_override;
+  gchar *html;
 
   if (next == NULL || override_task_id == NULL || override_result_id == NULL
       || new_threat == NULL)
@@ -8368,13 +9005,22 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       return ret;
     }
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving an override. "
-                         "The override was not saved. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an override. "
+                             "The override was not saved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -8501,14 +9147,24 @@ create_slave_omp (credentials_t *credentials, const char *name,
   gnutls_session_t session;
   GString *xml;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new slave. "
-                         "No new slave was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_slaves");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new slave. "
+                             "No new slave was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_slaves");
+    }
 
   xml = g_string_new ("<get_slaves>");
 
@@ -8629,14 +9285,24 @@ delete_slave_omp (credentials_t * credentials, const char *slave_id)
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a slave. "
-                         "The slave is not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_slaves");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a slave. "
+                             "The slave is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_slaves");
+    }
 
   xml = g_string_new ("<get_slaves>");
 
@@ -8698,14 +9364,24 @@ get_slave_omp (credentials_t * credentials, const char * slave_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting slaves list. "
-                         "The current list of slaves is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_slaves");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting slaves list. "
+                             "The current list of slaves is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_slaves");
+    }
 
   xml = g_string_new ("<get_slave>");
 
@@ -8767,14 +9443,24 @@ get_slaves_omp (credentials_t * credentials, const char * sort_field,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting slaves list. "
-                         "The current list of slaves is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_slaves");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting slaves list. "
+                             "The current list of slaves is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_slaves");
+    }
 
   xml = g_string_new ("<get_slaves>");
 
@@ -8834,13 +9520,23 @@ get_schedule_omp (credentials_t * credentials, const char * schedule_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a schedule. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_schedules");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a schedule. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_schedules");
+    }
 
   xml = g_string_new ("<get_schedule>");
 
@@ -8902,13 +9598,23 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
   int socket;
   time_t now;
   struct tm *now_broken;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the schedule list. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the schedule list. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_schedules>");
 
@@ -9003,14 +9709,24 @@ create_schedule_omp (credentials_t * credentials, const char *name,
   int socket;
   time_t now;
   struct tm *now_broken;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new schedule. "
-                         "No new schedule was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_schedules");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new schedule. "
+                             "No new schedule was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_schedules");
+    }
 
   xml = g_string_new ("<get_schedules>");
 
@@ -9161,14 +9877,24 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
   int socket;
   time_t now;
   struct tm *now_broken;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a schedule. "
-                         "The schedule was not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_schedules");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a schedule. "
+                             "The schedule was not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_schedules");
+    }
 
   xml = g_string_new ("<get_schedules>");
 
@@ -9250,14 +9976,24 @@ get_system_reports_omp (credentials_t * credentials, const char * duration,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the system reports. "
-                         "The current list of system reports is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the system reports. "
+                             "The current list of system reports is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_system_reports>");
   g_string_append_printf (xml,
@@ -9365,7 +10101,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
   /* fan/report.png */
   if (sscanf (url, "%500[^ /]./report.png", name) == 1)
     {
-      if (manager_connect (credentials, &socket, &session))
+      if (manager_connect (credentials, &socket, &session, NULL))
         return NULL;
 
       if (openvas_server_sendf (&session,
@@ -9451,14 +10187,24 @@ get_report_format (credentials_t * credentials,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the report formats. "
-                         "The current list of report formats is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the report formats. "
+                             "The current list of report formats is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   xml = g_string_new ("<get_report_format>");
 
@@ -9544,14 +10290,24 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the report formats. "
-                         "The current list of report formats is not available. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the report formats. "
+                             "The current list of report formats is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   xml = g_string_new ("<get_report_formats>");
 
@@ -9629,13 +10385,24 @@ delete_report_format_omp (credentials_t * credentials,
   GString *xml;
   gnutls_session_t session;
   int socket;
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a report format. "
-                         "The report_format iss not deleted. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a report format. "
+                             "The report_format iss not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -9695,6 +10462,7 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
   if (report_format_id == NULL || next == NULL)
     return gsad_message (credentials,
@@ -9704,13 +10472,22 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_report_formats");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a report format. "
-                         "The report format remains as it was. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a report format. "
+                             "The report format remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -9802,14 +10579,24 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while importing a report format. "
-                         "No new report format was created. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a report format. "
+                             "No new report format was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   xml = g_string_new ("<get_report_formats>");
 
@@ -9908,6 +10695,7 @@ save_report_format_omp (credentials_t * credentials,
   gchar *modify_format;
   int index, socket;
   gnutls_session_t session;
+  gchar *html;
 
   if (summary == NULL || name == NULL)
     return edit_report_format (credentials, report_format_id,
@@ -9924,13 +10712,22 @@ save_report_format_omp (credentials_t * credentials,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_report_formats");
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a report format. "
-                         "The report format remains the same. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a report format. "
+                             "The report format remains the same. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   index = 0;
   if (params)
@@ -10040,13 +10837,24 @@ verify_report_format_omp (credentials_t * credentials,
   GString *xml;
   gnutls_session_t session;
   int socket;
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while verifying a report format. "
-                         "The report_format iss not verified. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_report_formats");
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a report format. "
+                             "The report_format iss not verified. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_report_formats");
+    }
 
   if (openvas_server_sendf (&session,
                             "<commands>"
@@ -10103,13 +10911,23 @@ get_trash (credentials_t * credentials, const char * sort_field,
   GString *xml;
   gnutls_session_t session;
   int socket;
+  gchar *html;
 
-  if (manager_connect (credentials, &socket, &session))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting the trash. "
-                         "Diagnostics: Failure to connect to manager daemon.",
-                         "/omp?cmd=get_tasks");
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the trash. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
 
   xml = g_string_new ("<get_trash>");
 
@@ -10487,18 +11305,24 @@ authenticate_omp (const gchar * username, const gchar * password)
     }
 }
 
+int
+token_user_remove (const char *);
+
 /**
  * @brief Connect to OpenVAS Manager daemon.
+ *
+ * If the Manager is down, logout and return the login HTML in \p html.
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[out]  socket       Manager socket on success.
  * @param[out]  session      GNUTLS session on success.
+ * @param[out]  html         HTML on failure to connect if possible, else NULL.
  *
  * @return 0 success, -1 failed to connect, -2 authentication failed.
  */
 int
 manager_connect (credentials_t *credentials, int *socket,
-                 gnutls_session_t *session)
+                 gnutls_session_t *session, gchar **html)
 {
   *socket = openvas_server_open (session,
                                  manager_address
@@ -10506,7 +11330,41 @@ manager_connect (credentials_t *credentials, int *socket,
                                   : OPENVASMD_ADDRESS,
                                  manager_port);
   if (*socket == -1)
-    return -1;
+    {
+      time_t now;
+      gchar *xml;
+      char *res;
+      char ctime_now[27];
+      int ret;
+
+      if (html == NULL)
+        return -1;
+
+      *html = NULL;
+
+      if (credentials->token == NULL)
+        return -1;
+
+      ret = token_user_remove (credentials->token);
+      if (ret)
+        return -1;
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
+
+      xml = g_strdup_printf ("<login_page>"
+                             "<message>"
+                             "Logged out. OMP service is down."
+                             "</message>"
+                             "<token></token>"
+                             "<time>%s</time>"
+                             "</login_page>",
+                             ctime_now);
+      res = xsl_transform (xml);
+      g_free (xml);
+      *html = res;
+      return -1;
+    }
 
 #if 0
   tracef ("in manager_connect: Trying to authenticate with %s/%s\n",

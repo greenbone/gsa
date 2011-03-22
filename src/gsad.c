@@ -284,7 +284,7 @@ user_add (const gchar *username, const gchar *password)
  *         3 bad/missing cookie.
  */
 int
-token_user (const gchar *cookie, const gchar *token, user_t **user_return)
+user_find (const gchar *cookie, const gchar *token, user_t **user_return)
 {
   int ret;
   user_t *user = NULL;
@@ -329,7 +329,7 @@ token_user (const gchar *cookie, const gchar *token, user_t **user_return)
 }
 
 /**
- * @brief Release a user_t returned by user_add or token_user.
+ * @brief Release a user_t returned by user_add or user_find.
  *
  * @param[in]  user  User.
  */
@@ -349,6 +349,69 @@ user_remove (user_t *user)
 {
   g_ptr_array_remove (users, (gpointer) user);
   g_mutex_unlock (mutex);
+}
+
+/**
+ * @brief Add a user.
+ *
+ * If a user is returned, it's up to the caller to release the user.
+ *
+ * @param[in]   token        Token request parameter.
+ * @param[out]  user_return  User.
+ *
+ * @return 0 ok (user in user_return), 1 bad token, 2 expired token.
+ */
+int
+token_user (const gchar *token, user_t **user_return)
+{
+  int ret;
+  user_t *user = NULL;
+  int index;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->token, token) == 0)
+        {
+          user = item;
+          break;
+        }
+    }
+  if (user)
+    {
+      if (time (NULL) - user->time > (session_timeout * 60))
+        ret = 2;
+      else
+        {
+          *user_return = user;
+          ret = 0;
+          user->time = time (NULL);
+          return ret;
+        }
+    }
+  else
+    ret = 2;
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Remove a user from the session "database", releasing the user_t too.
+ *
+ * @param[in]  user  User.
+ *
+ * @return 0 success, -1 error.
+ */
+int
+token_user_remove (const char *token)
+{
+  user_t *user;
+  if (token_user (token, &user))
+    return -1;
+  g_ptr_array_remove (users, (gpointer) user);
+  g_mutex_unlock (mutex);
+  return 0;
 }
 
 /**
@@ -1849,7 +1912,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 3;
     }
 
-  ret = token_user (con_info->req_parms.cookie, con_info->req_parms.token,
+  ret = user_find (con_info->req_parms.cookie, con_info->req_parms.token,
                     &user);
   if (ret == 1)
     {
@@ -4802,7 +4865,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (openvas_validate (validator, "token", cookie))
         cookie = NULL;
 
-      ret = token_user (cookie, token, &user);
+      ret = user_find (cookie, token, &user);
       if (ret == 1)
         {
           res =  gsad_message (credentials,

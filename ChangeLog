@@ -1,3 +1,15 @@
+2011-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Log the user out when connecting to the Manager fails.
+
+	* src/gsad.c (user_find): New function.  Was token_user.  Update callers.
+	(token_user): Replace with version that find user from token only.
+	(token_user_remove): New function.  Remove user given token.
+
+	* src/gsad_omp.c (manager_connect): If connecting to manager fails, log
+	user out and return login page in new html param.  Update all callers to
+	return this html when appropriate.
+
 2011-03-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (get_trash): Added a header line for contents
