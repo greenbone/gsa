@@ -1,3 +1,7 @@
+2011-03-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/restore_inactive.png: Updated with final version.
+
 2011-03-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl: Renamed "Trashcan Contents" to "Contents".
