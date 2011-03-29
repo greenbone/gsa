@@ -573,6 +573,91 @@ new_task_omp (credentials_t * credentials, const char* message,
 }
 
 /**
+ * @brief Create a report, get all tasks, XSL transform the result.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  name          New task name.
+ * @param[in]  comment       Comment on task.
+ * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  xml_file      Report XML for new task.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_report_omp (credentials_t * credentials, char *name, char *comment,
+                   const char *apply_overrides, const char *xml_file)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  char *text = NULL;
+  int socket, ret;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new task. "
+                             "The task is not created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  ret = openvas_server_sendf (&session,
+                              "<commands>"
+                              "<create_report>"
+                              "<task>"
+                              "<name>%s</name>"
+                              "<comment>%s</comment>"
+                              "</task>"
+                              "%s"
+                              "</create_report>"
+                              "<get_tasks"
+                              " sort_field=\"name\""
+                              " sort_order=\"ascending\""
+                              " apply_overrides=\"%s\"/>"
+                              "</commands>",
+                              name,
+                              comment,
+                              xml_file,
+                              apply_overrides);
+
+  if (ret == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new task. "
+                           "The task is not created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while creating a new task. "
+                           "It is unclear whether the task has been created or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
  * @brief Create a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.

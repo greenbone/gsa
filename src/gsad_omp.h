@@ -39,6 +39,8 @@
 
 void omp_init (const gchar *, int);
 
+char * create_report_omp (credentials_t *, char *, char *, const char *,
+                          const char *);
 char * create_task_omp (credentials_t *, char *, char *, char *, char *,
                         const char *, const char *, const char *, const char *);
 char * delete_task_omp (credentials_t *, const char *, int, const char *);

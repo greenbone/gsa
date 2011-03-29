@@ -435,6 +435,7 @@ init_validator ()
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
+                         "|(create_report)"
                          "|(create_schedule)"
                          "|(create_slave)"
                          "|(create_target)"
@@ -2090,6 +2091,28 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                    con_info->req_parms.base,
                                    con_info->req_parms.credential_login,
                                    con_info->req_parms.password);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_report"))
+    {
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "comment", &con_info->req_parms.comment);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
+      if ((con_info->req_parms.name == NULL)
+          || (con_info->req_parms.comment == NULL)
+          || (con_info->req_parms.overrides == NULL)
+          || (con_info->req_parms.xml_file == NULL))
+        con_info->response
+         = new_task_omp (credentials,
+                         "Invalid parameter",
+                         con_info->req_parms.overrides
+                          ? strcmp (con_info->req_parms.overrides, "0")
+                          : 0);
+      else
+        con_info->response =
+          create_report_omp (credentials, con_info->req_parms.name,
+                             con_info->req_parms.comment,
+                             con_info->req_parms.overrides,
+                             con_info->req_parms.xml_file);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_task"))
     {

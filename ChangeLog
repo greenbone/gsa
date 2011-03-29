@@ -1,3 +1,17 @@
+2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a New Container Task window to the New Task page.
+
+	* src/gsad.c (init_validator): Add command create_report.
+	(exec_omp_post): Add create_report handling.
+
+	* src/gsad_omp.c (create_report_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (create_report_response): New template.
+	(new_task): Add container task window.
+
 2011-03-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/restore_inactive.png: Updated with final version.

@@ -1488,6 +1488,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_report_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Container Task</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_task_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Create Task</xsl:with-param>
@@ -9919,6 +9931,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                    mode="newtask"/>
             </select>
           </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="Create Task"/>
+          </td>
+        </tr>
+      </table>
+      <br/>
+    </form>
+  </div>
+
+  <div class="gb_window_part_left"></div>
+  <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">New Container Task
+    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="create_report"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="overrides" value="{apply_overrides}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+         <td valign="top" width="125">Name</td>
+         <td>
+           <input type="text" name="name" value="unnamed" size="30"
+                  maxlength="80"/>
+         </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125">Comment (optional)</td>
+          <td>
+            <input type="text" name="comment" size="30" maxlength="400"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Report</td>
+          <td><input type="file" name="xml_file" size="30"/></td>
         </tr>
         <tr>
           <td colspan="2" style="text-align:right;">
