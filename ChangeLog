@@ -1,5 +1,9 @@
 2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Remove duplicate token.
+
+2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add a New Container Task window to the New Task page.
 
 	* src/gsad.c (init_validator): Add command create_report.
