@@ -1,5 +1,10 @@
 2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table, task): Grey start button for
+	container tasks.
+
+2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Remove duplicate token.
 
 2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>

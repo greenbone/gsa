@@ -955,6 +955,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <xsl:choose>
+          <xsl:when test="task/target/@id=''">
+            <img src="/img/start_inactive.png" border="0" alt="Start"/>
+          </xsl:when>
           <xsl:when test="string-length(task/schedule/@id) &gt; 0">
             <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}&amp;token={/envelope/token}"
                title="Schedule Details">
@@ -1987,6 +1990,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <xsl:choose>
+            <xsl:when test="target/@id=''">
+              <img src="/img/start_inactive.png" border="0" alt="Start"/>
+            </xsl:when>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
               <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
                  title="Schedule Details">
