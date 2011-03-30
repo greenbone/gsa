@@ -1029,6 +1029,79 @@ save_task_omp (credentials_t * credentials, const char *task_id,
 }
 
 /**
+ * @brief Save container task, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  task_id           ID of task.
+ * @param[in]  name              New name for task.
+ * @param[in]  comment           New comment for task.
+ * @param[in]  next              Name of next page.
+ * @param[in]  refresh_interval  Refresh interval (parsed to int).
+ * @param[in]  sort_field        Field to sort on, or NULL.
+ * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  apply_overrides   Whether to apply overrides.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_container_task_omp (credentials_t * credentials, const char *task_id,
+                         const char *name, const char *comment,
+                         const char *next,
+                         /* Parameters for get_tasks. */
+                         const char *refresh_interval, const char *sort_field,
+                         const char *sort_order, int apply_overrides)
+{
+  gchar *modify_task;
+
+  if (comment == NULL || name == NULL)
+    return edit_task (credentials, task_id,
+                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
+                      refresh_interval, sort_field, sort_order,
+                      apply_overrides);
+
+  if (next == NULL || sort_field == NULL || sort_order == NULL
+      || task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a task. "
+                         "The task remains the same. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
+                                 "<name>%s</name>"
+                                 "<comment>%s</comment>"
+                                 "</modify_task>",
+                                 task_id,
+                                 name,
+                                 comment);
+
+  if (strcmp (next, "get_tasks") == 0)
+    {
+      char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
+                             refresh_interval, modify_task, apply_overrides);
+      g_free (modify_task);
+      return ret;
+    }
+
+  if (strcmp (next, "get_task") == 0)
+    {
+      char *ret = get_tasks (credentials, task_id, sort_field, sort_order,
+                             refresh_interval, modify_task, apply_overrides);
+      g_free (modify_task);
+      return ret;
+    }
+
+  g_free (modify_task);
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a task. "
+                       "The task remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_tasks");
+}
+
+/**
  * @brief Stop a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

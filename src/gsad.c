@@ -4075,10 +4075,16 @@ exec_omp_get (struct MHD_Connection *connection,
            && (next != NULL)
            && ((strcmp (next, "get_tasks") == 0)
                || (strcmp (next, "get_task") == 0)))
-    return save_task_omp (credentials, task_id, name, comment, escalator_id,
-                          schedule_id, slave_id, next, refresh_interval,
-                          sort_field, sort_order,
-                          overrides ? strcmp (overrides, "0") : 0);
+    {
+      if ((target_id == NULL) || (strcmp (target_id, "--")))
+        return save_task_omp (credentials, task_id, name, comment, escalator_id,
+                              schedule_id, slave_id, next, refresh_interval,
+                              sort_field, sort_order,
+                              overrides ? strcmp (overrides, "0") : 0);
+      return save_container_task_omp (credentials, task_id, name, comment, next,
+                                      refresh_interval, sort_field, sort_order,
+                                      overrides ? strcmp (overrides, "0") : 0);
+    }
 
   else if ((!strcmp (cmd, "verify_agent"))
            && (agent_id != NULL))

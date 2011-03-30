@@ -1,3 +1,17 @@
+2011-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Handle saving of container tasks.
+
+	* src/html/omp.xsl (html-edit-task-form): Send target_id as "--" for
+	container tasks.
+
+	* src/gsad_omp.c (save_container_task_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (exec_omp_get): Call save_container_task_omp for container
+	tasks.
+
 2011-03-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-table, task): Grey start button for

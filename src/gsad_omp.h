@@ -51,6 +51,9 @@ char * new_task_omp (credentials_t *, const char *, int);
 char * save_task_omp (credentials_t *, const char *, const char *, const char *,
                       const char *, const char *, const char *, const char *,
                       const char *, const char *, const char *, int);
+char * save_container_task_omp (credentials_t *, const char *, const char *,
+                                const char *, const char *, const char *,
+                                const char *, const char *, int);
 char * pause_task_omp (credentials_t *, const char *, int, const char *);
 char * resume_paused_task_omp (credentials_t *, const char *, int, const char *);
 char * resume_stopped_task_omp (credentials_t *, const char *, int, const char *);

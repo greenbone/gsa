@@ -1761,126 +1761,133 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      value="{commands_response/get_tasks_response/task/comment}"/>
             </td>
           </tr>
-          <tr>
-            <td valign="top">Scan Config (immutable)</td>
-            <td>
-              <select name="scanconfig" disabled="1">
-                <xsl:choose>
-                  <xsl:when
-                    test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
-                    <xsl:apply-templates
-                      select="commands_response/get_tasks_response/task/config"
-                      mode="newtask"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="--">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Scan Targets (immutable)</td>
-            <td>
-              <select name="target_id" disabled="1">
-                <xsl:choose>
-                  <xsl:when
-                    test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
-                    <xsl:apply-templates
-                      select="commands_response/get_tasks_response/task/target"
-                      mode="newtask"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="--">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Escalator (optional)</td>
-            <td>
-              <select name="escalator_id">
-                <xsl:variable name="escalator_id">
-                  <xsl:value-of select="commands_response/get_tasks_response/task/escalator/@id"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="string-length ($escalator_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="commands_response/get_escalators_response/escalator">
-                  <xsl:choose>
-                    <xsl:when test="@id = $escalator_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Schedule (optional)</td>
-            <td>
-              <select name="schedule_id">
-                <xsl:variable name="schedule_id">
-                  <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="string-length ($schedule_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="commands_response/get_schedules_response/schedule">
-                  <xsl:choose>
-                    <xsl:when test="@id = $schedule_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Slave (optional)</td>
-            <td>
-              <select name="slave_id">
-                <xsl:variable name="slave_id">
-                  <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="string-length ($slave_id) &gt; 0">
-                    <option value="0">--</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0" selected="1">--</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:for-each select="commands_response/get_slaves_response/slave">
-                  <xsl:choose>
-                    <xsl:when test="@id = $slave_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
+          <xsl:choose>
+            <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+              <input type="hidden" name="target_id" value="--"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <tr>
+                <td valign="top">Scan Config (immutable)</td>
+                <td>
+                  <select name="scanconfig" disabled="1">
+                    <xsl:choose>
+                      <xsl:when
+                        test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
+                        <xsl:apply-templates
+                          select="commands_response/get_tasks_response/task/config"
+                          mode="newtask"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="--">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Scan Targets (immutable)</td>
+                <td>
+                  <select name="target_id" disabled="1">
+                    <xsl:choose>
+                      <xsl:when
+                        test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
+                        <xsl:apply-templates
+                          select="commands_response/get_tasks_response/task/target"
+                          mode="newtask"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="--">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Escalator (optional)</td>
+                <td>
+                  <select name="escalator_id">
+                    <xsl:variable name="escalator_id">
+                      <xsl:value-of select="commands_response/get_tasks_response/task/escalator/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($escalator_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_escalators_response/escalator">
+                      <xsl:choose>
+                        <xsl:when test="@id = $escalator_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Schedule (optional)</td>
+                <td>
+                  <select name="schedule_id">
+                    <xsl:variable name="schedule_id">
+                      <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($schedule_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_schedules_response/schedule">
+                      <xsl:choose>
+                        <xsl:when test="@id = $schedule_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Slave (optional)</td>
+                <td>
+                  <select name="slave_id">
+                    <xsl:variable name="slave_id">
+                      <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                    </xsl:variable>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($slave_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="commands_response/get_slaves_response/slave">
+                      <xsl:choose>
+                        <xsl:when test="@id = $slave_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </td>
+              </tr>
+            </xsl:otherwise>
+          </xsl:choose>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save Task"/>
