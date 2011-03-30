@@ -411,8 +411,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
        With installing this package on a dpkg-based systems (e.g. Debian, Ubuntu)
-       a low privileged user account is created on that target system to allow
-       the scan engine to access the system retrieve information about intalled software
+       a privileged user account is created on that target system to allow
+       the scan engine to access the system retrieve information about installed software
        and other product information. De-installation of the package will disable the access.
       </p>
 

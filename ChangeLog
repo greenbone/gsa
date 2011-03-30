@@ -1,3 +1,7 @@
+2011-03-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl (configure_credentials.html): Fixed 2 typos.
+
 2011-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Handle saving of container tasks.
