@@ -962,7 +962,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Edit Scan Config</h4>
       <p>
-       A Scan Config can be modified if it is not currently in use by a task.
+       A Scan Config can be modified if it is not currently in use by a task,
+       including tasks in the trashcan.
        A click on the edit icon
        <img src="/img/edit.png" alt="Edit" title="Edit" />
        will open the <a href="scanconfig_editor.html?token={/envelope/token}">Scan Config Editor</a> dialog

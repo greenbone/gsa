@@ -5429,7 +5429,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:choose>
-        <xsl:when test="in_use='0'">
+        <xsl:when test="writable='0'">
           <a href="/omp?cmd=edit_config&amp;config_id={@id}&amp;token={/envelope/token}"
              title="Edit Scan Config"
              style="margin-left:3px;">
