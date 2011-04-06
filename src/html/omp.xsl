@@ -9790,7 +9790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="count(get_targets_response/target)"/></td>
         </tr>
         <tr class="even">
-          <td><a href="#tasks">Tasks</a></td>
+          <td><a href="#the_tasks">Tasks</a></td>
           <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
         </tr>
       </table>
@@ -9851,7 +9851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="html-targets-trash-table"/>
       </xsl:for-each>
 
-      <a name="tasks"></a>
+      <a name="the_tasks"></a>
       <h1>Tasks</h1>
       <!-- The for-each makes the get_tasks_response the current node. -->
       <xsl:for-each select="get_tasks_response">

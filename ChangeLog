@@ -1,3 +1,9 @@
+2011-04-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/tmp/omp.xsl (get_trash): Renamed link tag "tasks" to "the_tasks" because
+	at least the firefox mixes up the link tag with the div tag with the
+	same id "tasks" (and therfore jumps to another place on that page).
+
 2011-04-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (config): Check writable flag instead of in_use flag
