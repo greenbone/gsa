@@ -1360,6 +1360,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Security Scan Account for SSH</td>
         </tr>
         <tr class="even">
+          <td>SSH Port</td>
+          <td>no</td>
+          <td>400</td>
+          <td>A port number.</td>
+          <td>22</td>
+        </tr>
+        <tr class="even">
           <td>SMB Credential</td>
           <td>no</td>
           <td>--</td>

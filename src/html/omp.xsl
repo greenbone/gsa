@@ -3641,6 +3641,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <option value="--">--</option>
                 <xsl:apply-templates select="$lsc-credentials" mode="select"/>
               </select>
+              on port
+              <input type="text" name="port" value="22" size="6"
+                     maxlength="400"/>
             </td>
           </tr>
           <tr>
@@ -3893,9 +3896,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>SSH Credential:</td>
           <td>
-            <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="ssh_lsc_credential/name"/>
-            </a>
+            <xsl:if test="string-length (ssh_lsc_credential/@id) &gt; 0">
+              <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="ssh_lsc_credential/name"/>
+              </a>
+              on port
+              <xsl:value-of select="ssh_lsc_credential/port"/>
+            </xsl:if>
           </td>
         </tr>
         <tr>

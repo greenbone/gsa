@@ -2263,12 +2263,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                 &con_info->req_parms.target_locator);
       validate (validator, "lsc_password", &con_info->req_parms.password);
       validate (validator, "login", &con_info->req_parms.login);
+      validate (validator, "port", &con_info->req_parms.port);
       con_info->response =
         create_target_omp (credentials, con_info->req_parms.name,
                            con_info->req_parms.hosts,
                            con_info->req_parms.comment,
                            con_info->req_parms.port_range,
                            con_info->req_parms.lsc_credential_id,
+                           con_info->req_parms.port,
                            con_info->req_parms.lsc_smb_credential_id,
                            con_info->req_parms.target_locator,
                            con_info->req_parms.login,

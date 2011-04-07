@@ -1,3 +1,19 @@
+2011-04-07  Matthew Mundell <matthew.mundell@greenbone.net
+
+	Add SSH port support for targets.
+
+	* src/gsad.c (exec_omp_post): Pass port to create_target_omp.
+
+	* src/gsad_omp.c (create_target_omp): Add port arg.  Send to Manager.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-target-form): Add port input.
+	(target [details]): Add port.
+
+	* src/html/help.xsl (configure_targets.html): Add port to New Target
+	table.
+
 2011-04-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/tmp/omp.xsl (get_trash): Renamed link tag "tasks" to "the_tasks" because

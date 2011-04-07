@@ -3530,6 +3530,7 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
  * @param[in]  comment      Comment on target.
  * @param[in]  port_range   Range of ports to be scanned.
  * @param[in]  target_credential      UUID of SSH credential for target.
+ * @param[in]  port                   Port to use for SSH LSC login.
  * @param[in]  target_smb_credential  UUID of SMB credential for target.
  * @param[in]  target_locator Target locator to pull targets from.
  * @param[in]  username     Username for source.
@@ -3540,7 +3541,7 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
 char *
 create_target_omp (credentials_t * credentials, char *name, char *hosts,
                    char *comment, const char *port_range,
-                   const char *target_credential,
+                   const char *target_credential, const char *port,
                    const char *target_smb_credential,
                    const char* target_locator, const char* username,
                    const char* password)
@@ -3571,7 +3572,7 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
 
   if (name == NULL || (hosts == NULL && target_locator == NULL)
       || comment == NULL || port_range == NULL || target_credential == NULL
-      || target_smb_credential == NULL)
+      || port == NULL || target_smb_credential == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
   else
     {
@@ -3601,8 +3602,11 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
         credentials_element = g_strdup ("");
       else
         credentials_element =
-          g_strdup_printf ("<ssh_lsc_credential id=\"%s\"/>",
-                           target_credential);
+          g_strdup_printf ("<ssh_lsc_credential id=\"%s\">"
+                           "<port>%s</port>"
+                           "</ssh_lsc_credential>",
+                           target_credential,
+                           port);
 
       if (strcmp (target_smb_credential, "--") == 0)
         smb_credentials_element = g_strdup ("");
