@@ -1,5 +1,11 @@
 2011-04-07  Matthew Mundell <matthew.mundell@greenbone.net
 
+	* src/html/omp.xsl (html-report-details, html-report-table, task)
+	(task [trash]): Check if the status is "Container".
+	(status_bar): Add a container case.
+
+2011-04-07  Matthew Mundell <matthew.mundell@greenbone.net
+
 	Add SSH port support for targets.
 
 	* src/gsad.c (exec_omp_post): Pass port to create_target_omp.

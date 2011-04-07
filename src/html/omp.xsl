@@ -384,7 +384,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:call-template name="status_bar">
               <xsl:with-param name="status">
-                <xsl:value-of select="report/scan_run_status"/>
+                <xsl:choose>
+                  <xsl:when test="report/task/target/@id=''">
+                    <xsl:text>Container</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="report/scan_run_status"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:with-param>
               <xsl:with-param name="progress">
                 <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
@@ -1123,7 +1130,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:call-template name="status_bar">
               <xsl:with-param name="status">
-                <xsl:value-of select="task/status"/>
+                <xsl:choose>
+                  <xsl:when test="task/target/@id=''">
+                    <xsl:text>Container</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="task/status"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:with-param>
               <xsl:with-param name="progress">
                 <xsl:value-of select="task/progress/text()"/>
@@ -1416,6 +1430,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Done'">
+      <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_done" style="width:100px;"></div>
+        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Container'">
       <div class="progressbar_box" title="{$status}">
         <div class="progressbar_bar_done" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
@@ -1950,7 +1970,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:call-template name="status_bar">
             <xsl:with-param name="status">
-              <xsl:value-of select="status"/>
+              <xsl:choose>
+                <xsl:when test="target/@id=''">
+                  <xsl:text>Container</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="status"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:with-param>
             <xsl:with-param name="progress">
               <xsl:value-of select="progress/text()"/>
@@ -2126,7 +2153,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:call-template name="status_bar">
         <xsl:with-param name="status">
-          <xsl:value-of select="status"/>
+          <xsl:choose>
+            <xsl:when test="target/@id=''">
+              <xsl:text>Container</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="status"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:with-param>
         <xsl:with-param name="progress">
           <xsl:value-of select="progress/text()"/>
