@@ -1,3 +1,10 @@
+2011-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-lsc-credential-form)
+	(html-edit-lsc-credential-form, html-create-target-form)
+	(edit-config-preference, html-create-slave-form): Turn off autocomplete
+	for passwords.
+
 2011-04-12  Matthew Mundell <matthew.mundell@greenbone.net
 
 	* src/gsad.c (request_handler): In the GET case when the session has

@@ -2307,8 +2307,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Password
                   </td>
                   <td>
-                    <input type="password" name="password" value="" size="30"
-                           maxlength="40"/>
+                    <input type="password" autocomplete="off" name="password"
+                           value="" size="30" maxlength="40"/>
                   </td>
                 </tr>
               </table>
@@ -2455,8 +2455,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="checkbox" name="enable" value="yes"/>
                   Replace existing value with:
                   <br/>
-                  <input type="password" name="password" size="30" maxlength="400"
-                         value=""/>
+                  <input type="password" autocomplete="off" name="password"
+                         size="30" maxlength="400" value=""/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -3643,8 +3643,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <tr>
                         <td>Password</td>
                         <td>
-                          <input type="password" name="password" value="" size="15"
-                                maxlength="80"/>
+                          <input type="password" autocomplete="off"
+                                 name="password" value="" size="15"
+                                 maxlength="80"/>
                         </td>
                       </tr>
                       </table>
@@ -4490,7 +4491,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  value="yes"/>
           Replace existing value with:
           <br/>
-          <input type="password" name="preference:{nvt/name}[password]:{name}"
+          <input type="password" autocomplete="off"
+                 name="preference:{nvt/name}[password]:{name}"
                  value="{value}" size="30" maxlength="40"/>
         </xsl:when>
         <xsl:when test="type='file'">
@@ -6589,8 +6591,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Password</td>
             <td>
-              <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
+              <input type="password" autocomplete="off" name="password"
+                     value="" size="30" maxlength="40"/>
             </td>
           </tr>
           <tr>
