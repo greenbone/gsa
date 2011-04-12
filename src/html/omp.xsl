@@ -5473,15 +5473,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="writable='0'">
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
           <a href="/omp?cmd=edit_config&amp;config_id={@id}&amp;token={/envelope/token}"
              title="Edit Scan Config"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_config&amp;config_id={@id}&amp;token={/envelope/token}"
