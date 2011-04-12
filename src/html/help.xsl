@@ -2030,6 +2030,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Thus, the resulting sequence of reports describe the
        change of security status over time.
       </p>
+      <p>
+       A <b>container task</b> is a task whose sole function is to hold
+       imported reports.  Running a container task is forbidden.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -2397,7 +2401,9 @@ Public License instead of this License.
       <h1>New Task</h1>
 
       <p>
-       To create a task, this dialog offers the following entries.
+       To create a
+       <a href="glossary.html?token={/envelope/token}#task">task</a>,
+       this dialog offers the following entries.
        Hit the button "Create Task" to create the new task.
        The list of tasks will be shown.
       </p>
@@ -2458,6 +2464,47 @@ Public License instead of this License.
           <td>---</td>
           <td>Choice</td>
           <td></td>
+        </tr>
+      </table>
+
+      <h1>New Container Task</h1>
+
+      <p>
+       To create a
+       <a href="glossary.html?token={/envelope/token}#task">container task</a>,
+       this dialog offers the following entries.
+       Hit the button "Create Task" to create the new task.
+       The list of tasks will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Rome</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Report</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/tmp/report.xml</td>
         </tr>
       </table>
     </div>
@@ -3727,9 +3774,17 @@ Public License instead of this License.
                     <div class="progressbar_text">Done</div>
                   </div>
                 </td><td>
-                  The Task returned successful from a scan and produced a report. The
+                  The task returned successfully from a scan and produced a report. The
                   newest report is complete with regard to targets and scan configuration
                   of the task.
+              </td></tr>
+              <tr><td valign="top">
+                  <div class="progressbar_box" title="Container">
+                    <div class="progressbar_bar_done" style="width:100px;"></div>
+                    <div class="progressbar_text">Container</div>
+                  </div>
+                </td><td>
+                  The task is a container task.
               </td></tr>
             </table>
           </td>
@@ -3885,7 +3940,7 @@ Public License instead of this License.
       </p>
       <p>
        This action is only available if the task has status "New" or "Done" and
-       is not a scheduled task.
+       is not a scheduled task or a container task.
       </p>
 
       <h4>Pause Task</h4>
@@ -3895,7 +3950,7 @@ Public License instead of this License.
       </p>
       <p>
        This action is only available if the task has status "Running" or "Requested" and
-       is not a scheduled task.
+       is not a scheduled task or a container task.
       </p>
 
       <h4>Schedule Details</h4>
@@ -3937,7 +3992,7 @@ Public License instead of this License.
        of the reports associated with this task will be moved to the trashcan.
       </p>
       <p>
-       This action is only available if the task has status "New" or "Done".
+       This action is only available if the task has status "New", "Done" or "Container".
       </p>
 
       <h4>Details</h4>
@@ -3945,9 +4000,6 @@ Public License instead of this License.
        Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
        switch to an overview on all reports for this task.
        It is the same action as clicking on the number of reports in the column "Reports: Total".
-      </p>
-      <p>
-       This action is only available if at least one report is present.
       </p>
 
       <h4>Edit Task</h4>

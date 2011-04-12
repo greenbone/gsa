@@ -1,3 +1,9 @@
+2011-04-12  Matthew Mundell <matthew.mundell@greenbone.net
+
+	* src/html/help.xsl (glossary.html): Describe container tasks.
+	(new_task.html): Add container task section.
+	(tasks.html): Update for container tasks.
+
 2011-04-07  Matthew Mundell <matthew.mundell@greenbone.net
 
 	* src/html/omp.xsl (html-report-details, html-report-table, task)
