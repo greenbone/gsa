@@ -4921,7 +4921,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           char *res;
           gchar *full_url;
           char ctime_now[27];
-          const char *cmd;
+          const char *cmd, *report_format_id;
           int export;
 
           now = time (NULL);
@@ -4930,7 +4930,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
           cmd = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
                                              "cmd");
-          export = (cmd && (strncmp (cmd, "export", strlen ("export")) == 0));
+          report_format_id = MHD_lookup_connection_value (connection,
+                                                          MHD_GET_ARGUMENT_KIND,
+                                                          "report_format_id");
+          export = (cmd
+                    && ((strncmp (cmd, "export", strlen ("export")) == 0)
+                        || ((strcmp (cmd, "get_report") == 0)
+                            && report_format_id)));
 
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
