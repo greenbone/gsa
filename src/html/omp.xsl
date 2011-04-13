@@ -708,10 +708,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
-            <input type="hidden" name="max_results" value="{report/results/@max}"/>
             <input type="hidden"
                    name="overrides"
                    value="{report/filters/apply_overrides}"/>
+            <tr>
+              <td>
+                Results per page:
+              </td>
+              <td>
+                <input type="text" name="max_results" size="5"
+                       value="{report/results/@max}"
+                       maxlength="400"/>
+              </td>
+              <td></td>
+            </tr>
             <tr>
               <td colspan="3">
                 <xsl:choose>

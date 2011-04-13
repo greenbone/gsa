@@ -1,5 +1,12 @@
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (RESULTS_PER_PAGE): New define.
+	(exec_omp_post, exec_omp_get): Replace literals with new define.
+
+	* src/html/omp.xsl (html-report-details): Add results per page field.
+
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Get maximum result values from params instead
 	of using constant.
 

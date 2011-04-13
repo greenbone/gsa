@@ -130,6 +130,11 @@
 #define SESSION_TIMEOUT 15
 
 /**
+ * @brief Initial filtered results per page on the report summary.
+ */
+#define RESULTS_PER_PAGE 100
+
+/**
  * @brief Libgcrypt thread callback definition.
  */
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
@@ -2381,7 +2386,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       max_results = con_info->req_parms.max_results;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       con_info->response =
         create_note_omp (credentials,
@@ -2508,7 +2513,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       max_results = con_info->req_parms.max_results;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       con_info->response =
         create_override_omp (credentials,
@@ -3297,7 +3302,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return delete_note_omp (credentials, note_id, "get_report", report_id,
                               first, max, sort_field, sort_order, levels,
@@ -3360,7 +3365,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return delete_override_omp (credentials, override_id, "get_report",
                                   report_id, first, max, sort_field,
@@ -3508,7 +3513,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return edit_note_omp (credentials, note_id, "get_report", report_id,
                             first, max, sort_field, sort_order, levels,
@@ -3582,7 +3587,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return edit_override_omp (credentials, override_id, "get_report",
                                 report_id, first, max, sort_field, sort_order,
@@ -3747,7 +3752,7 @@ exec_omp_get (struct MHD_Connection *connection,
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       if (levels)
         ret = get_report_omp (credentials, report_id, report_format_id,
@@ -3967,7 +3972,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_report",
@@ -4074,7 +4079,7 @@ exec_omp_get (struct MHD_Connection *connection,
         first = 1;
 
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = 1000;
+        max = RESULTS_PER_PAGE;
 
       return save_override_omp (credentials, override_id, text, hosts, port,
                                 threat, new_threat, override_task_id,
