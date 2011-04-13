@@ -908,17 +908,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <!-- This must match the max value in exec_omp_get in gsad.c. -->
-          <xsl:variable name="increment">1000</xsl:variable>
           <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
           <xsl:if test = "report/results/@start &gt; 1">
-            <a class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&lt;&lt;</a>
+            <a class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&lt;&lt;</a>
           </xsl:if>
           <xsl:value-of select="report/results/@start"/> -
           <xsl:value-of select="$last"/>
           of <xsl:value-of select="report/result_count/filtered"/>
           <xsl:if test = "$last &lt; report/result_count/filtered">
-            <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + $increment}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&gt;&gt;</a>
+            <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">&gt;&gt;</a>
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>

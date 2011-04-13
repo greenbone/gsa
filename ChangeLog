@@ -1,6 +1,11 @@
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/oap.xsl (report): Remove download button.
+	* src/html/omp.xsl (html-report-details): Get the increment from the
+	report, instead of using a fixed value.
+
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report): Remove download button.
 
 	* src/html/help.xsl (reports.html): Remove "Download a report".
 
