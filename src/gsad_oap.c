@@ -793,7 +793,7 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
  */
 char *
 get_feed_oap (credentials_t * credentials, const char * sort_field,
-               const char * sort_order)
+              const char * sort_order)
 {
   tracef ("In get_feed_oap\n");
   entity_t entity;

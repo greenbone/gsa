@@ -1,5 +1,9 @@
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_oap.c (get_users_oap): Align arg properly.
+
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl (modify_user_response): New template.
 
 2011-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
