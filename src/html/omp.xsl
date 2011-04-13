@@ -708,6 +708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="report_id" value="{report/@id}"/>
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
+            <input type="hidden" name="max_results" value="{report/results/@max}"/>
             <input type="hidden"
                    name="overrides"
                    value="{report/filters/apply_overrides}"/>
@@ -7000,6 +7001,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="max_results" value="{max_results}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
@@ -7124,6 +7126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- get_report params. -->
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="max_results" value="{max_results}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
@@ -7654,6 +7657,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="oid" value="{nvt/@id}"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="max_results" value="{max_results}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
@@ -7792,6 +7796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- get_report params. -->
         <input type="hidden" name="report_id" value="{report/@id}"/>
         <input type="hidden" name="first_result" value="{first_result}"/>
+        <input type="hidden" name="max_results" value="{max_results}"/>
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="levels" value="{levels}"/>
@@ -9052,7 +9057,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}&amp;next=get_report#result-{../../@id}"
            title="Delete Note" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
@@ -9060,7 +9065,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
            title="Edit Note"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -9094,7 +9099,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$override-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;next=get_report#result-{../../@id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}&amp;next=get_report#result-{../../@id}"
            title="Delete Override" style="margin-left:3px;">
           <img src="/img/delete.png" border="0" alt="Delete"/>
         </a>
@@ -9102,7 +9107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Override Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides=1&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
            title="Edit Override"
            style="margin-left:3px;">
           <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -9199,13 +9204,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:choose>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -9223,13 +9228,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:choose>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>

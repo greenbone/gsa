@@ -3281,6 +3281,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3290,13 +3291,16 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return delete_note_omp (credentials, note_id, "get_report", report_id,
-                              first, 1000, sort_field, sort_order, levels,
+                              first, max, sort_field, sort_order, levels,
                               notes, overrides, result_hosts_only,
                               search_phrase, min_cvss_base, NULL, NULL);
     }
@@ -3340,6 +3344,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3349,13 +3354,16 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return delete_override_omp (credentials, override_id, "get_report",
-                                  report_id, first, 1000, sort_field,
+                                  report_id, first, max, sort_field,
                                   sort_order, levels, notes, overrides,
                                   result_hosts_only, search_phrase,
                                   min_cvss_base, NULL, NULL);
@@ -3484,6 +3492,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3493,13 +3502,16 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return edit_note_omp (credentials, note_id, "get_report", report_id,
-                            first, 1000, sort_field, sort_order, levels,
+                            first, max, sort_field, sort_order, levels,
                             notes, overrides, result_hosts_only, search_phrase,
                             min_cvss_base, NULL, NULL);
     }
@@ -3554,6 +3566,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3563,13 +3576,16 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return edit_override_omp (credentials, override_id, "get_report",
-                                report_id, first, 1000, sort_field, sort_order,
+                                report_id, first, max, sort_field, sort_order,
                                 levels, notes, overrides, result_hosts_only,
                                 search_phrase, min_cvss_base, NULL, NULL);
     }
@@ -3880,6 +3896,7 @@ exec_omp_get (struct MHD_Connection *connection,
            /* Report passthrough params. */
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3890,7 +3907,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (min_cvss_base != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id,
                          name, result_id, report_id, first_result,
-                         "1000", sort_field, sort_order, levels, notes,
+                         max_results, sort_field, sort_order, levels, notes,
                          overrides, result_hosts_only, search_phrase,
                          min_cvss_base);
 
@@ -3934,6 +3951,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3943,14 +3961,17 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return save_note_omp (credentials, note_id, text, hosts, port, threat,
                             note_task_id, note_result_id, "get_report",
-                            report_id, first, 1000, sort_field, sort_order,
+                            report_id, first, max, sort_field, sort_order,
                             levels, notes, overrides, result_hosts_only,
                             search_phrase, min_cvss_base, NULL, NULL);
     }
@@ -3979,6 +4000,7 @@ exec_omp_get (struct MHD_Connection *connection,
            /* Report passthrough params. */
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -3989,7 +4011,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (min_cvss_base != NULL))
     return new_override_omp (credentials, oid, hosts, port, threat, task_id,
                              name, result_id, report_id, first_result,
-                             "1000", sort_field, sort_order, levels, notes,
+                             max_results, sort_field, sort_order, levels, notes,
                              overrides, result_hosts_only, search_phrase,
                              min_cvss_base);
 
@@ -4036,6 +4058,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strcmp (next, "get_report") == 0)
            && (report_id != NULL)
            && (first_result != NULL)
+           && (max_results != NULL)
            && (sort_field != NULL)
            && (sort_order != NULL)
            && (levels != NULL)
@@ -4045,15 +4068,18 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     {
-      unsigned int first;
+      unsigned int first, max;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
 
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = 1000;
+
       return save_override_omp (credentials, override_id, text, hosts, port,
                                 threat, new_threat, override_task_id,
                                 override_result_id, "get_report", report_id,
-                                first, 1000, sort_field, sort_order, levels,
+                                first, max, sort_field, sort_order, levels,
                                 notes, overrides, result_hosts_only,
                                 search_phrase, min_cvss_base, NULL, NULL);
     }

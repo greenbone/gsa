@@ -1,5 +1,17 @@
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Get maximum result values from params instead
+	of using constant.
+
+	* src/html/omp.xsl (html-report-details, html-create-note-form)
+	(html-edit-note-form, html-create-override-form)
+	(html-edit-override-form): Add max_results to forms that lead back to the
+	results page.
+	(note-detailed, override-detailed, result-detailed): Add max_results to
+	links that lead back to the results page.
+
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Get the increment from the
 	report, instead of using a fixed value.
 
