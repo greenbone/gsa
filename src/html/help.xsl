@@ -3003,16 +3003,6 @@ Public License instead of this License.
        remove the report immediately. The list of reports will be updated.
       </p>
 
-      <h4>Download a report</h4>
-      <p>
-       To download the full report in XML format click on the download
-       <img src="/img/download.png" alt="Download" title="Download" />
-       icon.  Report formats can be configured on the
-       <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
-       page.  Other formats are available for download on the
-       <a href="/help/view_report.html?token={/envelope/token}">report details</a> page.
-      </p>
-
       <a name="notes"></a>
       <h1>Notes</h1>
       <p>

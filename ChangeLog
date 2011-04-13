@@ -1,5 +1,11 @@
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl (report): Remove download button.
+
+	* src/html/help.xsl (reports.html): Remove "Download a report".
+
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_oap.c (get_users_oap): Align arg properly.
 
 2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
