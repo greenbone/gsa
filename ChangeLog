@@ -1,3 +1,7 @@
+2011-04-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/oap.xsl (modify_user_response): New template.
+
 2011-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (config): Put the writable cases the right way round.

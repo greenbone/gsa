@@ -160,6 +160,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     MODIFY_USER_RESPONSE -->
+
+<xsl:template match="modify_user_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save User</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     USER -->
 
 <xsl:template match="user">
