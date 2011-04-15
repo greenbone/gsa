@@ -1,5 +1,10 @@
 2011-04-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Offer predefined reports with
+	trusted reports, for download.
+
+2011-04-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Only offer trusted report
 	formats.
 
