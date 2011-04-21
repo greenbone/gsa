@@ -3023,21 +3023,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">To Address</td>
+                  <td width="150">To Address</td>
                   <td>
                     <input type="text" name="method_data:to_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">From Address</td>
+                  <td width="150">From Address</td>
                   <td>
                     <input type="text" name="method_data:from_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">Content</td>
+                  <td width="150">Content</td>
                   <td>
                     <table>
                       <tr>
@@ -3114,9 +3114,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="100">URL</td>
+                  <td width="150">URL</td>
                   <td>
                     <input type="text" name="method_data:URL" size="30" maxlength="301"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <input type="radio" name="method" value="Sourcefire Connector"/>
+                    Sourcefire Connector
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">Defense Center IP</td>
+                  <td>
+                    <input type="text" name="method_data:defense_center_ip"
+                           size="30" maxlength="40"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">Defense Center Port</td>
+                  <td>
+                    <input type="text" name="method_data:defense_center_port"
+                           size="30" maxlength="400" value="8307"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">PKCS12 file</td>
+                  <td>
+                    <input type="file" name="method_data:pkcs12" size="30"/>
                   </td>
                 </tr>
               </table>
