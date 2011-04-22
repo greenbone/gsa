@@ -2300,18 +2300,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <table>
                 <tr>
-                  <td colspan="2">
+                  <td colspan="3">
                     <input type="radio" name="base" value="gen"/>
                     Autogenerate credential
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td colspan="2">
                     <input type="radio" name="base" value="pass" checked="1"/>
                     Password
                   </td>
                   <td>
                     <input type="password" autocomplete="off" name="password"
+                           value="" size="30" maxlength="40"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    <input type="radio" name="base" value="key"/>
+                    Key pair
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td>
+                    Public key
+                  </td>
+                  <td>
+                    <input type="file" name="public_key" size="30"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td>
+                    Private key
+                  </td>
+                  <td>
+                    <input type="file" name="private_key" size="30"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td>
+                    Passphrase
+                  </td>
+                  <td>
+                    <input type="password" autocomplete="off" name="passphrase"
                            value="" size="30" maxlength="40"/>
                   </td>
                 </tr>

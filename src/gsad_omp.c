@@ -1519,6 +1519,9 @@ get_tasks_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  type         Either "gen" or "pass".
  * @param[in]  login        Credential user name.
  * @param[in]  password     Password, for type "pass".
+ * @param[in]  passphrase   Passphrase, for type "key".
+ * @param[in]  public_key   Public key, for type "key".
+ * @param[in]  private_key  Private key, for type "key".
  *
  * @return Result of XSL transformation.
  */
@@ -1528,7 +1531,10 @@ create_lsc_credential_omp (credentials_t * credentials,
                            char *comment,
                            const char *type,
                            const char *login,
-                           const char *password)
+                           const char *password,
+                           const char *passphrase,
+                           const char *public_key,
+                           const char *private_key)
 {
   gnutls_session_t session;
   int socket;
@@ -1554,9 +1560,15 @@ create_lsc_credential_omp (credentials_t * credentials,
 
   xml = g_string_new ("<commands_response>");
 
-  if (name == NULL || comment == NULL || login == NULL)
+  if (name == NULL || comment == NULL || login == NULL || type == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
-  else if (type && strcmp (type, "gen") && password == NULL)
+  else if (type && (strcmp (type, "pass") == 0) && password == NULL)
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
+  else if (type
+           && (strcmp (type, "key") == 0)
+           && ((passphrase == NULL)
+               || (public_key == NULL)
+               || (private_key == NULL)))
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
   else
     {
@@ -1574,6 +1586,24 @@ create_lsc_credential_omp (credentials_t * credentials,
                                         name,
                                         comment ? comment : "",
                                         login);
+      else if (type && strcmp (type, "key") == 0)
+        ret = openvas_server_sendf_xml (&session,
+                                        "<create_lsc_credential>"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "<login>%s</login>"
+                                        "<key>"
+                                        "<public>%s</public>"
+                                        "<private>%s</private>"
+                                        "<phrase>%s</phrase>"
+                                        "</key>"
+                                        "</create_lsc_credential>",
+                                        name,
+                                        comment ? comment : "",
+                                        login,
+                                        public_key ? public_key : "",
+                                        private_key ? private_key : "",
+                                        passphrase ? passphrase : "");
       else
         ret = openvas_server_sendf_xml (&session,
                                         "<create_lsc_credential>"

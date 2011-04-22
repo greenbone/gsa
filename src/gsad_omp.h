@@ -87,6 +87,7 @@ int get_lsc_credentials_omp (credentials_t *, const char *, const char *,
                              gsize *, const char *, const char *, char **,
                              char **);
 char * create_lsc_credential_omp (credentials_t *, char *, char *,
+                                  const char *, const char *, const char *,
                                   const char *, const char *, const char *);
 char * delete_lsc_credential_omp (credentials_t *, const char *);
 char * delete_trash_lsc_credential_omp (credentials_t *, const char *);

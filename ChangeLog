@@ -1,3 +1,20 @@
+2011-04-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add key pair credentials.
+
+	* src/gsad.c (init_validator): Add "key" to "create_credentials_type".
+	Remove out of date comment.
+	(req_parms, free_resources): Add passphrase, private_key, public_key.
+	(serve_post): Pass passphrase, private_key and public_key to
+	create_lsc_credential_omp.
+
+	* src/gsad_omp.c (create_lsc_credential_omp): Add key args.  Pass through
+	to manager.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-lsc-credential-form): Add key pair input.
+
 2011-04-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-create-escalator-form): Add Sourcefire Connector

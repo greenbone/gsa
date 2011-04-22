@@ -547,7 +547,7 @@ init_validator ()
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
-  openvas_validator_add (validator, "create_credentials_type", "^(gen|pass)$");
+  openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
@@ -570,7 +570,6 @@ init_validator ()
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
-  /** @todo Because we fear injections, we're requiring weaker passwords! */
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
@@ -822,9 +821,12 @@ struct gsad_connection_info
     char *period;        ///< Value of "period" parameter.
     char *period_unit;   ///< Value of "period_unit" parameter.
     char *pw;            ///< Value of "pw" parameter.
+    char *passphrase;    ///< Value of "passphrase" parameter.
     char *password;      ///< Value of "password" parameter.
     char *port;          ///< Value of "port" parameter.
     char *port_range;    ///< Value of "port_range" parameter.
+    char *private_key;   ///< Value of "private_key" parameter.
+    char *public_key;    ///< Value of "public_key" parameter.
     char *timeout;       ///< Value of "timeout" parameter.
     char *threat;        ///< Value of "threat" parameter.
     char *new_threat;    ///< Value of "new_threat" parameter.
@@ -953,9 +955,12 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.period);
   free (con_info->req_parms.period_unit);
   free (con_info->req_parms.pw);
+  free (con_info->req_parms.passphrase);
   free (con_info->req_parms.password);
   free (con_info->req_parms.port);
   free (con_info->req_parms.port_range);
+  free (con_info->req_parms.public_key);
+  free (con_info->req_parms.private_key);
   free (con_info->req_parms.oid);
   free (con_info->req_parms.sort_field);
   free (con_info->req_parms.sort_order);
@@ -1305,6 +1310,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "oid"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.oid);
+      if (!strcmp (key, "passphrase"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.passphrase);
       if (!strcmp (key, "password"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.password);
@@ -1329,6 +1337,12 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "port_range"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.port_range);
+      if (!strcmp (key, "private_key"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.private_key);
+      if (!strcmp (key, "public_key"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.public_key);
       if (!strcmp (key, "threat"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.threat);
@@ -2087,6 +2101,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       validate (validator, "credential_login",
                 &con_info->req_parms.credential_login);
       validate (validator, "lsc_password", &con_info->req_parms.password);
+      validate (validator, "lsc_password", &con_info->req_parms.passphrase);
       validate (validator, "create_credentials_type",
                 &con_info->req_parms.base);
       con_info->response =
@@ -2095,7 +2110,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                    con_info->req_parms.comment,
                                    con_info->req_parms.base,
                                    con_info->req_parms.credential_login,
-                                   con_info->req_parms.password);
+                                   con_info->req_parms.password,
+                                   con_info->req_parms.passphrase,
+                                   con_info->req_parms.public_key,
+                                   con_info->req_parms.private_key);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_report"))
     {
