@@ -1,3 +1,9 @@
+2011-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details, html-report-table)
+	(status_bar, task): Add "Uploading" case.  Grey stop and resume when
+	uploading.
+
 2011-04-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add key pair credentials.

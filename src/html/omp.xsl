@@ -385,6 +385,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="status_bar">
               <xsl:with-param name="status">
                 <xsl:choose>
+                  <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                    <xsl:text>Uploading</xsl:text>
+                  </xsl:when>
                   <xsl:when test="report/task/target/@id=''">
                     <xsl:text>Container</xsl:text>
                   </xsl:when>
@@ -997,6 +1000,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
+          <xsl:when test="task/target/@id=''">
+            <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="string-length(task/schedule/@id) &gt; 0">
             <img src="/img/resume_inactive.png" border="0" alt="Resume"
                  style="margin-left:3px;"/>
@@ -1025,6 +1032,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
+          <xsl:when test="task/target/@id=''">
+            <img src="/img/stop_inactive.png" border="0" alt="Stop"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="string-length(task/schedule/@id) &gt; 0">
             <img src="/img/stop_inactive.png" border="0"
                  alt="Stop"
@@ -1140,6 +1151,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="status_bar">
               <xsl:with-param name="status">
                 <xsl:choose>
+                  <xsl:when test="task/target/@id='' and task/status='Running'">
+                    <xsl:text>Uploading</xsl:text>
+                  </xsl:when>
                   <xsl:when test="task/target/@id=''">
                     <xsl:text>Container</xsl:text>
                   </xsl:when>
@@ -1439,6 +1453,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:when>
     <xsl:when test="$status='Done'">
+      <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_done" style="width:100px;"></div>
+        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Uploading'">
       <div class="progressbar_box" title="{$status}">
         <div class="progressbar_bar_done" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
@@ -1975,6 +1995,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="status_bar">
             <xsl:with-param name="status">
               <xsl:choose>
+                <xsl:when test="target/@id='' and status='Running'">
+                  <xsl:text>Uploading</xsl:text>
+                </xsl:when>
                 <xsl:when test="target/@id=''">
                   <xsl:text>Container</xsl:text>
                 </xsl:when>
@@ -2054,6 +2077,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
+            <xsl:when test="target/@id=''">
+              <img src="/img/resume_inactive.png" border="0" alt="Resume"
+                 style="margin-left:3px;"/>
+            </xsl:when>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
               <img src="/img/resume_inactive.png" border="0" alt="Resume"
                    style="margin-left:3px;"/>
@@ -2082,6 +2109,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
+            <xsl:when test="target/@id=''">
+              <img src="/img/stop_inactive.png" border="0" alt="Stop"
+                 style="margin-left:3px;"/>
+            </xsl:when>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
               <img src="/img/stop_inactive.png" border="0"
                    alt="Stop"
