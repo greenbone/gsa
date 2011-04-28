@@ -587,6 +587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{report/@id}"/>
                 <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                <input type="hidden" name="max_results" value="{report/results/@max}"/>
                 <input type="hidden" name="levels" value="{$levels}"/>
                 <input type="hidden"
                        name="search_phrase"
