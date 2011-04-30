@@ -9407,7 +9407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <!-- Check for detected operating system(s) -->
-          <xsl:variable name="cpes" select="count(../host[ip/text() = $current_host]/detail[name/text() = 'OS'][contains(value/text(), 'cpe:/o:')])"/>
+          <xsl:variable name="cpes" select="count(../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe'])"/>
           <xsl:choose>
             <xsl:when test="$cpes = 0">
               <!-- nothing detected or matched by our CPE database -->
@@ -9415,12 +9415,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:when test="$cpes = 1">
               <!-- One system detected: display the corresponding icon and name from our database -->
-              <xsl:for-each select="../host[ip/text() = $current_host]/detail[name/text() = 'OS']">
-                <xsl:variable name="report" select="value"/>
-                <xsl:variable name="os_name" select="document('os.xml')//operating_systems/operating_system[contains($report, pattern)]/title"/>
-                <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($report, pattern)]/icon"/>
-                <img src="/img/{$os_icon}" alt="{$os_name}" title="{$os_name}"/>
-              </xsl:for-each>
+              <xsl:variable name="best_os_cpe" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
+              <xsl:variable name="best_os_txt" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
+              <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+              <img src="/img/{$os_icon}" alt="{$best_os_txt}" title="{$best_os_txt}"/>
             </xsl:when>
             <xsl:otherwise>
               <!-- too many OS detected! Report the conflict -->

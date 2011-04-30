@@ -1,3 +1,8 @@
+2011-05-01  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_report_response/report/report): use the
+	best_os_* entries from host details to display the detected OS.
+
 2011-04-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add missing max_results param
