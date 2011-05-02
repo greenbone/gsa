@@ -68,7 +68,10 @@ char * get_report_omp (credentials_t *, const char *, const char *,
                        gsize *, const unsigned int,
                        const unsigned int, const char *, const char *,
                        const char *, const char *, const char *, const char *,
-                       const char *, const char *, gchar **, char **);
+                       const char *, const char *, const char *,
+                       const unsigned int, const unsigned int, const char *,
+                       const char *, const char *, const char *, const char *,
+                       const char *, gchar **, char **);
 
 char * create_escalator_omp (credentials_t *, char *, char *, const char *,
                              GArray *, const char *, GArray *, const char *,

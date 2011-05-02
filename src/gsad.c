@@ -2768,6 +2768,9 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *comment      = NULL;
   const char *config_id    = NULL;
   const char *escalator_id = NULL;
+  const char *report_escalator_id = NULL;
+  const char *esc_first_result = NULL;
+  const char *esc_max_results = NULL;
   const char *task_id      = NULL;
   const char *result_id    = NULL;
   const char *report_id    = NULL;
@@ -2796,6 +2799,12 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *result_hosts_only = NULL;
   const char *search_phrase = NULL;
   const char *min_cvss_base    = NULL;
+  const char *esc_levels       = NULL;
+  const char *esc_notes        = NULL;
+  const char *esc_overrides    = NULL;
+  const char *esc_result_hosts_only = NULL;
+  const char *esc_search_phrase = NULL;
+  const char *esc_min_cvss_base    = NULL;
   const char *port         = NULL;
   const char *threat       = NULL;
   const char *new_threat   = NULL;
@@ -2847,6 +2856,17 @@ exec_omp_get (struct MHD_Connection *connection,
                                                   "escalator_id");
       if (openvas_validate (validator, "escalator_id", escalator_id))
         escalator_id = NULL;
+
+      report_escalator_id = MHD_lookup_connection_value (connection,
+                                                         MHD_GET_ARGUMENT_KIND,
+                                                         "report_escalator_id");
+      if (report_escalator_id)
+        {
+          if (openvas_validate (validator, "escalator_id", report_escalator_id))
+            report_escalator_id = NULL;
+        }
+      else
+        report_escalator_id = "0";
 
       task_id = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -2978,6 +2998,18 @@ exec_omp_get (struct MHD_Connection *connection,
                                                  "max_results");
       if (openvas_validate (validator, "max_results", max_results))
         max_results = NULL;
+
+      esc_first_result = MHD_lookup_connection_value (connection,
+                                                      MHD_GET_ARGUMENT_KIND,
+                                                      "esc_first_result");
+      if (openvas_validate (validator, "first_result", esc_first_result))
+        esc_first_result = NULL;
+
+      esc_max_results = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "esc_max_results");
+      if (openvas_validate (validator, "max_results", esc_max_results))
+        esc_max_results = NULL;
 
       sort_field = MHD_lookup_connection_value (connection,
                                                 MHD_GET_ARGUMENT_KIND,
@@ -3146,6 +3178,82 @@ exec_omp_get (struct MHD_Connection *connection,
         }
       else
         min_cvss_base = "";
+
+      esc_levels = MHD_lookup_connection_value (connection,
+                                                MHD_GET_ARGUMENT_KIND,
+                                                "esc_levels");
+      if (esc_levels)
+        {
+          if (openvas_validate (validator, "levels", esc_levels))
+            esc_levels = NULL;
+        }
+
+      esc_notes = MHD_lookup_connection_value (connection,
+                                               MHD_GET_ARGUMENT_KIND,
+                                               "esc_notes");
+      if (esc_notes)
+        {
+          if (openvas_validate (validator, "notes", esc_notes))
+            esc_notes = NULL;
+        }
+      else
+        esc_notes = "0";
+
+      esc_overrides = MHD_lookup_connection_value (connection,
+                                                   MHD_GET_ARGUMENT_KIND,
+                                                   "esc_overrides");
+      if (esc_overrides)
+        {
+          if (openvas_validate (validator, "overrides", esc_overrides))
+            esc_overrides = NULL;
+        }
+      else
+        esc_overrides = "0";
+
+      esc_result_hosts_only =
+       MHD_lookup_connection_value (connection,
+                                    MHD_GET_ARGUMENT_KIND,
+                                    "esc_result_hosts_only");
+      if (esc_result_hosts_only)
+        {
+          if (openvas_validate (validator,
+                                "result_hosts_only",
+                                esc_result_hosts_only))
+            esc_result_hosts_only = NULL;
+        }
+      else
+        esc_result_hosts_only = "0";
+
+      esc_search_phrase = MHD_lookup_connection_value (connection,
+                                                       MHD_GET_ARGUMENT_KIND,
+                                                       "esc_search_phrase");
+      if (esc_search_phrase)
+        {
+          if (openvas_validate (validator, "search_phrase", esc_search_phrase))
+            esc_search_phrase = NULL;
+        }
+      else
+        esc_search_phrase = "";
+
+      esc_min_cvss_base = MHD_lookup_connection_value (connection,
+                                                       MHD_GET_ARGUMENT_KIND,
+                                                       "esc_min_cvss_base");
+      if (esc_min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base", esc_min_cvss_base))
+            esc_min_cvss_base = NULL;
+          else
+            {
+              const char *apply_min;
+              apply_min = MHD_lookup_connection_value (connection,
+                                                       MHD_GET_ARGUMENT_KIND,
+                                                       "esc_apply_min_cvss_base");
+              if (apply_min == NULL || (strcmp (apply_min, "0") == 0))
+                esc_min_cvss_base = "";
+            }
+        }
+      else
+        esc_min_cvss_base = "";
 
       hosts = MHD_lookup_connection_value (connection,
                                            MHD_GET_ARGUMENT_KIND,
@@ -3763,14 +3871,19 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (report_id) < VAL_MAX_SIZE))
     {
       char *ret;
-      unsigned int first;
-      unsigned int max;
+      unsigned int first, esc_first;
+      unsigned int max, esc_max;
       gchar *content_type_omp;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
       if (!max_results || sscanf (max_results, "%u", &max) != 1)
         max = RESULTS_PER_PAGE;
+
+      if (!esc_first_result || sscanf (esc_first_result, "%u", &esc_first) != 1)
+        esc_first = 1;
+      if (!esc_max_results || sscanf (esc_max_results, "%u", &esc_max) != 1)
+        esc_max = RESULTS_PER_PAGE;
 
       if (levels)
         ret = get_report_omp (credentials, report_id, report_format_id,
@@ -3785,6 +3898,15 @@ exec_omp_get (struct MHD_Connection *connection,
                               result_hosts_only,
                               search_phrase,
                               min_cvss_base,
+                              report_escalator_id,
+                              (const unsigned int) esc_first,
+                              (const unsigned int) esc_max,
+                              esc_levels,
+                              esc_notes,
+                              esc_overrides,
+                              esc_result_hosts_only,
+                              esc_search_phrase,
+                              esc_min_cvss_base,
                               &content_type_omp,
                               content_disposition);
       else
@@ -3807,6 +3929,15 @@ exec_omp_get (struct MHD_Connection *connection,
                                 result_hosts_only,
                                 search_phrase,
                                 min_cvss_base,
+                                report_escalator_id,
+                                (const unsigned int) esc_first,
+                                (const unsigned int) esc_max,
+                                esc_levels,
+                                esc_notes,
+                                esc_overrides,
+                                esc_result_hosts_only,
+                                esc_search_phrase,
+                                esc_min_cvss_base,
                                 &content_type_omp,
                                 content_disposition);
           g_string_free (string, TRUE);

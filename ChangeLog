@@ -1,3 +1,21 @@
+2011-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a column to the report summary for escalating the report.
+
+	* src/html/omp.xsl (get_reports_escalate_response): New template.
+	(html-report-details): Add "Escalate" column.
+	(get_report): Also match get_reports_escalate_response.
+
+	* src/gsad.c (exec_omp_get): Also pass escalator filters to
+	get_report_omp.
+
+	* src/gsad_omp.c (get_report_omp): Escalate before getting report, if
+	requested.  Get escalators for dropdown.
+	(delete_note_omp, save_note_omp, delete_override_omp)
+	(save_override_omp): Get escalators for dropdown.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2011-05-01  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (get_report_response/report/report): use the

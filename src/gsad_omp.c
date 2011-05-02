@@ -6542,6 +6542,16 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  escalator_id       ID of escalator if escalation required, else 0.
+ * @param[in]  esc_first_result   Number of first result in escalated report.
+ * @param[in]  esc_max_results    Number of results in escalated report.
+ * @param[in]  esc_levels     Threat levels to include in escalated report.
+ * @param[in]  esc_notes      Whether to include notes in escalation.
+ * @param[in]  esc_overrides  Whether to include overrides in escalation.
+ * @param[in]  esc_result_hosts_only  Whether to show only hosts with results.
+ * @param[in]  esc_search_phrase  Phrase which included results must contain.
+ * @param[in]  esc_min_cvss_base  Minimum CVSS included results may have.
+ *                            "-1" for all, including results with NULL CVSS.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  *
@@ -6556,6 +6566,12 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const char * levels, const char * notes,
                 const char * overrides, const char *result_hosts_only,
                 const char * search_phrase, const char *min_cvss_base,
+                const char * escalator_id,
+                const unsigned int esc_first_result,
+                const unsigned int esc_max_results,
+                const char * esc_levels, const char * esc_notes,
+                const char * esc_overrides, const char *esc_result_hosts_only,
+                const char * esc_search_phrase, const char *esc_min_cvss_base,
                 gchar ** content_type, char **content_disposition)
 {
   char *report_encoded = NULL;
@@ -6569,6 +6585,14 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   *content_type = NULL;
   *report_len = 0;
+
+  if (escalator_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a report. "
+                         "The report could not be delivered. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
 
   if (search_phrase == NULL)
     {
@@ -6606,6 +6630,97 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                              "The report could not be delivered. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
+    }
+
+  if (strcmp (escalator_id, "0"))
+    {
+      const char *status;
+
+      if (openvas_server_sendf (&session,
+                                "<get_reports"
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " apply_overrides=\"%i\""
+                                " overrides=\"1\""
+                                " overrides_details=\"1\""
+                                " result_hosts_only=\"%i\""
+                                " report_id=\"%s\""
+                                " first_result=\"%u\""
+                                " max_results=\"%u\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\""
+                                " escalator_id=\"%s\"/>",
+                                strcmp (esc_notes, "0") ? 1 : 0,
+                                strcmp (esc_overrides, "0") ? 1 : 0,
+                                strcmp (esc_result_hosts_only, "0") ? 1 : 0,
+                                report_id,
+                                esc_first_result,
+                                esc_max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                esc_levels,
+                                esc_search_phrase,
+                                esc_min_cvss_base,
+                                escalator_id)
+          == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_entity (&session, &entity))
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+      status = entity_attribute (entity, "status");
+      if ((status == NULL)
+          || (strlen (status) == 0))
+        {
+          free_entity (entity);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to parse response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+      if (status[0] != '2')
+        {
+          char *ret;
+          gchar *msg;
+          msg = g_strdup_printf ("An internal error occurred while getting a report. "
+                                 "The report could not be delivered. "
+                                 "Diagnostics: GET_REPORT escalation failed: %s.",
+                                 entity_attribute (entity, "status_text"));
+          ret = gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              msg, "/omp?cmd=get_tasks");
+          g_free (msg);
+          free_entity (entity);
+          openvas_server_close (socket, session);
+          return ret;
+        }
+      free_entity (entity);
     }
 
   if (openvas_server_sendf (&session,
@@ -6771,6 +6886,11 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
       xml = g_string_new ("<get_report>");
 
+      if (strcmp (escalator_id, "0"))
+        g_string_append_printf (xml, "<get_reports_escalate_response"
+                                     " status=\"200\""
+                                     " status_text=\"OK\"/>");
+
       entity = NULL;
       if (read_entity_and_string (&session, &entity, &xml))
         {
@@ -6835,6 +6955,33 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         }
 
       if (openvas_server_send (&session, "<get_report_formats"
+                                         " sort_field=\"name\""
+                                         " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (openvas_server_send (&session, "<get_escalators"
                                          " sort_field=\"name\""
                                          " sort_order=\"ascending\"/>")
           == -1)
@@ -7674,6 +7821,9 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                                 "<get_report_formats"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
+                                "<get_escalators"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 note_id,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -8044,6 +8194,9 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
                                 "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
+                                "<get_escalators"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
@@ -8879,6 +9032,9 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                                 "<get_report_formats"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
+                                "<get_escalators"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
                                 "</commands>",
                                 override_id,
                                 strcmp (notes, "0") ? 1 : 0,
@@ -9256,6 +9412,9 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>"
                                 "<get_report_formats"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>"
+                                "<get_escalators"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
                                 "</commands>",
