@@ -1652,6 +1652,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$status='Uploading'">
       <div class="progressbar_box" title="{$status}">
+        <div class="progressbar_bar_done" style="width:{$progress}px;"></div>
+        <div class="progressbar_text">
+          <xsl:value-of select="$status"/>
+          <xsl:if test="$progress &gt;= 0">
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$progress"/> %
+          </xsl:if>
+        </div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Uploading'">
+      <div class="progressbar_box" title="{$status}">
         <div class="progressbar_bar_done" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
