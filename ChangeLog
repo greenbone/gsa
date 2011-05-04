@@ -1,5 +1,10 @@
 2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add missing max_results to
+	links, so that they respect "Results per page".
+
+2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (escalator [details]): Add Sourcefire Connector data.
 
 2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
