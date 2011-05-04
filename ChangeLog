@@ -1,4 +1,8 @@
-2011-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (escalator [details]): Add Sourcefire Connector data.
+
+2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Base64 encode PKCS12 when creating Sourcefire escalator.
 

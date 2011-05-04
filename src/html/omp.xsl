@@ -3783,6 +3783,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                 </xsl:when>
+                <xsl:when test="method/text()='Sourcefire Connector'">
+                  <tr>
+                    <td width="45"></td>
+                    <td>Defense Center IP:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='defense_center_ip']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='defense_center_ip']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>Defense Center Port:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='defense_center_port']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='defense_center_port']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
               </xsl:choose>
             </table>
           </td>
