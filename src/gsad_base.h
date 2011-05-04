@@ -65,6 +65,21 @@ typedef struct
   int value_size;  ///< Size of value.
 } preference_t;
 
+/**
+ * @brief Method data parameters.
+ */
+struct method_data_param
+{
+  gchar *key;             /* Key. */
+  gchar *value;           /* Binary value. */
+  gsize value_size;       /* Size of value. */
+};
+
+/**
+ * @brief Method data parameter type.
+ */
+typedef struct method_data_param method_data_param_t;
+
 int gsad_base_init ();
 char *ctime_r_strip_newline (time_t *, char *);
 char * xsl_transform (const char *);

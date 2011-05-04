@@ -2959,6 +2959,71 @@ send_escalator_data (gnutls_session_t *session, GArray *data)
 }
 
 /**
+ * @brief Send method data for an escalator.
+ *
+ * @param[in]   session  GNUTLS session.
+ * @param[out]  data     Data.
+ * @param[out]  method   Method.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static int
+send_escalator_method_data (gnutls_session_t *session, GArray *data,
+                            const char *method)
+{
+  int index = 0;
+  method_data_param_t *element;
+
+  if (data)
+    {
+      if (strcmp (method, "Sourcefire Connector"))
+        {
+          while ((element = g_array_index (data,
+                                           method_data_param_t*,
+                                           index++)))
+            if (openvas_server_sendf_xml (session,
+                                          "<data><name>%s</name>%s</data>",
+                                          element->key,
+                                          (gchar*) element->value))
+              return -1;
+          return 0;
+        }
+
+      while ((element = g_array_index (data, method_data_param_t*, index++)))
+        if (strcmp (element->key, "pkcs12"))
+          {
+            if (openvas_server_sendf_xml (session,
+                                          "<data><name>%s</name>%s</data>",
+                                          element->key,
+                                          (gchar*) element->value))
+              return -1;
+          }
+        else
+          {
+            gchar *base64;
+
+            /* Special case the pkcs12 file, which is binary. */
+
+            base64 = element->value_size
+                      ? g_base64_encode ((guchar *) element->value,
+                                         element->value_size)
+                      : g_strdup ("");
+            if (openvas_server_sendf_xml (session,
+                                          "<data><name>%s</name>%s</data>",
+                                          element->key,
+                                          base64))
+              {
+                g_free (base64);
+                return -1;
+              }
+            g_free (base64);
+          }
+    }
+
+  return 0;
+}
+
+/**
  * @brief Create an escalator, get all escalators, XSL transform the result.
  *
  * @param[in]   credentials     Username and password for authentication.
@@ -3014,16 +3079,20 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
        * value to vary per radio. */
       if (strncmp (method, "syslog ", strlen ("syslog ")) == 0)
         {
-          gchar *data;
+          method_data_param_t *method_data_param;
 
-          data = g_strdup_printf ("submethod0%s",
-                                  method + strlen ("syslog "));
-          data[strlen ("submethod")] = '\0';
+          method_data_param = g_malloc (sizeof (method_data_param));
+          method_data_param->key = g_strdup ("submethod");
+          method_data_param->value_size = strlen (method + strlen ("syslog "));
+          method_data_param->value = g_malloc (method_data_param->value_size);
+          memcpy (method_data_param->value,
+                  method + strlen ("syslog "),
+                  method_data_param->value_size);
 
           if (method_data == NULL)
             method_data = g_array_new (TRUE, FALSE, sizeof (gchar*));
 
-          g_array_append_val (method_data, data);
+          g_array_append_val (method_data, method_data_param);
 
           method = "syslog";
         }
@@ -3040,7 +3109,7 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
           || send_escalator_data (&session, event_data)
           || openvas_server_send (&session, "</event>")
           || openvas_server_sendf (&session, "<method>%s", method)
-          || send_escalator_data (&session, method_data)
+          || send_escalator_method_data (&session, method_data, method)
           || openvas_server_send (&session, "</method>")
           || openvas_server_sendf (&session, "<condition>%s", condition)
           || send_escalator_data (&session, condition_data)

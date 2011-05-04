@@ -727,20 +727,20 @@ content_type_from_format_string (enum content_type* content_type,
  * @param[out]  data  Data.
  * @param[out]  name  Name of element.
  *
- * @return 0 on success, -1 on error.
+ * @return Parameter value on success, NULL on error.
  */
 static gchar *
 escalator_data (GArray *data, const char *name)
 {
   int index = 0;
-  gchar *element;
+  method_data_param_t *element;
 
   if (data)
-    while ((element = g_array_index (data, gchar*, index++)))
-      if (strcmp (element, name) == 0)
-        return element + strlen (element) + 1;
+    while ((element = g_array_index (data, method_data_param_t*, index++)))
+      if (strcmp (element->key, name) == 0)
+        return (gchar*) element->value;
 
-  return 0;
+  return NULL;
 }
 
 /**
@@ -1005,7 +1005,22 @@ free_resources (void *cls, struct MHD_Connection *connection,
       g_array_free (con_info->req_parms.files, TRUE);
     }
 
-  free_gchar_array (&con_info->req_parms.method_data);
+  if (con_info->req_parms.method_data)
+    {
+      method_data_param_t *item;
+      int index = 0;
+
+      while ((item = g_array_index (con_info->req_parms.method_data,
+                                    method_data_param_t*,
+                                    index++)))
+        {
+          g_free (item->key);
+          g_free (item->value);
+          g_free (item);
+        }
+
+      g_array_free (con_info->req_parms.method_data, TRUE);
+    }
 
   if (con_info->req_parms.preferences)
     {
@@ -1582,13 +1597,14 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
         }
       if (!strncmp (key, "method_data:", strlen ("method_data:")))
         {
-          gchar *method_data;
+          method_data_param_t *method_data_param;
 
-          method_data = g_strdup_printf ("%s0%.*s",
-                                         key + strlen ("method_data:"),
-                                         (int) size,
-                                         data);
-          method_data[strlen (key + strlen ("method_data:"))] = '\0';
+          method_data_param = g_malloc (sizeof (method_data_param));
+          method_data_param->key = g_strdup (key + strlen ("method_data:"));
+          method_data_param->value_size = size;
+          method_data_param->value = g_malloc (size + 1);
+          memcpy (method_data_param->value, data, size);
+          method_data_param->value[size] = '\0';
 
           if (con_info->req_parms.method_data == NULL)
             con_info->req_parms.method_data
@@ -1596,7 +1612,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
                             FALSE,
                             sizeof (gchar*));
 
-          g_array_append_val (con_info->req_parms.method_data, method_data);
+          g_array_append_val (con_info->req_parms.method_data, method_data_param);
 
           con_info->answercode = MHD_HTTP_OK;
           return MHD_YES;

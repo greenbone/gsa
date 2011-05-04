@@ -1,5 +1,21 @@
 2011-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Base64 encode PKCS12 when creating Sourcefire escalator.
+
+	* src/gsad_base.h (struct method_data_param): New struct.
+	(method_data_param_t): New type.
+
+	* src/gsad.c (escalator_data, free_resources): Expect method data in
+	struct.
+	(serve_post): Put method data into struct.
+
+	* src/gsad_omp.c (send_escalator_method_data): New function.  Copy of
+	send_escalator_data, with Sourcefire PKCS12 base64 special case.
+	(create_escalator_omp): Switch syslog special to use struct.  Call
+	send_escalator_method_data instead of send_escalator_data for method data.
+
+2011-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (status_bar): Add percentage and bar to 'Uploading'.
 
 2011-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
