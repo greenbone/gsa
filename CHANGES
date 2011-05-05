@@ -1,3 +1,29 @@
+gsa 3.0+beta1 (2011-05-05)
+
+This is the first beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release -- in combination with the OpenVAS Manager 3.0+beta1 release --
+introduces a number of new features. For details, please refer to the list of
+changes below.
+
+Many thanks to everyone who has contributed to this release:
+Henri Doreau, Matthew Mundell, Michael Wiegand and Jan-Oliver Wagner.
+
+Main changes since 2.0 series:
+* New feature: Trashcan. It is now possible to place objects in a trashcan
+  instead of deleting them directly.
+* The login behaviour has been improved.
+* Support for Host Details reported by OpenVAS Scanner has been added.
+* Support for container task (imported reports) has been added.
+* Support for specifying an SSH port for Local Security Checks has been added.
+* Support for escalating result to a Sourcefire Defense Center has been added.
+* Support for using an SSH key pair for SSH authentication has been added.
+* Support for setting the number of results displayed on one page has been
+* added.
+
+
 gsa 2.0.1 (2011-03-02)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)

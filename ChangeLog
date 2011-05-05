@@ -1,3 +1,13 @@
+2011-05-05  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 3.0+beta1 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
 2011-05-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add missing max_results to
