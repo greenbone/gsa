@@ -286,28 +286,28 @@ create_user_oap (credentials_t * credentials, const char *name,
       /* Create the user. */
 
       if (strcmp (hosts_allow, "2") && strlen (hosts))
-        ret = openvas_server_sendf (&session,
-                                    "<create_user>"
-                                    "<name>%s</name>"
-                                    "<password>%s</password>"
-                                    "<role>%s</role>"
-                                    "<hosts allow=\"%s\">%s</hosts>"
-                                    "</create_user>",
-                                    name,
-                                    password,
-                                    role,
-                                    hosts_allow,
-                                    hosts);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<create_user>"
+                                        "<name>%s</name>"
+                                        "<password>%s</password>"
+                                        "<role>%s</role>"
+                                        "<hosts allow=\"%s\">%s</hosts>"
+                                        "</create_user>",
+                                        name,
+                                        password,
+                                        role,
+                                        hosts_allow,
+                                        hosts);
       else
-        ret = openvas_server_sendf (&session,
-                                    "<create_user>"
-                                    "<name>%s</name>"
-                                    "<password>%s</password>"
-                                    "<role>%s</role>"
-                                    "</create_user>",
-                                    name,
-                                    password,
-                                    role);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<create_user>"
+                                        "<name>%s</name>"
+                                        "<password>%s</password>"
+                                        "<role>%s</role>"
+                                        "</create_user>",
+                                        name,
+                                        password,
+                                        role);
 
       if (ret == -1)
         {
@@ -421,31 +421,31 @@ save_user_oap (credentials_t * credentials, const char *name,
       /* Modify the user. */
 
       if (strcmp (hosts_allow, "2") && strlen (hosts))
-        ret = openvas_server_sendf (&session,
-                                    "<modify_user>"
-                                    "<name>%s</name>"
-                                    "<password modify=\"%s\">%s</password>"
-                                    "<role>%s</role>"
-                                    "<hosts allow=\"%s\">%s</hosts>"
-                                    "</modify_user>",
-                                    name,
-                                    modify_password,
-                                    password,
-                                    role,
-                                    hosts_allow,
-                                    hosts);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<modify_user>"
+                                        "<name>%s</name>"
+                                        "<password modify=\"%s\">%s</password>"
+                                        "<role>%s</role>"
+                                        "<hosts allow=\"%s\">%s</hosts>"
+                                        "</modify_user>",
+                                        name,
+                                        modify_password,
+                                        password,
+                                        role,
+                                        hosts_allow,
+                                        hosts);
       else
-        ret = openvas_server_sendf (&session,
-                                    "<modify_user>"
-                                    "<name>%s</name>"
-                                    "<password modify=\"%s\">%s</password>"
-                                    "<role>%s</role>"
-                                    "<hosts allow=\"0\"></hosts>"
-                                    "</modify_user>",
-                                    name,
-                                    modify_password,
-                                    password,
-                                    role);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<modify_user>"
+                                        "<name>%s</name>"
+                                        "<password modify=\"%s\">%s</password>"
+                                        "<role>%s</role>"
+                                        "<hosts allow=\"0\"></hosts>"
+                                        "</modify_user>",
+                                        name,
+                                        modify_password,
+                                        password,
+                                        role);
 
       if (ret == -1)
         {

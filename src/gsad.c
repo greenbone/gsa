@@ -586,7 +586,7 @@ init_validator ()
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
-  openvas_validator_add (validator, "password",   "^[[:alnum:], \\./]{0,40}$");
+  openvas_validator_add (validator, "password",   "^.{0,40}$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, ]{1,400}))$");
   /** @todo Better regex. */

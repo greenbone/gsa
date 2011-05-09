@@ -9598,35 +9598,35 @@ create_slave_omp (credentials_t *credentials, const char *name,
       /* Create the slave. */
 
       if (comment)
-        ret = openvas_server_sendf (&session,
-                                    "<create_slave>"
-                                    "<name>%s</name>"
-                                    "<comment>%s</comment>"
-                                    "<host>%s</host>"
-                                    "<port>%s</port>"
-                                    "<login>%s</login>"
-                                    "<password>%s</password>"
-                                    "</create_slave>",
-                                    name,
-                                    comment,
-                                    host,
-                                    port,
-                                    login,
-                                    password);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<create_slave>"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "<host>%s</host>"
+                                        "<port>%s</port>"
+                                        "<login>%s</login>"
+                                        "<password>%s</password>"
+                                        "</create_slave>",
+                                        name,
+                                        comment,
+                                        host,
+                                        port,
+                                        login,
+                                        password);
       else
-        ret = openvas_server_sendf (&session,
-                                    "<create_slave>"
-                                    "<name>%s</name>"
-                                    "<host>%s</host>"
-                                    "<port>%s</port>"
-                                    "<login>%s</login>"
-                                    "<password>%s</password>"
-                                    "</create_slave>",
-                                    name,
-                                    host,
-                                    port,
-                                    login,
-                                    password);
+        ret = openvas_server_sendf_xml (&session,
+                                        "<create_slave>"
+                                        "<name>%s</name>"
+                                        "<host>%s</host>"
+                                        "<port>%s</port>"
+                                        "<login>%s</login>"
+                                        "<password>%s</password>"
+                                        "</create_slave>",
+                                        name,
+                                        host,
+                                        port,
+                                        login,
+                                        password);
 
 
       if (ret == -1)

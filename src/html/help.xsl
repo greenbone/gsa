@@ -1192,7 +1192,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Password</td>
           <td>yes</td>
           <td>40</td>
-          <td>Text</td>
+          <td>Free form text</td>
           <td></td>
         </tr>
       </table>
@@ -1558,7 +1558,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Password</td>
           <td>yes</td>
           <td>40</td>
-          <td>Alphanumeric</td>
+          <td>Free form text</td>
           <td></td>
         </tr>
         <tr class="odd">
