@@ -774,6 +774,7 @@ struct gsad_connection_info
     char *caller;        ///< Value of "caller" parameter.
 
     char *access_hosts;  ///< Value of "access_hosts" parameter.
+    char *agent_id;      ///< Value of "agent_id" parameter.
     char *authdn;        ///< Value of "authdn" parameter.
     char *base;          ///< Value of "base" parameter.
     char *cmd;           ///< Value of "cmd" parameter.
@@ -919,6 +920,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.caller);
 
   free (con_info->req_parms.access_hosts);
+  free (con_info->req_parms.agent_id);
   free (con_info->req_parms.base);
   free (con_info->req_parms.cmd);
   free (con_info->req_parms.name);
@@ -1220,6 +1222,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "access_hosts"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.access_hosts);
+      if (!strcmp (key, "agent_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.agent_id);
       if (!strcmp (key, "authdn"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.authdn);
@@ -2571,6 +2576,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.search_phrase,
                              con_info->req_parms.min_cvss_base);
     }
+  else if (!strcmp (con_info->req_parms.cmd, "delete_agent"))
+    {
+      validate (validator, "agent_id", &con_info->req_parms.agent_id);
+      con_info->response =
+        delete_agent_omp (credentials, con_info->req_parms.agent_id);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "empty_trashcan"))
     {
       con_info->response =
@@ -3390,9 +3401,6 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_tasks_omp (credentials, task_id, sort_field, sort_order,
                           refresh_interval,
                           overrides ? strcmp (overrides, "0") : 0);
-
-  else if ((0 == strcmp (cmd, "delete_agent")) && (agent_id != NULL))
-    return delete_agent_omp (credentials, agent_id);
 
   else if ((!strcmp (cmd, "delete_escalator")) && (escalator_id != NULL))
     return delete_escalator_omp (credentials, escalator_id);

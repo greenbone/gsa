@@ -1,5 +1,16 @@
 2011-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch delete_agent button to POST.
+
+	* src/gsad.c (req_parms, free_resources, serve_post): Add agent_id.
+	(exec_omp_post): Add delete_agent.
+	(exec_omp_get): Remove delete_agent.
+
+	* src/html/omp.xsl (delete-button): New template.
+	(agent): Replace link with form.
+
+2011-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove character limitations on "password".
 
 	* src/gsad_oap.c (create_user_oap, save_user_omp): Send command with

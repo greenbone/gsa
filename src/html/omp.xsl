@@ -40,6 +40,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<xsl:template name="delete-button">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+
+  <div style="display: inline">
+  <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="token" value="{/envelope/token}"/>
+    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+    <input type="hidden" name="cmd" value="delete_{$type}"/>
+    <input type="hidden" name="{$type}_id" value="{$id}"/>
+    <input type="image" src="/img/trashcan.png" alt="To Trashcan"
+           name="Delete" value="Delete" title="Delete"/>
+  </form>
+  </div>
+</xsl:template>
+
 <!-- This is called within a PRE. -->
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
@@ -3111,10 +3127,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
-             title="Move Agent to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="delete-button">
+            <xsl:with-param name="type">agent</xsl:with-param>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
