@@ -1,5 +1,22 @@
 2011-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch the delete_* commands to POST.
+
+	* src/gsad.c (validate_or): New function.
+	(req_parms, free_resources, serve_post): Add params for commands.
+	(exec_omp_post): Add delete_* commands.
+	(exec_omp_get): Remove delete_* commands.
+
+	* src/gsad_omp.c (delete_note_omp, delete_override_omp): NULL check
+	params.
+
+	* src/html/omp.xsl: Replace every delete_* icon links with POST icons.
+	(delete-button): Rename delete-icon.
+	(trash-delete-icon, trashcan-icon): New templates.
+	(delete-icon): New template.  Was delete-icon.
+
+2011-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch delete_agent button to POST.
 
 	* src/gsad.c (req_parms, free_resources, serve_post): Add agent_id.

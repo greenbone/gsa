@@ -663,6 +663,38 @@ validate (validator_t validator, const gchar* validator_rule, char** string)
 }
 
 /**
+ * @brief Check validity of an input string.
+ *
+ * @param[in]      validator       Validator to use.
+ * @param[in]      validator_rule  The rule with which to validate \p string.
+ * @param[in,out]  string          The string to validate.  If invalid, memory
+ *                                 location pointed to will be freed and set
+ *                                 to NULL.
+ * @param[in]      fallback        String to duplicate into \p string if
+ *                                 \p string is NULL.
+ *
+ * @return TRUE if \p string was invalid and was freed, FALSE otherwise.
+ */
+static gboolean
+validate_or (validator_t validator, const gchar* validator_rule, char** string,
+             const char *fallback)
+{
+  if (*string)
+    {
+      if (openvas_validate (validator, validator_rule, *string))
+        {
+          free (*string);
+          *string = NULL;
+          return TRUE;
+        }
+
+      return FALSE;
+    }
+  *string = g_strdup (fallback);
+  return FALSE;
+}
+
+/**
  * @brief Frees array and its gchar* contents.
  *
  * @param[in,out]  array  The GArray containing gchar*s to free.
@@ -775,6 +807,7 @@ struct gsad_connection_info
 
     char *access_hosts;  ///< Value of "access_hosts" parameter.
     char *agent_id;      ///< Value of "agent_id" parameter.
+    char *apply_min;     ///< Value of "apply_min" parameter.
     char *authdn;        ///< Value of "authdn" parameter.
     char *base;          ///< Value of "base" parameter.
     char *cmd;           ///< Value of "cmd" parameter.
@@ -818,7 +851,9 @@ struct gsad_connection_info
     char *login;         ///< Value of "login" parameter.
     char *minute;        ///< Value of "minute" parameter.
     char *month;         ///< Value of "month" parameter.
+    char *note_id;       ///< Value of "note_id" parameter.
     char *oid;           ///< Value of "oid" parameter.
+    char *override_id;   ///< Value of "override_id" parameter.
     char *period;        ///< Value of "period" parameter.
     char *period_unit;   ///< Value of "period_unit" parameter.
     char *pw;            ///< Value of "pw" parameter.
@@ -921,6 +956,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
   free (con_info->req_parms.access_hosts);
   free (con_info->req_parms.agent_id);
+  free (con_info->req_parms.apply_min);
   free (con_info->req_parms.base);
   free (con_info->req_parms.cmd);
   free (con_info->req_parms.name);
@@ -954,6 +990,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.hosts);
   free (con_info->req_parms.hosts_allow);
   free (con_info->req_parms.login);
+  free (con_info->req_parms.note_id);
+  free (con_info->req_parms.override_id);
   free (con_info->req_parms.period);
   free (con_info->req_parms.period_unit);
   free (con_info->req_parms.pw);
@@ -1225,6 +1263,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "agent_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.agent_id);
+      if (!strcmp (key, "apply_min"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.apply_min);
       if (!strcmp (key, "authdn"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.authdn);
@@ -1300,6 +1341,12 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "next"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.next);
+      if (!strcmp (key, "note_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.note_id);
+      if (!strcmp (key, "override_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.override_id);
       if (!strcmp (key, "period"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.period);
@@ -2582,6 +2629,383 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         delete_agent_omp (credentials, con_info->req_parms.agent_id);
     }
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_task"))
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
+      validate (validator, "page", &con_info->req_parms.next);
+
+      con_info->response =
+        delete_task_omp (credentials,
+                         con_info->req_parms.task_id,
+                         con_info->req_parms.overrides
+                          ? strcmp (con_info->req_parms.overrides, "0") : 0,
+                         con_info->req_parms.next);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "delete_escalator"))
+    {
+      validate (validator, "escalator_id", &con_info->req_parms.escalator_id);
+
+      con_info->response =
+        delete_escalator_omp (credentials, con_info->req_parms.escalator_id);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "delete_lsc_credential"))
+    {
+      validate (validator, "lsc_credential_id",
+                &con_info->req_parms.lsc_credential_id);
+      con_info->response =
+        delete_lsc_credential_omp (credentials,
+                                   con_info->req_parms.lsc_credential_id);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_notes") == 0))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      con_info->response =
+        delete_note_omp (credentials, con_info->req_parms.note_id,
+                         "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
+           && (con_info->req_parms.oid != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      con_info->response =
+        delete_note_omp (credentials, con_info->req_parms.note_id, "get_nvts",
+                         NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                         NULL, con_info->req_parms.oid, NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_report") == 0)
+           && (con_info->req_parms.report_id != NULL))
+    {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || (sscanf (con_info->req_parms.first_result, "%u", &first) != 1))
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || (sscanf (con_info->req_parms.max_results, "%u", &max) != 1))
+        max = RESULTS_PER_PAGE;
+
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      con_info->response =
+        delete_note_omp (credentials, con_info->req_parms.note_id, "get_report",
+                         con_info->req_parms.report_id, first, max,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.levels,
+                         con_info->req_parms.notes,
+                         con_info->req_parms.overrides,
+                         con_info->req_parms.result_hosts_only,
+                         con_info->req_parms.search_phrase, min_cvss_base,
+                         NULL, NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL)
+           && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
+           && (con_info->req_parms.task_id != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      con_info->response =
+        delete_note_omp (credentials, con_info->req_parms.note_id, "get_tasks",
+                         NULL, 0, 0, NULL, NULL, NULL, NULL,
+                         con_info->req_parms.overrides, NULL, NULL, NULL, NULL,
+                         con_info->req_parms.task_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_overrides") == 0))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      con_info->response =
+        delete_override_omp (credentials, con_info->req_parms.override_id,
+                             "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
+           && (con_info->req_parms.oid != NULL))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      validate (validator, "oid", &con_info->req_parms.oid);
+      con_info->response =
+        delete_override_omp (credentials, con_info->req_parms.override_id,
+                             "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, con_info->req_parms.oid,
+                             NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_report") == 0)
+           && (con_info->req_parms.report_id != NULL))
+    {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || (sscanf (con_info->req_parms.first_result, "%u", &first) != 1))
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || (sscanf (con_info->req_parms.max_results, "%u", &max) != 1))
+        max = RESULTS_PER_PAGE;
+
+      validate (validator, "override_id", &con_info->req_parms.note_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      con_info->response =
+        delete_override_omp (credentials, con_info->req_parms.override_id,
+                             "get_report",
+                             con_info->req_parms.report_id,
+                             first, max,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.levels,
+                             con_info->req_parms.notes,
+                             con_info->req_parms.overrides,
+                             con_info->req_parms.result_hosts_only,
+                             con_info->req_parms.search_phrase, min_cvss_base,
+                             NULL, NULL);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
+           && (con_info->req_parms.task_id != NULL))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      con_info->response =
+        delete_override_omp (credentials, con_info->req_parms.override_id,
+                             "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, NULL,
+                             con_info->req_parms.task_id);
+    }
+
+  else if (!strcmp (con_info->req_parms.cmd, "delete_report"))
+    {
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      con_info->response =
+        delete_report_omp (credentials, con_info->req_parms.report_id,
+                           con_info->req_parms.task_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_report_format"))
+           && (con_info->req_parms.report_format_id != NULL))
+    {
+      validate (validator, "report_format_id",
+                &con_info->req_parms.report_format_id);
+      con_info->response =
+        delete_report_format_omp (credentials,
+                                  con_info->req_parms.report_format_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_schedule"))
+           && (con_info->req_parms.schedule_id != NULL))
+    {
+      validate (validator, "schedule_id", &con_info->req_parms.schedule_id);
+      con_info->response =
+        delete_schedule_omp (credentials, con_info->req_parms.schedule_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_slave"))
+           && (con_info->req_parms.slave_id != NULL))
+    {
+      validate (validator, "slave_id", &con_info->req_parms.slave_id);
+      con_info->response =
+        delete_slave_omp (credentials, con_info->req_parms.slave_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_user"))
+           && (con_info->req_parms.name != NULL))
+    {
+      validate (validator, "name", &con_info->req_parms.name);
+      con_info->response =
+        delete_user_oap (credentials, con_info->req_parms.name);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_target"))
+           && (con_info->req_parms.target_id != NULL))
+    {
+      validate (validator, "target_id", &con_info->req_parms.target_id);
+      con_info->response =
+        delete_target_omp (credentials, con_info->req_parms.target_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_agent"))
+           && (con_info->req_parms.agent_id != NULL))
+    {
+      validate (validator, "agent_id", &con_info->req_parms.agent_id);
+      con_info->response =
+        delete_trash_agent_omp (credentials, con_info->req_parms.agent_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_config"))
+           && (con_info->req_parms.config_id != NULL))
+    {
+      validate (validator, "config_id", &con_info->req_parms.config_id);
+      con_info->response =
+        delete_trash_config_omp (credentials, con_info->req_parms.config_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_escalator"))
+           && (con_info->req_parms.escalator_id != NULL))
+    {
+      validate (validator, "escalator_id", &con_info->req_parms.escalator_id);
+      con_info->response =
+        delete_trash_escalator_omp (credentials, con_info->req_parms.escalator_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_lsc_credential"))
+           && (con_info->req_parms.lsc_credential_id != NULL))
+    {
+      validate (validator, "lsc_credential_id",
+                &con_info->req_parms.lsc_credential_id);
+      con_info->response =
+        delete_trash_lsc_credential_omp (credentials,
+                                         con_info->req_parms.lsc_credential_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_report_format"))
+           && (con_info->req_parms.report_format_id != NULL))
+    {
+      validate (validator, "report_format_id",
+                &con_info->req_parms.report_format_id);
+      con_info->response =
+        delete_trash_report_format_omp (credentials,
+                                        con_info->req_parms.report_format_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_schedule"))
+           && (con_info->req_parms.schedule_id != NULL))
+    {
+      validate (validator, "schedule_id", &con_info->req_parms.schedule_id);
+      con_info->response =
+        delete_trash_schedule_omp (credentials, con_info->req_parms.schedule_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_slave"))
+           && (con_info->req_parms.slave_id != NULL))
+    {
+      validate (validator, "slave_id", &con_info->req_parms.slave_id);
+      con_info->response =
+        delete_trash_slave_omp (credentials, con_info->req_parms.slave_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_target"))
+           && (con_info->req_parms.target_id != NULL))
+    {
+      validate (validator, "target_id", &con_info->req_parms.target_id);
+      con_info->response =
+        delete_trash_target_omp (credentials, con_info->req_parms.target_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_task"))
+           && (con_info->req_parms.task_id != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      con_info->response =
+        delete_trash_task_omp (credentials, con_info->req_parms.task_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_config"))
+           && (con_info->req_parms.config_id != NULL))
+    {
+      validate (validator, "config_id", &con_info->req_parms.config_id);
+      con_info->response =
+        delete_config_omp (credentials, con_info->req_parms.config_id);
+    }
+
   else if (!strcmp (con_info->req_parms.cmd, "empty_trashcan"))
     {
       con_info->response =
@@ -3337,17 +3761,8 @@ exec_omp_get (struct MHD_Connection *connection,
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
   /* Check cmd and precondition, start respective OMP command(s). */
-  if ((!strcmp (cmd, "delete_task")) && (task_id != NULL)
-      && (strlen (task_id) < VAL_MAX_SIZE)
-      && (next != NULL)
+  if ((!strcmp (cmd, "new_task"))
       && (overrides != NULL))
-    return delete_task_omp (credentials,
-                            task_id,
-                            overrides ? strcmp (overrides, "0") : 0,
-                            next);
-
-  else if ((!strcmp (cmd, "new_task"))
-           && (overrides != NULL))
     return new_task_omp (credentials, NULL,
                          overrides ? strcmp (overrides, "0") : 0);
 
@@ -3402,194 +3817,8 @@ exec_omp_get (struct MHD_Connection *connection,
                           refresh_interval,
                           overrides ? strcmp (overrides, "0") : 0);
 
-  else if ((!strcmp (cmd, "delete_escalator")) && (escalator_id != NULL))
-    return delete_escalator_omp (credentials, escalator_id);
-
-  else if ((!strcmp (cmd, "delete_lsc_credential"))
-           && (lsc_credential_id != NULL))
-    return delete_lsc_credential_omp (credentials, lsc_credential_id);
-
-  else if ((!strcmp (cmd, "delete_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_notes") == 0))
-    {
-      return delete_note_omp (credentials, note_id, "get_notes", NULL, 0, 0,
-                              NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_nvts") == 0)
-           && (oid != NULL))
-    {
-      return delete_note_omp (credentials, note_id, "get_nvts", NULL,
-                              0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                              NULL, oid, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_report") == 0)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return delete_note_omp (credentials, note_id, "get_report", report_id,
-                              first, max, sort_field, sort_order, levels,
-                              notes, overrides, result_hosts_only,
-                              search_phrase, min_cvss_base, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (overrides != NULL)
-           && (strcmp (next, "get_tasks") == 0)
-           && (task_id != NULL))
-    {
-      return delete_note_omp (credentials, note_id, "get_tasks", NULL, 0, 0,
-                              NULL, NULL, NULL, NULL, overrides, NULL, NULL,
-                              NULL, NULL, task_id);
-    }
-
-  else if ((!strcmp (cmd, "delete_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_overrides") == 0))
-    {
-      return delete_override_omp (credentials, override_id, "get_overrides",
-                                  NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                                  NULL, NULL, NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_nvts") == 0)
-           && (oid != NULL))
-    {
-      return delete_override_omp (credentials, override_id, "get_nvts",
-                                  NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                                  NULL, NULL, NULL, oid, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_report") == 0)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return delete_override_omp (credentials, override_id, "get_report",
-                                  report_id, first, max, sort_field,
-                                  sort_order, levels, notes, overrides,
-                                  result_hosts_only, search_phrase,
-                                  min_cvss_base, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "delete_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_tasks") == 0)
-           && (task_id != NULL))
-    {
-      return delete_override_omp (credentials, override_id, "get_tasks", NULL,
-                                  0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                  NULL, NULL, NULL, task_id);
-    }
-
-  else if ((!strcmp (cmd, "delete_report")) && (report_id != NULL)
-           && (strlen (report_id) < VAL_MAX_SIZE))
-    return delete_report_omp (credentials, report_id, task_id);
-
-  else if ((!strcmp (cmd, "delete_report_format"))
-           && (report_format_id != NULL))
-    return delete_report_format_omp (credentials, report_format_id);
-
-  else if ((!strcmp (cmd, "delete_schedule"))
-           && (schedule_id != NULL))
-    return delete_schedule_omp (credentials, schedule_id);
-
-  else if ((!strcmp (cmd, "delete_slave")) && (slave_id != NULL))
-    return delete_slave_omp (credentials, slave_id);
-
-  else if ((!strcmp (cmd, "delete_user")) && (name != NULL))
-    return delete_user_oap (credentials, name);
-
-  else if ((!strcmp (cmd, "delete_target")) && (target_id != NULL))
-    return delete_target_omp (credentials, target_id);
-
   else if ((!strcmp (cmd, "restore")) && (target_id != NULL))
     return restore_omp (credentials, target_id);
-
-  else if ((!strcmp (cmd, "delete_trash_agent")) && (agent_id != NULL))
-    return delete_trash_agent_omp (credentials, agent_id);
-
-  else if ((!strcmp (cmd, "delete_trash_config")) && (config_id != NULL))
-    return delete_trash_config_omp (credentials, config_id);
-
-  else if ((!strcmp (cmd, "delete_trash_escalator")) && (escalator_id != NULL))
-    return delete_trash_escalator_omp (credentials, escalator_id);
-
-  else if ((!strcmp (cmd, "delete_trash_lsc_credential"))
-           && (lsc_credential_id != NULL))
-    return delete_trash_lsc_credential_omp (credentials, lsc_credential_id);
-
-  else if ((!strcmp (cmd, "delete_trash_report_format"))
-           && (report_format_id != NULL))
-    return delete_trash_report_format_omp (credentials, report_format_id);
-
-  else if ((!strcmp (cmd, "delete_trash_schedule")) && (schedule_id != NULL))
-    return delete_trash_schedule_omp (credentials, schedule_id);
-
-  else if ((!strcmp (cmd, "delete_trash_slave")) && (slave_id != NULL))
-    return delete_trash_slave_omp (credentials, slave_id);
-
-  else if ((!strcmp (cmd, "delete_trash_target")) && (target_id != NULL))
-    return delete_trash_target_omp (credentials, target_id);
-
-  else if ((!strcmp (cmd, "delete_trash_task")) && (task_id != NULL))
-    return delete_trash_task_omp (credentials, task_id);
-
-  else if ((!strcmp (cmd, "delete_config")) && (config_id != NULL))
-    return delete_config_omp (credentials, config_id);
 
   else if (!strcmp (cmd, "edit_config"))
     return get_config_omp (credentials, config_id, 1);

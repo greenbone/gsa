@@ -7785,7 +7785,10 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   int socket;
   gchar *html;
 
-  if (next == NULL)
+  if ((note_id == NULL) || (next == NULL) || (report_id == NULL)
+      || (sort_field == NULL) || (sort_order == NULL) || (levels == NULL)
+      || (notes == NULL) || (overrides == NULL) || (result_hosts_only == NULL)
+      || (search_phrase == NULL) || (min_cvss_base == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a note. "
@@ -8993,11 +8996,14 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   int socket;
   gchar *html;
 
-  if (next == NULL)
+  if ((override_id == NULL) || (next == NULL) || (report_id == NULL)
+      || (sort_field == NULL) || (sort_order == NULL) || (levels == NULL)
+      || (notes == NULL) || (overrides == NULL) || (result_hosts_only == NULL)
+      || (search_phrase == NULL) || (min_cvss_base == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an override. "
-                         "The override remains intact. "
+                         "An internal error occurred while deleting a note. "
+                         "The note remains intact. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_overrides");
 

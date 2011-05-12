@@ -40,19 +40,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
-<xsl:template name="delete-button">
+<xsl:template name="trash-delete-icon">
   <xsl:param name="type"></xsl:param>
   <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
 
   <div style="display: inline">
-  <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="token" value="{/envelope/token}"/>
-    <input type="hidden" name="caller" value="{/envelope/caller}"/>
-    <input type="hidden" name="cmd" value="delete_{$type}"/>
-    <input type="hidden" name="{$type}_id" value="{$id}"/>
-    <input type="image" src="/img/trashcan.png" alt="To Trashcan"
-           name="Delete" value="Delete" title="Delete"/>
-  </form>
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="delete_trash_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/delete.png" alt="Delete"
+             name="Delete" value="Delete" title="Delete"/>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="delete-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="delete_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/delete.png" alt="Delete"
+             name="Delete" value="Delete" title="Delete"/>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="trashcan-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="delete_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/trashcan.png" alt="To Trashcan"
+             name="To Trashcan" value="To Trashcan" title="Move To Trashcan"/>
+      <xsl:copy-of select="$params"/>
+    </form>
   </div>
 </xsl:template>
 
@@ -1273,13 +1311,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=delete_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-               title="Move Task to Trashcan"
-               style="margin-left:3px;">
-              <img src="/img/trashcan.png"
-                   border="0"
-                   alt="To Trashcan"/>
-            </a>
+            <xsl:call-template name="trashcan-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_tasks"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=edit_task&amp;task_id={task/@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={sort/field/order}&amp;sort_field={sort/field/text()}&amp;overrides={apply_overrides}&amp;token={/envelope/token}"
@@ -1944,11 +1983,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=delete_report&amp;report_id={@id}&amp;task_id={../../@id}&amp;token={/envelope/token}"
-             title="Delete"
-             style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="delete-icon">
+            <xsl:with-param name="type">report</xsl:with-param>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="task_id" value="{../../@id}"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -2362,13 +2403,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=delete_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Move Task to Trashcan"
-                 style="margin-left:3px;">
-                <img src="/img/trashcan.png"
-                     border="0"
-                     alt="To Trashcan"/>
-              </a>
+              <xsl:call-template name="trashcan-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
           <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
@@ -2468,10 +2510,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=delete_trash_task&amp;task_id={@id}&amp;token={/envelope/token}"
-         title="Delete Task" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:call-template name="trash-delete-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -2802,10 +2844,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
-             title="Move Credential to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'lsc_credential'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
@@ -2866,10 +2908,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
-             title="Delete Credential" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type">lsc_credential</xsl:with-param>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
@@ -3127,7 +3169,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <xsl:call-template name="delete-button">
+          <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type">agent</xsl:with-param>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
@@ -3181,10 +3223,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Restore Agent" style="margin-left:3px;">
         <img src="/img/restore.png" border="0" alt="Restore"/>
       </a>
-      <a href="/omp?cmd=delete_trash_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
-         title="Delete Agent" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+        <xsl:call-template name="trash-delete-icon">
+          <xsl:with-param name="type" select="'agent'"/>
+          <xsl:with-param name="id" select="@id"/>
+        </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -3582,10 +3624,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
-             title="Move Escalator to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'escalator'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
@@ -3664,10 +3706,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
-             title="Delete Escalator" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'escalator'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
@@ -4145,10 +4187,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_target&amp;target_id={@id}&amp;token={/envelope/token}"
-             title="Move Target to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'target'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
@@ -4226,10 +4268,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_target&amp;target_id={@id}&amp;token={/envelope/token}"
-             title="Delete Target" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'target'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
@@ -5806,10 +5848,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_config&amp;config_id={@id}&amp;token={/envelope/token}"
-             title="Move Scan Config to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'config'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
@@ -5922,10 +5964,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_config&amp;config_id={@id}&amp;token={/envelope/token}"
-             title="Delete Scan Config" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'config'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" border="0" alt="Delete"
@@ -6646,10 +6688,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
-             title="Move Schedule to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'schedule'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
@@ -6735,10 +6777,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_schedule&amp;schedule_id={@id}&amp;token={/envelope/token}"
-             title="Delete Schedule" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'schedule'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
@@ -7038,10 +7080,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-             title="Move Slave to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'slave'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
@@ -7085,10 +7127,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="in_use='0'">
-          <a href="/omp?cmd=delete_trash_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-             title="Delete Slave" style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'slave'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
@@ -7703,10 +7745,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
-         title="Delete Note" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:call-template name="delete-icon">
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -7740,10 +7785,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
-         title="Delete Note" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:call-template name="delete-icon">
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="get_nvts"/>
+          <input type="hidden" name="oid" value="{../../get_nvts_response/nvt/@oid}"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -8425,10 +8474,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
-         title="Delete Override" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:call-template name="delete-icon">
+        <xsl:with-param name="type" select="'override'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -8465,10 +8517,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
-         title="Delete Override" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+      <xsl:call-template name="trashcan-icon">
+        <xsl:with-param name="type" select="'override'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="get_nvts"/>
+          <input type="hidden" name="oid" value="../../get_nvts_response/nvt/@oid"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
@@ -8970,10 +9026,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="global='0'">
-          <a href="/omp?cmd=delete_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
-             title="Move Report Format to Trashcan" style="margin-left:3px;">
-            <img src="/img/trashcan.png" border="0" alt="To Trashcan"/>
-          </a>
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'report_format'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/trashcan_inactive.png"
@@ -9048,10 +9104,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Restore Report Format" style="margin-left:3px;">
         <img src="/img/restore.png" border="0" alt="Restore"/>
       </a>
-      <a href="/omp?cmd=delete_trash_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
-         title="Delete Report Format" style="margin-left:3px;">
-        <img src="/img/delete.png" border="0" alt="Delete"/>
-      </a>
+        <xsl:call-template name="trash-delete-icon">
+          <xsl:with-param name="type" select="'report_format'"/>
+          <xsl:with-param name="id" select="@id"/>
+        </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -9414,10 +9470,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_note&amp;note_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}&amp;next=get_report#result-{../../@id}"
-           title="Delete Note" style="margin-left:3px;">
-          <img src="/img/delete.png" border="0" alt="Delete"/>
-        </a>
+        <div style="display: inline">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="cmd" value="delete_note"/>
+            <input type="hidden" name="note_id" value="{@id}"/>
+            <input type="image" src="/img/delete.png" alt="Delete"
+                   name="Delete" value="Delete" title="Delete"/>
+            <input type="hidden" name="report_id" value="{../../../../@id}"/>
+            <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
+            <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
+            <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
+            <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
+            <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
+            <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
+            <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
+            <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
+            <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
+            <input type="hidden" name="overrides" value="{../../../../filters/overrides}"/>
+            <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
+            <input type="hidden" name="next" value="get_report"/>
+          </form>
+        </div>
         <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
@@ -9456,10 +9531,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </pre>
     <xsl:if test="$override-buttons = 1">
       <div class="float_right" style="text-align:right">
-        <a href="/omp?cmd=delete_override&amp;override_id={@id}&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}&amp;next=get_report#result-{../../@id}"
-           title="Delete Override" style="margin-left:3px;">
-          <img src="/img/delete.png" border="0" alt="Delete"/>
-        </a>
+        <div style="display: inline">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="cmd" value="delete_override"/>
+            <input type="hidden" name="override_id" value="{@id}"/>
+            <input type="image" src="/img/delete.png" alt="Delete"
+                   name="Delete" value="Delete" title="Delete"/>
+            <input type="hidden" name="report_id" value="{../../../../@id}"/>
+            <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
+            <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
+            <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
+            <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
+            <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
+            <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
+            <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
+            <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
+            <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
+            <input type="hidden" name="overrides" value="{../../../../filters/overrides}"/>
+            <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
+            <input type="hidden" name="next" value="get_report"/>
+          </form>
+        </div>
         <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
            title="Override Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
