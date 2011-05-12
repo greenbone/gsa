@@ -1,4 +1,9 @@
-2011-05-09  Matthew Mundell <matthew.mundell@greenbone.net>
+2011-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (get_escalators_response): New function.  Prevents
+	matching of get_escalators_response on get_reports page.
+
+2011-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch the delete_* commands to POST.
 
