@@ -3049,12 +3049,60 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                               con_info->req_parms.authdn,
                               con_info->req_parms.domain);
     }
+  else if ((!strcmp (con_info->req_parms.cmd, "pause_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      con_info->response =
+        pause_task_omp (credentials,
+                        con_info->req_parms.task_id,
+                        con_info->req_parms.overrides
+                         ? strcmp (con_info->req_parms.overrides, "0")
+                         : 0,
+                        con_info->req_parms.next);
+    }
   else if ((!strcmp (con_info->req_parms.cmd, "restore"))
            && (con_info->req_parms.target_id != NULL))
     {
       validate (validator, "uuid", &con_info->req_parms.target_id);
       con_info->response =
         restore_omp (credentials, con_info->req_parms.target_id);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "resume_paused_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      con_info->response =
+        resume_paused_task_omp (credentials,
+                                con_info->req_parms.task_id,
+                                con_info->req_parms.overrides
+                                 ? strcmp (con_info->req_parms.overrides, "0")
+                                 : 0,
+                                con_info->req_parms.next);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "resume_stopped_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      con_info->response =
+        resume_stopped_task_omp (credentials,
+                                 con_info->req_parms.task_id,
+                                 con_info->req_parms.overrides
+                                  ? strcmp (con_info->req_parms.overrides, "0")
+                                  : 0,
+                                 con_info->req_parms.next);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
@@ -3175,6 +3223,38 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                        con_info->req_parms.role,
                        con_info->req_parms.access_hosts,
                        con_info->req_parms.hosts_allow);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "start_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      con_info->response =
+        start_task_omp (credentials,
+                        con_info->req_parms.task_id,
+                        con_info->req_parms.overrides
+                         ? strcmp (con_info->req_parms.overrides, "0")
+                         : 0,
+                        con_info->req_parms.next);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "stop_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL))
+    {
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      con_info->response =
+        stop_task_omp (credentials,
+                       con_info->req_parms.task_id,
+                       con_info->req_parms.overrides
+                        ? strcmp (con_info->req_parms.overrides, "0")
+                        : 0,
+                       con_info->req_parms.next);
     }
   else if (!strcmp (con_info->req_parms.cmd, "sync_feed"))
     {
@@ -3772,51 +3852,6 @@ exec_omp_get (struct MHD_Connection *connection,
       && (overrides != NULL))
     return new_task_omp (credentials, NULL,
                          overrides ? strcmp (overrides, "0") : 0);
-
-  else if ((!strcmp (cmd, "pause_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (next != NULL)
-           && (overrides != NULL))
-    return pause_task_omp (credentials,
-                           task_id,
-                           overrides ? strcmp (overrides, "0") : 0,
-                           next);
-
-  else if ((!strcmp (cmd, "resume_paused_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (next != NULL)
-           && (overrides != NULL))
-    return resume_paused_task_omp (credentials,
-                                   task_id,
-                                   overrides ? strcmp (overrides, "0") : 0,
-                                   next);
-
-  else if ((!strcmp (cmd, "resume_stopped_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (next != NULL)
-           && (overrides != NULL))
-    return resume_stopped_task_omp (credentials,
-                                    task_id,
-                                    overrides ? strcmp (overrides, "0") : 0,
-                                    next);
-
-  else if ((!strcmp (cmd, "start_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (next != NULL)
-           && (overrides != NULL))
-    return start_task_omp (credentials,
-                           task_id,
-                           overrides ? strcmp (overrides, "0") : 0,
-                           next);
-
-  else if ((!strcmp (cmd, "stop_task")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE)
-           && (next != NULL)
-           && (overrides != NULL))
-    return stop_task_omp (credentials,
-                          task_id,
-                          overrides ? strcmp (overrides, "0") : 0,
-                          next);
 
   else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
            && (strlen (task_id) < VAL_MAX_SIZE))

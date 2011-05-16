@@ -76,19 +76,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="trashcan-icon">
+<xsl:template name="pause-icon">
   <xsl:param name="type"></xsl:param>
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
   <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+    <form style="display: inline; font-size: 0px; margin-left: 3px"
+          action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="delete_{$type}"/>
+      <input type="hidden" name="cmd" value="pause_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/trashcan.png" alt="To Trashcan"
-             name="To Trashcan" value="To Trashcan" title="Move To Trashcan"/>
+      <input type="image" src="/img/pause.png" alt="Pause"
+             name="Pause" value="Pause" title="Pause"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -106,6 +107,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="target_id" value="{$id}"/>
       <input type="image" src="/img/restore.png" alt="Restore"
              name="Restore" value="Restore" title="Restore"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="resume-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+  <xsl:param name="cmd">resume_<xsl:value-of select="type"/></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px"
+          action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="{$cmd}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/resume.png" alt="Resume"
+             name="Resume" value="Resume" title="Resume"/>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="start-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px"
+          action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="start_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/start.png" alt="Start"
+             name="Start" value="Start" title="Start"/>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="stop-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px"
+          action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="stop_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/stop.png" alt="Stop"
+             name="Stop" value="Stop" title="Stop"/>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template name="trashcan-icon">
+  <xsl:param name="type"></xsl:param>
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="delete_{$type}"/>
+      <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="image" src="/img/trashcan.png" alt="To Trashcan"
+             name="To Trashcan" value="To Trashcan" title="Move To Trashcan"/>
+      <xsl:copy-of select="$params"/>
     </form>
   </div>
 </xsl:template>
@@ -1247,19 +1324,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:when>
           <xsl:when test="task/status='Running'">
-            <a href="/omp?cmd=pause_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
-               title="Pause Task">
-              <img src="/img/pause.png" border="0" alt="Pause"/>
-            </a>
+            <xsl:call-template name="pause-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_task"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:when>
           <xsl:when test="task/status='Stop Requested' or task/status='Delete Requested' or task/status='Pause Requested' or task/status = 'Paused' or task/status='Resume Requested' or task/status='Requested'">
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=start_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
-               title="Start Task">
-              <img src="/img/start.png" border="0" alt="Start"/>
-            </a>
+            <xsl:call-template name="start-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_task"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
@@ -1272,22 +1357,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:when test="task/status='Stopped'">
-            <a href="/omp?cmd=resume_stopped_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
-               title="Resume Task">
-              <img src="/img/resume.png"
-                   border="0"
-                   alt="Resume"
-                   style="margin-left:3px;"/>
-            </a>
+            <xsl:call-template name="resume-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_task"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:when>
           <xsl:when test="task/status='Paused'">
-            <a href="/omp?cmd=resume_paused_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
-               title="Resume Task">
-              <img src="/img/resume.png"
-                   border="0"
-                   alt="Resume"
-                   style="margin-left:3px;"/>
-            </a>
+            <xsl:call-template name="resume-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_task"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
             <img src="/img/resume_inactive.png" border="0" alt="Resume"
@@ -1310,13 +1399,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=stop_task&amp;task_id={task/@id}&amp;overrides={apply_overrides}&amp;next=get_task&amp;token={/envelope/token}"
-               title="Stop Task">
-              <img src="/img/stop.png"
-                   border="0"
-                   alt="Stop"
-                   style="margin-left:3px;"/>
-            </a>
+            <xsl:call-template name="stop-icon">
+              <xsl:with-param name="type">task</xsl:with-param>
+              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="overrides" value="{apply_overrides}"/>
+                <input type="hidden" name="next" value="get_task"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
@@ -2339,19 +2429,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </xsl:when>
             <xsl:when test="status='Running'">
-              <a href="/omp?cmd=pause_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Pause Task">
-                <img src="/img/pause.png" border="0" alt="Pause"/>
-              </a>
+              <xsl:call-template name="pause-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
               <img src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=start_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Start Task">
-                <img src="/img/start.png" border="0" alt="Start"/>
-              </a>
+              <xsl:call-template name="start-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
@@ -2364,22 +2462,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:when test="status='Stopped'">
-              <a href="/omp?cmd=resume_stopped_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Resume Task">
-                <img src="/img/resume.png"
-                     border="0"
-                     alt="Resume"
-                     style="margin-left:3px;"/>
-              </a>
+              <xsl:call-template name="resume-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="status='Paused'">
-              <a href="/omp?cmd=resume_paused_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Resume Task">
-                <img src="/img/resume.png"
-                     border="0"
-                     alt="Resume"
-                     style="margin-left:3px;"/>
-              </a>
+              <xsl:call-template name="resume-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
               <img src="/img/resume_inactive.png" border="0" alt="Resume"
@@ -2402,13 +2504,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=stop_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;next=get_tasks&amp;token={/envelope/token}"
-                 title="Stop Task">
-                <img src="/img/stop.png"
-                     border="0"
-                     alt="Stop"
-                     style="margin-left:3px;"/>
-              </a>
+              <xsl:call-template name="stop-icon">
+                <xsl:with-param name="type">task</xsl:with-param>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
+                  <input type="hidden" name="next" value="get_tasks"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
