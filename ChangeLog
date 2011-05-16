@@ -1,3 +1,9 @@
+2011-05-16  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (handle_sighup): Do not exit upon receiving a SIGHUP.
+	Even though exiting in the default POSIX action, most current
+	distributions do not expect this behavior.
+
 2011-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_escalators_response): New function.  Prevents

@@ -5815,7 +5815,6 @@ handle_sigterm (int signal)
 void
 handle_sighup (int signal)
 {
-  exit (EXIT_SUCCESS);
 }
 
 /**
