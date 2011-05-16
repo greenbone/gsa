@@ -1,3 +1,14 @@
+2011-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch the restore command to POST.
+
+	* src/gsad.c (init_validateor): Replace . with - in uuid.
+	(exec_omp_post): Add restore command.
+	(exec_omp_get): Remove restore command.
+
+	* src/html/omp.xsl: Replace every restore icon link with a POST icon.
+	(restore-icon): New template.
+
 2011-05-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (handle_sighup): Do not exit upon receiving a SIGHUP.

@@ -94,6 +94,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="restore-icon">
+  <xsl:param name="id"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp"
+          method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="restore"/>
+      <input type="hidden" name="target_id" value="{$id}"/>
+      <input type="image" src="/img/restore.png" alt="Restore"
+             name="Restore" value="Restore" title="Restore"/>
+    </form>
+  </div>
+</xsl:template>
+
 <!-- This is called within a PRE. -->
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
@@ -2500,10 +2516,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0')  and (escalator/trash = '0')">
-          <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-             title="Restore Task" style="margin-left:3px;">
-            <img src="/img/restore.png" border="0" alt="Restore"/>
-          </a>
+          <xsl:call-template name="restore-icon">
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/restore_inactive.png" border="0" alt="Restore"
@@ -2902,10 +2917,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="comment"/>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Credential" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -3219,14 +3233,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Agent" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
-        <xsl:call-template name="trash-delete-icon">
-          <xsl:with-param name="type" select="'agent'"/>
-          <xsl:with-param name="id" select="@id"/>
-        </xsl:call-template>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:call-template name="trash-delete-icon">
+        <xsl:with-param name="type" select="'agent'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -3703,10 +3716,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Escalator" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -4263,10 +4275,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-             title="Restore Target" style="margin-left:3px;">
-            <img src="/img/restore.png" border="0" alt="Restore"/>
-          </a>
+          <xsl:call-template name="restore-icon">
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -5961,10 +5972,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Config" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -6774,10 +6784,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Schedule" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -7124,10 +7133,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="login"/></td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Slave" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -9103,14 +9111,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=restore&amp;target_id={@id}&amp;token={/envelope/token}"
-         title="Restore Report Format" style="margin-left:3px;">
-        <img src="/img/restore.png" border="0" alt="Restore"/>
-      </a>
-        <xsl:call-template name="trash-delete-icon">
-          <xsl:with-param name="type" select="'report_format'"/>
-          <xsl:with-param name="id" select="@id"/>
-        </xsl:call-template>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:call-template name="trash-delete-icon">
+        <xsl:with-param name="type" select="'report_format'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>

@@ -608,7 +608,7 @@ init_validator ()
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF.]{1,40}$");
+  openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
 
@@ -3049,6 +3049,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                               con_info->req_parms.authdn,
                               con_info->req_parms.domain);
     }
+  else if ((!strcmp (con_info->req_parms.cmd, "restore"))
+           && (con_info->req_parms.target_id != NULL))
+    {
+      validate (validator, "uuid", &con_info->req_parms.target_id);
+      con_info->response =
+        restore_omp (credentials, con_info->req_parms.target_id);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "save_config"))
     {
       validate (validator, "config_id", &con_info->req_parms.config_id);
@@ -3816,9 +3823,6 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_tasks_omp (credentials, task_id, sort_field, sort_order,
                           refresh_interval,
                           overrides ? strcmp (overrides, "0") : 0);
-
-  else if ((!strcmp (cmd, "restore")) && (target_id != NULL))
-    return restore_omp (credentials, target_id);
 
   else if (!strcmp (cmd, "edit_config"))
     return get_config_omp (credentials, config_id, 1);
