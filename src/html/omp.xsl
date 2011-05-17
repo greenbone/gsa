@@ -135,16 +135,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type"></xsl:param>
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
+  <xsl:param name="cmd">start_<xsl:value-of select="$type"/></xsl:param>
+  <xsl:param name="alt">Start</xsl:param>
 
   <div style="display: inline">
     <form style="display: inline; font-size: 0px; margin-left: 3px"
           action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="start_{$type}"/>
+      <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/start.png" alt="Start"
-             name="Start" value="Start" title="Start"/>
+      <input type="image" src="/img/start.png" alt="{$alt}"
+             name="{$alt}" value="{$alt}" title="{$alt}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -2142,9 +2144,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="get">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_task"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="task_id"
                value="{commands_response/get_tasks_response/task/@id}"/>
@@ -3759,10 +3762,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Escalator Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=test_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
-         title="Test Escalator" style="margin-left:3px;">
-        <img src="/img/start.png" border="0" alt="Test"/>
-      </a>
+      <xsl:call-template name="start-icon">
+        <xsl:with-param name="type">escalator</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="cmd">test_escalator</xsl:with-param>
+        <xsl:with-param name="alt">Test</xsl:with-param>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -7627,9 +7632,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="get">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_note"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="note_id"
                value="{get_notes_response/note/@id}"/>
 
@@ -8304,9 +8310,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="get">
+      <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_override"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="override_id"
                value="{get_overrides_response/override/@id}"/>
 

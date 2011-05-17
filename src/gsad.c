@@ -628,6 +628,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
+  openvas_validator_alias (validator, "new_threat",   "threat");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
@@ -852,8 +853,12 @@ struct gsad_connection_info
     char *minute;        ///< Value of "minute" parameter.
     char *month;         ///< Value of "month" parameter.
     char *note_id;       ///< Value of "note_id" parameter.
+    char *note_task_id;  ///< Value of "note_task_id" parameter.
+    char *note_result_id; ///< Value of "note_result_id" parameter.
     char *oid;           ///< Value of "oid" parameter.
     char *override_id;   ///< Value of "override_id" parameter.
+    char *override_task_id;   ///< Value of "override_task_id" parameter.
+    char *override_result_id; ///< Value of "override_result_id" parameter.
     char *period;        ///< Value of "period" parameter.
     char *period_unit;   ///< Value of "period_unit" parameter.
     char *pw;            ///< Value of "pw" parameter.
@@ -868,6 +873,7 @@ struct gsad_connection_info
     char *new_threat;    ///< Value of "new_threat" parameter.
     char *text;          ///< Value of "text" parameter.
     char *task_id;       ///< Value of "task_id" parameter.
+    char *refresh_interval; ///< Value of "refresh_interval" parameter.
     char *result_id;     ///< Value of "result_id" parameter.
     char *report_format_id;     ///< Value of "report_format_id" parameter.
     char *report_id;     ///< Value of "report_id" parameter.
@@ -980,6 +986,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.modify_password);
   free (con_info->req_parms.method);
   free (con_info->req_parms.next);
+  free (con_info->req_parms.note_task_id);
+  free (con_info->req_parms.note_result_id);
   free (con_info->req_parms.schedule_id);
   free (con_info->req_parms.slave_id);
   free (con_info->req_parms.target_id);
@@ -992,6 +1000,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.login);
   free (con_info->req_parms.note_id);
   free (con_info->req_parms.override_id);
+  free (con_info->req_parms.override_task_id);
+  free (con_info->req_parms.override_result_id);
   free (con_info->req_parms.period);
   free (con_info->req_parms.period_unit);
   free (con_info->req_parms.pw);
@@ -1009,6 +1019,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.new_threat);
   free (con_info->req_parms.text);
   free (con_info->req_parms.task_id);
+  free (con_info->req_parms.refresh_interval);
   free (con_info->req_parms.result_id);
   free (con_info->req_parms.report_format_id);
   free (con_info->req_parms.report_id);
@@ -1344,9 +1355,21 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "note_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.note_id);
+      if (!strcmp (key, "note_task_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.note_task_id);
+      if (!strcmp (key, "note_result_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.note_result_id);
       if (!strcmp (key, "override_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.override_id);
+      if (!strcmp (key, "override_task_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.override_task_id);
+      if (!strcmp (key, "override_result_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.override_result_id);
       if (!strcmp (key, "period"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.period);
@@ -1422,6 +1445,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "task_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.task_id);
+      if (!strcmp (key, "refresh_interval"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.refresh_interval);
       if (!strcmp (key, "result_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.result_id);
@@ -3179,6 +3205,400 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                  con_info->req_parms.sort_field,
                                  con_info->req_parms.sort_order);
     }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_note") == 0))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
+
+      con_info->response =
+        save_note_omp (credentials,
+                       con_info->req_parms.note_id,
+                       con_info->req_parms.text,
+                       con_info->req_parms.hosts,
+                       con_info->req_parms.port,
+                       con_info->req_parms.threat,
+                       con_info->req_parms.note_task_id,
+                       con_info->req_parms.note_result_id,
+                       "get_note", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_notes") == 0))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
+      con_info->response =
+        save_note_omp (credentials,
+                       con_info->req_parms.note_id,
+                       con_info->req_parms.text,
+                       con_info->req_parms.hosts,
+                       con_info->req_parms.port,
+                       con_info->req_parms.threat,
+                       con_info->req_parms.note_task_id,
+                       con_info->req_parms.note_result_id,
+                       "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL, NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
+           && (con_info->req_parms.oid != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
+      validate (validator, "oid", &con_info->req_parms.oid);
+
+      con_info->response =
+        save_note_omp (credentials,
+                       con_info->req_parms.note_id,
+                       con_info->req_parms.text,
+                       con_info->req_parms.hosts,
+                       con_info->req_parms.port,
+                       con_info->req_parms.threat,
+                       con_info->req_parms.note_task_id,
+                       con_info->req_parms.note_result_id,
+                       "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                       NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_report") == 0))
+    {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || sscanf (con_info->req_parms.first_result, "%u", &first) != 1)
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
+        max = RESULTS_PER_PAGE;
+
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      con_info->response =
+        save_note_omp (credentials,
+                       con_info->req_parms.note_id,
+                       con_info->req_parms.text,
+                       con_info->req_parms.hosts,
+                       con_info->req_parms.port,
+                       con_info->req_parms.threat,
+                       con_info->req_parms.note_task_id,
+                       con_info->req_parms.note_result_id,
+                       "get_report",
+                       con_info->req_parms.report_id,
+                       first, max,
+                       con_info->req_parms.sort_field,
+                       con_info->req_parms.sort_order,
+                       con_info->req_parms.levels,
+                       con_info->req_parms.notes,
+                       con_info->req_parms.overrides,
+                       con_info->req_parms.result_hosts_only,
+                       con_info->req_parms.search_phrase,
+                       con_info->req_parms.min_cvss_base,
+                       NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL)
+           && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
+           && (con_info->req_parms.task_id != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+
+      con_info->response =
+        save_note_omp (credentials,
+                       con_info->req_parms.note_id,
+                       con_info->req_parms.text,
+                       con_info->req_parms.hosts,
+                       con_info->req_parms.port,
+                       con_info->req_parms.threat,
+                       con_info->req_parms.note_task_id,
+                       con_info->req_parms.note_result_id,
+                       "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                       con_info->req_parms.overrides,
+                       NULL, NULL, NULL, NULL,
+                       con_info->req_parms.task_id);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_override") == 0))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "override_task_id",
+                &con_info->req_parms.override_task_id);
+      validate (validator, "override_result_id",
+                &con_info->req_parms.override_result_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+
+      con_info->response =
+        save_override_omp (credentials,
+                           con_info->req_parms.override_id,
+                           con_info->req_parms.text,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.port,
+                           con_info->req_parms.threat,
+                           con_info->req_parms.new_threat,
+                           con_info->req_parms.override_task_id,
+                           con_info->req_parms.override_result_id,
+                           "get_override", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                           NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_overrides") == 0))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "override_task_id",
+                &con_info->req_parms.override_task_id);
+      validate (validator, "override_result_id",
+                &con_info->req_parms.override_result_id);
+
+      con_info->response =
+        save_override_omp (credentials,
+                           con_info->req_parms.override_id,
+                           con_info->req_parms.text,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.port,
+                           con_info->req_parms.threat,
+                           con_info->req_parms.new_threat,
+                           con_info->req_parms.override_task_id,
+                           con_info->req_parms.override_result_id,
+                           "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
+                           NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
+           && (con_info->req_parms.oid != NULL))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "override_task_id",
+                &con_info->req_parms.override_task_id);
+      validate (validator, "override_result_id",
+                &con_info->req_parms.override_result_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate (validator, "oid", &con_info->req_parms.oid);
+
+      con_info->response =
+        save_override_omp (credentials,
+                           con_info->req_parms.override_id,
+                           con_info->req_parms.text,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.port,
+                           con_info->req_parms.threat,
+                           con_info->req_parms.new_threat,
+                           con_info->req_parms.override_task_id,
+                           con_info->req_parms.override_result_id,
+                           "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                           NULL, NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_report") == 0))
+    {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || sscanf (con_info->req_parms.first_result, "%u", &first) != 1)
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
+        max = RESULTS_PER_PAGE;
+
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "override_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "override_result_id",
+                &con_info->req_parms.note_result_id);
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      con_info->response =
+        save_override_omp (credentials,
+                           con_info->req_parms.override_id,
+                           con_info->req_parms.text,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.port,
+                           con_info->req_parms.threat,
+                           con_info->req_parms.new_threat,
+                           con_info->req_parms.override_task_id,
+                           con_info->req_parms.override_result_id,
+                           "get_report",
+                           con_info->req_parms.report_id,
+                           first, max,
+                           con_info->req_parms.sort_field,
+                           con_info->req_parms.sort_order,
+                           con_info->req_parms.levels,
+                           con_info->req_parms.notes,
+                           con_info->req_parms.overrides,
+                           con_info->req_parms.result_hosts_only,
+                           con_info->req_parms.search_phrase,
+                           con_info->req_parms.min_cvss_base,
+                           NULL, NULL);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && (con_info->req_parms.overrides != NULL)
+           && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
+           && (con_info->req_parms.task_id != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate_or (validator, "text", &con_info->req_parms.text, "");
+      validate (validator, "hosts", &con_info->req_parms.hosts);
+      validate (validator, "port", &con_info->req_parms.port);
+      validate (validator, "threat", &con_info->req_parms.threat);
+      validate (validator, "new_threat", &con_info->req_parms.new_threat);
+      validate (validator, "override_task_id", &con_info->req_parms.note_task_id);
+      validate (validator, "override_result_id",
+                &con_info->req_parms.note_result_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+
+      con_info->response =
+        save_override_omp (credentials,
+                           con_info->req_parms.override_id,
+                           con_info->req_parms.text,
+                           con_info->req_parms.hosts,
+                           con_info->req_parms.port,
+                           con_info->req_parms.threat,
+                           con_info->req_parms.new_threat,
+                           con_info->req_parms.override_task_id,
+                           con_info->req_parms.override_result_id,
+                           "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                           con_info->req_parms.overrides,
+                           NULL, NULL, NULL, NULL,
+                           con_info->req_parms.task_id);
+    }
   else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
     {
       validate (validator, "report_format_id",
@@ -3205,6 +3625,72 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->req_parms.sort_field,
                            con_info->req_parms.sort_order,
                            con_info->req_parms.method_data);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_task"))
+           && (con_info->req_parms.task_id != NULL)
+           && (con_info->req_parms.next != NULL)
+           && ((strcmp (con_info->req_parms.next, "get_tasks") == 0)
+               || (strcmp (con_info->req_parms.next, "get_task") == 0)))
+    {
+      if ((con_info->req_parms.target_id == NULL)
+          || (strcmp (con_info->req_parms.target_id, "--")))
+        {
+          validate (validator, "task_id", &con_info->req_parms.task_id);
+          validate (validator, "name", &con_info->req_parms.name);
+          validate (validator, "comment", &con_info->req_parms.comment);
+          validate (validator, "escalator_id",
+                    &con_info->req_parms.escalator_id);
+          validate (validator, "schedule_id", &con_info->req_parms.schedule_id);
+          validate (validator, "slave_id", &con_info->req_parms.slave_id);
+          validate (validator, "page", &con_info->req_parms.next);
+          validate (validator, "refresh_interval",
+                    &con_info->req_parms.refresh_interval);
+          validate (validator, "sort_field", &con_info->req_parms.sort_field);
+          validate (validator, "sort_order", &con_info->req_parms.sort_order);
+          validate (validator, "overrides", &con_info->req_parms.overrides);
+
+          con_info->response =
+            save_task_omp (credentials,
+                           con_info->req_parms.task_id,
+                           con_info->req_parms.name,
+                           con_info->req_parms.comment,
+                           con_info->req_parms.escalator_id,
+                           con_info->req_parms.schedule_id,
+                           con_info->req_parms.slave_id,
+                           con_info->req_parms.next,
+                           con_info->req_parms.refresh_interval,
+                           con_info->req_parms.sort_field,
+                           con_info->req_parms.sort_order,
+                           con_info->req_parms.overrides
+                            ? strcmp (con_info->req_parms.overrides, "0")
+                            : 0);
+        }
+      else
+        {
+          validate (validator, "task_id", &con_info->req_parms.task_id);
+          validate (validator, "name", &con_info->req_parms.name);
+          validate (validator, "comment", &con_info->req_parms.comment);
+          validate (validator, "page", &con_info->req_parms.next);
+          validate (validator, "refresh_interval",
+                    &con_info->req_parms.refresh_interval);
+          validate (validator, "sort_field", &con_info->req_parms.sort_field);
+          validate (validator, "sort_order", &con_info->req_parms.sort_order);
+          validate (validator, "overrides", &con_info->req_parms.overrides);
+
+          con_info->response =
+            save_container_task_omp (credentials,
+                                     con_info->req_parms.task_id,
+                                     con_info->req_parms.name,
+                                     con_info->req_parms.comment,
+                                     con_info->req_parms.next,
+                                     con_info->req_parms.refresh_interval,
+                                     con_info->req_parms.sort_field,
+                                     con_info->req_parms.sort_order,
+                                     con_info->req_parms.overrides
+                                      ? strcmp (con_info->req_parms.overrides,
+                                                "0")
+                                      : 0);
+        }
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_user"))
     {
@@ -3260,6 +3746,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       con_info->response = sync_feed_oap (credentials);
     }
+  else if ((!strcmp (con_info->req_parms.cmd, "test_escalator"))
+           && (con_info->req_parms.escalator_id != NULL))
+    {
+      validate (validator, "escalator_id", &con_info->req_parms.escalator_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      con_info->response =
+        test_escalator_omp (credentials,
+                            con_info->req_parms.escalator_id,
+                            con_info->req_parms.sort_field,
+                            con_info->req_parms.sort_order);
+    }
   else
     {
       con_info->response = gsad_message (credentials,
@@ -3314,8 +3812,6 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *report_id    = NULL;
   const char *report_format_id = NULL;
   const char *note_id      = NULL;
-  const char *note_task_id   = NULL;
-  const char *note_result_id = NULL;
   const char *next         = NULL;
   const char *override_id  = NULL;
   const char *override_task_id   = NULL;
@@ -3435,18 +3931,6 @@ exec_omp_get (struct MHD_Connection *connection,
                                              "note_id");
       if (openvas_validate (validator, "note_id", note_id))
         note_id = NULL;
-
-      note_task_id = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "note_task_id");
-      if (openvas_validate (validator, "note_task_id", note_task_id))
-        note_task_id = NULL;
-
-      note_result_id = MHD_lookup_connection_value (connection,
-                                                    MHD_GET_ARGUMENT_KIND,
-                                                    "note_result_id");
-      if (openvas_validate (validator, "note_result_id", note_result_id))
-        note_result_id = NULL;
 
       override_id = MHD_lookup_connection_value (connection,
                                                  MHD_GET_ARGUMENT_KIND,
@@ -4327,10 +4811,6 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_settings"))
     return get_settings_oap (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "test_escalator")) && (escalator_id != NULL))
-    return test_escalator_omp (credentials, escalator_id, sort_field,
-                               sort_order);
-
   else if ((!strcmp (cmd, "new_note"))
            /* Note params. */
            && (oid != NULL)
@@ -4357,84 +4837,6 @@ exec_omp_get (struct MHD_Connection *connection,
                          overrides, result_hosts_only, search_phrase,
                          min_cvss_base);
 
-  else if ((!strcmp (cmd, "save_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_note") == 0))
-    {
-      return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_note", NULL,
-                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_notes") == 0))
-    {
-      return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_notes", NULL,
-                            0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_nvts") == 0)
-           && (oid != NULL))
-    {
-      return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_nvts",
-                            NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, oid, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_report") == 0)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_report",
-                            report_id, first, max, sort_field, sort_order,
-                            levels, notes, overrides, result_hosts_only,
-                            search_phrase, min_cvss_base, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_note"))
-           && (note_id != NULL)
-           && (next != NULL)
-           && (overrides != NULL)
-           && (strcmp (next, "get_tasks") == 0)
-           && (task_id != NULL))
-    {
-      return save_note_omp (credentials, note_id, text, hosts, port, threat,
-                            note_task_id, note_result_id, "get_tasks", NULL,
-                            0, 0, NULL, NULL, NULL, NULL, overrides, NULL, NULL,
-                            NULL, NULL, task_id);
-    }
-
   else if ((!strcmp (cmd, "new_override"))
            /* Override params. */
            && (oid != NULL)
@@ -4460,105 +4862,6 @@ exec_omp_get (struct MHD_Connection *connection,
                              max_results, sort_field, sort_order, levels, notes,
                              overrides, result_hosts_only, search_phrase,
                              min_cvss_base);
-
-  else if ((!strcmp (cmd, "save_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_override") == 0))
-    {
-      return save_override_omp (credentials, override_id, text, hosts, port,
-                                threat, new_threat, override_task_id,
-                                override_result_id, "get_override", NULL, 0, 0,
-                                NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_overrides") == 0))
-    {
-      return save_override_omp (credentials, override_id, text, hosts, port,
-                                threat, new_threat, override_task_id,
-                                override_result_id, "get_overrides", NULL,
-                                0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_nvts") == 0)
-           && (oid != NULL))
-    {
-      return save_override_omp (credentials, override_id, text, hosts, port,
-                                threat, new_threat, override_task_id,
-                                override_result_id, "get_nvts", NULL,
-                                0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, oid, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_report") == 0)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return save_override_omp (credentials, override_id, text, hosts, port,
-                                threat, new_threat, override_task_id,
-                                override_result_id, "get_report", report_id,
-                                first, max, sort_field, sort_order, levels,
-                                notes, overrides, result_hosts_only,
-                                search_phrase, min_cvss_base, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "save_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (overrides != NULL)
-           && (strcmp (next, "get_tasks") == 0)
-           && (task_id != NULL))
-    {
-      return save_override_omp (credentials, override_id, text, hosts, port,
-                                threat, new_threat, override_task_id,
-                                override_result_id, "get_tasks", NULL, 0, 0,
-                                NULL, NULL, NULL, NULL, overrides, NULL, NULL,
-                                NULL, NULL, task_id);
-    }
-
-  else if ((!strcmp (cmd, "save_task"))
-           && (task_id != NULL)
-           && (next != NULL)
-           && ((strcmp (next, "get_tasks") == 0)
-               || (strcmp (next, "get_task") == 0)))
-    {
-      if ((target_id == NULL) || (strcmp (target_id, "--")))
-        return save_task_omp (credentials, task_id, name, comment, escalator_id,
-                              schedule_id, slave_id, next, refresh_interval,
-                              sort_field, sort_order,
-                              overrides ? strcmp (overrides, "0") : 0);
-      return save_container_task_omp (credentials, task_id, name, comment, next,
-                                      refresh_interval, sort_field, sort_order,
-                                      overrides ? strcmp (overrides, "0") : 0);
-    }
 
   else if ((!strcmp (cmd, "verify_agent"))
            && (agent_id != NULL))

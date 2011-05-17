@@ -1,3 +1,17 @@
+2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch test_escalator and the save_* commands to POST.
+
+	* src/gsad.c (init_validator): Add alias "new_threat".
+	(struct req_parms, free_resources, serve_post): Add required fields.
+	(exec_omp_post): Add commands.
+	(exec_omp_get): Remove commands.
+
+	* src/html/omp.xsl (start-icon): Add cmd and alt params.
+	(html-edit-task-form, html-edit-note-form, html-edit-override-form): Make
+	form POST.  Add caller.
+	(escalator): Use start-icon.
+
 2011-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch the task control commands to POST.
