@@ -479,6 +479,7 @@ init_validator ()
                          "|(edit_task)"
                          "|(edit_user)"
                          "|(empty_trashcan)"
+                         "|(escalate_report)"
                          "|(export_config)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
@@ -821,6 +822,14 @@ struct gsad_connection_info
     char *duration;      ///< Value of "duration" parameter.
     char *duration_unit; ///< Value of "duration_unit" parameter.
     char *enable;        ///< Value of "enable" parameter.
+    char *esc_first_result;  ///< Value of "esc_first_result" parameter.
+    char *esc_levels;        ///< Value of "esc_levels" parameter.
+    char *esc_max_results;   ///< Value of "esc_max_results" parameter.
+    char *esc_min_cvss_base; ///< Value of "esc_min_cvss_base" parameter.
+    char *esc_notes;         ///< Value of "esc_notes" parameter.
+    char *esc_overrides;     ///< Value of "esc_overrides" parameter.
+    char *esc_result_hosts_only; ///< Value of "esc_result_hosts_only" parameter.
+    char *esc_search_phrase; ///< Value of "esc_search_phrase" parameter.
     char *escalator_id;  ///< Value of "escalator_id" parameter.
     char *event;         ///< Value of "event" parameter.
     char *family;        ///< Value of "family" parameter.
@@ -875,6 +884,7 @@ struct gsad_connection_info
     char *task_id;       ///< Value of "task_id" parameter.
     char *refresh_interval; ///< Value of "refresh_interval" parameter.
     char *result_id;     ///< Value of "result_id" parameter.
+    char *report_escalator_id;  ///< Value of "report_escalator_id" parameter.
     char *report_format_id;     ///< Value of "report_format_id" parameter.
     char *report_id;     ///< Value of "report_id" parameter.
     char *first_result;  ///< Value of "first_result" parameter.
@@ -975,6 +985,14 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.duration);
   free (con_info->req_parms.duration_unit);
   free (con_info->req_parms.escalator_id);
+  free (con_info->req_parms.esc_first_result);
+  free (con_info->req_parms.esc_levels);
+  free (con_info->req_parms.esc_max_results);
+  free (con_info->req_parms.esc_min_cvss_base);
+  free (con_info->req_parms.esc_notes);
+  free (con_info->req_parms.esc_overrides);
+  free (con_info->req_parms.esc_result_hosts_only);
+  free (con_info->req_parms.esc_search_phrase);
   free (con_info->req_parms.event);
   free (con_info->req_parms.family);
   free (con_info->req_parms.group);
@@ -1020,6 +1038,7 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.text);
   free (con_info->req_parms.task_id);
   free (con_info->req_parms.refresh_interval);
+  free (con_info->req_parms.report_escalator_id);
   free (con_info->req_parms.result_id);
   free (con_info->req_parms.report_format_id);
   free (con_info->req_parms.report_id);
@@ -1313,6 +1332,27 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "escalator_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.escalator_id);
+      if (!strcmp (key, "esc_first_result"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_max_results);
+      if (!strcmp (key, "esc_levels"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_levels);
+      if (!strcmp (key, "esc_min_cvss_base"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_min_cvss_base);
+      if (!strcmp (key, "esc_notes"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_notes);
+      if (!strcmp (key, "esc_overrides"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_overrides);
+      if (!strcmp (key, "esc_result_hosts_only"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_result_hosts_only);
+      if (!strcmp (key, "esc_search_phrase"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_search_phrase);
       if (!strcmp (key, "event"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.event);
@@ -1451,6 +1491,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "result_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.result_id);
+      if (!strcmp (key, "report_escalator_id"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.report_escalator_id);
       if (!strcmp (key, "report_format_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.report_format_id);
@@ -3036,6 +3079,121 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       con_info->response =
         empty_trashcan_omp (credentials);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "escalate_report"))
+    {
+      unsigned int first, esc_first;
+      unsigned int max, esc_max;
+      gchar *content_type_omp;
+      gsize response_size;
+      char *content_disposition;
+      const char *min_cvss_base, *esc_min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || sscanf (con_info->req_parms.first_result, "%u", &first) != 1)
+        first = 1;
+      if (!con_info->req_parms.max_results
+          || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
+        max = RESULTS_PER_PAGE;
+
+      if (!con_info->req_parms.esc_first_result
+          || sscanf (con_info->req_parms.esc_first_result, "%u", &esc_first) != 1)
+        esc_first = 1;
+      if (!con_info->req_parms.esc_max_results
+          || sscanf (con_info->req_parms.esc_max_results, "%u", &esc_max) != 1)
+        esc_max = RESULTS_PER_PAGE;
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "report_format_id",
+                &con_info->req_parms.report_format_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+      validate (validator, "levels", &con_info->req_parms.esc_levels);
+      validate_or (validator, "notes", &con_info->req_parms.esc_notes, "0");
+      validate_or (validator, "overrides", &con_info->req_parms.esc_overrides,
+                   "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.esc_result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.esc_search_phrase,
+                   "");
+      validate (validator, "escalator_id",
+                &con_info->req_parms.report_escalator_id);
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      if (con_info->req_parms.esc_min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.esc_min_cvss_base))
+            esc_min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                esc_min_cvss_base = con_info->req_parms.esc_min_cvss_base;
+              else
+                esc_min_cvss_base = "";
+            }
+        }
+      else
+        esc_min_cvss_base = "";
+
+      con_info->response =
+        get_report_omp (credentials,
+                        con_info->req_parms.report_id,
+                        con_info->req_parms.report_format_id,
+                        &response_size,
+                        (const unsigned int) first,
+                        (const unsigned int) max,
+                        con_info->req_parms.sort_field,
+                        con_info->req_parms.sort_order,
+                        con_info->req_parms.levels,
+                        con_info->req_parms.notes,
+                        con_info->req_parms.overrides,
+                        con_info->req_parms.result_hosts_only,
+                        con_info->req_parms.search_phrase,
+                        min_cvss_base,
+                        con_info->req_parms.report_escalator_id,
+                        (const unsigned int) esc_first,
+                        (const unsigned int) esc_max,
+                        con_info->req_parms.esc_levels,
+                        con_info->req_parms.esc_notes,
+                        con_info->req_parms.esc_overrides,
+                        con_info->req_parms.esc_result_hosts_only,
+                        con_info->req_parms.esc_search_phrase,
+                        esc_min_cvss_base,
+                        &content_type_omp,
+                        &content_disposition);
     }
   else if (!strcmp (con_info->req_parms.cmd, "get_tasks"))
     {

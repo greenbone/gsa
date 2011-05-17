@@ -1,5 +1,16 @@
 2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Split the escalate case of get_report out into a POST request.
+
+	* src/gsad.c (init_validator): Add alias "escalate_report".
+	(struct req_parms, free_resources, serve_post): Add required fields.
+	(exec_omp_post): Add new command.
+
+	* src/html/omp.xsl (html-report-details): Make escalate icons POST forms
+	that request the new escalate_report command.
+
+2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch test_escalator and the save_* commands to POST.
 
 	* src/gsad.c (init_validator): Add alias "new_threat".
