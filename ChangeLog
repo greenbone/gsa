@@ -1,5 +1,11 @@
 2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add missing filtering params to
+	"All filtered results" download.  Add missing max_results param to
+	"Filtered Results 1 to n" download.
+
+2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (serve_post): Correct esc_first_result case.  Add missing
 	esc_max_results case.
 
