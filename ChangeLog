@@ -1,5 +1,10 @@
 2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (serve_post): Correct esc_first_result case.  Add missing
+	esc_max_results case.
+
+2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Split the escalate case of get_report out into a POST request.
 
 	* src/gsad.c (init_validator): Add alias "escalate_report".

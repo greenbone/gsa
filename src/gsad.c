@@ -1334,10 +1334,13 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
                                     &con_info->req_parms.escalator_id);
       if (!strcmp (key, "esc_first_result"))
         return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_max_results);
+                                    &con_info->req_parms.esc_first_result);
       if (!strcmp (key, "esc_levels"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.esc_levels);
+      if (!strcmp (key, "esc_max_results"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.esc_max_results);
       if (!strcmp (key, "esc_min_cvss_base"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.esc_min_cvss_base);
