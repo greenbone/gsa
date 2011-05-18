@@ -1,5 +1,10 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (verify_agent_omp, delete_report_format_omp)
+	(verify_report_format_omp): Correct message typos.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table, get_trash): Use "Scan Config"
 	instead of "Config" for consistency.
 

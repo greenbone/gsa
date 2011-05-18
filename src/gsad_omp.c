@@ -2939,7 +2939,7 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying an agent. "
-                             "The agent iss not verified. "
+                             "The agent is not verified. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_agents");
     }
@@ -11011,7 +11011,7 @@ delete_report_format_omp (credentials_t * credentials,
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while deleting a report format. "
-                             "The report_format iss not deleted. "
+                             "The report_format is not deleted. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_report_formats");
     }
@@ -11463,7 +11463,7 @@ verify_report_format_omp (credentials_t * credentials,
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while verifying a report format. "
-                             "The report_format iss not verified. "
+                             "The report_format is not verified. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_report_formats");
     }
