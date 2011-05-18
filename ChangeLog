@@ -1,5 +1,9 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Add missing confirm window.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (modify_note_response)
 	(modify_override_response): Remove duplicate templates.
 
