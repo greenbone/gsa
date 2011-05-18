@@ -8681,12 +8681,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:call-template name="trashcan-icon">
+      <xsl:call-template name="delete-icon">
         <xsl:with-param name="type" select="'override'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
           <input type="hidden" name="next" value="get_nvts"/>
-          <input type="hidden" name="oid" value="../../get_nvts_response/nvt/@oid"/>
+          <input type="hidden" name="oid" value="{../../get_nvts_response/nvt/@oid}"/>
         </xsl:with-param>
       </xsl:call-template>
       <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"

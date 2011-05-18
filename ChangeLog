@@ -1,5 +1,9 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (override [nvt-details]): Use correct icon.  Add XSL markup.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (create_note_omp, create_override_omp): Get escalators
 	too, for report page dropdown.
 
