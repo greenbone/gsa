@@ -791,6 +791,15 @@ delete_task_omp (credentials_t * credentials, const char *task_id,
 {
   char *ret;
   gchar *delete_task;
+
+  if (task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a task. "
+                         "The task was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
   delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
   ret = get_tasks (credentials, NULL, "name", "ascending", NULL, delete_task,
                    apply_overrides);
@@ -1151,6 +1160,14 @@ pause_task_omp (credentials_t * credentials, const char *task_id,
   char *ret;
   gchar *pause_task;
 
+  if ((task_id == NULL) || (next == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while pausing a task. "
+                         "The task was not paused. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_task");
+
   pause_task = g_strdup_printf ("<pause_task task_id=\"%s\" />", task_id);
 
   if (strcmp (next, "get_task") == 0)
@@ -1183,6 +1200,14 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id,
 {
   char *ret;
   gchar *resume_paused_task;
+
+  if ((task_id == NULL) || (next == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while resuming a task. "
+                         "The task was not resumed. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_task");
 
   resume_paused_task = g_strdup_printf ("<resume_paused_task task_id=\"%s\" />",
                                         task_id);
@@ -1217,6 +1242,14 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
 {
   char *ret;
   gchar *resume_stopped;
+
+  if ((task_id == NULL) || (next == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while resuming a task. "
+                         "The task was not resumed. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_task");
 
   resume_stopped = g_strdup_printf ("<resume_stopped_task task_id=\"%s\" />",
                                     task_id);
@@ -1695,6 +1728,14 @@ delete_lsc_credential_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (lsc_credential_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a credential. "
+                         "The credential was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_lsc_credentials");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2581,6 +2622,14 @@ delete_agent_omp (credentials_t * credentials, const char *agent_id)
   int socket;
   gchar *html;
 
+  if (agent_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an agent. "
+                         "The agent was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_agents");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -3223,6 +3272,14 @@ delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
   int socket;
   gchar *html;
 
+  if (escalator_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an escalator. "
+                         "The escalator was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_escalators");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -3527,6 +3584,13 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
   int socket;
   char *ret;
   gchar *html;
+
+  if (escalator_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while testing an escalator. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_escalators");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3874,6 +3938,14 @@ delete_target_omp (credentials_t * credentials, const char *target_id)
   int socket;
   gchar *html;
 
+  if (target_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a target. "
+                         "The target was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_targets");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -3955,6 +4027,14 @@ delete_trash_agent_omp (credentials_t * credentials, const char *agent_id)
   int socket;
   gchar *html;
 
+  if (agent_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting an agent. "
+                         "The agent was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_agents");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4030,6 +4110,14 @@ delete_trash_config_omp (credentials_t * credentials, const char *config_id)
   int socket;
   gchar *html;
 
+  if (config_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a config. "
+                         "The config was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_configs");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4104,6 +4192,14 @@ delete_trash_escalator_omp (credentials_t * credentials, const char *escalator_i
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (escalator_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a escalator. "
+                         "The escalator was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_escalators");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4181,6 +4277,14 @@ delete_trash_lsc_credential_omp (credentials_t * credentials,
   int socket;
   gchar *html;
 
+  if (lsc_credential_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a credential. "
+                         "The credential was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_lsc_credentials");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4255,6 +4359,14 @@ delete_trash_report_format_omp (credentials_t * credentials, const char *report_
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (report_format_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a report format. "
+                         "The report format was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4331,6 +4443,14 @@ delete_trash_schedule_omp (credentials_t * credentials, const char *schedule_id)
   int socket;
   gchar *html;
 
+  if (schedule_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a schedule. "
+                         "The schedule was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_schedules");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4405,6 +4525,14 @@ delete_trash_slave_omp (credentials_t * credentials, const char *slave_id)
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (slave_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a slave. "
+                         "The slave was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_slaves");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4481,6 +4609,14 @@ delete_trash_target_omp (credentials_t * credentials, const char *target_id)
   int socket;
   gchar *html;
 
+  if (target_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a target. "
+                         "The target was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_targets");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4556,6 +4692,14 @@ delete_trash_task_omp (credentials_t * credentials, const char *task_id)
   int socket;
   gchar *html;
 
+  if (task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a task. "
+                         "The task was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -4630,6 +4774,14 @@ restore_omp (credentials_t * credentials, const char *target_id)
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (target_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while restoring a resource. "
+                         "The resource was not restored. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_resources");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6128,6 +6280,14 @@ delete_config_omp (credentials_t * credentials, const char *config_id)
   int socket;
   gchar *html;
 
+  if (config_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a config. "
+                         "The config was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_configs");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -6538,6 +6698,14 @@ delete_report_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if ((report_id == NULL) || (task_id == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a report. "
+                         "The report is not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7785,7 +7953,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
   int socket;
   gchar *html;
 
-  if (next == NULL)
+  if ((next == NULL) || (note_id == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a note. "
@@ -8993,7 +9161,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
   int socket;
   gchar *html;
 
-  if (next == NULL)
+  if ((next == NULL) || (override_id == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting an override. "
@@ -9707,6 +9875,14 @@ delete_slave_omp (credentials_t * credentials, const char *slave_id)
   int socket;
   gchar *html;
 
+  if (slave_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a slave. "
+                         "The slave was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_slaves");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -10299,6 +10475,14 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
   struct tm *now_broken;
   gchar *html;
 
+  if (schedule == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a schedule. "
+                         "The schedule was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_schedules");
+
   switch (manager_connect (credentials, &socket, &session, &html))
     {
       case 0:
@@ -10806,6 +10990,14 @@ delete_report_format_omp (credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (report_format_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a report format. "
+                         "The report format was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {

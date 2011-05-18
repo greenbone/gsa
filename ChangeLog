@@ -1,3 +1,16 @@
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Remove delete_note override requirement, as
+	it's optional.  Validate task_id too for delete_report.  Add save_note
+	and save_override NULL param checks that where previously done in
+	exec_omp_get.
+
+	* src/gsad_oap.c (delete_user_oap): Add NULL param check that was
+	done in exec_omp_get when this was a GET.
+
+	* src/gsad_omp.c: Add NULL param checks to the new POST commands.  These
+	were done in exec_omp_get when the commands were GET operations.
+
 2011-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (delete_note_omp, delete_override_omp): Revert erroneous

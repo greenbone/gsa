@@ -2823,18 +2823,26 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
            && (con_info->req_parms.note_id != NULL)
            && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL)
            && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
            && (con_info->req_parms.task_id != NULL))
     {
       validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
       validate (validator, "task_id", &con_info->req_parms.task_id);
-      con_info->response =
-        delete_note_omp (credentials, con_info->req_parms.note_id, "get_tasks",
-                         NULL, 0, 0, NULL, NULL, NULL, NULL,
-                         con_info->req_parms.overrides, NULL, NULL, NULL, NULL,
-                         con_info->req_parms.task_id);
+      if (validate_or (validator, "overrides", &con_info->req_parms.overrides,
+                       "0"))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while deleting a note. "
+                        "The note remains intact. "
+                        "Diagnostics: Required parameter was NULL.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          delete_note_omp (credentials, con_info->req_parms.note_id,
+                           "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                           con_info->req_parms.overrides, NULL, NULL, NULL,
+                           NULL, con_info->req_parms.task_id);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -2947,6 +2955,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if (!strcmp (con_info->req_parms.cmd, "delete_report"))
     {
       validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "task_id", &con_info->req_parms.task_id);
       con_info->response =
         delete_report_omp (credentials, con_info->req_parms.report_id,
                            con_info->req_parms.task_id);
@@ -3371,51 +3380,68 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_note") == 0))
     {
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "note_result_id",
-                &con_info->req_parms.note_result_id);
-
-      con_info->response =
-        save_note_omp (credentials,
-                       con_info->req_parms.note_id,
-                       con_info->req_parms.text,
-                       con_info->req_parms.hosts,
-                       con_info->req_parms.port,
-                       con_info->req_parms.threat,
-                       con_info->req_parms.note_task_id,
-                       con_info->req_parms.note_result_id,
-                       "get_note", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                       NULL, NULL, NULL, NULL, NULL, NULL);
+      if (validate (validator, "note_id", &con_info->req_parms.note_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "note_task_id",
+                       &con_info->req_parms.note_task_id)
+          || validate (validator, "note_result_id",
+                       &con_info->req_parms.note_result_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a note. "
+                        "The note remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          save_note_omp (credentials,
+                         con_info->req_parms.note_id,
+                         con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.note_task_id,
+                         con_info->req_parms.note_result_id,
+                         "get_note", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_notes") == 0))
     {
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "note_result_id",
-                &con_info->req_parms.note_result_id);
-      con_info->response =
-        save_note_omp (credentials,
-                       con_info->req_parms.note_id,
-                       con_info->req_parms.text,
-                       con_info->req_parms.hosts,
-                       con_info->req_parms.port,
-                       con_info->req_parms.threat,
-                       con_info->req_parms.note_task_id,
-                       con_info->req_parms.note_result_id,
-                       "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                       NULL, NULL, NULL, NULL, NULL);
+      if (validate (validator, "note_id", &con_info->req_parms.note_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "note_task_id",
+                       &con_info->req_parms.note_task_id)
+          || validate (validator, "note_result_id",
+                       &con_info->req_parms.note_result_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a note. "
+                        "The note remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          save_note_omp (credentials,
+                         con_info->req_parms.note_id,
+                         con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.note_task_id,
+                         con_info->req_parms.note_result_id,
+                         "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3423,27 +3449,35 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
            && (con_info->req_parms.oid != NULL))
     {
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "note_result_id",
-                &con_info->req_parms.note_result_id);
-      validate (validator, "oid", &con_info->req_parms.oid);
-
-      con_info->response =
-        save_note_omp (credentials,
-                       con_info->req_parms.note_id,
-                       con_info->req_parms.text,
-                       con_info->req_parms.hosts,
-                       con_info->req_parms.port,
-                       con_info->req_parms.threat,
-                       con_info->req_parms.note_task_id,
-                       con_info->req_parms.note_result_id,
-                       "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                       NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+      if (validate (validator, "note_id", &con_info->req_parms.note_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "note_task_id",
+                       &con_info->req_parms.note_task_id)
+          || validate (validator, "note_result_id",
+                       &con_info->req_parms.note_result_id)
+          || validate (validator, "oid", &con_info->req_parms.oid))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a note. "
+                        "The note remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          save_note_omp (credentials,
+                         con_info->req_parms.note_id,
+                         con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.note_task_id,
+                         con_info->req_parms.note_result_id,
+                         "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
+                         NULL, NULL, NULL, con_info->req_parms.oid, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3460,29 +3494,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (!con_info->req_parms.max_results
           || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
         max = RESULTS_PER_PAGE;
-
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "note_result_id",
-                &con_info->req_parms.note_result_id);
-      validate (validator, "report_id", &con_info->req_parms.report_id);
-      validate (validator, "sort_field", &con_info->req_parms.sort_field);
-      validate (validator, "sort_order", &con_info->req_parms.sort_order);
-      validate (validator, "levels", &con_info->req_parms.levels);
-      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate_or (validator,
-                   "result_hosts_only",
-                   &con_info->req_parms.result_hosts_only,
-                   "0");
-      validate_or (validator,
-                   "search_phrase",
-                   &con_info->req_parms.search_phrase,
-                   "");
 
       if (con_info->req_parms.min_cvss_base)
         {
@@ -3501,27 +3512,58 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       else
         min_cvss_base = "";
 
-      con_info->response =
-        save_note_omp (credentials,
-                       con_info->req_parms.note_id,
-                       con_info->req_parms.text,
-                       con_info->req_parms.hosts,
-                       con_info->req_parms.port,
-                       con_info->req_parms.threat,
-                       con_info->req_parms.note_task_id,
-                       con_info->req_parms.note_result_id,
-                       "get_report",
-                       con_info->req_parms.report_id,
-                       first, max,
-                       con_info->req_parms.sort_field,
-                       con_info->req_parms.sort_order,
-                       con_info->req_parms.levels,
-                       con_info->req_parms.notes,
-                       con_info->req_parms.overrides,
-                       con_info->req_parms.result_hosts_only,
-                       con_info->req_parms.search_phrase,
-                       con_info->req_parms.min_cvss_base,
-                       NULL, NULL);
+      if (validate (validator, "note_id", &con_info->req_parms.note_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "note_task_id", &con_info->req_parms.note_task_id)
+          || validate (validator, "note_result_id",
+                       &con_info->req_parms.note_result_id)
+          || validate (validator, "report_id", &con_info->req_parms.report_id)
+          || validate (validator, "sort_field", &con_info->req_parms.sort_field)
+          || validate (validator, "sort_order", &con_info->req_parms.sort_order)
+          || validate (validator, "levels", &con_info->req_parms.levels)
+          || validate_or (validator, "notes", &con_info->req_parms.notes, "0")
+          || validate_or (validator, "overrides", &con_info->req_parms.overrides, "0")
+          || validate_or (validator,
+                          "result_hosts_only",
+                          &con_info->req_parms.result_hosts_only,
+                          "0")
+          || validate_or (validator,
+                          "search_phrase",
+                          &con_info->req_parms.search_phrase,
+                          "")
+          || (min_cvss_base == NULL))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a note. "
+                        "The note remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          save_note_omp (credentials,
+                         con_info->req_parms.note_id,
+                         con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.note_task_id,
+                         con_info->req_parms.note_result_id,
+                         "get_report",
+                         con_info->req_parms.report_id,
+                         first, max,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.levels,
+                         con_info->req_parms.notes,
+                         con_info->req_parms.overrides,
+                         con_info->req_parms.result_hosts_only,
+                         con_info->req_parms.search_phrase,
+                         con_info->req_parms.min_cvss_base,
+                         NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3530,90 +3572,113 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
            && (con_info->req_parms.task_id != NULL))
     {
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "note_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "note_result_id",
-                &con_info->req_parms.note_result_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-
-      con_info->response =
-        save_note_omp (credentials,
-                       con_info->req_parms.note_id,
-                       con_info->req_parms.text,
-                       con_info->req_parms.hosts,
-                       con_info->req_parms.port,
-                       con_info->req_parms.threat,
-                       con_info->req_parms.note_task_id,
-                       con_info->req_parms.note_result_id,
-                       "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                       con_info->req_parms.overrides,
-                       NULL, NULL, NULL, NULL,
-                       con_info->req_parms.task_id);
+      if (validate (validator, "note_id", &con_info->req_parms.note_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "note_task_id",
+                       &con_info->req_parms.note_task_id)
+          || validate (validator, "note_result_id",
+                       &con_info->req_parms.note_result_id)
+          || validate_or (validator, "overrides",
+                          &con_info->req_parms.overrides, "0")
+          || validate (validator, "task_id", &con_info->req_parms.task_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a note. "
+                        "The note remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_notes");
+      else
+        con_info->response =
+          save_note_omp (credentials,
+                         con_info->req_parms.note_id,
+                         con_info->req_parms.text,
+                         con_info->req_parms.hosts,
+                         con_info->req_parms.port,
+                         con_info->req_parms.threat,
+                         con_info->req_parms.note_task_id,
+                         con_info->req_parms.note_result_id,
+                         "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                         con_info->req_parms.overrides,
+                         NULL, NULL, NULL, NULL,
+                         con_info->req_parms.task_id);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_override") == 0))
     {
-      validate (validator, "override_id", &con_info->req_parms.override_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "override_task_id",
-                &con_info->req_parms.override_task_id);
-      validate (validator, "override_result_id",
-                &con_info->req_parms.override_result_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-
-      con_info->response =
-        save_override_omp (credentials,
-                           con_info->req_parms.override_id,
-                           con_info->req_parms.text,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.port,
-                           con_info->req_parms.threat,
-                           con_info->req_parms.new_threat,
-                           con_info->req_parms.override_task_id,
-                           con_info->req_parms.override_result_id,
-                           "get_override", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                           NULL, NULL, NULL, NULL, NULL, NULL);
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id)
+          || validate_or (validator, "overrides",
+                          &con_info->req_parms.overrides, "0"))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving an override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_override", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_overrides") == 0))
     {
-      validate (validator, "override_id", &con_info->req_parms.override_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "override_task_id",
-                &con_info->req_parms.override_task_id);
-      validate (validator, "override_result_id",
-                &con_info->req_parms.override_result_id);
-
-      con_info->response =
-        save_override_omp (credentials,
-                           con_info->req_parms.override_id,
-                           con_info->req_parms.text,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.port,
-                           con_info->req_parms.threat,
-                           con_info->req_parms.new_threat,
-                           con_info->req_parms.override_task_id,
-                           con_info->req_parms.override_result_id,
-                           "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
-                           NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving an override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3621,31 +3686,37 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (strcmp (con_info->req_parms.next, "get_nvts") == 0)
            && (con_info->req_parms.oid != NULL))
     {
-      validate (validator, "override_id", &con_info->req_parms.override_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "override_task_id",
-                &con_info->req_parms.override_task_id);
-      validate (validator, "override_result_id",
-                &con_info->req_parms.override_result_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate (validator, "oid", &con_info->req_parms.oid);
-
-      con_info->response =
-        save_override_omp (credentials,
-                           con_info->req_parms.override_id,
-                           con_info->req_parms.text,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.port,
-                           con_info->req_parms.threat,
-                           con_info->req_parms.new_threat,
-                           con_info->req_parms.override_task_id,
-                           con_info->req_parms.override_result_id,
-                           "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                           NULL, NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id)
+          || validate (validator, "oid", &con_info->req_parms.oid))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving an override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                             NULL, NULL, NULL, NULL, con_info->req_parms.oid, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.next != NULL)
@@ -3661,30 +3732,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (!con_info->req_parms.max_results
           || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
         max = RESULTS_PER_PAGE;
-
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "override_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "override_result_id",
-                &con_info->req_parms.note_result_id);
-      validate (validator, "report_id", &con_info->req_parms.report_id);
-      validate (validator, "sort_field", &con_info->req_parms.sort_field);
-      validate (validator, "sort_order", &con_info->req_parms.sort_order);
-      validate (validator, "levels", &con_info->req_parms.levels);
-      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate_or (validator,
-                   "result_hosts_only",
-                   &con_info->req_parms.result_hosts_only,
-                   "0");
-      validate_or (validator,
-                   "search_phrase",
-                   &con_info->req_parms.search_phrase,
-                   "");
 
       if (con_info->req_parms.min_cvss_base)
         {
@@ -3703,28 +3750,61 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       else
         min_cvss_base = "";
 
-      con_info->response =
-        save_override_omp (credentials,
-                           con_info->req_parms.override_id,
-                           con_info->req_parms.text,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.port,
-                           con_info->req_parms.threat,
-                           con_info->req_parms.new_threat,
-                           con_info->req_parms.override_task_id,
-                           con_info->req_parms.override_result_id,
-                           "get_report",
-                           con_info->req_parms.report_id,
-                           first, max,
-                           con_info->req_parms.sort_field,
-                           con_info->req_parms.sort_order,
-                           con_info->req_parms.levels,
-                           con_info->req_parms.notes,
-                           con_info->req_parms.overrides,
-                           con_info->req_parms.result_hosts_only,
-                           con_info->req_parms.search_phrase,
-                           con_info->req_parms.min_cvss_base,
-                           NULL, NULL);
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id)
+          || validate (validator, "report_id", &con_info->req_parms.report_id)
+          || validate (validator, "sort_field", &con_info->req_parms.sort_field)
+          || validate (validator, "sort_order", &con_info->req_parms.sort_order)
+          || validate (validator, "levels", &con_info->req_parms.levels)
+          || validate_or (validator, "notes", &con_info->req_parms.notes, "0")
+          || validate_or (validator, "overrides", &con_info->req_parms.overrides, "0")
+          || validate_or (validator,
+                          "result_hosts_only",
+                          &con_info->req_parms.result_hosts_only,
+                          "0")
+          || validate_or (validator,
+                          "search_phrase",
+                          &con_info->req_parms.search_phrase,
+                          "")
+          || (min_cvss_base == NULL))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving an override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_report",
+                             con_info->req_parms.report_id,
+                             first, max,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.levels,
+                             con_info->req_parms.notes,
+                             con_info->req_parms.overrides,
+                             con_info->req_parms.result_hosts_only,
+                             con_info->req_parms.search_phrase,
+                             con_info->req_parms.min_cvss_base,
+                             NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3733,32 +3813,41 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
            && (con_info->req_parms.task_id != NULL))
     {
-      validate (validator, "note_id", &con_info->req_parms.note_id);
-      validate_or (validator, "text", &con_info->req_parms.text, "");
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "threat", &con_info->req_parms.threat);
-      validate (validator, "new_threat", &con_info->req_parms.new_threat);
-      validate (validator, "override_task_id", &con_info->req_parms.note_task_id);
-      validate (validator, "override_result_id",
-                &con_info->req_parms.note_result_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-
-      con_info->response =
-        save_override_omp (credentials,
-                           con_info->req_parms.override_id,
-                           con_info->req_parms.text,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.port,
-                           con_info->req_parms.threat,
-                           con_info->req_parms.new_threat,
-                           con_info->req_parms.override_task_id,
-                           con_info->req_parms.override_result_id,
-                           "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                           con_info->req_parms.overrides,
-                           NULL, NULL, NULL, NULL,
-                           con_info->req_parms.task_id);
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id)
+          || validate_or (validator, "overrides",
+                          &con_info->req_parms.overrides, "0")
+          || validate (validator, "task_id", &con_info->req_parms.task_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving an override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
+                             con_info->req_parms.overrides,
+                             NULL, NULL, NULL, NULL,
+                             con_info->req_parms.task_id);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
     {

@@ -522,6 +522,14 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
   int socket;
   gchar *html;
 
+  if (user_name == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a user. "
+                         "The user was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_users");
+
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
       case 0:
