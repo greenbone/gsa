@@ -1654,7 +1654,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="next">get_tasks</xsl:with-param>
               <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
               <xsl:with-param name="params">
-                <input type="hidden" name="task_id" value="{$task_id}}"/>
+                <input type="hidden" name="task_id" value="{$task_id}"/>
                 <input type="hidden" name="overrides" value="{$apply-overrides}"/>
               </xsl:with-param>
             </xsl:call-template>
@@ -1693,7 +1693,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="next">get_tasks</xsl:with-param>
               <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
               <xsl:with-param name="params">
-                <input type="hidden" name="task_id" value="{$task_id}}"/>
+                <input type="hidden" name="task_id" value="{$task_id}"/>
                 <input type="hidden" name="overrides" value="{$apply-overrides}"/>
               </xsl:with-param>
             </xsl:call-template>

@@ -1,5 +1,9 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table): Remove surplus } characters.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): At least survive if the caller param is
 	missing.
 
