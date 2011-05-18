@@ -1478,7 +1478,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="task/comment"/></td>
         </tr>
         <tr>
-          <td>Config:</td>
+          <td>Scan Config:</td>
           <td>
             <a href="/omp?cmd=get_config&amp;config_id={task/config/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="task/config/name"/>
@@ -10415,7 +10415,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
         </tr>
         <tr class="odd">
-          <td><a href="#configs">Configs</a></td>
+          <td><a href="#configs">Scan Configs</a></td>
           <td><xsl:value-of select="count(get_configs_response/config)"/></td>
         </tr>
         <tr class="even">
@@ -10456,7 +10456,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
 
       <a name="configs"></a>
-      <h1>Configs</h1>
+      <h1>Scan Configs</h1>
       <!-- The for-each makes the get_configs_response the current node. -->
       <xsl:for-each select="get_configs_response">
         <xsl:call-template name="html-configs-trash-table"/>
