@@ -175,6 +175,8 @@ xsl_transform (const char *xml_text)
 
   /* Copy text to temporary file. */
 
+  tracef ("text to transform: [%s]\n", xml_text);
+
   error = NULL;
   g_file_set_contents (content_file, xml_text, strlen (xml_text), &error);
   if (error)

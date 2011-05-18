@@ -1,5 +1,9 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_base.c (xsl_transform): Add trace as in USE_LIBXSLT case.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_nvts, get_note, get_override): Apply templates for
 	save note and override confirm windows.
 
