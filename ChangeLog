@@ -1,5 +1,10 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (create_note_omp, create_override_omp): Get escalators
+	too, for report page dropdown.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (verify_agent_omp, delete_report_format_omp)
 	(verify_report_format_omp): Correct message typos.
 
