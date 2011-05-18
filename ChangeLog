@@ -1,3 +1,8 @@
+2011-05-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (get_reports_response/report/report):
+	Improved note about missing OS information.
+
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_trash): Add missing confirm window.

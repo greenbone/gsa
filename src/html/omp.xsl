@@ -9889,7 +9889,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="$cpes = 0">
               <!-- nothing detected or matched by our CPE database -->
-              <img src="/img/os_unknown.png" alt="No information on Operating System. This happens for scans without credentials or when the OS was not identified." title="No information on Operating System. This happens for scans without credentials or when the OS was not identified."/>
+              <img src="/img/os_unknown.png" alt="No information on Operating System was gathered during scan." title="No information on Operating System was gathered during scan."/>
             </xsl:when>
             <xsl:when test="$cpes = 1">
               <!-- One system detected: display the corresponding icon and name from our database -->
