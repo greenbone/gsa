@@ -1,5 +1,10 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): At least survive if the caller param is
+	missing.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (user): Switch the delete_user icon to POST.
 
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>

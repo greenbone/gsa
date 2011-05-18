@@ -2158,7 +2158,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   /* @todo Validate caller. */
-  credentials->caller = strdup (con_info->req_parms.caller);
+  credentials->caller = strdup (con_info->req_parms.caller
+                                 ? con_info->req_parms.caller
+                                 : "");
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
 
