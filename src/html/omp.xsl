@@ -1651,7 +1651,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_notes_response/note">
             <xsl:call-template name="note">
-              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
+              <xsl:with-param name="next">get_tasks</xsl:with-param>
+              <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
+              <xsl:with-param name="params">
+                <input type="hidden" name="task_id" value="{$task_id}}"/>
+                <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -1685,8 +1690,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
           <xsl:for-each select="../get_overrides_response/override">
             <xsl:call-template name="override">
-              <xsl:with-param name="next">get_tasks&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/>
-</xsl:with-param>
+              <xsl:with-param name="next">get_tasks</xsl:with-param>
+              <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
+              <xsl:with-param name="params">
+                <input type="hidden" name="task_id" value="{$task_id}}"/>
+                <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -7863,6 +7872,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="note" match="note">
   <xsl:param name="next">get_notes</xsl:param>
+  <xsl:param name="params"/>
+  <xsl:param name="params-get"/>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -7898,13 +7909,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
           <input type="hidden" name="next" value="{$next}"/>
+          <xsl:copy-of select="$params"/>
         </xsl:with-param>
       </xsl:call-template>
       <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="Note Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -8580,6 +8592,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="override" match="override">
   <xsl:param name="next">get_overrides</xsl:param>
+  <xsl:param name="params"/>
+  <xsl:param name="params-get"/>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -8628,13 +8642,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
           <input type="hidden" name="next" value="{$next}"/>
+          <xsl:copy-of select="$params"/>
         </xsl:with-param>
       </xsl:call-template>
       <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="Override Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>

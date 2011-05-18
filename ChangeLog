@@ -1,5 +1,12 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table): Pass task_id and overrides params
+	to note and override templates explicitly, instead of bundling them in the
+	next param, which only works for GET.
+	(note, override): Add params and params-get parameters.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Remove delete_note override requirement, as
 	it's optional.  Validate task_id too for delete_report.  Add save_note
 	and save_override NULL param checks that where previously done in
