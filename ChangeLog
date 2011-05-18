@@ -1,5 +1,9 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (user): Switch the delete_user icon to POST.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Pass task_id and overrides params
 	to note and override templates explicitly, instead of bundling them in the
 	next param, which only works for GET.

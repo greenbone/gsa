@@ -215,11 +215,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/oap?cmd=delete_user&amp;name={name}&amp;token={/envelope/token}"
-             title="Delete User"
-             style="margin-left:3px;">
-            <img src="/img/delete.png" border="0" alt="Delete"/>
-          </a>
+          <div style="display: inline">
+            <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="caller" value="{/envelope/caller}"/>
+              <input type="hidden" name="cmd" value="delete_user"/>
+              <input type="hidden" name="name" value="{name}"/>
+              <input type="image" src="/img/delete.png" alt="Delete"
+                     name="Delete" value="Delete" title="Delete"/>
+            </form>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/oap?cmd=get_user&amp;name={name}&amp;token={/envelope/token}"
