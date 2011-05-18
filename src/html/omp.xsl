@@ -7481,6 +7481,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_note_response"/>
   <xsl:apply-templates select="commands_response/delete_override_response"/>
+  <xsl:apply-templates select="commands_response/modify_note_response"/>
+  <xsl:apply-templates select="commands_response/modify_override_response"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -8137,6 +8139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_note">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/modify_note_response"/>
   <xsl:choose>
     <xsl:when test="commands_reponse/get_notes_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
@@ -8881,6 +8884,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_override">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/modify_override_response"/>
   <xsl:choose>
     <xsl:when test="commands_reponse/get_overrides_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">

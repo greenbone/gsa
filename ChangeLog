@@ -1,5 +1,10 @@
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_nvts, get_note, get_override): Apply templates for
+	save note and override confirm windows.
+
+2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (override [nvt-details]): Use correct icon.  Add XSL markup.
 
 2011-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
