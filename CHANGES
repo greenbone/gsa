@@ -1,3 +1,24 @@
+gsa 3.0+beta2 (2011-05-19)
+
+This is the second beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release addresses a number of minor issues which were discovered after the
+release of GSA 3.0+beta1. For details, please refer to the list of changes
+below.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Michael Wiegand and Jan-Oliver Wagner.
+
+Main changes since 3.0+beta1:
+* Limitations on passwords allowed for LSC credentials have been reduced
+  further.
+* GET and POST requests are now used consistently throughout the GSA.
+* The GSA no longer terminates upon receiving a SIGHUP signal to better match
+  expected behavior.
+
+
 gsa 3.0+beta1 (2011-05-05)
 
 This is the first beta version of the upcoming 3.0 release of the Greenbone
