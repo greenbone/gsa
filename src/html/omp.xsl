@@ -3554,6 +3554,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           </select>
                         </td>
                       </tr>
+                      <tr>
+                        <td colspan="3" valign="top">
+                          <input type="radio" name="method_data:notice" value="2"/>
+                          Attach report
+                          <select name="method_data:notice_attach_format">
+                            <xsl:for-each select="$report-formats/report_format">
+                              <xsl:choose>
+                                <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                                  <option value="{@id}" selected="1">
+                                    <xsl:value-of select="name"/>
+                                  </option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}">
+                                    <xsl:value-of select="name"/>
+                                  </option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
+                          </select>
+                        </td>
+                      </tr>
                     </table>
                   </td>
                 </tr>
@@ -3980,6 +4002,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           Include report
                           <xsl:variable name="id"
                                         select="method/data[name='notice_report_format']/text()"/>
+                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                        </xsl:when>
+                        <xsl:when test="method/data[name='notice']/text() = '2'">
+                          Attach report
+                          <xsl:variable name="id"
+                                        select="method/data[name='notice_attach_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
                         </xsl:when>
                         <xsl:otherwise>

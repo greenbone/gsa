@@ -1,3 +1,9 @@
+2011-05-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-escalator-form): Add an attachment option
+	for Email Content.
+	(escalator [details]): Add attach text to Email Content.
+
 2011-05-19  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
