@@ -2856,8 +2856,6 @@ get_agents_omp (credentials_t * credentials,
         }
       else
         {
-          entity_t agent_entity = NULL;
-
           /* An error. */
 
           entity = NULL;
@@ -2874,7 +2872,6 @@ get_agents_omp (credentials_t * credentials,
             }
           openvas_server_close (socket, session);
 
-          agent_entity = entity_child (entity, "agent");
           free_entity (entity);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
