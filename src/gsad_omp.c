@@ -3129,7 +3129,8 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
 
           method_data_param = g_malloc (sizeof (method_data_param));
           method_data_param->key = g_strdup ("submethod");
-          method_data_param->value_size = strlen (method + strlen ("syslog "));
+          method_data_param->value_size = strlen (method + strlen ("syslog "))
+                                          + 1;
           method_data_param->value = g_malloc (method_data_param->value_size);
           memcpy (method_data_param->value,
                   method + strlen ("syslog "),

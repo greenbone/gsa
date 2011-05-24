@@ -1,3 +1,8 @@
+2011-05-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_escalator_omp): Increase value size for trailing
+	'\0' in submethod handling.
+
 2011-05-21  Stephan Kleine
 
 	* src/gsad_omp.c: Remove unused variable to fix compilation with GCC 4.6
