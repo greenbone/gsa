@@ -1,3 +1,9 @@
+2011-05-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/os_cisco.png, src/html/img/os_freebsd.png,
+	src/html/img/os_linux.png, src/html/img/os_netbsd.png,
+	src/html/img/os_aix.png, src/html/img/os_openbsd.png: New.
+
 2011-05-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_escalator_omp): Increase value size for trailing
