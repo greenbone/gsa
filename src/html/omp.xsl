@@ -466,6 +466,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
+      <xsl:if test="../../delta">
+        Delta
+      </xsl:if>
       Report Summary
       <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (View Report)">
@@ -533,37 +536,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Order of results:</td>
           <td>by host</td>
         </tr>
-        <tr>
-          <td><b>Scan started:</b></td>
-          <td><b><xsl:value-of select="report/scan_start"/></b></td>
-        </tr>
-        <tr>
-          <td>Scan ended:</td>
-          <td><xsl:value-of select="report/scan_end"/></td>
-        </tr>
-        <tr>
-          <td>Scan status:</td>
-          <td>
-            <xsl:call-template name="status_bar">
-              <xsl:with-param name="status">
-                <xsl:choose>
-                  <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
-                    <xsl:text>Uploading</xsl:text>
-                  </xsl:when>
-                  <xsl:when test="report/task/target/@id=''">
-                    <xsl:text>Container</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="report/scan_run_status"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:with-param>
-              <xsl:with-param name="progress">
-                <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </td>
-        </tr>
+        <xsl:choose>
+          <xsl:when test="../../delta">
+            <tr>
+              <td>Report 1:</td>
+              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
+            </tr>
+            <tr>
+              <td><b>Scan 1 started:</b></td>
+              <td><b><xsl:value-of select="report/scan_start"/></b></td>
+            </tr>
+            <tr>
+              <td>Scan 1 ended:</td>
+              <td><xsl:value-of select="report/scan_end"/></td>
+            </tr>
+            <tr>
+              <td>Scan 1 status:</td>
+              <td>
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Report 2:</td>
+              <td>
+                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
+              </td>
+            </tr>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td><b>Scan started:</b></td>
+              <td><b><xsl:value-of select="report/scan_start"/></b></td>
+            </tr>
+            <tr>
+              <td>Scan ended:</td>
+              <td><xsl:value-of select="report/scan_end"/></td>
+            </tr>
+            <tr>
+              <td>Scan status:</td>
+              <td>
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
       </table>
       <br/>
       <table class="gbntable" cellspacing="2" cellpadding="4">
@@ -1012,6 +1062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
+      <xsl:if test="../../delta">Delta</xsl:if>
       Result Filtering
       <!--
       <a href="/help/view_report.html?token={/envelope/token}#viewreport"
@@ -1079,6 +1130,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="get_report"/>
             <input type="hidden" name="report_id" value="{report/@id}"/>
+            <xsl:if test="../../delta">
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+            </xsl:if>
             <input type="hidden" name="sort_field" value="{$sort_field}"/>
             <input type="hidden" name="sort_order" value="{$sort_order}"/>
             <input type="hidden"
@@ -1288,7 +1342,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Filtered Results
+      Filtered
+      <xsl:if test="../../delta">Delta</xsl:if>
+      Results
 
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
@@ -2115,6 +2171,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="result_count/false_positive"/>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="../../../../../delta = @id">
+          <a href="/omp?cmd=get_tasks&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+             title="Compare"
+             style="margin-left:3px;">
+            <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
+          </a>
+        </xsl:when>
+        <xsl:when test="string-length (../../../../../delta) &gt; 0">
+          <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={../../../../../delta}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;token={/envelope/token}"
+             title="Compare"
+             style="margin-left:3px;">
+            <img src="/img/delta_second.png" border="0" alt="Compare"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_tasks&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+             title="Compare"
+             style="margin-left:3px;">
+            <img src="/img/delta.png" border="0" alt="Compare"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;token={/envelope/token}"
          title="Details"
          style="margin-left:3px;">
@@ -9766,6 +9845,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right" style="text-align:right">
       <xsl:value-of select="port"/>
     </div>
+    <xsl:if test="delta">
+      <div style="float: left; font-size: 24px; border: 2px; padding-left: 2px; padding-right: 8px; margin:0px;">
+        <xsl:choose>
+          <xsl:when test="delta = 'changed'">~</xsl:when>
+          <xsl:when test="delta = 'gone'">&#8722;</xsl:when>
+          <xsl:when test="delta = 'new'">+</xsl:when>
+          <xsl:when test="delta = 'same'">=</xsl:when>
+        </xsl:choose>
+      </div>
+    </xsl:if>
     <b><xsl:value-of select="threat"/></b>
     <xsl:choose>
       <xsl:when test="original_threat">

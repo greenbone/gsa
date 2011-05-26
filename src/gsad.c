@@ -3185,6 +3185,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         get_report_omp (credentials,
                         con_info->req_parms.report_id,
+                        NULL,
                         con_info->req_parms.report_format_id,
                         &response_size,
                         (const unsigned int) first,
@@ -3219,7 +3220,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         "",
                         con_info->req_parms.overrides
                          ? strcmp (con_info->req_parms.overrides, "0")
-                         : 0);
+                         : 0,
+                        NULL);
     }
   else if (!strcmp (con_info->req_parms.cmd, "import_config"))
     {
@@ -4055,6 +4057,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *agent_id     = NULL;
   const char *comment      = NULL;
   const char *config_id    = NULL;
+  const char *delta_report_id = NULL;
   const char *escalator_id = NULL;
   const char *report_escalator_id = NULL;
   const char *esc_first_result = NULL;
@@ -4136,6 +4139,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                "config_id");
       if (openvas_validate (validator, "config_id", config_id))
         config_id = NULL;
+
+      delta_report_id = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "delta_report_id");
+      if (openvas_validate (validator, "report_id", delta_report_id))
+        delta_report_id = NULL;
 
       escalator_id = MHD_lookup_connection_value (connection,
                                                   MHD_GET_ARGUMENT_KIND,
@@ -4593,7 +4602,8 @@ exec_omp_get (struct MHD_Connection *connection,
            && (strlen (task_id) < VAL_MAX_SIZE))
     return get_tasks_omp (credentials, task_id, sort_field, sort_order,
                           refresh_interval,
-                          overrides ? strcmp (overrides, "0") : 0);
+                          overrides ? strcmp (overrides, "0") : 0,
+                          report_id);
 
   else if (!strcmp (cmd, "edit_config"))
     return get_config_omp (credentials, config_id, 1);
@@ -4914,7 +4924,8 @@ exec_omp_get (struct MHD_Connection *connection,
         esc_max = RESULTS_PER_PAGE;
 
       if (levels)
-        ret = get_report_omp (credentials, report_id, report_format_id,
+        ret = get_report_omp (credentials, report_id, delta_report_id,
+                              report_format_id,
                               response_size,
                               (const unsigned int) first,
                               (const unsigned int) max,
@@ -4945,7 +4956,8 @@ exec_omp_get (struct MHD_Connection *connection,
           if (low) g_string_append (string, "l");
           if (log) g_string_append (string, "g");
           if (false_positive) g_string_append (string, "f");
-          ret = get_report_omp (credentials, report_id, report_format_id,
+          ret = get_report_omp (credentials, report_id, delta_report_id,
+                                report_format_id,
                                 response_size,
                                 (const unsigned int) first,
                                 (const unsigned int) max,
@@ -5004,7 +5016,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_tasks"))
     return get_tasks_omp (credentials, NULL, sort_field, sort_order,
                           refresh_interval,
-                          overrides ? strcmp (overrides, "0") : 0);
+                          overrides ? strcmp (overrides, "0") : 0,
+                          NULL);
 
   else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
     return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);

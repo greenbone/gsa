@@ -1,3 +1,27 @@
+2011-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add very basic report deltas.
+
+	* CMakeLists.txt: Add delta images.
+
+	* src/gsad.c (exec_omp_get): Pass report_id to get_tasks for marking
+	report for delta.  Pass delta_report_id to get_report_omp for report
+	deltas.
+
+	* src/gsad_omp.c (get_tasks): Add delta candidate arg.  Update callers.
+	(get_report_omp): Add delta_report_id arg.  Send through to Manager.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-report-details): When delta is given add delta
+	to headings and add report links.
+	(report): Add delta buttons.
+	(result-detailed): When doing delta add state indicators in result
+	headings.
+
+	* src/html/img/delta.png, src/html/img/delta_inactive.png,
+	src/html/img/delta_second.png: New files.
+
 2011-05-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/os_cisco.png, src/html/img/os_freebsd.png,
