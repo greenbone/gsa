@@ -1,5 +1,10 @@
 2011-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report): Use current override setting in get_report
+	icons.
+
+2011-05-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add very basic report deltas.
 
 	* CMakeLists.txt: Add delta images.

@@ -2180,7 +2180,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:when test="string-length (../../../../../delta) &gt; 0">
-          <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={../../../../../delta}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={../../../../../delta}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta_second.png" border="0" alt="Compare"/>
@@ -2194,7 +2194,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
          title="Details"
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
