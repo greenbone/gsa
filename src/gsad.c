@@ -552,6 +552,7 @@ init_validator ()
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
+  openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
@@ -615,6 +616,10 @@ init_validator ()
 
 
   openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "delta_state_changed", "boolean");
+  openvas_validator_alias (validator, "delta_state_gone", "boolean");
+  openvas_validator_alias (validator, "delta_state_new", "boolean");
+  openvas_validator_alias (validator, "delta_state_same", "boolean");
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
@@ -3193,6 +3198,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         con_info->req_parms.sort_field,
                         con_info->req_parms.sort_order,
                         con_info->req_parms.levels,
+                        NULL, // FIX
                         con_info->req_parms.notes,
                         con_info->req_parms.overrides,
                         con_info->req_parms.result_hosts_only,
@@ -4058,6 +4064,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *comment      = NULL;
   const char *config_id    = NULL;
   const char *delta_report_id = NULL;
+  const char *delta_states = NULL;
   const char *escalator_id = NULL;
   const char *report_escalator_id = NULL;
   const char *esc_first_result = NULL;
@@ -4105,6 +4112,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *slave_id   = NULL;
   const char *target_id  = NULL;
   int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
+  int changed = 0, gone = 0, new = 0, same = 0;
 
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   const int VAL_MAX_SIZE = 100;
@@ -4149,6 +4157,53 @@ exec_omp_get (struct MHD_Connection *connection,
       escalator_id = MHD_lookup_connection_value (connection,
                                                   MHD_GET_ARGUMENT_KIND,
                                                   "escalator_id");
+
+      delta_states = MHD_lookup_connection_value (connection,
+                                                  MHD_GET_ARGUMENT_KIND,
+                                                  "delta_states");
+      if (delta_states)
+        {
+          /* "delta_states" overrides "delta_state_*". */
+          if (openvas_validate (validator, "delta_states", delta_states))
+            delta_states = NULL;
+        }
+      else
+        {
+          const char *delta_state;
+
+          delta_state = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "delta_state_changed");
+          if (openvas_validate (validator, "delta_state_changed", delta_state))
+            changed = 0;
+          else
+            changed = atoi (delta_state);
+
+          delta_state = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "delta_state_gone");
+          if (openvas_validate (validator, "delta_state_gone", delta_state))
+            gone = 0;
+          else
+            gone = atoi (delta_state);
+
+          delta_state = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "delta_state_new");
+          if (openvas_validate (validator, "delta_state_new", delta_state))
+            new = 0;
+          else
+           new = atoi (delta_state);
+
+          delta_state = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "delta_state_same");
+          if (openvas_validate (validator, "delta_state_same", delta_state))
+            same = 0;
+          else
+            same = atoi (delta_state);
+        }
+
       if (openvas_validate (validator, "escalator_id", escalator_id))
         escalator_id = NULL;
 
@@ -4912,6 +4967,7 @@ exec_omp_get (struct MHD_Connection *connection,
       unsigned int first, esc_first;
       unsigned int max, esc_max;
       gchar *content_type_omp;
+      GString *levels_buffer, *delta_states_buffer;
 
       if (!first_result || sscanf (first_result, "%u", &first) != 1)
         first = 1;
@@ -4924,64 +4980,56 @@ exec_omp_get (struct MHD_Connection *connection,
         esc_max = RESULTS_PER_PAGE;
 
       if (levels)
-        ret = get_report_omp (credentials, report_id, delta_report_id,
-                              report_format_id,
-                              response_size,
-                              (const unsigned int) first,
-                              (const unsigned int) max,
-                              sort_field,
-                              sort_order,
-                              levels,
-                              notes,
-                              overrides,
-                              result_hosts_only,
-                              search_phrase,
-                              min_cvss_base,
-                              report_escalator_id,
-                              (const unsigned int) esc_first,
-                              (const unsigned int) esc_max,
-                              esc_levels,
-                              esc_notes,
-                              esc_overrides,
-                              esc_result_hosts_only,
-                              esc_search_phrase,
-                              esc_min_cvss_base,
-                              &content_type_omp,
-                              content_disposition);
+        levels_buffer = g_string_new (levels);
       else
         {
-          GString *string = g_string_new ("");
-          if (high) g_string_append (string, "h");
-          if (medium) g_string_append (string, "m");
-          if (low) g_string_append (string, "l");
-          if (log) g_string_append (string, "g");
-          if (false_positive) g_string_append (string, "f");
-          ret = get_report_omp (credentials, report_id, delta_report_id,
-                                report_format_id,
-                                response_size,
-                                (const unsigned int) first,
-                                (const unsigned int) max,
-                                sort_field,
-                                sort_order,
-                                string->str,
-                                notes,
-                                overrides,
-                                result_hosts_only,
-                                search_phrase,
-                                min_cvss_base,
-                                report_escalator_id,
-                                (const unsigned int) esc_first,
-                                (const unsigned int) esc_max,
-                                esc_levels,
-                                esc_notes,
-                                esc_overrides,
-                                esc_result_hosts_only,
-                                esc_search_phrase,
-                                esc_min_cvss_base,
-                                &content_type_omp,
-                                content_disposition);
-          g_string_free (string, TRUE);
+          levels_buffer = g_string_new ("");
+          if (high) g_string_append (levels_buffer, "h");
+          if (medium) g_string_append (levels_buffer, "m");
+          if (low) g_string_append (levels_buffer, "l");
+          if (log) g_string_append (levels_buffer, "g");
+          if (false_positive) g_string_append (levels_buffer, "f");
         }
+
+      if (delta_states)
+        delta_states_buffer = g_string_new (delta_states);
+      else
+        {
+          delta_states_buffer = g_string_new ("");
+          if (changed) g_string_append (delta_states_buffer, "c");
+          if (gone) g_string_append (delta_states_buffer, "g");
+          if (new) g_string_append (delta_states_buffer, "n");
+          if (same) g_string_append (delta_states_buffer, "s");
+        }
+
+      ret = get_report_omp (credentials, report_id, delta_report_id,
+                            report_format_id,
+                            response_size,
+                            (const unsigned int) first,
+                            (const unsigned int) max,
+                            sort_field,
+                            sort_order,
+                            levels_buffer->str,
+                            delta_states_buffer->str,
+                            notes,
+                            overrides,
+                            result_hosts_only,
+                            search_phrase,
+                            min_cvss_base,
+                            report_escalator_id,
+                            (const unsigned int) esc_first,
+                            (const unsigned int) esc_max,
+                            esc_levels,
+                            esc_notes,
+                            esc_overrides,
+                            esc_result_hosts_only,
+                            esc_search_phrase,
+                            esc_min_cvss_base,
+                            &content_type_omp,
+                            content_disposition);
+
+      g_string_free (levels_buffer, TRUE);
+      g_string_free (delta_states_buffer, TRUE);
 
       if (content_type_omp)
         {

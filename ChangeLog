@@ -1,3 +1,19 @@
+2011-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add delta state filtering to delta reports.
+
+	* src/html/omp.xsl (html-report-details): Add delta state filtering
+	control.
+
+	* src/gsad_omp.c (get_report_omp): Add delta_states arg.  Pass through to
+	Manager.
+
+	* src/gsad.c (init_validator): Add delta state validation.
+	(exec_omp_get): Pass delta states to get_report_omp.
+	(exec_omp_post): Add temporary get_report_omp delta states value.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2011-06-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Do the filtering controls with

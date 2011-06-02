@@ -6782,6 +6782,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  sort_field     Field to sort on, or NULL.
  * @param[in]  sort_order     "ascending", "descending", or NULL.
  * @param[in]  levels         Threat levels to include in report.
+ * @param[in]  delta_states   Delta states to include in report.
  * @param[in]  notes          Whether to include notes.
  * @param[in]  overrides      Whether to include overrides.
  * @param[in]  result_hosts_only  Whether to show only hosts with results.
@@ -6810,10 +6811,10 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const unsigned int first_result,
                 const unsigned int max_results,
                 const char * sort_field, const char * sort_order,
-                const char * levels, const char * notes,
-                const char * overrides, const char *result_hosts_only,
-                const char * search_phrase, const char *min_cvss_base,
-                const char * escalator_id,
+                const char * levels, const char * delta_states,
+                const char * notes, const char * overrides,
+                const char *result_hosts_only, const char * search_phrase,
+                const char *min_cvss_base, const char * escalator_id,
                 const unsigned int esc_first_result,
                 const unsigned int esc_max_results,
                 const char * esc_levels, const char * esc_notes,
@@ -6854,6 +6855,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     }
 
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
+
+  if (delta_states == NULL || strlen (delta_states) == 0) delta_states = "gn";
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
@@ -6897,6 +6900,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\""
                                 " levels=\"%s\""
+                                " delta_states=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\""
                                 " escalator_id=\"%s\"/>",
@@ -6914,6 +6918,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                     ? "descending"
                                     : "ascending"),
                                 esc_levels,
+                                delta_states,
                                 esc_search_phrase,
                                 esc_min_cvss_base,
                                 escalator_id)
@@ -6986,6 +6991,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " levels=\"%s\""
+                            " delta_states=\"%s\""
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
@@ -7006,6 +7012,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                 ? "descending"
                                 : "ascending"),
                             levels,
+                            delta_states,
                             search_phrase,
                             min_cvss_base)
       == -1)

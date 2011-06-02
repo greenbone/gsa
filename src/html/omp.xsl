@@ -1137,6 +1137,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="overrides"
                  value="{report/filters/apply_overrides}"/>
+          <xsl:if test="../../delta">
+            <div style="float: right;">
+              <div style="padding: 2px;">Show delta results:</div>
+              <div style="margin-left: 8px;">
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/same = 0">
+                    <input type="checkbox" name="delta_state_same" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_same"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                = same
+              </div>
+              <div style="margin-left: 8px;">
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/new = 0">
+                    <input type="checkbox" name="delta_state_new" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_new"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                + new
+              </div>
+              <div style="margin-left: 8px;">
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/gone = 0">
+                    <input type="checkbox" name="delta_state_gone" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_gone"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                &#8722; gone
+              </div>
+              <div style="margin-left: 8px;">
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/changed = 0">
+                    <input type="checkbox" name="delta_state_changed" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_changed"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                ~ changed
+              </div>
+            </div>
+          </xsl:if>
           <div style="padding: 2px;">
             Results per page:
             <input type="text" name="max_results" size="5"
