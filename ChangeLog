@@ -1,5 +1,10 @@
 2011-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Switch off threat and trend for container
+	tasks.
+
+2011-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add importing of reports into container tasks.
 
 	* src/html/omp.xsl (html-report-table): Add report import window.

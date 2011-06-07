@@ -2585,14 +2585,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td style="text-align:center;">
           <xsl:choose>
+            <xsl:when test="target/@id=''">
+            </xsl:when>
             <xsl:when test="last_report">
               <xsl:apply-templates select="last_report"/>
             </xsl:when>
           </xsl:choose>
         </td>
         <td style="text-align:center;">
-          <!-- Trend -->
-          <xsl:call-template name="trend_meter"/>
+          <xsl:choose>
+            <xsl:when test="target/@id=''">
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- Trend -->
+              <xsl:call-template name="trend_meter"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </td>
         <td>
           <xsl:choose>
