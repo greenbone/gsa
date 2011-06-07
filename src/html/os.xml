@@ -84,6 +84,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:microsoft:windows_server_2003::sp2</pattern><title>Microsoft Windows Server 2003 Service Pack 2</title><icon>os_windows.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:microsoft:windows</pattern><title>Microsoft Windows</title><icon>os_windows.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:redhat:linux:7.3</pattern><title>Red Hat Linux 7.3</title><icon>os_redhat.png</icon>
     </operating_system>
     <operating_system>
@@ -342,6 +345,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:sun:solaris</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:sun:sunos</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:apple:mac_os_x</pattern><title>Apple Mac OS X</title><icon>os_apple.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:ibm:aix</pattern><title>IBM AIX</title><icon>os_aix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:cisco:ios</pattern><title>Cisco IOS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:freebsd:freebsd</pattern><title>FreeBSD</title><icon>os_freebsd.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/h:hp:jetdirect</pattern><title>HP Jetdirect</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:linux:kernel</pattern><title>Linux Kernel</title><icon>os_linux.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:netbsd:netbsd</pattern><title>NetBSD</title><icon>os_netbsd.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:openbsd:openbsd</pattern><title>OpenBSD</title><icon>os_openbsd.png</icon>
     </operating_system>
 </operating_systems>

@@ -1,3 +1,16 @@
+2011-06-07  Henri Doreau <henri.doreau@greenbone.net>
+
+	Improved OS detection reporting using host details best_os_* fields.
+
+	* src/html/omp.xsl: Refactored OS icon displaying code to use best_os_*
+	fields from host details.
+
+	* src/html/os.xml: Updated with entries for OS's that now have CPE's
+	associated with.
+
+	* CMakeLists.txt: Updated to install new OS icons.
+
+
 2011-06-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add delta state filtering to delta reports.
