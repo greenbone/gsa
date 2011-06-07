@@ -1651,6 +1651,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </div>
   </div>
+  <xsl:if test="task/target/@id=''">
+    <br/>
+    <div class="gb_window">
+      <div class="gb_window_part_left"></div>
+      <div class="gb_window_part_right"></div>
+      <div class="gb_window_part_center">Import Report
+        <a href="/help/reports.html?token={/envelope/token}#import_report" title="Help: Import Report">
+          <img src="/img/help.png"/>
+        </a>
+      </div>
+      <div class="gb_window_part_content">
+        <form action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="create_report"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <input type="hidden" name="overrides" value="{apply_overrides}"/>
+          <input type="file" name="xml_file" size="30"/>
+          <div style="float: right">
+            <input type="submit" name="submit" value="Add Report"/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </xsl:if>
   <br/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>

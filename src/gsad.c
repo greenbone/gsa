@@ -2267,10 +2267,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "comment", &con_info->req_parms.comment);
       validate (validator, "overrides", &con_info->req_parms.overrides);
-      if ((con_info->req_parms.name == NULL)
-          || (con_info->req_parms.comment == NULL)
-          || (con_info->req_parms.overrides == NULL)
-          || (con_info->req_parms.xml_file == NULL))
+      if ((con_info->req_parms.task_id == NULL)
+          && ((con_info->req_parms.name == NULL)
+              || (con_info->req_parms.comment == NULL)
+              || (con_info->req_parms.overrides == NULL)
+              || (con_info->req_parms.xml_file == NULL)))
         con_info->response
          = new_task_omp (credentials,
                          "Invalid parameter",
@@ -2278,11 +2279,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                           ? strcmp (con_info->req_parms.overrides, "0")
                           : 0);
       else
-        con_info->response =
-          create_report_omp (credentials, con_info->req_parms.name,
-                             con_info->req_parms.comment,
-                             con_info->req_parms.overrides,
-                             con_info->req_parms.xml_file);
+        {
+          validate (validator, "task_id", &con_info->req_parms.task_id);
+          con_info->response =
+            create_report_omp (credentials, con_info->req_parms.name,
+                               con_info->req_parms.comment,
+                               con_info->req_parms.overrides,
+                               con_info->req_parms.xml_file,
+                               con_info->req_parms.task_id);
+        }
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_task"))
     {

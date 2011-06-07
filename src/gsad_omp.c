@@ -581,18 +581,37 @@ new_task_omp (credentials_t * credentials, const char* message,
  * @param[in]  comment       Comment on task.
  * @param[in]  apply_overrides   Whether to apply overrides.
  * @param[in]  xml_file      Report XML for new task.
+ * @param[in]  task_id       Task to hold report, or NULL for new task.
  *
  * @return Result of XSL transformation.
  */
 char *
 create_report_omp (credentials_t * credentials, char *name, char *comment,
-                   const char *apply_overrides, const char *xml_file)
+                   const char *apply_overrides, const char *xml_file,
+                   const char *task_id)
 {
   entity_t entity;
   gnutls_session_t session;
   char *text = NULL;
   int socket, ret;
   gchar *html;
+
+  if (task_id)
+    {
+      char *ret;
+      gchar *command;
+
+      command = g_strdup_printf ("<create_report>"
+                                 "<task id=\"%s\"/>"
+                                 "%s"
+                                 "</create_report>",
+                                 task_id ? task_id : "0",
+                                 xml_file);
+      ret = get_tasks (credentials, task_id, NULL, NULL, NULL, command,
+                       strcmp (apply_overrides, "0"), NULL);
+      g_free (command);
+      return ret;
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -625,8 +644,8 @@ create_report_omp (credentials_t * credentials, char *name, char *comment,
                               " sort_order=\"ascending\""
                               " apply_overrides=\"%s\"/>"
                               "</commands>",
-                              name,
-                              comment,
+                              name ? name : "",
+                              comment ? comment : "",
                               xml_file,
                               apply_overrides);
 
