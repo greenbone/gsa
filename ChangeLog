@@ -1,3 +1,8 @@
+2011-06-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/delta_second.png, src/html/img/delta.png,
+	src/html/img/delta_inactive.png: Udated with better graphics.
+
 2011-06-07  Henri Doreau <henri.doreau@greenbone.net>
 
 	Improved OS detection reporting using host details best_os_* fields.
