@@ -1,3 +1,9 @@
+2011-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details, report): Swap values of report_id
+	and delta_report_id for delta case, so that the report selected first
+	comes first in the delta.
+
 2011-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (task): Switch off threat and trend for container

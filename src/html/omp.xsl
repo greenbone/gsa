@@ -1128,10 +1128,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="report_id" value="{report/@id}"/>
-          <xsl:if test="../../delta">
-            <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+              <input type="hidden" name="report_id" value="{report/delta/report/@id}"/>
+              <input type="hidden" name="delta_report_id" value="{report/@id}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <input type="hidden" name="sort_field" value="{$sort_field}"/>
           <input type="hidden" name="sort_order" value="{$sort_order}"/>
           <input type="hidden"
@@ -2238,7 +2243,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:when test="string-length (../../../../../delta) &gt; 0">
-          <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;delta_report_id={../../../../../delta}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;report_id={../../../../../delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta_second.png" border="0" alt="Compare"/>
