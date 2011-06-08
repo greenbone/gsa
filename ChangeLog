@@ -31,8 +31,8 @@
 
 	Improved OS detection reporting using host details best_os_* fields.
 
-	* src/html/omp.xsl: Refactored OS icon displaying code to use best_os_*
-	fields from host details.
+	* src/html/omp.xsl (get_reports_response/report/report): Refactored
+	OS icon displaying code to use best_os_* fields from host details.
 
 	* src/html/os.xml: Updated with entries for OS's that now have CPE's
 	associated with.
