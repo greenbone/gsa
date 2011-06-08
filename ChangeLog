@@ -1,3 +1,8 @@
+2011-06-08  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_reports_response/report/report): Report
+	conflicting OS detection results.
+
 2011-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details, report): Swap values of report_id
