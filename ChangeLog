@@ -1,3 +1,8 @@
+2011-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (serve_post): Append method data chunk if there's an existing
+	chunk.
+
 2011-06-08  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (edit-config-preference): Added network_scan to

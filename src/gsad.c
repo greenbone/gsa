@@ -1728,6 +1728,34 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
         {
           method_data_param_t *method_data_param;
 
+          if (con_info->req_parms.method_data)
+            {
+              guint index;
+              /* Search for a previous chunk. */
+              index = con_info->req_parms.method_data->len;
+              while (index--)
+                {
+                  method_data_param_t *param;
+                  param = g_array_index (con_info->req_parms.method_data,
+                                         method_data_param_t*,
+                                         index);
+                  if (strcmp (param->key, key + strlen ("method_data:")) == 0)
+                    {
+                      gchar *value;
+                      /* Append to previous chunk. */
+                      value = g_malloc (param->value_size + size + 1);
+                      memcpy (value, param->value, param->value_size);
+                      memcpy (value + param->value_size, data, size);
+                      param->value_size += size;
+                      value[param->value_size] = '\0';
+                      g_free (param->value);
+                      param->value = value;
+                      con_info->answercode = MHD_HTTP_OK;
+                      return MHD_YES;
+                    }
+                }
+            }
+
           method_data_param = g_malloc (sizeof (method_data_param));
           method_data_param->key = g_strdup (key + strlen ("method_data:"));
           method_data_param->value_size = size;
