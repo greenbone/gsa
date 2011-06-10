@@ -1,4 +1,9 @@
-2011-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
+2011-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add delta params to paging
+	arrows in delta reports.
+
+2011-06-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (serve_post): Append method data chunk if there's an existing
 	chunk.
