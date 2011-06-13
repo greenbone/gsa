@@ -1,3 +1,8 @@
+2011-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Skip the Full Report line in the
+	Report Summary table for delta reports.
+
 2011-06-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add delta params to paging

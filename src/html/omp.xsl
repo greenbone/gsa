@@ -628,124 +628,130 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Escalate</td>
           <td>Download</td>
         </tr>
-        <tr>
-          <td>Full report:</td>
-          <td>
-            <xsl:value-of select="report/result_count/hole/full"/>
-          </td>
-          <td>
-            <xsl:value-of select="report/result_count/warning/full"/>
-          </td>
-          <td>
-            <xsl:value-of select="report/result_count/info/full"/>
-          </td>
-          <td>
-            <xsl:value-of select="report/result_count/log/full"/>
-          </td>
-          <td>
-            <xsl:value-of select="report/result_count/false_positive/full"/>
-          </td>
-          <td>
-            <xsl:value-of select="report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full"/>
-          </td>
-          <td>
-            <div id="small_form" style="float:right;">
-              <form action="" method="post">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="escalate_report"/>
-                <input type="hidden" name="caller" value="{/envelope/caller}"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
+        <xsl:choose>
+          <xsl:when test="../../delta">
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td>Full report:</td>
+              <td>
+                <xsl:value-of select="report/result_count/hole/full"/>
+              </td>
+              <td>
+                <xsl:value-of select="report/result_count/warning/full"/>
+              </td>
+              <td>
+                <xsl:value-of select="report/result_count/info/full"/>
+              </td>
+              <td>
+                <xsl:value-of select="report/result_count/log/full"/>
+              </td>
+              <td>
+                <xsl:value-of select="report/result_count/false_positive/full"/>
+              </td>
+              <td>
+                <xsl:value-of select="report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full"/>
+              </td>
+              <td>
+                <div id="small_form" style="float:right;">
+                  <form action="" method="post">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
 
-                <!-- Report page filters. -->
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="max_results" value="{report/results/@max}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="sort_field"
-                       value="{report/sort/field/text()}"/>
-                <input type="hidden"
-                       name="sort_order"
-                       value="{report/sort/field/order}"/>
-                <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
+                    <!-- Report page filters. -->
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="max_results" value="{report/results/@max}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="sort_field"
+                           value="{report/sort/field/text()}"/>
+                    <input type="hidden"
+                           name="sort_order"
+                           value="{report/sort/field/order}"/>
+                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
 
-                <!-- Escalator filters. -->
-                <input type="hidden" name="esc_first_result" value="1"/>
-                <input type="hidden" name="esc_max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
-                <input type="hidden" name="esc_notes" value="1"/>
-                <input type="hidden" name="esc_overrides" value="1"/>
-                <input type="hidden" name="esc_result_hosts_only" value="1"/>
-                <input type="hidden" name="esc_levels" value="hmlgf"/>
+                    <!-- Escalator filters. -->
+                    <input type="hidden" name="esc_first_result" value="1"/>
+                    <input type="hidden" name="esc_max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
+                    <input type="hidden" name="esc_notes" value="1"/>
+                    <input type="hidden" name="esc_overrides" value="1"/>
+                    <input type="hidden" name="esc_result_hosts_only" value="1"/>
+                    <input type="hidden" name="esc_levels" value="hmlgf"/>
 
-                <select name="report_escalator_id" title="Escalator">
-                  <xsl:for-each select="../../get_escalators_response/escalator">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Escalate"
-                       title="Escalate"
-                       src="/img/start.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Escalate"/>
-              </form>
-            </div>
-          </td>
-          <td>
-            <div id="small_form" style="float:right;">
-              <form action="" method="get">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_report"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
-                <input type="hidden" name="first_result" value="1"/>
-                <input type="hidden" name="max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
-                <input type="hidden" name="notes" value="1"/>
-                <input type="hidden" name="overrides" value="1"/>
-                <input type="hidden" name="result_hosts_only" value="1"/>
-                <input type="hidden" name="levels" value="hmlgf"/>
-                <select name="report_format_id"
-                        title="Download Format">
-                  <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
-                    <xsl:choose>
-                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
+                    <select name="report_escalator_id" title="Escalator">
+                      <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Download"
-                       title="Download"
-                       src="/img/download.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Download"/>
-              </form>
-            </div>
-          </td>
-        </tr>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Escalate"
+                           title="Escalate"
+                           src="/img/start.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Escalate"/>
+                  </form>
+                </div>
+              </td>
+              <td>
+                <div id="small_form" style="float:right;">
+                  <form action="" method="get">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_report"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="first_result" value="1"/>
+                    <input type="hidden" name="max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
+                    <input type="hidden" name="notes" value="1"/>
+                    <input type="hidden" name="overrides" value="1"/>
+                    <input type="hidden" name="result_hosts_only" value="1"/>
+                    <input type="hidden" name="levels" value="hmlgf"/>
+                    <select name="report_format_id"
+                            title="Download Format">
+                      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
+                        <xsl:choose>
+                          <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Download"
+                           title="Download"
+                           src="/img/download.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Download"/>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
         <tr>
           <td>All filtered results:</td>
           <td>
