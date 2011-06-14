@@ -1,3 +1,8 @@
+2011-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add delta params to refresh and
+	sorting links.
+
 2011-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Skip the Full Report line in the

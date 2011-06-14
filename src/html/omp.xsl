@@ -478,7 +478,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+              <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <input type="hidden" name="first_result" value="{report/results/@start}"/>
           <input type="hidden" name="max_results" value="{report/results/@max}"/>
           <input type="hidden" name="levels" value="{$levels}"/>
@@ -1090,7 +1099,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -1099,7 +1108,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 port descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=port&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port descending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -1108,7 +1117,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat ascending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat ascending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat ascending</a>
               </xsl:otherwise>
             </xsl:choose>
             |
@@ -1117,7 +1126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 threat descending
               </xsl:when>
               <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field=type&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat descending</a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat descending</a>
               </xsl:otherwise>
             </xsl:choose>
           </td>
