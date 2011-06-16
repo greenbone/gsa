@@ -9975,13 +9975,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right" style="text-align:right">
       <xsl:value-of select="port"/>
     </div>
-    <xsl:if test="delta">
+    <xsl:if test="delta/text()">
       <div style="float: left; font-size: 24px; border: 2px; padding-left: 2px; padding-right: 8px; margin:0px;">
         <xsl:choose>
-          <xsl:when test="delta = 'changed'">~</xsl:when>
-          <xsl:when test="delta = 'gone'">&#8722;</xsl:when>
-          <xsl:when test="delta = 'new'">+</xsl:when>
-          <xsl:when test="delta = 'same'">=</xsl:when>
+          <xsl:when test="delta/text() = 'changed'">~</xsl:when>
+          <xsl:when test="delta/text() = 'gone'">&#8722;</xsl:when>
+          <xsl:when test="delta/text() = 'new'">+</xsl:when>
+          <xsl:when test="delta/text() = 'same'">=</xsl:when>
         </xsl:choose>
       </div>
     </xsl:if>
@@ -10085,6 +10085,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </pre>
   </div>
+  <xsl:if test="delta">
+    <xsl:choose>
+      <xsl:when test="delta/text() = 'changed'">
+        <div class="issue_box_box">
+          <pre>
+            <xsl:call-template name="wrap">
+              <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
+            </xsl:call-template>
+          </pre>
+        </div>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:if>
   <a class="anchor" name="notes-{@id}"/>
   <xsl:for-each select="notes/note">
     <xsl:call-template name="note-detailed">
