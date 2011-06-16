@@ -10128,7 +10128,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="current_host" select="host/text()"/>
       <tr>
         <td>
-          <a href="#{$current_host}"><xsl:value-of select="$current_host"/></a>
+          <xsl:variable name="hostname" select="../host[ip/text() = $current_host]/detail[name/text() = 'hostname']/value"/>
+          <a href="#{$current_host}"><xsl:value-of select="$current_host"/>
+          <xsl:if test="$hostname">
+            <xsl:value-of select="concat(' (', $hostname, ')')"/>
+          </xsl:if>
+          </a>
         </td>
         <td>
           <!-- Check for detected operating system(s) -->

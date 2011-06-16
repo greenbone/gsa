@@ -1,3 +1,8 @@
+2011-06-16  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_reports_response/report/report): display
+	the target hostname if available.
+
 2011-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Swap delta_report_id and
