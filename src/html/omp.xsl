@@ -588,6 +588,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
               </td>
             </tr>
+            <tr>
+              <td><b>Scan 2 started:</b></td>
+              <td><b><xsl:value-of select="report/delta/report/scan_start"/></b></td>
+            </tr>
+            <tr>
+              <td>Scan 2 ended:</td>
+              <td><xsl:value-of select="report/delta/report/scan_end"/></td>
+            </tr>
+            <tr>
+              <td>Scan 2 status:</td>
+              <td>
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/target/@id='' and report/delta/report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/delta/report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </td>
+            </tr>
           </xsl:when>
           <xsl:otherwise>
             <tr>

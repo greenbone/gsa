@@ -1,3 +1,8 @@
+2011-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add scan 2 times and progress
+	bar.
+
 2011-06-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/indicator_operation_failed.png,
