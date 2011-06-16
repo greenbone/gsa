@@ -1174,13 +1174,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
           <xsl:choose>
             <xsl:when test="../../delta">
-              <input type="hidden" name="report_id" value="{report/delta/report/@id}"/>
-              <input type="hidden" name="delta_report_id" value="{report/@id}"/>
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
             </xsl:when>
             <xsl:otherwise>
-              <input type="hidden" name="report_id" value="{report/@id}"/>
             </xsl:otherwise>
           </xsl:choose>
           <input type="hidden" name="sort_field" value="{$sort_field}"/>

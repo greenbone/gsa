@@ -1,5 +1,10 @@
 2011-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Swap delta_report_id and
+	report_id for Apply button, else it swaps the reports.
+
+2011-06-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add scan 2 times and progress
 	bar.
 
