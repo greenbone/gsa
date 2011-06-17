@@ -110,6 +110,29 @@ div.float_right {
   float: right;
 }
 
+div.diff-line {
+ white-space: pre;
+ font-family: monospace;
+}
+
+div.diff-line-hunk {
+ white-space: pre;
+ font-family: monospace;
+ color: #9932CC;
+}
+
+div.diff-line-plus {
+ white-space: pre;
+ font-family: monospace;
+ color: #006400;
+}
+
+div.diff-line-minus {
+ white-space: pre;
+ font-family: monospace;
+ color: #B22222;
+}
+
 /* BEGIN Risk factor colouring */
 
 div.Critical {
