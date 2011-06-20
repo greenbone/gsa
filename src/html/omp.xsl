@@ -10193,6 +10193,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </div>
     </xsl:if>
+    <xsl:choose>
+      <xsl:when test="delta/text() = 'changed'">
+        <b>Result 1</b>
+      </xsl:when>
+    </xsl:choose>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
@@ -10203,6 +10208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="delta/text() = 'changed'">
         <div class="issue_box_box">
+          <b>Result 2</b>
           <pre>
             <xsl:call-template name="wrap">
               <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
@@ -10210,9 +10216,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </pre>
         </div>
         <div class="issue_box_box">
-          <xsl:call-template name="highlight-diff">
-            <xsl:with-param name="string"><xsl:value-of select="delta/diff"/></xsl:with-param>
-          </xsl:call-template>
+          <b>Different Lines</b>
+          <p>
+            <xsl:call-template name="highlight-diff">
+              <xsl:with-param name="string"><xsl:value-of select="delta/diff"/></xsl:with-param>
+            </xsl:call-template>
+          </p>
         </div>
       </xsl:when>
     </xsl:choose>
