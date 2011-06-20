@@ -779,8 +779,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><img src="/img/log.png" alt="Log" title="Log"/></td>
           <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
           <td>Total</td>
-          <td>Escalate</td>
-          <td>Download</td>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+            </xsl:when>
+            <xsl:otherwise>
+              <td>Escalate</td>
+              <td>Download</td>
+            </xsl:otherwise>
+          </xsl:choose>
         </tr>
         <xsl:choose>
           <xsl:when test="../../delta">
@@ -926,131 +932,137 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered"/>
           </td>
-          <td>
-            <div id="small_form" style="float:right;">
-              <form action="" method="post">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="escalate_report"/>
-                <input type="hidden" name="caller" value="{/envelope/caller}"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <div id="small_form" style="float:right;">
+                  <form action="" method="post">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
 
-                <!-- Report page filters. -->
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="max_results" value="{report/results/@max}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="sort_field"
-                       value="{report/sort/field/text()}"/>
-                <input type="hidden"
-                       name="sort_order"
-                       value="{report/sort/field/order}"/>
-                <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
+                    <!-- Report page filters. -->
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="max_results" value="{report/results/@max}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="sort_field"
+                           value="{report/sort/field/text()}"/>
+                    <input type="hidden"
+                           name="sort_order"
+                           value="{report/sort/field/order}"/>
+                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
 
-                <!-- Escalator filters. -->
-                <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="esc_max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
-                <input type="hidden" name="esc_levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="esc_search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="esc_apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="esc_min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden" name="esc_notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="esc_overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="esc_result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
+                    <!-- Escalator filters. -->
+                    <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="esc_max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
+                    <input type="hidden" name="esc_levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="esc_search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="esc_apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="esc_min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden" name="esc_notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="esc_overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="esc_result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
 
-                <select name="report_escalator_id" title="Escalator">
-                  <xsl:for-each select="../../get_escalators_response/escalator">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Escalate"
-                       title="Escalate"
-                       src="/img/start.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Escalate"/>
-              </form>
-            </div>
-          </td>
-          <td>
-            <div id="small_form" style="float:right;">
-              <form action="" method="get">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_report"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="sort_field"
-                       value="{report/sort/field/text()}"/>
-                <input type="hidden"
-                       name="sort_order"
-                       value="{report/sort/field/order}"/>
-                <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
-                <select name="report_format_id" title="Download Format">
-                  <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
-                    <xsl:choose>
-                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
+                    <select name="report_escalator_id" title="Escalator">
+                      <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Download"
-                       title="Download"
-                       src="/img/download.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Download"/>
-              </form>
-            </div>
-          </td>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Escalate"
+                           title="Escalate"
+                           src="/img/start.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Escalate"/>
+                  </form>
+                </div>
+              </td>
+              <td>
+                <div id="small_form" style="float:right;">
+                  <form action="" method="get">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_report"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="sort_field"
+                           value="{report/sort/field/text()}"/>
+                    <input type="hidden"
+                           name="sort_order"
+                           value="{report/sort/field/order}"/>
+                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
+                    <select name="report_format_id" title="Download Format">
+                      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
+                        <xsl:choose>
+                          <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Download"
+                           title="Download"
+                           src="/img/download.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Download"/>
+                  </form>
+                </div>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
         </tr>
         <tr>
           <td>
@@ -1085,134 +1097,140 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="count(report/results/result)"/>
           </td>
-          <td>
-            <div id="small_form" class="float_right">
-              <form action="" method="post">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="escalate_report"/>
-                <input type="hidden" name="caller" value="{/envelope/caller}"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <div id="small_form" class="float_right">
+                  <form action="" method="post">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
 
-                <!-- Report page filters. -->
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="max_results" value="{report/results/@max}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="sort_field"
-                       value="{report/sort/field/text()}"/>
-                <input type="hidden"
-                       name="sort_order"
-                       value="{report/sort/field/order}"/>
-                <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
+                    <!-- Report page filters. -->
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="max_results" value="{report/results/@max}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="sort_field"
+                           value="{report/sort/field/text()}"/>
+                    <input type="hidden"
+                           name="sort_order"
+                           value="{report/sort/field/order}"/>
+                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
 
-                <!-- Escalator filters. -->
-                <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="esc_max_results" value="{report/results/@max}"/>
-                <input type="hidden" name="esc_levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="esc_search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="esc_apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="esc_min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="esc_notes"
-                       value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="esc_overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="esc_result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
+                    <!-- Escalator filters. -->
+                    <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="esc_max_results" value="{report/results/@max}"/>
+                    <input type="hidden" name="esc_levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="esc_search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="esc_apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="esc_min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="esc_notes"
+                           value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="esc_overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="esc_result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
 
-                <select name="report_escalator_id" title="Escalator">
-                  <xsl:for-each select="../../get_escalators_response/escalator">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Escalate"
-                       title="Escalate"
-                       src="/img/start.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Escalate"/>
-              </form>
-            </div>
-          </td>
-          <td>
-            <div id="small_form" class="float_right">
-              <form action="" method="get">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_report"/>
-                <input type="hidden" name="report_id" value="{report/@id}"/>
-                <input type="hidden" name="first_result" value="{report/results/@start}"/>
-                <input type="hidden" name="max_results" value="{report/results/@max}"/>
-                <input type="hidden" name="levels" value="{$levels}"/>
-                <input type="hidden"
-                       name="search_phrase"
-                       value="{report/filters/phrase}"/>
-                <input type="hidden"
-                       name="apply_min_cvss_base"
-                       value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-                <input type="hidden"
-                       name="min_cvss_base"
-                       value="{report/filters/min_cvss_base}"/>
-                <input type="hidden"
-                       name="sort_field"
-                       value="{report/sort/field/text()}"/>
-                <input type="hidden"
-                       name="sort_order"
-                       value="{report/sort/field/order}"/>
-                <input type="hidden" name="notes" value="{report/filters/notes}"/>
-                <input type="hidden"
-                       name="overrides"
-                       value="{$apply-overrides}"/>
-                <input type="hidden"
-                       name="result_hosts_only"
-                       value="{report/filters/result_hosts_only}"/>
-                <select name="report_format_id" title="Download Format">
-                  <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
-                    <xsl:choose>
-                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
+                    <select name="report_escalator_id" title="Escalator">
+                      <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <input type="image"
-                       name="submit"
-                       value="Download"
-                       title="Download"
-                       src="/img/download.png"
-                       border="0"
-                       style="margin-left:3px;"
-                       alt="Download"/>
-              </form>
-            </div>
-          </td>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Escalate"
+                           title="Escalate"
+                           src="/img/start.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Escalate"/>
+                  </form>
+                </div>
+              </td>
+              <td>
+                <div id="small_form" class="float_right">
+                  <form action="" method="get">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="get_report"/>
+                    <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="first_result" value="{report/results/@start}"/>
+                    <input type="hidden" name="max_results" value="{report/results/@max}"/>
+                    <input type="hidden" name="levels" value="{$levels}"/>
+                    <input type="hidden"
+                           name="search_phrase"
+                           value="{report/filters/phrase}"/>
+                    <input type="hidden"
+                           name="apply_min_cvss_base"
+                           value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+                    <input type="hidden"
+                           name="min_cvss_base"
+                           value="{report/filters/min_cvss_base}"/>
+                    <input type="hidden"
+                           name="sort_field"
+                           value="{report/sort/field/text()}"/>
+                    <input type="hidden"
+                           name="sort_order"
+                           value="{report/sort/field/order}"/>
+                    <input type="hidden" name="notes" value="{report/filters/notes}"/>
+                    <input type="hidden"
+                           name="overrides"
+                           value="{$apply-overrides}"/>
+                    <input type="hidden"
+                           name="result_hosts_only"
+                           value="{report/filters/result_hosts_only}"/>
+                    <select name="report_format_id" title="Download Format">
+                      <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
+                        <xsl:choose>
+                          <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <input type="image"
+                           name="submit"
+                           value="Download"
+                           title="Download"
+                           src="/img/download.png"
+                           border="0"
+                           style="margin-left:3px;"
+                           alt="Download"/>
+                  </form>
+                </div>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
         </tr>
       </table>
     </div>
@@ -10154,6 +10172,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:if>
         <xsl:choose>
+          <xsl:when test="delta">
+          </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
             <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
@@ -10178,6 +10198,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:if>
         <xsl:choose>
+          <xsl:when test="delta">
+          </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
             <a href="/omp?cmd=new_override&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">

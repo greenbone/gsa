@@ -1,5 +1,12 @@
 2011-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Remove Escalate and Download
+	columns for delta reports.
+	(result-detailed): Remove note and override creation buttons for delta
+	reports.
+
+2011-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Add headings to the "changed" result
 	subboxes.
 
