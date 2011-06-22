@@ -64,6 +64,370 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<xsl:template name="indicator">
+  <xsl:param name="status"/>
+  <xsl:param name="status_text"/>
+  <xsl:param name="command"/>
+  <xsl:choose>
+    <xsl:when test="substring($status, 1, 1) = '2'">
+      <img src="/img/indicator_operation_ok.png"
+           alt="Result of {$command}: {$status_text}"
+           title="Result of {$command}: {$status_text}"
+           style="margin-right:3px;"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/indicator_operation_failed.png"
+           alt="Result of {$command}: {$status_text}"
+           title="Result of {$command}: {$status_text}"
+           style="margin-right:3px;"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="create_agent_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Agent'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_config_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Config'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_escalator_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Escalator'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_lsc_credential_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Credential'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_note_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Note'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_override_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Override'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_report_format_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_report_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Container Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_schedule_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Schedule'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_slave_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Slave'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_target_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Target'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="create_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_agent_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Agent'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_config_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Config'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_escalator_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Escalator'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_lsc_credential_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Credential'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_note_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Note'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_override_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Override'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_report_format_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_report_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Report'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_schedule_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Schedule'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_slave_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Slave'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_target_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Target'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="empty_trashcan_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Empty Trashcan'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_overrides_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Get Overrides'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_reports_escalate_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Escalate'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_reports_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Get Report'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_system_reports_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Get System Reports'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="gsad_msg" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="@operation"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_lsc_credential_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Credential'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_note_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Modify Note'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_override_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Modify Override'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_report_format_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Modify Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="restore_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Restore'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="start_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Start Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="stop_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Stop Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="pause_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Pause Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="resume_paused_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Resume Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="resume_stopped_task_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Resume Stopped Task'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="test_escalator_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Test Escalator'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="verify_report_format_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Verify Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
@@ -89,6 +453,156 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="$time"/> (UTC)
       </div>
       <div class="status_panel">
+        <xsl:apply-templates select="gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_config_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_report_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/create_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_config_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/modify_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_report_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_escalator/commands_response/delete_escalator_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_escalators/create_escalator_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_escalators/commands_response/delete_escalator_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_escalators/test_escalator_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_lsc_credential/commands_response/delete_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_note/commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_notes/commands_response/delete_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_notes/commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_nvts/commands_response/delete_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_nvts/commands_response/delete_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_nvts/commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_nvts/commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_override/commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_overrides/commands_response/delete_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_overrides/commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_override/commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_overrides/commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report/get_reports_escalate_response"
+                             mode="response-indicator"/>
+<!--
+        <xsl:apply-templates select="get_report/get_reports_response"
+                             mode="response-indicator"/>
+-->
+        <xsl:apply-templates select="get_report_format/commands_response/modify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_format/modify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_format/delete_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_formats/commands_response/modify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_formats/commands_response/delete_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_formats/create_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_formats/modify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_report_formats/commands_response/verify_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_schedule/commands_response/delete_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_schedules/create_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_schedules/commands_response/delete_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slave/commands_response/delete_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slaves/commands_response/delete_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slaves/create_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_system_reports/get_system_reports_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_target/commands_response/delete_target_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_targets/create_target_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_targets/commands_response/delete_target_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/delete_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/modify_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/modify_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/start_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/stop_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/pause_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/resume_paused_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tasks/commands_response/resume_stopped_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_config_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_escalator_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_report_format_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_target_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/delete_task_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/empty_trashcan_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_trash/restore_response"
+                             mode="response-indicator"/>
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
             document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"JavaScript is active\" title=\"JavaScript is active\"/&gt;");
@@ -242,66 +756,61 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="msg">(Status message is missing)</xsl:param>
   <xsl:param name="details"></xsl:param>
 
-  <div class="gb_window">
-
-    <!-- Choose red color if status is "bad" (outside the 200s). -->
-    <xsl:choose>
-      <xsl:when test="$status = '200' or $status = '201' or $status = '202'">
-        <div class="gb_window_part_left"></div>
-        <div class="gb_window_part_right"></div>
-        <div class="gb_window_part_center">Results of last operation</div>
-      </xsl:when>
-      <xsl:otherwise>
+  <xsl:choose>
+    <xsl:when test="$status = '200' or $status = '201' or $status = '202'">
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="gb_window">
         <div class="gb_window_part_left_error"></div>
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">
           Results of last operation
         </div>
-      </xsl:otherwise>
-    </xsl:choose>
 
-    <div class="gb_window_part_content_no_pad">
-      <div style="text-align:left;">
-        <table>
-          <xsl:choose>
-            <xsl:when test="$operation = ''">
-            </xsl:when>
-            <xsl:otherwise>
+        <div class="gb_window_part_content_no_pad">
+          <div style="text-align:left;">
+            <table>
+              <xsl:choose>
+                <xsl:when test="$operation = ''">
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr>
+                    <td>Operation:</td>
+                    <td><xsl:value-of select="$operation"/></td>
+                  </tr>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$status = ''">
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr>
+                    <td>Status code:</td>
+                    <td><xsl:value-of select="$status"/></td>
+                  </tr>
+                </xsl:otherwise>
+              </xsl:choose>
+
               <tr>
-                <td>Operation:</td>
-                <td><xsl:value-of select="$operation"/></td>
+                <td>Status message:</td>
+                <td><xsl:value-of select="$msg"/></td>
               </tr>
-            </xsl:otherwise>
-          </xsl:choose>
+            </table>
 
-          <xsl:choose>
-            <xsl:when test="$status = ''">
-            </xsl:when>
-            <xsl:otherwise>
-              <tr>
-                <td>Status code:</td>
-                <td><xsl:value-of select="$status"/></td>
-              </tr>
-            </xsl:otherwise>
-          </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$details = ''">
+              </xsl:when>
+              <xsl:otherwise>
+                <table><tr><td><xsl:value-of select="$details"/></td></tr></table>
+              </xsl:otherwise>
+            </xsl:choose>
 
-          <tr>
-            <td>Status message:</td>
-            <td><xsl:value-of select="$msg"/></td>
-          </tr>
-        </table>
-
-        <xsl:choose>
-          <xsl:when test="$details = ''">
-          </xsl:when>
-          <xsl:otherwise>
-            <table><tr><td><xsl:value-of select="$details"/></td></tr></table>
-          </xsl:otherwise>
-        </xsl:choose>
-
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- OMP -->

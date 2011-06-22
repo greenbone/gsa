@@ -338,6 +338,8 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/restore.png src/html/img/restore_inactive.png
                src/html/img/delta.png src/html/img/delta_inactive.png
                src/html/img/delta_second.png
+               src/html/img/indicator_operation_ok.png
+               src/html/img/indicator_operation_failed.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png

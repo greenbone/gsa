@@ -1,3 +1,32 @@
+2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a command result indicator icon.  Only show command result dialog on
+	failure.
+
+	* CMakeLists.txt: Install indicator icon images.
+
+	* src/html/gsad.xsl (indicator): New template.  Indicator icon.
+	(create_agent_response, create_config_response, create_escalator_response)
+	(create_lsc_credential_response, create_note_response)
+	(create_override_response, create_report_format_response)
+	(create_report_response, create_schedule_response, create_slave_response)
+	(create_target_response, create_task_response, delete_agent_response)
+	(delete_config_response, delete_escalator_response)
+	(delete_lsc_credential_response, delete_note_response)
+	(delete_override_response, delete_report_format_response)
+	(delete_report_response, delete_schedule_response, delete_slave_response)
+	(delete_target_response, delete_task_response, empty_trashcan_response)
+	(get_overrides_response, get_reports_escalate_response)
+	(get_reports_response, get_system_reports_response, gsad_msg)
+	(modify_lsc_credential_response, modify_note_response)
+	(modify_override_response, modify_report_format_response)
+	(modify_task_response, restore_response, start_task_response)
+	(stop_task_response, pause_task_response, resume_paused_task_response)
+	(resume_stopped_task_response, test_escalator_response)
+	(verify_report_format_response): New templates.  Mode "response-indicator".
+	(html-gsa-logo): Match responses for indictor icon.
+	(command_result_dialog): Skip the dialog in the success case.
+
 2011-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Remove Escalate and Download
