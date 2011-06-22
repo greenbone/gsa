@@ -1,5 +1,9 @@
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Add more gsad_msg matches.
+
+2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (create_user_response, delete_user_response)
 	(get_settings_response, modify_auth_response, modify_settings_response)
 	(modify_user_response, sync_feed_response): New templates.  Mode
