@@ -10079,6 +10079,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     RESULT -->
 
+<xsl:template match="result" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Result Details
+       <a href="/help/configure_results.html?token={/envelope/token}#resultdetails"
+         title="Help: Configure Results (Result Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <table>
+        <tr>
+          <td><b>UUID:</b></td>
+          <td><b><xsl:value-of select="@id"/></b></td>
+        </tr>
+      </table>
+      <xsl:call-template name="result-detailed">
+        <xsl:with-param name="details-button">0</xsl:with-param>
+        <xsl:with-param name="note-buttons">0</xsl:with-param>
+        <xsl:with-param name="override-buttons">0</xsl:with-param>
+        <xsl:with-param name="show-overrides">1</xsl:with-param>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="result" mode="overview">
   <xsl:variable name="class">
     <xsl:choose>
@@ -10093,8 +10121,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="result-detailed" match="result" mode="detailed">
+  <xsl:param name="details-button">1</xsl:param>
   <xsl:param name="note-buttons">1</xsl:param>
   <xsl:param name="override-buttons">1</xsl:param>
+  <xsl:param name="show-overrides">0</xsl:param>
   <xsl:variable name="style">
     <xsl:choose>
        <xsl:when test="threat='Low'">background:#539dcb</xsl:when>
@@ -10163,6 +10193,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <div class="issue_box_box">
+    <xsl:if test="$note-buttons = 1">
+      <xsl:choose>
+        <xsl:when test="delta">
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="float_right" style="text-align:right">
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;task_id={../../task/@id}&amp;token={/envelope/token}"
+               title="Result Details" style="margin-left:3px;">
+              <img src="/img/details.png" border="0" alt="Details"/>
+            </a>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
         <xsl:if test="count(notes/note) &gt; 0">
@@ -10257,7 +10301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:call-template>
   </xsl:for-each>
   <xsl:choose>
-    <xsl:when test="../../filters/apply_overrides = 1">
+    <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
       <a class="anchor" name="overrides-{@id}"/>
       <xsl:for-each select="overrides/override">
         <xsl:call-template name="override-detailed">
@@ -10272,6 +10316,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <br/>
 </xsl:template>
+
+<!--     GET_RESULT -->
+
+<xsl:template match="get_results_response">
+  <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Result
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="results/result" mode="details"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="get_result">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_results_response"/>
+</xsl:template>
+
+<!--     REPORT -->
 
 <xsl:template match="get_reports_response/report/report" mode="overview">
   <table class="gbntable" cellspacing="2" cellpadding="4">

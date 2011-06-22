@@ -310,6 +310,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="get_results_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Get Result'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="get_system_reports_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>

@@ -1,5 +1,23 @@
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a basic Result Details page.
+
+	* src/gsad.c (init_validator): Add "get_result" command.
+	(exec_omp_get): Handle "get_result".
+
+	* src/gsad_omp.c (get_result_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (get_results_response): New indicator template.
+
+	* src/html/omp.xsl (result [details], get_results_response)
+	(get_result): New template.
+	(result-detailed): Add details-button and show-overrides args.  Add a
+	result details icon.
+
+2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Add more gsad_msg matches.
 
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>

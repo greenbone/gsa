@@ -501,6 +501,7 @@ init_validator ()
                          "|(get_report)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
+                         "|(get_result)"
                          "|(get_settings)"
                          "|(get_schedule)"
                          "|(get_schedules)"
@@ -4943,6 +4944,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "get_escalator")) && (escalator_id != NULL))
     return get_escalator_omp (credentials, escalator_id, sort_field,
                               sort_order);
+
+  else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
+           && (task_id != NULL))
+    return get_result_omp (credentials, result_id, task_id);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

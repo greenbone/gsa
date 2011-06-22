@@ -7341,6 +7341,87 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 }
 
 /**
+ * @brief Get one result, XSL transform the result.
+ *
+ * @param[in]  credentials   Username and password for authentication.
+ * @param[in]  result_id     Result UUID.
+ * @param[in]  task_id       Result task UUID.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_result_omp (credentials_t *credentials, const char *result_id,
+                const char *task_id)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a result. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_results");
+    }
+
+  xml = g_string_new ("<get_result>"
+                      "<filters>"
+                      /* So that the XSL shows the overrides. */
+                      "<apply_overrides>1</apply_overrides>"
+                      "</filters>");
+
+  /* Get the result. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_results"
+                            " result_id=\"%s\""
+                            " task_id=\"%s\""
+                            " apply_overrides=\"1\""
+                            " overrides=\"1\""
+                            " notes=\"1\""
+                            "/>",
+                            result_id,
+                            task_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a result. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_results");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a result. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_results");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_result>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Get all notes, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
