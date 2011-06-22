@@ -1133,17 +1133,19 @@ save_settings_oap (credentials_t * credentials,
 
   if (settings)
     {
-      gchar *setting;
+      method_data_param_t *setting;
       int index = 0;
 
-      while ((setting = g_array_index (settings, gchar*, index++)))
+      while ((setting = g_array_index (settings,
+                                       method_data_param_t*,
+                                       index++)))
         if (openvas_server_sendf (&session,
                                   "<setting>"
                                   "<name>%s</name>"
                                   "<value>%s</value>"
                                   "</setting>",
-                                  setting,
-                                  setting + strlen (setting) + 1)
+                                  setting->key,
+                                  setting->value)
             == -1)
           {
             openvas_server_close (socket, session);

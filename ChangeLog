@@ -1,5 +1,10 @@
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_oap.c (save_settings_oap): Treat settings element as
+	method_data_param_t's, as required by chunking change.
+
+2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add a command result indicator icon.  Only show command result dialog on
 	failure.
 
