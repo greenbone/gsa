@@ -84,6 +84,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<!-- Manager indicators. -->
+
 <xsl:template match="create_agent_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -428,6 +430,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!-- Administrator indicators. -->
+
+<xsl:template match="create_user_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create User'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_user_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete User'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_settings_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Edit Settings'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_auth_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Modify Auth'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_settings_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Settings'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_user_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save User'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="sync_feed_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Synchronization with NVT Feed'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
@@ -455,6 +515,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="status_panel">
         <xsl:apply-templates select="gsad_msg"
                              mode="response-indicator"/>
+
+        <!-- Manager -->
         <xsl:apply-templates select="commands_response/create_agent_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/create_config_response"
@@ -603,6 +665,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/restore_response"
                              mode="response-indicator"/>
+
+        <!-- Administrator -->
+        <xsl:apply-templates select="commands_response/create_user_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/delete_user_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/modify_auth_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/modify_settings_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/sync_feed_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="edit_settings/get_settings_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="edit_settings/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/modify_user_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_settings/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/gsad_msg"
+                             mode="response-indicator"/>
+
         <a href="/help/javascript.html?token={/envelope/token}" title="Greenbone Security Assistant">
           <script type="text/javascript">
             document.write ("&lt;img src=\"/img/indicator_js.png\" alt=\"JavaScript is active\" title=\"JavaScript is active\"/&gt;");

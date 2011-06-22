@@ -1,5 +1,13 @@
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (create_user_response, delete_user_response)
+	(get_settings_response, modify_auth_response, modify_settings_response)
+	(modify_user_response, sync_feed_response): New templates.  Mode
+	"response-indicator".
+	(html-gsa-logo): Match administrator responses for indicator icon.
+
+2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_oap.c (save_settings_oap): Treat settings element as
 	method_data_param_t's, as required by chunking change.
 
