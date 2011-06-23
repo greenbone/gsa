@@ -10221,13 +10221,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
   <div class="issue_box_box">
-    <xsl:if test="$note-buttons = 1">
+    <xsl:if test="$details-button = 1">
       <xsl:choose>
         <xsl:when test="delta">
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;task_id={../../task/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;token={/envelope/token}"
                title="Result Details" style="margin-left:3px;">
               <img src="/img/details.png" border="0" alt="Details"/>
             </a>

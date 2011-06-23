@@ -7346,17 +7346,25 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  result_id     Result UUID.
  * @param[in]  task_id       Result task UUID.
+ * @param[in]  apply_overrides  Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_result_omp (credentials_t *credentials, const char *result_id,
-                const char *task_id)
+                const char *task_id, const char *apply_overrides)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  if (apply_overrides == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a result. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7374,11 +7382,14 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                              "/omp?cmd=get_results");
     }
 
-  xml = g_string_new ("<get_result>"
-                      "<filters>"
-                      /* So that the XSL shows the overrides. */
-                      "<apply_overrides>1</apply_overrides>"
-                      "</filters>");
+  xml = g_string_new ("<get_result>");
+
+  g_string_append_printf (xml,
+                          "<filters>"
+                          /* So that the XSL shows the overrides. */
+                          "<apply_overrides>%s</apply_overrides>"
+                          "</filters>",
+                          apply_overrides);
 
   /* Get the result. */
 
@@ -7386,12 +7397,13 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                             "<get_results"
                             " result_id=\"%s\""
                             " task_id=\"%s\""
-                            " apply_overrides=\"1\""
+                            " apply_overrides=\"%s\""
                             " overrides=\"1\""
                             " notes=\"1\""
                             "/>",
                             result_id,
-                            task_id)
+                            task_id,
+                            apply_overrides)
       == -1)
     {
       g_string_free (xml, TRUE);

@@ -4947,7 +4947,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
            && (task_id != NULL))
-    return get_result_omp (credentials, result_id, task_id);
+    return get_result_omp (credentials, result_id, task_id, overrides);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

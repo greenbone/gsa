@@ -1,5 +1,17 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Pass overrides to get_result_omp.
+
+	* src/gsad_omp.c (get_result_omp): Add apply_overrides arg.  Pass through
+	to Manager.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (result-detailed): Use right variable to control
+	details icon.  Add overrides to icon link.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Add BR when NVT is missing, like
 	it is for open ports, but only for delta reports, so that the delta result
 	status symbol shows fully.
