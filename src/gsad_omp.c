@@ -7399,8 +7399,9 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                             " task_id=\"%s\""
                             " apply_overrides=\"%s\""
                             " overrides=\"1\""
+                            " overrides_details=\"1\""
                             " notes=\"1\""
-                            "/>",
+                            " notes_details=\"1\"/>",
                             result_id,
                             task_id,
                             apply_overrides)

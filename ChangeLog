@@ -1,5 +1,10 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_result_omp): Get notes and overrides details too,
+	for the modification times.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Pass overrides to get_result_omp.
 
 	* src/gsad_omp.c (get_result_omp): Add apply_overrides arg.  Pass through
