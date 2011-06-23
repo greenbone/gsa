@@ -1,5 +1,9 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result [details]): Comment out the help icon for now.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_result_omp): Get notes and overrides details too,
 	for the modification times.
 

@@ -10110,10 +10110,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Result Details
+<!--
        <a href="/help/configure_results.html?token={/envelope/token}#resultdetails"
          title="Help: Configure Results (Result Details)">
          <img src="/img/help.png"/>
        </a>
+-->
     </div>
     <div class="gb_window_part_content">
       <table>
