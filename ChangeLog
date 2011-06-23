@@ -1,5 +1,10 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-table): Move Add Report button back into
+	FORM.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-task-form): Add an Import Report window.
 
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>

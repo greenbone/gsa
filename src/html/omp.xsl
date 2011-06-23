@@ -1858,10 +1858,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
       <div class="gb_window_part_content">
-        <div style="float: right">
-          <input type="submit" name="submit" value="Add Report"/>
-        </div>
         <form action="/omp" method="post" enctype="multipart/form-data">
+          <div style="float: right">
+            <input type="submit" name="submit" value="Add Report"/>
+          </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
