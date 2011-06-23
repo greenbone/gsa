@@ -1,5 +1,9 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-task-form): Add an Import Report window.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Move Apply button DIV about
 	threat DIV, so it stays in the window on older Firefoxes.
 	(html-report-table): Move Add Report button DIV about FORM, for same
