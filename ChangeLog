@@ -1,3 +1,10 @@
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Move Apply button DIV about
+	threat DIV, so it stays in the window on older Firefoxes.
+	(html-report-table): Move Add Report button DIV about FORM, for same
+	reason.
+
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a basic Result Details page.

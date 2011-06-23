@@ -1474,6 +1474,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{report/filters/phrase}"
                    maxlength="400"/>
           </div>
+          <div style="float: right">
+            <input type="submit" value="Apply" title="Apply"/>
+          </div>
           <div style="padding: 2px;">
             Threat:
             <table style="display: inline">
@@ -1544,9 +1547,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
               </tr>
             </table>
-            <div style="float: right">
-              <input type="submit" value="Apply" title="Apply"/>
-            </div>
           </div>
         </form>
       </div>
@@ -1858,6 +1858,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
       <div class="gb_window_part_content">
+        <div style="float: right">
+          <input type="submit" name="submit" value="Add Report"/>
+        </div>
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
@@ -1865,9 +1868,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="task_id" value="{task/@id}"/>
           <input type="hidden" name="overrides" value="{apply_overrides}"/>
           <input type="file" name="xml_file" size="30"/>
-          <div style="float: right">
-            <input type="submit" name="submit" value="Add Report"/>
-          </div>
         </form>
       </div>
     </div>
