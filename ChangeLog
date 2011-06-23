@@ -1,5 +1,11 @@
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result-detailed): Add BR when NVT is missing, like
+	it is for open ports, but only for delta reports, so that the delta result
+	status symbol shows fully.
+
+2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Move Add Report button back into
 	FORM.
 

@@ -10195,6 +10195,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
+          <xsl:if test="delta/text()">
+            <br/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
           NVT:
