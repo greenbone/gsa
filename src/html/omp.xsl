@@ -10536,7 +10536,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:variable name="current_host" select="host/text()"/>
     <a name="{$current_host}"></a>
     <h2>
-      Port summary for host &quot;<xsl:value-of select="$current_host"/>&quot;
+      Port summary for <xsl:value-of select="$current_host"/>
     </h2>
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">

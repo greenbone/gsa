@@ -1,5 +1,10 @@
 2011-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [details]): Remove "host" and quotes from port
+	summary heading.
+
+2011-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Pass container flag to report
 	template.
 	(report): Add name and container arg.  Use "Uploading" for upload run
