@@ -1931,7 +1931,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
             </td>
           </tr>
-          <xsl:apply-templates select="task/reports/report"/>
+          <xsl:for-each select="task/reports/report">
+            <xsl:call-template name="report">
+              <xsl:with-param name="container">1</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
         </table>
       </div>
     </div>
@@ -2373,7 +2377,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- REPORT -->
-<xsl:template match="report">
+<xsl:template match="report" name="report">
+  <xsl:param name="container">0</xsl:param>
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -2383,7 +2388,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b><xsl:value-of select="timestamp"/></b><br/>
-      <xsl:value-of select="scan_run_status"/>
+      <xsl:choose>
+        <xsl:when test="$container=1 and scan_run_status='Running'">
+          <xsl:text>Uploading</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="scan_run_status"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:choose>
