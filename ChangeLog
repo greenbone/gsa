@@ -1,3 +1,7 @@
+2011-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (tasks.html): Add missing edit_task anchor.
+
 2011-06-24  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
@@ -50,9 +54,9 @@
 
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (html-report-details): Move Apply button DIV about
+	* src/html/omp.xsl (html-report-details): Move Apply button DIV above
 	threat DIV, so it stays in the window on older Firefoxes.
-	(html-report-table): Move Add Report button DIV about FORM, for same
+	(html-report-table): Move Add Report button DIV above FORM, for same
 	reason.
 
 2011-06-22  Matthew Mundell <matthew.mundell@greenbone.net>

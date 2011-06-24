@@ -3992,6 +3992,7 @@ Public License instead of this License.
        It is the same action as clicking on the number of reports in the column "Reports: Total".
       </p>
 
+      <a name="edit_task"></a>
       <h4>Edit Task</h4>
       <p>
        Pressing the "Edit Task" icon <img src="/img/edit.png" alt="Edit Task"
