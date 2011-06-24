@@ -1,3 +1,30 @@
+gsa 3.0+beta3 (2011-06-24)
+
+This is the third beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release addresses a number of minor issues which were discovered after the
+release of GSA 3.0+beta2 and introduces a number of new features. For details,
+please refer to the list of changes below.
+
+Many thanks to everyone who has contributed to this release:
+Henri Doreau, Stephan Kleine, Matthew Mundell, Michael Wiegand and Jan-Oliver
+Wagner.
+
+Main changes since 3.0+beta2:
+* Support for displaying delta reports has been added.
+* Support for showing detected operating systems has been improved.
+* Support for uploading additional reports to a container task has been added.
+* A number of compiler warnings discovered by Stephan Kleine have been
+  addressed.
+* An issue which caused uploaded PKCS #12 certificates to be incorrectly
+  truncated has been fixed.
+* The display of command results has been improved.
+* Support for displaying the hostname in the result has been added.
+* Support for viewing individual result details has been added.
+
+
 gsa 3.0+beta2 (2011-05-19)
 
 This is the second beta version of the upcoming 3.0 release of the Greenbone

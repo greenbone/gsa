@@ -1,3 +1,9 @@
+2011-06-24  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 3.0+beta3 release.
+
+	* CHANGES: Updated.
+
 2011-06-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (result [details]): Comment out the help icon for now.
