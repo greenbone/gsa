@@ -2439,11 +2439,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:choose>
         <xsl:when test="../../../../../delta = @id">
-          <a href="/omp?cmd=get_tasks&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
-             title="Compare"
-             style="margin-left:3px;">
-            <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
-          </a>
+          <img src="/img/delta_inactive.png" border="0" alt="Compare"
+               style="margin-left:3px;"/>
         </xsl:when>
         <xsl:when test="string-length (../../../../../delta) &gt; 0">
           <a href="/omp?cmd=get_report&amp;report_id={../../../../../delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={../../../../../apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"

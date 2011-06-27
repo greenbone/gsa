@@ -1,5 +1,9 @@
 2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report): Remove anchor from delta first report icon.
+
+2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (note-detailed, override-detailed): Add delta arg,
 	print which result the item refers to.
 	(result-detailed): Pass result number and delta flag down into
