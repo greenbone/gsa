@@ -2989,6 +2989,25 @@ Public License instead of this License.
       <a name="actions"></a>
       <h3>Actions</h3>
 
+      <h4>Delta</h4>
+      <p>
+       Pressing the delta icon
+       <img src="/img/delta.png" alt="Compare" title="Compare" /> will
+       select the report for comparison.
+      </p>
+
+      <p>
+       Once a report is selected for comparison, the greyed out delta icon
+       <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
+       indicates that the report has been selected.
+      </p>
+
+      <p>
+       Pressing the second delta icon
+       <img src="/img/delta_second.png" alt="Compare" title="Compare" /> will
+       produce a comparison between the report and the previously selected one.
+      </p>
+
       <h4>Details</h4>
       <p>
        Pressing the details icon
@@ -4199,6 +4218,10 @@ Public License instead of this License.
        This can be combined with a text phrase, which limits the report to all the
        results that include the entered phrase.
        The "Show notes" checkbox toggles the display of notes.
+      </p>
+      <p>
+       For delta reports, the checkboxes under the "Show delta results" heading
+       control which delta results are shown.
       </p>
       <p>
        The list of results is updated after a click on the "Apply" button.

@@ -1,5 +1,10 @@
 2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (reports.html): Add delta actions.
+	(view_report.html): Add delta filtering.
+
+2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report): Remove anchor from delta first report icon.
 
 2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
