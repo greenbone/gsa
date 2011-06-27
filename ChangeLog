@@ -1,5 +1,26 @@
 2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Enable Result Details page buttons and get the delete_note working.
+
+	* src/gsad.c (exec_omp_post): Add the get_result case of delete_note.
+
+	* src/gsad_omp.c (get_result_omp): Add commands arg.  Add TASK to
+	GET_RESULT.  Wrap GET_RESULTS in COMMANDS and pass commands from arg
+	through to Manager.
+	(delete_note_omp): Add a get_result case, which calls get_result_omp.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (note-detailed): Add next arg.  When get_result setup
+	args for get_result page.
+	(result [details]): Turn on the note and override buttons.  Pass
+	result_detailed a result-details flag.
+	(result-detailed): Add result-details arg.  Pass next to note-detailed
+	according to arg.
+	(get_result): Add commands_response case.
+
+2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (reports.html): Add delta actions.
 	(view_report.html): Add delta filtering.
 

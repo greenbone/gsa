@@ -7347,12 +7347,14 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @param[in]  result_id     Result UUID.
  * @param[in]  task_id       Result task UUID.
  * @param[in]  apply_overrides  Whether to apply overrides.
+ * @param[in]  commands      Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_result_omp (credentials_t *credentials, const char *result_id,
-                const char *task_id, const char *apply_overrides)
+                const char *task_id, const char *apply_overrides,
+                const char *commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7385,15 +7387,19 @@ get_result_omp (credentials_t *credentials, const char *result_id,
   xml = g_string_new ("<get_result>");
 
   g_string_append_printf (xml,
+                          "<task id=\"%s\"/>"
                           "<filters>"
                           /* So that the XSL shows the overrides. */
                           "<apply_overrides>%s</apply_overrides>"
                           "</filters>",
+                          task_id,
                           apply_overrides);
 
   /* Get the result. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_results"
                             " result_id=\"%s\""
                             " task_id=\"%s\""
@@ -7401,7 +7407,9 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                             " overrides=\"1\""
                             " overrides_details=\"1\""
                             " notes=\"1\""
-                            " notes_details=\"1\"/>",
+                            " notes_details=\"1\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             result_id,
                             task_id,
                             apply_overrides)
@@ -8095,7 +8103,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvts).
- * @param[in]  task_id        ID of task (for get_tasks).
+ * @param[in]  task_id        ID of task (for get_tasks and get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -8157,6 +8165,15 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
                              overrides ? strcmp (overrides, "0") : 0,
                              NULL);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_result") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      char *ret = get_result_omp (credentials, report_id, task_id, overrides,
+                                  extra);
       g_free (extra);
       return ret;
     }

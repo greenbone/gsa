@@ -2864,6 +2864,25 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
            && (con_info->req_parms.note_id != NULL)
            && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_result") == 0)
+           && (con_info->req_parms.result_id != NULL))
+    {
+      validate (validator, "note_id", &con_info->req_parms.note_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate (validator, "result_id", &con_info->req_parms.result_id);
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+
+      con_info->response =
+        delete_note_omp (credentials, con_info->req_parms.note_id, "get_result",
+                         con_info->req_parms.result_id, 0, 0, NULL, NULL,
+                         NULL, NULL, con_info->req_parms.overrides, NULL, NULL,
+                         NULL, NULL, con_info->req_parms.task_id);
+    }
+
+  else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
+           && (con_info->req_parms.note_id != NULL)
+           && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
            && (con_info->req_parms.task_id != NULL))
     {
@@ -4947,7 +4966,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
            && (task_id != NULL))
-    return get_result_omp (credentials, result_id, task_id, overrides);
+    return get_result_omp (credentials, result_id, task_id, overrides, NULL);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);
