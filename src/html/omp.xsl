@@ -10006,8 +10006,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="note-detailed" match="note" mode="detailed">
   <xsl:param name="note-buttons">1</xsl:param>
+  <xsl:param name="delta"/>
   <div class="note_box_box">
-    <b>Note</b><br/>
+    <b>Note</b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
@@ -10057,6 +10058,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="override-detailed" match="override" mode="detailed">
   <xsl:param name="override-buttons">1</xsl:param>
+  <xsl:param name="delta"/>
   <div class="override_box_box">
     <b>
       Override from
@@ -10068,7 +10070,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="threat"/>
         </xsl:otherwise>
       </xsl:choose>
-      to <xsl:value-of select="new_threat"/></b><br/>
+      to <xsl:value-of select="new_threat"/></b><xsl:if test="$delta and $delta &gt; 0"> (Result <xsl:value-of select="$delta"/>)</xsl:if><br/>
     <pre>
       <xsl:call-template name="wrap">
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
@@ -10334,12 +10336,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
     </xsl:choose>
   </xsl:if>
+  <xsl:variable name="delta">
+    <xsl:choose>
+      <xsl:when test="delta">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <a class="anchor" name="notes-{@id}"/>
   <xsl:for-each select="notes/note">
     <xsl:call-template name="note-detailed">
       <xsl:with-param name="note-buttons">
         <xsl:value-of select="$note-buttons"/>
       </xsl:with-param>
+      <xsl:with-param name="delta" select="$delta"/>
+    </xsl:call-template>
+  </xsl:for-each>
+  <xsl:for-each select="delta/notes/note">
+    <xsl:call-template name="note-detailed">
+      <xsl:with-param name="note-buttons">
+        <xsl:value-of select="$note-buttons"/>
+      </xsl:with-param>
+      <xsl:with-param name="delta" select="2"/>
     </xsl:call-template>
   </xsl:for-each>
   <xsl:choose>
@@ -10350,6 +10367,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="override-buttons">
             <xsl:value-of select="$override-buttons"/>
           </xsl:with-param>
+          <xsl:with-param name="delta" select="$delta"/>
+        </xsl:call-template>
+      </xsl:for-each>
+      <xsl:for-each select="delta/overrides/override">
+        <xsl:call-template name="override-detailed">
+          <xsl:with-param name="override-buttons">
+            <xsl:value-of select="$override-buttons"/>
+          </xsl:with-param>
+          <xsl:with-param name="delta" select="2"/>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:when>

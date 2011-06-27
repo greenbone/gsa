@@ -1,3 +1,11 @@
+2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (note-detailed, override-detailed): Add delta arg,
+	print which result the item refers to.
+	(result-detailed): Pass result number and delta flag down into
+	override-detailed and note-detailed.  Print the second result notes and
+	overrides too.
+
 2011-06-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [details]): Remove "host" and quotes from port
