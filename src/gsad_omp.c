@@ -8318,7 +8318,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @param[in]  min_cvss_base   Minimum CVSS included results may have.
  *                             "-1" for all, including results with NULL CVSS.
  * @param[in]  oid             OID of NVT (for get_nvts).
- * @param[in]  task_id         ID of task (for get_tasks).
+ * @param[in]  task_id         ID of task (for get_tasks and get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -8540,6 +8540,14 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_notes") == 0)
     {
       char *ret = get_notes (credentials, modify_note);
+      g_free (modify_note);
+      return ret;
+    }
+
+  if (strcmp (next, "get_result") == 0)
+    {
+      char *ret = get_result_omp (credentials, report_id, task_id, overrides,
+                                  modify_note);
       g_free (modify_note);
       return ret;
     }

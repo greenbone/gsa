@@ -1,6 +1,23 @@
 2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Get the Result Details page delete_note working.
+	Get the Result Details page edit_note working.
+
+	* src/gsad.c (exec_omp_post): Add the get_result case of save_note.
+	(exec_omp_get): Add the get_result case of edit_note.
+
+	* src/gsad_omp.c (save_note_omp): Add a get_result case, which calls
+	get_result_omp.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add get_result modify_note response
+	for indicator icon.
+
+	* src/html/omp.xsl (note-detailed): Setup args specially for get_result
+	case.
+	(get_result): Match modify_note response.
+
+2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the Result Details page delete_override working.
 
 	* src/gsad.c (exec_omp_post): Add the get_result case of delete_override.
 

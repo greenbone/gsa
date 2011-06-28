@@ -10050,11 +10050,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="Note Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
-        <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
-           title="Edit Note"
-           style="margin-left:3px;">
-          <img src="/img/edit.png" border="0" alt="Edit"/>
-        </a>
+        <xsl:choose>
+          <xsl:when test="$next='get_result'">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;overrides={../../../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes=1&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </xsl:if>
     Last modified: <xsl:value-of select="modification_time"/>.
@@ -10448,6 +10459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_result">
+  <xsl:apply-templates select="commands_response/modify_note_response"/>
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_results_response"/>
   <xsl:apply-templates select="commands_response/get_results_response"/>
