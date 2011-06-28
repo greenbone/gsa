@@ -2998,6 +2998,26 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              NULL, NULL);
     }
 
+   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
+            && (con_info->req_parms.override_id != NULL)
+            && (con_info->req_parms.next != NULL)
+            && (strcmp (con_info->req_parms.next, "get_result") == 0)
+            && (con_info->req_parms.result_id != NULL))
+    {
+      validate (validator, "override_id", &con_info->req_parms.override_id);
+      validate (validator, "page", &con_info->req_parms.next);
+      validate (validator, "result_id", &con_info->req_parms.result_id);
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+
+      con_info->response =
+        delete_override_omp (credentials, con_info->req_parms.override_id,
+                             "get_result", con_info->req_parms.result_id, 0, 0,
+                             NULL, NULL, NULL, NULL,
+                             con_info->req_parms.overrides, NULL, NULL, NULL,
+                             NULL, con_info->req_parms.task_id);
+    }
+
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
            && (con_info->req_parms.override_id != NULL)
            && (con_info->req_parms.next != NULL)

@@ -1,3 +1,16 @@
+2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the Result Details page delete_note working.
+
+	* src/gsad.c (exec_omp_post): Add the get_result case of delete_override.
+
+	* src/gsad_omp.c (delete_override_omp): Add a get_result case, which calls
+	get_result_omp.
+
+	* src/html/omp.xsl (override-detailed): Add next arg.  When get_result setup
+	args for get_result page.
+	(result-detailed): Pass next to override-detailed according to arg.
+
 2011-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Enable Result Details page buttons and get the delete_note working.

@@ -10066,6 +10066,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="override-detailed" match="override" mode="detailed">
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="delta"/>
+  <xsl:param name="next">get_report</xsl:param>
   <div class="override_box_box">
     <b>
       Override from
@@ -10093,19 +10094,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="override_id" value="{@id}"/>
             <input type="image" src="/img/delete.png" alt="Delete"
                    name="Delete" value="Delete" title="Delete"/>
-            <input type="hidden" name="report_id" value="{../../../../@id}"/>
-            <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
-            <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
-            <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
-            <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
-            <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
-            <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
-            <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
-            <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
-            <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
-            <input type="hidden" name="overrides" value="{../../../../filters/overrides}"/>
-            <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
-            <input type="hidden" name="next" value="get_report"/>
+            <xsl:choose>
+              <xsl:when test="$next='get_result'">
+                <input type="hidden" name="result_id" value="{../../@id}"/>
+                <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
+                <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
+                <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
+                <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
+                <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
+                <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
+                <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
+                <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
+                <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
+                <input type="hidden" name="overrides" value="{../../../../filters/overrides}"/>
+                <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <input type="hidden" name="next" value="{$next}"/>
           </form>
         </div>
         <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
@@ -10387,6 +10397,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="$override-buttons"/>
           </xsl:with-param>
           <xsl:with-param name="delta" select="$delta"/>
+          <xsl:with-param name="next">
+            <xsl:choose>
+              <xsl:when test="$result-details">get_result</xsl:when>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
       <xsl:for-each select="delta/overrides/override">
@@ -10395,6 +10410,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="$override-buttons"/>
           </xsl:with-param>
           <xsl:with-param name="delta" select="2"/>
+          <xsl:with-param name="next">
+            <xsl:choose>
+              <xsl:when test="$result-details">get_result</xsl:when>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
       </xsl:for-each>
     </xsl:when>

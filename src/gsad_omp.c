@@ -9349,7 +9349,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  oid            OID of NVT (for get_nvts).
- * @param[in]  task_id        ID of task (for get_tasks).
+ * @param[in]  task_id        ID of task (for get_tasks and get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -9414,6 +9414,16 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
                              overrides ? strcmp (overrides, "0") : 0,
                              NULL);
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_result") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                                      override_id);
+      char *ret = get_result_omp (credentials, report_id, task_id, overrides,
+                                  extra);
       g_free (extra);
       return ret;
     }
