@@ -3934,6 +3934,50 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
            && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_result") == 0))
+    {
+      if (validate (validator, "override_id", &con_info->req_parms.override_id)
+          || validate_or (validator, "text", &con_info->req_parms.text, "")
+          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || validate (validator, "port", &con_info->req_parms.port)
+          || validate (validator, "threat", &con_info->req_parms.threat)
+          || validate (validator, "new_threat", &con_info->req_parms.new_threat)
+          || validate (validator, "override_task_id",
+                       &con_info->req_parms.override_task_id)
+          || validate (validator, "override_result_id",
+                       &con_info->req_parms.override_result_id)
+          || validate_or (validator, "overrides",
+                          &con_info->req_parms.overrides, "0")
+          || validate (validator, "task_id", &con_info->req_parms.task_id)
+          || validate (validator, "result_id", &con_info->req_parms.report_id))
+        con_info->response =
+          gsad_message (credentials,
+                        "Internal error", __FUNCTION__, __LINE__,
+                        "An internal error occurred while saving a override. "
+                        "The override remains the same. "
+                        "Diagnostics: Syntax error in required parameter.",
+                        "/omp?cmd=get_overrides");
+      else
+        con_info->response =
+          save_override_omp (credentials,
+                             con_info->req_parms.override_id,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.override_result_id,
+                             "get_result",
+                             con_info->req_parms.report_id,
+                             0, 0, NULL, NULL, NULL, NULL,
+                             con_info->req_parms.overrides,
+                             NULL, NULL, NULL, NULL,
+                             con_info->req_parms.task_id);
+    }
+  else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
+           && (con_info->req_parms.override_id != NULL)
+           && (con_info->req_parms.next != NULL)
            && (con_info->req_parms.overrides != NULL)
            && (strcmp (con_info->req_parms.next, "get_tasks") == 0)
            && (con_info->req_parms.task_id != NULL))
@@ -4940,6 +4984,19 @@ exec_omp_get (struct MHD_Connection *connection,
                                 report_id, first, max, sort_field, sort_order,
                                 levels, notes, overrides, result_hosts_only,
                                 search_phrase, min_cvss_base, NULL, NULL);
+    }
+
+  else if ((!strcmp (cmd, "edit_override"))
+           && (override_id != NULL)
+           && (next != NULL)
+           && (strcmp (next, "get_result") == 0)
+           && (result_id != NULL)
+           && (overrides != NULL))
+    {
+      return edit_override_omp (credentials, override_id, "get_result",
+                                /* Parameters for next page. */
+                                result_id, 0, 0, NULL, NULL, NULL, NULL,
+                                overrides, NULL, NULL, "-1", NULL, task_id);
     }
 
   else if ((!strcmp (cmd, "edit_override"))

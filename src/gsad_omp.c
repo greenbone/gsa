@@ -9809,6 +9809,14 @@ save_override_omp (credentials_t * credentials, const char *override_id,
       return ret;
     }
 
+  if (strcmp (next, "get_result") == 0)
+    {
+      char *ret = get_result_omp (credentials, report_id, task_id, overrides,
+                                  modify_override);
+      g_free (modify_override);
+      return ret;
+    }
+
   if (strcmp (next, "get_tasks") == 0)
     {
       char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,

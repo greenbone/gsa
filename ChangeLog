@@ -1,5 +1,22 @@
 2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get the Result Details page edit_override working.
+
+	* src/gsad.c (exec_omp_post): Add the get_result case of save_override.
+	(exec_omp_get): Add the get_result case of edit_override.
+
+	* src/gsad_omp.c (save_override_omp): Add a get_result case, which calls
+	get_result_omp.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add get_result modify_override
+	response for indicator icon.
+
+	* src/html/omp.xsl (override-detailed): Setup args specially for
+	get_result case.
+	(get_result): Match modify_override response.
+
+2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the Result Details page edit_note working.
 
 	* src/gsad.c (exec_omp_post): Add the get_result case of save_note.
