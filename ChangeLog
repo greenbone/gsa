@@ -1,5 +1,9 @@
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* ChangeLog: Revert overwritten entry.
+
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the result details save_override working.
 
 	* src/gsad.c (exec_omp_post): Pass task name to edit_override from the
@@ -14,6 +18,23 @@
 	* src/html/omp.xsl (html-edit-override-form): Add task name param for
 	get_result.
 	(result-detailed): Setup new_override link specially for get_result.
+
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the result details save_note working.
+
+	* src/gsad.c (exec_omp_post): Pass task name to edit_note from the
+	get_result page.
+	(exec_omp_get): Add a new_note case for get_result.
+
+	* src/gsad_omp.c (new_note_omp): Add a next arg.  Add to NEW_NOTE
+	for XSL.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-edit-note-form): Add task name param for
+	get_result.
+	(result-detailed): Setup new_note link specially for get_result.
 
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
