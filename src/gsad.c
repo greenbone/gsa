@@ -2690,7 +2690,88 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.min_cvss_base,
                          NULL, NULL);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "create_override"))
+  else if ((!strcmp (con_info->req_parms.cmd, "create_override"))
+           && (con_info->req_parms.next != NULL)
+           && (strcmp (con_info->req_parms.next, "get_result") == 0))
+    {
+      /* Check parameters for creating the override. */
+
+      validate (validator, "oid", &con_info->req_parms.oid);
+
+      validate (validator, "text", &con_info->req_parms.text);
+
+      if (strcmp (con_info->req_parms.port, "")
+          && openvas_validate (validator, "port", con_info->req_parms.port))
+        {
+          free (con_info->req_parms.port);
+          con_info->req_parms.port = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.threat, "")
+          && openvas_validate (validator,
+                               "threat",
+                               con_info->req_parms.threat))
+        {
+          free (con_info->req_parms.threat);
+          con_info->req_parms.threat = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.hosts, "")
+          && openvas_validate (validator,
+                               "hosts",
+                               con_info->req_parms.hosts))
+        {
+          free (con_info->req_parms.hosts);
+          con_info->req_parms.hosts = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.override_task_id, "")
+          && openvas_validate (validator,
+                               "task_id",
+                               con_info->req_parms.override_task_id))
+        {
+          free (con_info->req_parms.override_task_id);
+          con_info->req_parms.override_task_id = NULL;
+        }
+
+      if (strcmp (con_info->req_parms.result_id, "")
+          && openvas_validate (validator,
+                               "result_id",
+                               con_info->req_parms.result_id))
+        {
+          free (con_info->req_parms.result_id);
+          con_info->req_parms.result_id = NULL;
+        }
+
+      /* Check parameters for requesting the result. */
+
+      validate (validator, "result_id", &con_info->req_parms.report_id);
+      validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "name", &con_info->req_parms.name);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
+
+      /* Call the page handler. */
+
+      con_info->response =
+        create_override_omp (credentials,
+                             con_info->req_parms.oid,
+                             con_info->req_parms.text,
+                             con_info->req_parms.hosts,
+                             con_info->req_parms.port,
+                             con_info->req_parms.threat,
+                             con_info->req_parms.new_threat,
+                             con_info->req_parms.override_task_id,
+                             con_info->req_parms.result_id,
+                             "get_result",
+                             con_info->req_parms.report_id,
+                             0, 0, NULL, NULL, NULL, NULL,
+                             con_info->req_parms.overrides,
+                             NULL, NULL, NULL,
+                             con_info->req_parms.name,
+                             con_info->req_parms.task_id);
+    }
+  else if (!strcmp (con_info->req_parms.cmd, "create_override")
+           && (con_info->req_parms.next == NULL))
     {
       const char *first_result;
       const char *max_results;
@@ -2703,8 +2784,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       validate (validator, "text", &con_info->req_parms.text);
 
-       if (strcmp (con_info->req_parms.port, "")
-           && openvas_validate (validator, "port", con_info->req_parms.port))
+      if (strcmp (con_info->req_parms.port, "")
+          && openvas_validate (validator, "port", con_info->req_parms.port))
         {
           free (con_info->req_parms.port);
           con_info->req_parms.port = NULL;
@@ -2737,13 +2818,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.hosts = NULL;
         }
 
-      if (strcmp (con_info->req_parms.task_id, "")
+      if (strcmp (con_info->req_parms.override_task_id, "")
           && openvas_validate (validator,
                                "task_id",
-                               con_info->req_parms.task_id))
+                               con_info->req_parms.override_task_id))
         {
-          free (con_info->req_parms.task_id);
-          con_info->req_parms.task_id = NULL;
+          free (con_info->req_parms.override_task_id);
+          con_info->req_parms.override_task_id = NULL;
         }
 
       if (strcmp (con_info->req_parms.result_id, "")
@@ -2804,8 +2885,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.port,
                              con_info->req_parms.threat,
                              con_info->req_parms.new_threat,
-                             con_info->req_parms.task_id,
+                             con_info->req_parms.override_task_id,
                              con_info->req_parms.result_id,
+                             NULL,
                              con_info->req_parms.report_id,
                              first,
                              max,
@@ -2816,7 +2898,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.overrides,
                              con_info->req_parms.result_hosts_only,
                              con_info->req_parms.search_phrase,
-                             con_info->req_parms.min_cvss_base);
+                             con_info->req_parms.min_cvss_base,
+                             NULL, NULL);
     }
   else if (!strcmp (con_info->req_parms.cmd, "delete_agent"))
     {

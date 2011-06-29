@@ -1,5 +1,26 @@
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get the result details add_override working.
+
+	* src/gsad.c (exec_omp_post): Add a get_result case for create_override.
+	(exec_omp_get): Pass override_task_id instead of task_id to
+	create_override_omp, because the get_result case uses task_id.
+
+	* src/gsad_omp.c (new_override_omp): Put arg for NEW_OVERRIDE NEXT in the
+	right place.
+	(create_override_omp): Add args for next page, task name and task ID.  Add
+	the get_result case.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-override-form): Add params for the
+	get_result case.  Use override_task_id instead of task_id for the task_id
+	of the override.
+	(result-detailed): Move the new_override link to the override section.
+	Use the right params in new_override link.
+
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Match get_result delete ops for
 	indicator.
 

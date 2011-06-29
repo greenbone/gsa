@@ -9051,8 +9051,8 @@ new_override_omp (credentials_t *credentials, const char *oid,
                           task_id,
                           task_name,
                           result_id,
-                          report_id,
                           next ? next : "",
+                          report_id,
                           first_result,
                           max_results,
                           sort_field,
@@ -9095,6 +9095,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  new_threat     Threat to override the result to.
  * @param[in]  task_id        ID of task to limit override to, "" for all.
  * @param[in]  result_id      ID of result to limit override to, "" for all.
+ * @param[in]  next           Next page, NULL for get_report.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -9107,6 +9108,8 @@ new_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  task_name      Name of task (for get_result).
+ * @param[in]  result_task_id  ID of task (for get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -9115,20 +9118,23 @@ create_override_omp (credentials_t *credentials, const char *oid,
                      const char *text, const char *hosts, const char *port,
                      const char *threat, const char *new_threat,
                      const char *task_id, const char *result_id,
+                     const char *next,
+                     /* Passthroughs. */
                      const char *report_id,
                      const unsigned int first_result,
                      const unsigned int max_results,
                      const char *sort_field, const char *sort_order,
                      const char *levels, const char *notes,
                      const char *overrides, const char *result_hosts_only,
-                     const char *search_phrase, const char *min_cvss_base)
+                     const char *search_phrase, const char *min_cvss_base,
+                     const char *task_name, const char *result_task_id)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
-  gchar *html;
+  gchar *html, *create_override;
 
-  if (search_phrase == NULL)
+  if ((next == NULL) && (search_phrase == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
@@ -9144,14 +9150,48 @@ create_override_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_overrides");
 
-  if (threat == NULL || new_threat == NULL || port == NULL || hosts == NULL
-      || min_cvss_base == NULL)
+  if (threat == NULL || port == NULL || hosts == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
                          "No new override was created. "
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_overrides");
+
+  if ((next == NULL) && (min_cvss_base == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new override. "
+                         "No new override was created. "
+                         "Diagnostics: A required parameter was NULL.",
+                         "/omp?cmd=get_overrides");
+
+  create_override = g_strdup_printf ("<create_override>"
+                                     "<nvt oid=\"%s\"/>"
+                                     "<hosts>%s</hosts>"
+                                     "<port>%s</port>"
+                                     "<threat>%s</threat>"
+                                     "<new_threat>%s</new_threat>"
+                                     "<text>%s</text>"
+                                     "<task id=\"%s\"/>"
+                                     "<result id=\"%s\"/>"
+                                     "</create_override>",
+                                     oid,
+                                     hosts,
+                                     port,
+                                     threat,
+                                     new_threat,
+                                     text,
+                                     task_id,
+                                     result_id);
+
+  if (next && (strcmp (next, "get_result") == 0))
+    {
+      char *ret = get_result_omp (credentials, report_id, result_task_id,
+                                  task_name, overrides, create_override);
+      g_free (create_override);
+      return ret;
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -9180,25 +9220,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
 
       /* Create the override. */
 
-      ret = openvas_server_sendf (&session,
-                                  "<create_override>"
-                                  "<nvt oid=\"%s\"/>"
-                                  "<hosts>%s</hosts>"
-                                  "<port>%s</port>"
-                                  "<threat>%s</threat>"
-                                  "<new_threat>%s</new_threat>"
-                                  "<text>%s</text>"
-                                  "<task id=\"%s\"/>"
-                                  "<result id=\"%s\"/>"
-                                  "</create_override>",
-                                  oid,
-                                  hosts,
-                                  port,
-                                  threat,
-                                  new_threat,
-                                  text,
-                                  task_id,
-                                  result_id);
+      ret = openvas_server_sendf (&session, create_override);
 
       if (ret == -1)
         {
@@ -9224,6 +9246,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
                                "/omp?cmd=get_overrides");
         }
     }
+  g_free (create_override);
 
   /* Get the report. */
 
