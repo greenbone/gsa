@@ -1,3 +1,8 @@
+2011-06-29  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_reports_response/report/report): fixed the
+	conflicts reporting mechanism for OS detection.
+
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Revert overwritten entry.
@@ -59,6 +64,7 @@
 	(result-detailed): Pass task name to commands for get_result.
 	(result [details]): Print task name with link instead of UUID.
 
+>>>>>>> .r11244
 2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get the Result Details page edit_override working.

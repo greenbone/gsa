@@ -10533,7 +10533,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="best_os_cpe" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
           <xsl:variable name="best_os_txt" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
           <xsl:choose>
-            <xsl:when test="contains($best_os_cpe, '\n')">
+            <xsl:when test="contains($best_os_txt, '[possible conflict]')">
               <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
             </xsl:when>
             <xsl:when test="not($best_os_cpe)">
