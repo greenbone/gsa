@@ -1,3 +1,20 @@
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the result details add_note working.
+
+	* src/gsad.c (exec_omp_post): Add a get_result case for create_note.
+	(exec_omp_get): Pass note_task_id instead of task_id to create_note_omp,
+	because the get_result case uses task_id.
+
+	* src/gsad_omp.c (create_note_omp): Add args for next page, task name and
+	task ID.  Add the get_result case.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-create-note-form): Add params for the get_result
+	case.  Use note_task_id instead of task_id for the task_id of the note.
+	(result-detailed): Use the right params in new_note link.
+
 2011-06-29  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (get_reports_response/report/report): fixed the

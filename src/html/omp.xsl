@@ -7958,18 +7958,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
-        <input type="hidden" name="report_id" value="{report/@id}"/>
-        <input type="hidden" name="first_result" value="{first_result}"/>
-        <input type="hidden" name="max_results" value="{max_results}"/>
-        <input type="hidden" name="sort_field" value="{sort_field}"/>
-        <input type="hidden" name="sort_order" value="{sort_order}"/>
-        <input type="hidden" name="levels" value="{levels}"/>
-        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
-        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
-        <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
-        <input type="hidden" name="notes" value="{notes}"/>
-        <input type="hidden" name="overrides" value="{overrides}"/>
-        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
+        <input type="hidden" name="next" value="{next}"/>
+
+        <xsl:choose>
+          <xsl:when test="next='get_result'">
+            <!-- get_result params. -->
+            <input type="hidden" name="report_id" value="{result/@id}"/>
+            <input type="hidden" name="name" value="{task/name}"/>
+            <input type="hidden" name="task_id" value="{task/@id}"/>
+            <input type="hidden" name="overrides" value="{overrides}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- get_report params. -->
+            <input type="hidden" name="report_id" value="{report/@id}"/>
+            <input type="hidden" name="first_result" value="{first_result}"/>
+            <input type="hidden" name="max_results" value="{max_results}"/>
+            <input type="hidden" name="sort_field" value="{sort_field}"/>
+            <input type="hidden" name="sort_order" value="{sort_order}"/>
+            <input type="hidden" name="levels" value="{levels}"/>
+            <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+            <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+            <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
+            <input type="hidden" name="notes" value="{notes}"/>
+            <input type="hidden" name="overrides" value="{overrides}"/>
+            <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="125">
@@ -8009,9 +8024,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Task
             </td>
             <td>
-              <input type="radio" name="task_id" value=""/>
+              <input type="radio" name="note_task_id" value=""/>
               Any
-              <input type="radio" name="task_id" value="{task/@id}"
+              <input type="radio" name="note_task_id" value="{task/@id}"
                      checked="1"/>
               <xsl:value-of select="task/name"/>
             </td>
@@ -10316,7 +10331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;report_id={@id}&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>

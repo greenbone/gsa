@@ -7793,6 +7793,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  threat         Threat note applies to, "" for all.
  * @param[in]  task_id        ID of task to limit note to, "" for all.
  * @param[in]  result_id      ID of result to limit note to, "" for all.
+ * @param[in]  next           Next page, NULL for get_report.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
@@ -7805,6 +7806,8 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  search_phrase  Phrase which included results must contain.
  * @param[in]  min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  task_name      Name of task (for get_result).
+ * @param[in]  result_task_id  ID of task (for get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -7812,20 +7815,23 @@ char *
 create_note_omp (credentials_t *credentials, const char *oid,
                  const char *text, const char *hosts, const char *port,
                  const char *threat, const char *task_id, const char *result_id,
+                 const char *next,
+                 /* Passthroughs. */
                  const char *report_id,
                  const unsigned int first_result,
                  const unsigned int max_results,
                  const char *sort_field, const char *sort_order,
                  const char *levels, const char *notes, const char *overrides,
                  const char *result_hosts_only, const char *search_phrase,
-                 const char *min_cvss_base)
+                 const char *min_cvss_base, const char *task_name,
+                 const char *result_task_id)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
-  gchar *html;
+  gchar *html, *create_note;
 
-  if (search_phrase == NULL)
+  if ((next == NULL) && (search_phrase == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
@@ -7841,7 +7847,15 @@ create_note_omp (credentials_t *credentials, const char *oid,
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_notes");
 
-  if (threat == NULL || port == NULL || hosts == NULL || min_cvss_base == NULL)
+  if (threat == NULL || port == NULL || hosts == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new note. "
+                         "No new note was created. "
+                         "Diagnostics: A required parameter was NULL.",
+                         "/omp?cmd=get_notes");
+
+  if ((next == NULL) && (min_cvss_base == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
@@ -7868,6 +7882,31 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
   xml = g_string_new ("<commands_response>");
 
+  create_note = g_strdup_printf ("<create_note>"
+                                 "<nvt oid=\"%s\"/>"
+                                 "<hosts>%s</hosts>"
+                                 "<port>%s</port>"
+                                 "<threat>%s</threat>"
+                                 "<text>%s</text>"
+                                 "<task id=\"%s\"/>"
+                                 "<result id=\"%s\"/>"
+                                 "</create_note>",
+                                 oid,
+                                 hosts,
+                                 port,
+                                 threat,
+                                 text ? text : "",
+                                 task_id,
+                                 result_id);
+
+  if (next && (strcmp (next, "get_result") == 0))
+    {
+      char *ret = get_result_omp (credentials, report_id, result_task_id,
+                                  task_name, overrides, create_note);
+      g_free (create_note);
+      return ret;
+    }
+
   if (text == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Note"));
   else
@@ -7876,23 +7915,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
       /* Create the note. */
 
-      ret = openvas_server_sendf (&session,
-                                  "<create_note>"
-                                  "<nvt oid=\"%s\"/>"
-                                  "<hosts>%s</hosts>"
-                                  "<port>%s</port>"
-                                  "<threat>%s</threat>"
-                                  "<text>%s</text>"
-                                  "<task id=\"%s\"/>"
-                                  "<result id=\"%s\"/>"
-                                  "</create_note>",
-                                  oid,
-                                  hosts,
-                                  port,
-                                  threat,
-                                  text,
-                                  task_id,
-                                  result_id);
+      ret = openvas_server_sendf (&session, create_note);
 
       if (ret == -1)
         {
@@ -7918,6 +7941,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                                "/omp?cmd=get_notes");
         }
     }
+  g_free (create_note);
 
   /* Get the report. */
 
