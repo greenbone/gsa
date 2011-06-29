@@ -172,7 +172,7 @@ char * new_note_omp (credentials_t *, const char *, const char *, const char *,
                      const char *, const char *, const char *, const char *,
                      const char *, const char *, const char *, const char *,
                      const char *, const char *, const char *, const char *,
-                     const char *, const char *, const char *);
+                     const char *, const char *, const char *, const char *);
 char * create_note_omp (credentials_t *, const char *, const char *,
                         const char *, const char *, const char *, const char *,
                         const char *, const char *, const unsigned int,

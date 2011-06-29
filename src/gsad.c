@@ -3669,7 +3669,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           || validate_or (validator, "overrides",
                           &con_info->req_parms.overrides, "0")
           || validate (validator, "task_id", &con_info->req_parms.task_id)
-          || validate (validator, "result_id", &con_info->req_parms.report_id))
+          || validate (validator, "result_id", &con_info->req_parms.report_id)
+          || validate (validator, "name", &con_info->req_parms.name))
         con_info->response =
           gsad_message (credentials,
                         "Internal error", __FUNCTION__, __LINE__,
@@ -3693,7 +3694,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.overrides,
                          NULL, NULL, NULL, NULL,
                          con_info->req_parms.task_id,
-                         NULL);
+                         con_info->req_parms.name);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -5327,6 +5328,23 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_settings_oap (credentials, sort_field, sort_order);
 
   else if ((!strcmp (cmd, "new_note"))
+           && (next != NULL)
+           && (strcmp (next, "get_result") == 0)
+           /* Note params. */
+           && (oid != NULL)
+           && (hosts != NULL)
+           && (port != NULL)
+           && (threat != NULL)
+           && (task_id != NULL)
+           && (result_id != NULL)
+           /* Result passthrough params. */
+           && (overrides != NULL))
+    return new_note_omp (credentials, oid, hosts, port, threat, task_id, name,
+                         result_id, "get_result", report_id, 0, 0, NULL, NULL,
+                         NULL, NULL, overrides, NULL, NULL, NULL);
+
+  else if ((!strcmp (cmd, "new_note"))
+           && (next == NULL)
            /* Note params. */
            && (oid != NULL)
            && (hosts != NULL)
@@ -5347,7 +5365,7 @@ exec_omp_get (struct MHD_Connection *connection,
            && (search_phrase != NULL)
            && (min_cvss_base != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id,
-                         name, result_id, report_id, first_result,
+                         name, result_id, NULL, report_id, first_result,
                          max_results, sort_field, sort_order, levels, notes,
                          overrides, result_hosts_only, search_phrase,
                          min_cvss_base);
