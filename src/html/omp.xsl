@@ -7958,11 +7958,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
-        <input type="hidden" name="next" value="{next}"/>
 
         <xsl:choose>
           <xsl:when test="next='get_result'">
             <!-- get_result params. -->
+            <input type="hidden" name="next" value="{next}"/>
             <input type="hidden" name="report_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
             <input type="hidden" name="task_id" value="{task/@id}"/>
@@ -8630,11 +8630,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="cmd" value="create_override"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="oid" value="{nvt/@id}"/>
-        <input type="hidden" name="next" value="{next}"/>
 
         <xsl:choose>
           <xsl:when test="next='get_result'">
             <!-- get_result params. -->
+            <input type="hidden" name="next" value="{next}"/>
             <input type="hidden" name="report_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
             <input type="hidden" name="task_id" value="{task/@id}"/>
@@ -10445,6 +10445,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="next">
         <xsl:choose>
           <xsl:when test="$result-details">get_result</xsl:when>
+          <xsl:otherwise>get_report</xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
@@ -10458,6 +10459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="next">
         <xsl:choose>
           <xsl:when test="$result-details">get_result</xsl:when>
+          <xsl:otherwise>get_report</xsl:otherwise>
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
@@ -10474,6 +10476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="next">
             <xsl:choose>
               <xsl:when test="$result-details">get_result</xsl:when>
+              <xsl:otherwise>get_report</xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
         </xsl:call-template>
@@ -10487,6 +10490,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="next">
             <xsl:choose>
               <xsl:when test="$result-details">get_result</xsl:when>
+              <xsl:otherwise>get_report</xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
         </xsl:call-template>

@@ -1,5 +1,13 @@
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-note-form)
+	(html-create-override-form): Move next inside the get_result params,
+	because only get_result expects it.
+	(result-detailed): Set next in the get_report case of the note-detailed
+	call otherwise next ends up as the empty string.
+
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the result details add_override working.
 
 	* src/gsad.c (exec_omp_post): Add a get_result case for create_override.
