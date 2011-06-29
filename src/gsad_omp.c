@@ -8905,6 +8905,7 @@ get_override_omp (credentials_t *credentials, const char *override_id)
  * @param[in]  task_name      Name of task to limit override to, task_id given.
  * @param[in]  report_id      ID of report.
  * @param[in]  result_id      ID of result to limit note to, "" for all.
+ * @param[in]  next           Next page, NULL for get_report.
  * @param[in]  first_result   Number of first result in report.
  * @param[in]  max_results    Number of results in report.
  * @param[in]  sort_field     Field to sort on, or NULL.
@@ -8923,7 +8924,8 @@ char *
 new_override_omp (credentials_t *credentials, const char *oid,
                   const char *hosts, const char *port, const char *threat,
                   const char *task_id, const char *task_name,
-                  const char *result_id,
+                  const char *result_id, const char *next,
+                  /* Passthroughs. */
                   const char *report_id, const char *first_result,
                   const char *max_results, const char *sort_field,
                   const char *sort_order, const char *levels,
@@ -8936,12 +8938,19 @@ new_override_omp (credentials_t *credentials, const char *oid,
   int socket;
   gchar *html;
 
-  if (first_result == NULL || max_results == NULL || hosts == NULL
-      || levels == NULL || notes == NULL || oid == NULL || port == NULL
-      || report_id == NULL || result_id == NULL || search_phrase == NULL
-      || sort_field == NULL || sort_order == NULL || task_id == NULL
-      || task_name == NULL || threat == NULL || result_hosts_only == NULL
-      || min_cvss_base == NULL || overrides == NULL)
+  if (next == NULL
+      && (first_result == NULL || max_results == NULL
+          || levels == NULL || notes == NULL || report_id == NULL
+          || search_phrase == NULL || sort_field == NULL || sort_order == NULL
+          || task_name == NULL || threat == NULL || result_hosts_only == NULL
+          || min_cvss_base == NULL))
+    {
+      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  if (hosts == NULL || oid == NULL || port == NULL || result_id == NULL
+      || task_id == NULL || overrides == NULL)
     {
       GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
@@ -8998,6 +9007,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
                           "<name>%s</name>"
                           "</task>"
                           "<result id=\"%s\"/>"
+                          "<next>%s</next>"
                           /* Passthroughs. */
                           "<report id=\"%s\"/>"
                           "<first_result>%s</first_result>"
@@ -9018,6 +9028,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
                           task_name,
                           result_id,
                           report_id,
+                          next ? next : "",
                           first_result,
                           max_results,
                           sort_field,

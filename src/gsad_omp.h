@@ -203,7 +203,8 @@ char * new_override_omp (credentials_t *, const char *, const char *,
                          const char *, const char *, const char *, const char *,
                          const char *, const char *, const char *, const char *,
                          const char *, const char *, const char *, const char *,
-                         const char *, const char *, const char *, const char *);
+                         const char *, const char *, const char *, const char *,
+                         const char *);
 char * create_override_omp (credentials_t *, const char *, const char *,
                             const char *, const char *, const char *,
                             const char *, const char *, const char *,
