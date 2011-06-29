@@ -10026,6 +10026,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="$next='get_result'">
                 <input type="hidden" name="result_id" value="{../../@id}"/>
                 <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                <input type="hidden" name="name" value="{../../../../../../task/name}"/>
                 <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
               </xsl:when>
               <xsl:otherwise>
@@ -10052,7 +10053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;overrides={../../../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;overrides={../../../../../../filters/apply_overrides}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -10109,6 +10110,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="$next='get_result'">
                 <input type="hidden" name="result_id" value="{../../@id}"/>
                 <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                <input type="hidden" name="name" value="{../../../../../../task/name}"/>
                 <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
               </xsl:when>
               <xsl:otherwise>
@@ -10135,7 +10137,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;overrides={../../../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;overrides={../../../../../../filters/apply_overrides}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -10173,8 +10175,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <table>
         <tr>
-          <td><b>UUID:</b></td>
-          <td><b><xsl:value-of select="@id"/></b></td>
+          <td>Task:</td>
+          <td>
+            <a href="?cmd=get_tasks&amp;task_id={../../../../task/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="../../../../task/name"/>
+            </a>
+          </td>
         </tr>
       </table>
       <xsl:call-template name="result-detailed">
@@ -10284,7 +10290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;token={/envelope/token}"
                title="Result Details" style="margin-left:3px;">
               <img src="/img/details.png" border="0" alt="Details"/>
             </a>

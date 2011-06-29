@@ -2781,7 +2781,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         delete_note_omp (credentials, con_info->req_parms.note_id,
                          "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, NULL, NULL);
+                         NULL, NULL, NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
@@ -2794,7 +2794,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         delete_note_omp (credentials, con_info->req_parms.note_id, "get_nvts",
                          NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                         NULL, con_info->req_parms.oid, NULL);
+                         NULL, con_info->req_parms.oid, NULL, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
@@ -2858,7 +2858,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.overrides,
                          con_info->req_parms.result_hosts_only,
                          con_info->req_parms.search_phrase, min_cvss_base,
-                         NULL, NULL);
+                         NULL, NULL, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
@@ -2871,13 +2871,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       validate (validator, "page", &con_info->req_parms.next);
       validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "name", &con_info->req_parms.name);
       validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
 
       con_info->response =
         delete_note_omp (credentials, con_info->req_parms.note_id, "get_result",
                          con_info->req_parms.result_id, 0, 0, NULL, NULL,
                          NULL, NULL, con_info->req_parms.overrides, NULL, NULL,
-                         NULL, NULL, con_info->req_parms.task_id);
+                         NULL, NULL, con_info->req_parms.task_id,
+                         con_info->req_parms.name);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_note"))
@@ -2902,7 +2904,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           delete_note_omp (credentials, con_info->req_parms.note_id,
                            "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
                            con_info->req_parms.overrides, NULL, NULL, NULL,
-                           NULL, con_info->req_parms.task_id);
+                           NULL, con_info->req_parms.task_id, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -2914,7 +2916,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         delete_override_omp (credentials, con_info->req_parms.override_id,
                              "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -2929,7 +2931,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         delete_override_omp (credentials, con_info->req_parms.override_id,
                              "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
                              NULL, NULL, NULL, NULL, con_info->req_parms.oid,
-                             NULL);
+                             NULL, NULL);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -2995,7 +2997,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.overrides,
                              con_info->req_parms.result_hosts_only,
                              con_info->req_parms.search_phrase, min_cvss_base,
-                             NULL, NULL);
+                             NULL, NULL, NULL);
     }
 
    else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -3008,6 +3010,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       validate (validator, "page", &con_info->req_parms.next);
       validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate (validator, "name", &con_info->req_parms.name);
       validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
 
       con_info->response =
@@ -3015,7 +3018,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "get_result", con_info->req_parms.result_id, 0, 0,
                              NULL, NULL, NULL, NULL,
                              con_info->req_parms.overrides, NULL, NULL, NULL,
-                             NULL, con_info->req_parms.task_id);
+                             NULL, con_info->req_parms.task_id,
+                             con_info->req_parms.name);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_override"))
@@ -3029,7 +3033,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         delete_override_omp (credentials, con_info->req_parms.override_id,
                              "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
                              NULL, NULL, NULL, NULL, NULL,
-                             con_info->req_parms.task_id);
+                             con_info->req_parms.task_id, NULL);
     }
 
   else if (!strcmp (con_info->req_parms.cmd, "delete_report"))
@@ -3490,7 +3494,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.note_task_id,
                          con_info->req_parms.note_result_id,
                          "get_note", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, NULL, NULL, NULL);
+                         NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3524,7 +3528,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.note_task_id,
                          con_info->req_parms.note_result_id,
                          "get_notes", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, NULL, NULL);
+                         NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3560,7 +3564,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.note_task_id,
                          con_info->req_parms.note_result_id,
                          "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL, NULL,
-                         NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+                         NULL, NULL, NULL, con_info->req_parms.oid, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3646,7 +3650,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.result_hosts_only,
                          con_info->req_parms.search_phrase,
                          con_info->req_parms.min_cvss_base,
-                         NULL, NULL);
+                         NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3688,7 +3692,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          0, 0, NULL, NULL, NULL, NULL,
                          con_info->req_parms.overrides,
                          NULL, NULL, NULL, NULL,
-                         con_info->req_parms.task_id);
+                         con_info->req_parms.task_id,
+                         NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -3729,7 +3734,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
                          con_info->req_parms.overrides,
                          NULL, NULL, NULL, NULL,
-                         con_info->req_parms.task_id);
+                         con_info->req_parms.task_id,
+                         NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3767,7 +3773,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.override_task_id,
                              con_info->req_parms.override_result_id,
                              "get_override", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL, NULL);
+                             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3803,7 +3809,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.override_task_id,
                              con_info->req_parms.override_result_id,
                              "get_overrides", NULL, 0, 0, NULL, NULL, NULL,
-                             NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3841,7 +3847,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.override_task_id,
                              con_info->req_parms.override_result_id,
                              "get_nvts", NULL, 0, 0, NULL, NULL, NULL, NULL,
-                             NULL, NULL, NULL, NULL, con_info->req_parms.oid, NULL);
+                             NULL, NULL, NULL, NULL, con_info->req_parms.oid,
+                             NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.next != NULL)
@@ -3929,7 +3936,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.result_hosts_only,
                              con_info->req_parms.search_phrase,
                              con_info->req_parms.min_cvss_base,
-                             NULL, NULL);
+                             NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -3973,7 +3980,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              0, 0, NULL, NULL, NULL, NULL,
                              con_info->req_parms.overrides,
                              NULL, NULL, NULL, NULL,
-                             con_info->req_parms.task_id);
+                             con_info->req_parms.task_id,
+                             NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
@@ -4016,7 +4024,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "get_tasks", NULL, 0, 0, NULL, NULL, NULL, NULL,
                              con_info->req_parms.overrides,
                              NULL, NULL, NULL, NULL,
-                             con_info->req_parms.task_id);
+                             con_info->req_parms.task_id,
+                             NULL);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
     {
@@ -4845,7 +4854,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_note",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL, NULL);
+                            NULL, NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -4855,7 +4864,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_notes",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL, NULL);
+                            NULL, NULL, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -4866,7 +4875,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_note_omp (credentials, note_id, "get_nvts",
                             NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, oid, NULL);
+                            NULL, NULL, oid, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -4896,20 +4905,21 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_note_omp (credentials, note_id, "get_report", report_id,
                             first, max, sort_field, sort_order, levels,
                             notes, overrides, result_hosts_only, search_phrase,
-                            min_cvss_base, NULL, NULL);
+                            min_cvss_base, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
            && (next != NULL)
            && (strcmp (next, "get_result") == 0)
+           && (name != NULL)
            && (result_id != NULL)
            && (overrides != NULL))
     {
       return edit_note_omp (credentials, note_id, "get_result",
                             /* Parameters for next page. */
                             result_id, 0, 0, NULL, NULL, NULL, NULL, overrides,
-                            NULL, NULL, NULL, NULL, task_id);
+                            NULL, NULL, NULL, NULL, task_id, name);
     }
 
   else if ((!strcmp (cmd, "edit_note"))
@@ -4922,7 +4932,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_note_omp (credentials, note_id, "get_tasks",
                             /* Parameters for next page. */
                             NULL, 0, 0, NULL, NULL, NULL, NULL, overrides, NULL,
-                            NULL, NULL, NULL, task_id);
+                            NULL, NULL, NULL, task_id, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
@@ -4932,7 +4942,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_override_omp (credentials, override_id, "get_override",
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", NULL, NULL);
+                                NULL, "-1", NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
@@ -4942,7 +4952,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_override_omp (credentials, override_id, "get_overrides",
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", NULL, NULL);
+                                NULL, "-1", NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
@@ -4953,7 +4963,7 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       return edit_override_omp (credentials, override_id, "get_nvts",
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", oid, NULL);
+                                NULL, "-1", oid, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
@@ -4983,20 +4993,22 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_override_omp (credentials, override_id, "get_report",
                                 report_id, first, max, sort_field, sort_order,
                                 levels, notes, overrides, result_hosts_only,
-                                search_phrase, min_cvss_base, NULL, NULL);
+                                search_phrase, min_cvss_base, NULL, NULL, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
            && (override_id != NULL)
            && (next != NULL)
            && (strcmp (next, "get_result") == 0)
+           && (name != NULL)
            && (result_id != NULL)
            && (overrides != NULL))
     {
       return edit_override_omp (credentials, override_id, "get_result",
                                 /* Parameters for next page. */
                                 result_id, 0, 0, NULL, NULL, NULL, NULL,
-                                overrides, NULL, NULL, "-1", NULL, task_id);
+                                overrides, NULL, NULL, "-1", NULL, task_id,
+                                name);
     }
 
   else if ((!strcmp (cmd, "edit_override"))
@@ -5009,7 +5021,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return edit_override_omp (credentials, override_id, "get_tasks",
                                 /* Parameters for next page. */
                                 NULL, 0, 0, NULL, NULL, NULL, NULL, overrides, NULL,
-                                NULL, "-1", NULL, task_id);
+                                NULL, "-1", NULL, task_id, NULL);
     }
 
   else if ((!strcmp (cmd, "edit_report_format"))
@@ -5098,7 +5110,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
            && (task_id != NULL))
-    return get_result_omp (credentials, result_id, task_id, overrides, NULL);
+    return get_result_omp (credentials, result_id, task_id, name,
+                           overrides, NULL);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

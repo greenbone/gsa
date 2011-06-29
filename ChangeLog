@@ -1,3 +1,26 @@
+2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass the task name into the get_result page in preparation for the
+	edit icons.  As a result show the name instead of the UUID above the
+	result.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get): Pass task name to note and
+	override operations on the get_result page.  Pass name to get_result_omp
+	too.
+
+	* src/gsad_omp.c (get_result_omp): Add task name arg.  Add to TASK for
+	XSL.
+	(delete_note_omp, save_note_omp, delete_override_omp)
+	(save_override_omp): Add task_name arg, pass through to get_result_omp.
+	(edit_note_omp, edit_override_omp): Add task_name arg.  Add to EDIT_NOTE
+	for XSL.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (note-detailed, override-detailed)
+	(result-detailed): Pass task name to commands for get_result.
+	(result [details]): Print task name with link instead of UUID.
+
 2011-06-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get the Result Details page edit_override working.
