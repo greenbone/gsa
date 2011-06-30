@@ -1,5 +1,9 @@
 2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result [details]): Add overrides control.
+
+2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
 	(html-create-override-form, html-edit-override-form): Turn off the details
 	button of the associated note/override.

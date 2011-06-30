@@ -10204,6 +10204,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          <img src="/img/help.png"/>
        </a>
 -->
+      <xsl:variable name="apply-overrides" select="../../../../filters/apply_overrides"/>
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_result"/>
+          <input type="hidden" name="result_id" value="{@id}"/>
+          <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+          <input type="hidden" name="name" value="{../../../../task/name}"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="$apply-overrides">&#8730;No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <table>
