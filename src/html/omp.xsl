@@ -1931,9 +1931,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
             </td>
           </tr>
+          <xsl:variable name="container" select="task/target/@id='' and task/status='Running'"/>
           <xsl:for-each select="task/reports/report">
             <xsl:call-template name="report">
-              <xsl:with-param name="container">1</xsl:with-param>
+              <xsl:with-param name="container" select="$container"/>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -2175,12 +2176,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="$progress"/> %
           </xsl:if>
         </div>
-      </div>
-    </xsl:when>
-    <xsl:when test="$status='Uploading'">
-      <div class="progressbar_box" title="{$status}">
-        <div class="progressbar_bar_done" style="width:100px;"></div>
-        <div class="progressbar_text"><xsl:value-of select="$status"/></div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Container'">
