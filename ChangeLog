@@ -1,5 +1,10 @@
 2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Allow hosts to be empty in save_note and
+	save_override.
+
+2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result [details]): Add overrides control.
 
 2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>

@@ -3634,8 +3634,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id",
                        &con_info->req_parms.note_task_id)
@@ -3668,8 +3672,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id",
                        &con_info->req_parms.note_task_id)
@@ -3703,8 +3711,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id",
                        &con_info->req_parms.note_task_id)
@@ -3766,8 +3778,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id", &con_info->req_parms.note_task_id)
           || validate (validator, "note_result_id",
@@ -3824,8 +3840,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id",
                        &con_info->req_parms.note_task_id)
@@ -3870,8 +3890,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "note_id", &con_info->req_parms.note_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "note_task_id",
                        &con_info->req_parms.note_task_id)
@@ -3910,7 +3934,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
           || validate (validator, "port", &con_info->req_parms.port)
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
@@ -3948,8 +3974,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
           || validate (validator, "override_task_id",
@@ -3985,8 +4015,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
           || validate (validator, "override_task_id",
@@ -4050,8 +4084,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
           || validate (validator, "override_task_id",
@@ -4111,8 +4149,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
           || validate (validator, "override_task_id",
@@ -4159,8 +4201,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       if (validate (validator, "override_id", &con_info->req_parms.override_id)
           || validate_or (validator, "text", &con_info->req_parms.text, "")
-          || validate (validator, "hosts", &con_info->req_parms.hosts)
-          || validate (validator, "port", &con_info->req_parms.port)
+          || con_info->req_parms.hosts == NULL
+          || (strcmp (con_info->req_parms.hosts, "")
+              && validate (validator, "hosts", &con_info->req_parms.hosts))
+          || con_info->req_parms.port == NULL
+          || (strcmp (con_info->req_parms.port, "")
+              && validate (validator, "port", &con_info->req_parms.port))
           || validate (validator, "threat", &con_info->req_parms.threat)
           || validate (validator, "new_threat", &con_info->req_parms.new_threat)
           || validate (validator, "override_task_id",
