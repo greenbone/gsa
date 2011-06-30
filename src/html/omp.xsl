@@ -8055,6 +8055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </h3>
       <xsl:for-each select="get_results_response/results/result">
         <xsl:call-template name="result-detailed">
+          <xsl:with-param name="details-button">0</xsl:with-param>
           <xsl:with-param name="override-buttons">0</xsl:with-param>
           <xsl:with-param name="note-buttons">0</xsl:with-param>
         </xsl:call-template>
@@ -8261,6 +8262,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </h3>
           <xsl:for-each select="get_notes_response/note/result">
             <xsl:call-template name="result-detailed">
+              <xsl:with-param name="details-button">0</xsl:with-param>
               <xsl:with-param name="note-buttons">0</xsl:with-param>
               <xsl:with-param name="override-buttons">0</xsl:with-param>
             </xsl:call-template>
@@ -8739,6 +8741,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </h3>
       <xsl:for-each select="get_results_response/results/result">
         <xsl:call-template name="result-detailed">
+          <xsl:with-param name="details-button">0</xsl:with-param>
           <xsl:with-param name="override-buttons">0</xsl:with-param>
           <xsl:with-param name="note-buttons">0</xsl:with-param>
         </xsl:call-template>
@@ -8984,6 +8987,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </h3>
           <xsl:for-each select="get_overrides_response/override/result">
             <xsl:call-template name="result-detailed">
+              <xsl:with-param name="details-button">0</xsl:with-param>
               <xsl:with-param name="override-buttons">0</xsl:with-param>
               <xsl:with-param name="note-buttons">0</xsl:with-param>
             </xsl:call-template>

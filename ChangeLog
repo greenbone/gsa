@@ -1,7 +1,14 @@
 2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(html-create-override-form, html-edit-override-form): Turn off the details
+	button of the associated note/override.
+
+2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Check whether the task is a
 	container for the report template, instead of just passing 1.
+	(status_bar): Remove shadowed case.
 
 2011-06-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
