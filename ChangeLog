@@ -1,3 +1,9 @@
+2011-06-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/os_junos.png: New.
+
+	* CMakeLists.txt: Install the new icon.
+
 2011-06-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Allow hosts to be empty in save_note and
