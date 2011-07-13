@@ -1,5 +1,20 @@
 2011-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Enable result details for delta results.
+
+	* src/gsad.c (exec_omp_post): Pass result_id to get_report_omp.
+
+	* src/gsad_omp.c (get_report_omp): Add a result_id arg.  If given adjust
+	the XML to be a GET_DELTA_RESULT instead of a GET_REPORT.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (result [details]): Take task info as args.
+	(result-detailed): Add details icon to delta case.
+	(get_delta_result): New template.
+
+2011-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Pass overrides flag to delete_report_omp.
 
 	* src/gsad_omp.c (delete_report_omp): Add apply_overrides flag.  Call

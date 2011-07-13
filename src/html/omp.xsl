@@ -10193,7 +10193,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     RESULT -->
 
-<xsl:template match="result" mode="details">
+<xsl:template match="result" mode="details" name="result-details">
+  <xsl:param name="task_id" select="../../../../task/@id"/>
+  <xsl:param name="task_name" select="../../../../task/name"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -10211,8 +10213,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_result"/>
           <input type="hidden" name="result_id" value="{@id}"/>
-          <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
-          <input type="hidden" name="name" value="{../../../../task/name}"/>
+          <input type="hidden" name="task_id" value="{$task_id}"/>
+          <input type="hidden" name="name" value="{$task_name}"/>
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
@@ -10237,8 +10239,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Task:</td>
           <td>
-            <a href="?cmd=get_tasks&amp;task_id={../../../../task/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="../../../../task/name"/>
+            <a href="?cmd=get_tasks&amp;task_id={$task_id}&amp;token={/envelope/token}">
+              <xsl:value-of select="$task_name"/>
             </a>
           </td>
         </tr>
@@ -10347,6 +10349,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$details-button = 1">
       <xsl:choose>
         <xsl:when test="delta">
+          <div class="float_right" style="text-align:right">
+            <form class="float_right" style="text-align:right">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_report"/>
+              <input type="hidden" name="report_id" value="{../../../report/@id}"/>
+              <input type="hidden" name="result_id" value="{@id}"/>
+              <input type="hidden" name="delta_report_id" value="{../../../report/delta/report/@id}"/>
+              <input type="hidden" name="delta_states" value="{../../../report/filters/delta/text()}"/>
+              <input type="hidden" name="first_result" value="{../../../report/results/@start}"/>
+              <input type="hidden" name="max_results" value="{../../../report/results/@max}"/>
+              <input type="hidden" name="levels" value="{../../filters/text()}"/>
+              <input type="hidden"
+                     name="search_phrase"
+                     value="{../../filters/phrase}"/>
+              <input type="hidden"
+                     name="apply_min_cvss_base"
+                     value="{string-length(../../filters/min_cvss_base) &gt; 0}"/>
+              <input type="hidden"
+                     name="min_cvss_base"
+                     value="{../../filters/min_cvss_base}"/>
+              <input type="hidden"
+                     name="sort_field"
+                     value="{../../sort/field/text()}"/>
+              <input type="hidden"
+                     name="sort_order"
+                     value="{../../sort/field/order}"/>
+              <input type="hidden" name="notes" value="{../../filters/notes}"/>
+              <input type="hidden"
+                     name="result_hosts_only"
+                     value="{../../filters/result_hosts_only}"/>
+              <input type="hidden" name="task_id" value="{../../task/@id}"/>
+              <input type="hidden" name="overrides" value="{../../filters/apply_overrides}"/>
+              <input type="image"
+                     name="Details"
+                     src="/img/details.png"
+                     alt="Details" style="margin-left:3px;margin-right:3px;"/>
+            </form>
+          </div>
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
@@ -10559,6 +10599,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_results_response"/>
   <xsl:apply-templates select="commands_response/get_results_response"/>
+</xsl:template>
+
+<xsl:template match="get_delta_result">
+  <xsl:variable name="result_id" select="result/@id"/>
+  <xsl:variable name="task_id" select="task/@id"/>
+  <xsl:variable name="task_name" select="task/name"/>
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:for-each select="get_reports_response/report/report/results/result[@id=$result_id]">
+    <xsl:call-template name="result-details">
+      <xsl:with-param name="task_id" select="$task_id"/>
+      <xsl:with-param name="task_name" select="$task_name"/>
+    </xsl:call-template>
+  </xsl:for-each>
 </xsl:template>
 
 <!--     REPORT -->

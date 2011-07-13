@@ -6772,6 +6772,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  esc_search_phrase  Phrase which included results must contain.
  * @param[in]  esc_min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  result_id      ID of single result to get, in delta case.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  *
@@ -6793,6 +6794,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const char * esc_levels, const char * esc_notes,
                 const char * esc_overrides, const char *esc_result_hosts_only,
                 const char * esc_search_phrase, const char *esc_min_cvss_base,
+                const char *result_id,
                 gchar ** content_type, char **content_disposition)
 {
   char *report_encoded = NULL;
@@ -7113,14 +7115,21 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
       /* Format is NULL, send XSL transformed XML. */
 
-      xml = g_string_new ("<get_report>");
+      if (delta_report_id && result_id && strcmp (result_id, "0"))
+        xml = g_string_new ("<get_delta_result>");
+      else
+        xml = g_string_new ("<get_report>");
 
       if (strcmp (escalator_id, "0"))
         g_string_append_printf (xml, "<get_reports_escalate_response"
                                      " status=\"200\""
                                      " status_text=\"OK\"/>");
       else if (delta_report_id)
-        g_string_append_printf (xml, "<delta>%s</delta>", delta_report_id);
+        g_string_append_printf (xml,
+                                "<delta>%s</delta>"
+                                "<result id=\"%s\"/>",
+                                delta_report_id,
+                                result_id ? result_id : "0");
 
       entity = NULL;
       if (read_entity_and_string (&session, &entity, &xml))
@@ -7140,14 +7149,25 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       if (report_entity)
         {
           const char *id;
-          entity_t task_entity;
+          entity_t task_entity, name;
 
           id = NULL;
           task_entity = entity_child (report_entity, "task");
           if (task_entity)
-            id = entity_attribute (task_entity, "id");
+            {
+              id = entity_attribute (task_entity, "id");
+              name = entity_child (task_entity, "name");
+            }
+          else
+            name = NULL;
           if (id)
             task_id = g_strdup (id);
+          if (delta_report_id && result_id && id && name)
+            g_string_append_printf (xml,
+                                    "<task id=\"%s\"><name>%s</name></task>",
+                                    id,
+                                    entity_text (name));
+
           free_entity (entity);
         }
 
@@ -7288,7 +7308,10 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         g_string_append (xml, "</all>");
       }
 
-      g_string_append (xml, "</get_report>");
+      if (delta_report_id && result_id && strcmp (result_id, "0"))
+        g_string_append (xml, "</get_delta_result>");
+      else
+        g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }

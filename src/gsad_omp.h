@@ -71,7 +71,7 @@ char * get_report_omp (credentials_t *, const char *, const char *,
                        const char *, const char *, const char *, const char *,
                        const unsigned int, const unsigned int, const char *,
                        const char *, const char *, const char *, const char *,
-                       const char *, gchar **, char **);
+                       const char *, const char *, gchar **, char **);
 
 char * get_result_omp (credentials_t *, const char *, const char *,
                        const char *, const char *, const char *);

@@ -3459,6 +3459,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         con_info->req_parms.esc_result_hosts_only,
                         con_info->req_parms.esc_search_phrase,
                         esc_min_cvss_base,
+                        NULL,
                         &content_type_omp,
                         &content_disposition);
     }
@@ -5444,6 +5445,7 @@ exec_omp_get (struct MHD_Connection *connection,
                             esc_result_hosts_only,
                             esc_search_phrase,
                             esc_min_cvss_base,
+                            result_id,
                             &content_type_omp,
                             content_disposition);
 
