@@ -1,3 +1,7 @@
+2011-07-13  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/os.xml: Updated with new entries.
+
 2011-06-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/os_junos.png: New.

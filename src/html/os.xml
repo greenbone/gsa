@@ -132,6 +132,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:fedoraproject:fedora:12</pattern><title>Fedora 12</title><icon>os_fedora.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:13</pattern><title>Fedora 13</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:14</pattern><title>Fedora 14</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:15</pattern><title>Fedora 15</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora</pattern><title>Fedora</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:redhat:enterprise_linux:2.1</pattern><title>Red Hat Enterprise Linux 2.1</title><icon>os_redhat.png</icon>
     </operating_system>
     <operating_system>
@@ -142,6 +154,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:redhat:enterprise_linux:5</pattern><title>Red Hat Enterprise Linux 5</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat</pattern><title>Red Hat</title><icon>os_redhat.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:mandriva:linux:2009.0</pattern><title>Mandriva Linux 2009.0</title><icon>os_mandriva.png</icon>
@@ -163,6 +178,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:mandriva:linux:2006.0</pattern><title>Mandriva Linux 2006.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux</pattern><title>Mandriva Linux</title><icon>os_mandriva.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:mandrakesoft:mandrake_linux:10.2</pattern><title>MandrakeSoft Mandrake Linux 10.2</title><icon>os_mandriva.png</icon>
@@ -189,6 +207,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:mandrakesoft:mandrake_linux:7.2</pattern><title>MandrakeSoft Mandrake Linux 7.2</title><icon>os_mandriva.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:mandrakesoft:mandrake_linux</pattern><title>MandrakeSoft Mandrake Linux</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:centos:centos:5</pattern><title>CentOS-5</title><icon>os_centos.png</icon>
     </operating_system>
     <operating_system>
@@ -199,6 +220,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:centos:centos:2</pattern><title>CentOS-2</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos</pattern><title>CentOS</title><icon>os_centos.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:debian:debian_linux:2.2</pattern><title>Debian Debian Linux 2.2</title><icon>os_debian.png</icon>
@@ -216,6 +240,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:debian:debian_linux:5.0</pattern><title>Debian GNU/Linux 5.0</title><icon>os_debian.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:6.0</pattern><title>Debian GNU/Linux 6.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux</pattern><title>Debian GNU/Linux</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:suse:linux_enterprise_server:11</pattern><title>SuSE Linux Enterprise Server 11</title><icon>os_suse.png</icon>
     </operating_system>
     <operating_system>
@@ -223,6 +253,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:suse:linux_enterprise_server:9</pattern><title>SuSE Linux Enterprise Server 9</title><icon>os_suse.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:suse:linux_enterprise_server</pattern><title>SuSE Linux Enterprise Server</title><icon>os_suse.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:novell:opensuse:11.2</pattern><title>Novell openSUSE 11.2</title><icon>os_novell.png</icon>
@@ -276,6 +309,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:novell:suse_linux:7.3</pattern><title>Novell SUSE Linux 7.3</title><icon>os_novell.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:novell:suse_linux</pattern><title>Novell SUSE Linux</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:trustix:secure_linux:3.0.5</pattern><title>Trustix Secure Linux 3.0.5</title><icon>os_trustix.png</icon>
     </operating_system>
     <operating_system>
@@ -298,6 +334,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:trustix:secure_linux:1.1</pattern><title>Trustix Secure Linux 1.1</title><icon>os_trustix.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:trustix:secure_linux</pattern><title>Trustix Secure Linux</title><icon>os_trustix.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:gentoo:linux</pattern><title>Gentoo Linux</title><icon>os_gentoo.png</icon>
@@ -342,6 +381,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:hp:hp-ux:11.23</pattern><title>HP-UX 11i v2</title><icon>os_hp.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:hp:hp-ux</pattern><title>HP-UX</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:sun:solaris</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
     </operating_system>
     <operating_system>
@@ -355,6 +397,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:cisco:ios</pattern><title>Cisco IOS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:juniper</pattern><title>Juniper</title><icon>os_junos.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:freebsd:freebsd</pattern><title>FreeBSD</title><icon>os_freebsd.png</icon>
