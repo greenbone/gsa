@@ -1,3 +1,15 @@
+2011-07-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Pass overrides flag to delete_report_omp.
+
+	* src/gsad_omp.c (delete_report_omp): Add apply_overrides flag.  Call
+	through to get_tasks instead of doing the OMP by hand, as some of the OMP
+	was missing.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (report): Add override param to delete icon.
+
 2011-07-13  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Updated with new entries.

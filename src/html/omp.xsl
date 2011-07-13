@@ -2470,6 +2470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
               <input type="hidden" name="task_id" value="{../../@id}"/>
+              <input type="hidden" name="overrides" value="{../../../../../apply_overrides}"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>

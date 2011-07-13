@@ -63,7 +63,7 @@ char * stop_task_omp (credentials_t *, const char *, int, const char *);
 char * get_tasks_omp (credentials_t *, const char *, const char *,
                       const char *, const char*, int, const char *);
 
-char * delete_report_omp (credentials_t *, const char *, const char *);
+char * delete_report_omp (credentials_t *, const char *, const char *, int);
 char * get_report_omp (credentials_t *, const char *, const char *,
                        const char *, gsize *, const unsigned int,
                        const unsigned int, const char *, const char *,

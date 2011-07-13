@@ -6709,22 +6709,21 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
 /**
  * @brief Delete report, get task status, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  report_id    ID of report.
- * @param[in]  task_id      ID of task.
+ * @param[in]  credentials      Username and password for authentication.
+ * @param[in]  report_id        ID of report.
+ * @param[in]  task_id          ID of task.
+ * @param[in]  apply_overrides  Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
 char *
 delete_report_omp (credentials_t * credentials,
                    const char *report_id,
-                   const char *task_id)
+                   const char *task_id,
+                   int apply_overrides)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
+  char *ret;
+  gchar *delete_report;
 
   if ((report_id == NULL) || (task_id == NULL))
     return gsad_message (credentials,
@@ -6734,58 +6733,13 @@ delete_report_omp (credentials_t * credentials,
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a report. "
-                             "The report is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
+  delete_report = g_strdup_printf ("<delete_report report_id=\"%s\"/>",
+                                   report_id);
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_report report_id=\"%s\" />"
-                            "<get_tasks task_id=\"%s\" details=\"1\" />"
-                            "<get_report_formats"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
-                            report_id,
-                            task_id) == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a report. "
-                           "The report is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a report. "
-                           "It is unclear whether the report has been deleted or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  ret = get_tasks (credentials, task_id, NULL, NULL, 0, delete_report,
+                   apply_overrides, NULL);
+  g_free (delete_report);
+  return ret;
 }
 
 /**

@@ -3205,9 +3205,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       validate (validator, "report_id", &con_info->req_parms.report_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
+      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
       con_info->response =
         delete_report_omp (credentials, con_info->req_parms.report_id,
-                           con_info->req_parms.task_id);
+                           con_info->req_parms.task_id,
+                           con_info->req_parms.overrides
+                            ? strcmp (con_info->req_parms.overrides, "0")
+                            : 0);
     }
 
   else if ((!strcmp (con_info->req_parms.cmd, "delete_report_format"))
