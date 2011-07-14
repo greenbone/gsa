@@ -360,6 +360,7 @@ install (FILES  src/html/img/os_aix.png
                 src/html/img/os_fedora.png
                 src/html/img/os_freebsd.png
                 src/html/img/os_gentoo.png
+                src/html/img/os_gos.png
                 src/html/img/os_junos.png
                 src/html/img/os_hp.png
                 src/html/img/os_linux.png
