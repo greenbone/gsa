@@ -616,6 +616,7 @@ init_validator ()
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
 
 
+  openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",         "name");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");
@@ -4447,6 +4448,7 @@ exec_omp_get (struct MHD_Connection *connection,
   char *cmd = NULL;
   const char *agent_format = NULL;
   const char *agent_id     = NULL;
+  const char *apply_overrides    = NULL;
   const char *comment      = NULL;
   const char *config_id    = NULL;
   const char *delta_report_id = NULL;
@@ -4521,6 +4523,17 @@ exec_omp_get (struct MHD_Connection *connection,
                        "agent_id");
       if (openvas_validate (validator, "agent_id", agent_id))
         agent_id = NULL;
+
+      apply_overrides = MHD_lookup_connection_value (connection,
+                                                     MHD_GET_ARGUMENT_KIND,
+                                                     "apply_overrides");
+      if (apply_overrides)
+        {
+          if (openvas_validate (validator, "apply_overrides", apply_overrides))
+            apply_overrides = NULL;
+        }
+      else
+        apply_overrides = "0";
 
       comment = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
@@ -5329,7 +5342,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
            && (task_id != NULL))
     return get_result_omp (credentials, result_id, task_id, name,
-                           overrides, NULL);
+                           apply_overrides, NULL, report_id, first_result,
+                           max_results, levels, search_phrase, notes, overrides,
+                           min_cvss_base, result_hosts_only, sort_field,
+                           sort_order);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

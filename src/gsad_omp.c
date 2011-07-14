@@ -7329,23 +7329,42 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @param[in]  task_id       Result task UUID.
  * @param[in]  apply_overrides  Whether to apply overrides.
  * @param[in]  commands      Extra commands to run before the others.
+ * @param[in]  report_id     ID of report.
+ * @param[in]  first_result  First result.
+ * @param[in]  max_results   Max results.
+ * @param[in]  levels        Levels.
+ * @param[in]  search_phrase  Search phrase.
+ * @param[in]  notes         Notes filter flag.
+ * @param[in]  overrides     Overrides filter flag.
+ * @param[in]  min_cvss_base      Min CVSS base.
+ * @param[in]  result_hosts_only  Result hosts only filter flag.
+ * @param[in]  sort_field         Sort field.
+ * @param[in]  sort_order         Sort order.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_result_omp (credentials_t *credentials, const char *result_id,
                 const char *task_id, const char *task_name,
-                const char *apply_overrides, const char *commands)
+                const char *apply_overrides, const char *commands,
+                const char *report_id, const char *first_result,
+                const char *max_results, const char *levels,
+                const char *search_phrase, const char *notes,
+                const char *overrides, const char *min_cvss_base,
+                const char *result_hosts_only, const char *sort_field,
+                const char *sort_order)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
 
-  if (apply_overrides == NULL || task_name == NULL)
+  if (apply_overrides == NULL || task_name == NULL || notes == NULL
+      || overrides == NULL || min_cvss_base == NULL || result_hosts_only == NULL
+      || sort_field == NULL || sort_order == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a result. "
+                         "An internal error occurred while getting XXX a result. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
@@ -7369,13 +7388,39 @@ get_result_omp (credentials_t *credentials, const char *result_id,
 
   g_string_append_printf (xml,
                           "<task id=\"%s\"><name>%s</name></task>"
+                          "<report id=\"%s\">"
+                          "<results start=\"%s\" max=\"%s\"/>"
                           "<filters>"
+                          "%s"
+                          "<phrase>%s</phrase>"
+                          "<notes>%s</notes>"
+                          "<overrides>%s</overrides>"
+                          "<min_cvss_base>%s</min_cvss_base>"
                           /* So that the XSL shows the overrides. */
                           "<apply_overrides>%s</apply_overrides>"
-                          "</filters>",
+                          "<result_hosts_only>%s</result_hosts_only>"
+                          "</filters>"
+                          "<sort>"
+                          "<field>"
+                          "%s"
+                          "<order>%s</order>"
+                          "</field>"
+                          "</sort>"
+                          "</report>",
                           task_id,
                           task_name,
-                          apply_overrides);
+                          report_id,
+                          first_result,
+                          max_results,
+                          levels,
+                          search_phrase,
+                          notes,
+                          overrides,
+                          min_cvss_base,
+                          apply_overrides,
+                          result_hosts_only,
+                          sort_field,
+                          sort_order);
 
   /* Get the result. */
 
@@ -7883,7 +7928,9 @@ create_note_omp (credentials_t *credentials, const char *oid,
   if (next && (strcmp (next, "get_result") == 0))
     {
       char *ret = get_result_omp (credentials, report_id, result_task_id,
-                                  task_name, overrides, create_note);
+                                  task_name, overrides, create_note, NULL, NULL,
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                  NULL, NULL);
       g_free (create_note);
       return ret;
     }
@@ -8202,7 +8249,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
       ret = get_result_omp (credentials, report_id, task_id, task_name,
-                            overrides, extra);
+                            overrides, extra, NULL, NULL, NULL, NULL, NULL,
+                            NULL, NULL, NULL, NULL, NULL, NULL);
       g_free (extra);
       return ret;
     }
@@ -8581,7 +8629,9 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   if (strcmp (next, "get_result") == 0)
     {
       char *ret = get_result_omp (credentials, report_id, task_id, task_name,
-                                  overrides, modify_note);
+                                  overrides, modify_note, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                  NULL);
       g_free (modify_note);
       return ret;
     }
@@ -9169,7 +9219,9 @@ create_override_omp (credentials_t *credentials, const char *oid,
   if (next && (strcmp (next, "get_result") == 0))
     {
       char *ret = get_result_omp (credentials, report_id, result_task_id,
-                                  task_name, overrides, create_override);
+                                  task_name, overrides, create_override, NULL,
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                  NULL, NULL, NULL);
       g_free (create_override);
       return ret;
     }
@@ -9501,7 +9553,8 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
       char *ret = get_result_omp (credentials, report_id, task_id, task_name,
-                                  overrides, extra);
+                                  overrides, extra, NULL, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
       g_free (extra);
       return ret;
     }
@@ -9885,7 +9938,9 @@ save_override_omp (credentials_t * credentials, const char *override_id,
   if (strcmp (next, "get_result") == 0)
     {
       char *ret = get_result_omp (credentials, report_id, task_id, task_name,
-                                  overrides, modify_override);
+                                  overrides, modify_override, NULL, NULL, NULL,
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                  NULL);
       g_free (modify_override);
       return ret;
     }

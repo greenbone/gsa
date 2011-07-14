@@ -10209,7 +10209,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
 -->
       <xsl:if test="$delta=0">
-        <xsl:variable name="apply-overrides" select="../../../../filters/apply_overrides"/>
+        <xsl:variable name="apply-overrides" select="../../../../report/filters/apply_overrides"/>
         <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
           <form action="" method="get">
             <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -10238,6 +10238,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </div>
     <div class="gb_window_part_content">
+      <div class="float_right">
+        <xsl:choose>
+          <xsl:when test="$delta=0">
+            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../report/results/@start}&amp;max_results={../../../../report/results/@max}&amp;levels={../../../../report/filters/text()}&amp;search_phrase={../../../../report/filters/phrase}&amp;notes={../../../../report/filters/notes}&amp;apply_min_cvss_base={string-length (../../../../report/filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../../../report/filters/min_cvss_base}&amp;overrides={../../../../report/filters/apply_overrides}&amp;result_hosts_only={../../../../report/filters/result_hosts_only}&amp;sort_field={../../../../report/sort/text()}&amp;sort_order={../../../../report/sort/order}&amp;token={/envelope/token}">Back to Report</a>
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
+<!--
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <xsl:choose>
+            <xsl:when test="../../delta">
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+              <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <input type="hidden" name="first_result" value="{report/results/@start}"/>
+          <input type="hidden" name="max_results" value="{report/results/@max}"/>
+          <input type="hidden" name="levels" value="{$levels}"/>
+          <input type="hidden"
+                 name="search_phrase"
+                 value="{report/filters/phrase}"/>
+          <input type="hidden"
+                 name="apply_min_cvss_base"
+                 value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+          <input type="hidden"
+                 name="min_cvss_base"
+                 value="{report/filters/min_cvss_base}"/>
+          <input type="hidden"
+                 name="sort_field"
+                 value="{report/sort/field/text()}"/>
+          <input type="hidden"
+                 name="sort_order"
+                 value="{report/sort/field/order}"/>
+          <input type="hidden" name="notes" value="{report/filters/notes}"/>
+          <input type="hidden"
+                 name="result_hosts_only"
+                 value="{report/filters/result_hosts_only}"/>
+          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="1">&#8730;No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+-->
+      </div>
       <table>
         <tr>
           <td>Task:</td>
@@ -10393,7 +10457,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;first_result={../../../report/results/@start}&amp;max_results={../../../report/results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;token={/envelope/token}"
                title="Result Details" style="margin-left:3px;">
               <img src="/img/details.png" border="0" alt="Details"/>
             </a>

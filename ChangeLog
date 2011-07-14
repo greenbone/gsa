@@ -1,5 +1,22 @@
 2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a Back to Report link to the single result case of the Result Details
+	page.
+
+	* src/gsad.c (init_validator): Add apply_overrides.
+	(exec_omp_get): Pass get_report params through to get_result for
+	back link.
+
+	* src/gsad_omp.c (get_result_omp): Add get_report args.  Pass into XML.
+	Update callers with NULLs for now.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (result-details): Add a Back to Report link.  Add
+	get_report params to get_result icon.
+
+2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report_omp): Exit after the GET_TASKS for the delta
 	case, because that's all that's needed.
 
