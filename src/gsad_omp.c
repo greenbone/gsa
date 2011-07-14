@@ -7205,6 +7205,13 @@ get_report_omp (credentials_t * credentials, const char *report_id,
           g_free (task_id);
         }
 
+      if (delta_report_id && result_id && strcmp (result_id, "0"))
+        {
+          g_string_append (xml, "</get_delta_result>");
+          openvas_server_close (socket, session);
+          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+        }
+
       if (openvas_server_send (&session, "<get_report_formats"
                                          " sort_field=\"name\""
                                          " sort_order=\"ascending\"/>")
@@ -7308,10 +7315,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         g_string_append (xml, "</all>");
       }
 
-      if (delta_report_id && result_id && strcmp (result_id, "0"))
-        g_string_append (xml, "</get_delta_result>");
-      else
-        g_string_append (xml, "</get_report>");
+      g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }

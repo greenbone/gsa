@@ -1,5 +1,10 @@
 2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Exit after the GET_TASKS for the delta
+	case, because that's all that's needed.
+
+2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-details): Add delta param.  Skip overrides
 	widget if set.
 	(get_delta_result): Pass delta flag to result-details.
