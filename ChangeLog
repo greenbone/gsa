@@ -1,3 +1,9 @@
+2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (result-details): Add delta param.  Skip overrides
+	widget if set.
+	(get_delta_result): Pass delta flag to result-details.
+
 2011-07-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/os_gos.png: New.
