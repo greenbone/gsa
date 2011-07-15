@@ -7321,6 +7321,16 @@ get_report_omp (credentials_t * credentials, const char *report_id,
     }
 }
 
+#define REQUIRE(arg)                                                  \
+  if (arg == NULL)                                                    \
+    return gsad_message (credentials,                                 \
+                         "Internal error", __FUNCTION__, __LINE__,    \
+                         "An internal error occurred."                \
+                         " Diagnostics: Required parameter \""        \
+                         G_STRINGIFY (arg)                            \
+                         "\" was NULL.",                              \
+                         "/omp?cmd=get_tasks")
+
 /**
  * @brief Get one result, XSL transform the result.
  *
@@ -7358,6 +7368,15 @@ get_result_omp (credentials_t *credentials, const char *result_id,
   gnutls_session_t session;
   int socket;
   gchar *html;
+
+  REQUIRE (apply_overrides);
+  REQUIRE (task_name);
+  REQUIRE (notes);
+  REQUIRE (overrides);
+  REQUIRE (min_cvss_base);
+  REQUIRE (result_hosts_only);
+  REQUIRE (sort_field);
+  REQUIRE (sort_order);
 
   if (apply_overrides == NULL || task_name == NULL || notes == NULL
       || overrides == NULL || min_cvss_base == NULL || result_hosts_only == NULL
@@ -8238,7 +8257,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
 
   if (strcmp (next, "get_result") == 0)
     {
-      gchar * extra;
+      gchar *extra, *first, *max;
       char *ret;
 
       if (task_name == NULL)
@@ -8250,10 +8269,16 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                              "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      first = g_strdup_printf ("%ui", first_result);
+      max = g_strdup_printf ("%ui", max_results);
       ret = get_result_omp (credentials, report_id, task_id, task_name,
-                            overrides, extra, NULL, NULL, NULL, NULL, NULL,
-                            NULL, NULL, NULL, NULL, NULL, NULL);
+                            overrides, extra, report_id, first, max,
+                            levels, search_phrase, notes, overrides,
+                            min_cvss_base, result_hosts_only, sort_field,
+                            sort_order);
       g_free (extra);
+      g_free (first);
+      g_free (max);
       return ret;
     }
 
@@ -9554,10 +9579,16 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
+      gchar *first = g_strdup_printf ("%ui", first_result);
+      gchar *max = g_strdup_printf ("%ui", max_results);
       char *ret = get_result_omp (credentials, report_id, task_id, task_name,
-                                  overrides, extra, NULL, NULL, NULL, NULL,
-                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                                  overrides, extra, report_id, first, max,
+                                  levels, search_phrase, notes, overrides,
+                                  min_cvss_base, result_hosts_only, sort_field,
+                                  sort_order);
       g_free (extra);
+      g_free (first);
+      g_free (max);
       return ret;
     }
 

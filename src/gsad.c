@@ -3033,18 +3033,68 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (strcmp (con_info->req_parms.next, "get_result") == 0)
            && (con_info->req_parms.result_id != NULL))
     {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || (sscanf (con_info->req_parms.first_result, "%u", &first) != 1))
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || (sscanf (con_info->req_parms.max_results, "%u", &max) != 1))
+        max = RESULTS_PER_PAGE;
+
       validate (validator, "note_id", &con_info->req_parms.note_id);
       validate (validator, "page", &con_info->req_parms.next);
       validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
       validate (validator, "name", &con_info->req_parms.name);
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
       validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
 
       con_info->response =
         delete_note_omp (credentials, con_info->req_parms.note_id, "get_result",
-                         con_info->req_parms.result_id, 0, 0, NULL, NULL,
-                         NULL, NULL, con_info->req_parms.overrides, NULL, NULL,
-                         NULL, NULL, con_info->req_parms.task_id,
+                         con_info->req_parms.result_id, first, max,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.levels,
+                         con_info->req_parms.notes,
+                         con_info->req_parms.overrides,
+                         con_info->req_parms.result_hosts_only,
+                         con_info->req_parms.search_phrase,
+                         min_cvss_base,
+                         NULL,
+                         con_info->req_parms.task_id,
                          con_info->req_parms.name);
     }
 
@@ -3172,18 +3222,66 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             && (strcmp (con_info->req_parms.next, "get_result") == 0)
             && (con_info->req_parms.result_id != NULL))
     {
+      unsigned int first, max;
+      const char *min_cvss_base;
+
+      if (!con_info->req_parms.first_result
+          || (sscanf (con_info->req_parms.first_result, "%u", &first) != 1))
+        first = 1;
+
+      if (!con_info->req_parms.max_results
+          || (sscanf (con_info->req_parms.max_results, "%u", &max) != 1))
+        max = RESULTS_PER_PAGE;
+
       validate (validator, "override_id", &con_info->req_parms.override_id);
       validate (validator, "page", &con_info->req_parms.next);
       validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
       validate (validator, "name", &con_info->req_parms.name);
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
       validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
+      validate_or (validator,
+                   "result_hosts_only",
+                   &con_info->req_parms.result_hosts_only,
+                   "0");
+      validate_or (validator,
+                   "search_phrase",
+                   &con_info->req_parms.search_phrase,
+                   "");
+
+      if (con_info->req_parms.min_cvss_base)
+        {
+          if (openvas_validate (validator, "min_cvss_base",
+                                con_info->req_parms.min_cvss_base))
+            min_cvss_base = NULL;
+          else
+            {
+              if (con_info->req_parms.apply_min
+                  && strcmp (con_info->req_parms.apply_min, "0"))
+                min_cvss_base = con_info->req_parms.min_cvss_base;
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
 
       con_info->response =
         delete_override_omp (credentials, con_info->req_parms.override_id,
-                             "get_result", con_info->req_parms.result_id, 0, 0,
-                             NULL, NULL, NULL, NULL,
-                             con_info->req_parms.overrides, NULL, NULL, NULL,
+                             "get_result", con_info->req_parms.result_id,
+                             first, max,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.levels,
+                             con_info->req_parms.notes,
+                             con_info->req_parms.overrides,
+                             con_info->req_parms.result_hosts_only,
+                             con_info->req_parms.search_phrase, min_cvss_base,
                              NULL, con_info->req_parms.task_id,
                              con_info->req_parms.name);
     }

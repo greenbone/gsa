@@ -1,5 +1,18 @@
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Pass get_report params to delete_note_omp
+	and delete_override_omp.
+
+	* src/gsad_omp.c (REQUIRE): New macro.
+	(get_result_omp): Check args with REQUIRE.
+	(delete_note_omp, delete_override_omp): Pass get_report params back to
+	get_result_omp.
+
+	* src/html/omp.xsl (note-detailed, override-detailed): Add get_report
+	params to delete icons.
+
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_result_omp): Move the constructed report children
 	up to the same level as the report, for the XSL.
 

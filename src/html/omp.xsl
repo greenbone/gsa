@@ -10062,6 +10062,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
                 <input type="hidden" name="name" value="{../../../../../../task/name}"/>
                 <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
+
+                <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                <input type="hidden" name="first_result" value="{../../../../../../results/@start}"/>
+                <input type="hidden" name="max_results" value="{../../../../../../results/@max}"/>
+                <input type="hidden" name="levels" value="{../../../../../../filters/text()}"/>
+                <input type="hidden" name="sort_field" value="{../../../../../../sort/field/text()}"/>
+                <input type="hidden" name="sort_order" value="{../../../../../../sort/field/order}"/>
+                <input type="hidden" name="search_phrase" value="{../../../../../../filters/phrase}"/>
+                <input type="hidden" name="min_cvss_base" value="{../../../../../../filters/min_cvss_base}"/>
+                <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../../../filters/min_cvss_base) &gt; 0}"/>
+                <input type="hidden" name="notes" value="{../../../../../../filters/notes}"/>
+                <input type="hidden" name="overrides" value="{../../../../../../filters/overrides}"/>
+                <input type="hidden" name="result_hosts_only={../../../../../../filters/result_hosts_only}"/>
               </xsl:when>
               <xsl:otherwise>
                 <input type="hidden" name="report_id" value="{../../../../@id}"/>
@@ -10146,6 +10159,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
                 <input type="hidden" name="name" value="{../../../../../../task/name}"/>
                 <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
+
+                <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                <input type="hidden" name="first_result" value="{../../../../../../results/@start}"/>
+                <input type="hidden" name="max_results" value="{../../../../../../results/@max}"/>
+                <input type="hidden" name="levels" value="{../../../../../../filters/text()}"/>
+                <input type="hidden" name="sort_field" value="{../../../../../../sort/field/text()}"/>
+                <input type="hidden" name="sort_order" value="{../../../../../../sort/field/order}"/>
+                <input type="hidden" name="search_phrase" value="{../../../../../../filters/phrase}"/>
+                <input type="hidden" name="min_cvss_base" value="{../../../../../../filters/min_cvss_base}"/>
+                <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../../../filters/min_cvss_base) &gt; 0}"/>
+                <input type="hidden" name="notes" value="{../../../../../../filters/notes}"/>
+                <input type="hidden" name="overrides" value="{../../../../../../filters/overrides}"/>
+                <input type="hidden" name="result_hosts_only={../../../../../../filters/result_hosts_only}"/>
               </xsl:when>
               <xsl:otherwise>
                 <input type="hidden" name="report_id" value="{../../../../@id}"/>
