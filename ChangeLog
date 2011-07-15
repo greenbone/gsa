@@ -1,3 +1,10 @@
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_result_omp): Remove trace text.
+
+	* src/html/omp.xsl (result-details): Add get_report params to refresh
+	icon.  Correct sort paths in Back to Report link.
+
 2011-07-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a Back to Report link to the single result case of the Result Details

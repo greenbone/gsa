@@ -7364,7 +7364,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
       || sort_field == NULL || sort_order == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting XXX a result. "
+                         "An internal error occurred while getting a result. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
