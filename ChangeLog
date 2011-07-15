@@ -1,5 +1,11 @@
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (note-detailed, override-detailed): Get edit icon
+	note/override param value from XML instead of assuming it is 1.  Get
+	the value from the correct element too.
+
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Pass get_report params across edits on get_result page.
 
 	* src/gsad.c (exec_omp_post): Pass get_report params to the get_result
