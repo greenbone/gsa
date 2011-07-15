@@ -7388,7 +7388,10 @@ get_result_omp (credentials_t *credentials, const char *result_id,
 
   g_string_append_printf (xml,
                           "<task id=\"%s\"><name>%s</name></task>"
-                          "<report id=\"%s\">"
+                          "<report id=\"%s\"/>"
+                          /* As a hack put the REPORT children alongside the
+                           * REPORT.  This keeps them at the same level
+                           * above the RESULT as they are in GET_REPORT. */
                           "<results start=\"%s\" max=\"%s\"/>"
                           "<filters>"
                           "%s"
@@ -7405,8 +7408,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                           "%s"
                           "<order>%s</order>"
                           "</field>"
-                          "</sort>"
-                          "</report>",
+                          "</sort>",
                           task_id,
                           task_name,
                           report_id,

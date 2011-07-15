@@ -1,5 +1,15 @@
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_result_omp): Move the constructed report children
+	up to the same level as the report, for the XSL.
+
+	* src/html/omp.xsl (result-details): In the links that pass through the
+	get_report params, expect the params at the same level above the result
+	as in the get_report case, like the links that use the params for other
+	purposes do.
+
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_result_omp): Remove trace text.
 
 	* src/html/omp.xsl (result-details): Add get_report params to refresh

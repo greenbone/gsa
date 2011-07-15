@@ -10209,7 +10209,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
 -->
       <xsl:if test="$delta=0">
-        <xsl:variable name="apply-overrides" select="../../../../report/filters/apply_overrides"/>
+        <xsl:variable name="apply-overrides" select="../../../../filters/apply_overrides"/>
         <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
           <form action="" method="get">
             <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -10221,27 +10221,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="report_id"
                    value="{../../../../report/@id}"/>
             <input type="hidden" name="first_result"
-                   value="{../../../../report/results/@start}"/>
+                   value="{../../../../results/@start}"/>
             <input type="hidden" name="max_results"
-                   value="{../../../../report/results/@max}"/>
+                   value="{../../../../results/@max}"/>
             <input type="hidden" name="levels"
-                   value="{../../../../report/filters/text()}"/>
+                   value="{../../../../filters/text()}"/>
             <input type="hidden" name="search_phrase"
-                   value="{../../../../report/filters/phrase}"/>
+                   value="{../../../../filters/phrase}"/>
             <input type="hidden" name="notes"
-                   value="{../../../../report/filters/notes}"/>
+                   value="{../../../../filters/notes}"/>
             <input type="hidden" name="overrides"
-                   value="{../../../../report/filters/overrides}"/>
+                   value="{../../../../filters/overrides}"/>
             <input type="hidden" name="apply_min_cvss_base"
-                   value="{string-length (../../../../report/filters/min_cvss_base) &gt; 0}"/>
+                   value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
             <input type="hidden" name="min_cvss_base"
-                   value="{../../../../report/filters/min_cvss_base}"/>
+                   value="{../../../../filters/min_cvss_base}"/>
             <input type="hidden" name="result_hosts_only"
-                   value="{../../../../report/filters/result_hosts_only}"/>
+                   value="{../../../../filters/result_hosts_only}"/>
             <input type="hidden" name="sort_field"
-                   value="{../../../../report/sort/field/text()}"/>
+                   value="{../../../../sort/field/text()}"/>
             <input type="hidden" name="sort_order"
-                   value="{../../../../report/sort/field/order}"/>
+                   value="{../../../../sort/field/order}"/>
 
             <select style="margin-bottom: 0px;" name="apply_overrides" size="1">
               <xsl:choose>
@@ -10267,7 +10267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../report/results/@start}&amp;max_results={../../../../report/results/@max}&amp;levels={../../../../report/filters/text()}&amp;search_phrase={../../../../report/filters/phrase}&amp;notes={../../../../report/filters/notes}&amp;apply_min_cvss_base={string-length (../../../../report/filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../../../report/filters/min_cvss_base}&amp;overrides={../../../../report/filters/apply_overrides}&amp;result_hosts_only={../../../../report/filters/result_hosts_only}&amp;sort_field={../../../../report/sort/field/text()}&amp;sort_order={../../../../report/sort/field/order}&amp;token={/envelope/token}">Back to Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;token={/envelope/token}">Back to Report</a>
           </xsl:when>
           <xsl:otherwise>
           </xsl:otherwise>
