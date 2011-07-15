@@ -1,5 +1,27 @@
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Pass get_report params across edits on get_result page.
+
+	* src/gsad.c (exec_omp_post): Pass get_report params to the get_result
+	cases of save_note_omp and save_override_omp.
+	(exec_omp_get): Pass get_report params to the get_result cases of
+	edit_note_omp and edit_override_omp.
+
+	* src/gsad_omp.c (edit_note_omp, edit_override_omp): Add result_id arg.
+	Pass into XML.
+	(save_note_omp, save_override_omp): Pass get_report params to
+	get_result_omp.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-edit-note-form, html-edit-override-form): Add
+	result_id param for get_result, because report_id is now used for
+	report_id passed from get_report page.
+	(note-detailed, override-detailed): Add get_report params to edit icon in
+	get_results case.
+
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Pass result ID to delete_note_omp and
 	delete_override_omp from result_id instead of report_id, because report_id
 	is used for the get_report pass-through params now.
@@ -11,6 +33,8 @@
 	* src/gsad_omp.h: Update headers accordingly.
 
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass get_report params across deletes on get_result page.
 
 	* src/gsad.c (exec_omp_post): Pass get_report params to delete_note_omp
 	and delete_override_omp.
