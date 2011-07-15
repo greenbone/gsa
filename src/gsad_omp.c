@@ -8190,6 +8190,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  oid            OID of NVT (for get_nvts).
  * @param[in]  task_id        ID of task (for get_tasks and get_result).
  * @param[in]  task_name      Name of task (for get_result).
+ * @param[in]  result_id      ID of result (for get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -8202,7 +8203,8 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                  const char *levels, const char *notes, const char *overrides,
                  const char *result_hosts_only, const char *search_phrase,
                  const char *min_cvss_base, const char *oid,
-                 const char *task_id, const char *task_name)
+                 const char *task_id, const char *task_name,
+                 const char *result_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -8269,9 +8271,9 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                              "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      first = g_strdup_printf ("%ui", first_result);
-      max = g_strdup_printf ("%ui", max_results);
-      ret = get_result_omp (credentials, report_id, task_id, task_name,
+      first = g_strdup_printf ("%u", first_result);
+      max = g_strdup_printf ("%u", max_results);
+      ret = get_result_omp (credentials, result_id, task_id, task_name,
                             overrides, extra, report_id, first, max,
                             levels, search_phrase, notes, overrides,
                             min_cvss_base, result_hosts_only, sort_field,
@@ -9506,6 +9508,7 @@ create_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  oid            OID of NVT (for get_nvts).
  * @param[in]  task_id        ID of task (for get_tasks and get_result).
  * @param[in]  task_name      Name of task (for get_result).
+ * @param[in]  result_id      ID of result (for get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -9519,7 +9522,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                      const char *overrides, const char *result_hosts_only,
                      const char *search_phrase, const char *min_cvss_base,
                      const char *oid, const char *task_id,
-                     const char *task_name)
+                     const char *task_name, const char *result_id)
 {
   entity_t entity;
   char *text = NULL;
@@ -9579,9 +9582,9 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      gchar *first = g_strdup_printf ("%ui", first_result);
-      gchar *max = g_strdup_printf ("%ui", max_results);
-      char *ret = get_result_omp (credentials, report_id, task_id, task_name,
+      gchar *first = g_strdup_printf ("%u", first_result);
+      gchar *max = g_strdup_printf ("%u", max_results);
+      char *ret = get_result_omp (credentials, result_id, task_id, task_name,
                                   overrides, extra, report_id, first, max,
                                   levels, search_phrase, notes, overrides,
                                   min_cvss_base, result_hosts_only, sort_field,

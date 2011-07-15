@@ -188,7 +188,7 @@ char * delete_note_omp (credentials_t *, const char *, const char *,
                         const char *, const unsigned int, const unsigned int,
                         const char *, const char *, const char *, const char *,
                         const char *, const char *, const char *, const char *,
-                        const char *, const char *, const char *);
+                        const char *, const char *, const char *, const char *);
 char * edit_note_omp (credentials_t *, const char *, const char *,
                       const char *, const unsigned int, const unsigned int,
                       const char *, const char *, const char *, const char *,
@@ -224,7 +224,8 @@ char * delete_override_omp (credentials_t *, const char *, const char *,
                             const unsigned int, const char *, const char *,
                             const char *, const char *, const char *,
                             const char *, const char *, const char *,
-                            const char *, const char *, const char *);
+                            const char *, const char *, const char *,
+                            const char *);
 char * edit_override_omp (credentials_t *, const char *, const char *,
                           const char *, const unsigned int, const unsigned int,
                           const char *, const char *, const char *,

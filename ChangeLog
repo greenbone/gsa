@@ -1,5 +1,17 @@
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Pass result ID to delete_note_omp and
+	delete_override_omp from result_id instead of report_id, because report_id
+	is used for the get_report pass-through params now.
+
+	* src/gsad_omp.c (delete_note_omp, delete_override_omp): Add result_id
+	arg.  Use for result ID for get_result_omp instead of report_id.  Also
+	correct format specifier for first and max.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Pass get_report params to delete_note_omp
 	and delete_override_omp.
 
