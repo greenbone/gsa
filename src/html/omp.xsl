@@ -7959,10 +7959,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="next='get_result'">
             <!-- get_result params. -->
             <input type="hidden" name="next" value="{next}"/>
-            <input type="hidden" name="report_id" value="{result/@id}"/>
+            <input type="hidden" name="result_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
             <input type="hidden" name="task_id" value="{task/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
+
+            <!-- get_report passthrough params. -->
+            <input type="hidden" name="report_id" value="{report/@id}"/>
+            <input type="hidden" name="first_result" value="{first_result}"/>
+            <input type="hidden" name="max_results" value="{max_results}"/>
+            <input type="hidden" name="sort_field" value="{sort_field}"/>
+            <input type="hidden" name="sort_order" value="{sort_order}"/>
+            <input type="hidden" name="levels" value="{levels}"/>
+            <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+            <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+            <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
+            <input type="hidden" name="notes" value="{notes}"/>
+            <input type="hidden" name="overrides" value="{overrides}"/>
+            <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
           </xsl:when>
           <xsl:otherwise>
             <!-- get_report params. -->
@@ -8032,9 +8046,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Result
             </td>
             <td>
-              <input type="radio" name="result_id" value="" checked="1"/>
+              <input type="radio" name="note_result_id" value="" checked="1"/>
               Any
-              <input type="radio" name="result_id" value="{result/@id}"/>
+              <input type="radio" name="note_result_id" value="{result/@id}"/>
               <xsl:value-of select="result/@id"/>
             </td>
           </tr>
@@ -8634,10 +8648,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="next='get_result'">
             <!-- get_result params. -->
             <input type="hidden" name="next" value="{next}"/>
-            <input type="hidden" name="report_id" value="{result/@id}"/>
+            <input type="hidden" name="result_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
             <input type="hidden" name="task_id" value="{task/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
+
+            <!-- get_report passthrough params. -->
+            <input type="hidden" name="report_id" value="{report/@id}"/>
+            <input type="hidden" name="first_result" value="{first_result}"/>
+            <input type="hidden" name="max_results" value="{max_results}"/>
+            <input type="hidden" name="sort_field" value="{sort_field}"/>
+            <input type="hidden" name="sort_order" value="{sort_order}"/>
+            <input type="hidden" name="levels" value="{levels}"/>
+            <input type="hidden" name="search_phrase" value="{search_phrase}"/>
+            <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
+            <input type="hidden" name="apply_min_cvss_base" value="{string-length (min_cvss_base) &gt; 0}"/>
+            <input type="hidden" name="notes" value="{notes}"/>
+            <input type="hidden" name="overrides" value="{overrides}"/>
+            <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
           </xsl:when>
           <xsl:otherwise>
             <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -8719,9 +8747,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Result
             </td>
             <td>
-              <input type="radio" name="result_id" value="" checked="1"/>
+              <input type="radio" name="note_result_id" value="" checked="1"/>
               Any
-              <input type="radio" name="result_id" value="{result/@id}"/>
+              <input type="radio" name="note_result_id" value="{result/@id}"/>
               <xsl:value-of select="result/@id"/>
             </td>
           </tr>
@@ -10531,7 +10559,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;report_id={@id}&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -10563,7 +10591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;next=get_result&amp;report_id={@id}&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>

@@ -7839,7 +7839,7 @@ new_note_omp (credentials_t *credentials, const char *oid,
  * @param[in]  port           Port note applies to, "" for all.
  * @param[in]  threat         Threat note applies to, "" for all.
  * @param[in]  task_id        ID of task to limit note to, "" for all.
- * @param[in]  result_id      ID of result to limit note to, "" for all.
+ * @param[in]  note_result_id  ID of result to limit note to, "" for all.
  * @param[in]  next           Next page, NULL for get_report.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
@@ -7855,14 +7855,15 @@ new_note_omp (credentials_t *credentials, const char *oid,
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  task_name      Name of task (for get_result).
  * @param[in]  result_task_id  ID of task (for get_result).
+ * @param[in]  result_id      ID of result (for get_result).
  *
  * @return Result of XSL transformation.
  */
 char *
 create_note_omp (credentials_t *credentials, const char *oid,
                  const char *text, const char *hosts, const char *port,
-                 const char *threat, const char *task_id, const char *result_id,
-                 const char *next,
+                 const char *threat, const char *task_id,
+                 const char *note_result_id, const char *next,
                  /* Passthroughs. */
                  const char *report_id,
                  const unsigned int first_result,
@@ -7871,7 +7872,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                  const char *levels, const char *notes, const char *overrides,
                  const char *result_hosts_only, const char *search_phrase,
                  const char *min_cvss_base, const char *task_name,
-                 const char *result_task_id)
+                 const char *result_task_id, const char *result_id)
 {
   gnutls_session_t session;
   GString *xml;
@@ -7944,15 +7945,20 @@ create_note_omp (credentials_t *credentials, const char *oid,
                                  threat,
                                  text ? text : "",
                                  task_id,
-                                 result_id);
+                                 note_result_id);
 
   if (next && (strcmp (next, "get_result") == 0))
     {
-      char *ret = get_result_omp (credentials, report_id, result_task_id,
-                                  task_name, overrides, create_note, NULL, NULL,
-                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                  NULL, NULL);
+      gchar *first = g_strdup_printf ("%u", first_result);
+      gchar *max = g_strdup_printf ("%u", max_results);
+      char *ret = get_result_omp (credentials, result_id, result_task_id,
+                                  task_name, overrides, create_note, report_id,
+                                  first, max, levels, search_phrase, notes,
+                                  overrides, min_cvss_base, result_hosts_only,
+                                  sort_field, sort_order);
       g_free (create_note);
+      g_free (first);
+      g_free (max);
       return ret;
     }
 
@@ -9164,7 +9170,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
  * @param[in]  threat         Threat override applies to, "" for all.
  * @param[in]  new_threat     Threat to override the result to.
  * @param[in]  task_id        ID of task to limit override to, "" for all.
- * @param[in]  result_id      ID of result to limit override to, "" for all.
+ * @param[in]  note_result_id  ID of result to limit override to, "" for all.
  * @param[in]  next           Next page, NULL for get_report.
  * @param[in]  report_id      ID of report.
  * @param[in]  first_result   Number of first result in report.
@@ -9180,6 +9186,7 @@ new_override_omp (credentials_t *credentials, const char *oid,
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  task_name      Name of task (for get_result).
  * @param[in]  result_task_id  ID of task (for get_result).
+ * @param[in]  result_id      ID of result (for get_result).
  *
  * @return Result of XSL transformation.
  */
@@ -9187,7 +9194,7 @@ char *
 create_override_omp (credentials_t *credentials, const char *oid,
                      const char *text, const char *hosts, const char *port,
                      const char *threat, const char *new_threat,
-                     const char *task_id, const char *result_id,
+                     const char *task_id, const char *note_result_id,
                      const char *next,
                      /* Passthroughs. */
                      const char *report_id,
@@ -9197,7 +9204,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
                      const char *levels, const char *notes,
                      const char *overrides, const char *result_hosts_only,
                      const char *search_phrase, const char *min_cvss_base,
-                     const char *task_name, const char *result_task_id)
+                     const char *task_name, const char *result_task_id,
+                     const char *result_id)
 {
   gnutls_session_t session;
   GString *xml;
@@ -9253,15 +9261,20 @@ create_override_omp (credentials_t *credentials, const char *oid,
                                      new_threat,
                                      text,
                                      task_id,
-                                     result_id);
+                                     note_result_id);
 
   if (next && (strcmp (next, "get_result") == 0))
     {
-      char *ret = get_result_omp (credentials, report_id, result_task_id,
-                                  task_name, overrides, create_override, NULL,
-                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                  NULL, NULL, NULL);
+      gchar *first = g_strdup_printf ("%u", first_result);
+      gchar *max = g_strdup_printf ("%u", max_results);
+      char *ret = get_result_omp (credentials, result_id, result_task_id,
+                                  task_name, overrides, create_override,
+                                  report_id, first, max, levels, search_phrase,
+                                  notes, overrides, min_cvss_base,
+                                  result_hosts_only, sort_field, sort_order);
       g_free (create_override);
+      g_free (first);
+      g_free (max);
       return ret;
     }
 

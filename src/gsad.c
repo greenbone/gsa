@@ -2495,6 +2495,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_result") == 0))
     {
+      const char *first_result;
+      const char *max_results;
+      unsigned int first;
+      unsigned int max;
+
       /* Check parameters for creating the note. */
 
       validate (validator, "oid", &con_info->req_parms.oid);
@@ -2535,23 +2540,55 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.note_task_id = NULL;
         }
 
-      if (strcmp (con_info->req_parms.result_id, "")
-          && openvas_validate (validator,
-                               "result_id",
-                               con_info->req_parms.result_id))
-        {
-          free (con_info->req_parms.result_id);
-          con_info->req_parms.result_id = NULL;
-        }
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
 
       /* Check parameters for requesting the result. */
 
-      validate (validator, "result_id", &con_info->req_parms.report_id);
+      validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
       validate (validator, "name", &con_info->req_parms.name);
+
+      /* Check get_report passthrough parameters. */
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "first_result", &con_info->req_parms.first_result);
+      validate (validator, "max_results", &con_info->req_parms.max_results);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate (validator, "notes", &con_info->req_parms.notes);
       validate (validator, "overrides", &con_info->req_parms.overrides);
+      validate (validator, "result_hosts_only",
+                &con_info->req_parms.result_hosts_only);
+      validate (validator, "search_phrase",
+                &con_info->req_parms.search_phrase);
+      if (openvas_validate (validator,
+                            "min_cvss_base",
+                            con_info->req_parms.min_cvss_base))
+        {
+          free (con_info->req_parms.min_cvss_base);
+          con_info->req_parms.min_cvss_base = NULL;
+        }
+      else
+        {
+          if (con_info->req_parms.apply_min_cvss_base == NULL
+              || (strcmp (con_info->req_parms.apply_min_cvss_base, "0") == 0))
+            {
+              free (con_info->req_parms.min_cvss_base);
+              con_info->req_parms.min_cvss_base = g_strdup ("");
+            }
+        }
 
       /* Call the page handler. */
+
+      first_result = con_info->req_parms.first_result;
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      max_results = con_info->req_parms.max_results;
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = RESULTS_PER_PAGE;
 
       con_info->response =
         create_note_omp (credentials,
@@ -2561,14 +2598,22 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.port,
                          con_info->req_parms.threat,
                          con_info->req_parms.note_task_id,
-                         con_info->req_parms.result_id,
+                         con_info->req_parms.note_result_id,
                          "get_result",
                          con_info->req_parms.report_id,
-                         0, 0, NULL, NULL, NULL, NULL,
+                         first,
+                         max,
+                         con_info->req_parms.sort_field,
+                         con_info->req_parms.sort_order,
+                         con_info->req_parms.levels,
+                         con_info->req_parms.notes,
                          con_info->req_parms.overrides,
-                         NULL, NULL, NULL,
+                         con_info->req_parms.result_hosts_only,
+                         con_info->req_parms.search_phrase,
+                         con_info->req_parms.min_cvss_base,
                          con_info->req_parms.name,
-                         con_info->req_parms.task_id);
+                         con_info->req_parms.task_id,
+                         con_info->req_parms.result_id);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "create_note"))
            && (con_info->req_parms.next == NULL))
@@ -2618,14 +2663,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.note_task_id = NULL;
         }
 
-      if (strcmp (con_info->req_parms.result_id, "")
-          && openvas_validate (validator,
-                               "result_id",
-                               con_info->req_parms.result_id))
-        {
-          free (con_info->req_parms.result_id);
-          con_info->req_parms.result_id = NULL;
-        }
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
 
       /* Check parameters for requesting the report. */
 
@@ -2676,7 +2715,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.port,
                          con_info->req_parms.threat,
                          con_info->req_parms.note_task_id,
-                         con_info->req_parms.result_id,
+                         con_info->req_parms.note_result_id,
                          NULL,
                          con_info->req_parms.report_id,
                          first,
@@ -2689,12 +2728,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          con_info->req_parms.result_hosts_only,
                          con_info->req_parms.search_phrase,
                          con_info->req_parms.min_cvss_base,
-                         NULL, NULL);
+                         NULL, NULL, NULL);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "create_override"))
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_result") == 0))
     {
+      const char *first_result;
+      const char *max_results;
+      unsigned int first;
+      unsigned int max;
+
       /* Check parameters for creating the override. */
 
       validate (validator, "oid", &con_info->req_parms.oid);
@@ -2735,23 +2779,56 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.override_task_id = NULL;
         }
 
-      if (strcmp (con_info->req_parms.result_id, "")
-          && openvas_validate (validator,
-                               "result_id",
-                               con_info->req_parms.result_id))
-        {
-          free (con_info->req_parms.result_id);
-          con_info->req_parms.result_id = NULL;
-        }
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
 
       /* Check parameters for requesting the result. */
 
-      validate (validator, "result_id", &con_info->req_parms.report_id);
+      validate (validator, "result_id", &con_info->req_parms.result_id);
       validate (validator, "task_id", &con_info->req_parms.task_id);
       validate (validator, "name", &con_info->req_parms.name);
       validate (validator, "overrides", &con_info->req_parms.overrides);
 
+      /* Check get_report passthrough parameters. */
+
+      validate (validator, "report_id", &con_info->req_parms.report_id);
+      validate (validator, "first_result", &con_info->req_parms.first_result);
+      validate (validator, "max_results", &con_info->req_parms.max_results);
+      validate (validator, "sort_field", &con_info->req_parms.sort_field);
+      validate (validator, "sort_order", &con_info->req_parms.sort_order);
+      validate (validator, "levels", &con_info->req_parms.levels);
+      validate (validator, "notes", &con_info->req_parms.notes);
+      validate (validator, "overrides", &con_info->req_parms.overrides);
+      validate (validator, "result_hosts_only",
+                &con_info->req_parms.result_hosts_only);
+      validate (validator, "search_phrase",
+                &con_info->req_parms.search_phrase);
+      if (openvas_validate (validator,
+                            "min_cvss_base",
+                            con_info->req_parms.min_cvss_base))
+        {
+          free (con_info->req_parms.min_cvss_base);
+          con_info->req_parms.min_cvss_base = NULL;
+        }
+      else
+        {
+          if (con_info->req_parms.apply_min_cvss_base == NULL
+              || (strcmp (con_info->req_parms.apply_min_cvss_base, "0") == 0))
+            {
+              free (con_info->req_parms.min_cvss_base);
+              con_info->req_parms.min_cvss_base = g_strdup ("");
+            }
+        }
+
       /* Call the page handler. */
+
+      first_result = con_info->req_parms.first_result;
+      if (!first_result || sscanf (first_result, "%u", &first) != 1)
+        first = 1;
+
+      max_results = con_info->req_parms.max_results;
+      if (!max_results || sscanf (max_results, "%u", &max) != 1)
+        max = RESULTS_PER_PAGE;
 
       con_info->response =
         create_override_omp (credentials,
@@ -2762,14 +2839,22 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.threat,
                              con_info->req_parms.new_threat,
                              con_info->req_parms.override_task_id,
-                             con_info->req_parms.result_id,
+                             con_info->req_parms.note_result_id,
                              "get_result",
                              con_info->req_parms.report_id,
-                             0, 0, NULL, NULL, NULL, NULL,
+                             first,
+                             max,
+                             con_info->req_parms.sort_field,
+                             con_info->req_parms.sort_order,
+                             con_info->req_parms.levels,
+                             con_info->req_parms.notes,
                              con_info->req_parms.overrides,
-                             NULL, NULL, NULL,
+                             con_info->req_parms.result_hosts_only,
+                             con_info->req_parms.search_phrase,
+                             con_info->req_parms.min_cvss_base,
                              con_info->req_parms.name,
-                             con_info->req_parms.task_id);
+                             con_info->req_parms.task_id,
+                             con_info->req_parms.result_id);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_override")
            && (con_info->req_parms.next == NULL))
@@ -2828,14 +2913,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.override_task_id = NULL;
         }
 
-      if (strcmp (con_info->req_parms.result_id, "")
-          && openvas_validate (validator,
-                               "result_id",
-                               con_info->req_parms.result_id))
-        {
-          free (con_info->req_parms.result_id);
-          con_info->req_parms.result_id = NULL;
-        }
+      validate (validator, "note_result_id",
+                &con_info->req_parms.note_result_id);
 
       /* Check parameters for requesting the report. */
 
@@ -2887,7 +2966,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.threat,
                              con_info->req_parms.new_threat,
                              con_info->req_parms.override_task_id,
-                             con_info->req_parms.result_id,
+                             con_info->req_parms.note_result_id,
                              NULL,
                              con_info->req_parms.report_id,
                              first,
@@ -2900,7 +2979,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.result_hosts_only,
                              con_info->req_parms.search_phrase,
                              con_info->req_parms.min_cvss_base,
-                             NULL, NULL);
+                             NULL, NULL, NULL);
     }
   else if (!strcmp (con_info->req_parms.cmd, "delete_agent"))
     {
@@ -5813,11 +5892,23 @@ exec_omp_get (struct MHD_Connection *connection,
            && (threat != NULL)
            && (task_id != NULL)
            && (result_id != NULL)
-           /* Result passthrough params. */
-           && (overrides != NULL))
+           /* get_report passthrough params. */
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (max_results != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     return new_note_omp (credentials, oid, hosts, port, threat, task_id, name,
-                         result_id, "get_result", report_id, 0, 0, NULL, NULL,
-                         NULL, NULL, overrides, NULL, NULL, NULL);
+                         result_id, "get_result", report_id, first_result,
+                         max_results, sort_field, sort_order, levels, notes,
+                         overrides, result_hosts_only, search_phrase,
+                         min_cvss_base);
 
   else if ((!strcmp (cmd, "new_note"))
            && (next == NULL)
@@ -5856,12 +5947,23 @@ exec_omp_get (struct MHD_Connection *connection,
            && (threat != NULL)
            && (task_id != NULL)
            && (result_id != NULL)
-           /* Result passthrough params. */
-           && (overrides != NULL))
+           /* Report passthrough params. */
+           && (report_id != NULL)
+           && (first_result != NULL)
+           && (max_results != NULL)
+           && (sort_field != NULL)
+           && (sort_order != NULL)
+           && (levels != NULL)
+           && (notes != NULL)
+           && (overrides != NULL)
+           && (result_hosts_only != NULL)
+           && (search_phrase != NULL)
+           && (min_cvss_base != NULL))
     return new_override_omp (credentials, oid, hosts, port, threat, task_id,
-                             name, result_id, "get_result", report_id, 0, 0,
-                             NULL, NULL, NULL, NULL, overrides, NULL, NULL,
-                             NULL);
+                             name, result_id, "get_result", report_id, first_result,
+                             max_results, sort_field, sort_order, levels, notes,
+                             overrides, result_hosts_only, search_phrase,
+                             min_cvss_base);
 
   else if ((!strcmp (cmd, "new_override"))
            && (next == NULL)

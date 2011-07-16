@@ -1,3 +1,25 @@
+2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass get_report params across creates on get_result page.
+
+	* src/gsad.c (exec_omp_post): Pass get_report params to the get_result
+	cases of create_note_omp and create_override_omp.
+	(exec_omp_get): Pass get_report params to the get_result cases of
+	new_note_omp and new_override_omp.
+
+	* src/gsad_omp.c (create_note_omp, create_override_omp): Rename result_id
+	arg to note_result_id.  Add result_id arg for get_result result.  Pass
+	get_report params to get_result_omp.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-create-note-form, html-create-override-form): Add
+	get_report params to get_result case of create icon.  Pass result ID in
+	result_id instead of report_id.  Use note_result_id for result ID
+	constraint of note/override instead of result_id.
+	(result-detailed): Add get_report params to get_result case of create
+	icon.
+
 2011-07-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (note-detailed, override-detailed): Get edit icon
