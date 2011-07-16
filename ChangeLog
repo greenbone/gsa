@@ -1,5 +1,12 @@
 2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (note-detailed, override-detailed)
+	(result-detailed): Pass overrides to note icons from apply_overrides,
+	because apply_overrides is the apply flag, whereas overrides is the
+	"include overrides" flag.
+
+2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Pass get_report params across creates on get_result page.
 
 	* src/gsad.c (exec_omp_post): Pass get_report params to the get_result
