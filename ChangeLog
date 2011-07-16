@@ -1,5 +1,11 @@
 2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (struct req_parms, serve_post, exec_omp_get): Remove TODOs
+	about stricter and static parameter handling, it's already too hard to
+	manage the parameters.
+
+2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add get_result Back to Report link for delta results.
 
 	* src/gsad.c (exec_omp_get): Pass delta params to get_result_omp.

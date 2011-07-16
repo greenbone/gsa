@@ -802,9 +802,7 @@ struct gsad_connection_info
 
   /**
    * @brief create_task / create_target / create_config POST request info
-   * @todo This should eventually be a dynamic key-based structure.  (The
-   *       names and number of request parameters are static, so a static
-   *       structure is more appropriate. -- mamu)
+   * @todo This should eventually be a dynamic key-based structure.
    * @todo Combine POST and GET parameter handling.
    */
   struct req_parms
@@ -1281,18 +1279,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "caller"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.caller);
-
-      /**
-       * @todo Accept only the parameters that the command uses.
-       *
-       * That way req_params can be reduced to something more manageable,
-       * and any extra parameters would be caught as errors.
-       *
-       * A problem is that the command is determined by a parameter.
-       * So how about we represent the command in the filename instead?
-       *
-       *     http://xxx/omp/get_targets?sort_field=name
-       */
 
       if (!strcmp (key, "access_hosts"))
         return append_chunk_string (con_info, data, size, off,
@@ -4794,8 +4780,6 @@ exec_omp_get (struct MHD_Connection *connection,
 
   if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))
     {
-      /** @todo Why lookup all parameters when each handler only uses some? */
-
       tracef ("cmd: [%s]\n", cmd);
 
       agent_id = MHD_lookup_connection_value
