@@ -1,5 +1,20 @@
 2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add get_result Back to Report link for delta results.
+
+	* src/gsad.c (exec_omp_get): Pass delta params to get_result_omp.
+
+	* src/gsad_omp.c (get_result_omp): Add delta param args.  Pass into XML.
+	Update callers.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (result-details): Add Back to Report link for delta
+	case.
+	(result-detailed): Pass delta params to get_result.
+
+2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (note-detailed, override-detailed)
 	(result-detailed): Pass overrides to note icons from apply_overrides,
 	because apply_overrides is the apply flag, whereas overrides is the

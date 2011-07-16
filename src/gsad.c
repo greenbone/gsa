@@ -5666,7 +5666,7 @@ exec_omp_get (struct MHD_Connection *connection,
                            apply_overrides, NULL, report_id, first_result,
                            max_results, levels, search_phrase, notes, overrides,
                            min_cvss_base, result_hosts_only, sort_field,
-                           sort_order);
+                           sort_order, delta_report_id, delta_states);
 
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);

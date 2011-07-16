@@ -7350,6 +7350,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
  * @param[in]  result_hosts_only  Result hosts only filter flag.
  * @param[in]  sort_field         Sort field.
  * @param[in]  sort_order         Sort order.
+ * @param[in]  delta_report_id    ID of delta report.
+ * @param[in]  delta_states       Delta states.
  *
  * @return Result of XSL transformation.
  */
@@ -7362,7 +7364,8 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                 const char *search_phrase, const char *notes,
                 const char *overrides, const char *min_cvss_base,
                 const char *result_hosts_only, const char *sort_field,
-                const char *sort_order)
+                const char *sort_order, const char *delta_report_id,
+                const char *delta_states)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7408,6 +7411,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
   g_string_append_printf (xml,
                           "<task id=\"%s\"><name>%s</name></task>"
                           "<report id=\"%s\"/>"
+                          "<delta><report id=\"%s\"/></delta>"
                           /* As a hack put the REPORT children alongside the
                            * REPORT.  This keeps them at the same level
                            * above the RESULT as they are in GET_REPORT. */
@@ -7421,6 +7425,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                           /* So that the XSL shows the overrides. */
                           "<apply_overrides>%s</apply_overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
+                          "<delta>%s</delta>"
                           "</filters>"
                           "<sort>"
                           "<field>"
@@ -7431,6 +7436,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                           task_id,
                           task_name,
                           report_id,
+                          delta_report_id,
                           first_result,
                           max_results,
                           levels,
@@ -7440,6 +7446,7 @@ get_result_omp (credentials_t *credentials, const char *result_id,
                           min_cvss_base,
                           apply_overrides,
                           result_hosts_only,
+                          delta_states,
                           sort_field,
                           sort_order);
 
@@ -7955,7 +7962,7 @@ create_note_omp (credentials_t *credentials, const char *oid,
                                   task_name, overrides, create_note, report_id,
                                   first, max, levels, search_phrase, notes,
                                   overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order);
+                                  sort_field, sort_order, NULL, NULL);
       g_free (create_note);
       g_free (first);
       g_free (max);
@@ -8283,7 +8290,7 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
                             overrides, extra, report_id, first, max,
                             levels, search_phrase, notes, overrides,
                             min_cvss_base, result_hosts_only, sort_field,
-                            sort_order);
+                            sort_order, NULL, NULL);
       g_free (extra);
       g_free (first);
       g_free (max);
@@ -8674,7 +8681,7 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                                   task_name, overrides, modify_note, report_id,
                                   first, max, levels, search_phrase, notes,
                                   overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order);
+                                  sort_field, sort_order, NULL, NULL);
       g_free (modify_note);
       g_free (first);
       g_free (max);
@@ -9271,7 +9278,8 @@ create_override_omp (credentials_t *credentials, const char *oid,
                                   task_name, overrides, create_override,
                                   report_id, first, max, levels, search_phrase,
                                   notes, overrides, min_cvss_base,
-                                  result_hosts_only, sort_field, sort_order);
+                                  result_hosts_only, sort_field, sort_order,
+                                  NULL, NULL);
       g_free (create_override);
       g_free (first);
       g_free (max);
@@ -9611,7 +9619,7 @@ delete_override_omp (credentials_t * credentials, const char *override_id,
                                   overrides, extra, report_id, first, max,
                                   levels, search_phrase, notes, overrides,
                                   min_cvss_base, result_hosts_only, sort_field,
-                                  sort_order);
+                                  sort_order, NULL, NULL);
       g_free (extra);
       g_free (first);
       g_free (max);
@@ -10009,7 +10017,7 @@ save_override_omp (credentials_t * credentials, const char *override_id,
                                   overrides, modify_override, report_id,
                                   first, max, levels, search_phrase, notes,
                                   overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order);
+                                  sort_field, sort_order, NULL, NULL);
       g_free (modify_override);
       g_free (first);
       g_free (max);
