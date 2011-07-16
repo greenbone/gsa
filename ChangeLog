@@ -1,5 +1,10 @@
 2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add missing report params to
+	result window << and >> links.
+
+2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (struct req_parms, serve_post, exec_omp_get): Remove TODOs
 	about stricter and static parameter handling, it's already too hard to
 	manage the parameters.
