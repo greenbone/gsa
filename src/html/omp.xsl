@@ -1845,6 +1845,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
+      <xsl:choose>
+        <xsl:when test="task/target/@id=''">
+        </xsl:when>
+        <xsl:otherwise>
+          <h4>Scan Intesity</h4>
+          <table>
+            <tr>
+              <td><xsl:value-of select="task/preferences/preference[scanner_name='max_checks']/name"/>:</td>
+              <td>
+                <xsl:value-of select="task/preferences/preference[scanner_name='max_checks']/value"/>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="task/preferences/preference[scanner_name='max_hosts']/name"/>:</td>
+              <td>
+                <xsl:value-of select="task/preferences/preference[scanner_name='max_hosts']/value"/>
+              </td>
+            </tr>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
   <xsl:if test="task/target/@id=''">
@@ -2674,6 +2695,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </xsl:choose>
                     </xsl:for-each>
                   </select>
+                </td>
+              </tr>
+            </xsl:otherwise>
+          </xsl:choose>
+        </table>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <xsl:choose>
+            <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+              <input type="hidden" name="target_id" value="--"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <h2>Scan Intesity</h2>
+              <tr>
+                <td valign="top" width="320">
+                  <xsl:value-of select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name"/>
+                </td>
+                <td>
+                  <input type="text"
+                         name="max_checks"
+                         value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/value}"
+                         size="10"
+                         maxlength="10"/>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <xsl:value-of select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/name"/>
+                </td>
+                <td>
+                  <input type="text"
+                         name="max_hosts"
+                         value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/value}"
+                         size="10"
+                         maxlength="10"/>
                 </td>
               </tr>
             </xsl:otherwise>
@@ -11454,6 +11509,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </select>
           </td>
         </tr>
+      </table>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <xsl:choose>
+          <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+            <input type="hidden" name="target_id" value="--"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <h2>Scan Intesity</h2>
+            <tr>
+              <td valign="top" width="320">
+                Maximum concurrently executed NVTs per host
+              </td>
+              <td>
+                <input type="text"
+                       name="max_checks"
+                       value="4"
+                       size="10"
+                       maxlength="10"/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Maximum concurrently scanned hosts
+              </td>
+              <td>
+                <input type="text"
+                       name="max_hosts"
+                       value="20"
+                       size="10"
+                       maxlength="10"/>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
         <tr>
           <td colspan="2" style="text-align:right;">
             <input type="submit" name="submit" value="Create Task"/>

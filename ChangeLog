@@ -1,3 +1,20 @@
+2011-07-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Move performance prefs from configs to tasks.
+
+	* src/gsad.c (init_validator, struct req_parms, free_resources)
+	(serve_post): Add max_checks and max_hosts.
+	(exec_omp_post): Pass max_checks and max_hosts to new_task_omp and
+	save_task_omp.
+
+	* src/gsad_omp.c (create_task_omp, create_task_omp): Add max_checks and
+	max_hosts params.  Pass to OMP commands.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-report-table, html-edit-task-form, new_task): Add
+	Scan Intensity fields.
+
 2011-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add missing report params to

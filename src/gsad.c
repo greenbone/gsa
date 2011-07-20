@@ -628,6 +628,8 @@ init_validator ()
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
+  openvas_validator_alias (validator, "max_checks",   "number");
+  openvas_validator_alias (validator, "max_hosts",    "number");
   openvas_validator_alias (validator, "method",       "condition");
   openvas_validator_alias (validator, "modify_password", "boolean");
   openvas_validator_alias (validator, "ldaphost",     "hostport");
@@ -864,6 +866,8 @@ struct gsad_connection_info
     char *hosts;         ///< Value of "hosts" parameter.
     char *hosts_allow;   ///< Value of "hosts_allow" parameter.
     char *login;         ///< Value of "login" parameter.
+    char *max_checks;    ///< Value of "max_checks" parameter.
+    char *max_hosts;     ///< Value of "max_hosts" parameter.
     char *minute;        ///< Value of "minute" parameter.
     char *month;         ///< Value of "month" parameter.
     char *note_id;       ///< Value of "note_id" parameter.
@@ -1004,6 +1008,8 @@ free_resources (void *cls, struct MHD_Connection *connection,
   free (con_info->req_parms.hour);
   free (con_info->req_parms.lsc_credential_id);
   free (con_info->req_parms.lsc_smb_credential_id);
+  free (con_info->req_parms.max_checks);
+  free (con_info->req_parms.max_hosts);
   free (con_info->req_parms.minute);
   free (con_info->req_parms.month);
   free (con_info->req_parms.modify_password);
@@ -1364,6 +1370,12 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
       if (!strcmp (key, "lsc_smb_credential_id"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.lsc_smb_credential_id);
+      if (!strcmp (key, "max_checks"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.max_checks);
+      if (!strcmp (key, "max_hosts"))
+        return append_chunk_string (con_info, data, size, off,
+                                    &con_info->req_parms.max_hosts);
       if (!strcmp (key, "minute"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.minute);
@@ -2355,6 +2367,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           con_info->req_parms.slave_id  = NULL;
         }
       validate (validator, "overrides", &con_info->req_parms.overrides);
+      validate (validator, "max_checks", &con_info->req_parms.max_checks);
+      validate (validator, "max_hosts", &con_info->req_parms.max_hosts);
       if ((con_info->req_parms.name == NULL) ||
           (con_info->req_parms.comment == NULL) ||
           (con_info->req_parms.config_id == NULL) ||
@@ -2362,7 +2376,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           (con_info->req_parms.target_id == NULL) ||
           (con_info->req_parms.escalator_id == NULL) ||
           (con_info->req_parms.slave_id == NULL) ||
-          (con_info->req_parms.schedule_id == NULL))
+          (con_info->req_parms.schedule_id == NULL) ||
+          (con_info->req_parms.max_checks == NULL) ||
+          (con_info->req_parms.max_hosts == NULL))
         con_info->response
          = new_task_omp (credentials,
                          "Invalid parameter",
@@ -2378,7 +2394,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->req_parms.escalator_id,
                            con_info->req_parms.schedule_id,
                            con_info->req_parms.slave_id,
-                           con_info->req_parms.overrides);
+                           con_info->req_parms.overrides,
+                           con_info->req_parms.max_checks,
+                           con_info->req_parms.max_hosts);
     }
   else if (!strcmp (con_info->req_parms.cmd, "create_user"))
     {
@@ -4562,6 +4580,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           validate (validator, "sort_field", &con_info->req_parms.sort_field);
           validate (validator, "sort_order", &con_info->req_parms.sort_order);
           validate (validator, "overrides", &con_info->req_parms.overrides);
+          validate (validator, "max_checks", &con_info->req_parms.max_checks);
+          validate (validator, "max_hosts", &con_info->req_parms.max_hosts);
 
           con_info->response =
             save_task_omp (credentials,
@@ -4577,7 +4597,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->req_parms.sort_order,
                            con_info->req_parms.overrides
                             ? strcmp (con_info->req_parms.overrides, "0")
-                            : 0);
+                            : 0,
+                           con_info->req_parms.max_checks,
+                           con_info->req_parms.max_hosts);
         }
       else
         {

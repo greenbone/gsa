@@ -42,7 +42,8 @@ void omp_init (const gchar *, int);
 char * create_report_omp (credentials_t *, char *, char *, const char *,
                           const char *, const char *);
 char * create_task_omp (credentials_t *, char *, char *, char *, char *,
-                        const char *, const char *, const char *, const char *);
+                        const char *, const char *, const char *, const char *,
+                        const char *, const char *);
 char * delete_task_omp (credentials_t *, const char *, int, const char *);
 char * delete_trash_task_omp (credentials_t *, const char *);
 char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
@@ -50,7 +51,8 @@ char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
 char * new_task_omp (credentials_t *, const char *, int);
 char * save_task_omp (credentials_t *, const char *, const char *, const char *,
                       const char *, const char *, const char *, const char *,
-                      const char *, const char *, const char *, int);
+                      const char *, const char *, const char *, int,
+                      const char *, const char *);
 char * save_container_task_omp (credentials_t *, const char *, const char *,
                                 const char *, const char *, const char *,
                                 const char *, const char *, int);

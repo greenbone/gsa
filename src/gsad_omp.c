@@ -689,6 +689,8 @@ create_report_omp (credentials_t * credentials, char *name, char *comment,
  * @param[in]  schedule_id   UUID of schedule for task.
  * @param[in]  slave_id      UUID of slave for task.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  max_checks        Max checks task preference.
+ * @param[in]  max_hosts         Max hosts task preference.
  *
  * @return Result of XSL transformation.
  */
@@ -696,7 +698,8 @@ char *
 create_task_omp (credentials_t * credentials, char *name, char *comment,
                  char *target_id, char *config_id, const char *escalator_id,
                  const char *schedule_id, const char *slave_id,
-                 const char *apply_overrides)
+                 const char *apply_overrides, const char *max_checks,
+                 const char *max_hosts)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -748,6 +751,16 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                               "<target id=\"%s\"/>"
                               "<name>%s</name>"
                               "<comment>%s</comment>"
+                              "<preferences>"
+                              "<preference>"
+                              "<scanner_name>max_checks</scanner_name>"
+                              "<value>%s</value>"
+                              "</preference>"
+                              "<preference>"
+                              "<scanner_name>max_hosts</scanner_name>"
+                              "<value>%s</value>"
+                              "</preference>"
+                              "</preferences>"
                               "</create_task>"
                               "<get_tasks"
                               " sort_field=\"name\""
@@ -761,6 +774,8 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                               target_id,
                               name,
                               comment,
+                              max_checks,
+                              max_hosts,
                               apply_overrides);
 
   g_free (schedule_element);
@@ -988,6 +1003,8 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
  * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  max_checks        Max checks task preference.
+ * @param[in]  max_hosts         Max hosts task preference.
  *
  * @return Result of XSL transformation.
  */
@@ -998,7 +1015,8 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                const char *next,
                /* Parameters for get_tasks. */
                const char *refresh_interval, const char *sort_field,
-               const char *sort_order, int apply_overrides)
+               const char *sort_order, int apply_overrides,
+               const char *max_checks, const char *max_hosts)
 {
   gchar *modify_task;
 
@@ -1010,7 +1028,7 @@ save_task_omp (credentials_t * credentials, const char *task_id,
 
   if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL)
+      || task_id == NULL || max_checks == NULL || max_hosts == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -1024,13 +1042,25 @@ save_task_omp (credentials_t * credentials, const char *task_id,
                                  "<escalator id=\"%s\"/>"
                                  "<schedule id=\"%s\"/>"
                                  "<slave id=\"%s\"/>"
+                                 "<preferences>"
+                                 "<preference>"
+                                 "<scanner_name>max_checks</scanner_name>"
+                                 "<value>%s</value>"
+                                 "</preference>"
+                                 "<preference>"
+                                 "<scanner_name>max_hosts</scanner_name>"
+                                 "<value>%s</value>"
+                                 "</preference>"
+                                 "</preferences>"
                                  "</modify_task>",
                                  task_id,
                                  name,
                                  comment,
                                  escalator_id,
                                  schedule_id,
-                                 slave_id);
+                                 slave_id,
+                                 max_checks,
+                                 max_hosts);
 
   if (strcmp (next, "get_tasks") == 0)
     {
