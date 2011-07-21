@@ -1,3 +1,9 @@
+2011-07-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 3.0+beta4 release.
+
+	* CHANGES: Updated.
+
 2011-07-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move performance prefs from configs to tasks.
