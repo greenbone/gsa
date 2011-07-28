@@ -1,3 +1,9 @@
+2011-07-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add an example inventory host
+	table to the Filtered Results window.
+	(report [inventory]): New template.
+
 2011-07-21  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.

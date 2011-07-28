@@ -1602,6 +1602,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
+          <xsl:apply-templates select="report" mode="inventory"/>
+
           <xsl:apply-templates select="report" mode="overview"/>
 
           <xsl:apply-templates select="report" mode="details"/>
@@ -10766,6 +10768,139 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!--     REPORT -->
+
+<xsl:template match="get_reports_response/report/report" mode="inventory">
+  <table class="gbntable" cellspacing="2" cellpadding="4">
+    <tr class="gbntablehead2">
+      <td>IP</td>
+      <td><img src="/img/high.png" alt="High" title="High"/></td>
+      <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
+      <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+      <td>Current Report</td>
+      <td>OS</td>
+      <td>Ports</td>
+      <td>Apps</td>
+      <td>Reports</td>
+      <td>Distance</td>
+    </tr>
+    <xsl:for-each select="host">
+      <xsl:variable name="current_host" select="ip"/>
+      <tr>
+        <td>
+          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+          <a href="#{$current_host}"><xsl:value-of select="$current_host"/>
+          <xsl:if test="$hostname">
+            <xsl:value-of select="concat(' (', $hostname, ')')"/>
+          </xsl:if>
+          </a>
+        </td>
+        <td>
+          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
+        </td>
+        <td>
+          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
+        </td>
+        <td>
+          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="../scan_start/text() != ''">
+              <a href="/omp?cmd=get_report&amp;report_id={../@id}&amp;notes={../filters/notes}&amp;overrides={../filters/apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
+                <xsl:value-of select="substring(../scan_start/text(),5,6)"/>
+                <xsl:value-of select="substring(../scan_start/text(),20,21)"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>(not finished)</xsl:otherwise>
+          </xsl:choose>
+        </td>
+        <td>
+          <!-- Check for detected operating system(s) -->
+          <xsl:variable name="best_os_cpe" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
+          <xsl:variable name="best_os_txt" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
+          <xsl:choose>
+            <xsl:when test="contains($best_os_txt, '[possible conflict]')">
+              <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
+            </xsl:when>
+            <xsl:when test="not($best_os_cpe)">
+              <!-- nothing detected or matched by our CPE database -->
+              <xsl:variable name="img_desc">
+                <xsl:choose>
+                  <xsl:when test="$best_os_txt">
+                    <xsl:value-of select="$best_os_txt"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>No information on Operating System was gathered during scan.</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- One system detected: display the corresponding icon and name from our database -->
+              <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+              <xsl:variable name="img_desc">
+                <xsl:choose>
+                  <xsl:when test="$best_os_txt">
+                    <xsl:value-of select="$best_os_txt"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:choose>
+                <xsl:when test="$os_icon">
+                    <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+        <td>
+          <xsl:value-of select="count (str:tokenize (detail[name = 'ports']/value, ','))"/>
+        </td>
+        <td>
+          <xsl:value-of select="count (detail[name = 'App'])"/>
+        </td>
+        <td>
+          <xsl:value-of select="../../../../get_tasks_response/task/report_count/finished"/>
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="substring-after (detail[name = 'traceroute']/value, ',') = '?'">
+              ?
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 2"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+    </xsl:for-each>
+    <tr>
+      <td>Total: <xsl:value-of select="count(host_start)"/></td>
+      <td>
+        <xsl:value-of select="count(results/result[threat/text() = 'High'])"/>
+      </td>
+      <td>
+        <xsl:value-of select="count(results/result[threat/text() = 'Medium'])"/>
+      </td>
+      <td>
+        <xsl:value-of select="count(results/result[threat/text() = 'Low'])"/>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</xsl:template>
 
 <xsl:template match="get_reports_response/report/report" mode="overview">
   <table class="gbntable" cellspacing="2" cellpadding="4">
