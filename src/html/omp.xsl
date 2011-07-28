@@ -10767,6 +10767,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="os-icon">
+  <xsl:param name="host"/>
+  <xsl:param name="current_host"/>
+  <!-- Check for detected operating system(s) -->
+  <xsl:variable name="best_os_cpe" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
+  <xsl:variable name="best_os_txt" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
+  <xsl:choose>
+    <xsl:when test="contains($best_os_txt, '[possible conflict]')">
+      <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
+    </xsl:when>
+    <xsl:when test="not($best_os_cpe)">
+      <!-- nothing detected or matched by our CPE database -->
+      <xsl:variable name="img_desc">
+        <xsl:choose>
+          <xsl:when test="$best_os_txt">
+            <xsl:value-of select="$best_os_txt"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>No information on Operating System was gathered during scan.</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- One system detected: display the corresponding icon and name from our database -->
+      <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+      <xsl:variable name="img_desc">
+        <xsl:choose>
+          <xsl:when test="$best_os_txt">
+            <xsl:value-of select="$best_os_txt"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$os_icon">
+            <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!--     REPORT -->
 
 <xsl:template match="get_reports_response/report/report" mode="inventory">
@@ -10815,50 +10864,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <!-- Check for detected operating system(s) -->
-          <xsl:variable name="best_os_cpe" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
-          <xsl:variable name="best_os_txt" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
-          <xsl:choose>
-            <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-              <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
-            </xsl:when>
-            <xsl:when test="not($best_os_cpe)">
-              <!-- nothing detected or matched by our CPE database -->
-              <xsl:variable name="img_desc">
-                <xsl:choose>
-                  <xsl:when test="$best_os_txt">
-                    <xsl:value-of select="$best_os_txt"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>No information on Operating System was gathered during scan.</xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- One system detected: display the corresponding icon and name from our database -->
-              <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
-              <xsl:variable name="img_desc">
-                <xsl:choose>
-                  <xsl:when test="$best_os_txt">
-                    <xsl:value-of select="$best_os_txt"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="$os_icon">
-                    <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="os-icon">
+            <xsl:with-param name="host" select="../host"/>
+            <xsl:with-param name="current_host" select="$current_host"/>
+          </xsl:call-template>
         </td>
         <td>
           <xsl:value-of select="count (str:tokenize (detail[name = 'ports']/value, ','))"/>
@@ -10928,50 +10937,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </td>
         <td>
-          <!-- Check for detected operating system(s) -->
-          <xsl:variable name="best_os_cpe" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
-          <xsl:variable name="best_os_txt" select="../host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
-          <xsl:choose>
-            <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-              <img src="/img/os_conflict.png" alt="OS conflict: {$best_os_txt}" title="OS conflict: {$best_os_txt}"/>
-            </xsl:when>
-            <xsl:when test="not($best_os_cpe)">
-              <!-- nothing detected or matched by our CPE database -->
-              <xsl:variable name="img_desc">
-                <xsl:choose>
-                  <xsl:when test="$best_os_txt">
-                    <xsl:value-of select="$best_os_txt"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>No information on Operating System was gathered during scan.</xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- One system detected: display the corresponding icon and name from our database -->
-              <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
-              <xsl:variable name="img_desc">
-                <xsl:choose>
-                  <xsl:when test="$best_os_txt">
-                    <xsl:value-of select="$best_os_txt"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="$os_icon">
-                    <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <img src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="os-icon">
+            <xsl:with-param name="host" select="../host"/>
+            <xsl:with-param name="current_host" select="$current_host"/>
+          </xsl:call-template>
         </td>
         <td>
           <xsl:value-of select="substring(text(),5,6)"/>, <xsl:value-of select="substring(text(),12,8)"/>

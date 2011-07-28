@@ -1,5 +1,10 @@
 2011-07-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (os-icon): New template.
+	(report [inventory], report [overview]): Call os-icon.
+
+2011-07-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add an example inventory host
 	table to the Filtered Results window.
 	(report [inventory]): New template.
