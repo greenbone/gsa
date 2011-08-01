@@ -571,6 +571,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="inventory">
+  <xsl:variable name="levels"
+                select="report/filters/text()"/>
+  <xsl:variable name="apply-overrides"
+                select="report/filters/apply_overrides"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Inventory
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:apply-templates select="report" mode="inventory"/>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-report-details">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
@@ -1602,7 +1619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <xsl:apply-templates select="report" mode="inventory"/>
+          <xsl:apply-templates select="report" mode="report-inventory"/>
 
           <xsl:apply-templates select="report" mode="overview"/>
 
@@ -10044,7 +10061,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <xsl:for-each select="report">
-        <xsl:call-template name="html-report-details"/>
+        <xsl:choose>
+          <xsl:when test="@type = 'inventory'">
+            <xsl:call-template name="inventory"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="html-report-details"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </xsl:otherwise>
   </xsl:choose>
@@ -10818,7 +10842,94 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     REPORT -->
 
-<xsl:template match="get_reports_response/report/report" mode="inventory">
+<xsl:template match="report" mode="inventory">
+  <table class="gbntable" cellspacing="2" cellpadding="4">
+    <tr class="gbntablehead2">
+      <td>IP</td>
+      <td><img src="/img/high.png" alt="High" title="High"/></td>
+      <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
+      <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+      <td>Last Report</td>
+      <td>OS</td>
+      <td>Ports</td>
+      <td>Apps</td>
+      <td>Reports</td>
+      <td>Distance</td>
+    </tr>
+    <xsl:for-each select="host">
+      <xsl:variable name="current_host" select="ip"/>
+      <tr>
+        <td>
+          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+          <xsl:value-of select="$current_host"/>
+          <xsl:if test="$hostname">
+            <xsl:value-of select="concat(' (', $hostname, ')')"/>
+          </xsl:if>
+        </td>
+        <td>
+          <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
+        </td>
+        <td>
+          <xsl:value-of select="detail[name/text() = 'report/result_count/medium']/value"/>
+        </td>
+        <td>
+          <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="start/text() != ''">
+              <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes={../filters/notes}&amp;overrides={../filters/apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
+                <xsl:value-of select="substring(start/text(),5,6)"/>
+                <xsl:value-of select="substring(start/text(),20,21)"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>(not finished)</xsl:otherwise>
+          </xsl:choose>
+        </td>
+        <td>
+          <xsl:call-template name="os-icon">
+            <xsl:with-param name="host" select="../host"/>
+            <xsl:with-param name="current_host" select="$current_host"/>
+          </xsl:call-template>
+        </td>
+        <td>
+          <xsl:value-of select="count (str:tokenize (detail[name = 'ports']/value, ','))"/>
+        </td>
+        <td>
+          <xsl:value-of select="count (detail[name = 'App'])"/>
+        </td>
+        <td>
+          <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="substring-after (detail[name = 'traceroute']/value, ',') = '?'">
+            </xsl:when>
+            <xsl:when test="count (detail[name = 'traceroute']) = 0">
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 2"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+    </xsl:for-each>
+    <tr>
+      <td>Total: <xsl:value-of select="count(host)"/></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+</xsl:template>
+
+<xsl:template match="get_reports_response/report/report" mode="report-inventory">
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>IP</td>

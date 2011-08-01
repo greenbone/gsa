@@ -1,6 +1,27 @@
+2011-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add basic host inventory page.
+
+	* src/gsad.c (init_validator): Add type.
+	(exec_omp_post): Update get_report_omp call.
+	(exec_omp_get): Pass type to get_report_omp.
+
+	* src/gsad_omp.c (get_report_omp): Add type arg.  Add to GET_REPORT
+	request.  Exit earlier in inventory case.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add Asset Management section.
+
+	* src/html/omp.xsl (inventory): New template.
+	(html-report-details): Rename template in call.
+	(get_reports_response): Call template according to type.
+	(report [report-inventory]): New template.  Body from report [inventory].
+	(report [inventory]): Replace body with full inventory page case.
+
 2011-08-01  Henri Doreau <henri.doreau@greenbone.net>
 
-	* src/html/os.xml: Added entries for Univention Corporate Server (UCS). 
+	* src/html/os.xml: Added entries for Univention Corporate Server (UCS).
 
 2011-07-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 

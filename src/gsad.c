@@ -605,6 +605,7 @@ init_validator ()
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
+  openvas_validator_add (validator, "type",       "^inventory$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
@@ -3647,6 +3648,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         con_info->req_parms.esc_search_phrase,
                         esc_min_cvss_base,
                         NULL,
+                        NULL,
                         &content_type_omp,
                         &content_disposition);
     }
@@ -4766,6 +4768,7 @@ exec_omp_get (struct MHD_Connection *connection,
   const char *oid          = NULL;
   const char *sort_field   = NULL;
   const char *sort_order   = NULL;
+  const char *type         = NULL;
   const char *levels       = NULL;
   const char *notes        = NULL;
   const char *overrides    = NULL;
@@ -5064,6 +5067,12 @@ exec_omp_get (struct MHD_Connection *connection,
                                                  "schedule_id");
       if (openvas_validate (validator, "schedule_id", schedule_id))
         schedule_id = NULL;
+
+      type = MHD_lookup_connection_value (connection,
+                                          MHD_GET_ARGUMENT_KIND,
+                                          "type");
+      if (openvas_validate (validator, "type", type))
+        type = NULL;
 
       lsc_credential_id = MHD_lookup_connection_value (connection,
                                                        MHD_GET_ARGUMENT_KIND,
@@ -5723,8 +5732,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return html;
     }
 
-  else if ((!strcmp (cmd, "get_report")) && (report_id != NULL)
-           && (strlen (report_id) < VAL_MAX_SIZE))
+  else if (!strcmp (cmd, "get_report"))
     {
       char *ret;
       unsigned int first, esc_first;
@@ -5789,6 +5797,7 @@ exec_omp_get (struct MHD_Connection *connection,
                             esc_search_phrase,
                             esc_min_cvss_base,
                             result_id,
+                            type,
                             &content_type_omp,
                             content_disposition);
 

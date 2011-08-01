@@ -766,6 +766,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </ul>
           </li>
           <li>
+            Asset Management
+            <ul>
+              <li><a href="/omp?cmd=get_report&amp;type=inventory&amp;overrides=1&amp;token={/envelope/token}">Inventory</a></li>
+            </ul>
+          </li>
+          <li>
             Configuration
             <ul>
               <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>

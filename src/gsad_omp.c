@@ -6803,6 +6803,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  esc_min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  result_id      ID of single result to get, in delta case.
+ * @param[in]  type           Type of report: "inventory" or NULL.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  *
@@ -6825,6 +6826,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                 const char * esc_overrides, const char *esc_result_hosts_only,
                 const char * esc_search_phrase, const char *esc_min_cvss_base,
                 const char *result_id,
+                const char *type,
                 gchar ** content_type, char **content_disposition)
 {
   char *report_encoded = NULL;
@@ -6982,6 +6984,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
+                            "%s"
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -6999,10 +7002,15 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " delta_states=\"%s\""
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
+                            (type && (strcmp (type, "inventory") == 0))
+                             ? " type=\"inventory\""
+                             : "",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
-                            report_id,
+                            (type && (strcmp (type, "inventory") == 0))
+                             ? ""
+                             : report_id,
                             delta_report_id ? delta_report_id : "0",
                             format_id
                              ? format_id
@@ -7171,6 +7179,13 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_tasks");
+        }
+
+      if (type && (strcmp (type, "inventory") == 0))
+        {
+          g_string_append (xml, "</get_report>");
+          openvas_server_close (socket, session);
+          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
       report_entity = entity_child (entity, "report");
