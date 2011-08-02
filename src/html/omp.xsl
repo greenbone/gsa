@@ -10908,7 +10908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="count (detail[name = 'traceroute']) = 0">
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 2"/>
+              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 1"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -10995,7 +10995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               ?
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 2"/>
+              <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 1"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
