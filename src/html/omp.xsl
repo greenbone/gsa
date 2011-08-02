@@ -1868,7 +1868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="task/target/@id=''">
         </xsl:when>
         <xsl:otherwise>
-          <h4>Scan Intesity</h4>
+          <h4>Scan Intensity</h4>
           <table>
             <tr>
               <td><xsl:value-of select="task/preferences/preference[scanner_name='max_checks']/name"/>:</td>
@@ -2725,7 +2725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="target_id" value="--"/>
             </xsl:when>
             <xsl:otherwise>
-              <h2>Scan Intesity</h2>
+              <h2>Scan Intensity</h2>
               <tr>
                 <td valign="top" width="320">
                   <xsl:value-of select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/name"/>
@@ -11731,7 +11731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="target_id" value="--"/>
           </xsl:when>
           <xsl:otherwise>
-            <h2>Scan Intesity</h2>
+            <h2>Scan Intensity</h2>
             <tr>
               <td valign="top" width="320">
                 Maximum concurrently executed NVTs per host
