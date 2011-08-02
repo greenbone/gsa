@@ -10878,7 +10878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="start/text() != ''">
-              <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes={../filters/notes}&amp;overrides={../filters/apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
                 <xsl:value-of select="substring(start/text(),5,6)"/>
                 <xsl:value-of select="substring(start/text(),20,21)"/>
               </a>
