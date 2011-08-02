@@ -1,6 +1,12 @@
 2011-08-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (report [inventory, report-inventory]): Subtracet
+	* src/html/omp.xsl (inventory): Rename Inventory page to Assets.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Rename Inventory page Assets.
+
+2011-08-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report [inventory, report-inventory]): Subtract
 	less from the traceroute distance so it starts at 0.
 
 2011-08-02  Matthew Mundell <matthew.mundell@greenbone.net>

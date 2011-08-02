@@ -580,7 +580,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Inventory
+      Assets
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="inventory"/>
