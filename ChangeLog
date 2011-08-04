@@ -1,5 +1,10 @@
 2011-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (inventory): Add Filtering window with results per
+	page.
+
+2011-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [report-inventory]): Match distance to Assets
 	page.
 
