@@ -580,7 +580,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
+      <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
       Assets
+      <xsl:if test = "report/hosts/@start &gt; 1">
+        <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&lt;&lt;</a>
+      </xsl:if>
+      <xsl:value-of select="report/hosts/@start"/> -
+      <xsl:value-of select="$last"/>
+      of <xsl:value-of select="report/host_count/filtered"/>
+      <xsl:if test = "$last &lt; report/host_count/filtered">
+        <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/results/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
+      </xsl:if>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="inventory"/>
