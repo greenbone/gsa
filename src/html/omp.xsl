@@ -701,7 +701,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="float: right">
             <input type="submit" value="Apply" title="Apply"/>
           </div>
-<!--
           <div style="padding: 2px;">
             Threat:
             <table style="display: inline">
@@ -742,38 +741,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                   <img src="/img/low.png" alt="Low" title="Low"/>
                 </td>
-                <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Log']">
-                      <input type="checkbox" name="level_log" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_log" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/log.png" alt="Log" title="Log"/>
-                </td>
-                <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='False Positive']">
-                      <input type="checkbox"
-                             name="level_false_positive"
-                             value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox"
-                             name="level_false_positive"
-                             value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
-                </td>
               </tr>
             </table>
           </div>
--->
         </form>
       </div>
     </div>
@@ -786,13 +756,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
       Filtered Assets
       <xsl:if test = "report/hosts/@start &gt; 1">
-        <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&lt;&lt;</a>
+        <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;token={/envelope/token}">&lt;&lt;</a>
       </xsl:if>
       <xsl:value-of select="report/hosts/@start"/> -
       <xsl:value-of select="$last"/>
       of <xsl:value-of select="report/host_count/filtered"/>
       <xsl:if test = "$last &lt; report/host_count/filtered">
-        <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
+        <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
     </div>
     <div class="gb_window_part_content">

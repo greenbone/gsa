@@ -1,5 +1,17 @@
 2011-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Enable Assets threat filtering.
+
+	* src/gsad_omp.c (get_report_omp): Make levels fallback the empty
+	string.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add levels to Assets link.
+
+	* src/html/omp.xsl (inventory): Enable threat filter.  Add levels to page
+	links.
+
+2011-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (inventory): Add Filtering window with results per
 	page.
 

@@ -6861,7 +6861,13 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
-  if (levels == NULL || strlen (levels) == 0) levels = "hm";
+  if (type && (strcmp (type, "inventory") == 0))
+    {
+      if (levels == NULL || strlen (levels) == 0)
+        levels = "";
+    }
+  else if (levels == NULL || strlen (levels) == 0)
+    levels = "hm";
 
   if (delta_states == NULL || strlen (delta_states) == 0) delta_states = "gn";
 
