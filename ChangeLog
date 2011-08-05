@@ -1,3 +1,7 @@
+2011-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow any character in authdn.
+
 2011-08-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Enable Assets threat filtering.
