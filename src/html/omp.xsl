@@ -1802,7 +1802,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
+          <!--
           <xsl:apply-templates select="report" mode="report-inventory"/>
+          -->
 
           <xsl:apply-templates select="report" mode="overview"/>
 
