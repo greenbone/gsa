@@ -1,3 +1,9 @@
+2011-08-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/os_ubuntu.png: New.
+
+	* CMakeLists.txt: Install the new icon.
+
 2011-08-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (inventory): Enable search phrase field.  Add search

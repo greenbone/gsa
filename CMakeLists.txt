@@ -372,6 +372,7 @@ install (FILES  src/html/img/os_aix.png
                 src/html/img/os_sun.png
                 src/html/img/os_suse.png
                 src/html/img/os_trustix.png
+                src/html/img/os_ubuntu.png
                 src/html/img/os_ucs.png
                 src/html/img/os_unknown.png
                 src/html/img/os_windows.png
