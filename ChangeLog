@@ -1,3 +1,7 @@
+2011-08-09  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/os.xml: Added a generic entry for Ubuntu.
+
 2011-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Hide Filtered Results window

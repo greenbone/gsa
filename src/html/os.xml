@@ -428,4 +428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <operating_system>
         <pattern>cpe:/o:univention:univention_corporate_server</pattern><title>Univention Corporate Server (UCS)</title><icon>os_ucs.png</icon>
     </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:canonical:ubuntu_linux</pattern><title>Canonical Ubuntu Linux</title><icon>os_ubuntu.png</icon>
+    </operating_system>
 </operating_systems>
