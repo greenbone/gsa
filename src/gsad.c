@@ -606,7 +606,7 @@ init_validator ()
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
-  openvas_validator_add (validator, "type",       "^inventory$");
+  openvas_validator_add (validator, "type",       "^assets$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");

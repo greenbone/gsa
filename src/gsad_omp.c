@@ -6803,7 +6803,7 @@ delete_report_omp (credentials_t * credentials,
  * @param[in]  esc_min_cvss_base  Minimum CVSS included results may have.
  *                            "-1" for all, including results with NULL CVSS.
  * @param[in]  result_id      ID of single result to get, in delta case.
- * @param[in]  type           Type of report: "inventory" or NULL.
+ * @param[in]  type           Type of report: "assets" or NULL.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  *
@@ -6861,7 +6861,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
-  if (type && (strcmp (type, "inventory") == 0))
+  if (type && (strcmp (type, "assets") == 0))
     {
       if (levels == NULL || strlen (levels) == 0)
         levels = "";
@@ -7008,13 +7008,13 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " delta_states=\"%s\""
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
-                            (type && (strcmp (type, "inventory") == 0))
-                             ? " type=\"inventory\""
+                            (type && (strcmp (type, "assets") == 0))
+                             ? " type=\"assets\""
                              : "",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
-                            (type && (strcmp (type, "inventory") == 0))
+                            (type && (strcmp (type, "assets") == 0))
                              ? ""
                              : report_id,
                             delta_report_id ? delta_report_id : "0",
@@ -7187,7 +7187,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                "/omp?cmd=get_tasks");
         }
 
-      if (type && (strcmp (type, "inventory") == 0))
+      if (type && (strcmp (type, "assets") == 0))
         {
           g_string_append (xml, "</get_report>");
           openvas_server_close (socket, session);

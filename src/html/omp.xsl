@@ -571,7 +571,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="inventory">
+<xsl:template name="assets">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
   <xsl:variable name="apply-overrides"
@@ -599,7 +599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="type" value="inventory"/>
+          <input type="hidden" name="type" value="assets"/>
           <input type="hidden" name="sort_field" value="{$sort_field}"/>
           <input type="hidden" name="sort_order" value="{$sort_order}"/>
           <input type="hidden"
@@ -756,17 +756,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
       Filtered Assets
       <xsl:if test = "report/hosts/@start &gt; 1">
-        <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&lt;&lt;</a>
+        <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&lt;&lt;</a>
       </xsl:if>
       <xsl:value-of select="report/hosts/@start"/> -
       <xsl:value-of select="$last"/>
       of <xsl:value-of select="report/host_count/filtered"/>
       <xsl:if test = "$last &lt; report/host_count/filtered">
-        <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=inventory&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
+        <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
     </div>
     <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="inventory"/>
+      <xsl:apply-templates select="report" mode="assets"/>
     </div>
   </div>
 </xsl:template>
@@ -1803,7 +1803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
           <!--
-          <xsl:apply-templates select="report" mode="report-inventory"/>
+          <xsl:apply-templates select="report" mode="report-assets"/>
           -->
 
           <xsl:apply-templates select="report" mode="overview"/>
@@ -10247,8 +10247,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <xsl:for-each select="report">
         <xsl:choose>
-          <xsl:when test="@type = 'inventory'">
-            <xsl:call-template name="inventory"/>
+          <xsl:when test="@type = 'assets'">
+            <xsl:call-template name="assets"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="html-report-details"/>
@@ -11027,7 +11027,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     REPORT -->
 
-<xsl:template match="report" mode="inventory">
+<xsl:template match="report" mode="assets">
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>IP</td>
@@ -11114,7 +11114,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </table>
 </xsl:template>
 
-<xsl:template match="get_reports_response/report/report" mode="report-inventory">
+<xsl:template match="get_reports_response/report/report" mode="report-assets">
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td>IP</td>

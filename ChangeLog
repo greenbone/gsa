@@ -1,3 +1,23 @@
+2011-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use "assets" in naming instead of "inventory".
+
+	* src/gsad.c (init_validator): In type rename inventory to assets.
+
+	* src/gsad_omp.c (get_report_omp): Rename type inventory to assets.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Rename type inventory to
+	assets.
+
+	* src/html/omp.xsl (inventory, report [inventory])
+	(report [report-inventory]): Rename.
+	(assets): New template.  Was "inventory".  Update caller.  Rename report
+	type inventory to assets.
+	(get_reports_response): Rename report type inventory to assets.
+	(report [assets]): New template.  Was "report [inventory]".  Update caller.
+	(report [report-assets]): New template.  Was "report [report-inventory]".
+	Update caller.
+
 2011-08-09  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Added a generic entry for Ubuntu.
