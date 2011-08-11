@@ -1,3 +1,10 @@
+2011-08-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (assets): Add help icons.
+
+	* src/html/omp.xsl (assets.html): New template.
+	(view_report.html): Correct window name.
+
 2011-08-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Use "assets" in naming instead of "inventory".

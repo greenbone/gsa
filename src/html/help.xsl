@@ -129,6 +129,135 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="assets.html">
+  <div class="gb_window_part_center">Help: Assets</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Assets</h1>
+      <p>
+       This page provides an overview of all the hosts found in all tasks.
+      </p>
+
+      <a name="filtering"></a>
+      <h2>Asset Filtering</h2>
+      <p>
+        The Asset Filtering window shows how the assets of the scan have been
+        filtered to produce the overview.  Modifying any of the values and clicking
+        the "Apply" button will update the overview.
+      </p>
+
+      <a name="filtered"></a>
+      <h2>Filtered Assets</h2>
+      <p>
+        The Filtered Assets window shows all the hosts, filtered
+        according to the Asset Filtering window.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>IP</td>
+          <td>
+            IP address of the host.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><img src="/img/high.png" /></td>
+          <td>
+            Number of high results on most recent report.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td valign="top"><img src="/img/medium.png" /></td>
+          <td>
+            Number of medium results on most recent report.
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><img src="/img/low.png" /></td>
+          <td>
+            Number of low results on most recent report.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Last Report</td>
+          <td>
+            Link to most recent report.
+          </td>
+        </tr>
+        <tr>
+          <td>OS</td>
+          <td>
+            Icon for detected operating system in most recent report.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Ports</td>
+          <td>
+            Number of open ports found in most recent report.
+          </td>
+        </tr>
+        <tr>
+          <td>Apps</td>
+          <td>
+            Number of applications detected in most recent report, according
+            to CPEs.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Reports</td>
+          <td>
+            Number of complete reports that include this host.
+          </td>
+        </tr>
+        <tr>
+          <td>Distance</td>
+          <td>
+            Distance to host from server running the Scanner, according to
+            most recent report.
+          </td>
+        </tr>
+      </table>
+
+      <!--
+      <a name="overrides"></a>
+      <h3>Overrides</h3>
+      <p>
+       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
+       The selection allows to switch to a view without applying overrides.
+       In the table view, threat, threat numbers and trend might change
+       when switching this selection.
+       By pressing the refresh
+       <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon a change is confirmed.
+      </p>
+      <p>
+       The selection that is active for the present page is marked with a hook (&#8730;).
+      </p>
+      <p>
+       Note that leaving this page will reset the overrides selection to apply overrides.
+      </p>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Details</h4>
+      <p>
+       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
+       switch to an overview on all reports for this task.
+       It is the same action as clicking on the number of reports in the column "Reports: Total".
+      </p>
+      -->
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="configure_agents.html">
   <div class="gb_window_part_center">Help: Configure Agents</div>
   <div class="gb_window_part_content">
@@ -4145,10 +4274,10 @@ Public License instead of this License.
        page.
       </p>
 
-      <a name="result_filtering"></a>
-      <h2>Filtering Results</h2>
+      <a name="result_filtered"></a>
+      <h2>Filtered Results</h2>
       <p>
-        The Filtering Results window shows the results of the report, filtered
+        The Filtered Results window shows the results of the report, filtered
         according to the Result Filtering window.
       </p>
 

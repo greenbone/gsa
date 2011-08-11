@@ -581,12 +581,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Asset Filtering
-      <!--
-      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-         title="Help: View Report (Result Filtering)">
-        <img src="/img/help.png"/>
+      <a href="/help/assets.html?token={/envelope/token}" title="Help: Assets">
+        <img src="/img/help.png" border="0"/>
       </a>
-      -->
     </div>
     <div class="gb_window_part_content">
       <div style="background-color: #EEEEEE;">
@@ -764,6 +761,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test = "$last &lt; report/host_count/filtered">
         <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
+      <a style="margin-left: 7px" href="/help/assets.html?token={/envelope/token}" title="Help: Assets">
+        <img src="/img/help.png" border="0"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="assets"/>
