@@ -285,3 +285,106 @@ gsad_message (credentials_t *credentials, const char *title,
   g_free (xml);
   return resp;
 }
+
+
+/* Params. */
+
+/**
+ * @brief Free a param.
+ *
+ * @param[in]  param  Param.
+ */
+static void
+param_free (gpointer param)
+{
+  g_free (((param_t*) param)->value);
+  g_free (param);
+}
+
+/**
+ * @brief Make a params.
+ *
+ * @return Freshly allocated params.  Free with params_free.
+ */
+params_t *
+params_new ()
+{
+  return g_hash_table_new_full (g_str_hash, g_str_equal, g_free, param_free);
+}
+
+/**
+ * @brief Make a params.
+ *
+ * @param[in]  Params.
+ */
+void
+params_free (params_t *params)
+{
+  if (params)
+    g_hash_table_destroy (params);
+}
+
+/**
+ * @brief Get param.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Param if present, else NULL.
+ */
+param_t *
+params_get (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param;
+}
+
+/**
+ * @brief Get value of param.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Value if param present, else NULL.
+ */
+const char *
+params_value (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->value : NULL;
+}
+
+/**
+ * @brief Get whether a param is valid.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return 1 if param present and valid, else 0.
+ */
+int
+params_valid (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->valid : 0;
+}
+
+/**
+ * @brief Add a param.
+ *
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
+ * @param[in]  value   Value.
+ */
+void
+params_add (params_t *params, const char *name, const char *value)
+{
+  param_t *param;
+  param = g_malloc (sizeof (param_t));
+  param->valid = 0;
+  param->value = g_strdup (value);
+  g_hash_table_insert (params, g_strdup (name), param);
+}

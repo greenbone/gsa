@@ -37,18 +37,17 @@
 
 void oap_init (const gchar *, int);
 
-char * edit_user_oap (credentials_t *, const char *);
+char * edit_user_oap (credentials_t *, params_t *);
 char * get_user_oap (credentials_t *, const char *);
 char * get_users_oap (credentials_t *, const char *, const char *);
 char * create_user_oap (credentials_t *, const char *, const char *,
                         const char *, const char *, const char *);
 char * delete_user_oap (credentials_t *, const char *);
-char * save_user_oap (credentials_t *, const char *, const char *,
-                      const char *, const char *, const char *, const char *);
+char * save_user_oap (credentials_t *, params_t *);
 char * get_feed_oap (credentials_t *, const char *, const char *);
 char * sync_feed_oap (credentials_t *);
 char * get_settings_oap (credentials_t *, const char *, const char *);
-char * edit_settings_oap (credentials_t *, const char *, const char *);
+char * edit_settings_oap (credentials_t *, params_t *);
 char * save_settings_oap (credentials_t * credentials, const char *,
                           const char *, GArray *);
 char * modify_ldap_auth_oap (credentials_t * credentials, const char * method,

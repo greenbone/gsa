@@ -1,3 +1,29 @@
+2011-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add automatic storage and validation of request parameters.  The idea is
+	to reduce the work and complexity involved in the explicit parameter
+	handling.  Convert a few of the Administrator pages to this mechanism.
+
+	* src/gsad.c (struct gsad_connection_info, free_resources): Add params.
+	(params_append_mhd, params_mhd_validate, params_mhd_add): New functions.
+	(serve_post): Add every param to params.
+	(exec_omp_post): Validate all params.  Pass single param arg to
+	save_user_oap.
+	(exec_omp_get): Add and validate every param.  Pass single param arg to
+	edit_settings_oap and edit_user_oap.
+	(redirect_handler, request_handler): Init params.
+
+	* src/gsad_base.c (param_free, params_new, params_free, params_get)
+	(params_value, params_valid, params_add): New functions.
+
+	* src/gsad_base.h: Add headers accordingly.
+	(params_t, struct param, param_t): New types.
+
+	* src/gsad_oap.c (save_user_oap, edit_user_oap)
+	(edit_settings_oap): Replace request param args with single arg.
+
+	* src/gsad_oap.h: Update headers accordingly.
+
 2011-08-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets): Add help icons.

@@ -107,4 +107,35 @@ enum content_type
   GSAD_CONTENT_TYPE_OCTET_STREAM
 } ;
 
+
+/* Params. */
+
+#define params_t GHashTable
+
+/**
+ * @brief Request parameter.
+ */
+struct param
+{
+  int valid;             /* Validation flag. */
+  gchar *value;          /* Value. */
+};
+
+/**
+ * @brief Request parameter.
+ */
+typedef struct param param_t;
+
+params_t *params_new ();
+
+void params_free (params_t *);
+
+const char *params_value (params_t *, const char *);
+
+param_t *params_get (params_t *, const char *);
+
+int params_valid (params_t *, const char *);
+
+void params_add (params_t *, const char *, const char *);
+
 #endif /* not _GSAD_BASE_H */

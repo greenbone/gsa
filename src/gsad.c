@@ -804,6 +804,8 @@ struct gsad_connection_info
   char *response;                          ///< HTTP response text.
   int answercode;                          ///< HTTP response code.
 
+  params_t *params; ///< Request parameters.
+
   /**
    * @brief create_task / create_target / create_config POST request info
    * @todo This should eventually be a dynamic key-based structure.
@@ -976,6 +978,9 @@ free_resources (void *cls, struct MHD_Connection *connection,
           MHD_destroy_post_processor (con_info->postprocessor);
         }
     }
+
+  params_free (con_info->params);
+
   free (con_info->req_parms.cookie);
   free (con_info->req_parms.token);
 
@@ -1199,6 +1204,65 @@ append_chunk_string (struct gsad_connection_info *con_info,
 }
 
 /**
+ * @brief Append a chunk to a request parameter.
+ *
+ * @param[in]   params        Request parameters.
+ * @param[out]  name          Parameter.
+ * @param[in]   chunk_data    Incoming chunk data.
+ * @param[out]  chunk_size    Size of chunk.
+ * @param[out]  chunk_offset  Offset into all data.
+ *
+ * @return MHD_YES on success, MHD_NO on error.
+ */
+static int
+params_append_mhd (params_t *params,
+                   const char *name,
+                   const char *chunk_data,
+                   int chunk_size,
+                   int chunk_offset)
+{
+  param_t *param;
+
+  param = params_get (params, name);
+
+  if (chunk_size)
+    {
+      if (param == NULL)
+        {
+          char *value;
+
+          assert (chunk_offset == 0);
+
+          value = malloc (chunk_size + 1);
+          if (value == NULL)
+            return MHD_NO;
+          memcpy (value + chunk_offset,
+                  chunk_data,
+                  chunk_size);
+          value[chunk_offset + chunk_size] = '\0';
+
+          params_add (params, name, value);
+        }
+      else
+        {
+          char *new_value;
+          new_value = realloc (param->value,
+                               strlen (param->value) + chunk_size + 1);
+          if (new_value == NULL)
+            return MHD_NO;
+          param->value = new_value;
+          memcpy (param->value + chunk_offset,
+                  chunk_data,
+                  chunk_size);
+          param->value[chunk_offset + chunk_size] = '\0';
+        }
+    }
+  else if (param == NULL)
+    params_add (params, name, "");
+  return MHD_YES;
+}
+
+/**
  * @brief Append a chunk to a binary parameter.
  *
  * @param[in]   chunk_data    Incoming chunk data.
@@ -1280,6 +1344,8 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
+      params_append_mhd (con_info->params, key, data, size, off);
+
       if (!strcmp (key, "token"))
         return append_chunk_string (con_info, data, size, off,
                                     &con_info->req_parms.token);
@@ -2013,6 +2079,33 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 }
 
 /**
+ * @brief Add a param.
+ *
+ * @param[in]  params  Params.
+ */
+static void
+params_mhd_validate (void *params)
+{
+  GHashTableIter iter;
+  gpointer name, value;
+
+  g_hash_table_iter_init (&iter, params);
+  while (g_hash_table_iter_next (&iter, &name, &value))
+    {
+      param_t *param;
+      param = (param_t*) value;
+      if (openvas_validate (validator, name, param->value))
+        {
+          g_free (param->value);
+          param->value = NULL;
+          param->valid = 0;
+        }
+      else
+        param->valid = 1;
+    }
+}
+
+/**
  * @brief Handle a complete POST request.
  *
  * Ensures there is a command, then depending on the command validates
@@ -2177,6 +2270,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     abort ();
 
   /* From here, the user is authenticated. */
+
+  params_mhd_validate (con_info->params);
 
   credentials = malloc (sizeof (credentials_t));
   if (credentials == NULL)
@@ -4633,21 +4728,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_user"))
     {
-      validate (validator, "login", &con_info->req_parms.login);
-      validate (validator, "modify_password",
-                &con_info->req_parms.modify_password);
-      validate (validator, "password", &con_info->req_parms.password);
-      validate (validator, "role", &con_info->req_parms.role);
-      validate (validator, "access_hosts", &con_info->req_parms.access_hosts);
-      validate (validator, "hosts_allow", &con_info->req_parms.hosts_allow);
       con_info->response =
-        save_user_oap (credentials,
-                       con_info->req_parms.login,
-                       con_info->req_parms.modify_password,
-                       con_info->req_parms.password,
-                       con_info->req_parms.role,
-                       con_info->req_parms.access_hosts,
-                       con_info->req_parms.hosts_allow);
+        save_user_oap (credentials, con_info->params);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "start_task"))
            && (con_info->req_parms.task_id != NULL)
@@ -4710,6 +4792,22 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   con_info->answercode = MHD_HTTP_OK;
   return 0;
+}
+
+/**
+ * @brief Add a param.
+ *
+ * @param[in]  params  Params.
+ * @param[in]  kind    MHD header kind.
+ * @param[in]  name    Name.
+ * @param[in]  value   Value.
+ */
+static int
+params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
+                const char *value)
+{
+  params_add ((params_t *) params, name, value);
+  return MHD_YES;
 }
 
 /**
@@ -4798,6 +4896,8 @@ exec_omp_get (struct MHD_Connection *connection,
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   const int VAL_MAX_SIZE = 100;
 
+  params_t *params;
+
   cmd =
     (char *) MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
                                           "cmd");
@@ -4807,6 +4907,13 @@ exec_omp_get (struct MHD_Connection *connection,
   if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))
     {
       tracef ("cmd: [%s]\n", cmd);
+
+      params = params_new ();
+
+      MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
+                                 params_mhd_add, params);
+
+      params_mhd_validate (params);
 
       agent_id = MHD_lookup_connection_value
                       (connection,
@@ -5601,7 +5708,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                    sort_field, sort_order);
 
   else if (!strcmp (cmd, "edit_settings"))
-    return edit_settings_oap (credentials, sort_field, sort_order);
+    return edit_settings_oap (credentials, params);
 
   else if ((!strcmp (cmd, "edit_task"))
            && (task_id != NULL)
@@ -5613,8 +5720,8 @@ exec_omp_get (struct MHD_Connection *connection,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
 
-  else if ((!strcmp (cmd, "edit_user")) && (name != NULL))
-    return edit_user_oap (credentials, name);
+  else if (!strcmp (cmd, "edit_user"))
+    return edit_user_oap (credentials, params);
 
   else if ((!strcmp (cmd, "export_config")) && (config_id != NULL))
     return export_config_omp (credentials, config_id, content_type,
@@ -6276,6 +6383,8 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
       if (NULL == con_info)
         return MHD_NO;
 
+      con_info->params = params_new ();
+
       con_info->connectiontype = 2;
 
       *con_cls = (void *) con_info;
@@ -6681,6 +6790,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       con_info = calloc (1, sizeof (struct gsad_connection_info));
       if (NULL == con_info)
         return MHD_NO;
+
+      con_info->params = params_new ();
 
       con_info->connectiontype = 2;
 
@@ -7117,6 +7228,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                        serve_post, (void *) con_info);
           if (NULL == con_info->postprocessor)
             return MHD_NO;
+          con_info->params = params_new ();
           con_info->connectiontype = 1;
           con_info->answercode = MHD_HTTP_OK;
 

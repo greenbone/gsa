@@ -372,20 +372,12 @@ create_user_oap (credentials_t * credentials, const char *name,
  *
  * @param[in]  credentials      Username and password for authentication
  * @param[in]  name             User name.
- * @param[in]  modify_password  Save password if true.
- * @param[in]  password         New user password.
- * @param[in]  role             New user role.
- * @param[in]  hosts            List of hosts user has/lacks access rights.
- *                              Empty string for all access, NULL on error.
- * @param[in]  hosts_allow      Whether hosts grants ("1") or forbids ("0")
- *                              access, or "2" for all access.
+ * @param[in]  params           Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_user_oap (credentials_t * credentials, const char *name,
-               const char *modify_password, const char *password,
-               const char *role, const char *hosts, const char *hosts_allow)
+save_user_oap (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
@@ -411,12 +403,31 @@ save_user_oap (credentials_t * credentials, const char *name,
 
   xml = g_string_new ("<get_users>");
 
-  if (name == NULL || modify_password == NULL || password == NULL
-      || role == NULL || hosts == NULL || hosts_allow == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
-  else
+  if (params_valid (params, "login") && params_valid (params, "modify_password")
+      && params_valid (params, "password") && params_valid (params, "role")
+      && params_valid (params, "access_hosts")
+      && params_valid (params, "hosts_allow"))
     {
       int ret;
+      const gchar *name, *modify_password, *password, *role, *hosts;
+      const gchar *hosts_allow;
+
+      name = params_value (params, "login");
+      modify_password = params_value (params, "modify_password");
+      password = params_value (params, "password");
+      role = params_value (params, "role");
+      /* List of hosts user has/lacks access rights. */
+      hosts = params_value (params, "access_hosts");
+      /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
+       * access. */
+      hosts_allow = params_value (params, "hosts_allow");
+
+      tracef ("name: %s", name);
+      tracef ("modify_password: %s", modify_password);
+      tracef ("password: %s", password);
+      tracef ("role: %s", role);
+      tracef ("hosts: %s", hosts);
+      tracef ("hosts_allow: %s", hosts_allow);
 
       /* Modify the user. */
 
@@ -471,6 +482,8 @@ save_user_oap (credentials_t * credentials, const char *name,
                                "/oap?cmd=get_users");
         }
     }
+  else
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
 
   /* Get all users. */
 
@@ -580,12 +593,12 @@ delete_user_oap (credentials_t * credentials, const char *user_name)
  * @brief Get a user for editing and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  name         User name.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_user_oap (credentials_t * credentials, const char * name)
+edit_user_oap (credentials_t * credentials, params_t * params)
 {
   tracef ("In edit_users_oap\n");
   GString *xml;
@@ -593,7 +606,7 @@ edit_user_oap (credentials_t * credentials, const char * name)
   int socket;
   gchar *html;
 
-  assert (name);
+  assert (params_value (params, "name"));
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -617,7 +630,7 @@ edit_user_oap (credentials_t * credentials, const char * name)
 
   if (openvas_server_sendf (&session,
                             "<get_users name=\"%s\"/>",
-                            name)
+                            params_value (params, "name"))
       == -1)
     {
       return gsad_message (credentials,
@@ -1008,14 +1021,12 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
  * @brief Get all settings and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_settings_oap (credentials_t * credentials, const char * sort_field,
-                   const char * sort_order)
+edit_settings_oap (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
