@@ -1,3 +1,16 @@
+2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert get_lsc_credential and edit_lsc_credential to new param mechanism.
+
+	* src/gsad.c (init_validator): Add next.
+	(exec_omp_post, exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (get_lsc_credential, get_lsc_credential_omp)
+	(edit_lsc_credential, edit_lsc_credential_omp)
+	(save_lsc_credential_omp): Replace request params with single arg.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
 2011-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add automatic storage and validation of request parameters.  The idea is

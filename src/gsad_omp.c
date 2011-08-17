@@ -1852,24 +1852,20 @@ delete_lsc_credential_omp (credentials_t * credentials,
  * @brief Get one LSC credential, XSL transform the result.
  *
  * @param[in]   credentials        Username and password for authentication.
- * @param[in]   lsc_credential_id  UUID of LSC credential.
- * @param[in]   sort_field         Field to sort on, or NULL.
- * @param[in]   sort_order         "ascending", "descending", or NULL.
+ * @param[in]   params             Request parameters.
  * @param[in]   commands           Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_lsc_credential (credentials_t * credentials,
-                    const char * lsc_credential_id,
-                    const char * sort_field,
-                    const char * sort_order,
-                    const char * commands)
+get_lsc_credential (credentials_t * credentials, params_t *params,
+                    const char *commands)
 {
   GString *xml = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -1890,6 +1886,9 @@ get_lsc_credential (credentials_t * credentials,
 
   /* Get the LSC credential. */
 
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "%s"
@@ -1899,7 +1898,7 @@ get_lsc_credential (credentials_t * credentials,
                             " sort_order=\"%s\"/>"
                             "</commands>",
                             commands ? commands : "",
-                            lsc_credential_id,
+                            params_value (params, "lsc_credential_id"),
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
@@ -1937,21 +1936,15 @@ get_lsc_credential (credentials_t * credentials,
 /**
  * @brief Get one LSC credential, XSL transform the result.
  *
- * @param[in]   credentials        Username and password for authentication.
- * @param[in]   lsc_credential_id  UUID of LSC credential.
- * @param[in]   sort_field         Field to sort on, or NULL.
- * @param[in]   sort_order         "ascending", "descending", or NULL.
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  params            Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_lsc_credential_omp (credentials_t * credentials,
-                        const char * lsc_credential_id,
-                        const char * sort_field,
-                        const char * sort_order)
+get_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
-  return get_lsc_credential (credentials, lsc_credential_id, sort_field,
-                             sort_order, NULL);
+  return get_lsc_credential (credentials, params, NULL);
 }
 
 /** @todo Do package download somewhere else. */
@@ -2243,25 +2236,23 @@ get_lsc_credentials_omp (credentials_t * credentials,
  * @brief Setup edit_lsc_credential XML, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
- * @param[in]  lsc_credential_id  UUID of lsc_credential.
+ * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[in]  next              Name of next page.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
  *
  * @return Result of XSL transformation.
  */
 static char *
-edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
-                    const char *extra_xml, const char *next,
-                    const char *sort_field, const char *sort_order)
+edit_lsc_credential (credentials_t * credentials, params_t *params,
+                     const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_order, *sort_field;
 
-  if (lsc_credential_id == NULL || next == NULL)
+  if (params_value (params, "lsc_credential_id") == NULL
+      || params_value (params, "next") == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a credential. "
@@ -2293,7 +2284,7 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
                             " params=\"1\""
                             " details=\"1\" />"
                             "</commands>",
-                            lsc_credential_id)
+                            params_value (params, "lsc_credential_id"))
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2310,6 +2301,9 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
   g_string_append_printf (xml,
                           "<edit_lsc_credential>"
                           "<lsc_credential id=\"%s\"/>"
@@ -2318,10 +2312,10 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
                           /* Passthroughs. */
                           "<sort_field>%s</sort_field>"
                           "<sort_order>%s</sort_order>",
-                          lsc_credential_id,
-                          next,
-                          sort_field,
-                          sort_order);
+                          params_value (params, "lsc_credential_id"),
+                          params_value (params, "next"),
+                          sort_field ? sort_field : "",
+                          sort_order ? sort_order : "");
 
   if (read_string (&session, &xml))
     {
@@ -2345,63 +2339,46 @@ edit_lsc_credential (credentials_t * credentials, const char *lsc_credential_id,
  * @brief Setup edit_lsc_credential XML, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
- * @param[in]  lsc_credential_id  UUID of lsc_credential.
- * @param[in]  next              Name of next page.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  params            Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_lsc_credential_omp (credentials_t * credentials,
-                        const char *lsc_credential_id, const char *next,
-                        /* Parameters for get_lsc_credentials. */
-                        const char *sort_field, const char *sort_order)
+edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
-  return edit_lsc_credential (credentials, lsc_credential_id, NULL, next,
-                             sort_field, sort_order);
+  return edit_lsc_credential (credentials, params, NULL);
 }
 
 /**
  * @brief Save lsc_credential, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
- * @param[in]  lsc_credential_id  ID of LSC credential.
- * @param[in]  name              New name for LSC credential.
- * @param[in]  comment           New comment for LSC credential.
- * @param[in]  change_login      Whether to change login.
- * @param[in]  login             New login for LSC credential.
- * @param[in]  change_password   Whether to change password.
- * @param[in]  password          New password for LSC credential.
- * @param[in]  next              Name of next page.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  params            Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_lsc_credential_omp (credentials_t * credentials,
-                         const char *lsc_credential_id, const char *name,
-                         const char *comment, int change_login,
-                         const char *login, int change_password,
-                         const char *password, const char *next,
-                         /* Parameters for get_lsc_credentials. */
-                         const char *sort_field, const char *sort_order)
+save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify;
-  int socket;
+  int socket, change_login, change_password;
   gnutls_session_t session;
   gchar *html;
 
-  if (comment == NULL || name == NULL || (change_password && password == NULL)
-      || (change_login && login == NULL))
-    return edit_lsc_credential (credentials, lsc_credential_id,
-                                GSAD_MESSAGE_INVALID_PARAM
-                                 ("Save Credential"),
-                                next, sort_field, sort_order);
+  change_login = (params_value (params, "enable") ? 1 : 0);
+  change_password = (params_value (params, "login") ? 1 : 0);
 
-  if (next == NULL || sort_field == NULL || sort_order == NULL
-      || lsc_credential_id == NULL)
+  if (params_value (params, "comment") == NULL
+      || params_value (params, "name") == NULL
+      || (change_password && params_value (params, "password") == NULL)
+      || (change_login && params_value (params, "login" == NULL)))
+    return edit_lsc_credential (credentials,
+                                params,
+                                GSAD_MESSAGE_INVALID_PARAM
+                                 ("Save Credential"));
+
+  if (params_value (params, "next") == NULL
+      || params_value (params, "lsc_credential_id") == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a credential. "
@@ -2434,11 +2411,11 @@ save_lsc_credential_omp (credentials_t * credentials,
                                       "<login>%s</login>"
                                       "<password>%s</password>"
                                       "</modify_lsc_credential>",
-                                      lsc_credential_id,
-                                      name,
-                                      comment,
-                                      login,
-                                      password);
+                                      params_value (params, "lsc_credential_id"),
+                                      params_value (params, "name"),
+                                      params_value (params, "comment"),
+                                      params_value (params, "login"),
+                                      params_value (params, "password"));
   else if (change_login)
     modify = g_strdup_printf ("<modify_lsc_credential"
                               " lsc_credential_id=\"%s\">"
@@ -2446,10 +2423,10 @@ save_lsc_credential_omp (credentials_t * credentials,
                               "<comment>%s</comment>"
                               "<login>%s</login>"
                               "</modify_lsc_credential>",
-                              lsc_credential_id,
-                              name,
-                              comment,
-                              login);
+                              params_value (params, "lsc_credential_id"),
+                              params_value (params, "name"),
+                              params_value (params, "comment"),
+                              params_value (params, "login"));
   else if (change_password)
     modify = g_strdup_printf ("<modify_lsc_credential"
                               " lsc_credential_id=\"%s\">"
@@ -2457,34 +2434,34 @@ save_lsc_credential_omp (credentials_t * credentials,
                               "<comment>%s</comment>"
                               "<password>%s</password>"
                               "</modify_lsc_credential>",
-                              lsc_credential_id,
-                              name,
-                              comment,
-                              password);
+                              params_value (params, "lsc_credential_id"),
+                              params_value (params, "name"),
+                              params_value (params, "comment"),
+                              params_value (params, "password"));
   else
     modify = g_strdup_printf ("<modify_lsc_credential"
                               " lsc_credential_id=\"%s\">"
                               "<name>%s</name>"
                               "<comment>%s</comment>"
                               "</modify_lsc_credential>",
-                              lsc_credential_id,
-                              name,
-                              comment);
+                              params_value (params, "lsc_credential_id"),
+                              params_value (params, "name"),
+                              params_value (params, "comment"));
 
-  if (strcmp (next, "get_lsc_credentials") == 0)
+  if (strcmp (params_value (params, "next"), "get_lsc_credentials") == 0)
     {
       char *ret;
-      get_lsc_credentials (credentials, NULL, NULL, NULL, sort_field,
-                           sort_order, &ret, NULL, modify);
+      get_lsc_credentials (credentials, NULL, NULL, NULL,
+                           params_value (params, "sort_field"),
+                           params_value (params, "sort_order"),
+                           &ret, NULL, modify);
       g_free (modify);
       return ret;
     }
 
-  if (strcmp (next, "get_lsc_credential") == 0)
+  if (strcmp (params_value (params, "next"), "get_lsc_credential") == 0)
     {
-      char *ret = get_lsc_credential (credentials, lsc_credential_id,
-                                      sort_field, sort_order,
-                                      modify);
+      char *ret = get_lsc_credential (credentials, params, modify);
       g_free (modify);
       return ret;
     }

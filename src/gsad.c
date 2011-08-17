@@ -641,6 +641,7 @@ init_validator ()
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
   openvas_validator_alias (validator, "new_threat",   "threat");
+  openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
@@ -3894,28 +3895,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_lsc_credential"))
     {
-      int change_login = &con_info->req_parms.login ? 1 : 0;
-      validate (validator, "lsc_credential_id",
-                &con_info->req_parms.lsc_credential_id);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      if (change_login)
-        validate (validator, "credential_login",
-                  &con_info->req_parms.credential_login);
-      if (con_info->req_parms.enable)
-        validate (validator, "lsc_password", &con_info->req_parms.password);
       con_info->response =
-        save_lsc_credential_omp (credentials,
-                                 con_info->req_parms.lsc_credential_id,
-                                 con_info->req_parms.name,
-                                 con_info->req_parms.comment,
-                                 change_login,
-                                 con_info->req_parms.credential_login,
-                                 con_info->req_parms.enable ? 1 : 0,
-                                 con_info->req_parms.password,
-                                 con_info->req_parms.next,
-                                 con_info->req_parms.sort_field,
-                                 con_info->req_parms.sort_order);
+        save_lsc_credential_omp (credentials, con_info->params);
     }
   else if ((!strcmp (con_info->req_parms.cmd, "save_note"))
            && (con_info->req_parms.note_id != NULL)
@@ -5474,13 +5455,8 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_config_nvt_omp (credentials, config_id, name, family, oid,
                                sort_field, sort_order, 1);
 
-  else if ((!strcmp (cmd, "edit_lsc_credential"))
-           && (lsc_credential_id != NULL)
-           && (next != NULL)
-           && ((strcmp (next, "get_lsc_credentials") == 0)
-               || (strcmp (next, "get_lsc_credential") == 0)))
-    return edit_lsc_credential_omp (credentials, lsc_credential_id, next,
-                                    sort_field, sort_order);
+  else if (!strcmp (cmd, "edit_lsc_credential"))
+    return edit_lsc_credential_omp (credentials, params);
 
   else if ((!strcmp (cmd, "edit_note"))
            && (note_id != NULL)
@@ -5794,9 +5770,8 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);
 
-  else if ((!strcmp (cmd, "get_lsc_credential")) && (lsc_credential_id != NULL))
-    return get_lsc_credential_omp (credentials, lsc_credential_id, sort_field,
-                                   sort_order);
+  else if (!strcmp (cmd, "get_lsc_credential"))
+    return get_lsc_credential_omp (credentials, params);
 
   else if (!strcmp (cmd, "get_lsc_credentials")
            && ((lsc_credential_id == NULL && package_format == NULL)
