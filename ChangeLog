@@ -1,5 +1,26 @@
 2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Convert save_report_format to new param mechanism.  In the process add
+	handling of binary values and groups of values to the mechanism.
+
+	* src/gsad_base.c (params_values, params_append_bin)
+	(params_iterator_next): New functions.
+	(params_add): Return added param.
+
+	* src/gsad_base.h: Update headers accordingly.
+	(struct param): Add values and values_size.
+	(params_iterator_t, params_iterator_init): New defines.
+
+	* src/gsad.c (params_append_mhd): If name contains a colon add the data
+	to the params new named values instead of to the params single value.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_omp.c (save_report_format_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_oap.c (save_user_oap): Remove excess tracing.
 
 2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>

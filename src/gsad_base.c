@@ -357,6 +357,22 @@ params_value (params_t *params, const char *name)
 }
 
 /**
+ * @brief Get values of param.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Values if param present, else NULL.
+ */
+params_t *
+params_values (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->values : NULL;
+}
+
+/**
  * @brief Get whether a param is valid.
  *
  * @param[in]  Params.
@@ -379,12 +395,81 @@ params_valid (params_t *params, const char *name)
  * @param[in]  name    Name.
  * @param[in]  value   Value.
  */
-void
+param_t *
 params_add (params_t *params, const char *name, const char *value)
 {
   param_t *param;
   param = g_malloc (sizeof (param_t));
   param->valid = 0;
   param->value = g_strdup (value);
+  param->value_size = strlen (value);
   g_hash_table_insert (params, g_strdup (name), param);
+  return param;
+}
+
+/**
+ * @brief Append binary data to a param.
+ *
+ * Appended data always has an extra NULL terminator.
+ *
+ * @param[in]  params        Params.
+ * @param[in]  name          Name.
+ * @param[in]  chunk_data    Data to append.
+ * @param[in]  chunk_size    Number of bytes to copy.
+ * @param[in]  chunk_offset  Offset in bytes into data from which to start.
+ *
+ * @return Param appended to, or NULL on memory error.
+ */
+param_t *
+params_append_bin (params_t *params, const char *name, const char *chunk_data,
+                   int chunk_size, int chunk_offset)
+{
+  param_t *param;
+  char *new_value;
+
+  param = params_get (params, name);
+
+  if (param == NULL)
+    {
+      char *value;
+
+      value = malloc (chunk_size + 1);
+      if (value == NULL)
+        return NULL;
+      memcpy (value + chunk_offset,
+              chunk_data,
+              chunk_size);
+      value[chunk_offset + chunk_size] = '\0';
+
+      return params_add (params, name, value);
+    }
+
+  new_value = realloc (param->value,
+                       strlen (param->value) + chunk_size + 1);
+  if (new_value == NULL)
+    return NULL;
+  param->value = new_value;
+  memcpy (param->value + chunk_offset,
+          chunk_data,
+          chunk_size);
+  param->value[chunk_offset + chunk_size] = '\0';
+  param->value_size += chunk_size;
+
+  return param;
+}
+
+/**
+ * @brief Increment a params iterator.
+ *
+ * @param[in]   iterator  Iterator.
+ * @param[out]  name      Name of param.
+ * @param[out]  param     Param.
+ *
+ * @return TRUE if there was a next element, else FALSE.
+ */
+gboolean
+params_iterator_next (params_iterator_t *iterator, char **name,
+                      param_t **param)
+{
+  return g_hash_table_iter_next (iterator, (gpointer*) name, (gpointer*) param);
 }

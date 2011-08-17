@@ -1223,43 +1223,44 @@ params_append_mhd (params_t *params,
                    int chunk_offset)
 {
   param_t *param;
+  const char *colon;
 
-  param = params_get (params, name);
+  colon = strchr (name, ':');
 
-  if (chunk_size)
+  if (colon)
     {
+      gchar *prefix;
+
+      /* Hashtable param, like for radios. */
+
+      if (colon[1] == '\0')
+        return MHD_NO;
+
+      prefix = g_strndup (name, 1 + colon - name);
+      param = params_get (params, prefix);
+
+      tracef ("=== prefix: %s", prefix);
+
       if (param == NULL)
         {
-          char *value;
-
-          assert (chunk_offset == 0);
-
-          value = malloc (chunk_size + 1);
-          if (value == NULL)
-            return MHD_NO;
-          memcpy (value + chunk_offset,
-                  chunk_data,
-                  chunk_size);
-          value[chunk_offset + chunk_size] = '\0';
-
-          params_add (params, name, value);
+          param = params_add (params, prefix, "");
+          param->values = params_new ();
         }
-      else
-        {
-          char *new_value;
-          new_value = realloc (param->value,
-                               strlen (param->value) + chunk_size + 1);
-          if (new_value == NULL)
-            return MHD_NO;
-          param->value = new_value;
-          memcpy (param->value + chunk_offset,
-                  chunk_data,
-                  chunk_size);
-          param->value[chunk_offset + chunk_size] = '\0';
-        }
+
+      g_free (prefix);
+
+      if (chunk_size)
+        params_append_bin (param->values, colon + 1, chunk_data, chunk_size,
+                           chunk_offset);
+
+      return MHD_YES;
     }
-  else if (param == NULL)
-    params_add (params, name, "");
+
+  /* Single value param. */
+
+  if (chunk_size)
+    params_append_bin (params, name, chunk_data, chunk_size, chunk_offset);
+
   return MHD_YES;
 }
 
@@ -4612,22 +4613,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
     {
-      validate (validator, "report_format_id",
-                &con_info->req_parms.report_format_id);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "enable", &con_info->req_parms.enable);
-      validate (validator, "page", &con_info->req_parms.next);
       con_info->response =
-        save_report_format_omp (credentials,
-                                con_info->req_parms.report_format_id,
-                                con_info->req_parms.name,
-                                con_info->req_parms.comment,
-                                con_info->req_parms.enable,
-                                con_info->req_parms.preferences,
-                                con_info->req_parms.next,
-                                con_info->req_parms.sort_field,
-                                con_info->req_parms.sort_order);
+        save_report_format_omp (credentials, con_info->params);
     }
   else if (!strcmp (con_info->req_parms.cmd, "save_settings"))
     {

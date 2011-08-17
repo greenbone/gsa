@@ -262,9 +262,7 @@ char * delete_trash_report_format_omp (credentials_t *, const char *);
 char * edit_report_format_omp (credentials_t *, const char *, const char *,
                                const char *, const char *);
 char * import_report_format_omp (credentials_t *, char *);
-char * save_report_format_omp (credentials_t *, const char *, const char *,
-                               const char *, const char *, GArray *,
-                               const char *, const char *, const char *);
+char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, const char *);
 
 char * get_trash_omp (credentials_t *, const char *, const char *);

@@ -119,6 +119,8 @@ struct param
 {
   int valid;             /* Validation flag. */
   gchar *value;          /* Value. */
+  int value_size;        /* Size of value, excluding trailing NULL. */
+  params_t *values;      /* Multiple binary values. */
 };
 
 /**
@@ -132,10 +134,20 @@ void params_free (params_t *);
 
 const char *params_value (params_t *, const char *);
 
+params_t *params_values (params_t *, const char *);
+
 param_t *params_get (params_t *, const char *);
 
 int params_valid (params_t *, const char *);
 
-void params_add (params_t *, const char *, const char *);
+param_t *params_add (params_t *, const char *, const char *);
+
+param_t *params_append_bin (params_t *, const char *, const char *, int, int);
+
+#define params_iterator_t GHashTableIter
+
+#define params_iterator_init g_hash_table_iter_init
+
+gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
 
 #endif /* not _GSAD_BASE_H */
