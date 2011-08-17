@@ -422,13 +422,6 @@ save_user_oap (credentials_t * credentials, params_t *params)
        * access. */
       hosts_allow = params_value (params, "hosts_allow");
 
-      tracef ("name: %s", name);
-      tracef ("modify_password: %s", modify_password);
-      tracef ("password: %s", password);
-      tracef ("role: %s", role);
-      tracef ("hosts: %s", hosts);
-      tracef ("hosts_allow: %s", hosts_allow);
-
       /* Modify the user. */
 
       if (strcmp (hosts_allow, "2") && strlen (hosts))

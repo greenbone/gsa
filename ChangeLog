@@ -1,5 +1,9 @@
 2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_oap.c (save_user_oap): Remove excess tracing.
+
+2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert get_lsc_credential and edit_lsc_credential to new param mechanism.
 
 	* src/gsad.c (init_validator): Add next.
