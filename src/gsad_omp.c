@@ -7616,18 +7616,27 @@ get_notes_omp (credentials_t *credentials)
  * @brief Get a note, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  note_id      ID of note.
+ * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_note (credentials_t *credentials, const char *note_id, const char *commands)
+get_note (credentials_t *credentials, params_t *params, const char *commands)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *note_id;
+
+  note_id = params_value (params, "note_id");
+  if (note_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a note. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_notes");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7691,14 +7700,14 @@ get_note (credentials_t *credentials, const char *note_id, const char *commands)
  * @brief Get a note, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  note_id      ID of note.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_note_omp (credentials_t *credentials, const char *note_id)
+get_note_omp (credentials_t *credentials, params_t *params)
 {
-  return get_note (credentials, note_id, NULL);
+  return get_note (credentials, params, NULL);
 }
 
 /**
@@ -8820,7 +8829,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_note") == 0)
     {
-      char *ret = get_note (credentials, note_id, modify_note);
+      char *ret = get_note (credentials, params, modify_note);
       g_free (modify_note);
       return ret;
     }

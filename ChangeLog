@@ -1,5 +1,16 @@
 2011-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Convert get_note to new param mechanism.
+
+	* src/gsad.c (exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (get_note, get_note_omp): Replace multiple args with one.
+	Update callers.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+2011-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert save_notes to new param mechanism.
 
 	* src/gsad_base.c (params_free): Free original_value.

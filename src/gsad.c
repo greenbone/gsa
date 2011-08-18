@@ -5531,9 +5531,8 @@ exec_omp_get (struct MHD_Connection *connection,
       return ret;
     }
 
-  else if ((!strcmp (cmd, "get_note"))
-           && (note_id != NULL))
-    return get_note_omp (credentials, note_id);
+  else if (!strcmp (cmd, "get_note"))
+    return get_note_omp (credentials, params);
 
   else if ((!strcmp (cmd, "get_notes")))
     return get_notes_omp (credentials);
