@@ -8459,45 +8459,23 @@ delete_note_omp (credentials_t * credentials, const char *note_id,
  * @brief Edit note, get next page, XSL transform the result.
  *
  * @param[in]  credentials     Username and password for authentication.
- * @param[in]  note_id         ID of note.
- * @param[in]  next            Name of next page.
- * @param[in]  report_id       ID of current report.
- * @param[in]  first_result    Number of first result in report.
- * @param[in]  max_results     Number of results in report.
- * @param[in]  sort_field      Field to sort on, or NULL.
- * @param[in]  sort_order      "ascending", "descending", or NULL.
- * @param[in]  levels          Threat levels to include in report.
- * @param[in]  notes           Whether to include notes.
- * @param[in]  overrides       Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase   Phrase which included results must contain.
- * @param[in]  min_cvss_base   Minimum CVSS included results may have.
- *                             "-1" for all, including results with NULL CVSS.
- * @param[in]  oid             OID of NVT (for get_nvts).
- * @param[in]  task_id         ID of task (for get_tasks and get_result).
- * @param[in]  task_name       Name of task (for get_result).
- * @param[in]  result_id       ID of result (for get_result).
+ * @param[in]  params          Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (credentials_t * credentials, const char *note_id,
-               /* Next page params. */
-               const char *next, const char *report_id,
-               const unsigned int first_result,
-               const unsigned int max_results,
-               const char *sort_field, const char *sort_order,
-               const char *levels, const char *notes, const char *overrides,
-               const char *result_hosts_only, const char *search_phrase,
-               const char *min_cvss_base, const char *oid, const char *task_id,
-               const char *task_name, const char *result_id)
+edit_note_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *note_id, *next;
+  int first_result, max_results;
 
-  if (note_id == NULL)
+  note_id = params_value (params, "note_id");
+  next = params_value (params, "next");
+  if (note_id == NULL || next == NULL)
     {
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -8505,6 +8483,76 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                            "The note remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_notes");
+    }
+
+  if (strcmp (next, "get_note")
+      && strcmp (next, "get_notes")
+      && strcmp (next, "get_nvts")
+      && strcmp (next, "get_report")
+      && strcmp (next, "get_result")
+      && strcmp (next, "get_tasks"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a note. "
+                         "The note remains the same. "
+                         "Diagnostics: next must name a valid page.",
+                         "/omp?cmd=get_notes");
+
+  if ((strcmp (next, "get_nvts") == 0)
+      && (params_value (params, "oid") == NULL))
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a note. "
+                           "The note remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_notes");
+    }
+
+  if ((strcmp (next, "get_tasks") == 0)
+      && (params_value (params, "overrides") == NULL)
+      && (params_value (params, "task_id") == NULL))
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing a note. "
+                           "The note remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_notes");
+    }
+
+  if ((strcmp (next, "get_result") == 0)
+      || (strcmp (next, "get_report") == 0))
+    {
+      if ((params_value (params, "report_id") == NULL)
+          || (params_value (params, "first_result") == NULL)
+          || (params_value (params, "max_results") == NULL)
+          || (params_value (params, "sort_field") == NULL)
+          || (params_value (params, "sort_order") == NULL)
+          || (params_value (params, "levels") == NULL)
+          || (params_value (params, "notes") == NULL)
+          || (params_value (params, "overrides") == NULL)
+          || (params_value (params, "result_hosts_only") == NULL)
+          || (params_value (params, "search_phrase") == NULL)
+          || (params_value (params, "min_cvss_base") == NULL))
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a note. "
+                             "The note remains as it was. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_notes");
+
+      if (sscanf (params_value (params, "first_result"), "%u", &first_result)
+          != 1)
+        first_result = 1;
+
+      if (sscanf (params_value (params, "max_results"), "%u", &max_results) != 1)
+        max_results = RESULTS_PER_PAGE;
+    }
+  else
+    {
+      first_result = 0;
+      max_results = 0;
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -8566,21 +8614,23 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
                           /* Parameters for get_tasks and get_result. */
                           "<task id=\"%s\"><name>%s</name></task>",
                           next,
-                          report_id,
+                          params_value (params, "report_id"),
                           first_result,
                           max_results,
-                          sort_field,
-                          sort_order,
-                          levels,
-                          notes,
-                          overrides,
-                          result_hosts_only,
-                          search_phrase,
-                          min_cvss_base,
-                          oid,
-                          result_id,
-                          task_id,
-                          task_name ? task_name : "");
+                          params_value (params, "sort_field"),
+                          params_value (params, "sort_order"),
+                          params_value (params, "levels"),
+                          params_value (params, "notes"),
+                          params_value (params, "overrides"),
+                          params_value (params, "result_hosts_only"),
+                          params_value (params, "search_phrase"),
+                          params_value (params, "min_cvss_base"),
+                          params_value (params, "oid"),
+                          params_value (params, "result_id"),
+                          params_value (params, "task_id"),
+                          params_value (params, "name")
+                           ? params_value (params, "name")
+                           : "");
 
   if (read_string (&session, &xml))
     {
