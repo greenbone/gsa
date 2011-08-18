@@ -298,6 +298,7 @@ static void
 param_free (gpointer param)
 {
   g_free (((param_t*) param)->value);
+  g_free (((param_t*) param)->original_value);
   g_free (param);
 }
 
@@ -341,6 +342,22 @@ params_get (params_t *params, const char *name)
 }
 
 /**
+ * @brief Get whether a param was given at all.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return 1 if given, else 0.
+ */
+int
+params_given (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? 1 : 0;
+}
+
+/**
  * @brief Get value of param.
  *
  * @param[in]  Params.
@@ -354,6 +371,24 @@ params_value (params_t *params, const char *name)
   param_t *param;
   param = g_hash_table_lookup (params, name);
   return param ? param->value : NULL;
+}
+
+/**
+ * @brief Get original value of param, before validation.
+ *
+ * Only set if validation failed.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Value if param present, else NULL.
+ */
+const char *
+params_original_value (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->original_value : NULL;
 }
 
 /**
@@ -399,7 +434,7 @@ param_t *
 params_add (params_t *params, const char *name, const char *value)
 {
   param_t *param;
-  param = g_malloc (sizeof (param_t));
+  param = g_malloc0 (sizeof (param_t));
   param->valid = 0;
   param->value = g_strdup (value);
   param->value_size = strlen (value);

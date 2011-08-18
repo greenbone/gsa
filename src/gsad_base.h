@@ -34,6 +34,11 @@
 
 #include <glib.h>
 
+/**
+ * @brief Initial filtered results per page on the report summary.
+ */
+#define RESULTS_PER_PAGE 100
+
 /** @brief Answer for invalid input. */
 #define GSAD_MESSAGE_INVALID_PARAM(op)                                            \
   "<gsad_msg status_text=\"Invalid parameter\" operation=\"" op "\">"             \
@@ -119,6 +124,7 @@ struct param
 {
   int valid;             /* Validation flag. */
   gchar *value;          /* Value. */
+  gchar *original_value; /* Original value, before validation. */
   int value_size;        /* Size of value, excluding trailing NULL. */
   params_t *values;      /* Multiple binary values. */
 };
@@ -132,7 +138,11 @@ params_t *params_new ();
 
 void params_free (params_t *);
 
+int params_given (params_t *, const char *);
+
 const char *params_value (params_t *, const char *);
+
+const char *params_original_value (params_t *, const char *);
 
 params_t *params_values (params_t *, const char *);
 

@@ -8596,46 +8596,12 @@ edit_note_omp (credentials_t * credentials, const char *note_id,
  * @brief Save note, get next page, XSL transform the result.
  *
  * @param[in]  credentials     Username and password for authentication.
- * @param[in]  note_id         ID of note.
- * @param[in]  text            Text of note.
- * @param[in]  hosts           Hosts note applied to, "" for all.
- * @param[in]  port            Port note applies to, "" for all.
- * @param[in]  threat          Threat note applies to, "" for all.
- * @param[in]  note_task_id    ID of task to limit note to, "" for all.
- * @param[in]  note_result_id  ID of result to limit note to, "" for all.
- * @param[in]  next            Name of next page.
- * @param[in]  report_id       ID of current report.
- * @param[in]  first_result    Number of first result in report.
- * @param[in]  max_results     Number of results in report.
- * @param[in]  sort_field      Field to sort on, or NULL.
- * @param[in]  sort_order      "ascending", "descending", or NULL.
- * @param[in]  levels          Threat levels to include in report.
- * @param[in]  notes           Whether to include notes.
- * @param[in]  overrides       Whether to apply/include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase   Phrase which included results must contain.
- * @param[in]  min_cvss_base   Minimum CVSS included results may have.
- *                             "-1" for all, including results with NULL CVSS.
- * @param[in]  oid             OID of NVT (for get_nvts).
- * @param[in]  task_id         ID of task (for get_tasks).
- * @param[in]  task_name       Name of task (for get_result).
- * @param[in]  result_id       ID of result (for get_result).
+ * @param[in]  params          Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (credentials_t * credentials, const char *note_id,
-               const char *text, const char *hosts, const char *port,
-               const char *threat, const char *note_task_id,
-               const char *note_result_id, const char *next,
-               const char *report_id,
-               const unsigned int first_result,
-               const unsigned int max_results,
-               const char *sort_field, const char *sort_order,
-               const char *levels, const char *notes, const char *overrides,
-               const char *result_hosts_only, const char *search_phrase,
-               const char *min_cvss_base, const char *oid, const char *task_id,
-               const char *task_name, const char *result_id)
+save_note_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *response = NULL;
@@ -8644,6 +8610,65 @@ save_note_omp (credentials_t * credentials, const char *note_id,
   gchar *modify_note;
   gchar *html;
 
+  const char *note_id, *text, *hosts, *port, *threat, *note_task_id;
+  const char *note_result_id, *next, *report_id;
+  unsigned int first_result, max_results;
+  const char *sort_field, *sort_order, *levels, *notes, *overrides;
+  const char *result_hosts_only, *search_phrase, *min_cvss_base;
+  const char *oid, *task_id, *task_name, *result_id;
+
+  note_id = params_value (params, "note_id");
+
+  text = params_value (params, "text");
+  if (text == NULL)
+    params_given (params, "text") || (text = "");
+
+  if (params_valid (params, "hosts"))
+    hosts = params_value (params, "hosts");
+  else if (strcmp (params_original_value (params, "hosts"), ""))
+    hosts = NULL;
+  else
+    hosts = "";
+
+  if (params_valid (params, "port"))
+    port = params_value (params, "port");
+  else if (strcmp (params_original_value (params, "port"), ""))
+    port = NULL;
+  else
+    port = "";
+
+  threat = params_value (params, "threat");
+  note_task_id = params_value (params, "note_task_id");
+  note_result_id = params_value (params, "note_result_id");
+  next = params_value (params, "next");
+  report_id = params_value (params, "report_id");
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  levels = params_value (params, "levels");
+
+  notes = params_value (params, "notes");
+  if (notes == NULL)
+    params_given (params, "notes") || (notes = "0");
+
+  overrides = params_value (params, "overrides");
+  if (overrides == NULL)
+    params_given (params, "overrides") || (overrides = "0");
+
+  result_hosts_only = params_value (params, "result_hosts_only");
+  if (result_hosts_only == NULL)
+    params_given (params, "result_hosts_only") || (result_hosts_only = "0");
+
+  search_phrase = params_value (params, "search_phrase");
+  if (search_phrase == NULL)
+    params_given (params, "search_phrase") || (search_phrase = "");
+
+  min_cvss_base = NULL;
+  oid = params_value (params, "oid");
+  task_id = params_value (params, "task_id");
+  task_name = params_value (params, "name");
+  result_id = params_value (params, "result_id");
+
   if (next == NULL || note_task_id == NULL || note_result_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
@@ -8651,6 +8676,112 @@ save_note_omp (credentials_t * credentials, const char *note_id,
                          "The note remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_notes");
+
+  if (strcmp (next, "get_note")
+      && strcmp (next, "get_notes")
+      && strcmp (next, "get_nvts")
+      && strcmp (next, "get_report")
+      && strcmp (next, "get_result")
+      && strcmp (next, "get_tasks"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a note. "
+                         "The note remains the same. "
+                         "Diagnostics: next must name a valid page.",
+                         "/omp?cmd=get_notes");
+
+  if (note_id == NULL
+      || text == NULL
+      || hosts == NULL
+      || port == NULL
+      || threat == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a note. "
+                         "The note remains the same. "
+                         "Diagnostics: Syntax error in required parameter.",
+                         "/omp?cmd=get_notes");
+
+  first_result = 0;
+  max_results = 0;
+
+  if ((strcmp (next, "get_report") == 0)
+      || (strcmp (next, "get_result") == 0))
+    {
+      if (params_value (params, "first_result") == NULL
+          || sscanf (params_value (params, "first_result"), "%u", &first_result)
+             != 1)
+        first_result = 1;
+
+      if (params_given (params, "min_cvss_base"))
+        {
+          if (params_valid (params, "min_cvss_base"))
+            {
+              if (params_value (params, "apply_min")
+                  && strcmp (params_value (params, "apply_min"), "0"))
+                min_cvss_base = params_value (params, "min_cvss_base");
+              else
+                min_cvss_base = "";
+            }
+        }
+      else
+        min_cvss_base = "";
+
+      if (report_id == NULL
+          || sort_field == NULL
+          || sort_order == NULL
+          || levels == NULL
+          || notes == NULL
+          || overrides == NULL
+          || result_hosts_only == NULL
+          || search_phrase == NULL
+          || min_cvss_base == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a note. "
+                             "The note remains the same. "
+                             "Diagnostics: Syntax error in required parameter.",
+                             "/omp?cmd=get_notes");
+
+      if (strcmp (next, "get_report") == 0)
+        {
+          if (params_value (params, "max_results") == NULL
+              || sscanf (params_value (params, "max_results"), "%u", &max_results)
+                 != 1)
+            max_results = 1;
+        }
+      else
+        {
+          if (params_value (params, "max_results") == NULL
+              || sscanf (params_value (params, "max_results"), "%u", &max_results)
+                 != 1)
+            max_results = RESULTS_PER_PAGE;
+
+          if (task_id == NULL
+              || result_id == NULL
+              || task_name == NULL)
+            return
+              gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while saving a note. "
+                            "The note remains the same. "
+                            "Diagnostics: Syntax error in required parameter.",
+                            "/omp?cmd=get_notes");
+        }
+
+    }
+
+  if (strcmp (next, "get_tasks") == 0)
+    {
+      if (overrides == NULL
+          || task_id == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a note. "
+                             "The note remains the same. "
+                             "Diagnostics: Syntax error in required parameter.",
+                             "/omp?cmd=get_notes");
+    }
 
   modify_note = g_strdup_printf ("<modify_note note_id=\"%s\">"
                                  "<hosts>%s</hosts>"

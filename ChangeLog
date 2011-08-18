@@ -1,3 +1,26 @@
+2011-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert save_notes to new param mechanism.
+
+	* src/gsad_base.c (params_free): Free original_value.
+	(params_given, params_original_value): New functions.
+	(params_add): Clear memory on allocation.
+
+	* src/gsad_base.h: Update headers accordingly.
+	(RESULTS_PER_PAGE): New define.  From gsad.c.
+	(struct param): Add original_value.
+
+	* src/gsad.c (RESULTS_PER_PAGE): Remove.  To gsad_base.h.
+	(params_append_mhd): Append to the param even if zero size, so that empty
+	params are still added.
+	(params_mhd_validate): Set original_value.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_omp.c (save_note_omp): Replace multiple args with one.  Check
+	validation outcome, as was done in exec_omp_post.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2011-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Convert save_report_format to new param mechanism.  In the process add
