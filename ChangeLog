@@ -1,5 +1,11 @@
 2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/gsa-style.css: Removed some redundant
+	color/background definitions. This patch was developed by
+	Karl-Heinz Ruskowski.
+
+2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Make Navigation a menu. This patch was developed by
 	Karl-Heinz Ruskowski.
 
