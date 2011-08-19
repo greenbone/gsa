@@ -786,7 +786,7 @@ envelope/token}">Assets</a></li>
      </ul>
     </li>
     <li>
-     <a href="#">Misc</a>
+     <a href="#">Extras</a>
      <ul>
       <li class="pointy"></li>
       <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
