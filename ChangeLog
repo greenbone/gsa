@@ -1,5 +1,13 @@
 2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Moved "Scan Configs"
+	menu item two entries down.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Moved Performance
+	menu item from "Scan Management" to "Misc".
+
+2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/gsa-style.css: Removed some redundant
 	color/background definitions. This patch was developed by
 	Karl-Heinz Ruskowski.

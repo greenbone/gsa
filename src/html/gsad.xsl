@@ -759,7 +759,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
       <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
       <li><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
-      <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
      </ul>
     </li>
     <ul>
@@ -776,9 +775,9 @@ envelope/token}">Assets</a></li>
      <a>Configuration</a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
       <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
+      <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
       <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
       <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
@@ -800,6 +799,7 @@ envelope/token}">Assets</a></li>
      <ul>
       <li class="pointy"></li>
       <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+      <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
      </ul>
     </li>
     <li class="last_button">
