@@ -1,5 +1,10 @@
 2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl (html-task-table): Reduced width of columns
+	Threat and Trend.
+
+2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Moved "Scan Configs"
 	menu item two entries down.
 

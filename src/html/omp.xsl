@@ -527,8 +527,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
             <td colspan="3">Reports</td>
-            <td rowspan="2">Threat</td>
-            <td rowspan="2">Trend</td>
+            <td width="1" rowspan="2">Threat</td>
+            <td width="1" rowspan="2">Trend</td>
             <td width="115" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
