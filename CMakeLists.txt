@@ -349,6 +349,8 @@ install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png
                src/html/img/style/window_dec_a_error.png
                src/html/img/style/window_dec_b_error.png
                src/html/img/style/window_dec_c_error.png
+               src/html/img/style/top_menu_buttons.png
+               src/html/img/style/menu_pointy.png
          DESTINATION ${GSA_DATA_DIR}/img/style)
 
 install (FILES  src/html/img/os_aix.png

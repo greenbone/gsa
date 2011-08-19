@@ -18,6 +18,7 @@ Matthew Mundell <matthew.mundell@greenbone.net>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@greenbone.net>
 Hartmut Goebel <h.goebel@goebel-consult.de>
+Karl-Heinz Ruskowski <khruskowski@intevation.de>
 
 Copyright:
 Copyright (C) 2009, 2010 Greenbone Networks GmbH
@@ -748,67 +749,71 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-gsa-navigation">
-  <div class="gb_window" style="width:170px;">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Navigation</div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="nav">
-        <ul>
-          <li>
-            Scan Management
-            <ul>
-              <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
-              <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
-              <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
-              <li><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
-              <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
-            </ul>
-          </li>
-          <li>
-            Asset Management
-            <ul>
-              <li><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Assets</a></li>
-            </ul>
-          </li>
-          <li>
-            Configuration
-            <ul>
-              <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
-              <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
-              <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
-              <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
-              <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
-              <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
-              <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
-              <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
-            </ul>
-          </li>
-          <li>
-            Administration
-            <ul>
-              <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
-              <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
-              <li><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
-            </ul>
-          </li>
-          <li>
-            Miscellaneous
-            <ul>
-              <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
-            </ul>
-          </li>
-          <li>
-            Help
-            <ul>
-              <li><a href="/help/contents.html?token={/envelope/token}">Contents</a></li>
-              <li><a href="/help/about.html?token={/envelope/token}">About</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <div id="gb_menu">
+   <ul>
+    <li class="first_button">
+     <a>Scan Management</a>
+     <ul>
+      <li class="pointy"></li>
+      <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
+      <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
+      <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
+      <li><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+      <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
+     </ul>
+    </li>
+    <ul>
+     <li>
+      <a>Asset Management</a>
+      <ul>
+       <li class="pointy"></li>
+       <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/
+envelope/token}">Assets</a></li>
+      </ul>
+     </li>
+    </ul>
+    <li>
+     <a>Configuration</a>
+     <ul>
+      <li class="pointy"></li>
+      <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
+      <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
+      <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
+      <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+      <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
+      <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
+      <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
+      <li class="last"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
+     </ul>
+    </li>
+    <li>
+     <a>Administration</a>
+     <ul>
+      <li class="pointy"></li>
+      <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
+      <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
+      <li class="last"><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
+     </ul>
+    </li>
+    <li>
+     <a href="#">Misc</a>
+     <ul>
+      <li class="pointy"></li>
+      <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+     </ul>
+    </li>
+    <li class="last_button">
+     <a>Help</a>
+     <ul>
+      <li class="pointy"></li>
+      <li><a href="/help/contents.html?token={/envelope/token}">Contents</a></li>
+      <li class="last"><a href="/help/about.html?token={/envelope/token}">About</a></li>
+     </ul>
+    </li>
+   </ul>
   </div>
+  <br clear="all" />
+  <br />
 </xsl:template>
 
 <!-- DIALOGS -->
@@ -1021,16 +1026,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="time"/>
       </xsl:with-param>
     </xsl:call-template>
-    <table width="100%" cellpadding="3" cellspacing="0">
-      <tr>
-        <td valign="top" width="1">
-          <xsl:call-template name="html-gsa-navigation"/>
-        </td>
-        <td valign="top">
-          <xsl:apply-templates/>
-        </td>
-      </tr>
-    </table>
+    <xsl:call-template name="html-gsa-navigation"/>
+    <xsl:apply-templates/>
     <xsl:call-template name="html-footer"/>
   </div>
 </xsl:template>

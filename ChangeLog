@@ -1,3 +1,22 @@
+2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Make Navigation a menu. This patch was developed by
+	Karl-Heinz Ruskowski.
+
+	* src/html/img/style/top_menu_buttons.png,
+	src/html/img/style/menu_pointy.png: New.
+
+	* CMakeLists.txt: Install top_menu_buttons.png and menu_pointy.png.
+
+	* src/html/gsa-style.css (progressbar_text): increased
+	z-index to 3 to have it below the menu.
+	(gb_menu): New. The styles for the new menu.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Replaced
+	gb_window div-container by gb_menu div container.
+	(envelope): Replace the table where first column was
+	Navigation with simply stacked Menu/Content.
+
 2011-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Convert save_note to new param mechanism.
