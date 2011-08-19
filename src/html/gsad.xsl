@@ -786,20 +786,20 @@ envelope/token}">Assets</a></li>
      </ul>
     </li>
     <li>
+     <a href="#">Misc</a>
+     <ul>
+      <li class="pointy"></li>
+      <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+      <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
+     </ul>
+    </li>
+    <li>
      <a>Administration</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
       <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
       <li class="last"><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
-     </ul>
-    </li>
-    <li>
-     <a href="#">Misc</a>
-     <ul>
-      <li class="pointy"></li>
-      <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
-      <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
      </ul>
     </li>
     <li class="last_button">
