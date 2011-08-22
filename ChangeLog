@@ -1,3 +1,8 @@
+2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (ELSE, ELSE_OAP): New macros.
+	(exec_omp_post, exec_omp_get): Use macro for params cases.
+
 2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Renamed

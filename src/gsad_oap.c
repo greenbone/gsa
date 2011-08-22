@@ -476,7 +476,7 @@ save_user_oap (credentials_t * credentials, params_t *params)
         }
     }
   else
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Save User"));
 
   /* Get all users. */
 

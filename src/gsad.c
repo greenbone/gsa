@@ -2101,6 +2101,20 @@ params_mhd_validate (void *params)
 }
 
 /**
+ * @brief Add else branch for an OMP operation.
+ */
+#define ELSE(name) \
+  else if (!strcmp (con_info->req_parms.cmd, G_STRINGIFY (name))) \
+    con_info->response = name ## _omp (credentials, con_info->params);
+
+/**
+ * @brief Add else branch for an OMP operation.
+ */
+#define ELSE_OAP(name) \
+  else if (!strcmp (con_info->req_parms.cmd, G_STRINGIFY (name))) \
+    con_info->response = name ## _oap (credentials, con_info->params);
+
+/**
  * @brief Handle a complete POST request.
  *
  * Ensures there is a command, then depending on the command validates
@@ -3887,15 +3901,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.passwords,
                              con_info->req_parms.timeout);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "save_lsc_credential"))
-    {
-      con_info->response =
-        save_lsc_credential_omp (credentials, con_info->params);
-    }
-  else if (!strcmp (con_info->req_parms.cmd, "save_note"))
-    {
-      con_info->response = save_note_omp (credentials, con_info->params);
-    }
+  ELSE (save_lsc_credential)
+  ELSE (save_note)
   else if ((!strcmp (con_info->req_parms.cmd, "save_override"))
            && (con_info->req_parms.override_id != NULL)
            && (con_info->req_parms.next != NULL)
@@ -4259,11 +4266,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              con_info->req_parms.task_id,
                              NULL, NULL);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "save_report_format"))
-    {
-      con_info->response =
-        save_report_format_omp (credentials, con_info->params);
-    }
+  ELSE (save_report_format)
   else if (!strcmp (con_info->req_parms.cmd, "save_settings"))
     {
       con_info->response =
@@ -4342,11 +4345,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                       : 0);
         }
     }
-  else if (!strcmp (con_info->req_parms.cmd, "save_user"))
-    {
-      con_info->response =
-        save_user_oap (credentials, con_info->params);
-    }
+  ELSE_OAP (save_user)
   else if ((!strcmp (con_info->req_parms.cmd, "start_task"))
            && (con_info->req_parms.task_id != NULL)
            && (con_info->req_parms.next != NULL)
@@ -4425,6 +4424,23 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
   params_add ((params_t *) params, name, value);
   return MHD_YES;
 }
+
+#undef ELSE
+#undef ELSE_OAP
+
+/**
+ * @brief Add else branch for an OMP operation.
+ */
+#define ELSE(name) \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) \
+    return name ## _omp (credentials, params);
+
+/**
+ * @brief Add else branch for an OAP operation.
+ */
+#define ELSE_OAP(name) \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) \
+    return name ## _oap (credentials, params);
 
 /**
  * @brief Handle a complete GET request.
@@ -5090,13 +5106,8 @@ exec_omp_get (struct MHD_Connection *connection,
     return get_config_nvt_omp (credentials, config_id, name, family, oid,
                                sort_field, sort_order, 1);
 
-  else if (!strcmp (cmd, "edit_lsc_credential"))
-    return edit_lsc_credential_omp (credentials, params);
-
-  else if (!strcmp (cmd, "edit_note"))
-    {
-      return edit_note_omp (credentials, params);
-    }
+  ELSE (edit_lsc_credential)
+  ELSE (edit_note)
 
   else if ((!strcmp (cmd, "edit_override"))
            && (override_id != NULL)
@@ -5215,8 +5226,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return edit_report_format_omp (credentials, report_format_id, next,
                                    sort_field, sort_order);
 
-  else if (!strcmp (cmd, "edit_settings"))
-    return edit_settings_oap (credentials, params);
+  ELSE_OAP (edit_settings)
 
   else if ((!strcmp (cmd, "edit_task"))
            && (task_id != NULL)
@@ -5228,8 +5238,7 @@ exec_omp_get (struct MHD_Connection *connection,
                           sort_field, sort_order,
                           overrides ? strcmp (overrides, "0") : 0);
 
-  else if (!strcmp (cmd, "edit_user"))
-    return edit_user_oap (credentials, params);
+  ELSE_OAP (edit_user)
 
   else if ((!strcmp (cmd, "export_config")) && (config_id != NULL))
     return export_config_omp (credentials, config_id, content_type,
@@ -5302,8 +5311,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_escalators"))
     return get_escalators_omp (credentials, sort_field, sort_order);
 
-  else if (!strcmp (cmd, "get_lsc_credential"))
-    return get_lsc_credential_omp (credentials, params);
+  ELSE (get_lsc_credential)
 
   else if (!strcmp (cmd, "get_lsc_credentials")
            && ((lsc_credential_id == NULL && package_format == NULL)
@@ -5428,8 +5436,7 @@ exec_omp_get (struct MHD_Connection *connection,
       return ret;
     }
 
-  else if (!strcmp (cmd, "get_note"))
-    return get_note_omp (credentials, params);
+  ELSE (get_note)
 
   else if ((!strcmp (cmd, "get_notes")))
     return get_notes_omp (credentials);
