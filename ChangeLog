@@ -1,5 +1,9 @@
 2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Remove last from Trashcan.
+
+2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert more pages to new param mechanism.
 
 	* src/gsad.c (init_validator): Add xml_file regex.

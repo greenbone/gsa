@@ -789,7 +789,7 @@ envelope/token}">Assets</a></li>
      <a href="#">Extras</a>
      <ul>
       <li class="pointy"></li>
-      <li class="last"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+      <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
       <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
      </ul>
     </li>
