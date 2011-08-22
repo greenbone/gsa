@@ -237,25 +237,18 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
  * @brief Create a user, get all users, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  name         New user name.
- * @param[in]  password     New user password.
- * @param[in]  role         New user role.
- * @param[in]  hosts        List of hosts user has/lacks access rights.
- *                          Empty string for all access, NULL on error.
- * @param[in]  hosts_allow  Whether hosts grants ("1") or forbids ("0") access,
- *                          or "2" for all access.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_user_oap (credentials_t * credentials, const char *name,
-                 const char *password, const char *role, const char *hosts,
-                 const char *hosts_allow)
+create_user_oap (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html;
+  const char *name, *password, *role, *hosts, *hosts_allow;
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -275,6 +268,12 @@ create_user_oap (credentials_t * credentials, const char *name,
     }
 
   xml = g_string_new ("<commands_response>");
+
+  name = params_value (params, "login");
+  password = params_value (params, "password");
+  role = params_value (params, "role");
+  hosts = params_value (params, "access_hosts");
+  hosts_allow = params_value (params, "hosts_allow");
 
   if (name == NULL || password == NULL || role == NULL || hosts == NULL
       || hosts_allow == NULL)

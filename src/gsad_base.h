@@ -125,6 +125,7 @@ struct param
   int valid;             /* Validation flag. */
   gchar *value;          /* Value. */
   gchar *original_value; /* Original value, before validation. */
+  gchar *filename;       /* Filename. */
   int value_size;        /* Size of value, excluding trailing NULL. */
   params_t *values;      /* Multiple binary values. */
 };
@@ -142,7 +143,11 @@ int params_given (params_t *, const char *);
 
 const char *params_value (params_t *, const char *);
 
+int params_value_size (params_t *, const char *);
+
 const char *params_original_value (params_t *, const char *);
+
+const char *params_filename (params_t *, const char *);
 
 params_t *params_values (params_t *, const char *);
 

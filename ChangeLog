@@ -1,7 +1,32 @@
 2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (init_validator): Add xml_file regex.
+	(params_append_mhd): Add filename arg.  Set in param.  Update caller.
+	(exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_base.c (param_free): Add filename.
+	(params_value_size, params_filename): New functions.
+
+	* src/gsad_base.h: Add headers accordingly.
+	(struct param): Add filename.
+
+	* src/gsad_oap.c (create_user_oap): Replace multiple args with one.
+
+	* src/gsad_oap.h: Update header accordingly.
+
+	* src/gsad_omp.c (create_agent_omp, empty_trashcan_omp)
+	(import_config_omp):: Replace multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (ELSE, ELSE_OAP): New macros.
 	(exec_omp_post, exec_omp_get): Use macro for params cases.
+
+	* src/gsad_oap.c (save_user_oap): Correct op name in message.
 
 2011-08-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 

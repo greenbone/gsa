@@ -591,7 +591,7 @@ init_validator ()
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  openvas_validator_add (validator, "xml_file",   NULL);
+  openvas_validator_add (validator, "xml_file",   "^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
@@ -1204,6 +1204,7 @@ append_chunk_string (struct gsad_connection_info *con_info,
  *
  * @param[in]   params        Request parameters.
  * @param[out]  name          Parameter.
+ * @param[out]  filename      Filename if uploaded file.
  * @param[in]   chunk_data    Incoming chunk data.
  * @param[out]  chunk_size    Size of chunk.
  * @param[out]  chunk_offset  Offset into all data.
@@ -1213,6 +1214,7 @@ append_chunk_string (struct gsad_connection_info *con_info,
 static int
 params_append_mhd (params_t *params,
                    const char *name,
+                   const char *filename,
                    const char *chunk_data,
                    int chunk_size,
                    int chunk_offset)
@@ -1246,6 +1248,8 @@ params_append_mhd (params_t *params,
 
       params_append_bin (param->values, colon + 1, chunk_data, chunk_size,
                          chunk_offset);
+      if (filename)
+        param->filename = g_strdup (filename);
 
       return MHD_YES;
     }
@@ -1339,7 +1343,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   if (NULL != key)
     {
-      params_append_mhd (con_info->params, key, data, size, off);
+      params_append_mhd (con_info->params, key, filename, data, size, off);
 
       if (!strcmp (key, "token"))
         return append_chunk_string (con_info, data, size, off,
@@ -2317,24 +2321,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_tasks");
     }
-  else if (!strcmp (con_info->req_parms.cmd, "create_agent"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      con_info->response =
-        create_agent_omp (credentials,
-                          con_info->req_parms.name,
-                          con_info->req_parms.comment,
-                          con_info->req_parms.installer,
-                          con_info->req_parms.installer_size,
-                          con_info->req_parms.installer_filename,
-                          con_info->req_parms.installer_sig,
-                          con_info->req_parms.installer_sig_size,
-                          con_info->req_parms.howto_install,
-                          con_info->req_parms.howto_install_size,
-                          con_info->req_parms.howto_use,
-                          con_info->req_parms.howto_use_size);
-    }
+  ELSE (create_agent)
   else if (!strcmp (con_info->req_parms.cmd, "create_escalator"))
     {
       validate (validator, "name", &con_info->req_parms.name);
@@ -2504,21 +2491,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->req_parms.max_checks,
                            con_info->req_parms.max_hosts);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "create_user"))
-    {
-      validate (validator, "login", &con_info->req_parms.login);
-      validate (validator, "password", &con_info->req_parms.password);
-      validate (validator, "role", &con_info->req_parms.role);
-      validate (validator, "access_hosts", &con_info->req_parms.access_hosts);
-      validate (validator, "hosts_allow", &con_info->req_parms.hosts_allow);
-      con_info->response =
-        create_user_oap (credentials,
-                         con_info->req_parms.login,
-                         con_info->req_parms.password,
-                         con_info->req_parms.role,
-                         con_info->req_parms.access_hosts,
-                         con_info->req_parms.hosts_allow);
-    }
+  ELSE_OAP (create_user)
   else if (!strcmp (con_info->req_parms.cmd, "create_schedule"))
     {
       validate (validator, "name", &con_info->req_parms.name);
@@ -3632,12 +3605,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response =
         delete_config_omp (credentials, con_info->req_parms.config_id);
     }
-
-  else if (!strcmp (con_info->req_parms.cmd, "empty_trashcan"))
-    {
-      con_info->response =
-        empty_trashcan_omp (credentials);
-    }
+  ELSE (empty_trashcan)
   else if (!strcmp (con_info->req_parms.cmd, "escalate_report"))
     {
       unsigned int first, esc_first;
@@ -3770,11 +3738,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                          : 0,
                         NULL);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "import_config"))
-    {
-      con_info->response =
-        import_config_omp (credentials, con_info->req_parms.xml_file);
-    }
+  ELSE (import_config)
   else if (!strcmp (con_info->req_parms.cmd, "import_report_format"))
     {
       con_info->response =

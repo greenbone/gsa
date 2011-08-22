@@ -109,12 +109,7 @@ char * save_lsc_credential_omp (credentials_t *, params_t *);
 
 int get_agents_omp (credentials_t *, const char *, const char *,
                     gsize *, const char *, const char *, char **, char **);
-char * create_agent_omp (credentials_t *, const char *, const char *,
-                         const char *, int,
-                         const char *,
-                         const char *, int,
-                         const char *, int,
-                         const char *, int);
+char * create_agent_omp (credentials_t *, params_t *);
 char * delete_agent_omp (credentials_t *, const char *);
 char * delete_trash_agent_omp (credentials_t *, const char *);
 char * verify_agent_omp (credentials_t *, const char *);
@@ -157,7 +152,7 @@ char * save_config_nvt_omp (credentials_t *, const char *, const char *,
                             const char *, GArray *, GArray *, GArray *,
                             const char *);
 char * create_config_omp (credentials_t *, char *, char *, const char *);
-char * import_config_omp (credentials_t *, char *);
+char * import_config_omp (credentials_t *, params_t *);
 char * delete_config_omp (credentials_t *, const char *);
 char * delete_trash_config_omp (credentials_t *, const char *);
 char * export_config_omp (credentials_t *, const char *, enum content_type*,
@@ -257,7 +252,7 @@ char * verify_report_format_omp (credentials_t *, const char *);
 
 char * get_trash_omp (credentials_t *, const char *, const char *);
 char * restore_omp (credentials_t *, const char *);
-char * empty_trashcan_omp (credentials_t *);
+char * empty_trashcan_omp (credentials_t *, params_t *);
 
 int authenticate_omp (const gchar *, const gchar *);
 

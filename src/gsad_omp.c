@@ -2479,33 +2479,20 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
  * @brief Create an agent, get all agents, XSL transform result.
  *
  * @param[in]  credentials          Username and password for authentication.
- * @param[in]  name                 Agent name.
- * @param[in]  comment              Comment on agent.
- * @param[in]  installer            Installer, in base64.
- * @param[in]  installer_size       Size of \param installer .
- * @param[in]  installer_filename   Installer filename.
- * @param[in]  installer_sig        Installer signature, in base64.
- * @param[in]  installer_sig_size   Size of \param installer_sig .
- * @param[in]  howto_install        Install HOWTO, in base64.
- * @param[in]  howto_install_size   Size of \param howto_install .
- * @param[in]  howto_use            Usage HOWTO, in base64.
- * @param[in]  howto_use_size       Size of \param howto_use .
+ * @param[in]  params               Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (credentials_t * credentials, const char *name,
-                  const char *comment,
-                  const char *installer, int installer_size,
-                  const char *installer_filename,
-                  const char *installer_sig, int installer_sig_size,
-                  const char *howto_install, int howto_install_size,
-                  const char *howto_use, int howto_use_size)
+create_agent_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   int socket;
   GString *xml;
   gchar *html;
+  const char *name, *comment, *installer, *installer_filename, *installer_sig;
+  const char *howto_install, *howto_use;
+  int installer_size, installer_sig_size, howto_install_size, howto_use_size;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2525,6 +2512,18 @@ create_agent_omp (credentials_t * credentials, const char *name,
     }
 
   xml = g_string_new ("<commands_response>");
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  installer = params_value (params, "installer");
+  installer_filename = params_filename (params, "installer");
+  installer_size = params_value_size (params, "installer");
+  installer_sig = params_value (params, "installer_sig");
+  installer_sig_size = params_value_size (params, "installer_sig");
+  howto_install = params_value (params, "howto_install");
+  howto_install_size = params_value_size (params, "howto_install");
+  howto_use = params_value (params, "howto_use");
+  howto_use_size = params_value_size (params, "howto_use");
 
   if (name == NULL || comment == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Agent"));
@@ -4878,11 +4877,12 @@ restore_omp (credentials_t * credentials, const char *target_id)
  * @brief Empty the trashcan, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-empty_trashcan_omp (credentials_t * credentials)
+empty_trashcan_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
@@ -5277,12 +5277,12 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
  * @brief Import config, get all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  xml_file     Config XML for new config.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_config_omp (credentials_t * credentials, char *xml_file)
+import_config_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml = NULL;
@@ -5314,7 +5314,7 @@ import_config_omp (credentials_t * credentials, char *xml_file)
                             "<create_config>"
                             "%s"
                             "</create_config>",
-                            xml_file)
+                            params_value (params, "xml_file"))
       == -1)
     {
       g_string_free (xml, TRUE);

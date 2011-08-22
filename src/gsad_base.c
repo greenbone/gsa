@@ -299,6 +299,7 @@ param_free (gpointer param)
 {
   g_free (((param_t*) param)->value);
   g_free (((param_t*) param)->original_value);
+  g_free (((param_t*) param)->filename);
   g_free (param);
 }
 
@@ -374,6 +375,22 @@ params_value (params_t *params, const char *name)
 }
 
 /**
+ * @brief Get the size of the value of param.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Size if param present, else -1.
+ */
+int
+params_value_size (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->value_size : -1;
+}
+
+/**
  * @brief Get original value of param, before validation.
  *
  * Only set if validation failed.
@@ -389,6 +406,22 @@ params_original_value (params_t *params, const char *name)
   param_t *param;
   param = g_hash_table_lookup (params, name);
   return param ? param->original_value : NULL;
+}
+
+/**
+ * @brief Get filename of param.
+ *
+ * @param[in]  Params.
+ * @param[in]  Name.
+ *
+ * @return Filename if param present and has a filename, else NULL.
+ */
+const char *
+params_filename (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+  return param ? param->filename : NULL;
 }
 
 /**
