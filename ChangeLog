@@ -1,3 +1,8 @@
+2011-08-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Consistently mark
+	each last menu entry with class "last".
+
 2011-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Remove last from Trashcan.
