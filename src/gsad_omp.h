@@ -164,11 +164,7 @@ char * export_report_format_omp (credentials_t *, const char *,
 
 char * get_notes_omp (credentials_t *);
 char * get_note_omp (credentials_t *, params_t *);
-char * new_note_omp (credentials_t *, const char *, const char *, const char *,
-                     const char *, const char *, const char *, const char *,
-                     const char *, const char *, const char *, const char *,
-                     const char *, const char *, const char *, const char *,
-                     const char *, const char *, const char *, const char *);
+char * new_note_omp (credentials_t *, params_t *);
 char * create_note_omp (credentials_t *, const char *, const char *,
                         const char *, const char *, const char *, const char *,
                         const char *, const char *, const char *,
@@ -186,12 +182,7 @@ char * save_note_omp (credentials_t *, params_t *);
 
 char * get_overrides_omp (credentials_t *);
 char * get_override_omp (credentials_t *, const char *);
-char * new_override_omp (credentials_t *, const char *, const char *,
-                         const char *, const char *, const char *, const char *,
-                         const char *, const char *, const char *, const char *,
-                         const char *, const char *, const char *, const char *,
-                         const char *, const char *, const char *, const char *,
-                         const char *);
+char * new_override_omp (credentials_t *, params_t *);
 char * create_override_omp (credentials_t *, const char *, const char *,
                             const char *, const char *, const char *,
                             const char *, const char *, const char *,

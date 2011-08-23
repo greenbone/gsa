@@ -7781,57 +7781,55 @@ get_note_omp (credentials_t *credentials, params_t *params)
 /**
  * @brief Return the new notes page.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  oid            OID of NVT associated with note.
- * @param[in]  hosts          Hosts to limit override to, "" for all.
- * @param[in]  port           Port to limit note to, "" for all.
- * @param[in]  threat         Threat to limit note to, "" for all.
- * @param[in]  task_id        ID of task to limit note to, "" for all.
- * @param[in]  task_name      Name of task to limit note to, task_id given.
- * @param[in]  result_id      ID of result to limit note to, "" for all.
- * @param[in]  next           Next page, NULL for get_report.
- * @param[in]  report_id      ID of report.
- * @param[in]  first_result   Number of first result in report.
- * @param[in]  max_results    Number of results in report.
- * @param[in]  sort_field     Field to sort on, or NULL.
- * @param[in]  sort_order     "ascending", "descending", or NULL.
- * @param[in]  levels         Threat levels to include in report.
- * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase  Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_note_omp (credentials_t *credentials, const char *oid,
-              const char *hosts, const char *port, const char *threat,
-              const char *task_id, const char *task_name,
-              const char *result_id, const char *next,
-              /* Passthroughs. */
-              const char *report_id, const char *first_result,
-              const char *max_results, const char *sort_field,
-              const char *sort_order, const char *levels, const char *notes,
-              const char *overrides, const char *result_hosts_only,
-              const char *search_phrase, const char *min_cvss_base)
+new_note_omp (credentials_t *credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *oid, *hosts, *port, *threat, *task_id, *task_name, *result_id;
+  const char *next;
+  /* Passthroughs. */
+  const char *report_id, *first_result, *max_results, *sort_field;
+  const char *sort_order, *levels, *notes, *overrides, *result_hosts_only;
+  const char *search_phrase, *min_cvss_base;
 
-  if (next == NULL
-      && (first_result == NULL || max_results == NULL
-          || levels == NULL || notes == NULL || report_id == NULL
-          || search_phrase == NULL || sort_field == NULL || sort_order == NULL
-          || task_name == NULL || threat == NULL || result_hosts_only == NULL
-          || min_cvss_base == NULL))
+  next = params_value (params, "next");
+  first_result = params_value (params, "first_result");
+  max_results = params_value (params, "max_results");
+  levels = params_value (params, "levels");
+  notes = params_value (params, "notes");
+  report_id = params_value (params, "report_id");
+  search_phrase = params_value (params, "search_phrase");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  task_name = params_value (params, "name");
+  threat = params_value (params, "threat");
+  result_hosts_only = params_value (params, "result_hosts_only");
+  min_cvss_base = params_value (params, "min_cvss_base");
+
+  if (first_result == NULL || max_results == NULL
+      || levels == NULL || notes == NULL || report_id == NULL
+      || search_phrase == NULL || sort_field == NULL || sort_order == NULL
+      || task_name == NULL || threat == NULL || result_hosts_only == NULL
+      || min_cvss_base == NULL)
     {
-      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("New Note"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
+
+  hosts = params_value (params, "hosts");
+  oid = params_value (params, "oid");
+  port = params_value (params, "port");
+  result_id = params_value (params, "result_id");
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
 
   if (hosts == NULL || oid == NULL || port == NULL || result_id == NULL
       || task_id == NULL || overrides == NULL)
@@ -9289,58 +9287,55 @@ get_override_omp (credentials_t *credentials, const char *override_id)
 /**
  * @brief Return the new overrides page.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  oid            OID of NVT associated with override.
- * @param[in]  hosts          Hosts to limit override to, "" for all.
- * @param[in]  port           Port to limit override to, "" for all.
- * @param[in]  threat         Threat to limit override to, "" for all.
- * @param[in]  task_id        ID of task to limit override to, "" for all.
- * @param[in]  task_name      Name of task to limit override to, task_id given.
- * @param[in]  report_id      ID of report.
- * @param[in]  result_id      ID of result to limit note to, "" for all.
- * @param[in]  next           Next page, NULL for get_report.
- * @param[in]  first_result   Number of first result in report.
- * @param[in]  max_results    Number of results in report.
- * @param[in]  sort_field     Field to sort on, or NULL.
- * @param[in]  sort_order     "ascending", "descending", or NULL.
- * @param[in]  levels         Threat levels to include in report.
- * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase  Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_override_omp (credentials_t *credentials, const char *oid,
-                  const char *hosts, const char *port, const char *threat,
-                  const char *task_id, const char *task_name,
-                  const char *result_id, const char *next,
-                  /* Passthroughs. */
-                  const char *report_id, const char *first_result,
-                  const char *max_results, const char *sort_field,
-                  const char *sort_order, const char *levels,
-                  const char *notes, const char *overrides,
-                  const char *result_hosts_only, const char *search_phrase,
-                  const char *min_cvss_base)
+new_override_omp (credentials_t *credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *oid, *hosts, *port, *threat, *task_id, *task_name, *result_id;
+  const char *next;
+  /* Passthroughs. */
+  const char *report_id, *first_result, *max_results, *sort_field;
+  const char *sort_order, *levels, *notes, *overrides, *result_hosts_only;
+  const char *search_phrase, *min_cvss_base;
 
-  if (next == NULL
-      && (first_result == NULL || max_results == NULL
-          || levels == NULL || notes == NULL || report_id == NULL
-          || search_phrase == NULL || sort_field == NULL || sort_order == NULL
-          || task_name == NULL || threat == NULL || result_hosts_only == NULL
-          || min_cvss_base == NULL))
+  next = params_value (params, "next");
+  first_result = params_value (params, "first_result");
+  max_results = params_value (params, "max_results");
+  levels = params_value (params, "levels");
+  notes = params_value (params, "notes");
+  report_id = params_value (params, "report_id");
+  search_phrase = params_value (params, "search_phrase");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  task_name = params_value (params, "name");
+  threat = params_value (params, "threat");
+  result_hosts_only = params_value (params, "result_hosts_only");
+  min_cvss_base = params_value (params, "min_cvss_base");
+
+  if (first_result == NULL || max_results == NULL
+      || levels == NULL || notes == NULL || report_id == NULL
+      || search_phrase == NULL || sort_field == NULL || sort_order == NULL
+      || task_name == NULL || threat == NULL || result_hosts_only == NULL
+      || min_cvss_base == NULL)
     {
-      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("New Override"));
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
+
+  hosts = params_value (params, "hosts");
+  oid = params_value (params, "oid");
+  port = params_value (params, "port");
+  result_id = params_value (params, "result_id");
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
 
   if (hosts == NULL || oid == NULL || port == NULL || result_id == NULL
       || task_id == NULL || overrides == NULL)
