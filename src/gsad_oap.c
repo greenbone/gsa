@@ -514,18 +514,21 @@ save_user_oap (credentials_t * credentials, params_t *params)
  * @brief Delete a user, get all users, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  user_name    Name of user to remove.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_user_oap (credentials_t * credentials, const char *user_name)
+delete_user_oap (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *user_name;
+
+  user_name = params_value (params, "name");
 
   if (user_name == NULL)
     return gsad_message (credentials,

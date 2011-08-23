@@ -1800,20 +1800,22 @@ create_lsc_credential_omp (credentials_t * credentials,
 /**
  * @brief Delete LSC credential, get all credentials, XSL transform result.
  *
- * @param[in]  credentials        Username and password for authentication.
- * @param[in]  lsc_credential_id  UUID of LSC credential.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_lsc_credential_omp (credentials_t * credentials,
-                           const char *lsc_credential_id)
+delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *lsc_credential_id;
+
+  lsc_credential_id = params_value (params, "lsc_credential_id");
 
   if (lsc_credential_id == NULL)
     return gsad_message (credentials,
@@ -2671,18 +2673,21 @@ create_agent_omp (credentials_t * credentials, params_t *params)
  * @brief Delete agent, get all agents, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  agent_id     UUID of agent.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (credentials_t * credentials, const char *agent_id)
+delete_agent_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *agent_id;
+
+  agent_id = params_value (params, "agent_id");
 
   if (agent_id == NULL)
     return gsad_message (credentials,
@@ -3319,18 +3324,21 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
 /**
  * @brief Delete an escalator, get all escalators, XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  escalator_id  UUID of escalator.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_escalator_omp (credentials_t * credentials, const char *escalator_id)
+delete_escalator_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *escalator_id;
+
+  escalator_id = params_value (params, "escalator_id");
 
   if (escalator_id == NULL)
     return gsad_message (credentials,
@@ -3986,17 +3994,20 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
  * @brief Delete a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  target_id    UUID of target.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (credentials_t * credentials, const char *target_id)
+delete_target_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *target_id;
+
+  target_id = params_value (params, "target_id");
 
   if (target_id == NULL)
     return gsad_message (credentials,
@@ -6329,18 +6340,21 @@ save_config_nvt_omp (credentials_t * credentials,
  * @brief Delete config, get all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (credentials_t * credentials, const char *config_id)
+delete_config_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id;
+
+  config_id = params_value (params, "config_id");
 
   if (config_id == NULL)
     return gsad_message (credentials,
@@ -10553,17 +10567,20 @@ create_slave_omp (credentials_t *credentials, const char *name,
  * @brief Delete a slave, get all slaves, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  slave_id     UUID of slave.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_slave_omp (credentials_t * credentials, const char *slave_id)
+delete_slave_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *slave_id;
+
+  slave_id = params_value (params, "slave_id");
 
   if (slave_id == NULL)
     return gsad_message (credentials,
@@ -11151,12 +11168,12 @@ create_schedule_omp (credentials_t * credentials, const char *name,
  * @brief Delete a schedule, get all schedules, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  schedule     UUID of schedule.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_schedule_omp (credentials_t * credentials, const char *schedule)
+delete_schedule_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
@@ -11164,6 +11181,9 @@ delete_schedule_omp (credentials_t * credentials, const char *schedule)
   time_t now;
   struct tm *now_broken;
   gchar *html;
+  const char *schedule;
+
+  schedule = params_value (params, "schedule_id");
 
   if (schedule == NULL)
     return gsad_message (credentials,
@@ -11667,19 +11687,21 @@ get_report_formats_omp (credentials_t * credentials, const char * sort_field,
 /**
  * @brief Delete report format, get report formats, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  ID of report format.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_report_format_omp (credentials_t * credentials,
-                          const char *report_format_id)
+delete_report_format_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *report_format_id;
+
+  report_format_id = params_value (params, "report_format_id");
 
   if (report_format_id == NULL)
     return gsad_message (credentials,
