@@ -3526,83 +3526,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_slave)
   ELSE_OAP (delete_user)
   ELSE (delete_target)
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_agent"))
-           && (con_info->req_parms.agent_id != NULL))
-    {
-      validate (validator, "agent_id", &con_info->req_parms.agent_id);
-      con_info->response =
-        delete_trash_agent_omp (credentials, con_info->req_parms.agent_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_config"))
-           && (con_info->req_parms.config_id != NULL))
-    {
-      validate (validator, "config_id", &con_info->req_parms.config_id);
-      con_info->response =
-        delete_trash_config_omp (credentials, con_info->req_parms.config_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_escalator"))
-           && (con_info->req_parms.escalator_id != NULL))
-    {
-      validate (validator, "escalator_id", &con_info->req_parms.escalator_id);
-      con_info->response =
-        delete_trash_escalator_omp (credentials, con_info->req_parms.escalator_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_lsc_credential"))
-           && (con_info->req_parms.lsc_credential_id != NULL))
-    {
-      validate (validator, "lsc_credential_id",
-                &con_info->req_parms.lsc_credential_id);
-      con_info->response =
-        delete_trash_lsc_credential_omp (credentials,
-                                         con_info->req_parms.lsc_credential_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_report_format"))
-           && (con_info->req_parms.report_format_id != NULL))
-    {
-      validate (validator, "report_format_id",
-                &con_info->req_parms.report_format_id);
-      con_info->response =
-        delete_trash_report_format_omp (credentials,
-                                        con_info->req_parms.report_format_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_schedule"))
-           && (con_info->req_parms.schedule_id != NULL))
-    {
-      validate (validator, "schedule_id", &con_info->req_parms.schedule_id);
-      con_info->response =
-        delete_trash_schedule_omp (credentials, con_info->req_parms.schedule_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_slave"))
-           && (con_info->req_parms.slave_id != NULL))
-    {
-      validate (validator, "slave_id", &con_info->req_parms.slave_id);
-      con_info->response =
-        delete_trash_slave_omp (credentials, con_info->req_parms.slave_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_target"))
-           && (con_info->req_parms.target_id != NULL))
-    {
-      validate (validator, "target_id", &con_info->req_parms.target_id);
-      con_info->response =
-        delete_trash_target_omp (credentials, con_info->req_parms.target_id);
-    }
-
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_trash_task"))
-           && (con_info->req_parms.task_id != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      con_info->response =
-        delete_trash_task_omp (credentials, con_info->req_parms.task_id);
-    }
-
+  ELSE (delete_trash_agent)
+  ELSE (delete_trash_config)
+  ELSE (delete_trash_escalator)
+  ELSE (delete_trash_lsc_credential)
+  ELSE (delete_trash_report_format)
+  ELSE (delete_trash_schedule)
+  ELSE (delete_trash_slave)
+  ELSE (delete_trash_target)
+  ELSE (delete_trash_task)
   ELSE (delete_config)
   ELSE (empty_trashcan)
   else if (!strcmp (con_info->req_parms.cmd, "escalate_report"))

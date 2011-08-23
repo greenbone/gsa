@@ -4085,18 +4085,21 @@ delete_target_omp (credentials_t * credentials, params_t *params)
  * @brief Delete a trash agent, get all agents, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  agent_id     UUID of agent.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_agent_omp (credentials_t * credentials, const char *agent_id)
+delete_trash_agent_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *agent_id;
+
+  agent_id = params_value (params, "agent_id");
 
   if (agent_id == NULL)
     return gsad_message (credentials,
@@ -4168,18 +4171,21 @@ delete_trash_agent_omp (credentials_t * credentials, const char *agent_id)
  * @brief Delete a trash config, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_config_omp (credentials_t * credentials, const char *config_id)
+delete_trash_config_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id;
+
+  config_id = params_value (params, "config_id");
 
   if (config_id == NULL)
     return gsad_message (credentials,
@@ -4251,18 +4257,21 @@ delete_trash_config_omp (credentials_t * credentials, const char *config_id)
  * @brief Delete a trash escalator, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  escalator_id    UUID of escalator.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_escalator_omp (credentials_t * credentials, const char *escalator_id)
+delete_trash_escalator_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *escalator_id;
+
+  escalator_id = params_value (params, "escalator_id");
 
   if (escalator_id == NULL)
     return gsad_message (credentials,
@@ -4333,20 +4342,22 @@ delete_trash_escalator_omp (credentials_t * credentials, const char *escalator_i
 /**
  * @brief Delete a trash LSC credential, get all trash, XSL transform the result.
  *
- * @param[in]  credentials        Username and password for authentication.
- * @param[in]  lsc_credential_id  UUID of LSC credential.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_lsc_credential_omp (credentials_t * credentials,
-                                 const char *lsc_credential_id)
+delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *lsc_credential_id;
+
+  lsc_credential_id = params_value (params, "lsc_credential_id");
 
   if (lsc_credential_id == NULL)
     return gsad_message (credentials,
@@ -4418,18 +4429,21 @@ delete_trash_lsc_credential_omp (credentials_t * credentials,
  * @brief Delete a trash report format, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  report_format_id    UUID of report format.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_report_format_omp (credentials_t * credentials, const char *report_format_id)
+delete_trash_report_format_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *report_format_id;
+
+  report_format_id = params_value (params, "report_format_id");
 
   if (report_format_id == NULL)
     return gsad_message (credentials,
@@ -4501,18 +4515,21 @@ delete_trash_report_format_omp (credentials_t * credentials, const char *report_
  * @brief Delete a trash schedule, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  schedule_id    UUID of schedule.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_schedule_omp (credentials_t * credentials, const char *schedule_id)
+delete_trash_schedule_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *schedule_id;
+
+  schedule_id = params_value (params, "schedule_id");
 
   if (schedule_id == NULL)
     return gsad_message (credentials,
@@ -4584,18 +4601,21 @@ delete_trash_schedule_omp (credentials_t * credentials, const char *schedule_id)
  * @brief Delete a trash slave, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  slave_id    UUID of slave.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_slave_omp (credentials_t * credentials, const char *slave_id)
+delete_trash_slave_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *slave_id;
+
+  slave_id = params_value (params, "slave_id");
 
   if (slave_id == NULL)
     return gsad_message (credentials,
@@ -4667,18 +4687,21 @@ delete_trash_slave_omp (credentials_t * credentials, const char *slave_id)
  * @brief Delete a trash target, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  target_id    UUID of target.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_target_omp (credentials_t * credentials, const char *target_id)
+delete_trash_target_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *target_id;
+
+  target_id = params_value (params, "target_id");
 
   if (target_id == NULL)
     return gsad_message (credentials,
@@ -4750,18 +4773,21 @@ delete_trash_target_omp (credentials_t * credentials, const char *target_id)
  * @brief Delete a trash task, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      UUID of task.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_task_omp (credentials_t * credentials, const char *task_id)
+delete_trash_task_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *task_id;
+
+  task_id = params_value (params, "task_id");
 
   if (task_id == NULL)
     return gsad_message (credentials,
