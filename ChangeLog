@@ -1,3 +1,23 @@
+2011-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert save_config to new param mechanism.
+
+	* src/gsad.c (init_validator): Add config rules.
+	(params_append_mhd): Catch the collection params explicitly instead of
+	searching for a colon.
+	(params_mhd_validate_values): New function.
+	(params_mhd_validate): Validate values too.
+	(exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_base.c (params_add): Set value manually to use allocated
+	memory.
+
+	* src/gsad_omp.c (member): Search in params instead of array.
+	(member1): New function.
+	(save_config_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2011-08-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Consistently mark
@@ -26,7 +46,7 @@
 	* src/gsad_oap.h: Update header accordingly.
 
 	* src/gsad_omp.c (create_agent_omp, empty_trashcan_omp)
-	(import_config_omp):: Replace multiple args with one.
+	(import_config_omp): Replace multiple args with one.
 
 	* src/gsad_omp.h: Update headers accordingly.
 

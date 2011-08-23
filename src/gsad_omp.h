@@ -136,9 +136,7 @@ char * delete_trash_target_omp (credentials_t *, const char *);
 
 char * get_config_omp (credentials_t *, const char *, int);
 char * get_configs_omp (credentials_t *, const char *, const char *);
-char * save_config_omp (credentials_t *, const char *, const char *,
-                        const char *, const char *, GArray *, GArray *,
-                        GArray *, const char *);
+char * save_config_omp (credentials_t *, params_t *);
 char * get_config_family_omp (credentials_t *, const char *, const char *,
                               const char *, const char *, const char *, int);
 char * save_config_family_omp (credentials_t *, const char *, const char *,

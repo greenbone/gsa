@@ -180,20 +180,47 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
 }
 
 /**
- * @brief Test whether a string equal to a given string exists in an array.
+ * @brief Look for a param with name equal to a given string.
  *
- * @param[in]  array   Array of gchar* pointers.
+ * @param[in]  params  Params.
  * @param[in]  string  String.
  *
- * @return 1 if a string equal to \arg string exists in \arg array, else 0.
+ * @return 1 if param with name \arg string exists in \arg params, else 0.
  */
 static int
-member (GArray *array, const char *string)
+member (params_t *params, const char *string)
 {
-  const gchar *item;
-  int index = 0;
-  while ((item = g_array_index (array, gchar*, index++)))
-    if (strcmp (item, string) == 0) return 1;
+  params_iterator_t iter;
+  param_t *param;
+  char *name;
+
+  params_iterator_init (&iter, params);
+  while (params_iterator_next (&iter, &name, &param))
+    if (strcmp (name, string) == 0) return 1;
+  return 0;
+}
+
+/**
+ * @brief Look for param with value 1 and name equal to given string.
+ *
+ * @param[in]  params  Params.
+ * @param[in]  string  String.
+ *
+ * @return 1 if param with name \arg string exists in \arg params, else 0.
+ */
+int
+member1 (params_t *params, const char *string)
+{
+  params_iterator_t iter;
+  param_t *param;
+  char *name;
+
+  params_iterator_init (&iter, params);
+  while (params_iterator_next (&iter, &name, &param))
+    if (param->value_size
+        && param->value[0] == '1'
+        && strcmp (name, string) == 0)
+      return 1;
   return 0;
 }
 
@@ -5555,32 +5582,19 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
  * @brief Save details of an NVT for a config and return the next page.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
- * @param[in]  name         Name of config.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  selects      Selected families.
- * @param[in]  trends       Trend values.
- * @param[in]  preferences  Scanner preferences.
- * @param[in]  next         Name of following page.
+ * @param[in]  params       Request parameters.
  *
  * @return Following page.
  */
 char *
-save_config_omp (credentials_t * credentials,
-                 const char * config_id,
-                 const char * name,
-                 const char * sort_field,
-                 const char * sort_order,
-                 GArray * selects,
-                 GArray * trends,
-                 GArray *preferences,
-                 const char * next)
+save_config_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   int socket;
   char *ret;
   gchar *html;
+  const char *next;
+  params_t *preferences, *selects, *trends;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5601,20 +5615,21 @@ save_config_omp (credentials_t * credentials,
 
   /* Save preferences. */
 
+  preferences = params_values (params, "preference:");
   if (preferences)
     {
-      preference_t *preference;
-      int index = 0;
+      params_iterator_t iter;
+      char *param_name;
+      param_t *param;
 
-      while ((preference = g_array_index (preferences,
-                                          preference_t*,
-                                          index++)))
+      params_iterator_init (&iter, preferences);
+      while (params_iterator_next (&iter, &param_name, &param))
         {
           gchar *value;
 
-          value = preference->value_size
-                  ? g_base64_encode ((guchar *) preference->value,
-                                     preference->value_size)
+          value = param->value_size
+                  ? g_base64_encode ((guchar *) param->value,
+                                     param->value_size)
                   : g_strdup ("");
 
           if (openvas_server_sendf (&session,
@@ -5624,8 +5639,8 @@ save_config_omp (credentials_t * credentials,
                                     "<value>%s</value>"
                                     "</preference>"
                                     "</modify_config>",
-                                    config_id,
-                                    preference->name,
+                                    params_value (params, "config_id"),
+                                    param_name,
                                     value)
               == -1)
             {
@@ -5640,7 +5655,6 @@ save_config_omp (credentials_t * credentials,
             }
           g_free (value);
 
-
           ret = check_modify_config (credentials, &session, __FUNCTION__,
                                      __LINE__);
           if (ret)
@@ -5653,12 +5667,16 @@ save_config_omp (credentials_t * credentials,
 
   /* Update the config. */
 
+  trends = params_values (params, "trend:");
+
   if (openvas_server_sendf (&session,
                             "<modify_config config_id=\"%s\">"
                             "<family_selection>"
                             "<growing>%i</growing>",
-                            config_id,
-                            trends && member (trends, ""))
+                            params_value (params, "config_id"),
+                            trends
+                            && params_value (params, "trend:")
+                            && strcmp (params_value (params, "trend:"), "0"))
       == -1)
     {
       openvas_server_close (socket, session);
@@ -5670,12 +5688,16 @@ save_config_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
+  selects = params_values (params, "select:");
+
   if (selects)
     {
       gchar *family;
-      int index = 0;
+      params_iterator_t iter;
+      param_t *param;
 
-      while ((family = g_array_index (selects, gchar*, index++)))
+      params_iterator_init (&iter, selects);
+      while (params_iterator_next (&iter, &family, &param))
         if (openvas_server_sendf (&session,
                                   "<family>"
                                   "<name>%s</name>"
@@ -5683,7 +5705,7 @@ save_config_omp (credentials_t * credentials,
                                   "<growing>%i</growing>"
                                   "</family>",
                                   family,
-                                  trends && member (trends, family))
+                                  trends && member1 (trends, family))
             == -1)
           {
             openvas_server_close (socket, session);
@@ -5699,10 +5721,14 @@ save_config_omp (credentials_t * credentials,
   if (trends)
     {
       gchar *family;
-      int index = 0;
+      params_iterator_t iter;
+      param_t *param;
 
-      while ((family = g_array_index (trends, gchar*, index++)))
+      params_iterator_init (&iter, trends);
+      while (params_iterator_next (&iter, &family, &param))
         {
+          if (param->value_size == 0) continue;
+          if (param->value[0] == '0') continue;
           if (selects && member (selects, family)) continue;
           if (openvas_server_sendf (&session,
                                     "<family>"
@@ -5749,9 +5775,11 @@ save_config_omp (credentials_t * credentials,
 
   /* Return the next page. */
 
+  next = params_value (params, "next:");
   if (next == NULL || strcmp (next, "Save Config") == 0)
-    return get_config_omp (credentials, config_id, 1);
-  return get_config_family_omp (credentials, config_id, name, next, NULL, NULL,
+    return get_config_omp (credentials, params_value (params, "config_id"), 1);
+  return get_config_family_omp (credentials, params_value (params, "config_id"),
+                                params_value (params, "name"), next, NULL, NULL,
                                 1);
 }
 

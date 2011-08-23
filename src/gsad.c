@@ -590,17 +590,24 @@ init_validator ()
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, ]{1,400}))$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "preference:",      "^$");
+  openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
+  openvas_validator_add (validator, "preference:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "select:",      "^$");
+  openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
+  openvas_validator_add (validator, "trend:",      "^(0|1)$");
+  openvas_validator_add (validator, "trend:value", "^(0|1)$");
   openvas_validator_add (validator, "type",       "^assets$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
@@ -642,6 +649,8 @@ init_validator ()
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
+  openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "trend:name",   "family");
 }
 
 /**
@@ -1219,30 +1228,35 @@ params_append_mhd (params_t *params,
                    int chunk_size,
                    int chunk_offset)
 {
-  param_t *param;
-  const char *colon;
-
-  colon = strchr (name, ':');
-
-  if (colon)
+  if ((strncmp (name, "parameter:", strlen ("parameter:")) == 0)
+      || (strncmp (name, "select:", strlen ("select:")) == 0)
+      || (strncmp (name, "trend:", strlen ("trend:")) == 0))
     {
+      param_t *param;
+      const char *colon;
       gchar *prefix;
+
+      colon = strchr (name, ':');
 
       /* Hashtable param, like for radios. */
 
-      if (colon[1] == '\0')
-        return MHD_NO;
+      if ((colon - name) == (strlen (name) - 1))
+        {
+          params_append_bin (params, name, chunk_data, chunk_size, chunk_offset);
+
+          return MHD_YES;
+        }
 
       prefix = g_strndup (name, 1 + colon - name);
       param = params_get (params, prefix);
-
-      tracef ("=== prefix: %s", prefix);
 
       if (param == NULL)
         {
           param = params_add (params, prefix, "");
           param->values = params_new ();
         }
+      else if (param->values == NULL)
+        param->values = params_new ();
 
       g_free (prefix);
 
@@ -2078,7 +2092,50 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 }
 
 /**
- * @brief Add a param.
+ * @brief Validate param values.
+ *
+ * @param[in]  params  Values.
+ */
+void
+params_mhd_validate_values (const char *parent_name, void *params)
+{
+  GHashTableIter iter;
+  gpointer name, value;
+  gchar *name_name, *value_name;
+
+  name_name = g_strdup_printf ("%sname", parent_name);
+  value_name = g_strdup_printf ("%svalue", parent_name);
+
+  g_hash_table_iter_init (&iter, params);
+  while (g_hash_table_iter_next (&iter, &name, &value))
+    {
+      param_t *param;
+      param = (param_t*) value;
+
+      if (openvas_validate (validator, name_name, name))
+        {
+          param->original_value = param->value;
+          param->value = NULL;
+          param->value_size = 0;
+          param->valid = 0;
+        }
+      else if (openvas_validate (validator, value_name, param->value))
+        {
+          param->original_value = param->value;
+          param->value = NULL;
+          param->value_size = 0;
+          param->valid = 0;
+        }
+      else
+        param->valid = 1;
+    }
+
+  g_free (name_name);
+  g_free (value_name);
+}
+
+/**
+ * @brief Validate params.
  *
  * @param[in]  params  Params.
  */
@@ -2101,6 +2158,9 @@ params_mhd_validate (void *params)
         }
       else
         param->valid = 1;
+
+      if (param->values)
+        params_mhd_validate_values (name, param->values);
     }
 }
 
@@ -3815,23 +3875,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                   : 0,
                                  con_info->req_parms.next);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "save_config"))
-    {
-      validate (validator, "config_id", &con_info->req_parms.config_id);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "family_page", &con_info->req_parms.submit);
-
-      con_info->response =
-        save_config_omp (credentials,
-                         con_info->req_parms.config_id,
-                         con_info->req_parms.name,
-                         con_info->req_parms.sort_field,
-                         con_info->req_parms.sort_order,
-                         con_info->req_parms.selects,
-                         con_info->req_parms.trends,
-                         con_info->req_parms.preferences,
-                         con_info->req_parms.submit);
-    }
+  ELSE (save_config)
   else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
     {
       validate (validator, "config_id", &con_info->req_parms.config_id);

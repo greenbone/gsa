@@ -461,7 +461,7 @@ params_valid (params_t *params, const char *name)
  *
  * @param[in]  params  Params.
  * @param[in]  name    Name.
- * @param[in]  value   Value.
+ * @param[in]  value   Value.  Must be a string.
  */
 param_t *
 params_add (params_t *params, const char *name, const char *value)
@@ -509,7 +509,11 @@ params_append_bin (params_t *params, const char *name, const char *chunk_data,
               chunk_size);
       value[chunk_offset + chunk_size] = '\0';
 
-      return params_add (params, name, value);
+      param = params_add (params, name, "");
+      g_free (param->value);
+      param->value = value;
+      param->value_size = chunk_size;
+      return param;
     }
 
   new_value = realloc (param->value,
