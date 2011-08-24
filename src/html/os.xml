@@ -431,4 +431,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <operating_system>
         <pattern>cpe:/o:canonical:ubuntu_linux</pattern><title>Canonical Ubuntu Linux</title><icon>os_ubuntu.png</icon>
     </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:greenbone:greenbone_os:1.6.0</pattern><title>Greenbone OS 1.6</title><icon>os_gos.png</icon>
+    </operating_system>
 </operating_systems>
