@@ -194,15 +194,7 @@ char * edit_override_omp (credentials_t *, const char *, const char *,
                           const char *, const char *, const char *,
                           const char *, const char *, const char *,
                           const char *, const char *, const char *);
-char * save_override_omp (credentials_t *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const unsigned int,
-                          const unsigned int, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *);
+char * save_override_omp (credentials_t *, params_t *);
 
 char * get_slave_omp (credentials_t *, const char *, const char *,
                       const char *);
