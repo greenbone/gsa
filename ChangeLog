@@ -4,6 +4,17 @@
 
 	* src/gsad.c (exec_omp_post): Pass single param instead of many.
 
+	* src/gsad_omp.c (delete_task_omp, delete_report_omp): Replace multiple
+	args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-08-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (exec_omp_post): Pass single param instead of many.
+
 	* src/gsad_omp.c (delete_note_omp, delete_override_omp): Replace multiple
 	args with one.
 

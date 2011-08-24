@@ -841,20 +841,21 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
  * @brief Delete a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next              Name of next page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (credentials_t * credentials, const char *task_id,
-                 int apply_overrides, const char *next)
+delete_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *delete_task;
+  const char *task_id, *overrides;
 
-  if (task_id == NULL)
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
+
+  if (task_id == NULL || overrides == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while deleting a task. "
@@ -864,7 +865,7 @@ delete_task_omp (credentials_t * credentials, const char *task_id,
 
   delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
   ret = get_tasks (credentials, NULL, "name", "ascending", NULL, delete_task,
-                   apply_overrides, NULL);
+                   strcmp (overrides, "0"), NULL);
   g_free (delete_task);
   return ret;
 }
@@ -6784,21 +6785,21 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
 /**
  * @brief Delete report, get task status, XSL transform the result.
  *
- * @param[in]  credentials      Username and password for authentication.
- * @param[in]  report_id        ID of report.
- * @param[in]  task_id          ID of task.
- * @param[in]  apply_overrides  Whether to apply overrides.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_report_omp (credentials_t * credentials,
-                   const char *report_id,
-                   const char *task_id,
-                   int apply_overrides)
+delete_report_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *delete_report;
+  const char *report_id, *task_id, *overrides;
+
+  report_id = params_value (params, "report_id");
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
 
   if ((report_id == NULL) || (task_id == NULL))
     return gsad_message (credentials,
@@ -6812,7 +6813,7 @@ delete_report_omp (credentials_t * credentials,
                                    report_id);
 
   ret = get_tasks (credentials, task_id, NULL, NULL, 0, delete_report,
-                   apply_overrides, NULL);
+                   overrides ? strcmp (overrides, "0") : 0, NULL);
   g_free (delete_report);
   return ret;
 }

@@ -3125,37 +3125,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              NULL, NULL, NULL);
     }
   ELSE (delete_agent)
-  else if ((!strcmp (con_info->req_parms.cmd, "delete_task"))
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "overrides", &con_info->req_parms.overrides);
-      validate (validator, "page", &con_info->req_parms.next);
-
-      con_info->response =
-        delete_task_omp (credentials,
-                         con_info->req_parms.task_id,
-                         con_info->req_parms.overrides
-                          ? strcmp (con_info->req_parms.overrides, "0") : 0,
-                         con_info->req_parms.next);
-    }
+  ELSE (delete_task)
   ELSE (delete_escalator)
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
-  else if (!strcmp (con_info->req_parms.cmd, "delete_report"))
-    {
-      validate (validator, "report_id", &con_info->req_parms.report_id);
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        delete_report_omp (credentials, con_info->req_parms.report_id,
-                           con_info->req_parms.task_id,
-                           con_info->req_parms.overrides
-                            ? strcmp (con_info->req_parms.overrides, "0")
-                            : 0);
-    }
+  ELSE (delete_report)
   ELSE (delete_report_format)
   ELSE (delete_schedule)
   ELSE (delete_slave)
