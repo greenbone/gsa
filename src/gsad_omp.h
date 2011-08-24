@@ -62,8 +62,7 @@ char * resume_stopped_task_omp (credentials_t *, const char *, int, const char *
 char * start_task_omp (credentials_t *, const char *, int, const char *);
 char * stop_task_omp (credentials_t *, const char *, int, const char *);
 
-char * get_tasks_omp (credentials_t *, const char *, const char *,
-                      const char *, const char*, int, const char *);
+char * get_tasks_omp (credentials_t *, params_t *);
 
 char * delete_report_omp (credentials_t *, params_t *);
 char * get_report_omp (credentials_t *, const char *, const char *,
@@ -225,7 +224,7 @@ char * delete_report_format_omp (credentials_t *, params_t *);
 char * delete_trash_report_format_omp (credentials_t *, params_t *);
 char * edit_report_format_omp (credentials_t *, const char *, const char *,
                                const char *, const char *);
-char * import_report_format_omp (credentials_t *, char *);
+char * import_report_format_omp (credentials_t *, params_t *);
 char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, const char *);
 

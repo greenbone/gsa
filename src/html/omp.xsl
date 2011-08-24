@@ -380,7 +380,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form method="get" action="">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
-          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">

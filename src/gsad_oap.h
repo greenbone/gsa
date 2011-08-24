@@ -44,11 +44,10 @@ char * create_user_oap (credentials_t *, params_t *);
 char * delete_user_oap (credentials_t *, params_t *);
 char * save_user_oap (credentials_t *, params_t *);
 char * get_feed_oap (credentials_t *, const char *, const char *);
-char * sync_feed_oap (credentials_t *);
+char * sync_feed_oap (credentials_t *, params_t *);
 char * get_settings_oap (credentials_t *, const char *, const char *);
 char * edit_settings_oap (credentials_t *, params_t *);
-char * save_settings_oap (credentials_t * credentials, const char *,
-                          const char *, GArray *);
+char * save_settings_oap (credentials_t * credentials, params_t *);
 char * modify_ldap_auth_oap (credentials_t * credentials, const char * method,
                              const char * enable, const char * ldaphost,
                              const char * authdn, const char * domain);

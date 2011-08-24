@@ -874,11 +874,12 @@ get_feed_oap (credentials_t * credentials, const char * sort_field,
  * @brief Synchronize with an NVT feed and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-sync_feed_oap (credentials_t * credentials)
+sync_feed_oap (credentials_t * credentials, params_t *params)
 {
   tracef ("In sync_feed_oap\n");
   entity_t entity;
@@ -1084,23 +1085,19 @@ edit_settings_oap (credentials_t * credentials, params_t *params)
  * @brief Save settings.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  settings     Scanner settings.
+ * @param[in]  params       Request parameters.
  *
  * @return Following page.
  */
 char *
-save_settings_oap (credentials_t * credentials,
-                   const char * sort_field,
-                   const char * sort_order,
-                   GArray *settings)
+save_settings_oap (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   gnutls_session_t session;
   int socket;
   char *text = NULL;
   gchar *html;
+  params_t *settings;
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -1137,20 +1134,21 @@ save_settings_oap (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
+  settings = params_values (params, "method_data:");
   if (settings)
     {
-      method_data_param_t *setting;
-      int index = 0;
+      params_iterator_t iter;
+      param_t *setting;
+      char *name;
 
-      while ((setting = g_array_index (settings,
-                                       method_data_param_t*,
-                                       index++)))
+      params_iterator_init (&iter, settings);
+      while (params_iterator_next (&iter, &name, &setting))
         if (openvas_server_sendf (&session,
                                   "<setting>"
                                   "<name>%s</name>"
                                   "<value>%s</value>"
                                   "</setting>",
-                                  setting->key,
+                                  name,
                                   setting->value)
             == -1)
           {

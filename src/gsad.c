@@ -594,13 +594,15 @@ init_validator ()
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  openvas_validator_add (validator, "xml_file",   "^.*$");
+  openvas_validator_add (validator, "xml_file",   "^(\\R|.)*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "method_data:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
@@ -1230,7 +1232,8 @@ params_append_mhd (params_t *params,
 {
   if ((strncmp (name, "parameter:", strlen ("parameter:")) == 0)
       || (strncmp (name, "select:", strlen ("select:")) == 0)
-      || (strncmp (name, "trend:", strlen ("trend:")) == 0))
+      || (strncmp (name, "trend:", strlen ("trend:")) == 0)
+      || (strncmp (name, "method_data:", strlen ("method_data:")) == 0))
     {
       param_t *param;
       const char *colon;
@@ -3266,25 +3269,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         &content_type_omp,
                         &content_disposition);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "get_tasks"))
-    {
-      con_info->response
-       = get_tasks_omp (credentials,
-                        NULL,
-                        con_info->req_parms.sort_field,
-                        con_info->req_parms.sort_order,
-                        "",
-                        con_info->req_parms.overrides
-                         ? strcmp (con_info->req_parms.overrides, "0")
-                         : 0,
-                        NULL);
-    }
+  ELSE (get_tasks)
   ELSE (import_config)
-  else if (!strcmp (con_info->req_parms.cmd, "import_report_format"))
-    {
-      con_info->response =
-        import_report_format_omp (credentials, con_info->req_parms.xml_file);
-    }
+  ELSE (import_report_format)
   else if (!strcmp (con_info->req_parms.cmd, "modify_auth"))
     {
       validate (validator, "group", &con_info->req_parms.group);
@@ -3756,14 +3743,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              NULL, NULL);
     }
   ELSE (save_report_format)
-  else if (!strcmp (con_info->req_parms.cmd, "save_settings"))
-    {
-      con_info->response =
-        save_settings_oap (credentials,
-                           con_info->req_parms.sort_field,
-                           con_info->req_parms.sort_order,
-                           con_info->req_parms.method_data);
-    }
+  ELSE_OAP (save_settings)
   else if ((!strcmp (con_info->req_parms.cmd, "save_task"))
            && (con_info->req_parms.task_id != NULL)
            && (con_info->req_parms.next != NULL)
@@ -3867,10 +3847,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         : 0,
                        con_info->req_parms.next);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "sync_feed"))
-    {
-      con_info->response = sync_feed_oap (credentials);
-    }
+  ELSE_OAP (sync_feed)
   else if ((!strcmp (con_info->req_parms.cmd, "test_escalator"))
            && (con_info->req_parms.escalator_id != NULL))
     {
@@ -4015,7 +3992,6 @@ exec_omp_get (struct MHD_Connection *connection,
   int changed = 0, gone = 0, new = 0, same = 0;
 
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
-  const int VAL_MAX_SIZE = 100;
 
   params_t *params;
 
@@ -4577,12 +4553,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return new_task_omp (credentials, NULL,
                          overrides ? strcmp (overrides, "0") : 0);
 
-  else if ((!strcmp (cmd, "get_tasks")) && (task_id != NULL)
-           && (strlen (task_id) < VAL_MAX_SIZE))
-    return get_tasks_omp (credentials, task_id, sort_field, sort_order,
-                          refresh_interval,
-                          overrides ? strcmp (overrides, "0") : 0,
-                          report_id);
+  ELSE (get_tasks)
 
   else if (!strcmp (cmd, "edit_config"))
     return get_config_omp (credentials, config_id, 1);
@@ -4943,12 +4914,6 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "get_report_formats"))
     return get_report_formats_omp (credentials, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_tasks"))
-    return get_tasks_omp (credentials, NULL, sort_field, sort_order,
-                          refresh_interval,
-                          overrides ? strcmp (overrides, "0") : 0,
-                          NULL);
 
   else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
     return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);

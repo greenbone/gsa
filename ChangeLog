@@ -2,6 +2,25 @@
 
 	Convert more pages to new param mechanism.
 
+	* src/gsad.c (init_validator): Include newlines in xml_file.  Add
+	method_data rules.
+	(params_append_mhd): Add method_data check.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_oap.c (sync_feed_oap, save_settings_oap): Replace multiple
+	args with one.
+
+	* src/gsad_omp.c (get_tasks_omp, import_report_format_omp): Replace
+	multiple args with one.
+
+	* src/gsad_omp.h, src/gsad_oap.h: Update headers accordingly.
+
+	* src/html/omp.xsl (html-task-table): Remove duplicate input.
+
+2011-08-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
 	* src/gsad.c (exec_omp_post): Pass single param instead of many.
 
 	* src/gsad_omp.c (delete_task_omp, delete_report_omp): Replace multiple

@@ -1611,23 +1611,23 @@ get_tasks (credentials_t * credentials, const char *task_id,
  * @brief Get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  report_id    ID of delta candidate.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_omp (credentials_t * credentials, const char *task_id,
-               const char *sort_field, const char *sort_order,
-               const char *refresh_interval, int apply_overrides,
-               const char *report_id)
+get_tasks_omp (credentials_t * credentials, params_t *params)
 {
-  return get_tasks (credentials, task_id, sort_field, sort_order,
-                    refresh_interval, NULL, apply_overrides, report_id);
+  return get_tasks (credentials,
+                    params_value (params, "task_id"),
+                    params_value (params, "sort_field"),
+                    params_value (params, "sort_order"),
+                    params_value (params, "refresh_interval"),
+                    NULL,
+                    params_value (params, "overrides")
+                      ? strcmp (params_value (params, "overrides"), "0")
+                      : 0,
+                    params_value (params, "report_id"));
 }
 
 /**
@@ -12031,12 +12031,12 @@ edit_report_format_omp (credentials_t * credentials,
  * @brief Import report format, get all report formats, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  xml_file     Report format XML for new report format.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_report_format_omp (credentials_t * credentials, char *xml_file)
+import_report_format_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml = NULL;
@@ -12068,7 +12068,7 @@ import_report_format_omp (credentials_t * credentials, char *xml_file)
                             "<create_report_format>"
                             "%s"
                             "</create_report_format>",
-                            xml_file)
+                            params_value (params, "xml_file"))
       == -1)
     {
       g_string_free (xml, TRUE);
