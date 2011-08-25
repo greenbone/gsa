@@ -39,8 +39,7 @@
 
 void omp_init (const gchar *, int);
 
-char * create_report_omp (credentials_t *, char *, char *, const char *,
-                          const char *, const char *);
+char * create_report_omp (credentials_t *, params_t *);
 char * create_task_omp (credentials_t *, char *, char *, char *, char *,
                         const char *, const char *, const char *, const char *,
                         const char *, const char *);
@@ -96,9 +95,7 @@ char * get_lsc_credential_omp (credentials_t *, params_t *);
 int get_lsc_credentials_omp (credentials_t *, const char *, const char *,
                              gsize *, const char *, const char *, char **,
                              char **);
-char * create_lsc_credential_omp (credentials_t *, char *, char *,
-                                  const char *, const char *, const char *,
-                                  const char *, const char *, const char *);
+char * create_lsc_credential_omp (credentials_t *, params_t *);
 char * delete_lsc_credential_omp (credentials_t *, params_t *);
 char * delete_trash_lsc_credential_omp (credentials_t *, params_t *);
 char * edit_lsc_credential_omp (credentials_t *, params_t *);
@@ -146,7 +143,7 @@ char * save_config_nvt_omp (credentials_t *, const char *, const char *,
                             const char *, const char *, const char *,
                             const char *, GArray *, GArray *, GArray *,
                             const char *);
-char * create_config_omp (credentials_t *, params_t *params);
+char * create_config_omp (credentials_t *, params_t *);
 char * import_config_omp (credentials_t *, params_t *);
 char * delete_config_omp (credentials_t *, params_t *);
 char * delete_trash_config_omp (credentials_t *, params_t *);

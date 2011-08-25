@@ -2,6 +2,17 @@
 
 	Convert more pages to new param mechanism.
 
+	* src/gsad.c (exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_omp.c (create_report_omp, create_lsc_credential_omp): Replace
+	multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
 	* src/gsad.c (init_validator): Widen method_data value.  Add escalator
 	data rules.
 	(escalator_data): Remove.  For old param mechanism.

@@ -2391,54 +2391,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   ELSE (create_agent)
   ELSE (create_escalator)
-  else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "credential_login",
-                &con_info->req_parms.credential_login);
-      validate (validator, "lsc_password", &con_info->req_parms.password);
-      validate (validator, "lsc_password", &con_info->req_parms.passphrase);
-      validate (validator, "create_credentials_type",
-                &con_info->req_parms.base);
-      con_info->response =
-        create_lsc_credential_omp (credentials,
-                                   con_info->req_parms.name,
-                                   con_info->req_parms.comment,
-                                   con_info->req_parms.base,
-                                   con_info->req_parms.credential_login,
-                                   con_info->req_parms.password,
-                                   con_info->req_parms.passphrase,
-                                   con_info->req_parms.public_key,
-                                   con_info->req_parms.private_key);
-    }
-  else if (!strcmp (con_info->req_parms.cmd, "create_report"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "overrides", &con_info->req_parms.overrides);
-      if ((con_info->req_parms.task_id == NULL)
-          && ((con_info->req_parms.name == NULL)
-              || (con_info->req_parms.comment == NULL)
-              || (con_info->req_parms.overrides == NULL)
-              || (con_info->req_parms.xml_file == NULL)))
-        con_info->response
-         = new_task_omp (credentials,
-                         "Invalid parameter",
-                         con_info->req_parms.overrides
-                          ? strcmp (con_info->req_parms.overrides, "0")
-                          : 0);
-      else
-        {
-          validate (validator, "task_id", &con_info->req_parms.task_id);
-          con_info->response =
-            create_report_omp (credentials, con_info->req_parms.name,
-                               con_info->req_parms.comment,
-                               con_info->req_parms.overrides,
-                               con_info->req_parms.xml_file,
-                               con_info->req_parms.task_id);
-        }
-    }
+  ELSE (create_lsc_credential)
+  ELSE (create_report)
   else if (!strcmp (con_info->req_parms.cmd, "create_task"))
     {
       validate (validator, "name", &con_info->req_parms.name);

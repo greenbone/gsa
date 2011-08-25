@@ -604,24 +604,22 @@ new_task_omp (credentials_t * credentials, const char* message,
  * @brief Create a report, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.
- * @param[in]  name          New task name.
- * @param[in]  comment       Comment on task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  xml_file      Report XML for new task.
- * @param[in]  task_id       Task to hold report, or NULL for new task.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_report_omp (credentials_t * credentials, char *name, char *comment,
-                   const char *apply_overrides, const char *xml_file,
-                   const char *task_id)
+create_report_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   gnutls_session_t session;
   char *text = NULL;
   int socket, ret;
   gchar *html;
+  const char *task_id, *overrides, *name, *comment, *xml_file;
+
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
 
   if (task_id)
     {
@@ -633,12 +631,24 @@ create_report_omp (credentials_t * credentials, char *name, char *comment,
                                  "%s"
                                  "</create_report>",
                                  task_id ? task_id : "0",
-                                 xml_file);
+                                 xml_file ? xml_file : "");
       ret = get_tasks (credentials, task_id, NULL, NULL, NULL, command,
-                       strcmp (apply_overrides, "0"), NULL);
+                       overrides && strcmp (overrides, "0"), NULL);
       g_free (command);
       return ret;
     }
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  xml_file = params_value (params, "xml_file");
+
+  if ((name == NULL)
+      || (comment == NULL)
+      || (overrides == NULL)
+      || (xml_file == NULL))
+    return new_task_omp (credentials,
+                         "Invalid parameter",
+                         overrides ? strcmp (overrides, "0") : 0);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -671,10 +681,10 @@ create_report_omp (credentials_t * credentials, char *name, char *comment,
                               " sort_order=\"ascending\""
                               " apply_overrides=\"%s\"/>"
                               "</commands>",
-                              name ? name : "",
-                              comment ? comment : "",
+                              name,
+                              comment,
                               xml_file,
-                              apply_overrides);
+                              overrides);
 
   if (ret == -1)
     {
@@ -1634,32 +1644,19 @@ get_tasks_omp (credentials_t * credentials, params_t *params)
  * @brief Create an LSC credential, get all credentials, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Credential name.
- * @param[in]  comment      Comment on credential.
- * @param[in]  type         Either "gen" or "pass".
- * @param[in]  login        Credential user name.
- * @param[in]  password     Password, for type "pass".
- * @param[in]  passphrase   Passphrase, for type "key".
- * @param[in]  public_key   Public key, for type "key".
- * @param[in]  private_key  Private key, for type "key".
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_lsc_credential_omp (credentials_t * credentials,
-                           char *name,
-                           char *comment,
-                           const char *type,
-                           const char *login,
-                           const char *password,
-                           const char *passphrase,
-                           const char *public_key,
-                           const char *private_key)
+create_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   int socket;
   GString *xml;
   gchar *html;
+  const char *name, *comment, *login, *type, *password, *passphrase;
+  const char *public_key, *private_key;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -1679,6 +1676,15 @@ create_lsc_credential_omp (credentials_t * credentials,
     }
 
   xml = g_string_new ("<commands_response>");
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  login = params_value (params, "login");
+  type = params_value (params, "type");
+  password = params_value (params, "password");
+  passphrase = params_value (params, "passphrase");
+  public_key = params_value (params, "public_key");
+  private_key = params_value (params, "private_key");
 
   if (name == NULL || comment == NULL || login == NULL || type == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
