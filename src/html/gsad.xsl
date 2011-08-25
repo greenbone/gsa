@@ -752,7 +752,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_menu">
    <ul>
     <li class="first_button">
-     <a>Scan Management</a>
+     <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Scan Management</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
@@ -763,7 +763,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </li>
     <ul>
      <li>
-      <a>Asset Management</a>
+      <a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/
+envelope/token}">Asset Management</a>
       <ul>
        <li class="pointy"></li>
        <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/
@@ -772,7 +773,7 @@ envelope/token}">Assets</a></li>
      </li>
     </ul>
     <li>
-     <a>Configuration</a>
+     <a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Configuration</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
@@ -786,7 +787,7 @@ envelope/token}">Assets</a></li>
      </ul>
     </li>
     <li>
-     <a href="#">Extras</a>
+     <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Extras</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
@@ -794,7 +795,7 @@ envelope/token}">Assets</a></li>
      </ul>
     </li>
     <li>
-     <a>Administration</a>
+     <a href="/oap?cmd=get_users&amp;token={/envelope/token}">Administration</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
@@ -803,7 +804,7 @@ envelope/token}">Assets</a></li>
      </ul>
     </li>
     <li class="last_button">
-     <a>Help</a>
+     <a href="/help/contents.html?token={/envelope/token}">Help</a>
      <ul>
       <li class="pointy"></li>
       <li><a href="/help/contents.html?token={/envelope/token}">Contents</a></li>

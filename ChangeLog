@@ -1,3 +1,9 @@
+2011-08-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Make the first
+	menu item the default when clicking on the main menu.
+	Patch by Karl-Heinz Ruskowski.
+
 2011-08-24  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Added an entry for Greenbone OS 1.6.
