@@ -547,12 +547,16 @@ init_validator ()
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
+  openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
+  openvas_validator_add (validator, "condition_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "event_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
@@ -602,7 +606,7 @@ init_validator ()
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "method_data:value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "method_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
@@ -644,6 +648,8 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
+  openvas_validator_alias (validator, "method_data:to_address:", "email");
+  openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_threat",   "threat");
   openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "notes",        "boolean");
@@ -771,28 +777,6 @@ content_type_from_format_string (enum content_type* content_type,
   // Defaults to GSAD_CONTENT_TYPE_APP_HTML
   else
     *content_type = GSAD_CONTENT_TYPE_APP_HTML;
-}
-
-/**
- * @brief Get data for an escalator.
- *
- * @param[out]  data  Data.
- * @param[out]  name  Name of element.
- *
- * @return Parameter value on success, NULL on error.
- */
-static gchar *
-escalator_data (GArray *data, const char *name)
-{
-  int index = 0;
-  method_data_param_t *element;
-
-  if (data)
-    while ((element = g_array_index (data, method_data_param_t*, index++)))
-      if (strcmp (element->key, name) == 0)
-        return (gchar*) element->value;
-
-  return NULL;
 }
 
 /**
@@ -2102,35 +2086,56 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 void
 params_mhd_validate_values (const char *parent_name, void *params)
 {
-  GHashTableIter iter;
-  gpointer name, value;
-  gchar *name_name, *value_name;
+  params_iterator_t iter;
+  param_t *param;
+  gchar *name, *name_name, *value_name;
 
   name_name = g_strdup_printf ("%sname", parent_name);
   value_name = g_strdup_printf ("%svalue", parent_name);
 
-  g_hash_table_iter_init (&iter, params);
-  while (g_hash_table_iter_next (&iter, &name, &value))
+  params_iterator_init (&iter, params);
+  while (params_iterator_next (&iter, &name, &param))
     {
-      param_t *param;
-      param = (param_t*) value;
+      gchar *item_name;
 
-      if (openvas_validate (validator, name_name, name))
+      item_name = g_strdup_printf ("%s%s:", parent_name, name);
+
+      /* Item specific value validator like "method_data:to_adddress:". */
+      switch (openvas_validate (validator, item_name, param->value))
         {
-          param->original_value = param->value;
-          param->value = NULL;
-          param->value_size = 0;
-          param->valid = 0;
+          case 0:
+            break;
+          case 1:
+            /* General name validator for collection like "method_data:name". */
+            if (openvas_validate (validator, name_name, name))
+              {
+                param->original_value = param->value;
+                param->value = NULL;
+                param->value_size = 0;
+                param->valid = 0;
+              }
+            /* General value validator like "method_data:value". */
+            else if (openvas_validate (validator, value_name, param->value))
+              {
+                param->original_value = param->value;
+                param->value = NULL;
+                param->value_size = 0;
+                param->valid = 0;
+              }
+            else
+              param->valid = 1;
+            break;
+          case 2:
+          default:
+            {
+              param->original_value = param->value;
+              param->value = NULL;
+              param->value_size = 0;
+              param->valid = 0;
+            }
         }
-      else if (openvas_validate (validator, value_name, param->value))
-        {
-          param->original_value = param->value;
-          param->value = NULL;
-          param->value_size = 0;
-          param->valid = 0;
-        }
-      else
-        param->valid = 1;
+
+      g_free (item_name);
     }
 
   g_free (name_name);
@@ -2385,46 +2390,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "/omp?cmd=get_tasks");
     }
   ELSE (create_agent)
-  else if (!strcmp (con_info->req_parms.cmd, "create_escalator"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "condition", &con_info->req_parms.condition);
-      validate (validator, "event", &con_info->req_parms.event);
-      if (validate (validator, "method", &con_info->req_parms.method))
-        ;
-      else if (strcasecmp (con_info->req_parms.method, "Email") == 0)
-        {
-          char *to_address;
-          to_address = escalator_data (con_info->req_parms.method_data,
-                                       "to_address");
-          if (openvas_validate (validator, "email", to_address))
-            {
-              free (con_info->req_parms.method);
-              con_info->req_parms.method = NULL;
-            }
-          else
-            {
-              gchar *from_address;
-              from_address = escalator_data (con_info->req_parms.method_data,
-                                             "from_address");
-              if (openvas_validate (validator, "email", from_address))
-                {
-                  free (con_info->req_parms.method);
-                  con_info->req_parms.method = NULL;
-                }
-            }
-        }
-      con_info->response =
-        create_escalator_omp (credentials, con_info->req_parms.name,
-                              con_info->req_parms.comment,
-                              con_info->req_parms.condition,
-                              con_info->req_parms.condition_data,
-                              con_info->req_parms.event,
-                              con_info->req_parms.event_data,
-                              con_info->req_parms.method,
-                              con_info->req_parms.method_data);
-    }
+  ELSE (create_escalator)
   else if (!strcmp (con_info->req_parms.cmd, "create_lsc_credential"))
     {
       validate (validator, "name", &con_info->req_parms.name);
@@ -2627,16 +2593,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->req_parms.login,
                            con_info->req_parms.password);
     }
-  else if (!strcmp (con_info->req_parms.cmd, "create_config"))
-    {
-      validate (validator, "base", &con_info->req_parms.base);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      con_info->response =
-        create_config_omp (credentials, con_info->req_parms.name,
-                           con_info->req_parms.comment,
-                           con_info->req_parms.base);
-    }
+  ELSE (create_config)
   else if ((!strcmp (con_info->req_parms.cmd, "create_note"))
            && (con_info->req_parms.next != NULL)
            && (strcmp (con_info->req_parms.next, "get_result") == 0))

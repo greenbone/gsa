@@ -3056,18 +3056,22 @@ verify_agent_omp (credentials_t * credentials, const char *agent_id)
  * @return 0 on success, -1 on error.
  */
 static int
-send_escalator_data (gnutls_session_t *session, GArray *data)
+send_escalator_data (gnutls_session_t *session, params_t *data)
 {
-  int index = 0;
-  gchar *element;
-
   if (data)
-    while ((element = g_array_index (data, gchar*, index++)))
-      if (openvas_server_sendf_xml (session,
-                                    "<data><name>%s</name>%s</data>",
-                                    element,
-                                    element + strlen (element) + 1))
-        return -1;
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, data);
+      while (params_iterator_next (&iter, &name, &param))
+        if (openvas_server_sendf_xml (session,
+                                      "<data><name>%s</name>%s</data>",
+                                      name,
+                                      param->value ? param->value : ""))
+          return -1;
+    }
 
   return 0;
 }
@@ -3082,34 +3086,35 @@ send_escalator_data (gnutls_session_t *session, GArray *data)
  * @return 0 on success, -1 on error.
  */
 static int
-send_escalator_method_data (gnutls_session_t *session, GArray *data,
+send_escalator_method_data (gnutls_session_t *session, params_t *data,
                             const char *method)
 {
-  int index = 0;
-  method_data_param_t *element;
-
   if (data)
     {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
       if (strcmp (method, "Sourcefire Connector"))
         {
-          while ((element = g_array_index (data,
-                                           method_data_param_t*,
-                                           index++)))
+          params_iterator_init (&iter, data);
+          while (params_iterator_next (&iter, &name, &param))
             if (openvas_server_sendf_xml (session,
                                           "<data><name>%s</name>%s</data>",
-                                          element->key,
-                                          (gchar*) element->value))
+                                          name,
+                                          param->value ? param->value : ""))
               return -1;
           return 0;
         }
 
-      while ((element = g_array_index (data, method_data_param_t*, index++)))
-        if (strcmp (element->key, "pkcs12"))
+      params_iterator_init (&iter, data);
+      while (params_iterator_next (&iter, &name, &param))
+        if (strcmp (name, "pkcs12"))
           {
             if (openvas_server_sendf_xml (session,
                                           "<data><name>%s</name>%s</data>",
-                                          element->key,
-                                          (gchar*) element->value))
+                                          name,
+                                          param->value ? param->value : ""))
               return -1;
           }
         else
@@ -3118,13 +3123,13 @@ send_escalator_method_data (gnutls_session_t *session, GArray *data,
 
             /* Special case the pkcs12 file, which is binary. */
 
-            base64 = element->value_size
-                      ? g_base64_encode ((guchar *) element->value,
-                                         element->value_size)
+            base64 = (param->value && param->value_size)
+                      ? g_base64_encode ((guchar*) param->value,
+                                         param->value_size)
                       : g_strdup ("");
             if (openvas_server_sendf_xml (session,
                                           "<data><name>%s</name>%s</data>",
-                                          element->key,
+                                          name,
                                           base64))
               {
                 g_free (base64);
@@ -3140,28 +3145,19 @@ send_escalator_method_data (gnutls_session_t *session, GArray *data,
 /**
  * @brief Create an escalator, get all escalators, XSL transform the result.
  *
- * @param[in]   credentials     Username and password for authentication.
- * @param[in]   name            Name of new escalator.
- * @param[out]  comment         Comment on escalator.
- * @param[out]  condition       Condition.
- * @param[out]  condition_data  Condition data.
- * @param[out]  event           Event.
- * @param[out]  event_data      Event data.
- * @param[out]  method          Method.
- * @param[out]  method_data     Method data.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_escalator_omp (credentials_t * credentials, char *name, char *comment,
-                      const char *condition, GArray *condition_data,
-                      const char *event, GArray *event_data,
-                      const char *method, GArray *method_data)
+create_escalator_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html;
+  const char *name, *comment, *condition, *event, *method;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3182,33 +3178,30 @@ create_escalator_omp (credentials_t * credentials, char *name, char *comment,
 
   xml = g_string_new ("<get_escalators>");
 
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  condition = params_value (params, "condition");
+  event = params_value (params, "event");
+  method = params_value (params, "method");
+
   if (name == NULL || comment == NULL || condition == NULL || event == NULL
       || method == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Escalator"));
   else
     {
+      params_t *method_data, *event_data, *condition_data;
+
       /* Create the escalator. */
+
+      method_data = params_values (params, "method_data:");
+      event_data = params_values (params, "event_data:");
+      condition_data = params_values (params, "condition_data:");
 
       /* Special case the syslog submethods, because HTTP only allows one
        * value to vary per radio. */
       if (strncmp (method, "syslog ", strlen ("syslog ")) == 0)
         {
-          method_data_param_t *method_data_param;
-
-          method_data_param = g_malloc (sizeof (method_data_param));
-          method_data_param->key = g_strdup ("submethod");
-          method_data_param->value_size = strlen (method + strlen ("syslog "))
-                                          + 1;
-          method_data_param->value = g_malloc (method_data_param->value_size);
-          memcpy (method_data_param->value,
-                  method + strlen ("syslog "),
-                  method_data_param->value_size);
-
-          if (method_data == NULL)
-            method_data = g_array_new (TRUE, FALSE, sizeof (gchar*));
-
-          g_array_append_val (method_data, method_data_param);
-
+          params_add (method_data, "submethod", method + strlen ("syslog "));
           method = "syslog";
         }
 
@@ -5226,20 +5219,18 @@ get_targets_omp (credentials_t * credentials, const char * sort_field,
  * @brief Create config, get all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of new config.
- * @param[in]  comment      Comment on new config.
- * @param[in]  base         Name of config to use as base for new config.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_config_omp (credentials_t * credentials, char *name, char *comment,
-                   const char *base)
+create_config_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml = NULL;
   int socket;
   gchar *html;
+  const char *name, *comment, *base;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5259,6 +5250,10 @@ create_config_omp (credentials_t * credentials, char *name, char *comment,
     }
 
   xml = g_string_new ("<commands_response>");
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  base = params_value (params, "base");
 
   if (name == NULL || comment == NULL || base == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Scan Config"));

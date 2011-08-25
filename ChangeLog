@@ -1,3 +1,18 @@
+2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (init_validator): Widen method_data value.  Add escalator
+	data rules.
+	(escalator_data): Remove.  For old param mechanism.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_omp.c (send_escalator_data, send_escalator_method_data): Expect
+	data as params.
+	(create_escalator_omp, create_config_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
 2011-08-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Make the first
@@ -10,7 +25,7 @@
 
 2011-08-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Convert save_overrides to new param mechanism.
+	Convert save_override to new param mechanism.
 
 	* src/gsad.c (exec_omp_post): Pass single param instead of many.
 
