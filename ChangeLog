@@ -1,5 +1,23 @@
 2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Convert create_task to new param mechanism.
+
+	* src/gsad.c (init_validator): Add rules for optional cases.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_base.h (GSAD_MESSAGE_INVALID): New define.
+
+	* src/gsad_omp.c (new_task_omp): Show message.
+	(CHECK): New macro.
+	(create_task_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (new_task): Use optional cases of params.  Remove stray
+	input.
+
+2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert more pages to new param mechanism.
 
 	* src/gsad.c (exec_omp_post): Pass single param instead of many.

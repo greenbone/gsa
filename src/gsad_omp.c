@@ -406,8 +406,6 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
 /**
  * @brief Returns page to create a new task.
  *
- * @todo Display actual text given in \param message .
- *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  message      If not NULL, display message.
  * @param[in]  apply_overrides  Whether to apply overrides.
@@ -588,7 +586,7 @@ new_task_omp (credentials_t * credentials, const char* message,
     }
 
   if (message)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Task"));
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID, message, "Create Task");
   g_string_append_printf (xml,
                           "<user>%s</user>"
                           "<apply_overrides>%i</apply_overrides>"
@@ -714,29 +712,22 @@ create_report_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, text);
 }
 
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    return new_task_omp (credentials,                                          \
+                         "Given " G_STRINGIFY (name) " was invalid",           \
+                         apply_overrides ? strcmp (apply_overrides, "0") : 0); \
+
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  name          New task name.
- * @param[in]  comment       Comment on task.
- * @param[in]  target_id     Target for task.
- * @param[in]  config_id     Config for task.
- * @param[in]  escalator_id  Escalator for task.
- * @param[in]  schedule_id   UUID of schedule for task.
- * @param[in]  slave_id      UUID of slave for task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  max_checks        Max checks task preference.
- * @param[in]  max_hosts         Max hosts task preference.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_task_omp (credentials_t * credentials, char *name, char *comment,
-                 char *target_id, char *config_id, const char *escalator_id,
-                 const char *schedule_id, const char *slave_id,
-                 const char *apply_overrides, const char *max_checks,
-                 const char *max_hosts)
+create_task_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -744,6 +735,30 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
   int socket, ret;
   gchar *schedule_element, *escalator_element, *slave_element;
   gchar *html;
+  const char *name, *comment, *config_id, *apply_overrides, *target_id;
+  const char *escalator_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  config_id = params_value (params, "config_id");
+  apply_overrides = params_value (params, "overrides");
+  target_id = params_value (params, "target_id");
+  escalator_id = params_value (params, "escalator_id_optional");
+  slave_id = params_value (params, "slave_id_optional");
+  schedule_id = params_value (params, "schedule_id_optional");
+  max_checks = params_value (params, "max_checks");
+  max_hosts = params_value (params, "max_hosts");
+
+  CHECK (name);
+  CHECK (comment);
+  CHECK (config_id);
+  CHECK (apply_overrides);
+  CHECK (target_id);
+  CHECK (escalator_id);
+  CHECK (slave_id);
+  CHECK (schedule_id);
+  CHECK (max_checks);
+  CHECK (max_hosts);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -762,18 +777,18 @@ create_task_omp (credentials_t * credentials, char *name, char *comment,
                              "/omp?cmd=get_tasks");
     }
 
-  if (!schedule_id || strcmp (schedule_id, "--") == 0)
+  if (schedule_id == NULL || strcmp (schedule_id, "--") == 0)
     schedule_element = g_strdup ("");
   else
     schedule_element = g_strdup_printf ("<schedule id=\"%s\"/>", schedule_id);
 
-  if (!escalator_id || strcmp (escalator_id, "--") == 0)
+  if (escalator_id == NULL || strcmp (escalator_id, "--") == 0)
     escalator_element = g_strdup ("");
   else
     escalator_element = g_strdup_printf ("<escalator id=\"%s\"/>",
                                          escalator_id);
 
-  if (!slave_id || strcmp (slave_id, "--") == 0)
+  if (slave_id == NULL || strcmp (slave_id, "--") == 0)
     slave_element = g_strdup ("");
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);

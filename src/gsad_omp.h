@@ -40,9 +40,7 @@
 void omp_init (const gchar *, int);
 
 char * create_report_omp (credentials_t *, params_t *);
-char * create_task_omp (credentials_t *, char *, char *, char *, char *,
-                        const char *, const char *, const char *, const char *,
-                        const char *, const char *);
+char * create_task_omp (credentials_t *, params_t *);
 char * delete_task_omp (credentials_t *, params_t *);
 char * delete_trash_task_omp (credentials_t *, params_t *);
 char * edit_task_omp (credentials_t *, const char *, const char *, const char *,

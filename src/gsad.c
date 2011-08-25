@@ -544,6 +544,7 @@ init_validator ()
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "config_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
@@ -555,6 +556,7 @@ init_validator ()
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "escalator_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "event_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
@@ -608,7 +610,9 @@ init_validator ()
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "target_id_optional",  "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
@@ -621,6 +625,7 @@ init_validator ()
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
@@ -2393,87 +2398,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_escalator)
   ELSE (create_lsc_credential)
   ELSE (create_report)
-  else if (!strcmp (con_info->req_parms.cmd, "create_task"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      if (con_info->req_parms.escalator_id
-          && strcmp (con_info->req_parms.escalator_id, "--")
-          && openvas_validate (validator,
-                               "escalator_id",
-                               con_info->req_parms.escalator_id))
-        {
-          free (con_info->req_parms.escalator_id);
-          con_info->req_parms.escalator_id  = NULL;
-        }
-      if (con_info->req_parms.target_id
-          && strcmp (con_info->req_parms.target_id, "--")
-          && openvas_validate (validator,
-                               "target_id",
-                               con_info->req_parms.target_id))
-        {
-          free (con_info->req_parms.target_id);
-          con_info->req_parms.target_id  = NULL;
-        }
-      if (con_info->req_parms.config_id
-          && strcmp (con_info->req_parms.config_id, "--")
-          && openvas_validate (validator,
-                               "config_id",
-                               con_info->req_parms.config_id))
-        {
-          free (con_info->req_parms.config_id);
-          con_info->req_parms.config_id  = NULL;
-        }
-      if (con_info->req_parms.schedule_id
-          && strcmp (con_info->req_parms.schedule_id, "--")
-          && openvas_validate (validator,
-                               "schedule_id",
-                               con_info->req_parms.schedule_id))
-        {
-          free (con_info->req_parms.schedule_id);
-          con_info->req_parms.schedule_id  = NULL;
-        }
-      if (con_info->req_parms.slave_id
-          && strcmp (con_info->req_parms.slave_id, "--")
-          && openvas_validate (validator,
-                               "slave_id",
-                               con_info->req_parms.slave_id))
-        {
-          free (con_info->req_parms.slave_id);
-          con_info->req_parms.slave_id  = NULL;
-        }
-      validate (validator, "overrides", &con_info->req_parms.overrides);
-      validate (validator, "max_checks", &con_info->req_parms.max_checks);
-      validate (validator, "max_hosts", &con_info->req_parms.max_hosts);
-      if ((con_info->req_parms.name == NULL) ||
-          (con_info->req_parms.comment == NULL) ||
-          (con_info->req_parms.config_id == NULL) ||
-          (con_info->req_parms.overrides == NULL) ||
-          (con_info->req_parms.target_id == NULL) ||
-          (con_info->req_parms.escalator_id == NULL) ||
-          (con_info->req_parms.slave_id == NULL) ||
-          (con_info->req_parms.schedule_id == NULL) ||
-          (con_info->req_parms.max_checks == NULL) ||
-          (con_info->req_parms.max_hosts == NULL))
-        con_info->response
-         = new_task_omp (credentials,
-                         "Invalid parameter",
-                         con_info->req_parms.overrides
-                          ? strcmp (con_info->req_parms.overrides, "0")
-                          : 0);
-      else
-        con_info->response =
-          create_task_omp (credentials, con_info->req_parms.name,
-                           con_info->req_parms.comment,
-                           con_info->req_parms.target_id,
-                           con_info->req_parms.config_id,
-                           con_info->req_parms.escalator_id,
-                           con_info->req_parms.schedule_id,
-                           con_info->req_parms.slave_id,
-                           con_info->req_parms.overrides,
-                           con_info->req_parms.max_checks,
-                           con_info->req_parms.max_hosts);
-    }
+  ELSE (create_task)
   ELSE_OAP (create_user)
   else if (!strcmp (con_info->req_parms.cmd, "create_schedule"))
     {

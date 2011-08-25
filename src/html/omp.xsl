@@ -11882,7 +11882,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Escalator (optional)</td>
           <td>
-            <select name="escalator_id">
+            <select name="escalator_id_optional">
               <option value="--">--</option>
               <xsl:apply-templates select="get_escalators_response/escalator"
                                    mode="newtask"/>
@@ -11892,7 +11892,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Schedule (optional)</td>
           <td>
-            <select name="schedule_id">
+            <select name="schedule_id_optional">
               <option value="--">--</option>
               <xsl:apply-templates select="get_schedules_response/schedule"
                                    mode="newtask"/>
@@ -11902,7 +11902,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Slave (optional)</td>
           <td>
-            <select name="slave_id">
+            <select name="slave_id_optional">
               <option value="--">--</option>
               <xsl:apply-templates select="get_slaves_response/slave"
                                    mode="newtask"/>
@@ -11913,7 +11913,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <xsl:choose>
           <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
-            <input type="hidden" name="target_id" value="--"/>
           </xsl:when>
           <xsl:otherwise>
             <h2>Scan Intensity</h2>
