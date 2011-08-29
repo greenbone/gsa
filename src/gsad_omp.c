@@ -862,6 +862,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, text);
 }
 
+#undef CHECK
+
 /**
  * @brief Delete a task, get all tasks, XSL transform the result.
  *
@@ -1656,6 +1658,17 @@ get_tasks_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,                         \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Create Credential")
+
+/**
  * @brief Create an LSC credential, get all credentials, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -1694,15 +1707,17 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  login = params_value (params, "login");
-  type = params_value (params, "type");
-  password = params_value (params, "password");
+  login = params_value (params, "credential_login");
+  type = params_value (params, "base");
+  password = params_value (params, "lsc_password");
   passphrase = params_value (params, "passphrase");
   public_key = params_value (params, "public_key");
   private_key = params_value (params, "private_key");
 
-  if (name == NULL || comment == NULL || login == NULL || type == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
+  CHECK (name);
+  else CHECK (comment);
+  else CHECK (login);
+  else CHECK (type);
   else if (type && (strcmp (type, "pass") == 0) && password == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Credential"));
   else if (type

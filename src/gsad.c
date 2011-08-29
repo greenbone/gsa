@@ -599,6 +599,8 @@ init_validator ()
   openvas_validator_add (validator, "preference:",      "^$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "private_key",      "^(\\R|.)*$");
+  openvas_validator_add (validator, "public_key",       "^(\\R|.)*$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "^(\\R|.)*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
@@ -659,6 +661,7 @@ init_validator ()
   openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
+  openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");

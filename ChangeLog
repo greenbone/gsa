@@ -1,5 +1,18 @@
 2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get create_credential params working.
+
+	* src/gsad.c (init_validator): Add create_credential rules.
+
+	* src/gsad_omp.c (CHECK): New macro.
+	(create_lsc_credential_omp): Use the right param names.  Check one param
+	at a time.
+
+	* src/html/omp.xsl (html-create-lsc-credential-form): Use lsc_password
+	instead of password as param name.
+
+2011-08-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert create_task to new param mechanism.
 
 	* src/gsad.c (init_validator): Add rules for optional cases.

@@ -3392,8 +3392,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     Password
                   </td>
                   <td>
-                    <input type="password" autocomplete="off" name="password"
-                           value="" size="30" maxlength="40"/>
+                    <input type="password" autocomplete="off"
+                           name="lsc_password" value="" size="30"
+                           maxlength="40"/>
                   </td>
                 </tr>
                 <tr>
