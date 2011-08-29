@@ -655,6 +655,8 @@ init_validator ()
   openvas_validator_alias (validator, "level_low",    "boolean");
   openvas_validator_alias (validator, "level_log",    "boolean");
   openvas_validator_alias (validator, "level_false_positive", "boolean");
+  openvas_validator_alias (validator, "lsc_smb_credential_id",
+                           "lsc_credential_id");
   openvas_validator_alias (validator, "method_data:to_address:", "email");
   openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_threat",   "threat");
@@ -2404,78 +2406,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_report)
   ELSE (create_task)
   ELSE_OAP (create_user)
-  else if (!strcmp (con_info->req_parms.cmd, "create_schedule"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "hour", &con_info->req_parms.hour);
-      validate (validator, "minute", &con_info->req_parms.minute);
-      validate (validator, "day_of_month", &con_info->req_parms.day_of_month);
-      validate (validator, "month", &con_info->req_parms.month);
-      validate (validator, "year", &con_info->req_parms.year);
-      validate (validator, "period", &con_info->req_parms.period);
-      validate (validator, "period_unit", &con_info->req_parms.period_unit);
-      validate (validator, "duration", &con_info->req_parms.duration);
-      validate (validator, "duration_unit", &con_info->req_parms.duration_unit);
-
-      con_info->response =
-        create_schedule_omp (credentials,
-                             con_info->req_parms.name,
-                             con_info->req_parms.comment,
-                             con_info->req_parms.hour,
-                             con_info->req_parms.minute,
-                             con_info->req_parms.day_of_month,
-                             con_info->req_parms.month,
-                             con_info->req_parms.year,
-                             con_info->req_parms.period,
-                             con_info->req_parms.period_unit,
-                             con_info->req_parms.duration,
-                             con_info->req_parms.duration_unit);
-    }
-  else if (!strcmp (con_info->req_parms.cmd, "create_slave"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "host", &con_info->req_parms.host);
-      validate (validator, "port", &con_info->req_parms.port);
-      validate (validator, "login", &con_info->req_parms.login);
-      validate (validator, "password", &con_info->req_parms.password);
-      con_info->response =
-        create_slave_omp (credentials,
-                          con_info->req_parms.name,
-                          con_info->req_parms.comment,
-                          con_info->req_parms.host,
-                          con_info->req_parms.port,
-                          con_info->req_parms.login,
-                          con_info->req_parms.password);
-    }
-  else if (!strcmp (con_info->req_parms.cmd, "create_target"))
-    {
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "hosts", &con_info->req_parms.hosts);
-      validate (validator, "comment", &con_info->req_parms.comment);
-      validate (validator, "port_range", &con_info->req_parms.port_range);
-      validate (validator, "lsc_credential_id",
-                &con_info->req_parms.lsc_credential_id);
-      validate (validator, "lsc_credential_id",
-                &con_info->req_parms.lsc_smb_credential_id);
-      validate (validator, "target_locator",
-                &con_info->req_parms.target_locator);
-      validate (validator, "lsc_password", &con_info->req_parms.password);
-      validate (validator, "login", &con_info->req_parms.login);
-      validate (validator, "port", &con_info->req_parms.port);
-      con_info->response =
-        create_target_omp (credentials, con_info->req_parms.name,
-                           con_info->req_parms.hosts,
-                           con_info->req_parms.comment,
-                           con_info->req_parms.port_range,
-                           con_info->req_parms.lsc_credential_id,
-                           con_info->req_parms.port,
-                           con_info->req_parms.lsc_smb_credential_id,
-                           con_info->req_parms.target_locator,
-                           con_info->req_parms.login,
-                           con_info->req_parms.password);
-    }
+  ELSE (create_schedule)
+  ELSE (create_slave)
+  ELSE (create_target)
   ELSE (create_config)
   else if ((!strcmp (con_info->req_parms.cmd, "create_note"))
            && (con_info->req_parms.next != NULL)

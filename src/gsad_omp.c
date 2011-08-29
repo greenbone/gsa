@@ -1834,6 +1834,8 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
+#undef CHECK
+
 /**
  * @brief Delete LSC credential, get all credentials, XSL transform result.
  *
@@ -3783,34 +3785,33 @@ test_escalator_omp (credentials_t * credentials, const char * escalator_id,
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,                         \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Create Target")
+
+/**
  * @brief Create a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of new target.
- * @param[in]  hosts        Hosts associated with target.
- * @param[in]  comment      Comment on target.
- * @param[in]  port_range   Range of ports to be scanned.
- * @param[in]  target_credential      UUID of SSH credential for target.
- * @param[in]  port                   Port to use for SSH LSC login.
- * @param[in]  target_smb_credential  UUID of SMB credential for target.
- * @param[in]  target_locator Target locator to pull targets from.
- * @param[in]  username     Username for source.
- * @param[in]  password     Password for username at source.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_target_omp (credentials_t * credentials, char *name, char *hosts,
-                   char *comment, const char *port_range,
-                   const char *target_credential, const char *port,
-                   const char *target_smb_credential,
-                   const char* target_locator, const char* username,
-                   const char* password)
+create_target_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html;
+  const char *name, *hosts, *target_locator, *comment, *port_range;
+  const char *target_credential, *port, *target_smb_credential;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3831,16 +3832,33 @@ create_target_omp (credentials_t * credentials, char *name, char *hosts,
 
   xml = g_string_new ("<get_targets>");
 
-  if (name == NULL || (hosts == NULL && target_locator == NULL)
-      || comment == NULL || port_range == NULL || target_credential == NULL
-      || port == NULL || target_smb_credential == NULL)
+  name = params_value (params, "name");
+  hosts = params_value (params, "hosts");
+  target_locator = params_value (params, "target_locator");
+  comment = params_value (params, "comment");
+  port_range = params_value (params, "port_range");
+  target_credential = params_value (params, "lsc_credential_id");
+  port = params_value (params, "port");
+  target_smb_credential = params_value (params, "lsc_smb_credential_id");
+
+  CHECK (name);
+  else if (hosts == NULL && target_locator == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
+  else CHECK (comment);
+  else CHECK (port_range);
+  else CHECK (target_credential);
+  else CHECK (port);
+  else CHECK (target_smb_credential);
   else
     {
       int ret;
       gchar *credentials_element, *smb_credentials_element;
       gchar* source_element = NULL;
       gchar* comment_element = NULL;
+      const char *username, *password;
+
+      username = params_value (params, "login");
+      password = params_value (params, "password");
 
       if (comment != NULL)
         comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -10720,24 +10738,18 @@ save_override_omp (credentials_t * credentials, params_t *params)
  * @brief Create a slave, get all slaves, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  name         Name of new slave.
- * @param[in]  comment      Comment on slave.
- * @param[in]  host         Host associated with slave.
- * @param[in]  port         Port on host.
- * @param[in]  login        Login for host.
- * @param[in]  password     Password for login.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_slave_omp (credentials_t *credentials, const char *name,
-                  const char *comment, const char *host, const char *port,
-                  const char *login, const char* password)
+create_slave_omp (credentials_t *credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html;
+  const char *name, *comment, *host, *port, *login, *password;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10757,6 +10769,13 @@ create_slave_omp (credentials_t *credentials, const char *name,
     }
 
   xml = g_string_new ("<get_slaves>");
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  host = params_value (params, "host");
+  port = params_value (params, "port");
+  login = params_value (params, "login");
+  password = params_value (params, "password");
 
   if (name == NULL || comment == NULL || host == NULL || port == NULL
       || login == NULL || password == NULL)
@@ -11280,30 +11299,13 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
 /**
  * @brief Create a schedule, get all schedules, XSL transform the result.
  *
- * @param[in]   credentials    Username and password for authentication.
- * @param[in]   name           Name of new schedule.
- * @param[in]   comment        Comment on schedule.
- * @param[in]   hour           First time hour (0 to 23).
- * @param[in]   minute         First time minute (0 to 59).
- * @param[in]   day_of_month   First time day of month (1 to 31).
- * @param[in]   month          First time month (1 to 12).
- * @param[in]   year           First time year.
- * @param[in]   period         How often the action will run.  0 for once.  0 if
- *                             "".
- * @param[in]   period_unit    The unit of period.  "second" if "".
- * @param[in]   duration       How long the action will run for.  0 for entire
- *                             duration of action.  0 if "".
- * @param[in]   duration_unit  The unit of duration.  "second" if "".
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_schedule_omp (credentials_t * credentials, const char *name,
-                     const char *comment, const char *hour, const char *minute,
-                     const char *day_of_month, const char *month,
-                     const char *year,
-                     const char *period, const char *period_unit,
-                     const char *duration, const char *duration_unit)
+create_schedule_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
@@ -11311,6 +11313,8 @@ create_schedule_omp (credentials_t * credentials, const char *name,
   time_t now;
   struct tm *now_broken;
   gchar *html;
+  const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
+  const char *period, *period_unit, *duration, *duration_unit;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11351,9 +11355,21 @@ create_schedule_omp (credentials_t * credentials, const char *name,
                           (now_broken->tm_mon + 1),
                           (now_broken->tm_year + 1900));
 
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  hour = params_value (params, "hour");
+  minute = params_value (params, "hour");
+  day_of_month = params_value (params, "day_of_month");
+  duration = params_value (params, "duration");
+  duration_unit = params_value (params, "duration_unit");
+  month = params_value (params, "month");
+  period = params_value (params, "period");
+  period_unit = params_value (params, "period_unit");
+  year = params_value (params, "year");
+
   if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
-      || duration == NULL || duration_unit == NULL || month == NULL || period == NULL
-      || period_unit == NULL || year == NULL)
+      || duration == NULL || duration_unit == NULL || month == NULL
+      || period == NULL || period_unit == NULL || year == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
   else
     {

@@ -106,10 +106,7 @@ char * delete_agent_omp (credentials_t *, params_t *);
 char * delete_trash_agent_omp (credentials_t *, params_t *);
 char * verify_agent_omp (credentials_t *, const char *);
 
-char * create_schedule_omp (credentials_t *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *, const char *);
+char * create_schedule_omp (credentials_t *, params_t *);
 
 char * delete_schedule_omp (credentials_t *, params_t *);
 char * delete_trash_schedule_omp (credentials_t *, params_t *);
@@ -120,9 +117,7 @@ char * get_schedules_omp (credentials_t *, const char *, const char *);
 char * get_target_omp (credentials_t *, const char *, const char *,
                        const char *);
 char * get_targets_omp (credentials_t *, const char *, const char *);
-char * create_target_omp (credentials_t *, char *, char *, char *, const char*,
-                          const char *, const char *, const char*, const char*,
-                          const char *, const char*);
+char * create_target_omp (credentials_t *, params_t *);
 char * delete_target_omp (credentials_t *, params_t *);
 char * delete_trash_target_omp (credentials_t *, params_t *);
 
@@ -192,8 +187,7 @@ char * save_override_omp (credentials_t *, params_t *);
 char * get_slave_omp (credentials_t *, const char *, const char *,
                       const char *);
 char * get_slaves_omp (credentials_t *, const char *, const char *);
-char * create_slave_omp (credentials_t *, const char *, const char *,
-                         const char *, const char*, const char*, const char*);
+char * create_slave_omp (credentials_t *, params_t *);
 char * delete_slave_omp (credentials_t *, params_t *);
 char * delete_trash_slave_omp (credentials_t *, params_t *);
 
