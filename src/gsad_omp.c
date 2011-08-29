@@ -2437,7 +2437,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   if (params_value (params, "comment") == NULL
       || params_value (params, "name") == NULL
       || (change_password && params_value (params, "password") == NULL)
-      || (change_login && params_value (params, "login" == NULL)))
+      || (change_login && params_value (params, "login") == NULL))
     return edit_lsc_credential (credentials,
                                 params,
                                 GSAD_MESSAGE_INVALID_PARAM
