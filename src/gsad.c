@@ -1223,6 +1223,7 @@ params_append_mhd (params_t *params,
                    int chunk_offset)
 {
   if ((strncmp (name, "parameter:", strlen ("parameter:")) == 0)
+      || (strncmp (name, "preference:", strlen ("preference:")) == 0)
       || (strncmp (name, "select:", strlen ("select:")) == 0)
       || (strncmp (name, "trend:", strlen ("trend:")) == 0)
       || (strncmp (name, "method_data:", strlen ("method_data:")) == 0))
