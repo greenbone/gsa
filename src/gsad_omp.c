@@ -614,7 +614,7 @@ create_report_omp (credentials_t * credentials, params_t *params)
   char *text = NULL;
   int socket, ret;
   gchar *html;
-  const char *task_id, *overrides, *name, *comment, *xml_file;
+  const char *task_id, *overrides, *name, *comment, *xml_file = NULL;
 
   task_id = params_value (params, "task_id");
   overrides = params_value (params, "overrides");

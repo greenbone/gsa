@@ -1,3 +1,8 @@
+2011-08-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_omp.c (create_report_omp): Make it compile again by
+	initializing a variable before use.
+
 2011-08-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Convert more pages to new param mechanism.
