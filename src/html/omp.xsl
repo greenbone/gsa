@@ -8220,7 +8220,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="next" value="{next}"/>
             <input type="hidden" name="result_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
-            <input type="hidden" name="task_id" value="{task/@id}"/>
+            <input type="hidden" name="result_task_id" value="{task/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
 
             <!-- get_report passthrough params. -->

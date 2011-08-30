@@ -7992,52 +7992,80 @@ new_note_omp (credentials_t *credentials, params_t *params)
 /**
  * @brief Create a note, get report, XSL transform the result.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  oid            OID of NVT associated with note.
- * @param[in]  text           Text of note.
- * @param[in]  hosts          Hosts note applied to, "" for all.
- * @param[in]  port           Port note applies to, "" for all.
- * @param[in]  threat         Threat note applies to, "" for all.
- * @param[in]  task_id        ID of task to limit note to, "" for all.
- * @param[in]  note_result_id  ID of result to limit note to, "" for all.
- * @param[in]  next           Next page, NULL for get_report.
- * @param[in]  report_id      ID of report.
- * @param[in]  first_result   Number of first result in report.
- * @param[in]  max_results    Number of results in report.
- * @param[in]  sort_field     Field to sort on, or NULL.
- * @param[in]  sort_order     "ascending", "descending", or NULL.
- * @param[in]  levels         Threat levels to include in report.
- * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase  Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  task_name      Name of task (for get_result).
- * @param[in]  result_task_id  ID of task (for get_result).
- * @param[in]  result_id      ID of result (for get_result).
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_note_omp (credentials_t *credentials, const char *oid,
-                 const char *text, const char *hosts, const char *port,
-                 const char *threat, const char *task_id,
-                 const char *note_result_id, const char *next,
-                 /* Passthroughs. */
-                 const char *report_id,
-                 const unsigned int first_result,
-                 const unsigned int max_results,
-                 const char *sort_field, const char *sort_order,
-                 const char *levels, const char *notes, const char *overrides,
-                 const char *result_hosts_only, const char *search_phrase,
-                 const char *min_cvss_base, const char *task_name,
-                 const char *result_task_id, const char *result_id)
+create_note_omp (credentials_t *credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
   int socket;
   gchar *html, *create_note;
+  unsigned int first, max;
+  const char *next, *search_phrase, *oid, *threat, *port, *hosts;
+  const char *min_cvss_base, *text, *task_id;
+  /* For get_report. */
+  const char *levels, *result_hosts_only, *notes, *overrides, *report_id;
+  const char *first_result, *max_results, *sort_order, *sort_field;
+
+  next = params_value (params, "next");
+  search_phrase = params_value (params, "search_phrase");
+  oid = params_value (params, "oid");
+
+  if (params_valid (params, "threat"))
+    threat = params_value (params, "threat");
+  else if (strcmp (params_original_value (params, "threat"), ""))
+    threat = NULL;
+  else
+    threat = "";
+
+  if (params_valid (params, "port"))
+    port = params_value (params, "port");
+  else if (strcmp (params_original_value (params, "port"), ""))
+    port = NULL;
+  else
+    port = "";
+
+  if (params_valid (params, "hosts"))
+    hosts = params_value (params, "hosts");
+  else if (strcmp (params_original_value (params, "hosts"), ""))
+    hosts = NULL;
+  else
+    hosts = "";
+
+  if (params_given (params, "min_cvss_base"))
+    {
+      if (params_valid (params, "min_cvss_base"))
+        {
+          if (params_value (params, "apply_min")
+              && strcmp (params_value (params, "apply_min"), "0"))
+            min_cvss_base = params_value (params, "min_cvss_base");
+          else
+            min_cvss_base = "";
+        }
+      else
+        min_cvss_base = NULL;
+    }
+  else
+    min_cvss_base = "";
+
+  first_result = params_value (params, "first_result");
+  if (sscanf (first_result, "%u", &first) != 1)
+    first_result = "1";
+
+  max_results = params_value (params, "max_results");
+  if (sscanf (max_results, "%u", &max) != 1)
+    max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+  if (params_valid (params, "note_task_id"))
+    task_id = params_value (params, "note_task_id");
+  else if (strcmp (params_original_value (params, "note_task_id"), ""))
+    task_id = NULL;
+  else
+    task_id = "";
 
   if ((next == NULL) && (search_phrase == NULL))
     return gsad_message (credentials,
@@ -8090,6 +8118,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
   xml = g_string_new ("<commands_response>");
 
+  text = params_value (params, "text");
+
   create_note = g_strdup_printf ("<create_note>"
                                  "<nvt oid=\"%s\"/>"
                                  "<hosts>%s</hosts>"
@@ -8105,20 +8135,29 @@ create_note_omp (credentials_t *credentials, const char *oid,
                                  threat,
                                  text ? text : "",
                                  task_id,
-                                 note_result_id);
+                                 params_value (params, "note_result_id"));
 
   if (next && (strcmp (next, "get_result") == 0))
     {
-      gchar *first = g_strdup_printf ("%u", first_result);
-      gchar *max = g_strdup_printf ("%u", max_results);
-      char *ret = get_result_omp (credentials, result_id, result_task_id,
-                                  task_name, overrides, create_note, report_id,
-                                  first, max, levels, search_phrase, notes,
-                                  overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order, NULL, NULL);
+      char *ret = get_result_omp (credentials,
+                                  params_value (params, "result_id"),
+                                  params_value (params, "result_task_id"),
+                                  params_value (params, "name"),
+                                  params_value (params, "overrides"),
+                                  create_note,
+                                  params_value (params, "report_id"),
+                                  first_result,
+                                  max_results,
+                                  params_value (params, "levels"),
+                                  search_phrase,
+                                  params_value (params, "notes"),
+                                  params_value (params, "overrides"),
+                                  min_cvss_base,
+                                  params_value (params, "result_hosts_only"),
+                                  params_value (params, "sort_field"),
+                                  params_value (params, "sort_order"),
+                                  NULL, NULL);
       g_free (create_note);
-      g_free (first);
-      g_free (max);
       return ret;
     }
 
@@ -8160,6 +8199,11 @@ create_note_omp (credentials_t *credentials, const char *oid,
 
   /* Get the report. */
 
+  levels = params_value (params, "levels");
+  result_hosts_only = params_value (params, "result_hosts_only");
+  notes = params_value (params, "notes");
+  overrides = params_value (params, "overrides");
+
   if (levels == NULL || strlen (levels) == 0) levels = "hm";
 
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
@@ -8168,6 +8212,10 @@ create_note_omp (credentials_t *credentials, const char *oid,
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
   if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+
+  report_id = params_value (params, "report_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
@@ -8179,8 +8227,8 @@ create_note_omp (credentials_t *credentials, const char *oid,
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
                             " format=\"XML\""
-                            " first_result=\"%u\""
-                            " max_results=\"%u\""
+                            " first_result=\"%s\""
+                            " max_results=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " levels=\"%s\""

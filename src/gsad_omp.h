@@ -152,13 +152,7 @@ char * export_report_format_omp (credentials_t *, const char *,
 char * get_notes_omp (credentials_t *);
 char * get_note_omp (credentials_t *, params_t *);
 char * new_note_omp (credentials_t *, params_t *);
-char * create_note_omp (credentials_t *, const char *, const char *,
-                        const char *, const char *, const char *, const char *,
-                        const char *, const char *, const char *,
-                        const unsigned int, const unsigned int, const char *,
-                        const char *, const char *, const char *, const char *,
-                        const char *, const char *, const char *, const char *,
-                        const char *, const char *);
+char * create_note_omp (credentials_t *, params_t *);
 char * delete_note_omp (credentials_t *, params_t *);
 char * edit_note_omp (credentials_t *, params_t *);
 char * save_note_omp (credentials_t *, params_t *);
