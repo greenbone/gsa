@@ -160,15 +160,7 @@ char * save_note_omp (credentials_t *, params_t *);
 char * get_overrides_omp (credentials_t *);
 char * get_override_omp (credentials_t *, const char *);
 char * new_override_omp (credentials_t *, params_t *);
-char * create_override_omp (credentials_t *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *,
-                            const unsigned int, const unsigned int,
-                            const char *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, const char *);
+char * create_override_omp (credentials_t *, params_t *);
 char * delete_override_omp (credentials_t *, params_t *);
 char * edit_override_omp (credentials_t *, const char *, const char *,
                           const char *, const unsigned int, const unsigned int,
