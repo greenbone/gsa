@@ -614,10 +614,12 @@ create_report_omp (credentials_t * credentials, params_t *params)
   char *text = NULL;
   int socket, ret;
   gchar *html;
-  const char *task_id, *overrides, *name, *comment, *xml_file = NULL;
+  const char *task_id, *overrides, *name, *comment, *xml_file;
 
   task_id = params_value (params, "task_id");
   overrides = params_value (params, "overrides");
+
+  xml_file = params_value (params, "xml_file");
 
   if (task_id)
     {
@@ -638,7 +640,6 @@ create_report_omp (credentials_t * credentials, params_t *params)
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  xml_file = params_value (params, "xml_file");
 
   if ((name == NULL)
       || (comment == NULL)
