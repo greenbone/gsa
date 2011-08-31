@@ -1224,18 +1224,31 @@ save_container_task_omp (credentials_t * credentials, const char *task_id,
  * @brief Stop a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next              Name of next page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-stop_task_omp (credentials_t * credentials, const char *task_id,
-               int apply_overrides, const char *next)
+stop_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *stop_task;
+  const char *task_id, *next, *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+
+  if ((task_id == NULL) || (next == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while stopping a task. "
+                         "The task was not stopped. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_task");
 
   stop_task = g_strdup_printf ("<stop_task task_id=\"%s\" />", task_id);
 
@@ -1257,18 +1270,23 @@ stop_task_omp (credentials_t * credentials, const char *task_id,
  * @brief Pause a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next              Name of next page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-pause_task_omp (credentials_t * credentials, const char *task_id,
-                int apply_overrides, const char *next)
+pause_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *pause_task;
+  const char *task_id, *next, *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if ((task_id == NULL) || (next == NULL))
     return gsad_message (credentials,
@@ -1298,18 +1316,23 @@ pause_task_omp (credentials_t * credentials, const char *task_id,
  * @brief Resume a paused task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next              Name of next page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_paused_task_omp (credentials_t * credentials, const char *task_id,
-                        int apply_overrides, const char *next)
+resume_paused_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *resume_paused_task;
+  const char *task_id, *next, *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if ((task_id == NULL) || (next == NULL))
     return gsad_message (credentials,
@@ -1340,18 +1363,23 @@ resume_paused_task_omp (credentials_t * credentials, const char *task_id,
  * @brief Resume a stopped task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next              Name of next page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
-                         int apply_overrides, const char *next)
+resume_stopped_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *resume_stopped;
+  const char *task_id, *next, *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if ((task_id == NULL) || (next == NULL))
     return gsad_message (credentials,
@@ -1382,18 +1410,31 @@ resume_stopped_task_omp (credentials_t * credentials, const char *task_id,
  * @brief Start a task, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  task_id      ID of task.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  next         Name of following page.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (credentials_t * credentials, const char *task_id,
-                int apply_overrides, const char *next)
+start_task_omp (credentials_t * credentials, params_t *params)
 {
   char *ret;
   gchar *start_task;
+  const char *task_id, *next, *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
+
+  if ((task_id == NULL) || (next == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while starting a task. "
+                         "The task was not starting. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_task");
 
   start_task = g_strdup_printf ("<start_task task_id=\"%s\" />", task_id);
 
@@ -3669,22 +3710,24 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
 /**
  * @brief Test an escalator, get all escalators XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  escalator_id  UUID of escalator.
- * @param[in]  sort_field    Field to sort on, or NULL.
- * @param[in]  sort_order    "ascending", "descending", or NULL.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-test_escalator_omp (credentials_t * credentials, const char * escalator_id,
-                    const char * sort_field, const char * sort_order)
+test_escalator_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   char *ret;
   gchar *html;
+  const char *escalator_id, *sort_field, *sort_order;
+
+  escalator_id = params_value (params, "escalator_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   if (escalator_id == NULL)
     return gsad_message (credentials,
@@ -4908,18 +4951,21 @@ delete_trash_task_omp (credentials_t * credentials, params_t *params)
  * @brief Restore a resource, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  target_id    UUID of resource.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-restore_omp (credentials_t * credentials, const char *target_id)
+restore_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *target_id;
+
+  target_id = params_value (params, "target_id");
 
   if (target_id == NULL)
     return gsad_message (credentials,
@@ -6023,19 +6069,17 @@ get_config_family_omp (credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_config_family_omp (credentials_t * credentials,
-                        const char * config_id,
-                        const char * name,
-                        const char * family,
-                        const char * sort_field,
-                        const char * sort_order,
-                        GArray *nvts)
+save_config_family_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
-  gchar *nvt;
-  int socket, index = 0;
+  int socket;
   char *ret;
   gchar *html;
+  const char *config_id, *family;
+  params_t *nvts;
+
+  config_id = params_value (params, "config_id");
+  family = params_value (params, "family");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6073,21 +6117,29 @@ save_config_family_omp (credentials_t * credentials,
                            "/omp?cmd=get_configs");
     }
 
+  nvts = params_values (params, "nvt:");
   if (nvts)
-    while ((nvt = g_array_index (nvts, gchar*, index++)))
-      if (openvas_server_sendf (&session,
-                                "<nvt oid=\"%s\"/>",
-                                nvt)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a config. "
-                               "It is unclear whether the entire config has been saved. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_configs");
-        }
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, nvts);
+      while (params_iterator_next (&iter, &name, &param))
+        if (openvas_server_sendf (&session,
+                                  "<nvt oid=\"%s\"/>",
+                                  name)
+            == -1)
+          {
+            openvas_server_close (socket, session);
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while saving a config. "
+                                 "It is unclear whether the entire config has been saved. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_configs");
+          }
+    }
 
   if (openvas_server_send (&session,
                            "</nvt_selection>"
@@ -6114,8 +6166,12 @@ save_config_family_omp (credentials_t * credentials,
 
   /* Return the Edit family page. */
 
-  return get_config_family_omp (credentials, config_id, name, family,
-                                sort_field, sort_order, 1);
+  return get_config_family_omp (credentials, config_id,
+                                params_value (params, "name"),
+                                family,
+                                params_value (params, "sort_field"),
+                                params_value (params, "sort_order"),
+                                1);
 }
 
 /**
@@ -6218,38 +6274,27 @@ get_config_nvt_omp (credentials_t * credentials,
  * @brief Save NVT prefs for a config, get NVT details, XSL transform result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
- * @param[in]  name         Name of config.
- * @param[in]  family       Name of family.
- * @param[in]  nvt          OID of NVT.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  preferences  Preferences.
- * @param[in]  files        Files within preferences that must be updated.
- * @param[in]  passwords    Passwords within preferences that must be updated.
- * @param[in]  timeout      0 to skip timeout preference.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_config_nvt_omp (credentials_t * credentials,
-                     const char * config_id,
-                     const char * name,
-                     const char * family,
-                     const char * nvt,
-                     const char * sort_field,
-                     const char * sort_order,
-                     GArray *preferences,
-                     GArray *files,
-                     GArray *passwords,
-                     const char * timeout)
+save_config_nvt_omp (credentials_t * credentials, params_t *params)
 {
+  params_t *preferences;
+  const char *config_id;
+
+  config_id = params_value (params, "config_id");
+
+  preferences = params_values (params, "preference:");
   if (preferences)
     {
       gnutls_session_t session;
-      preference_t *preference;
-      int socket, index = 0;
+      int socket;
       gchar *html;
+      param_t *preference;
+      gchar *preference_name;
+      params_iterator_t iter;
 
       /* Save preferences. */
 
@@ -6270,9 +6315,8 @@ save_config_nvt_omp (credentials_t * credentials,
                                  "/omp?cmd=get_configs");
         }
 
-      while ((preference = g_array_index (preferences,
-                                          preference_t*,
-                                          index++)))
+      params_iterator_init (&iter, preferences);
+      while (params_iterator_next (&iter, &preference_name, &preference))
         {
           int type_start, type_end, count, ret, is_timeout = 0;
           gchar *value;
@@ -6283,53 +6327,68 @@ save_config_nvt_omp (credentials_t * credentials,
            * send the actual password or show the actual file. */
 
           /* LDAPsearch[entry]:Timeout value */
-          count = sscanf (preference->name,
+          count = sscanf (preference_name,
                           "%*[^[][%n%*[^]]%n]:",
                           &type_start,
                           &type_end);
           if (count == 0 && type_start > 0 && type_end > 0)
             {
-              if (strncmp (preference->name + type_start,
+              if (strncmp (preference_name + type_start,
                            "password",
                            type_end - type_start)
                   == 0)
                 {
-                  const preference_t *password;
-                  int index = 0, found = 0;
+                  int found = 0;
+                  params_t *passwords;
+
+                  passwords = params_values (params, "password:");
                   if (passwords)
-                    while ((password = g_array_index (passwords,
-                                                      preference_t*,
-                                                      index++)))
-                      if (strcmp (password->name, preference->name) == 0)
-                        {
-                          found = 1;
-                          break;
-                        }
+                    {
+                      param_t *password;
+                      gchar *password_name;
+
+                      params_iterator_init (&iter, passwords);
+                      while (params_iterator_next (&iter, &password_name,
+                                                   &password))
+                        if (strcmp (password_name, preference_name) == 0)
+                          {
+                            found = 1;
+                            break;
+                          }
+                    }
                   if (found == 0)
                     /* Skip modifying the password preference. */
                     continue;
                 }
-              else if (strncmp (preference->name + type_start,
+              else if (strncmp (preference_name + type_start,
                                 "file",
                                 type_end - type_start)
                        == 0)
                 {
-                  const preference_t *file;
-                  int index = 0, found = 0;
+                  int found = 0;
+                  params_t *files;
+
+                  files = params_values (params, "files:");
                   if (files)
-                    while ((file = g_array_index (files,
-                                                  preference_t*,
-                                                  index++)))
-                      if (strcmp (file->name, preference->name) == 0)
-                        {
-                          found = 1;
-                          break;
-                        }
+                    {
+                      param_t *file;
+                      gchar *file_name;
+                      params_iterator_t iter;
+
+                      params_iterator_init (&iter, files);
+                      while (params_iterator_next (&iter, &file_name,
+                                                   &file))
+                        if (strcmp (file_name, preference_name) == 0)
+                          {
+                            found = 1;
+                            break;
+                          }
+                    }
                   if (found == 0)
                     /* Skip modifying the file preference. */
                     continue;
                 }
-              else if (strncmp (preference->name + type_start,
+              else if (strncmp (preference_name + type_start,
                                 "scanner",
                                 type_end - type_start)
                        == 0)
@@ -6346,6 +6405,22 @@ save_config_nvt_omp (credentials_t * credentials,
 
           if (is_timeout)
             {
+              const char *timeout;
+
+              timeout = params_value (params, "timeout");
+
+              if (timeout == NULL)
+                {
+                  g_free (value);
+                  openvas_server_close (socket, session);
+                  return gsad_message (credentials,
+                                       "Internal error", __FUNCTION__, __LINE__,
+                                       "An internal error occurred while saving a config. "
+                                       "It is unclear whether the entire config has been saved. "
+                                       "Diagnostics: Required parameter was NULL.",
+                                       "/omp?cmd=get_configs");
+                }
+
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
                 ret = openvas_server_sendf (&session,
@@ -6355,7 +6430,7 @@ save_config_nvt_omp (credentials_t * credentials,
                                             "</preference>"
                                             "</modify_config>",
                                             config_id,
-                                            preference->name);
+                                            preference_name);
               else
                 ret = openvas_server_sendf (&session,
                                             "<modify_config config_id=\"%s\">"
@@ -6365,7 +6440,7 @@ save_config_nvt_omp (credentials_t * credentials,
                                             "</preference>"
                                             "</modify_config>",
                                             config_id,
-                                            preference->name,
+                                            preference_name,
                                             value);
             }
           else
@@ -6378,8 +6453,8 @@ save_config_nvt_omp (credentials_t * credentials,
                                         "</preference>"
                                         "</modify_config>",
                                         config_id,
-                                        nvt,
-                                        preference->name,
+                                        params_value (params, "oid"),
+                                        preference_name,
                                         value);
 
           if (ret == -1)
@@ -6409,8 +6484,13 @@ save_config_nvt_omp (credentials_t * credentials,
 
   /* Return the Edit NVT page. */
 
-  return get_config_nvt_omp (credentials, config_id, name, family, nvt,
-                             sort_field, sort_order, 1);
+  return get_config_nvt_omp (credentials, config_id,
+                             params_value (params, "name"),
+                             params_value (params, "family"),
+                             params_value (params, "oid"),
+                             params_value (params, "sort_field"),
+                             params_value (params, "sort_field"),
+                             1);
 }
 
 /**

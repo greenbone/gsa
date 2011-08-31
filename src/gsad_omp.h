@@ -53,11 +53,11 @@ char * save_task_omp (credentials_t *, const char *, const char *, const char *,
 char * save_container_task_omp (credentials_t *, const char *, const char *,
                                 const char *, const char *, const char *,
                                 const char *, const char *, int);
-char * pause_task_omp (credentials_t *, const char *, int, const char *);
-char * resume_paused_task_omp (credentials_t *, const char *, int, const char *);
-char * resume_stopped_task_omp (credentials_t *, const char *, int, const char *);
-char * start_task_omp (credentials_t *, const char *, int, const char *);
-char * stop_task_omp (credentials_t *, const char *, int, const char *);
+char * pause_task_omp (credentials_t *, params_t *);
+char * resume_paused_task_omp (credentials_t *, params_t *);
+char * resume_stopped_task_omp (credentials_t *, params_t *);
+char * start_task_omp (credentials_t *, params_t *);
+char * stop_task_omp (credentials_t *, params_t *);
 
 char * get_tasks_omp (credentials_t *, params_t *);
 
@@ -75,8 +75,7 @@ char * get_result_omp (credentials_t *, const char *, const char *,
 char * create_escalator_omp (credentials_t *, params_t *);
 char * delete_escalator_omp (credentials_t *, params_t *);
 char * delete_trash_escalator_omp (credentials_t *, params_t *);
-char * test_escalator_omp (credentials_t *, const char *, const char *,
-                           const char *);
+char * test_escalator_omp (credentials_t *, params_t *);
 char * get_escalator_omp (credentials_t *, const char *, const char *,
                           const char *);
 char * get_escalators_omp (credentials_t *, const char *, const char *);
@@ -118,16 +117,11 @@ char * get_configs_omp (credentials_t *, const char *, const char *);
 char * save_config_omp (credentials_t *, params_t *);
 char * get_config_family_omp (credentials_t *, const char *, const char *,
                               const char *, const char *, const char *, int);
-char * save_config_family_omp (credentials_t *, const char *, const char *,
-                               const char *, const char *, const char *,
-                               GArray *);
+char * save_config_family_omp (credentials_t *, params_t *);
 char * get_config_nvt_omp (credentials_t *, const char *, const char *,
                            const char *, const char *, const char *,
                            const char *, int);
-char * save_config_nvt_omp (credentials_t *, const char *, const char *,
-                            const char *, const char *, const char *,
-                            const char *, GArray *, GArray *, GArray *,
-                            const char *);
+char * save_config_nvt_omp (credentials_t *, params_t *);
 char * create_config_omp (credentials_t *, params_t *);
 char * import_config_omp (credentials_t *, params_t *);
 char * delete_config_omp (credentials_t *, params_t *);
@@ -186,7 +180,7 @@ char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, const char *);
 
 char * get_trash_omp (credentials_t *, const char *, const char *);
-char * restore_omp (credentials_t *, const char *);
+char * restore_omp (credentials_t *, params_t *);
 char * empty_trashcan_omp (credentials_t *, params_t *);
 
 int authenticate_omp (const gchar *, const gchar *);

@@ -561,6 +561,8 @@ init_validator ()
   openvas_validator_add (validator, "event_data:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
+  openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
+  openvas_validator_add (validator, "file:value",   "^yes$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
@@ -591,6 +593,7 @@ init_validator ()
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
+  openvas_validator_add (validator, "password:value", "^(\\R|.)*$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, ]{1,400}))$");
   /** @todo Better regex. */
@@ -611,6 +614,7 @@ init_validator ()
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:value", "^(\\R|.)*$");
+  openvas_validator_add (validator, "nvt:name",          "^(\\R|.)*$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
@@ -671,14 +675,17 @@ init_validator ()
   openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "note_task_id", "optional_task_id");
+  openvas_validator_alias (validator, "nvt:value",         "uuid");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "override_task_id", "optional_task_id");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
+  openvas_validator_alias (validator, "password:name", "preference_name");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
+  openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
 
   openvas_validator_alias (validator, "esc_notes",        "notes");
@@ -711,38 +718,6 @@ validate (validator_t validator, const gchar* validator_rule, char** string)
       return TRUE;
     }
 
-  return FALSE;
-}
-
-/**
- * @brief Check validity of an input string.
- *
- * @param[in]      validator       Validator to use.
- * @param[in]      validator_rule  The rule with which to validate \p string.
- * @param[in,out]  string          The string to validate.  If invalid, memory
- *                                 location pointed to will be freed and set
- *                                 to NULL.
- * @param[in]      fallback        String to duplicate into \p string if
- *                                 \p string is NULL.
- *
- * @return TRUE if \p string was invalid and was freed, FALSE otherwise.
- */
-static gboolean
-validate_or (validator_t validator, const gchar* validator_rule, char** string,
-             const char *fallback)
-{
-  if (*string)
-    {
-      if (openvas_validate (validator, validator_rule, *string))
-        {
-          free (*string);
-          *string = NULL;
-          return TRUE;
-        }
-
-      return FALSE;
-    }
-  *string = g_strdup (fallback);
   return FALSE;
 }
 
@@ -1240,11 +1215,14 @@ params_append_mhd (params_t *params,
                    int chunk_size,
                    int chunk_offset)
 {
-  if ((strncmp (name, "parameter:", strlen ("parameter:")) == 0)
+  if ((strncmp (name, "file:", strlen ("file:")) == 0)
+      || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
+      || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)
       || (strncmp (name, "select:", strlen ("select:")) == 0)
       || (strncmp (name, "trend:", strlen ("trend:")) == 0)
-      || (strncmp (name, "method_data:", strlen ("method_data:")) == 0))
+      || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
+      || (strncmp (name, "nvt:", strlen ("nvt:")) == 0))
     {
       param_t *param;
       const char *colon;
@@ -2464,111 +2442,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (get_tasks)
   ELSE (import_config)
   ELSE (import_report_format)
-  else if (!strcmp (con_info->req_parms.cmd, "modify_auth"))
-    {
-      validate (validator, "group", &con_info->req_parms.group);
-      validate (validator, "enable", &con_info->req_parms.enable);
-      validate (validator, "authdn", &con_info->req_parms.authdn);
-      validate (validator, "ldaphost", &con_info->req_parms.ldaphost);
-      validate (validator, "domain", &con_info->req_parms.domain);
-
-      con_info->response =
-        modify_ldap_auth_oap (credentials,
-                              con_info->req_parms.group,
-                              con_info->req_parms.enable,
-                              con_info->req_parms.ldaphost,
-                              con_info->req_parms.authdn,
-                              con_info->req_parms.domain);
-    }
-  else if ((!strcmp (con_info->req_parms.cmd, "pause_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "page", &con_info->req_parms.next);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        pause_task_omp (credentials,
-                        con_info->req_parms.task_id,
-                        con_info->req_parms.overrides
-                         ? strcmp (con_info->req_parms.overrides, "0")
-                         : 0,
-                        con_info->req_parms.next);
-    }
-  else if ((!strcmp (con_info->req_parms.cmd, "restore"))
-           && (con_info->req_parms.target_id != NULL))
-    {
-      validate (validator, "uuid", &con_info->req_parms.target_id);
-      con_info->response =
-        restore_omp (credentials, con_info->req_parms.target_id);
-    }
-  else if ((!strcmp (con_info->req_parms.cmd, "resume_paused_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "page", &con_info->req_parms.next);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        resume_paused_task_omp (credentials,
-                                con_info->req_parms.task_id,
-                                con_info->req_parms.overrides
-                                 ? strcmp (con_info->req_parms.overrides, "0")
-                                 : 0,
-                                con_info->req_parms.next);
-    }
-  else if ((!strcmp (con_info->req_parms.cmd, "resume_stopped_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "page", &con_info->req_parms.next);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        resume_stopped_task_omp (credentials,
-                                 con_info->req_parms.task_id,
-                                 con_info->req_parms.overrides
-                                  ? strcmp (con_info->req_parms.overrides, "0")
-                                  : 0,
-                                 con_info->req_parms.next);
-    }
+  ELSE_OAP (modify_auth)
+  ELSE (pause_task)
+  ELSE (restore)
+  ELSE (resume_paused_task)
+  ELSE (resume_stopped_task)
   ELSE (save_config)
-  else if (!strcmp (con_info->req_parms.cmd, "save_config_family"))
-    {
-      validate (validator, "config_id", &con_info->req_parms.config_id);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "family", &con_info->req_parms.family);
-      con_info->response =
-        save_config_family_omp (credentials,
-                                con_info->req_parms.config_id,
-                                con_info->req_parms.name,
-                                con_info->req_parms.family,
-                                con_info->req_parms.sort_field,
-                                con_info->req_parms.sort_order,
-                                con_info->req_parms.nvts);
-    }
-  else if (!strcmp (con_info->req_parms.cmd, "save_config_nvt"))
-    {
-      validate (validator, "config_id", &con_info->req_parms.config_id);
-      validate (validator, "name", &con_info->req_parms.name);
-      validate (validator, "family", &con_info->req_parms.family);
-      validate (validator, "oid", &con_info->req_parms.oid);
-      con_info->response =
-        save_config_nvt_omp (credentials,
-                             con_info->req_parms.config_id,
-                             con_info->req_parms.name,
-                             con_info->req_parms.family,
-                             con_info->req_parms.oid,
-                             con_info->req_parms.sort_field,
-                             con_info->req_parms.sort_order,
-                             con_info->req_parms.preferences,
-                             con_info->req_parms.files,
-                             con_info->req_parms.passwords,
-                             con_info->req_parms.timeout);
-    }
+  ELSE (save_config_family)
+  ELSE (save_config_nvt)
   ELSE (save_lsc_credential)
   ELSE (save_note)
   ELSE (save_override)
@@ -2645,51 +2526,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         }
     }
   ELSE_OAP (save_user)
-  else if ((!strcmp (con_info->req_parms.cmd, "start_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "page", &con_info->req_parms.next);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        start_task_omp (credentials,
-                        con_info->req_parms.task_id,
-                        con_info->req_parms.overrides
-                         ? strcmp (con_info->req_parms.overrides, "0")
-                         : 0,
-                        con_info->req_parms.next);
-    }
-  else if ((!strcmp (con_info->req_parms.cmd, "stop_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && (con_info->req_parms.overrides != NULL))
-    {
-      validate (validator, "task_id", &con_info->req_parms.task_id);
-      validate (validator, "page", &con_info->req_parms.next);
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      con_info->response =
-        stop_task_omp (credentials,
-                       con_info->req_parms.task_id,
-                       con_info->req_parms.overrides
-                        ? strcmp (con_info->req_parms.overrides, "0")
-                        : 0,
-                       con_info->req_parms.next);
-    }
+  ELSE (start_task)
+  ELSE (stop_task)
   ELSE_OAP (sync_feed)
-  else if ((!strcmp (con_info->req_parms.cmd, "test_escalator"))
-           && (con_info->req_parms.escalator_id != NULL))
-    {
-      validate (validator, "escalator_id", &con_info->req_parms.escalator_id);
-      validate (validator, "sort_field", &con_info->req_parms.sort_field);
-      validate (validator, "sort_order", &con_info->req_parms.sort_order);
-      con_info->response =
-        test_escalator_omp (credentials,
-                            con_info->req_parms.escalator_id,
-                            con_info->req_parms.sort_field,
-                            con_info->req_parms.sort_order);
-    }
+  ELSE (test_escalator)
   else
     {
       con_info->response = gsad_message (credentials,

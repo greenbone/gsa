@@ -1207,30 +1207,22 @@ save_settings_oap (credentials_t * credentials, params_t *params)
  * @brief openvas-administrator.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  method       The method to configure (ads/ldap).
- * @param[in]  enable       Whether to enable ldap authentication.
- * @param[in]  ldaphost     LDAP host for ldap configuration.
- * @param[in]  authdn       auth dn for ldap configuration.
- * @param[in]  domain       domain for das configuration.
+ * @param[in]  params        Request parameters.
  *
  * @return XSL transformated list of users and configuration.
  */
 char*
-modify_ldap_auth_oap (credentials_t* credentials,
-                      const char* method,
-                      const char* enable,
-                      const char* ldaphost,
-                      const char* authdn,
-                      const char* domain)
+modify_auth_oap (credentials_t* credentials, params_t *params)
 {
   tracef ("In modify_ldap_auth_oap\n");
   entity_t entity;
   gnutls_session_t session;
   int socket;
   char *text = NULL;
-  char* truefalse = (enable && strcmp (enable, "1") == 0) ? "true" : "false";
+  char* truefalse;
   GString* xml = NULL;
   gchar *html;
+  const char *ldaphost, *method, *authdn, *domain;
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -1252,6 +1244,15 @@ modify_ldap_auth_oap (credentials_t* credentials,
                                     " may save the settings."
                                     "</gsad_msg>"));
     }
+
+  truefalse = (params_value (params, "enable")
+               && strcmp (params_value (params, "enable"), "1") == 0)
+                ? "true" : "false";
+
+  ldaphost = params_value (params, "ldaphost");
+  method = params_value (params, "group");
+  authdn = params_value (params, "authdn");
+  domain = params_value (params, "domain");
 
   if (ldaphost == NULL || method == NULL
       || (strcmp (method, "method:ldap") == 0 && authdn == NULL)

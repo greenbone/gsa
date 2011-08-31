@@ -2,6 +2,26 @@
 
 	Convert more pages to new param mechanism.
 
+	* src/gsad.c (init_validator): Add more rules.
+	(validator_or): Remove.  Out of use.
+	(params_append_mhd): Add more container cases.
+	(exec_omp_post): Pass single param instead of many.
+
+	* src/gsad_oap.c (modify_ldap_auth_oap): Remove for rename.
+	(modify_auth_oap): New function.  Was modify_ldap_auth_oap.  Replace
+	multiple args with one.
+
+	* src/gsad_omp.c (stop_task_omp, pause_task_omp, resume_paused_task_omp)
+	(resume_stopped_task_omp, start_task_omp, test_escalator_omp, restore_omp)
+	(save_config_family_omp, save_config_nvt_omp): Replace multiple args with
+	one.
+
+	* src/gsad_omp.h, src/gsad_oap.h: Update headers accordingly.
+
+2011-08-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
 	* src/gsad.c (init_validator): Add get_task rules.
 	(exec_omp_post, exec_omp_get): Pass single param instead of many.
 
