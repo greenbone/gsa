@@ -6871,59 +6871,18 @@ delete_report_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Get a report and XSL transform the result.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  report_id      ID of report.
- * @param[in]  delta_report_id  ID of report to compare with.
- * @param[in]  format_id      ID of format of report.
- * @param[out] report_len     Length of report.
- * @param[in]  first_result   Number of first result in report.
- * @param[in]  max_results    Number of results in report.
- * @param[in]  sort_field     Field to sort on, or NULL.
- * @param[in]  sort_order     "ascending", "descending", or NULL.
- * @param[in]  levels         Threat levels to include in report.
- * @param[in]  delta_states   Delta states to include in report.
- * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase  Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  escalator_id       ID of escalator if escalation required, else 0.
- * @param[in]  esc_first_result   Number of first result in escalated report.
- * @param[in]  esc_max_results    Number of results in escalated report.
- * @param[in]  esc_levels     Threat levels to include in escalated report.
- * @param[in]  esc_notes      Whether to include notes in escalation.
- * @param[in]  esc_overrides  Whether to include overrides in escalation.
- * @param[in]  esc_result_hosts_only  Whether to show only hosts with results.
- * @param[in]  esc_search_phrase  Phrase which included results must contain.
- * @param[in]  esc_min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  result_id      ID of single result to get, in delta case.
- * @param[in]  type           Type of report: "assets" or NULL.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] report_len   Length of report.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  *
  * @return Report.
  */
 char *
-get_report_omp (credentials_t * credentials, const char *report_id,
-                const char *delta_report_id, const char *format_id,
-                gsize *report_len,
-                const unsigned int first_result,
-                const unsigned int max_results,
-                const char * sort_field, const char * sort_order,
-                const char * levels, const char * delta_states,
-                const char * notes, const char * overrides,
-                const char *result_hosts_only, const char * search_phrase,
-                const char *min_cvss_base, const char * escalator_id,
-                const unsigned int esc_first_result,
-                const unsigned int esc_max_results,
-                const char * esc_levels, const char * esc_notes,
-                const char * esc_overrides, const char *esc_result_hosts_only,
-                const char * esc_search_phrase, const char *esc_min_cvss_base,
-                const char *result_id,
-                const char *type,
-                gchar ** content_type, char **content_disposition)
+get_report_omp (credentials_t * credentials, params_t *params,
+                gsize *report_len, gchar ** content_type,
+                char **content_disposition)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -6933,6 +6892,50 @@ get_report_omp (credentials_t * credentials, const char *report_id,
   gnutls_session_t session;
   int socket;
   gchar *html;
+  unsigned int first, max;
+  GString *levels, *delta_states;
+  const char *escalator_id, *search_phrase, *min_cvss_base, *type;
+  const char *notes, *overrides, *result_hosts_only, *report_id, *sort_field;
+  const char *sort_order, *result_id, *delta_report_id, *format_id;
+  const char *first_result, *max_results;
+
+  escalator_id = params_value (params, "escalator_id");
+  if (escalator_id == NULL)
+    params_given (params, "escalator_id") || (escalator_id = "0");
+
+  search_phrase = params_value (params, "search_phrase");
+  if (search_phrase == NULL)
+    params_given (params, "search_phrase") || (search_phrase = "");
+
+  if (params_given (params, "min_cvss_base"))
+    {
+      if (params_valid (params, "min_cvss_base"))
+        {
+          if (params_value (params, "apply_min_cvss_base")
+              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
+            min_cvss_base = params_value (params, "min_cvss_base");
+          else
+            min_cvss_base = "";
+        }
+      else
+        min_cvss_base = NULL;
+    }
+  else
+    min_cvss_base = "";
+
+  type = params_value (params, "type");
+
+  notes = params_value (params, "notes");
+  if (notes == NULL)
+    params_given (params, "notes") || (notes = "0");
+
+  overrides = params_value (params, "overrides");
+  if (overrides == NULL)
+    params_given (params, "overrides") || (overrides = "0");
+
+  result_hosts_only = params_value (params, "result_hosts_only");
+  if (result_hosts_only == NULL)
+    params_given (params, "result_hosts_only") || (result_hosts_only = "0");
 
   *content_type = NULL;
   *report_len = 0;
@@ -6942,30 +6945,26 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report. "
                          "The report could not be delivered. "
-                         "Diagnostics: Required parameter was NULL.",
+                         "Diagnostics: escalator_id was NULL.",
                          "/omp?cmd=get_tasks");
 
   if (search_phrase == NULL)
     {
-      xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      xml = g_string_new ("");
+      g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                              "Given search_phrase was invalid",
+                              "Get Report");
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
 
   if (min_cvss_base == NULL)
     {
-      xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("Get Report"));
+      xml = g_string_new ("");
+      g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                              "Given min_cvss_base was invalid",
+                              "Get Report");
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
-
-  if (type && (strcmp (type, "assets") == 0))
-    {
-      if (levels == NULL || strlen (levels) == 0)
-        levels = "";
-    }
-  else if (levels == NULL || strlen (levels) == 0)
-    levels = "hm";
-
-  if (delta_states == NULL || strlen (delta_states) == 0) delta_states = "gn";
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
@@ -6991,9 +6990,110 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                              "/omp?cmd=get_tasks");
     }
 
+  if (params_value (params, "delta_states"))
+    delta_states = g_string_new (params_value (params, "delta_states"));
+  else
+    {
+      delta_states = g_string_new ("");
+      if (params_value (params, "delta_state_change")
+          && atoi (params_value (params, "delta_state_change")))
+        g_string_append (delta_states, "c");
+      if (params_value (params, "delta_state_gone")
+          && atoi (params_value (params, "delta_state_gone")))
+        g_string_append (delta_states, "g");
+      if (params_value (params, "delta_state_new")
+          && atoi (params_value (params, "delta_state_new")))
+        g_string_append (delta_states, "n");
+      if (params_value (params, "delta_state_same")
+          && atoi (params_value (params, "delta_state_same")))
+        g_string_append (delta_states, "s");
+    }
+
+  if (strlen (delta_states->str) == 0) g_string_append (delta_states, "gn");
+
+  if (params_value (params, "levels"))
+    levels = g_string_new (params_value (params, "levels"));
+  else
+    {
+      levels = g_string_new ("");
+      if (params_value (params, "level_high")
+          && atoi (params_value (params, "level_high")))
+        g_string_append (levels, "h");
+      if (params_value (params, "level_medium")
+          && atoi (params_value (params, "level_medium")))
+        g_string_append (levels, "m");
+      if (params_value (params, "level_low")
+          && atoi (params_value (params, "level_low")))
+        g_string_append (levels, "l");
+      if (params_value (params, "level_log")
+          && atoi (params_value (params, "level_log")))
+        g_string_append (levels, "g");
+      if (params_value (params, "level_false_positive")
+          && atoi (params_value (params, "level_false_positive")))
+        g_string_append (levels, "f");
+    }
+
+  if (type && (strcmp (type, "assets") == 0))
+    {
+      if (strlen (levels->str) == 0)
+        g_string_append (levels, "");
+    }
+  else if (strlen (levels->str) == 0)
+    g_string_append (levels, "hm");
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  report_id = params_value (params, "report_id");
+
   if (strcmp (escalator_id, "0"))
     {
-      const char *status;
+      const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
+      const char *esc_first_result, *esc_max_results;
+      const char *esc_search_phrase, *esc_min_cvss_base;
+
+      esc_notes = params_value (params, "esc_notes");
+      if (esc_notes == NULL)
+        params_given (params, "esc_notes") || (esc_notes = "0");
+
+      esc_overrides = params_value (params, "esc_overrides");
+      if (esc_overrides == NULL)
+        params_given (params, "esc_overrides") || (esc_overrides = "0");
+
+      esc_result_hosts_only = params_value (params, "esc_result_hosts_only");
+      if (esc_result_hosts_only == NULL)
+        params_given (params, "esc_result_hosts_only")
+          || (esc_result_hosts_only = "0");
+
+      esc_first_result = params_value (params, "esc_first_result");
+      if (esc_first_result == NULL
+          || sscanf (esc_first_result, "%u", &first) != 1)
+        esc_first_result = "1";
+
+      esc_max_results = params_value (params, "esc_max_results");
+      if (esc_max_results == NULL
+          || sscanf (esc_max_results, "%u", &max) != 1)
+        esc_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+      esc_search_phrase = params_value (params, "esc_search_phrase");
+      if (esc_search_phrase == NULL)
+        params_given (params, "esc_search_phrase") || (esc_search_phrase = "");
+
+      if (params_given (params, "esc_min_cvss_base"))
+        {
+          if (params_valid (params, "esc_min_cvss_base"))
+            {
+              if (params_value (params, "esc_apply_min_cvss_base")
+                  && strcmp (params_value (params, "esc_apply_min_cvss_base"),
+                                           "0"))
+                esc_min_cvss_base = params_value (params, "esc_min_cvss_base");
+              else
+                esc_min_cvss_base = "";
+            }
+          else
+            esc_min_cvss_base = NULL;
+        }
+      else
+        esc_min_cvss_base = "";
 
       if (openvas_server_sendf (&session,
                                 "<get_reports"
@@ -7004,8 +7104,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                 " overrides_details=\"1\""
                                 " result_hosts_only=\"%i\""
                                 " report_id=\"%s\""
-                                " first_result=\"%u\""
-                                " max_results=\"%u\""
+                                " first_result=\"%s\""
+                                " max_results=\"%s\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\""
                                 " levels=\"%s\""
@@ -7026,14 +7126,15 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                      || strcmp (sort_field, "type") == 0)
                                     ? "descending"
                                     : "ascending"),
-                                esc_levels,
-                                delta_states,
+                                params_value (params, "esc_levels"),
+                                delta_states->str,
                                 esc_search_phrase,
                                 esc_min_cvss_base,
                                 escalator_id)
           == -1)
         {
           openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -7045,6 +7146,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -7058,6 +7160,7 @@ get_report_omp (credentials_t * credentials, const char *report_id,
         {
           free_entity (entity);
           openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -7079,10 +7182,25 @@ get_report_omp (credentials_t * credentials, const char *report_id,
           g_free (msg);
           free_entity (entity);
           openvas_server_close (socket, session);
+          g_string_free (delta_states, TRUE);
           return ret;
         }
       free_entity (entity);
     }
+
+  result_id = params_value (params, "result_id");
+  delta_report_id = params_value (params, "delta_report_id");
+  format_id = params_value (params, "report_format_id");
+
+  first_result = params_value (params, "first_result");
+  if (first_result == NULL
+      || sscanf (first_result, "%u", &first) != 1)
+    first_result = "1";
+
+  max_results = params_value (params, "max_results");
+  if (max_results == NULL
+      || sscanf (max_results, "%u", &max) != 1)
+    max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
@@ -7096,8 +7214,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                             " report_id=\"%s\""
                             " delta_report_id=\"%s\""
                             " format_id=\"%s\""
-                            " first_result=\"%u\""
-                            " max_results=\"%u\""
+                            " first_result=\"%s\""
+                            " max_results=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\""
                             " levels=\"%s\""
@@ -7126,13 +7244,14 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                                  || strcmp (sort_field, "type") == 0)
                                 ? "descending"
                                 : "ascending"),
-                            levels,
-                            delta_states,
+                            levels->str,
+                            delta_states->str,
                             search_phrase,
                             min_cvss_base)
       == -1)
     {
       openvas_server_close (socket, session);
+      g_string_free (delta_states, TRUE);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -7140,6 +7259,8 @@ get_report_omp (credentials_t * credentials, const char *report_id,
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+
+  g_string_free (delta_states, TRUE);
 
   if (format_id)
     {

@@ -1056,7 +1056,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="esc_result_hosts_only" value="1"/>
                     <input type="hidden" name="esc_levels" value="hmlgf"/>
 
-                    <select name="report_escalator_id" title="Escalator">
+                    <select name="escalator_id" title="Escalator">
                       <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
@@ -1191,7 +1191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="esc_result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <select name="report_escalator_id" title="Escalator">
+                    <select name="escalator_id" title="Escalator">
                       <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
@@ -1358,7 +1358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="esc_result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <select name="report_escalator_id" title="Escalator">
+                    <select name="escalator_id" title="Escalator">
                       <xsl:for-each select="../../get_escalators_response/escalator">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>

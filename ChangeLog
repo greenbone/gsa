@@ -1,3 +1,16 @@
+2011-08-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (init_validator): Add get_task rules.
+	(exec_omp_post, exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (get_report_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (html-report-details): Match param name to validator.
+
 2011-08-31  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Re-ordered some entries to have the most specific

@@ -562,6 +562,7 @@ init_validator ()
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
+  openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
@@ -631,9 +632,12 @@ init_validator ()
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
 
+  /* Beware, the rule must be defined before the alias. */
 
+  openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",         "name");
+  openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");
   openvas_validator_alias (validator, "delta_state_new", "boolean");
@@ -641,6 +645,11 @@ init_validator ()
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
+  openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
+  openvas_validator_alias (validator, "esc_first_result", "first_result");
+  openvas_validator_alias (validator, "esc_max_results",  "max_results");
+  openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
+  openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");
@@ -671,6 +680,11 @@ init_validator ()
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "trend:name",   "family");
+
+  openvas_validator_alias (validator, "esc_notes",        "notes");
+  openvas_validator_alias (validator, "esc_overrides",    "overrides");
+  openvas_validator_alias (validator, "esc_result_hosts_only",
+                           "result_hosts_only");
 }
 
 /**
@@ -2439,122 +2453,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (empty_trashcan)
   else if (!strcmp (con_info->req_parms.cmd, "escalate_report"))
     {
-      unsigned int first, esc_first;
-      unsigned int max, esc_max;
       gchar *content_type_omp;
       gsize response_size;
       char *content_disposition;
-      const char *min_cvss_base, *esc_min_cvss_base;
-
-      if (!con_info->req_parms.first_result
-          || sscanf (con_info->req_parms.first_result, "%u", &first) != 1)
-        first = 1;
-      if (!con_info->req_parms.max_results
-          || sscanf (con_info->req_parms.max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      if (!con_info->req_parms.esc_first_result
-          || sscanf (con_info->req_parms.esc_first_result, "%u", &esc_first) != 1)
-        esc_first = 1;
-      if (!con_info->req_parms.esc_max_results
-          || sscanf (con_info->req_parms.esc_max_results, "%u", &esc_max) != 1)
-        esc_max = RESULTS_PER_PAGE;
-
-      validate (validator, "report_id", &con_info->req_parms.report_id);
-      validate (validator, "report_format_id",
-                &con_info->req_parms.report_format_id);
-      validate (validator, "sort_field", &con_info->req_parms.sort_field);
-      validate (validator, "sort_order", &con_info->req_parms.sort_order);
-      validate (validator, "levels", &con_info->req_parms.levels);
-      validate_or (validator, "notes", &con_info->req_parms.notes, "0");
-      validate_or (validator, "overrides", &con_info->req_parms.overrides, "0");
-      validate_or (validator,
-                   "result_hosts_only",
-                   &con_info->req_parms.result_hosts_only,
-                   "0");
-      validate_or (validator,
-                   "search_phrase",
-                   &con_info->req_parms.search_phrase,
-                   "");
-      validate (validator, "levels", &con_info->req_parms.esc_levels);
-      validate_or (validator, "notes", &con_info->req_parms.esc_notes, "0");
-      validate_or (validator, "overrides", &con_info->req_parms.esc_overrides,
-                   "0");
-      validate_or (validator,
-                   "result_hosts_only",
-                   &con_info->req_parms.esc_result_hosts_only,
-                   "0");
-      validate_or (validator,
-                   "search_phrase",
-                   &con_info->req_parms.esc_search_phrase,
-                   "");
-      validate (validator, "escalator_id",
-                &con_info->req_parms.report_escalator_id);
-
-      if (con_info->req_parms.min_cvss_base)
-        {
-          if (openvas_validate (validator, "min_cvss_base",
-                                con_info->req_parms.min_cvss_base))
-            min_cvss_base = NULL;
-          else
-            {
-              if (con_info->req_parms.apply_min
-                  && strcmp (con_info->req_parms.apply_min, "0"))
-                min_cvss_base = con_info->req_parms.min_cvss_base;
-              else
-                min_cvss_base = "";
-            }
-        }
-      else
-        min_cvss_base = "";
-
-      if (con_info->req_parms.esc_min_cvss_base)
-        {
-          if (openvas_validate (validator, "min_cvss_base",
-                                con_info->req_parms.esc_min_cvss_base))
-            esc_min_cvss_base = NULL;
-          else
-            {
-              if (con_info->req_parms.apply_min
-                  && strcmp (con_info->req_parms.apply_min, "0"))
-                esc_min_cvss_base = con_info->req_parms.esc_min_cvss_base;
-              else
-                esc_min_cvss_base = "";
-            }
-        }
-      else
-        esc_min_cvss_base = "";
-
-      con_info->response =
-        get_report_omp (credentials,
-                        con_info->req_parms.report_id,
-                        NULL,
-                        con_info->req_parms.report_format_id,
-                        &response_size,
-                        (const unsigned int) first,
-                        (const unsigned int) max,
-                        con_info->req_parms.sort_field,
-                        con_info->req_parms.sort_order,
-                        con_info->req_parms.levels,
-                        NULL, // FIX
-                        con_info->req_parms.notes,
-                        con_info->req_parms.overrides,
-                        con_info->req_parms.result_hosts_only,
-                        con_info->req_parms.search_phrase,
-                        min_cvss_base,
-                        con_info->req_parms.report_escalator_id,
-                        (const unsigned int) esc_first,
-                        (const unsigned int) esc_max,
-                        con_info->req_parms.esc_levels,
-                        con_info->req_parms.esc_notes,
-                        con_info->req_parms.esc_overrides,
-                        con_info->req_parms.esc_result_hosts_only,
-                        con_info->req_parms.esc_search_phrase,
-                        esc_min_cvss_base,
-                        NULL,
-                        NULL,
-                        &content_type_omp,
-                        &content_disposition);
+      con_info->response = get_report_omp (credentials, con_info->params,
+                                           &response_size,
+                                           &content_type_omp,
+                                           &content_disposition);
     }
   ELSE (get_tasks)
   ELSE (import_config)
@@ -3743,74 +3648,12 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_report"))
     {
       char *ret;
-      unsigned int first, esc_first;
-      unsigned int max, esc_max;
       gchar *content_type_omp;
-      GString *levels_buffer, *delta_states_buffer;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      if (!esc_first_result || sscanf (esc_first_result, "%u", &esc_first) != 1)
-        esc_first = 1;
-      if (!esc_max_results || sscanf (esc_max_results, "%u", &esc_max) != 1)
-        esc_max = RESULTS_PER_PAGE;
-
-      if (levels)
-        levels_buffer = g_string_new (levels);
-      else
-        {
-          levels_buffer = g_string_new ("");
-          if (high) g_string_append (levels_buffer, "h");
-          if (medium) g_string_append (levels_buffer, "m");
-          if (low) g_string_append (levels_buffer, "l");
-          if (log) g_string_append (levels_buffer, "g");
-          if (false_positive) g_string_append (levels_buffer, "f");
-        }
-
-      if (delta_states)
-        delta_states_buffer = g_string_new (delta_states);
-      else
-        {
-          delta_states_buffer = g_string_new ("");
-          if (changed) g_string_append (delta_states_buffer, "c");
-          if (gone) g_string_append (delta_states_buffer, "g");
-          if (new) g_string_append (delta_states_buffer, "n");
-          if (same) g_string_append (delta_states_buffer, "s");
-        }
-
-      ret = get_report_omp (credentials, report_id, delta_report_id,
-                            report_format_id,
+      ret = get_report_omp (credentials,
+                            params,
                             response_size,
-                            (const unsigned int) first,
-                            (const unsigned int) max,
-                            sort_field,
-                            sort_order,
-                            levels_buffer->str,
-                            delta_states_buffer->str,
-                            notes,
-                            overrides,
-                            result_hosts_only,
-                            search_phrase,
-                            min_cvss_base,
-                            report_escalator_id,
-                            (const unsigned int) esc_first,
-                            (const unsigned int) esc_max,
-                            esc_levels,
-                            esc_notes,
-                            esc_overrides,
-                            esc_result_hosts_only,
-                            esc_search_phrase,
-                            esc_min_cvss_base,
-                            result_id,
-                            type,
                             &content_type_omp,
                             content_disposition);
-
-      g_string_free (levels_buffer, TRUE);
-      g_string_free (delta_states_buffer, TRUE);
 
       if (content_type_omp)
         {
