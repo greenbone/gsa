@@ -1,3 +1,22 @@
+2011-09-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (new_task): New function.  Body from new_task_omp.
+	(new_task_omp): Call through to new_task.
+	(create_report_omp): Replace multiple args with one.
+	(get_config, get_config_family, get_config_nvt): New functions.  Bodies
+	from *_omp versions, replacing multiple args with one.
+	(get_config_omp, edit_config_omp, get_config_family_omp)
+	(edit_config_family_omp, get_config_nvt_omp, edit_config_nvt_omp): Call
+	through to new function.  Switch callers to new function.
+	(edit_override_omp): Replace multiple args with one.
+	(save_override_omp): Correct message typo.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
 2011-08-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Convert more pages to new param mechanism.

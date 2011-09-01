@@ -3122,135 +3122,16 @@ exec_omp_get (struct MHD_Connection *connection,
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
   /* Check cmd and precondition, start respective OMP command(s). */
-  if ((!strcmp (cmd, "new_task"))
-      && (overrides != NULL))
-    return new_task_omp (credentials, NULL,
-                         overrides ? strcmp (overrides, "0") : 0);
+  if (!strcmp (cmd, "new_task"))
+    return new_task_omp (credentials, params);
 
   ELSE (get_tasks)
-
-  else if (!strcmp (cmd, "edit_config"))
-    return get_config_omp (credentials, config_id, 1);
-
-  else if (!strcmp (cmd, "edit_config_family"))
-    return get_config_family_omp (credentials, config_id, name, family,
-                                  sort_field, sort_order, 1);
-
-  else if (!strcmp (cmd, "edit_config_nvt"))
-    return get_config_nvt_omp (credentials, config_id, name, family, oid,
-                               sort_field, sort_order, 1);
-
+  ELSE (edit_config)
+  ELSE (edit_config_family)
+  ELSE (edit_config_nvt)
   ELSE (edit_lsc_credential)
   ELSE (edit_note)
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_override") == 0))
-    {
-      return edit_override_omp (credentials, override_id, "get_override",
-                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", NULL, NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_overrides") == 0))
-    {
-      return edit_override_omp (credentials, override_id, "get_overrides",
-                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", NULL, NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_nvts") == 0)
-           && (oid != NULL))
-    {
-      return edit_override_omp (credentials, override_id, "get_nvts",
-                                NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL,
-                                NULL, "-1", oid, NULL, NULL, NULL);
-    }
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_report") == 0)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return edit_override_omp (credentials, override_id, "get_report",
-                                report_id, first, max, sort_field, sort_order,
-                                levels, notes, overrides, result_hosts_only,
-                                search_phrase, min_cvss_base, NULL, NULL, NULL,
-                                NULL);
-    }
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (strcmp (next, "get_result") == 0)
-           && (name != NULL)
-           && (result_id != NULL)
-           && (report_id != NULL)
-           && (first_result != NULL)
-           && (max_results != NULL)
-           && (sort_field != NULL)
-           && (sort_order != NULL)
-           && (levels != NULL)
-           && (notes != NULL)
-           && (overrides != NULL)
-           && (result_hosts_only != NULL)
-           && (search_phrase != NULL)
-           && (min_cvss_base != NULL))
-    {
-      unsigned int first, max;
-
-      if (!first_result || sscanf (first_result, "%u", &first) != 1)
-        first = 1;
-
-      if (!max_results || sscanf (max_results, "%u", &max) != 1)
-        max = RESULTS_PER_PAGE;
-
-      return edit_override_omp (credentials, override_id, "get_result",
-                                /* Parameters for next page. */
-                                report_id, first, max, sort_field, sort_order,
-                                levels, notes, overrides, result_hosts_only,
-                                search_phrase, min_cvss_base, NULL, task_id,
-                                name, result_id);
-    }
-
-  else if ((!strcmp (cmd, "edit_override"))
-           && (override_id != NULL)
-           && (next != NULL)
-           && (overrides != NULL)
-           && (strcmp (next, "get_tasks") == 0)
-           && (task_id != NULL))
-    {
-      return edit_override_omp (credentials, override_id, "get_tasks",
-                                /* Parameters for next page. */
-                                NULL, 0, 0, NULL, NULL, NULL, NULL, overrides, NULL,
-                                NULL, "-1", NULL, task_id, NULL, NULL);
-    }
+  ELSE (edit_override)
 
   else if ((!strcmp (cmd, "edit_report_format"))
            && (report_format_id != NULL)
@@ -3464,19 +3345,13 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "get_feed"))
     return get_feed_oap (credentials, sort_field, sort_order);
 
-  else if (!strcmp (cmd, "get_config"))
-    return get_config_omp (credentials, config_id, 0);
+  ELSE (get_config)
 
   else if (!strcmp (cmd, "get_configs"))
     return get_configs_omp (credentials, sort_field, sort_order);
 
-  else if (!strcmp (cmd, "get_config_family"))
-    return get_config_family_omp (credentials, config_id, name, family,
-                                  sort_field, sort_order, 0);
-
-  else if (!strcmp (cmd, "get_config_nvt"))
-    return get_config_nvt_omp (credentials, config_id, name, family, oid,
-                               sort_field, sort_order, 0);
+  ELSE (get_config_family)
+  ELSE (get_config_nvt)
 
   else if ((!strcmp (cmd, "get_nvts")) && (oid != NULL))
     return get_nvts_omp (credentials, oid);

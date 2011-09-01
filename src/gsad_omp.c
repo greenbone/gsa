@@ -99,6 +99,8 @@ static char *get_tasks (credentials_t *, const char *, const char *,
 static char *get_trash (credentials_t *, const char *, const char *,
                         const char *);
 
+static char * get_config_family (credentials_t *, params_t *, int);
+
 
 /* Helpers. */
 
@@ -407,19 +409,24 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
  * @brief Returns page to create a new task.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
  * @param[in]  message      If not NULL, display message.
- * @param[in]  apply_overrides  Whether to apply overrides.
  *
  * @return Result of XSL transformation.
  */
-char *
-new_task_omp (credentials_t * credentials, const char* message,
-              int apply_overrides)
+static char *
+new_task (credentials_t * credentials, const char *message, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  int apply_overrides;
+  const char *overrides;
+
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -599,6 +606,20 @@ new_task_omp (credentials_t * credentials, const char* message,
 }
 
 /**
+ * @brief Returns page to create a new task.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_task_omp (credentials_t * credentials, params_t *params)
+{
+  return new_task (credentials, NULL, params);
+}
+
+/**
  * @brief Create a report, get all tasks, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.
@@ -645,9 +666,7 @@ create_report_omp (credentials_t * credentials, params_t *params)
       || (comment == NULL)
       || (overrides == NULL)
       || (xml_file == NULL))
-    return new_task_omp (credentials,
-                         "Invalid parameter",
-                         overrides ? strcmp (overrides, "0") : 0);
+    return new_task (credentials, "Invalid parameter", params);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -713,11 +732,11 @@ create_report_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, text);
 }
 
-#define CHECK(name)                                                            \
-  if (name == NULL)                                                            \
-    return new_task_omp (credentials,                                          \
-                         "Given " G_STRINGIFY (name) " was invalid",           \
-                         apply_overrides ? strcmp (apply_overrides, "0") : 0); \
+#define CHECK(name)                                                        \
+  if (name == NULL)                                                       \
+    return new_task (credentials,                                          \
+                     "Given " G_STRINGIFY (name) " was invalid",           \
+                     params);
 
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
@@ -5614,20 +5633,28 @@ get_configs_omp (credentials_t * credentials, const char * sort_field,
  * @brief Get a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
+ * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_config_omp (credentials_t * credentials, const char * config_id, int edit)
+static char *
+get_config (credentials_t * credentials, params_t *params, int edit)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id;
 
-  assert (config_id);
+  config_id = params_value (params, "config_id");
+
+  if (config_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a config. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_resources");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5712,6 +5739,35 @@ get_config_omp (credentials_t * credentials, const char * config_id, int edit)
   g_string_append (xml, "</get_config_response>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get a config, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  edit         0 for config view page, else config edit page.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_config_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config (credentials, params, 0);
+}
+
+/**
+ * @brief Get a config, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_config_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config (credentials, params, 1);
 }
 
 /**
@@ -5913,38 +5969,38 @@ save_config_omp (credentials_t * credentials, params_t *params)
 
   next = params_value (params, "next:");
   if (next == NULL || strcmp (next, "Save Config") == 0)
-    return get_config_omp (credentials, params_value (params, "config_id"), 1);
-  return get_config_family_omp (credentials, params_value (params, "config_id"),
-                                params_value (params, "name"), next, NULL, NULL,
-                                1);
+    return get_config (credentials, params, 1);
+  return get_config_family (credentials, params, 1);
 }
 
 /**
- * @brief Get details of a family for a configs, XSL transform the result.
+ * @brief Get details of a family for a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
- * @param[in]  name         Name of config.
- * @param[in]  family       Name of family.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_config_family_omp (credentials_t * credentials,
-                       const char * config_id,
-                       const char * name,
-                       const char * family,
-                       const char * sort_field,
-                       const char * sort_order,
-                       int edit)
+static char *
+get_config_family (credentials_t * credentials, params_t *params, int edit)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id, *name, *family, *sort_field, *sort_order;
+
+  config_id = params_value (params, "config_id");
+  name = params_value (params, "name");
+  family = params_value (params, "family");
+
+  if ((config_id == NULL) || (name == NULL) || (family == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting config family. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_resources");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5957,7 +6013,7 @@ get_config_family_omp (credentials_t * credentials,
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting list of configs. "
+                             "An internal error occurred while getting config family. "
                              "The current list of configs is not available. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_configs");
@@ -5975,6 +6031,9 @@ get_config_family_omp (credentials_t * credentials,
                           family);
 
   /* Get the details for all NVT's in the config in the family. */
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
@@ -6055,6 +6114,34 @@ get_config_family_omp (credentials_t * credentials,
   g_string_append (xml, "</get_config_family_response>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get details of a family for a config, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_config_family_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config_family (credentials, params, 0);
+}
+
+/**
+ * @brief Get details of a family for editing a config, XSL transform result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_config_family_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config_family (credentials, params, 1);
 }
 
 /**
@@ -6168,42 +6255,38 @@ save_config_family_omp (credentials_t * credentials, params_t *params)
 
   /* Return the Edit family page. */
 
-  return get_config_family_omp (credentials, config_id,
-                                params_value (params, "name"),
-                                family,
-                                params_value (params, "sort_field"),
-                                params_value (params, "sort_order"),
-                                1);
+  return get_config_family (credentials, params, 1);
 }
 
 /**
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  config_id    UUID of config.
- * @param[in]  name         Name of config.
- * @param[in]  family       Name of family.
- * @param[in]  nvt          OID of NVT.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
-char *
-get_config_nvt_omp (credentials_t * credentials,
-                    const char * config_id,
-                    const char * name,
-                    const char * family,
-                    const char * nvt,
-                    const char * sort_field,
-                    const char * sort_order,
-                    int edit)
+static char *
+get_config_nvt (credentials_t * credentials, params_t *params, int edit)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id, *name, *family, *sort_field, *sort_order, *nvt;
+
+  config_id = params_value (params, "config_id");
+  name = params_value (params, "name");
+  family = params_value (params, "family");
+  nvt = params_value (params, "oid");
+
+  if ((config_id == NULL) || (name == NULL) || (family == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting config family. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_resources");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6233,6 +6316,8 @@ get_config_nvt_omp (credentials_t * credentials,
                           name,
                           family);
 
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
@@ -6270,6 +6355,34 @@ get_config_nvt_omp (credentials_t * credentials,
   g_string_append (xml, "</get_config_nvt_response>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get details of an NVT for a config, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_config_nvt_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config_nvt (credentials, params, 0);
+}
+
+/**
+ * @brief Edit details of an NVT for a config, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_config_nvt_omp (credentials_t * credentials, params_t *params)
+{
+  return get_config_nvt (credentials, params, 1);
 }
 
 /**
@@ -6486,13 +6599,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
 
   /* Return the Edit NVT page. */
 
-  return get_config_nvt_omp (credentials, config_id,
-                             params_value (params, "name"),
-                             params_value (params, "family"),
-                             params_value (params, "oid"),
-                             params_value (params, "sort_field"),
-                             params_value (params, "sort_field"),
-                             1);
+  return get_config_nvt (credentials, params, 1);
 }
 
 /**
@@ -8879,8 +8986,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Edit note, get next page, XSL transform the result.
  *
- * @param[in]  credentials     Username and password for authentication.
- * @param[in]  params          Request parameters.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
@@ -10500,47 +10607,24 @@ delete_override_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Edit override, get next page, XSL transform the result.
  *
- * @param[in]  credentials    Username and password for authentication.
- * @param[in]  override_id    ID of override.
- * @param[in]  next           Name of next page.
- * @param[in]  report_id      ID of current report.
- * @param[in]  first_result   Number of first result in report.
- * @param[in]  max_results    Number of results in report.
- * @param[in]  sort_field     Field to sort on, or NULL.
- * @param[in]  sort_order     "ascending", "descending", or NULL.
- * @param[in]  levels         Threat levels to include in report.
- * @param[in]  notes          Whether to include notes.
- * @param[in]  overrides      Whether to include overrides.
- * @param[in]  result_hosts_only  Whether to show only hosts with results.
- * @param[in]  search_phrase  Phrase which included results must contain.
- * @param[in]  min_cvss_base  Minimum CVSS included results may have.
- *                            "-1" for all, including results with NULL CVSS.
- * @param[in]  oid            OID of NVT (for get_nvts).
- * @param[in]  task_id        ID of task (for get_tasks).
- * @param[in]  task_name      Name of task (for get_result).
- * @param[in]  result_id      ID of result (for get_result).
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (credentials_t * credentials, const char *override_id,
-                   /* Next page params. */
-                   const char *next, const char *report_id,
-                   const unsigned int first_result,
-                   const unsigned int max_results,
-                   const char *sort_field, const char *sort_order,
-                   const char *levels, const char *notes, const char *overrides,
-                   const char *result_hosts_only, const char *search_phrase,
-                   const char *min_cvss_base, const char *oid,
-                   const char *task_id, const char *task_name,
-                   const char *result_id)
+edit_override_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *override_id, *next;
+  int first_result, max_results;
 
-  if (override_id == NULL || min_cvss_base == NULL)
+  override_id = params_value (params, "override_id");
+  next = params_value (params, "next");
+  if (override_id == NULL || next == NULL)
     {
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10548,6 +10632,76 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
                            "The override remains as it was. "
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_overrides");
+    }
+
+  if (strcmp (next, "get_override")
+      && strcmp (next, "get_overrides")
+      && strcmp (next, "get_nvts")
+      && strcmp (next, "get_report")
+      && strcmp (next, "get_result")
+      && strcmp (next, "get_tasks"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving an override. "
+                         "The override remains the same. "
+                         "Diagnostics: next must name a valid page.",
+                         "/omp?cmd=get_overrides");
+
+  if ((strcmp (next, "get_nvts") == 0)
+      && (params_value (params, "oid") == NULL))
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an override. "
+                           "The override remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  if ((strcmp (next, "get_tasks") == 0)
+      && (params_value (params, "overrides") == NULL)
+      && (params_value (params, "task_id") == NULL))
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while editing an override. "
+                           "The override remains as it was. "
+                           "Diagnostics: Required parameter was NULL.",
+                           "/omp?cmd=get_overrides");
+    }
+
+  if ((strcmp (next, "get_result") == 0)
+      || (strcmp (next, "get_report") == 0))
+    {
+      if ((params_value (params, "report_id") == NULL)
+          || (params_value (params, "first_result") == NULL)
+          || (params_value (params, "max_results") == NULL)
+          || (params_value (params, "sort_field") == NULL)
+          || (params_value (params, "sort_order") == NULL)
+          || (params_value (params, "levels") == NULL)
+          || (params_value (params, "notes") == NULL)
+          || (params_value (params, "overrides") == NULL)
+          || (params_value (params, "result_hosts_only") == NULL)
+          || (params_value (params, "search_phrase") == NULL)
+          || (params_value (params, "min_cvss_base") == NULL))
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing an override. "
+                             "The override remains as it was. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_overrides");
+
+      if (sscanf (params_value (params, "first_result"), "%u", &first_result)
+          != 1)
+        first_result = 1;
+
+      if (sscanf (params_value (params, "max_results"), "%u", &max_results) != 1)
+        max_results = RESULTS_PER_PAGE;
+    }
+  else
+    {
+      first_result = 0;
+      max_results = 0;
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -10609,21 +10763,23 @@ edit_override_omp (credentials_t * credentials, const char *override_id,
                           /* Parameters for get_tasks. */
                           "<task id=\"%s\"><name>%s</name></task>",
                           next,
-                          report_id,
+                          params_value (params, "report_id"),
                           first_result,
                           max_results,
-                          sort_field,
-                          sort_order,
-                          levels,
-                          notes,
-                          overrides,
-                          result_hosts_only,
-                          search_phrase,
-                          min_cvss_base,
-                          oid,
-                          result_id,
-                          task_id,
-                          task_name ? task_name : "");
+                          params_value (params, "sort_field"),
+                          params_value (params, "sort_order"),
+                          params_value (params, "levels"),
+                          params_value (params, "notes"),
+                          params_value (params, "overrides"),
+                          params_value (params, "result_hosts_only"),
+                          params_value (params, "search_phrase"),
+                          params_value (params, "min_cvss_base"),
+                          params_value (params, "oid"),
+                          params_value (params, "result_id"),
+                          params_value (params, "task_id"),
+                          params_value (params, "name")
+                           ? params_value (params, "name")
+                           : "");
 
   if (read_string (&session, &xml))
     {
@@ -10739,7 +10895,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
       && strcmp (next, "get_tasks"))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a override. "
+                         "An internal error occurred while saving an override. "
                          "The override remains the same. "
                          "Diagnostics: next must name a valid page.",
                          "/omp?cmd=get_overrides");

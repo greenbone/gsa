@@ -45,7 +45,7 @@ char * delete_task_omp (credentials_t *, params_t *);
 char * delete_trash_task_omp (credentials_t *, params_t *);
 char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
                       const char *, const char *, int);
-char * new_task_omp (credentials_t *, const char *, int);
+char * new_task_omp (credentials_t *, params_t *);
 char * save_task_omp (credentials_t *, params_t *);
 char * save_container_task_omp (credentials_t *, const char *, const char *,
                                 const char *, const char *, const char *,
@@ -109,15 +109,15 @@ char * create_target_omp (credentials_t *, params_t *);
 char * delete_target_omp (credentials_t *, params_t *);
 char * delete_trash_target_omp (credentials_t *, params_t *);
 
-char * get_config_omp (credentials_t *, const char *, int);
+char * edit_config_omp (credentials_t *, params_t *);
+char * get_config_omp (credentials_t *, params_t *);
 char * get_configs_omp (credentials_t *, const char *, const char *);
 char * save_config_omp (credentials_t *, params_t *);
-char * get_config_family_omp (credentials_t *, const char *, const char *,
-                              const char *, const char *, const char *, int);
+char * edit_config_family_omp (credentials_t *, params_t *);
+char * get_config_family_omp (credentials_t *, params_t *);
 char * save_config_family_omp (credentials_t *, params_t *);
-char * get_config_nvt_omp (credentials_t *, const char *, const char *,
-                           const char *, const char *, const char *,
-                           const char *, int);
+char * edit_config_nvt_omp (credentials_t *, params_t *);
+char * get_config_nvt_omp (credentials_t *, params_t *);
 char * save_config_nvt_omp (credentials_t *, params_t *);
 char * create_config_omp (credentials_t *, params_t *);
 char * import_config_omp (credentials_t *, params_t *);
@@ -145,12 +145,7 @@ char * get_override_omp (credentials_t *, const char *);
 char * new_override_omp (credentials_t *, params_t *);
 char * create_override_omp (credentials_t *, params_t *);
 char * delete_override_omp (credentials_t *, params_t *);
-char * edit_override_omp (credentials_t *, const char *, const char *,
-                          const char *, const unsigned int, const unsigned int,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *,
-                          const char *, const char *, const char *);
+char * edit_override_omp (credentials_t *, params_t *);
 char * save_override_omp (credentials_t *, params_t *);
 
 char * get_slave_omp (credentials_t *, const char *, const char *,
