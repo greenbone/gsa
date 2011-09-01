@@ -1047,40 +1047,42 @@ edit_task_omp (credentials_t * credentials, const char *task_id,
 /**
  * @brief Save task, get next page, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  task_id           ID of task.
- * @param[in]  name              New name for task.
- * @param[in]  comment           New comment for task.
- * @param[in]  escalator_id      New escalator for task.
- * @param[in]  schedule_id       New schedule for task.
- * @param[in]  slave_id          New slave for task.
- * @param[in]  next              Name of next page.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  max_checks        Max checks task preference.
- * @param[in]  max_hosts         Max hosts task preference.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_task_omp (credentials_t * credentials, const char *task_id,
-               const char *name, const char *comment, const char *escalator_id,
-               const char *schedule_id, const char *slave_id,
-               const char *next,
-               /* Parameters for get_tasks. */
-               const char *refresh_interval, const char *sort_field,
-               const char *sort_order, int apply_overrides,
-               const char *max_checks, const char *max_hosts)
+save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
+  const char *comment, *name, *next, *refresh_interval, *sort_field;
+  const char *sort_order, *overrides, *escalator_id, *schedule_id;
+  const char *slave_id, *task_id, *max_checks, *max_hosts;
+  int apply_overrides;
+
+  comment = params_value (params, "comment");
+  name = params_value (params, "name");
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  refresh_interval = params_value (params, "refresh_interval");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (comment == NULL || name == NULL)
     return edit_task (credentials, task_id,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
                       refresh_interval, sort_field, sort_order,
                       apply_overrides);
+
+  escalator_id = params_value (params, "escalator_id");
+  schedule_id = params_value (params, "schedule_id");
+  slave_id = params_value (params, "slave_id");
+  max_checks = params_value (params, "max_checks");
+  max_hosts = params_value (params, "max_hosts");
 
   if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL

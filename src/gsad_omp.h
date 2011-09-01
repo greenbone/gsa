@@ -46,10 +46,7 @@ char * delete_trash_task_omp (credentials_t *, params_t *);
 char * edit_task_omp (credentials_t *, const char *, const char *, const char *,
                       const char *, const char *, int);
 char * new_task_omp (credentials_t *, const char *, int);
-char * save_task_omp (credentials_t *, const char *, const char *, const char *,
-                      const char *, const char *, const char *, const char *,
-                      const char *, const char *, const char *, int,
-                      const char *, const char *);
+char * save_task_omp (credentials_t *, params_t *);
 char * save_container_task_omp (credentials_t *, const char *, const char *,
                                 const char *, const char *, const char *,
                                 const char *, const char *, int);

@@ -695,33 +695,6 @@ init_validator ()
 }
 
 /**
- * @brief Check validity of an input string.
- *
- * Checks whether an input string is valid according to a rule registered with
- * \ref validator.  Frees and NULLs \p string if not.
- *
- * @param[in]      validator       Validator to use.
- * @param[in]      validator_rule  The rule with which to validate \p string.
- * @param[in,out]  string          The string to validate.  If invalid, memory
- *                                 location pointed to will be freed and set
- *                                 to NULL.
- *
- * @return TRUE if \p string was invalid and was freed, FALSE otherwise.
- */
-static gboolean
-validate (validator_t validator, const gchar* validator_rule, char** string)
-{
-  if (openvas_validate (validator, validator_rule, *string))
-    {
-      free (*string);
-      *string = NULL;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
  * @brief Frees array and its gchar* contents.
  *
  * @param[in,out]  array  The GArray containing gchar*s to free.
@@ -2455,76 +2428,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_override)
   ELSE (save_report_format)
   ELSE_OAP (save_settings)
-  else if ((!strcmp (con_info->req_parms.cmd, "save_task"))
-           && (con_info->req_parms.task_id != NULL)
-           && (con_info->req_parms.next != NULL)
-           && ((strcmp (con_info->req_parms.next, "get_tasks") == 0)
-               || (strcmp (con_info->req_parms.next, "get_task") == 0)))
-    {
-      if ((con_info->req_parms.target_id == NULL)
-          || (strcmp (con_info->req_parms.target_id, "--")))
-        {
-          validate (validator, "task_id", &con_info->req_parms.task_id);
-          validate (validator, "name", &con_info->req_parms.name);
-          validate (validator, "comment", &con_info->req_parms.comment);
-          validate (validator, "escalator_id",
-                    &con_info->req_parms.escalator_id);
-          validate (validator, "schedule_id", &con_info->req_parms.schedule_id);
-          validate (validator, "slave_id", &con_info->req_parms.slave_id);
-          validate (validator, "page", &con_info->req_parms.next);
-          validate (validator, "refresh_interval",
-                    &con_info->req_parms.refresh_interval);
-          validate (validator, "sort_field", &con_info->req_parms.sort_field);
-          validate (validator, "sort_order", &con_info->req_parms.sort_order);
-          validate (validator, "overrides", &con_info->req_parms.overrides);
-          validate (validator, "max_checks", &con_info->req_parms.max_checks);
-          validate (validator, "max_hosts", &con_info->req_parms.max_hosts);
-
-          con_info->response =
-            save_task_omp (credentials,
-                           con_info->req_parms.task_id,
-                           con_info->req_parms.name,
-                           con_info->req_parms.comment,
-                           con_info->req_parms.escalator_id,
-                           con_info->req_parms.schedule_id,
-                           con_info->req_parms.slave_id,
-                           con_info->req_parms.next,
-                           con_info->req_parms.refresh_interval,
-                           con_info->req_parms.sort_field,
-                           con_info->req_parms.sort_order,
-                           con_info->req_parms.overrides
-                            ? strcmp (con_info->req_parms.overrides, "0")
-                            : 0,
-                           con_info->req_parms.max_checks,
-                           con_info->req_parms.max_hosts);
-        }
-      else
-        {
-          validate (validator, "task_id", &con_info->req_parms.task_id);
-          validate (validator, "name", &con_info->req_parms.name);
-          validate (validator, "comment", &con_info->req_parms.comment);
-          validate (validator, "page", &con_info->req_parms.next);
-          validate (validator, "refresh_interval",
-                    &con_info->req_parms.refresh_interval);
-          validate (validator, "sort_field", &con_info->req_parms.sort_field);
-          validate (validator, "sort_order", &con_info->req_parms.sort_order);
-          validate (validator, "overrides", &con_info->req_parms.overrides);
-
-          con_info->response =
-            save_container_task_omp (credentials,
-                                     con_info->req_parms.task_id,
-                                     con_info->req_parms.name,
-                                     con_info->req_parms.comment,
-                                     con_info->req_parms.next,
-                                     con_info->req_parms.refresh_interval,
-                                     con_info->req_parms.sort_field,
-                                     con_info->req_parms.sort_order,
-                                     con_info->req_parms.overrides
-                                      ? strcmp (con_info->req_parms.overrides,
-                                                "0")
-                                      : 0);
-        }
-    }
+  ELSE (save_task)
   ELSE_OAP (save_user)
   ELSE (start_task)
   ELSE (stop_task)
