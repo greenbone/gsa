@@ -89,7 +89,7 @@ int get_agents_omp (credentials_t *, const char *, const char *,
 char * create_agent_omp (credentials_t *, params_t *);
 char * delete_agent_omp (credentials_t *, params_t *);
 char * delete_trash_agent_omp (credentials_t *, params_t *);
-char * verify_agent_omp (credentials_t *, const char *);
+char * verify_agent_omp (credentials_t *, params_t *);
 
 char * create_schedule_omp (credentials_t *, params_t *);
 
@@ -120,13 +120,12 @@ char * create_config_omp (credentials_t *, params_t *);
 char * import_config_omp (credentials_t *, params_t *);
 char * delete_config_omp (credentials_t *, params_t *);
 char * delete_trash_config_omp (credentials_t *, params_t *);
-char * export_config_omp (credentials_t *, const char *, enum content_type*,
+char * export_config_omp (credentials_t *, params_t *, enum content_type*,
                           char **, gsize *);
 
-char * export_preference_file_omp (credentials_t *, const char *, const char *,
-                                   const char *, enum content_type *, char **,
-                                   gsize *);
-char * export_report_format_omp (credentials_t *, const char *,
+char * export_preference_file_omp (credentials_t *, params_t *,
+                                   enum content_type *, char **, gsize *);
+char * export_report_format_omp (credentials_t *, params_t *,
                                  enum content_type *, char **, gsize *);
 
 char * get_notes_omp (credentials_t *);
@@ -165,7 +164,7 @@ char * delete_trash_report_format_omp (credentials_t *, params_t *);
 char * edit_report_format_omp (credentials_t *, params_t *);
 char * import_report_format_omp (credentials_t *, params_t *);
 char * save_report_format_omp (credentials_t *, params_t *);
-char * verify_report_format_omp (credentials_t *, const char *);
+char * verify_report_format_omp (credentials_t *, params_t *);
 
 char * get_trash_omp (credentials_t *, const char *, const char *);
 char * restore_omp (credentials_t *, params_t *);

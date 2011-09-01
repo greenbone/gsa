@@ -3138,23 +3138,17 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_task)
   ELSE_OAP (edit_user)
 
-  else if ((!strcmp (cmd, "export_config")) && (config_id != NULL))
-    return export_config_omp (credentials, config_id, content_type,
+  else if (!strcmp (cmd, "export_config"))
+    return export_config_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
-  else if ((!strcmp (cmd, "export_preference_file"))
-           && (config_id != NULL)
-           && (oid != NULL)
-           && (preference_name != NULL))
-    return export_preference_file_omp (credentials, config_id, oid, preference_name,
-                                       content_type, content_disposition,
-                                       response_size);
+  else if (!strcmp (cmd, "export_preference_file"))
+    return export_preference_file_omp (credentials, params, content_type,
+                                       content_disposition, response_size);
 
-  else if ((!strcmp (cmd, "export_report_format"))
-           && (report_format_id != NULL))
-    return export_report_format_omp (credentials, report_format_id,
-                                     content_type, content_disposition,
-                                     response_size);
+  else if (!strcmp (cmd, "export_report_format"))
+    return export_report_format_omp (credentials, params, content_type,
+                                     content_disposition, response_size);
 
   else if (0 == strcmp (cmd, "get_agents")
            && ((agent_id == NULL && agent_format == NULL)
@@ -3344,14 +3338,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (new_note)
   ELSE (new_override)
-
-  else if ((!strcmp (cmd, "verify_agent"))
-           && (agent_id != NULL))
-    return verify_agent_omp (credentials, agent_id);
-
-  else if ((!strcmp (cmd, "verify_report_format"))
-           && (report_format_id != NULL))
-    return verify_report_format_omp (credentials, report_format_id);
+  ELSE (verify_agent)
+  ELSE (verify_report_format)
 
   else
     return gsad_message (credentials,

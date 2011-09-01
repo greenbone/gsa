@@ -3077,17 +3077,26 @@ get_agents_omp (credentials_t * credentials,
  * @brief Verify agent, get agents, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  agent_id     ID of agent.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-verify_agent_omp (credentials_t * credentials, const char *agent_id)
+verify_agent_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *agent_id;
+
+  agent_id = params_value (params, "agent_id");
+  if (agent_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while verifying an agent. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_agents");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6277,7 +6286,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
   family = params_value (params, "family");
   nvt = params_value (params, "oid");
 
-  if ((config_id == NULL) || (name == NULL) || (family == NULL))
+  if ((config_id == NULL) || (name == NULL))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting config family. "
@@ -6310,7 +6319,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
                           "</config>",
                           config_id,
                           name,
-                          family);
+                          family ? family : "");
 
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
@@ -6479,7 +6488,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
                   int found = 0;
                   params_t *files;
 
-                  files = params_values (params, "files:");
+                  files = params_values (params, "file:");
                   if (files)
                     {
                       param_t *file;
@@ -6683,7 +6692,7 @@ delete_config_omp (credentials_t * credentials, params_t *params)
  * @brief Export a config.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   config_id            UUID of config.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
@@ -6691,7 +6700,7 @@ delete_config_omp (credentials_t * credentials, params_t *params)
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (credentials_t * credentials, const char *config_id,
+export_config_omp (credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length)
 {
@@ -6702,6 +6711,15 @@ export_config_omp (credentials_t * credentials, const char *config_id,
   int socket;
   char *content = NULL;
   gchar *html;
+  const char *config_id;
+
+  config_id = params_value (params, "config_id");
+  if (config_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a config. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_configs");
 
   *content_length = 0;
 
@@ -6794,9 +6812,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
  * @brief Export a file preference.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   config_id            UUID of config.
- * @param[in]   oid                  OID of NVT.
- * @param[in]   preference_name      Name of preference.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content dispositions return.
  * @param[out]  content_length       Content length return.
@@ -6804,8 +6820,7 @@ export_config_omp (credentials_t * credentials, const char *config_id,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_preference_file_omp (credentials_t * credentials, const char *config_id,
-                            const char *oid, const char *preference_name,
+export_preference_file_omp (credentials_t * credentials, params_t *params,
                             enum content_type * content_type, char **content_disposition,
                             gsize *content_length)
 {
@@ -6814,6 +6829,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *config_id, *oid, *preference_name;
 
   *content_length = 0;
 
@@ -6833,6 +6849,10 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
     }
+
+  config_id = params_value (params, "config_id");
+  oid = params_value (params, "oid");
+  preference_name = params_value (params, "preference_name");
 
   xml = g_string_new ("<get_preferences_response>");
 
@@ -6918,7 +6938,7 @@ export_preference_file_omp (credentials_t * credentials, const char *config_id,
  *         on error.
  */
 char *
-export_report_format_omp (credentials_t * credentials, const char *report_format_id,
+export_report_format_omp (credentials_t * credentials, params_t *params,
                           enum content_type * content_type, char **content_disposition,
                           gsize *content_length)
 {
@@ -6929,6 +6949,7 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
   int socket;
   char *content = NULL;
   gchar *html;
+  const char *report_format_id;
 
   *content_length = 0;
 
@@ -6950,6 +6971,8 @@ export_report_format_omp (credentials_t * credentials, const char *report_format
     }
 
   xml = g_string_new ("<get_report_formats>");
+
+  report_format_id = params_value (params, "report_format_id");
 
   if (report_format_id == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Scan Report Format"));
@@ -12930,19 +12953,27 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Verify report format, get report formats, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  ID of report format.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-verify_report_format_omp (credentials_t * credentials,
-                          const char *report_format_id)
+verify_report_format_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *report_format_id;
+
+  report_format_id = params_value (params, "report_format_id");
+  if (report_format_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while verifying a report format. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {

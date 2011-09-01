@@ -2,6 +2,18 @@
 
 	Convert more pages to new param mechanism.
 
+	* src/gsad.c (exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (verify_agent_omp, export_config_omp)
+	(export_preference_file_omp, export_report_format_omp)
+	(verify_report_format_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-09-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
 	* src/gsad.c (exec_omp_get, exec_omp_post): Pass single param instead of
 	many.
 
