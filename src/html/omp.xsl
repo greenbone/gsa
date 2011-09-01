@@ -2745,7 +2745,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="save_task"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden"
                name="task_id"
@@ -2778,11 +2777,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
               <input type="hidden" name="target_id" value="--"/>
+              <input type="hidden" name="cmd" value="save_container_task"/>
             </xsl:when>
             <xsl:otherwise>
               <tr>
                 <td valign="top">Scan Config (immutable)</td>
                 <td>
+                  <input type="hidden" name="cmd" value="save_task"/>
                   <select name="scanconfig" disabled="1">
                     <xsl:choose>
                       <xsl:when

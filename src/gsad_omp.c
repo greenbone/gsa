@@ -920,28 +920,31 @@ delete_task_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Setup edit_task XML, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  task_id           UUID of task.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[in]  next              Name of next page.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_task (credentials_t * credentials, const char *task_id,
-           const char *extra_xml, const char *next,
-           /* Parameters for get_tasks. */
-           const char *refresh_interval, const char *sort_field,
-           const char *sort_order, int apply_overrides)
+edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
+  const char *overrides;
+  int apply_overrides;
+
+  task_id = params_value (params, "task_id");
+  next = params_value (params, "next");
+  refresh_interval = params_value (params, "refresh_interval");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  overrides = params_value (params, "overrides");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (task_id == NULL || next == NULL)
     return gsad_message (credentials,
@@ -1053,14 +1056,9 @@ edit_task (credentials_t * credentials, const char *task_id,
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (credentials_t * credentials, const char *task_id,
-               const char *next,
-               /* Parameters for get_tasks. */
-               const char *refresh_interval, const char *sort_field,
-               const char *sort_order, int apply_overrides)
+edit_task_omp (credentials_t * credentials, params_t *params)
 {
-  return edit_task (credentials, task_id, NULL, next, refresh_interval,
-                    sort_field, sort_order, apply_overrides);
+  return edit_task (credentials, params, NULL);
 }
 
 /**
@@ -1092,10 +1090,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (comment == NULL || name == NULL)
-    return edit_task (credentials, task_id,
-                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
-                      refresh_interval, sort_field, sort_order,
-                      apply_overrides);
+    return edit_task (credentials, params,
+                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   escalator_id = params_value (params, "escalator_id");
   schedule_id = params_value (params, "schedule_id");
@@ -1169,33 +1165,33 @@ save_task_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Save container task, get next page, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  task_id           ID of task.
- * @param[in]  name              New name for task.
- * @param[in]  comment           New comment for task.
- * @param[in]  next              Name of next page.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  apply_overrides   Whether to apply overrides.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_container_task_omp (credentials_t * credentials, const char *task_id,
-                         const char *name, const char *comment,
-                         const char *next,
-                         /* Parameters for get_tasks. */
-                         const char *refresh_interval, const char *sort_field,
-                         const char *sort_order, int apply_overrides)
+save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
+  const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
+  const char *overrides, *refresh_interval;
+  int apply_overrides;
+
+  comment = params_value (params, "comment");
+  name = params_value (params, "name");
+  next = params_value (params, "next");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  task_id = params_value (params, "task_id");
+  overrides = params_value (params, "overrides");
+  refresh_interval = params_value (params, "refresh_interval");
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (comment == NULL || name == NULL)
-    return edit_task (credentials, task_id,
-                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"), next,
-                      refresh_interval, sort_field, sort_order,
-                      apply_overrides);
+    return edit_task (credentials, params,
+                      GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   if (next == NULL || sort_field == NULL || sort_order == NULL
       || task_id == NULL)
@@ -12542,31 +12538,43 @@ delete_report_format_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Setup edit_report_format XML, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  UUID of report_format.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[in]  next              Name of next page.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-edit_report_format (credentials_t * credentials, const char *report_format_id,
-                    const char *extra_xml, const char *next,
-                    const char *sort_field, const char *sort_order)
+edit_report_format (credentials_t * credentials, params_t *params,
+                    const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *next, *report_format_id, *sort_field, *sort_order;
 
-  if (report_format_id == NULL || next == NULL)
+  next = params_value (params, "next");
+  report_format_id = params_value (params, "report_format_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (report_format_id == NULL || next == NULL || sort_field == NULL
+      || sort_order == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a report format. "
                          "The report format remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
+
+  if (strcmp (next, "get_report_formats")
+      && strcmp (next, "get_report_format"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a report "
+                         "format. "
+                         "Diagnostics: next must name a valid page.",
                          "/omp?cmd=get_report_formats");
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -12644,22 +12652,15 @@ edit_report_format (credentials_t * credentials, const char *report_format_id,
 /**
  * @brief Setup edit_report_format XML, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  UUID of report_format.
- * @param[in]  next              Name of next page.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_report_format_omp (credentials_t * credentials,
-                        const char *report_format_id, const char *next,
-                        /* Parameters for get_report_formats. */
-                        const char *sort_field, const char *sort_order)
+edit_report_format_omp (credentials_t * credentials, params_t *params)
 {
-  return edit_report_format (credentials, report_format_id, NULL, next,
-                             sort_field, sort_order);
+  return edit_report_format (credentials, params, NULL);
 }
 
 /**
@@ -12784,13 +12785,9 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 
   if (params_value (params, "comment") == NULL
       || params_value (params, "name") == NULL)
-    return edit_report_format (credentials,
-                               params_value (params, "report_format_id"),
+    return edit_report_format (credentials, params,
                                GSAD_MESSAGE_INVALID_PARAM
-                                ("Save Report Format"),
-                               params_value (params, "next"),
-                               params_value (params, "sort_field"),
-                               params_value (params, "sort_order"));
+                                ("Save Report Format"));
 
   if (params_value (params, "next") == NULL
       || params_value (params, "sort_field") == NULL

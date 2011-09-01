@@ -2429,6 +2429,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_report_format)
   ELSE_OAP (save_settings)
   ELSE (save_task)
+  ELSE (save_container_task)
   ELSE_OAP (save_user)
   ELSE (start_task)
   ELSE (stop_task)
@@ -3132,27 +3133,9 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_lsc_credential)
   ELSE (edit_note)
   ELSE (edit_override)
-
-  else if ((!strcmp (cmd, "edit_report_format"))
-           && (report_format_id != NULL)
-           && (next != NULL)
-           && ((strcmp (next, "get_report_formats") == 0)
-               || (strcmp (next, "get_report_format") == 0)))
-    return edit_report_format_omp (credentials, report_format_id, next,
-                                   sort_field, sort_order);
-
+  ELSE (edit_report_format)
   ELSE_OAP (edit_settings)
-
-  else if ((!strcmp (cmd, "edit_task"))
-           && (task_id != NULL)
-           && (next != NULL)
-           && (overrides != NULL)
-           && ((strcmp (next, "get_tasks") == 0)
-               || (strcmp (next, "get_task") == 0)))
-    return edit_task_omp (credentials, task_id, next, refresh_interval,
-                          sort_field, sort_order,
-                          overrides ? strcmp (overrides, "0") : 0);
-
+  ELSE (edit_task)
   ELSE_OAP (edit_user)
 
   else if ((!strcmp (cmd, "export_config")) && (config_id != NULL))
