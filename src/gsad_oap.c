@@ -657,20 +657,28 @@ edit_user_oap (credentials_t * credentials, params_t * params)
  * @brief Get a user and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  name         User name.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_user_oap (credentials_t * credentials, const char * name)
+get_user_oap (credentials_t * credentials, params_t *params)
 {
   tracef ("In get_users_oap\n");
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *name;
 
-  assert (name);
+  name = params_value (params, "login");
+
+  if (name == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a user. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_users");
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -726,14 +734,12 @@ get_user_oap (credentials_t * credentials, const char * name)
  * @brief Get all users and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_users_oap (credentials_t * credentials, const char * sort_field,
-               const char * sort_order)
+get_users_oap (credentials_t * credentials, params_t *params)
 {
   tracef ("In get_users_oap\n");
   entity_t entity;
@@ -741,6 +747,10 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -802,14 +812,12 @@ get_users_oap (credentials_t * credentials, const char * sort_field,
  * @brief Get descriptions of the feed(s) connected to the administrator.
  *
  * @param[in]  credentials  Username and password for authentication
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_feed_oap (credentials_t * credentials, const char * sort_field,
-              const char * sort_order)
+get_feed_oap (credentials_t * credentials, params_t *params)
 {
   tracef ("In get_feed_oap\n");
   entity_t entity;

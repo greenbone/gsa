@@ -1,5 +1,21 @@
 2011-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Convert last pages to new param mechanism.
+
+	* src/gsad.c (exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_oap.c (get_user_oap, get_users_oap, get_feed_oap): Replace
+	multiple args with one.
+
+	* src/gsad_omp.c (get_nvts_omp, get_target_omp, get_targets_omp)
+	(get_configs_omp, get_trash_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h, src/gsad_oap.h: Update headers accordingly.
+
+	* src/html/oap.xsl (user): Match param name to validator.
+
+2011-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Convert more pages to new param mechanism.
 
 	* src/gsad.c (exec_omp_get): Pass single param instead of many.

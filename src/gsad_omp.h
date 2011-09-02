@@ -91,16 +91,15 @@ char * delete_trash_schedule_omp (credentials_t *, params_t *);
 char * get_schedule_omp (credentials_t *, params_t *);
 char * get_schedules_omp (credentials_t *, params_t *);
 
-char * get_target_omp (credentials_t *, const char *, const char *,
-                       const char *);
-char * get_targets_omp (credentials_t *, const char *, const char *);
+char * get_target_omp (credentials_t *, params_t *params);
+char * get_targets_omp (credentials_t *, params_t *params);
 char * create_target_omp (credentials_t *, params_t *);
 char * delete_target_omp (credentials_t *, params_t *);
 char * delete_trash_target_omp (credentials_t *, params_t *);
 
 char * edit_config_omp (credentials_t *, params_t *);
 char * get_config_omp (credentials_t *, params_t *);
-char * get_configs_omp (credentials_t *, const char *, const char *);
+char * get_configs_omp (credentials_t *, params_t *);
 char * save_config_omp (credentials_t *, params_t *);
 char * edit_config_family_omp (credentials_t *, params_t *);
 char * get_config_family_omp (credentials_t *, params_t *);
@@ -156,12 +155,12 @@ char * import_report_format_omp (credentials_t *, params_t *);
 char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, params_t *);
 
-char * get_trash_omp (credentials_t *, const char *, const char *);
+char * get_trash_omp (credentials_t *, params_t *params);
 char * restore_omp (credentials_t *, params_t *);
 char * empty_trashcan_omp (credentials_t *, params_t *);
 
 int authenticate_omp (const gchar *, const gchar *);
 
-char * get_nvts_omp (credentials_t *, const char *);
+char * get_nvts_omp (credentials_t *, params_t *);
 
 #endif /* not _GSAD_OMP_H */

@@ -3239,39 +3239,18 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_slave)
   ELSE (get_slaves)
   ELSE (get_system_reports)
-
-  else if ((!strcmp (cmd, "get_target")) && (target_id != NULL))
-    return get_target_omp (credentials, target_id, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_targets"))
-    return get_targets_omp (credentials, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_trash"))
-    return get_trash_omp (credentials, sort_field, sort_order);
-
-  else if ((!strcmp (cmd, "get_user")) && (name != NULL))
-    return get_user_oap (credentials, name);
-
-  else if (!strcmp (cmd, "get_users"))
-    return get_users_oap (credentials, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_feed"))
-    return get_feed_oap (credentials, sort_field, sort_order);
-
+  ELSE (get_target)
+  ELSE (get_targets)
+  ELSE (get_trash)
+  ELSE_OAP (get_user)
+  ELSE_OAP (get_users)
+  ELSE_OAP (get_feed)
   ELSE (get_config)
-
-  else if (!strcmp (cmd, "get_configs"))
-    return get_configs_omp (credentials, sort_field, sort_order);
-
+  ELSE (get_configs)
   ELSE (get_config_family)
   ELSE (get_config_nvt)
-
-  else if ((!strcmp (cmd, "get_nvts")) && (oid != NULL))
-    return get_nvts_omp (credentials, oid);
-
-  else if (!strcmp (cmd, "get_settings"))
-    return get_settings_oap (credentials, sort_field, sort_order);
-
+  ELSE (get_nvts)
+  ELSE_OAP (get_settings)
   ELSE (new_note)
   ELSE (new_override)
   ELSE (verify_agent)

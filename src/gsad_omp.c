@@ -1551,13 +1551,23 @@ get_nvts (credentials_t *credentials, const char *oid,
  * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  oid          OID of NVT.
+ * @param[in]  params       Request parameters.
  *
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvts_omp (credentials_t *credentials, const char *oid)
+get_nvts_omp (credentials_t *credentials, params_t *params)
 {
+  const char *oid;
+
+  oid = params_value (params, "oid");
+  if (oid == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting an NVT. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
   return get_nvts (credentials, oid, NULL);
 }
 
@@ -5189,20 +5199,29 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
  * @brief Get one target, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  target_id    UUID of target.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (credentials_t * credentials, const char * target_id,
-                const char * sort_field, const char * sort_order)
+get_target_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *target_id, *sort_field, *sort_order;
+
+  target_id = params_value (params, "target_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (target_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a target. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_targets");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5269,19 +5288,21 @@ get_target_omp (credentials_t * credentials, const char * target_id,
  * @brief Get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (credentials_t * credentials, const char * sort_field,
-                 const char * sort_order)
+get_targets_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5625,20 +5646,22 @@ import_config_omp (credentials_t * credentials, params_t *params)
  * @brief Get one or all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_configs_omp (credentials_t * credentials, const char * sort_field,
-                 const char * sort_order)
+get_configs_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
   char *text = NULL;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -13497,16 +13520,15 @@ get_trash (credentials_t * credentials, const char * sort_field,
  * @brief Get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_trash_omp (credentials_t * credentials, const char * sort_field,
-               const char * sort_order)
+get_trash_omp (credentials_t * credentials, params_t *params)
 {
-  return get_trash (credentials, sort_field, sort_order, NULL);
+  return get_trash (credentials, params_value (params, "sort_field"),
+                    params_value (params, "sort_order"), NULL);
 }
 
 
