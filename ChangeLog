@@ -4,6 +4,18 @@
 
 	* src/gsad.c (exec_omp_get): Pass single param instead of many.
 
+	* src/gsad_omp.c (get_slave_omp, get_slaves_omp, get_schedule_omp)
+	(get_schedules_omp, get_system_reports_omp, get_report_format_omp)
+	(get_report_formats_omp): Replace multiple args with one.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+2011-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
+	* src/gsad.c (exec_omp_get): Pass single param instead of many.
+
 	* src/gsad_omp.c (get_result): New function.  Body from get_result_omp.
 	(get_result_omp): Call through to get_result.  Update callers to call
 	get_result.

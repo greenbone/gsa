@@ -3232,32 +3232,13 @@ exec_omp_get (struct MHD_Connection *connection,
     }
 
   ELSE (get_result)
-
-  else if ((!strcmp (cmd, "get_report_format")) && (report_format_id != NULL))
-    return get_report_format_omp (credentials, report_format_id, sort_field,
-                                  sort_order);
-
-  else if (!strcmp (cmd, "get_report_formats"))
-    return get_report_formats_omp (credentials, sort_field, sort_order);
-
-  else if ((!strcmp (cmd, "get_schedule")) && (schedule_id != NULL))
-    return get_schedule_omp (credentials, schedule_id, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_schedules"))
-    return get_schedules_omp (credentials, sort_field, sort_order);
-
-  else if ((!strcmp (cmd, "get_slave")) && (slave_id != NULL))
-    return get_slave_omp (credentials, slave_id, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_slaves"))
-    return get_slaves_omp (credentials, sort_field, sort_order);
-
-  else if (!strcmp (cmd, "get_system_reports"))
-    return get_system_reports_omp (credentials,
-                                   ((duration == NULL || (*duration == '\0'))
-                                     ? "86400" : duration),
-                                   ((slave_id == NULL || (*slave_id == '\0'))
-                                     ? "0" : slave_id));
+  ELSE (get_report_format)
+  ELSE (get_report_formats)
+  ELSE (get_schedule)
+  ELSE (get_schedules)
+  ELSE (get_slave)
+  ELSE (get_slaves)
+  ELSE (get_system_reports)
 
   else if ((!strcmp (cmd, "get_target")) && (target_id != NULL))
     return get_target_omp (credentials, target_id, sort_field, sort_order);

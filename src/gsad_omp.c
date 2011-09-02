@@ -11539,20 +11539,29 @@ delete_slave_omp (credentials_t * credentials, params_t *params)
  * @brief Get one slave, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  slave_id     UUID of slave.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_slave_omp (credentials_t * credentials, const char * slave_id,
-               const char * sort_field, const char * sort_order)
+get_slave_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *slave_id, *sort_field, *sort_order;
+
+  slave_id = params_value (params, "slave_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (slave_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a slave. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_slaves");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11619,19 +11628,21 @@ get_slave_omp (credentials_t * credentials, const char * slave_id,
  * @brief Get all slaves, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_slaves_omp (credentials_t * credentials, const char * sort_field,
-                 const char * sort_order)
+get_slaves_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11695,20 +11706,29 @@ get_slaves_omp (credentials_t * credentials, const char * sort_field,
  * @brief Get one schedule, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  schedule_id  UUID of schedule.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_schedule_omp (credentials_t * credentials, const char * schedule_id,
-                  const char * sort_field, const char * sort_order)
+get_schedule_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *schedule_id, *sort_field, *sort_order;
+
+  schedule_id = params_value (params, "schedule_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (schedule_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a schedule. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_schedules");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11772,14 +11792,12 @@ get_schedule_omp (credentials_t * credentials, const char * schedule_id,
  * @brief Get all schedules, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_schedules_omp (credentials_t * credentials, const char * sort_field,
-                   const char * sort_order)
+get_schedules_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
@@ -11787,6 +11805,10 @@ get_schedules_omp (credentials_t * credentials, const char * sort_field,
   time_t now;
   struct tm *now_broken;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -12160,19 +12182,21 @@ delete_schedule_omp (credentials_t * credentials, params_t *params)
  * @brief Get all system reports, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  duration     Duration of reports, in seconds.
- * @param[in]  slave_id     ID of slave.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (credentials_t * credentials, const char * duration,
-                        const char * slave_id)
+get_system_reports_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *duration, *slave_id;
+
+  duration = params_value (params, "duration");
+  slave_id = params_value (params, "slave_id");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -12453,20 +12477,27 @@ get_report_format (credentials_t * credentials,
 /**
  * @brief Get one report format, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  UUID of report_format.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_report_format_omp (credentials_t * credentials,
-                       const char * report_format_id, const char * sort_field,
-                       const char * sort_order)
+get_report_format_omp (credentials_t * credentials, params_t *params)
 {
-  return get_report_format (credentials, report_format_id, sort_field,
-                            sort_order, NULL);
+  const char *report_format_id;
+  report_format_id = params_value (params, "report_format_id");
+  if (report_format_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a report format. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_report_formats");
+  return get_report_format (credentials,
+                            report_format_id,
+                            params_value (params, "sort_field"),
+                            params_value (params, "sort_order"),
+                            NULL);
 }
 
 /**
@@ -12554,16 +12585,17 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
  * @brief Get all report formats, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_report_formats_omp (credentials_t * credentials, const char * sort_field,
-                        const char * sort_order)
+get_report_formats_omp (credentials_t * credentials, params_t *params)
 {
-  return get_report_formats (credentials, sort_field, sort_order, NULL);
+  return get_report_formats (credentials,
+                             params_value (params, "sort_field"),
+                             params_value (params, "sort_order"),
+                             NULL);
 }
 
 /**
