@@ -58,13 +58,7 @@ char * get_tasks_omp (credentials_t *, params_t *);
 char * delete_report_omp (credentials_t *, params_t *);
 char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
 
-char * get_result_omp (credentials_t *, const char *, const char *,
-                       const char *, const char *, const char *,
-                       const char *, const char *, const char *,
-                       const char *, const char *, const char *,
-                       const char *, const char *, const char *,
-                       const char *, const char *, const char *,
-                       const char *);
+char * get_result_omp (credentials_t *, params_t *);
 
 char * create_escalator_omp (credentials_t *, params_t *);
 char * delete_escalator_omp (credentials_t *, params_t *);
@@ -127,7 +121,7 @@ char * export_preference_file_omp (credentials_t *, params_t *,
 char * export_report_format_omp (credentials_t *, params_t *,
                                  enum content_type *, char **, gsize *);
 
-char * get_notes_omp (credentials_t *);
+char * get_notes_omp (credentials_t *, params_t *);
 char * get_note_omp (credentials_t *, params_t *);
 char * new_note_omp (credentials_t *, params_t *);
 char * create_note_omp (credentials_t *, params_t *);
@@ -135,8 +129,8 @@ char * delete_note_omp (credentials_t *, params_t *);
 char * edit_note_omp (credentials_t *, params_t *);
 char * save_note_omp (credentials_t *, params_t *);
 
-char * get_overrides_omp (credentials_t *);
-char * get_override_omp (credentials_t *, const char *);
+char * get_overrides_omp (credentials_t *, params_t *);
+char * get_override_omp (credentials_t *, params_t *);
 char * new_override_omp (credentials_t *, params_t *);
 char * create_override_omp (credentials_t *, params_t *);
 char * delete_override_omp (credentials_t *, params_t *);

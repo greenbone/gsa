@@ -7889,17 +7889,17 @@ get_report_omp (credentials_t * credentials, params_t *params,
  *
  * @return Result of XSL transformation.
  */
-char *
-get_result_omp (credentials_t *credentials, const char *result_id,
-                const char *task_id, const char *task_name,
-                const char *apply_overrides, const char *commands,
-                const char *report_id, const char *first_result,
-                const char *max_results, const char *levels,
-                const char *search_phrase, const char *notes,
-                const char *overrides, const char *min_cvss_base,
-                const char *result_hosts_only, const char *sort_field,
-                const char *sort_order, const char *delta_report_id,
-                const char *delta_states)
+static char *
+get_result (credentials_t *credentials, const char *result_id,
+            const char *task_id, const char *task_name,
+            const char *apply_overrides, const char *commands,
+            const char *report_id, const char *first_result,
+            const char *max_results, const char *levels,
+            const char *search_phrase, const char *notes,
+            const char *overrides, const char *min_cvss_base,
+            const char *result_hosts_only, const char *sort_field,
+            const char *sort_order, const char *delta_report_id,
+            const char *delta_states)
 {
   GString *xml;
   gnutls_session_t session;
@@ -8032,6 +8032,38 @@ get_result_omp (credentials_t *credentials, const char *result_id,
 }
 
 /**
+ * @brief Get one result, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_result_omp (credentials_t *credentials, params_t *params)
+{
+  return get_result (credentials,
+                     params_value (params, "result_id"),
+                     params_value (params, "task_id"),
+                     params_value (params, "name"),
+                     params_value (params, "apply_overrides"),
+                     NULL,
+                     params_value (params, "report_id"),
+                     params_value (params, "first_result"),
+                     params_value (params, "max_results"),
+                     params_value (params, "levels"),
+                     params_value (params, "search_phrase"),
+                     params_value (params, "notes"),
+                     params_value (params, "overrides"),
+                     params_value (params, "min_cvss_base"),
+                     params_value (params, "result_hosts_only"),
+                     params_value (params, "sort_field"),
+                     params_value (params, "sort_order"),
+                     params_value (params, "delta_report_id"),
+                     params_value (params, "delta_states"));
+}
+
+/**
  * @brief Get all notes, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -8113,7 +8145,7 @@ get_notes (credentials_t *credentials, const char *commands)
  * @return Result of XSL transformation.
  */
 char *
-get_notes_omp (credentials_t *credentials)
+get_notes_omp (credentials_t *credentials, params_t *params)
 {
   return get_notes (credentials, NULL);
 }
@@ -8525,24 +8557,24 @@ create_note_omp (credentials_t *credentials, params_t *params)
 
   if (next && (strcmp (next, "get_result") == 0))
     {
-      char *ret = get_result_omp (credentials,
-                                  params_value (params, "result_id"),
-                                  params_value (params, "result_task_id"),
-                                  params_value (params, "name"),
-                                  params_value (params, "overrides"),
-                                  create_note,
-                                  params_value (params, "report_id"),
-                                  first_result,
-                                  max_results,
-                                  params_value (params, "levels"),
-                                  search_phrase,
-                                  params_value (params, "notes"),
-                                  params_value (params, "overrides"),
-                                  min_cvss_base,
-                                  params_value (params, "result_hosts_only"),
-                                  params_value (params, "sort_field"),
-                                  params_value (params, "sort_order"),
-                                  NULL, NULL);
+      char *ret = get_result (credentials,
+                              params_value (params, "result_id"),
+                              params_value (params, "result_task_id"),
+                              params_value (params, "name"),
+                              params_value (params, "overrides"),
+                              create_note,
+                              params_value (params, "report_id"),
+                              first_result,
+                              max_results,
+                              params_value (params, "levels"),
+                              search_phrase,
+                              params_value (params, "notes"),
+                              params_value (params, "overrides"),
+                              min_cvss_base,
+                              params_value (params, "result_hosts_only"),
+                              params_value (params, "sort_field"),
+                              params_value (params, "sort_order"),
+                              NULL, NULL);
       g_free (create_note);
       return ret;
     }
@@ -8930,11 +8962,11 @@ delete_note_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_result_omp (credentials, result_id, task_id, task_name,
-                            overrides, extra, report_id, first_result,
-                            max_results, levels, search_phrase, notes,
-                            overrides, min_cvss_base, result_hosts_only,
-                            sort_field, sort_order, NULL, NULL);
+      ret = get_result (credentials, result_id, task_id, task_name,
+                        overrides, extra, report_id, first_result,
+                        max_results, levels, search_phrase, notes,
+                        overrides, min_cvss_base, result_hosts_only,
+                        sort_field, sort_order, NULL, NULL);
       g_free (extra);
       return ret;
     }
@@ -9500,11 +9532,11 @@ save_note_omp (credentials_t * credentials, params_t *params)
     {
       gchar *first = g_strdup_printf ("%u", first_result);
       gchar *max = g_strdup_printf ("%u", max_results);
-      char *ret = get_result_omp (credentials, result_id, task_id,
-                                  task_name, overrides, modify_note, report_id,
-                                  first, max, levels, search_phrase, notes,
-                                  overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order, NULL, NULL);
+      char *ret = get_result (credentials, result_id, task_id,
+                              task_name, overrides, modify_note, report_id,
+                              first, max, levels, search_phrase, notes,
+                              overrides, min_cvss_base, result_hosts_only,
+                              sort_field, sort_order, NULL, NULL);
       g_free (modify_note);
       g_free (first);
       g_free (max);
@@ -9728,7 +9760,7 @@ get_overrides (credentials_t *credentials, const char *commands)
  * @return Result of XSL transformation.
  */
 char *
-get_overrides_omp (credentials_t *credentials)
+get_overrides_omp (credentials_t *credentials, params_t *params)
 {
   return get_overrides (credentials, NULL);
 }
@@ -9818,9 +9850,9 @@ get_override (credentials_t *credentials, const char *override_id,
  * @return Result of XSL transformation.
  */
 char *
-get_override_omp (credentials_t *credentials, const char *override_id)
+get_override_omp (credentials_t *credentials, params_t *params)
 {
-  return get_override (credentials, override_id, NULL);
+  return get_override (credentials, params_value (params, "override_id"), NULL);
 }
 
 /**
@@ -10126,24 +10158,24 @@ create_override_omp (credentials_t *credentials, params_t *params)
 
   if (next && (strcmp (next, "get_result") == 0))
     {
-      char *ret = get_result_omp (credentials,
-                                  params_value (params, "result_id"),
-                                  params_value (params, "result_task_id"),
-                                  params_value (params, "name"),
-                                  params_value (params, "overrides"),
-                                  create_override,
-                                  params_value (params, "report_id"),
-                                  first_result,
-                                  max_results,
-                                  params_value (params, "levels"),
-                                  search_phrase,
-                                  params_value (params, "notes"),
-                                  params_value (params, "overrides"),
-                                  min_cvss_base,
-                                  params_value (params, "result_hosts_only"),
-                                  params_value (params, "sort_field"),
-                                  params_value (params, "sort_order"),
-                                  NULL, NULL);
+      char *ret = get_result (credentials,
+                              params_value (params, "result_id"),
+                              params_value (params, "result_task_id"),
+                              params_value (params, "name"),
+                              params_value (params, "overrides"),
+                              create_override,
+                              params_value (params, "report_id"),
+                              first_result,
+                              max_results,
+                              params_value (params, "levels"),
+                              search_phrase,
+                              params_value (params, "notes"),
+                              params_value (params, "overrides"),
+                              min_cvss_base,
+                              params_value (params, "result_hosts_only"),
+                              params_value (params, "sort_field"),
+                              params_value (params, "sort_order"),
+                              NULL, NULL);
       g_free (create_override);
       return ret;
     }
@@ -10551,11 +10583,11 @@ delete_override_omp (credentials_t * credentials, params_t *params)
 
       extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      ret = get_result_omp (credentials, result_id, task_id, task_name,
-                            overrides, extra, report_id, first_result,
-                            max_results, levels, search_phrase, notes,
-                            overrides, min_cvss_base, result_hosts_only,
-                            sort_field, sort_order, NULL, NULL);
+      ret = get_result (credentials, result_id, task_id, task_name,
+                        overrides, extra, report_id, first_result,
+                        max_results, levels, search_phrase, notes,
+                        overrides, min_cvss_base, result_hosts_only,
+                        sort_field, sort_order, NULL, NULL);
       g_free (extra);
       return ret;
     }
@@ -11125,11 +11157,11 @@ save_override_omp (credentials_t * credentials, params_t *params)
     {
       gchar *first = g_strdup_printf ("%u", first_result);
       gchar *max = g_strdup_printf ("%u", max_results);
-      char *ret = get_result_omp (credentials, result_id, task_id, task_name,
-                                  overrides, modify_override, report_id,
-                                  first, max, levels, search_phrase, notes,
-                                  overrides, min_cvss_base, result_hosts_only,
-                                  sort_field, sort_order, NULL, NULL);
+      char *ret = get_result (credentials, result_id, task_id, task_name,
+                              overrides, modify_override, report_id,
+                              first, max, levels, search_phrase, notes,
+                              overrides, min_cvss_base, result_hosts_only,
+                              sort_field, sort_order, NULL, NULL);
       g_free (modify_override);
       g_free (first);
       g_free (max);

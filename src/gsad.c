@@ -3204,29 +3204,13 @@ exec_omp_get (struct MHD_Connection *connection,
     }
 
   ELSE (get_escalator)
-
-  else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
-           && (task_id != NULL))
-    return get_result_omp (credentials, result_id, task_id, name,
-                           apply_overrides, NULL, report_id, first_result,
-                           max_results, levels, search_phrase, notes, overrides,
-                           min_cvss_base, result_hosts_only, sort_field,
-                           sort_order, delta_report_id, delta_states);
-
   ELSE (get_escalators)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)
   ELSE (get_note)
-
-  else if (!strcmp (cmd, "get_notes"))
-    return get_notes_omp (credentials);
-
-  else if ((!strcmp (cmd, "get_override"))
-           && (override_id != NULL))
-    return get_override_omp (credentials, override_id);
-
-  else if (!strcmp (cmd, "get_overrides"))
-    return get_overrides_omp (credentials);
+  ELSE (get_notes)
+  ELSE (get_override)
+  ELSE (get_overrides)
 
   else if (!strcmp (cmd, "get_report"))
     {
@@ -3246,6 +3230,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return ret;
     }
+
+  ELSE (get_result)
 
   else if ((!strcmp (cmd, "get_report_format")) && (report_format_id != NULL))
     return get_report_format_omp (credentials, report_format_id, sort_field,
