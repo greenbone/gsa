@@ -2074,39 +2074,30 @@ get_lsc_credential_omp (credentials_t * credentials, params_t *params)
   return get_lsc_credential (credentials, params, NULL);
 }
 
-/** @todo Do package download somewhere else. */
 /**
  * @brief Get one or all LSC credentials, XSL transform the result.
  *
- * @param[in]   credentials        Username and password for authentication.
- * @param[in]   lsc_credential_id  UUID of LSC credential.
- * @param[in]   format             Format of result
- * @param[out]  result_len         Length of result.
- * @param[in]   sort_field         Field to sort on, or NULL.
- * @param[in]   sort_order         "ascending", "descending", or NULL.
- * @param[out]  html               Result of XSL transformation.  Required.
- * @param[out]  login              Login name return.  NULL to skip.  Only set
- *                                 on success with lsc_credential_id.
- * @param[in]   commands           Extra commands to run before the others when
- *                                 lsc_credential_id is NULL.
+ * @param[in]   credentials  Username and password for authentication.
+ * @param[in]   params       Request parameters.
+ * @param[out]  result_len   Length of result.
+ * @param[out]  html         Result of XSL transformation.  Required.
+ * @param[out]  login        Login name return.  NULL to skip.  Only set on
+ *                           success with lsc_credential_id.
  *
  * @return 0 success, 1 failure.
  */
-static int
-get_lsc_credentials (credentials_t * credentials,
-                     const char * lsc_credential_id,
-                     const char * format,
-                     gsize *result_len,
-                     const char * sort_field,
-                     const char * sort_order,
-                     char ** html,
-                     char ** login,
-                     const char *commands)
+int
+export_lsc_credential_omp (credentials_t * credentials,
+                           params_t *params,
+                           gsize *result_len,
+                           char ** html,
+                           char ** login)
 {
   entity_t entity;
   gnutls_session_t session;
   int socket;
   gchar *connect_html;
+  const char *lsc_credential_id, *format;
 
   assert (html);
 
@@ -2126,237 +2117,259 @@ get_lsc_credentials (credentials_t * credentials,
       default:
         *html = gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting the credential list. "
-                              "The current list of credentials is not available. "
+                              "An internal error occurred while getting a credential. "
                               "Diagnostics: Failure to connect to manager daemon.",
-                              "/omp?cmd=get_targets");
+                              "/omp?cmd=get_lsc_credentials");
         return 1;
     }
 
   /* Send the request. */
 
-  if (lsc_credential_id && format)
+  lsc_credential_id = params_value (params, "lsc_credential_id");
+  format = params_value (params, "package_format");
+
+  if ((lsc_credential_id == NULL) || (format == NULL))
     {
-      if (openvas_server_sendf (&session,
-                                "<get_lsc_credentials"
-                                " lsc_credential_id=\"%s\""
-                                " format=\"%s\"/>",
-                                lsc_credential_id,
-                                format)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          *html = gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting credential list. "
-                                "The current list of credentials is not available. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_targets");
-          return 1;
-        }
+      openvas_server_close (socket, session);
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a credential. "
+                            "Diagnostics: Required parameter was NULL.",
+                            "/omp?cmd=get_lsc_credentials");
+      return 1;
     }
-  else
+
+  if (openvas_server_sendf (&session,
+                            "<get_lsc_credentials"
+                            " lsc_credential_id=\"%s\""
+                            " format=\"%s\"/>",
+                            lsc_credential_id,
+                            format)
+      == -1)
     {
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "%s"
-                                "<get_lsc_credentials"
-                                " sort_field=\"%s\" sort_order=\"%s\"/>"
-                                "</commands>",
-                                commands ? commands : "",
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending")
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          *html = gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting credential list. "
-                                "The current list of credentials is not available. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_targets");
-          return 1;
-        }
+      openvas_server_close (socket, session);
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a credential. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            "/omp?cmd=get_lsc_credentials");
+      return 1;
     }
 
   /* Read and handle the response. */
 
-  if (lsc_credential_id && format)
+  if (strcmp (format, "rpm") == 0
+      || strcmp (format, "deb") == 0
+      || strcmp (format, "exe") == 0)
     {
-      if (strcmp (format, "rpm") == 0
-          || strcmp (format, "deb") == 0
-          || strcmp (format, "exe") == 0)
+      char *package_encoded = NULL;
+      gchar *package_decoded = NULL;
+      entity_t package_entity = NULL, credential_entity;
+
+      /* A base64 encoded package. */
+
+      entity = NULL;
+      if (read_entity (&session, &entity))
         {
-          char *package_encoded = NULL;
-          gchar *package_decoded = NULL;
-          entity_t package_entity = NULL, credential_entity;
+          openvas_server_close (socket, session);
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a credential. "
+                                "The credential is not available. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_lsc_credentials");
+          return 1;
+        }
 
-          /* A base64 encoded package. */
-
-          entity = NULL;
-          if (read_entity (&session, &entity))
+      credential_entity = entity_child (entity, "lsc_credential");
+      if (credential_entity)
+        package_entity = entity_child (credential_entity, "package");
+      if (package_entity != NULL)
+        {
+          gsize len;
+          package_encoded = entity_text (package_entity);
+          if (strlen (package_encoded))
             {
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a credential. "
-                                    "The credential is not available. "
-                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                    "/omp?cmd=get_targets");
-              return 1;
-            }
-
-          credential_entity = entity_child (entity, "lsc_credential");
-          if (credential_entity)
-            package_entity = entity_child (credential_entity, "package");
-          if (package_entity != NULL)
-            {
-              gsize len;
-              package_encoded = entity_text (package_entity);
-              if (strlen (package_encoded))
-                {
-                  package_decoded = (gchar *) g_base64_decode (package_encoded,
-                                                               &len);
-                  if (package_decoded == NULL)
-                    {
-                      package_decoded = (gchar *) g_strdup ("");
-                      len = 0;
-                    }
-                }
-              else
+              package_decoded = (gchar *) g_base64_decode (package_encoded,
+                                                           &len);
+              if (package_decoded == NULL)
                 {
                   package_decoded = (gchar *) g_strdup ("");
                   len = 0;
                 }
-              if (result_len) *result_len = len;
-              openvas_server_close (socket, session);
-              *html = package_decoded;
-              if (login)
-                {
-                  entity_t login_entity;
-                  login_entity = entity_child (credential_entity, "login");
-                  if (login_entity)
-                    *login = g_strdup (entity_text (login_entity));
-                  else
-                    *login = NULL;
-                }
-              free_entity (entity);
-              return 0;
             }
           else
             {
-              free_entity (entity);
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a credential. "
-                                    "The credential could not be delivered. "
-                                    "Diagnostics: Failure to receive credential from manager daemon.",
-                                    "/omp?cmd=get_tasks");
-              return 1;
+              package_decoded = (gchar *) g_strdup ("");
+              len = 0;
             }
+          if (result_len) *result_len = len;
+          openvas_server_close (socket, session);
+          *html = package_decoded;
+          if (login)
+            {
+              entity_t login_entity;
+              login_entity = entity_child (credential_entity, "login");
+              if (login_entity)
+                *login = g_strdup (entity_text (login_entity));
+              else
+                *login = NULL;
+            }
+          free_entity (entity);
+          return 0;
         }
       else
         {
-          entity_t credential_entity, key_entity = NULL;
-
-          /* A key. */
-
-          entity = NULL;
-          if (read_entity (&session, &entity))
-            {
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a credential. "
-                                    "The credential could not be delivered. "
-                                    "Diagnostics: Failure to receive credential from manager daemon.",
-                                    "/omp?cmd=get_tasks");
-              return 1;
-            }
+          free_entity (entity);
           openvas_server_close (socket, session);
-
-          credential_entity = entity_child (entity, "lsc_credential");
-          if (credential_entity)
-            key_entity = entity_child (credential_entity, "public_key");
-          if (key_entity != NULL)
-            {
-              *html = g_strdup (entity_text (key_entity));
-              if (login)
-                {
-                  entity_t login_entity = entity_child (credential_entity, "login");
-                  if (login_entity)
-                    *login = g_strdup (entity_text (login_entity));
-                  else
-                    *login = NULL;
-                }
-              free_entity (entity);
-              return 0;
-            }
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a credential. "
                                 "The credential could not be delivered. "
-                                "Diagnostics: Failure to parse credential from manager daemon.",
-                                "/omp?cmd=get_tasks");
-          free_entity (entity);
+                                "Diagnostics: Failure to receive credential from manager daemon.",
+                                "/omp?cmd=get_lsc_credentials");
           return 1;
         }
     }
   else
     {
-      char *text = NULL;
+      entity_t credential_entity, key_entity = NULL;
 
-      /* The list of credentials. */
+      /* A key. */
 
       entity = NULL;
-      if (read_entity_and_text (&session, &entity, &text))
+      if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting credential list. "
-                                "The current list of credentials is not available. "
-                                "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_targets");
+                                "An internal error occurred while getting a credential. "
+                                "The credential could not be delivered. "
+                                "Diagnostics: Failure to receive credential from manager daemon.",
+                                "/omp?cmd=get_lsc_credentials");
           return 1;
         }
-      free_entity (entity);
-
       openvas_server_close (socket, session);
-      *html = xsl_transform_omp (credentials, text);
-      return 0;
+
+      credential_entity = entity_child (entity, "lsc_credential");
+      if (credential_entity)
+        key_entity = entity_child (credential_entity, "public_key");
+      if (key_entity != NULL)
+        {
+          *html = g_strdup (entity_text (key_entity));
+          if (login)
+            {
+              entity_t login_entity = entity_child (credential_entity, "login");
+              if (login_entity)
+                *login = g_strdup (entity_text (login_entity));
+              else
+                *login = NULL;
+            }
+          free_entity (entity);
+          return 0;
+        }
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a credential. "
+                            "The credential could not be delivered. "
+                            "Diagnostics: Failure to parse credential from manager daemon.",
+                            "/omp?cmd=get_lsc_credentials");
+      free_entity (entity);
+      return 1;
     }
+}
+
+/**
+ * @brief Get an LSC credentials, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  commands     Extra commands to run before the others when
+ *                          lsc_credential_id is NULL.
+ *
+ * @return 0 success, 1 failure.
+ */
+static char *
+get_lsc_credentials (credentials_t * credentials, params_t *params,
+                     const char *commands)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  gchar *connect_html;
+  char *text = NULL;
+  const char *sort_order, *sort_field;
+
+  switch (manager_connect (credentials, &socket, &session, &connect_html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (connect_html)
+          return (connect_html);
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the credential list. "
+                             "The current list of credentials is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  /* Send the request. */
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_lsc_credentials"
+                            " sort_field=\"%s\" sort_order=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credential list. "
+                           "The current list of credentials is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  /* Read and handle the response. */
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting credential list. "
+                           "The current list of credentials is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
 }
 
 /**
  * @brief Get one or all LSC credentials, XSL transform the result.
  *
- * @param[in]   credentials        Username and password for authentication.
- * @param[in]   lsc_credential_id  UUID of LSC credential.
- * @param[in]   format             Format of result
- * @param[out]  result_len         Length of result.
- * @param[in]   sort_field         Field to sort on, or NULL.
- * @param[in]   sort_order         "ascending", "descending", or NULL.
- * @param[out]  html               Result of XSL transformation.  Required.
- * @param[out]  login              Login name return.  NULL to skip.  Only set
- *                                 on success with lsc_credential_id.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return 0 success, 1 failure.
  */
-int
-get_lsc_credentials_omp (credentials_t * credentials,
-                         const char * lsc_credential_id,
-                         const char * format,
-                         gsize *result_len,
-                         const char * sort_field,
-                         const char * sort_order,
-                         char ** html,
-                         char ** login)
+char *
+get_lsc_credentials_omp (credentials_t * credentials, params_t *params)
 {
-  return get_lsc_credentials (credentials, lsc_credential_id, format,
-                              result_len, sort_field, sort_order, html,
-                              login, NULL);
+  return get_lsc_credentials (credentials, params, NULL);
 }
 
 /**
@@ -2578,10 +2591,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   if (strcmp (params_value (params, "next"), "get_lsc_credentials") == 0)
     {
       char *ret;
-      get_lsc_credentials (credentials, NULL, NULL, NULL,
-                           params_value (params, "sort_field"),
-                           params_value (params, "sort_order"),
-                           &ret, NULL, modify);
+      ret = get_lsc_credentials (credentials, params, modify);
       g_free (modify);
       return ret;
     }
@@ -2661,22 +2671,22 @@ create_agent_omp (credentials_t * credentials, params_t *params)
 
       /* Create the agent. */
 
-      installer_64 = installer_size
+      installer_64 = (installer_size > 0)
                      ? g_base64_encode ((guchar *) installer,
                                         installer_size)
                      : g_strdup ("");
 
-      installer_sig_64 = installer_sig_size
+      installer_sig_64 = (installer_sig_size > 0)
                          ? g_base64_encode ((guchar *) installer_sig,
                                             installer_sig_size)
                          : g_strdup ("");
 
-      howto_install_64 = howto_install_size
+      howto_install_64 = (howto_install_size > 0)
                          ? g_base64_encode ((guchar *) howto_install,
                                             howto_install_size)
                          : g_strdup ("");
 
-      howto_use_64 = howto_use_size
+      howto_use_64 = (howto_use_size > 0)
                      ? g_base64_encode ((guchar *) howto_use,
                                         howto_use_size)
                      : g_strdup ("");
@@ -2845,16 +2855,13 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, text);
 }
 
-/** @todo Split into get_agents_omp and get_agent_omp. */
 /**
- * @brief Get one or all agents, XSL transform the result.
+ * @brief Get an agent, XSL transform the result.
  *
  * @param[in]   credentials  Username and password for authentication.
- * @param[in]   agent_id     UUID of agent.
+ * @param[in]   params       Request parameters.
  * @param[in]   format       Format of result
  * @param[out]  result_len   Length of result.
- * @param[in]   sort_field   Field to sort on, or NULL.
- * @param[in]   sort_order   "ascending", "descending", or NULL.
  * @param[out]  html         Result of XSL transformation.  Required.
  * @param[out]  filename     Agent filename return.  NULL to skip.  Only set
  *                           on success with agent_id.
@@ -2862,19 +2869,31 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
  * @return 0 success, 1 failure.
  */
 int
-get_agents_omp (credentials_t * credentials,
-                const char * agent_id,
-                const char * format,
-                gsize *result_len,
-                const char * sort_field,
-                const char * sort_order,
-                char ** html,
-                char ** filename)
+get_agent_omp (credentials_t * credentials,
+               params_t *params,
+               gsize *result_len,
+               char ** html,
+               char ** filename)
 {
   entity_t entity;
   gnutls_session_t session;
   int socket;
   gchar *connect_html;
+  const char *agent_id, *format;
+
+  agent_id = params_value (params, "agent_id");
+  format = params_value (params, "agent_format");
+
+  if ((agent_id == NULL) || (format == NULL))
+    {
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while deleting an agent. "
+                            "The agent was not deleted. "
+                            "Diagnostics: Required parameter was NULL.",
+                            "/omp?cmd=get_agents");
+      return 1;
+    }
 
   *result_len = 0;
 
@@ -2903,174 +2922,204 @@ get_agents_omp (credentials_t * credentials,
 
   /* Send the request. */
 
-  if (agent_id && format)
+  if (openvas_server_sendf (&session,
+                            "<get_agents agent_id=\"%s\" format=\"%s\"/>",
+                            agent_id,
+                            format)
+      == -1)
     {
-      if (openvas_server_sendf (&session,
-                                "<get_agents agent_id=\"%s\" format=\"%s\"/>",
-                                agent_id,
-                                format)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          *html = gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting agent list. "
-                                "The current list of agents is not available. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_agents");
-          return 1;
-        }
-    }
-  else
-    {
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "<get_agents"
-                                " sort_field=\"%s\" sort_order=\"%s\"/>"
-                                "</commands>",
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending")
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          *html = gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting agent list. "
-                                "The current list of agents is not available. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_agents");
-          return 1;
-        }
+      openvas_server_close (socket, session);
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting agent list. "
+                            "The current list of agents is not available. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            "/omp?cmd=get_agents");
+      return 1;
     }
 
   /* Read and handle the response. */
 
-  if (agent_id && format)
+  if (strcmp (format, "installer") == 0
+      || strcmp (format, "howto_install") == 0
+      || strcmp (format, "howto_use") == 0)
     {
-      if (strcmp (format, "installer") == 0
-          || strcmp (format, "howto_install") == 0
-          || strcmp (format, "howto_use") == 0)
+      char *package_encoded = NULL;
+      gchar *package_decoded = NULL;
+      entity_t package_entity = NULL, agent_entity;
+
+      /* A base64 encoded package. */
+
+      entity = NULL;
+      if (read_entity (&session, &entity))
         {
-          char *package_encoded = NULL;
-          gchar *package_decoded = NULL;
-          entity_t package_entity = NULL, agent_entity;
+          openvas_server_close (socket, session);
+          *html = gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while getting a agent. "
+                                "The agent is not available. "
+                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "/omp?cmd=get_agents");
+          return 1;
+        }
 
-          /* A base64 encoded package. */
-
-          entity = NULL;
-          if (read_entity (&session, &entity))
+      agent_entity = entity_child (entity, "agent");
+      if (agent_entity)
+        package_entity = entity_child (agent_entity, "package");
+      if (package_entity != NULL)
+        {
+          package_encoded = entity_text (package_entity);
+          if (strlen (package_encoded))
             {
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a agent. "
-                                    "The agent is not available. "
-                                    "Diagnostics: Failure to receive response from manager daemon.",
-                                    "/omp?cmd=get_agents");
-              return 1;
-            }
-
-          agent_entity = entity_child (entity, "agent");
-          if (agent_entity)
-            package_entity = entity_child (agent_entity, "package");
-          if (package_entity != NULL)
-            {
-              package_encoded = entity_text (package_entity);
-              if (strlen (package_encoded))
-                {
-                  package_decoded = (gchar *) g_base64_decode (package_encoded,
-                                                               result_len);
-                  if (package_decoded == NULL)
-                    {
-                      package_decoded = (gchar *) g_strdup ("");
-                      *result_len = 0;
-                    }
-                }
-              else
+              package_decoded = (gchar *) g_base64_decode (package_encoded,
+                                                           result_len);
+              if (package_decoded == NULL)
                 {
                   package_decoded = (gchar *) g_strdup ("");
                   *result_len = 0;
                 }
-              openvas_server_close (socket, session);
-              *html = package_decoded;
-              if (filename)
-                {
-                  entity_t filename_entity;
-                  filename_entity = entity_child (package_entity,
-                                                  "filename");
-                  if (filename_entity)
-                    *filename = g_strdup (entity_text (filename_entity));
-                  else
-                    *filename = NULL;
-                }
-              free_entity (entity);
-              return 0;
             }
           else
             {
-              free_entity (entity);
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a agent. "
-                                    "The agent could not be delivered. "
-                                    "Diagnostics: Failure to receive agent from manager daemon.",
-                                    "/omp?cmd=get_tasks");
-              return 1;
+              package_decoded = (gchar *) g_strdup ("");
+              *result_len = 0;
             }
+          openvas_server_close (socket, session);
+          *html = package_decoded;
+          if (filename)
+            {
+              entity_t filename_entity;
+              filename_entity = entity_child (package_entity,
+                                              "filename");
+              if (filename_entity)
+                *filename = g_strdup (entity_text (filename_entity));
+              else
+                *filename = NULL;
+            }
+          free_entity (entity);
+          return 0;
         }
       else
         {
-          /* An error. */
-
-          entity = NULL;
-          if (read_entity (&session, &entity))
-            {
-              openvas_server_close (socket, session);
-              *html = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred while getting a agent. "
-                                    "The agent could not be delivered. "
-                                    "Diagnostics: Failure to receive agent from manager daemon.",
-                                    "/omp?cmd=get_tasks");
-              return 1;
-            }
-          openvas_server_close (socket, session);
-
           free_entity (entity);
+          openvas_server_close (socket, session);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a agent. "
                                 "The agent could not be delivered. "
-                                "Diagnostics: Failure to parse agent from manager daemon.",
+                                "Diagnostics: Failure to receive agent from manager daemon.",
                                 "/omp?cmd=get_tasks");
           return 1;
         }
     }
   else
     {
-      char *text = NULL;
-
-      /* The list of agents. */
+      /* An error. */
 
       entity = NULL;
-      if (read_entity_and_text (&session, &entity, &text))
+      if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting agent list. "
-                                "The current list of agents is not available. "
-                                "Diagnostics: Failure to receive response from manager daemon.",
+                                "An internal error occurred while getting a agent. "
+                                "The agent could not be delivered. "
+                                "Diagnostics: Failure to receive agent from manager daemon.",
                                 "/omp?cmd=get_tasks");
           return 1;
         }
-      free_entity (entity);
-
       openvas_server_close (socket, session);
-      *html = xsl_transform_omp (credentials, text);
-      return 0;
+
+      free_entity (entity);
+      *html = gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a agent. "
+                            "The agent could not be delivered. "
+                            "Diagnostics: Failure to parse agent from manager daemon.",
+                            "/omp?cmd=get_tasks");
+      return 1;
     }
+}
+
+/**
+ * @brief Get one or all agents, XSL transform the result.
+ *
+ * @param[in]   credentials  Username and password for authentication.
+ * @param[in]   params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_agents_omp (credentials_t * credentials, params_t *params)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  gchar *connect_html;
+  char *text = NULL;
+  const char *sort_field, *sort_order;
+
+  switch (manager_connect (credentials, &socket, &session, &connect_html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (connect_html)
+          {
+            return connect_html;
+          }
+        /* Fall through. */
+      default:
+        {
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the agent list. "
+                               "The current list of agents is not available. "
+                               "Diagnostics: Failure to connect to manager daemon.",
+                               "/omp?cmd=get_agents");
+        }
+    }
+
+  /* Send the request. */
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_agents"
+                            " sort_field=\"%s\" sort_order=\"%s\"/>"
+                            "</commands>",
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting agent list. "
+                           "The current list of agents is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_agents");
+    }
+
+  /* Read and handle the response. */
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting agent list. "
+                           "The current list of agents is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
 }
 
 /**
@@ -3515,20 +3564,29 @@ delete_escalator_omp (credentials_t * credentials, params_t *params)
  * @brief Get one escalator, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.
- * @param[in]  escalator_id  Name of escalator.
- * @param[in]  sort_field    Field to sort on, or NULL.
- * @param[in]  sort_order    "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_escalator_omp (credentials_t * credentials, const char * escalator_id,
-                   const char * sort_field, const char * sort_order)
+get_escalator_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *escalator_id, *sort_field, *sort_order;
+
+  escalator_id = params_value (params, "escalator_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (escalator_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting an escalator. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_escalators");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3658,14 +3716,12 @@ get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
  * @brief Get all escalators, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_escalators_omp (credentials_t * credentials, const char * sort_field,
-                    const char * sort_order)
+get_escalators_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3692,7 +3748,9 @@ get_escalators_omp (credentials_t * credentials, const char * sort_field,
 
   xml = g_string_new ("<get_escalators>");
 
-  ret = get_escalators_xml (credentials, &session, xml, sort_field, sort_order);
+  ret = get_escalators_xml (credentials, &session, xml,
+                            params_value (params, "sort_field"),
+                            params_value (params, "sort_order"));
   if (ret)
     {
       g_string_free (xml, TRUE);

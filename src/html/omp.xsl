@@ -3652,19 +3652,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
       <xsl:if test="type='gen'">
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
            title="Download RPM package" style="margin-left:3px;">
           <img src="/img/rpm.png" border="0" alt="Download RPM"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
            title="Download Debian package" style="margin-left:3px;">
           <img src="/img/deb.png" border="0" alt="Download Deb"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
            title="Download Exe package" style="margin-left:3px;">
           <img src="/img/exe.png" border="0" alt="Download Exe"/>
         </a>
-        <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
            title="Download Public Key" style="margin-left:3px;">
           <img src="/img/key.png" border="0" alt="Download Public Key"/>
         </a>
@@ -3969,7 +3969,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_agents&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>

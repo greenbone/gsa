@@ -476,8 +476,10 @@ init_validator ()
                          "|(empty_trashcan)"
                          "|(escalate_report)"
                          "|(export_config)"
+                         "|(export_lsc_credential)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
+                         "|(get_agent)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -575,6 +577,10 @@ init_validator ()
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
+  openvas_validator_add (validator, "howto_use",   "^(\\R|.)*$");
+  openvas_validator_add (validator, "howto_install",  "^(\\R|.)*$");
+  openvas_validator_add (validator, "installer",      "^(\\R|.)*$");
+  openvas_validator_add (validator, "installer_sig",  "^(\\R|.)*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
@@ -3142,96 +3148,16 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_config_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
-  else if (!strcmp (cmd, "export_preference_file"))
-    return export_preference_file_omp (credentials, params, content_type,
-                                       content_disposition, response_size);
-
-  else if (!strcmp (cmd, "export_report_format"))
-    return export_report_format_omp (credentials, params, content_type,
-                                     content_disposition, response_size);
-
-  else if (0 == strcmp (cmd, "get_agents")
-           && ((agent_id == NULL && agent_format == NULL)
-               || (agent_id && agent_format)))
+  else if (!strcmp (cmd, "export_lsc_credential"))
     {
-      char *html, *filename;
+      char *html;
+      gchar *lsc_credential_login;
 
-      if (agent_id == NULL)
-        {
-          get_agents_omp (credentials,
-                          agent_id,
-                          agent_format,
-                          response_size,
-                          sort_field,
-                          sort_order,
-                          &html,
-                          NULL);
-          return html;
-        }
-
-      if (get_agents_omp (credentials,
-                          agent_id,
-                          agent_format,
-                          response_size,
-                          NULL,
-                          NULL,
-                          &html,
-                          &filename))
-        return html;
-
-      *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
-      free (*content_disposition);
-      *content_disposition = g_strdup_printf ("attachment; filename=%s",
-                                              filename);
-      free (filename);
-
-      return html;
-    }
-
-  else if ((!strcmp (cmd, "get_escalator")) && (escalator_id != NULL))
-    return get_escalator_omp (credentials, escalator_id, sort_field,
-                              sort_order);
-
-  else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
-           && (task_id != NULL))
-    return get_result_omp (credentials, result_id, task_id, name,
-                           apply_overrides, NULL, report_id, first_result,
-                           max_results, levels, search_phrase, notes, overrides,
-                           min_cvss_base, result_hosts_only, sort_field,
-                           sort_order, delta_report_id, delta_states);
-
-  else if (!strcmp (cmd, "get_escalators"))
-    return get_escalators_omp (credentials, sort_field, sort_order);
-
-  ELSE (get_lsc_credential)
-
-  else if (!strcmp (cmd, "get_lsc_credentials")
-           && ((lsc_credential_id == NULL && package_format == NULL)
-               || (lsc_credential_id && package_format)))
-    {
-      char *html, *lsc_credential_login;
-
-      if (lsc_credential_id == NULL)
-        {
-          get_lsc_credentials_omp (credentials,
-                                   lsc_credential_id,
-                                   package_format,
-                                   response_size,
-                                   sort_field,
-                                   sort_order,
-                                   &html,
-                                   NULL);
-          return html;
-        }
-
-      if (get_lsc_credentials_omp (credentials,
-                                   lsc_credential_id,
-                                   package_format,
-                                   response_size,
-                                   NULL,
-                                   NULL,
-                                   &html,
-                                   &lsc_credential_login))
+      if (export_lsc_credential_omp (credentials,
+                                     params,
+                                     response_size,
+                                     &html,
+                                     &lsc_credential_login))
         return html;
 
       content_type_from_format_string (content_type, package_format);
@@ -3246,6 +3172,61 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return html;
     }
+
+  else if (!strcmp (cmd, "export_preference_file"))
+    return export_preference_file_omp (credentials, params, content_type,
+                                       content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_report_format"))
+    return export_report_format_omp (credentials, params, content_type,
+                                     content_disposition, response_size);
+
+  ELSE (get_agents)
+
+  else if (!strcmp (cmd, "get_agent"))
+    {
+      char *html, *filename;
+
+      if (get_agent_omp (credentials,
+                         params,
+                         response_size,
+                         &html,
+                         &filename))
+        return html;
+
+      *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
+      free (*content_disposition);
+      *content_disposition = g_strdup_printf ("attachment; filename=%s",
+                                              filename);
+      free (filename);
+
+      return html;
+    }
+
+  ELSE (get_escalator)
+
+  else if ((!strcmp (cmd, "get_result")) && (result_id != NULL)
+           && (task_id != NULL))
+    return get_result_omp (credentials, result_id, task_id, name,
+                           apply_overrides, NULL, report_id, first_result,
+                           max_results, levels, search_phrase, notes, overrides,
+                           min_cvss_base, result_hosts_only, sort_field,
+                           sort_order, delta_report_id, delta_states);
+
+  ELSE (get_escalators)
+  ELSE (get_lsc_credential)
+  ELSE (get_lsc_credentials)
+  ELSE (get_note)
+
+  else if (!strcmp (cmd, "get_notes"))
+    return get_notes_omp (credentials);
+
+  else if ((!strcmp (cmd, "get_override"))
+           && (override_id != NULL))
+    return get_override_omp (credentials, override_id);
+
+  else if (!strcmp (cmd, "get_overrides"))
+    return get_overrides_omp (credentials);
 
   else if (!strcmp (cmd, "get_report"))
     {
@@ -3265,18 +3246,6 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return ret;
     }
-
-  ELSE (get_note)
-
-  else if ((!strcmp (cmd, "get_notes")))
-    return get_notes_omp (credentials);
-
-  else if ((!strcmp (cmd, "get_override"))
-           && (override_id != NULL))
-    return get_override_omp (credentials, override_id);
-
-  else if ((!strcmp (cmd, "get_overrides")))
-    return get_overrides_omp (credentials);
 
   else if ((!strcmp (cmd, "get_report_format")) && (report_format_id != NULL))
     return get_report_format_omp (credentials, report_format_id, sort_field,

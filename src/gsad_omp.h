@@ -70,22 +70,21 @@ char * create_escalator_omp (credentials_t *, params_t *);
 char * delete_escalator_omp (credentials_t *, params_t *);
 char * delete_trash_escalator_omp (credentials_t *, params_t *);
 char * test_escalator_omp (credentials_t *, params_t *);
-char * get_escalator_omp (credentials_t *, const char *, const char *,
-                          const char *);
-char * get_escalators_omp (credentials_t *, const char *, const char *);
+char * get_escalator_omp (credentials_t *, params_t *);
+char * get_escalators_omp (credentials_t *, params_t *);
 
+int export_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
+                               char **);
 char * get_lsc_credential_omp (credentials_t *, params_t *);
-int get_lsc_credentials_omp (credentials_t *, const char *, const char *,
-                             gsize *, const char *, const char *, char **,
-                             char **);
+char * get_lsc_credentials_omp (credentials_t *, params_t *);
 char * create_lsc_credential_omp (credentials_t *, params_t *);
 char * delete_lsc_credential_omp (credentials_t *, params_t *);
 char * delete_trash_lsc_credential_omp (credentials_t *, params_t *);
 char * edit_lsc_credential_omp (credentials_t *, params_t *);
 char * save_lsc_credential_omp (credentials_t *, params_t *);
 
-int get_agents_omp (credentials_t *, const char *, const char *,
-                    gsize *, const char *, const char *, char **, char **);
+char * get_agents_omp (credentials_t *, params_t *);
+int get_agent_omp (credentials_t *, params_t *, gsize *, char **, char **);
 char * create_agent_omp (credentials_t *, params_t *);
 char * delete_agent_omp (credentials_t *, params_t *);
 char * delete_trash_agent_omp (credentials_t *, params_t *);

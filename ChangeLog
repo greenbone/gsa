@@ -2,6 +2,25 @@
 
 	Convert more pages to new param mechanism.
 
+	* src/gsad.c (init_validator): Add rules and new commands.
+	(exec_omp_get): Pass single param instead of many.
+
+	* src/gsad_omp.c (export_lsc_credential_omp): New function.  Split from
+	get_lsc_credentials.
+	(get_lsc_credentials): Replace multiple args with one.  Update caller.
+	(get_lsc_credentials_omp, get_agents_omp, get_escalator_omp)
+	(get_escalators_omp): Replace multiple args with one.
+	(create_agent_omp): Improve size check because new param size can be -1.
+	(get_agent_omp): New function.  Split from get_agents.
+
+	* src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/omp.xsl (lsc_credential, agent): Use new command names.
+
+2011-09-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Convert more pages to new param mechanism.
+
 	* src/gsad.c (exec_omp_get): Pass single param instead of many.
 
 	* src/gsad_omp.c (verify_agent_omp, export_config_omp)
