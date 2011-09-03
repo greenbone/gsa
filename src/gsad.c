@@ -513,6 +513,7 @@ init_validator ()
                          "|(get_users)"
                          "|(import_config)"
                          "|(import_report_format)"
+                         "|(login)"
                          "|(modify_auth)"
                          "|(new_note)"
                          "|(new_override)"
@@ -544,6 +545,7 @@ init_validator ()
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",     "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
+  openvas_validator_add (validator, "caller",     "^.*$");
   openvas_validator_add (validator, "comment",    "^[-_[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "config_id_optional", "^(--|[a-z0-9\\-]+)$");
@@ -701,26 +703,6 @@ init_validator ()
 }
 
 /**
- * @brief Frees array and its gchar* contents.
- *
- * @param[in,out]  array  The GArray containing gchar*s to free.
- */
-static void
-free_gchar_array (GArray ** array)
-{
-  if (*array)
-    {
-      gchar *item;
-      int index = 0;
-
-      while ((item = g_array_index (*array, gchar*, index++)))
-        g_free (item);
-
-      g_array_free (*array, TRUE);
-    }
-}
-
-/**
  * @brief Set a content type from a format string.
  *
  * For example set the content type to GSAD_CONTENT_TYPE_APP_DEB when given
@@ -774,128 +756,8 @@ struct gsad_connection_info
   struct MHD_PostProcessor *postprocessor; ///< POST processor.
   char *response;                          ///< HTTP response text.
   int answercode;                          ///< HTTP response code.
-
-  params_t *params; ///< Request parameters.
-
-  /**
-   * @brief create_task / create_target / create_config POST request info
-   * @todo This should eventually be a dynamic key-based structure.
-   * @todo Combine POST and GET parameter handling.
-   */
-  struct req_parms
-  {
-    char *cookie;        ///< Value of "SID" cookie.
-    char *token;         ///< Value of "token" parameter.
-
-    char *caller;        ///< Value of "caller" parameter.
-
-    char *access_hosts;  ///< Value of "access_hosts" parameter.
-    char *agent_id;      ///< Value of "agent_id" parameter.
-    char *apply_min;     ///< Value of "apply_min" parameter.
-    char *authdn;        ///< Value of "authdn" parameter.
-    char *base;          ///< Value of "base" parameter.
-    char *cmd;           ///< Value of "cmd" parameter.
-    char *name;          ///< Value of "name" parameter.
-    char *comment;       ///< Value of "comment" parameter.
-    char *condition;     ///< Value of "condition" parameter.
-    char *config_id;     ///< Value of "config_id" parameter.
-    char *credential_login; ///< Value of "credential_login" parameter.
-    char *day_of_month;  ///< Value of "day_of_month" parameter.
-    char *duration;      ///< Value of "duration" parameter.
-    char *duration_unit; ///< Value of "duration_unit" parameter.
-    char *enable;        ///< Value of "enable" parameter.
-    char *esc_first_result;  ///< Value of "esc_first_result" parameter.
-    char *esc_levels;        ///< Value of "esc_levels" parameter.
-    char *esc_max_results;   ///< Value of "esc_max_results" parameter.
-    char *esc_min_cvss_base; ///< Value of "esc_min_cvss_base" parameter.
-    char *esc_notes;         ///< Value of "esc_notes" parameter.
-    char *esc_overrides;     ///< Value of "esc_overrides" parameter.
-    char *esc_result_hosts_only; ///< Value of "esc_result_hosts_only" parameter.
-    char *esc_search_phrase; ///< Value of "esc_search_phrase" parameter.
-    char *escalator_id;  ///< Value of "escalator_id" parameter.
-    char *event;         ///< Value of "event" parameter.
-    char *family;        ///< Value of "family" parameter.
-    char *group;         ///< Value of "group" parameter.
-    char *domain;        ///< Value of "domain" parameter.
-    char *hour;          ///< Value of "hour" parameter.
-    char *ldaphost;      ///< Value of "ldaphost" parameter.
-    char *lsc_credential_id; ///< Value of "lsc_credential_id" parameter.
-    char *lsc_smb_credential_id; ///< Value of "lsc_smb_credential_id" parameter.
-    char *modify_password; ///< Value of "modify_password" parameter.
-    char *method;        ///< Value of "event" parameter.
-    char *next;          ///< Value of "next" parameter.
-    char *schedule_id;   ///< Value of "schedule_id" parameter.
-    char *slave_id;      ///< Value of "slave_id" parameter.
-    char *sort_field;    ///< Value of "sort_field" parameter.
-    char *sort_order;    ///< Value of "sort_order" parameter.
-    char *target_id;     ///< Value of "target_id" parameter.
-    char *target_locator; ///< Value of "target_locator" parameter.
-    char *levels;        ///< Value of "levels" parameter.
-    char *notes;         ///< Value of "notes" parameter.
-    char *overrides;     ///< Value of "overrides" parameter.
-    char *result_hosts_only; ///< Value of "result_hosts_only" parameter.
-    char *xml_file;      ///< Value of "xml_file" parameter.
-    char *role;          ///< Value of "role" parameter.
-    char *submit;        ///< Value of "submit" parameter.
-    char *host;          ///< Value of "host" parameter.
-    char *hosts;         ///< Value of "hosts" parameter.
-    char *hosts_allow;   ///< Value of "hosts_allow" parameter.
-    char *login;         ///< Value of "login" parameter.
-    char *max_checks;    ///< Value of "max_checks" parameter.
-    char *max_hosts;     ///< Value of "max_hosts" parameter.
-    char *minute;        ///< Value of "minute" parameter.
-    char *month;         ///< Value of "month" parameter.
-    char *note_id;       ///< Value of "note_id" parameter.
-    char *note_task_id;  ///< Value of "note_task_id" parameter.
-    char *note_result_id; ///< Value of "note_result_id" parameter.
-    char *oid;           ///< Value of "oid" parameter.
-    char *override_id;   ///< Value of "override_id" parameter.
-    char *override_task_id;   ///< Value of "override_task_id" parameter.
-    char *override_result_id; ///< Value of "override_result_id" parameter.
-    char *period;        ///< Value of "period" parameter.
-    char *period_unit;   ///< Value of "period_unit" parameter.
-    char *pw;            ///< Value of "pw" parameter.
-    char *passphrase;    ///< Value of "passphrase" parameter.
-    char *password;      ///< Value of "password" parameter.
-    char *port;          ///< Value of "port" parameter.
-    char *port_range;    ///< Value of "port_range" parameter.
-    char *private_key;   ///< Value of "private_key" parameter.
-    char *public_key;    ///< Value of "public_key" parameter.
-    char *timeout;       ///< Value of "timeout" parameter.
-    char *threat;        ///< Value of "threat" parameter.
-    char *new_threat;    ///< Value of "new_threat" parameter.
-    char *text;          ///< Value of "text" parameter.
-    char *task_id;       ///< Value of "task_id" parameter.
-    char *refresh_interval; ///< Value of "refresh_interval" parameter.
-    char *result_id;     ///< Value of "result_id" parameter.
-    char *report_escalator_id;  ///< Value of "report_escalator_id" parameter.
-    char *report_format_id;     ///< Value of "report_format_id" parameter.
-    char *report_id;     ///< Value of "report_id" parameter.
-    char *first_result;  ///< Value of "first_result" parameter.
-    char *max_results;   ///< Value of "max_results" parameter.
-    char *search_phrase; ///< Value of "search_phrase" parameter.
-    char *min_cvss_base; ///< Value of "min_cvss_base" parameter.
-    char *apply_min_cvss_base; ///< Value of "apply_min_cvss_base" parameter.
-    char *installer;     ///< Value of "installer" parameter.
-    int installer_size;  ///< Size of "installer" parameter.
-    char *installer_filename; ///< Filename of "installer" parameter.
-    char *installer_sig; ///< Value of "installer_sig" parameter.
-    int installer_sig_size;  ///< Size of "installer_sig" parameter.
-    char *howto_install; ///< Value of "howto_install" parameter.
-    int howto_install_size; ///< Size of "howto_install" parameter.
-    char *howto_use;     ///< Value of "howto_use" parameter.
-    int howto_use_size;  ///< Size of "howto_use" parameter.
-    char *year;          ///< Value of "year" parameter.
-    GArray *condition_data; ///< Collection of "condition_data:*" parameters.
-    GArray *event_data;  ///< Collection of "event_data:*" parameters.
-    GArray *files;       ///< Collection of "file:*" parameters.
-    GArray *method_data; ///< Collection of "method_data:*" parameters.
-    GArray *passwords;   ///< Collection of "password:*" parameters.
-    GArray *preferences; ///< Collection of "preference:*" parameters.
-    GArray *nvts;        ///< Collection of "nvt:*" parameters.
-    GArray *trends;      ///< Collection of "trend:*" parameters.
-    GArray *selects;     ///< Collection of "select:*" parameters.
-  } req_parms;
+  params_t *params;                        ///< Request parameters.
+  char *cookie;                            ///< Value of "SID" cookie param.
 };
 
 /**
@@ -951,227 +813,9 @@ free_resources (void *cls, struct MHD_Connection *connection,
     }
 
   params_free (con_info->params);
-
-  free (con_info->req_parms.cookie);
-  free (con_info->req_parms.token);
-
-  free (con_info->req_parms.caller);
-
-  free (con_info->req_parms.access_hosts);
-  free (con_info->req_parms.agent_id);
-  free (con_info->req_parms.apply_min);
-  free (con_info->req_parms.base);
-  free (con_info->req_parms.cmd);
-  free (con_info->req_parms.name);
-  free (con_info->req_parms.comment);
-  free (con_info->req_parms.condition);
-  free (con_info->req_parms.config_id);
-  free (con_info->req_parms.credential_login);
-  free (con_info->req_parms.day_of_month);
-  free (con_info->req_parms.domain);
-  free (con_info->req_parms.duration);
-  free (con_info->req_parms.duration_unit);
-  free (con_info->req_parms.escalator_id);
-  free (con_info->req_parms.esc_first_result);
-  free (con_info->req_parms.esc_levels);
-  free (con_info->req_parms.esc_max_results);
-  free (con_info->req_parms.esc_min_cvss_base);
-  free (con_info->req_parms.esc_notes);
-  free (con_info->req_parms.esc_overrides);
-  free (con_info->req_parms.esc_result_hosts_only);
-  free (con_info->req_parms.esc_search_phrase);
-  free (con_info->req_parms.event);
-  free (con_info->req_parms.family);
-  free (con_info->req_parms.group);
-  free (con_info->req_parms.hour);
-  free (con_info->req_parms.lsc_credential_id);
-  free (con_info->req_parms.lsc_smb_credential_id);
-  free (con_info->req_parms.max_checks);
-  free (con_info->req_parms.max_hosts);
-  free (con_info->req_parms.minute);
-  free (con_info->req_parms.month);
-  free (con_info->req_parms.modify_password);
-  free (con_info->req_parms.method);
-  free (con_info->req_parms.next);
-  free (con_info->req_parms.note_task_id);
-  free (con_info->req_parms.note_result_id);
-  free (con_info->req_parms.schedule_id);
-  free (con_info->req_parms.slave_id);
-  free (con_info->req_parms.target_id);
-  free (con_info->req_parms.xml_file);
-  free (con_info->req_parms.role);
-  free (con_info->req_parms.submit);
-  free (con_info->req_parms.host);
-  free (con_info->req_parms.hosts);
-  free (con_info->req_parms.hosts_allow);
-  free (con_info->req_parms.login);
-  free (con_info->req_parms.note_id);
-  free (con_info->req_parms.override_id);
-  free (con_info->req_parms.override_task_id);
-  free (con_info->req_parms.override_result_id);
-  free (con_info->req_parms.period);
-  free (con_info->req_parms.period_unit);
-  free (con_info->req_parms.pw);
-  free (con_info->req_parms.passphrase);
-  free (con_info->req_parms.password);
-  free (con_info->req_parms.port);
-  free (con_info->req_parms.port_range);
-  free (con_info->req_parms.public_key);
-  free (con_info->req_parms.private_key);
-  free (con_info->req_parms.oid);
-  free (con_info->req_parms.sort_field);
-  free (con_info->req_parms.sort_order);
-  free (con_info->req_parms.timeout);
-  free (con_info->req_parms.threat);
-  free (con_info->req_parms.new_threat);
-  free (con_info->req_parms.text);
-  free (con_info->req_parms.task_id);
-  free (con_info->req_parms.refresh_interval);
-  free (con_info->req_parms.report_escalator_id);
-  free (con_info->req_parms.result_id);
-  free (con_info->req_parms.report_format_id);
-  free (con_info->req_parms.report_id);
-  free (con_info->req_parms.first_result);
-  free (con_info->req_parms.max_results);
-  free (con_info->req_parms.search_phrase);
-  free (con_info->req_parms.min_cvss_base);
-  free (con_info->req_parms.apply_min_cvss_base);
-  free (con_info->req_parms.installer);
-  free (con_info->req_parms.installer_filename);
-  free (con_info->req_parms.installer_sig);
-  free (con_info->req_parms.howto_install);
-  free (con_info->req_parms.howto_use);
-  free (con_info->req_parms.year);
-
-  free_gchar_array (&con_info->req_parms.condition_data);
-  free_gchar_array (&con_info->req_parms.event_data);
-
-  if (con_info->req_parms.files)
-    {
-      preference_t *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.files,
-                                    preference_t*,
-                                    index++)))
-        {
-          g_free (item->name);
-          g_free (item->nvt);
-          g_free (item->value);
-          g_free (item);
-        }
-
-      g_array_free (con_info->req_parms.files, TRUE);
-    }
-
-  if (con_info->req_parms.method_data)
-    {
-      method_data_param_t *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.method_data,
-                                    method_data_param_t*,
-                                    index++)))
-        {
-          g_free (item->key);
-          g_free (item->value);
-          g_free (item);
-        }
-
-      g_array_free (con_info->req_parms.method_data, TRUE);
-    }
-
-  if (con_info->req_parms.preferences)
-    {
-      preference_t *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.preferences,
-                                    preference_t*,
-                                    index++)))
-        {
-          g_free (item->name);
-          g_free (item->nvt);
-          g_free (item->value);
-          g_free (item);
-        }
-
-      g_array_free (con_info->req_parms.preferences, TRUE);
-    }
-  if (con_info->req_parms.passwords)
-    {
-      preference_t *item;
-      int index = 0;
-
-      while ((item = g_array_index (con_info->req_parms.passwords,
-                                    preference_t*,
-                                    index++)))
-        {
-          g_free (item->name);
-          g_free (item->nvt);
-          g_free (item->value);
-          g_free (item);
-        }
-
-      g_array_free (con_info->req_parms.passwords, TRUE);
-    }
-  free_gchar_array (&con_info->req_parms.nvts);
-  free_gchar_array (&con_info->req_parms.selects);
-  free_gchar_array (&con_info->req_parms.trends);
-
+  free (con_info->cookie);
   free (con_info);
   *con_cls = NULL;
-}
-
-/**
- * @brief Append a chunk to a string parameter.
- *
- * @param[in]   con_info      Connection info.
- * @param[in]   chunk_data    Incoming chunk data.
- * @param[out]  chunk_size    Size of chunk.
- * @param[out]  chunk_offset  Offset into all data.
- * @param[out]  param         Parameter.
- *
- * @return MHD_YES on success, MHD_NO on error.
- */
-static int
-append_chunk_string (struct gsad_connection_info *con_info,
-                     const char *chunk_data,
-                     int chunk_size,
-                     int chunk_offset,
-                     char **param)
-{
-  if (chunk_size)
-    {
-      if (*param == NULL)
-        {
-          assert (chunk_offset == 0);
-          *param = malloc (chunk_size + 1);
-          if (*param == NULL)
-            return MHD_NO;
-        }
-      else
-        {
-          char *new_param;
-          if (*param == NULL)
-            return MHD_NO;
-          new_param = realloc (*param, strlen (*param) + chunk_size + 1);
-          if (new_param == NULL)
-            return MHD_NO;
-          *param = new_param;
-        }
-      memcpy (*param + chunk_offset,
-              chunk_data,
-              chunk_size);
-      (*param)[chunk_offset + chunk_size] = '\0';
-    }
-  else if (*param == NULL)
-    {
-      *param = malloc (100);
-      **param = '\0';
-    }
-  con_info->answercode = MHD_HTTP_OK;
-  return MHD_YES;
 }
 
 /**
@@ -1247,57 +891,12 @@ params_append_mhd (params_t *params,
 }
 
 /**
- * @brief Append a chunk to a binary parameter.
- *
- * @param[in]   chunk_data    Incoming chunk data.
- * @param[out]  chunk_size    Size of chunk.
- * @param[out]  chunk_offset  Offset into all data.
- * @param[out]  param         Parameter.
- * @param[out]  param_size    Parameter size.
- *
- * @return 0 on success, -1 on error.
- */
-static int
-append_chunk_binary (const char *chunk_data,
-                     int chunk_size,
-                     int chunk_offset,
-                     char **param,
-                     int *param_size)
-{
-  if (chunk_size)
-    {
-      if (chunk_offset == 0)
-        {
-          if (*param)
-            return -1;
-          *param = malloc (chunk_size);
-          *param_size = chunk_size;
-        }
-      else
-        {
-          void *new_param;
-          if (*param == NULL)
-            return -1;
-          new_param = realloc (*param, *param_size + chunk_size);
-          if (new_param == NULL)
-            return -1;
-          *param = new_param;
-          *param_size += chunk_size;
-        }
-      memcpy (*param + chunk_offset,
-              chunk_data,
-              chunk_size);
-    }
-  return 0;
-}
-
-/**
  * @brief Serves part of a POST request.
  *
  * Implements an MHD_PostDataIterator.
  *
  * Called one or more times to collect the multiple parts (key/value pairs)
- * of a POST request.  Fills the req_params of a gsad_connection_info.
+ * of a POST request.  Fills the params of a gsad_connection_info.
  *
  * After serve_post, the connection info is free'd.
  *
@@ -1321,7 +920,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 {
   struct gsad_connection_info *con_info =
     (struct gsad_connection_info *) coninfo_cls;
-  gboolean abort_on_insane = FALSE;
 
   con_info->answercode = MHD_HTTP_INTERNAL_SERVER_ERROR;
   con_info->response   = SERVER_ERROR;
@@ -1329,733 +927,6 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
   if (NULL != key)
     {
       params_append_mhd (con_info->params, key, filename, data, size, off);
-
-      if (!strcmp (key, "token"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.token);
-
-      if (!strcmp (key, "caller"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.caller);
-
-      if (!strcmp (key, "access_hosts"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.access_hosts);
-      if (!strcmp (key, "agent_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.agent_id);
-      if (!strcmp (key, "apply_min"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.apply_min);
-      if (!strcmp (key, "authdn"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.authdn);
-      if (!strcmp (key, "base"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.base);
-      if (!strcmp (key, "cmd"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.cmd);
-      if (!strcmp (key, "condition"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.condition);
-      if (!strcmp (key, "config_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.config_id);
-      if (!strcmp (key, "credential_login"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.credential_login);
-      if (!strcmp (key, "day_of_month"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.day_of_month);
-      if (!strcmp (key, "duration"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.duration);
-      if (!strcmp (key, "duration_unit"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.duration_unit);
-      if (!strcmp (key, "domain"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.domain);
-      if (!strcmp (key, "enable"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.enable);
-      if (!strcmp (key, "escalator_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.escalator_id);
-      if (!strcmp (key, "esc_first_result"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_first_result);
-      if (!strcmp (key, "esc_levels"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_levels);
-      if (!strcmp (key, "esc_max_results"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_max_results);
-      if (!strcmp (key, "esc_min_cvss_base"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_min_cvss_base);
-      if (!strcmp (key, "esc_notes"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_notes);
-      if (!strcmp (key, "esc_overrides"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_overrides);
-      if (!strcmp (key, "esc_result_hosts_only"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_result_hosts_only);
-      if (!strcmp (key, "esc_search_phrase"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.esc_search_phrase);
-      if (!strcmp (key, "event"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.event);
-      if (!strcmp (key, "group"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.group);
-      if (!strcmp (key, "hour"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.hour);
-      if (!strcmp (key, "lsc_credential_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.lsc_credential_id);
-      if (!strcmp (key, "lsc_smb_credential_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.lsc_smb_credential_id);
-      if (!strcmp (key, "max_checks"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.max_checks);
-      if (!strcmp (key, "max_hosts"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.max_hosts);
-      if (!strcmp (key, "minute"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.minute);
-      if (!strcmp (key, "month"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.month);
-      if (!strcmp (key, "modify_password"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.modify_password);
-      if (!strcmp (key, "method"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.method);
-      if (!strcmp (key, "name"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.name);
-      if (!strcmp (key, "ldaphost"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.ldaphost);
-      if (!strcmp (key, "login"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.login);
-      if (!strcmp (key, "next"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.next);
-      if (!strcmp (key, "note_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.note_id);
-      if (!strcmp (key, "note_task_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.note_task_id);
-      if (!strcmp (key, "note_result_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.note_result_id);
-      if (!strcmp (key, "override_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.override_id);
-      if (!strcmp (key, "override_task_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.override_task_id);
-      if (!strcmp (key, "override_result_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.override_result_id);
-      if (!strcmp (key, "period"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.period);
-      if (!strcmp (key, "period_unit"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.period_unit);
-      if (!strcmp (key, "pw"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.pw);
-      if (!strcmp (key, "family"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.family);
-      if (!strcmp (key, "host"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.host);
-      if (!strcmp (key, "hosts"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.hosts);
-      if (!strcmp (key, "hosts_allow"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.hosts_allow);
-      if (!strcmp (key, "comment"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.comment);
-      if (!strcmp (key, "xml_file"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.xml_file);
-      if (!strcmp (key, "oid"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.oid);
-      if (!strcmp (key, "passphrase"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.passphrase);
-      if (!strcmp (key, "password"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.password);
-      if (!strcmp (key, "role"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.role);
-      if (!strcmp (key, "target_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.target_id);
-      if (!strcmp (key, "target_locator"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.target_locator);
-      if (!strcmp (key, "submit"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.submit);
-      if (!strcmp (key, "timeout"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.timeout);
-      if (!strcmp (key, "port"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.port);
-      if (!strcmp (key, "port_range"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.port_range);
-      if (!strcmp (key, "private_key"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.private_key);
-      if (!strcmp (key, "public_key"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.public_key);
-      if (!strcmp (key, "threat"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.threat);
-      if (!strcmp (key, "new_threat"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.new_threat);
-      if (!strcmp (key, "text"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.text);
-      if (!strcmp (key, "task_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.task_id);
-      if (!strcmp (key, "refresh_interval"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.refresh_interval);
-      if (!strcmp (key, "result_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.result_id);
-      if (!strcmp (key, "report_escalator_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.report_escalator_id);
-      if (!strcmp (key, "report_format_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.report_format_id);
-      if (!strcmp (key, "report_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.report_id);
-      if (!strcmp (key, "first_result"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.first_result);
-      if (!strcmp (key, "max_results"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.max_results);
-      if (!strcmp (key, "schedule_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.schedule_id);
-      if (!strcmp (key, "slave_id"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.slave_id);
-      if (!strcmp (key, "sort_field"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.sort_field);
-      if (!strcmp (key, "sort_order"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.sort_order);
-      if (!strcmp (key, "levels"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.levels);
-      if (!strcmp (key, "notes"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.notes);
-      if (!strcmp (key, "overrides"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.overrides);
-      if (!strcmp (key, "result_hosts_only"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.result_hosts_only);
-      if (!strcmp (key, "search_phrase"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.search_phrase);
-      if (!strcmp (key, "min_cvss_base"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.min_cvss_base);
-      if (!strcmp (key, "apply_min_cvss_base"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.apply_min_cvss_base);
-      if (!strcmp (key, "year"))
-        return append_chunk_string (con_info, data, size, off,
-                                    &con_info->req_parms.year);
-
-      if (!strcmp (key, "installer"))
-        {
-          if (con_info->req_parms.installer_filename == NULL)
-            con_info->req_parms.installer_filename = g_strdup (filename);
-          if (append_chunk_binary (data,
-                                   size,
-                                   off,
-                                   &con_info->req_parms.installer,
-                                   &con_info->req_parms.installer_size))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strcmp (key, "installer_sig"))
-        {
-          if (append_chunk_binary (data,
-                                   size,
-                                   off,
-                                   &con_info->req_parms.installer_sig,
-                                   &con_info->req_parms.installer_sig_size))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strcmp (key, "howto_install"))
-        {
-          if (append_chunk_binary (data,
-                                   size,
-                                   off,
-                                   &con_info->req_parms.howto_install,
-                                   &con_info->req_parms.howto_install_size))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strcmp (key, "howto_use"))
-        {
-          if (append_chunk_binary (data,
-                                   size,
-                                   off,
-                                   &con_info->req_parms.howto_use,
-                                   &con_info->req_parms.howto_use_size))
-            return MHD_NO;
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "condition_data:", strlen ("condition_data:")))
-        {
-          gchar *condition_data;
-
-          condition_data = g_strdup_printf ("%s0%.*s",
-                                            key + strlen ("condition_data:"),
-                                            (int) size,
-                                            data);
-          condition_data[strlen (key + strlen ("condition_data:"))] = '\0';
-
-          if (con_info->req_parms.condition_data == NULL)
-            con_info->req_parms.condition_data
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.condition_data, condition_data);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "event_data:", strlen ("event_data:")))
-        {
-          gchar *event_data;
-
-          event_data = g_strdup_printf ("%s0%.*s",
-                                        key + strlen ("event_data:"),
-                                        (int) size,
-                                        data);
-          event_data[strlen (key + strlen ("event_data:"))] = '\0';
-
-          if (con_info->req_parms.event_data == NULL)
-            con_info->req_parms.event_data
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.event_data, event_data);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "file:", strlen ("file:")))
-        {
-          int uuid_start = -1, uuid_end = -1, count;
-          count = sscanf (key,
-                          "file:%*[^[][%n%*[^]]%n]:%*s",
-                          &uuid_start,
-                          &uuid_end);
-          if (count == 0 && uuid_start > 0 && uuid_end > 0)
-            {
-              preference_t preference;
-              gboolean pref_already_in_array = FALSE;
-
-              /* Just put the type in the nvt field for now, so that there
-               * is something to free. */
-              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
-              if (abort_on_insane
-                  && openvas_validate (validator, "uuid", preference.nvt))
-                {
-                  g_free (preference.nvt);
-                  return MHD_NO;
-                }
-
-              preference.name = g_strdup (key + strlen ("file:"));
-              if (abort_on_insane
-                  && openvas_validate (validator,
-                                       "preference_name",
-                                       preference.name))
-                {
-                  g_free (preference.nvt);
-                  g_free (preference.name);
-                  return MHD_NO;
-                }
-
-              preference.value = g_memdup (data, size);
-              preference.value_size = size;
-
-              if (con_info->req_parms.files != NULL)
-                {
-                  preference_t *item;
-                  int index = 0;
-
-                  while ((item = g_array_index (con_info->req_parms.files,
-                                                preference_t*,
-                                                index++)))
-                    {
-                      if (g_ascii_strcasecmp (item->name, preference.name) == 0)
-                        {
-                          g_free (preference.nvt);
-                          g_free (preference.name);
-
-                          if (append_chunk_binary (data, size, off,
-                                                   (char**) &item->value,
-                                                   &item->value_size))
-                            return MHD_NO;
-
-                          pref_already_in_array = TRUE;
-                          break;
-                        }
-                    }
-                }
-
-              if (pref_already_in_array == FALSE)
-                {
-                  gconstpointer p;
-
-                  preference.value = g_memdup (data, size);
-                  preference.value_size = size;
-
-                  if (con_info->req_parms.files == NULL)
-                    con_info->req_parms.files
-                      = g_array_new (TRUE,
-                                     FALSE,
-                                     sizeof (preference_t*));
-
-                  p = g_memdup (&preference, sizeof (preference));
-                  g_array_append_vals (con_info->req_parms.files,
-                                       &p,
-                                       1);
-                }
-
-              con_info->answercode = MHD_HTTP_OK;
-              return MHD_YES;
-            }
-          return MHD_NO;
-        }
-      if (!strncmp (key, "method_data:", strlen ("method_data:")))
-        {
-          method_data_param_t *method_data_param;
-
-          if (con_info->req_parms.method_data)
-            {
-              guint index;
-              /* Search for a previous chunk. */
-              index = con_info->req_parms.method_data->len;
-              while (index--)
-                {
-                  method_data_param_t *param;
-                  param = g_array_index (con_info->req_parms.method_data,
-                                         method_data_param_t*,
-                                         index);
-                  if (strcmp (param->key, key + strlen ("method_data:")) == 0)
-                    {
-                      gchar *value;
-                      /* Append to previous chunk. */
-                      value = g_malloc (param->value_size + size + 1);
-                      memcpy (value, param->value, param->value_size);
-                      memcpy (value + param->value_size, data, size);
-                      param->value_size += size;
-                      value[param->value_size] = '\0';
-                      g_free (param->value);
-                      param->value = value;
-                      con_info->answercode = MHD_HTTP_OK;
-                      return MHD_YES;
-                    }
-                }
-            }
-
-          method_data_param = g_malloc (sizeof (method_data_param));
-          method_data_param->key = g_strdup (key + strlen ("method_data:"));
-          method_data_param->value_size = size;
-          method_data_param->value = g_malloc (size + 1);
-          memcpy (method_data_param->value, data, size);
-          method_data_param->value[size] = '\0';
-
-          if (con_info->req_parms.method_data == NULL)
-            con_info->req_parms.method_data
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.method_data, method_data_param);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "nvt:", strlen ("nvt:")))
-        {
-          gchar *nvt = g_strdup (key + strlen ("nvt:"));
-          if (abort_on_insane
-              && openvas_validate (validator,
-                                   "uuid",
-                                   nvt))
-            {
-              g_free (nvt);
-              return MHD_NO;
-            }
-
-          if (con_info->req_parms.nvts == NULL)
-            con_info->req_parms.nvts
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.nvts, nvt);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "preference:", strlen ("preference:")))
-        {
-          int uuid_start = -1, uuid_end = -1, count;
-          count = sscanf (key,
-                          "preference:%*[^[][%n%*[^]]%n]:%*s",
-                          &uuid_start,
-                          &uuid_end);
-          if (count == 0 && uuid_start > 0 && uuid_end > 0)
-            {
-              preference_t preference;
-              gboolean pref_already_in_array = FALSE;
-
-              /* Just put the type in the nvt field for now, so that there
-               * is something to free. */
-              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
-              if (abort_on_insane
-                  && openvas_validate (validator, "uuid", preference.nvt))
-                {
-                  g_free (preference.nvt);
-                  return MHD_NO;
-                }
-
-              preference.name = g_strdup (key + strlen ("preference:"));
-              if (abort_on_insane
-                  && openvas_validate (validator,
-                                       "preference_name",
-                                       preference.name))
-                {
-                  g_free (preference.nvt);
-                  g_free (preference.name);
-                  return MHD_NO;
-                }
-
-              if (con_info->req_parms.preferences != NULL)
-                {
-                  preference_t *item;
-                  int index = 0;
-
-                  while ((item = g_array_index (con_info->req_parms.preferences,
-                                                preference_t*,
-                                                index++)))
-                    {
-                      if (g_ascii_strcasecmp (item->name, preference.name) == 0)
-                        {
-                          g_free (preference.nvt);
-                          g_free (preference.name);
-
-                          if (append_chunk_binary (data, size, off,
-                                                   (char**) &item->value,
-                                                   &item->value_size))
-                            return MHD_NO;
-
-                          pref_already_in_array = TRUE;
-                          break;
-                        }
-                    }
-                }
-
-              if (pref_already_in_array == FALSE)
-                {
-                  gconstpointer p;
-
-                  preference.value = g_memdup (data, size);
-                  preference.value_size = size;
-
-                  if (con_info->req_parms.preferences == NULL)
-                    con_info->req_parms.preferences
-                      = g_array_new (TRUE,
-                                     FALSE,
-                                     sizeof (preference_t*));
-
-                  p = g_memdup (&preference, sizeof (preference));
-                  g_array_append_vals (con_info->req_parms.preferences,
-                                       &p,
-                                       1);
-                }
-              con_info->answercode = MHD_HTTP_OK;
-              return MHD_YES;
-            }
-          return MHD_NO;
-        }
-      if (!strncmp (key, "password:", strlen ("password:")))
-        {
-          int uuid_start = -1, uuid_end = -1, count;
-          count = sscanf (key,
-                          "password:%*[^[][%n%*[^]]%n]:%*s",
-                          &uuid_start,
-                          &uuid_end);
-          if (count == 0 && uuid_start > 0 && uuid_end > 0)
-            {
-              preference_t preference;
-              gboolean pref_already_in_array = FALSE;
-
-              /* Just put the type in the nvt field for now, so that there
-               * is something to free. */
-              preference.nvt = g_strndup (key + uuid_start, uuid_end - uuid_start);
-              if (abort_on_insane
-                  && openvas_validate (validator, "uuid", preference.nvt))
-                {
-                  g_free (preference.nvt);
-                  return MHD_NO;
-                }
-
-              preference.name = g_strdup (key + strlen ("password:"));
-              if (abort_on_insane
-                  && openvas_validate (validator,
-                                       "preference_name",
-                                       preference.name))
-                {
-                  g_free (preference.nvt);
-                  g_free (preference.name);
-                  return MHD_NO;
-                }
-
-              if (con_info->req_parms.passwords != NULL)
-                {
-                  preference_t *item;
-                  int index = 0;
-
-                  while ((item = g_array_index (con_info->req_parms.passwords,
-                                                preference_t*,
-                                                index++)))
-                    {
-                      if (g_ascii_strcasecmp (item->name, preference.name) == 0)
-                        {
-                          g_free (preference.nvt);
-                          g_free (preference.name);
-
-                          if (append_chunk_binary (data, size, off,
-                                                   (char**) &item->value,
-                                                   &item->value_size))
-                            return MHD_NO;
-
-                          pref_already_in_array = TRUE;
-                          break;
-                        }
-                    }
-                }
-
-              if (pref_already_in_array == FALSE)
-                {
-                  gconstpointer p;
-
-                  preference.value = g_memdup (data, size);
-                  preference.value_size = size;
-
-                  if (con_info->req_parms.passwords == NULL)
-                    con_info->req_parms.passwords
-                      = g_array_new (TRUE,
-                                     FALSE,
-                                     sizeof (preference_t*));
-
-                  p = g_memdup (&preference, sizeof (preference));
-                  g_array_append_vals (con_info->req_parms.passwords,
-                                       &p,
-                                       1);
-                }
-
-              con_info->answercode = MHD_HTTP_OK;
-              return MHD_YES;
-            }
-          return MHD_NO;
-        }
-      if (!strncmp (key, "select:", strlen ("select:")))
-        {
-          gchar *select = g_strdup (key + strlen ("select:"));
-          if (abort_on_insane
-              && openvas_validate (validator, "name", select))
-            {
-              g_free (select);
-              return MHD_NO;
-            }
-
-          if (con_info->req_parms.selects == NULL)
-            con_info->req_parms.selects
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.selects, select);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
-      if (!strncmp (key, "trend:", strlen ("trend:"))
-          && size > 0
-          && data[0] == '1')
-        {
-          gchar *trend = g_strdup (key + strlen ("trend:"));
-          if (abort_on_insane
-              && openvas_validate (validator, "name", trend))
-            {
-              g_free (trend);
-              return MHD_NO;
-            }
-
-          if (con_info->req_parms.trends == NULL)
-            con_info->req_parms.trends
-             = g_array_new (TRUE,
-                            FALSE,
-                            sizeof (gchar*));
-
-          g_array_append_val (con_info->req_parms.trends, trend);
-
-          con_info->answercode = MHD_HTTP_OK;
-          return MHD_YES;
-        }
       con_info->answercode = MHD_HTTP_OK;
       return MHD_YES;
     }
@@ -2160,14 +1031,14 @@ params_mhd_validate (void *params)
  * @brief Add else branch for an OMP operation.
  */
 #define ELSE(name) \
-  else if (!strcmp (con_info->req_parms.cmd, G_STRINGIFY (name))) \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) \
     con_info->response = name ## _omp (credentials, con_info->params);
 
 /**
  * @brief Add else branch for an OMP operation.
  */
 #define ELSE_OAP(name) \
-  else if (!strcmp (con_info->req_parms.cmd, G_STRINGIFY (name))) \
+  else if (!strcmp (cmd, G_STRINGIFY (name))) \
     con_info->response = name ## _oap (credentials, con_info->params);
 
 /**
@@ -2191,16 +1062,22 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   int ret;
   user_t *user;
   credentials_t *credentials = NULL;
+  const char *cmd, *caller;
 
   /* Handle the login command specially. */
 
-  if (con_info->req_parms.cmd && !strcmp (con_info->req_parms.cmd, "login"))
+  params_mhd_validate (con_info->params);
+
+  cmd = params_value (con_info->params, "cmd");
+
+  if (cmd && !strcmp (cmd, "login"))
     {
-      if (con_info->req_parms.login && con_info->req_parms.password)
+      if (params_value (con_info->params, "login")
+          && params_value (con_info->params, "password"))
         {
           int ret;
-          ret = authenticate_omp (con_info->req_parms.login,
-                                  con_info->req_parms.password);
+          ret = authenticate_omp (params_value (con_info->params, "login"),
+                                  params_value (con_info->params, "password"));
           if (ret)
             {
               time_t now;
@@ -2227,8 +1104,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           else
             {
               user_t *user;
-              user = user_add (con_info->req_parms.login,
-                               con_info->req_parms.password);
+              user = user_add (params_value (con_info->params, "login"),
+                               params_value (con_info->params, "password"));
               /* Redirect to get_tasks. */
               *user_return = user;
               return 1;
@@ -2250,10 +1127,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* Check the session. */
 
-  if (openvas_validate (validator, "token", con_info->req_parms.token))
-    con_info->req_parms.token = NULL;
-
-  if (con_info->req_parms.token == NULL)
+  if (params_value (con_info->params, "token") == NULL)
     {
       con_info->response
        = gsad_message (credentials,
@@ -2265,8 +1139,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 3;
     }
 
-  ret = user_find (con_info->req_parms.cookie, con_info->req_parms.token,
-                    &user);
+  ret = user_find (con_info->cookie,
+                   params_value (con_info->params, "token"),
+                   &user);
   if (ret == 1)
     {
       con_info->response
@@ -2288,6 +1163,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
+      caller = params_value (con_info->params, "caller");
+
       /* @todo Validate caller. */
 
       xml = g_markup_printf_escaped ("<login_page>"
@@ -2299,8 +1176,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<url>%s</url>"
                                      "</login_page>",
                                      ctime_now,
-                                     con_info->req_parms.caller
-                                      ? con_info->req_parms.caller
+                                     caller
+                                      ? caller
                                       : "");
       con_info->response = xsl_transform (xml);
       g_free (xml);
@@ -2336,8 +1213,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* From here, the user is authenticated. */
 
-  params_mhd_validate (con_info->params);
-
   credentials = malloc (sizeof (credentials_t));
   if (credentials == NULL)
     {
@@ -2352,10 +1227,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->token = strdup (user->token);
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
-  /* @todo Validate caller. */
-  credentials->caller = strdup (con_info->req_parms.caller
-                                 ? con_info->req_parms.caller
-                                 : "");
+  caller = params_value (con_info->params, "caller");
+  credentials->caller = strdup (caller ? caller : "");
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
 
@@ -2363,7 +1236,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* Handle the usual commands. */
 
-  if (!con_info->req_parms.cmd)
+  if (!cmd)
     {
       con_info->response = gsad_message (credentials,
                                          "Internal error",
@@ -2408,7 +1281,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_task)
   ELSE (delete_config)
   ELSE (empty_trashcan)
-  else if (!strcmp (con_info->req_parms.cmd, "escalate_report"))
+  else if (!strcmp (cmd, "escalate_report"))
     {
       gchar *content_type_omp;
       gsize response_size;
@@ -2515,65 +1388,7 @@ exec_omp_get (struct MHD_Connection *connection,
               gsize* response_size)
 {
   char *cmd = NULL;
-  const char *agent_format = NULL;
-  const char *agent_id     = NULL;
-  const char *apply_overrides    = NULL;
-  const char *comment      = NULL;
-  const char *config_id    = NULL;
-  const char *delta_report_id = NULL;
-  const char *delta_states = NULL;
-  const char *escalator_id = NULL;
-  const char *report_escalator_id = NULL;
-  const char *esc_first_result = NULL;
-  const char *esc_max_results = NULL;
-  const char *task_id      = NULL;
-  const char *result_id    = NULL;
-  const char *report_id    = NULL;
-  const char *report_format_id = NULL;
-  const char *note_id      = NULL;
-  const char *next         = NULL;
-  const char *override_id  = NULL;
-  const char *override_task_id   = NULL;
-  const char *override_result_id = NULL;
-  const char *format       = NULL;
-  const char *preference_name = NULL;
-  const char *package_format = NULL;
-  const char *name         = NULL;
-  const char *family       = NULL;
-  const char *first_result = NULL;
-  const char *hosts        = NULL;
-  const char *max_results  = NULL;
-  const char *oid          = NULL;
-  const char *sort_field   = NULL;
-  const char *sort_order   = NULL;
-  const char *type         = NULL;
-  const char *levels       = NULL;
-  const char *notes        = NULL;
-  const char *overrides    = NULL;
-  const char *result_hosts_only = NULL;
-  const char *search_phrase = NULL;
-  const char *min_cvss_base    = NULL;
-  const char *esc_levels       = NULL;
-  const char *esc_notes        = NULL;
-  const char *esc_overrides    = NULL;
-  const char *esc_result_hosts_only = NULL;
-  const char *esc_search_phrase = NULL;
-  const char *esc_min_cvss_base    = NULL;
-  const char *port         = NULL;
-  const char *threat       = NULL;
-  const char *new_threat   = NULL;
-  const char *text         = NULL;
-  const char *refresh_interval = NULL;
-  const char *duration     = NULL;
-  const char *lsc_credential_id = NULL;
-  const char *schedule_id  = NULL;
-  const char *slave_id   = NULL;
-  const char *target_id  = NULL;
-  int high = 0, medium = 0, low = 0, log = 0, false_positive = 0;
-  int changed = 0, gone = 0, new = 0, same = 0;
-
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
-
   params_t *params;
 
   cmd =
@@ -2592,531 +1407,6 @@ exec_omp_get (struct MHD_Connection *connection,
                                  params_mhd_add, params);
 
       params_mhd_validate (params);
-
-      agent_id = MHD_lookup_connection_value
-                      (connection,
-                       MHD_GET_ARGUMENT_KIND,
-                       "agent_id");
-      if (openvas_validate (validator, "agent_id", agent_id))
-        agent_id = NULL;
-
-      apply_overrides = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "apply_overrides");
-      if (apply_overrides)
-        {
-          if (openvas_validate (validator, "apply_overrides", apply_overrides))
-            apply_overrides = NULL;
-        }
-      else
-        apply_overrides = "0";
-
-      comment = MHD_lookup_connection_value (connection,
-                                             MHD_GET_ARGUMENT_KIND,
-                                             "comment");
-      if (openvas_validate (validator, "comment", comment))
-        comment = NULL;
-
-      config_id = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "config_id");
-      if (openvas_validate (validator, "config_id", config_id))
-        config_id = NULL;
-
-      delta_report_id = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "delta_report_id");
-      if (openvas_validate (validator, "report_id", delta_report_id))
-        delta_report_id = NULL;
-
-      escalator_id = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "escalator_id");
-
-      delta_states = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "delta_states");
-      if (delta_states)
-        {
-          /* "delta_states" overrides "delta_state_*". */
-          if (openvas_validate (validator, "delta_states", delta_states))
-            delta_states = NULL;
-        }
-      else
-        {
-          const char *delta_state;
-
-          delta_state = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "delta_state_changed");
-          if (openvas_validate (validator, "delta_state_changed", delta_state))
-            changed = 0;
-          else
-            changed = atoi (delta_state);
-
-          delta_state = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "delta_state_gone");
-          if (openvas_validate (validator, "delta_state_gone", delta_state))
-            gone = 0;
-          else
-            gone = atoi (delta_state);
-
-          delta_state = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "delta_state_new");
-          if (openvas_validate (validator, "delta_state_new", delta_state))
-            new = 0;
-          else
-           new = atoi (delta_state);
-
-          delta_state = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "delta_state_same");
-          if (openvas_validate (validator, "delta_state_same", delta_state))
-            same = 0;
-          else
-            same = atoi (delta_state);
-        }
-
-      if (openvas_validate (validator, "escalator_id", escalator_id))
-        escalator_id = NULL;
-
-      report_escalator_id = MHD_lookup_connection_value (connection,
-                                                         MHD_GET_ARGUMENT_KIND,
-                                                         "report_escalator_id");
-      if (report_escalator_id)
-        {
-          if (openvas_validate (validator, "escalator_id", report_escalator_id))
-            report_escalator_id = NULL;
-        }
-      else
-        report_escalator_id = "0";
-
-      task_id = MHD_lookup_connection_value (connection,
-                                             MHD_GET_ARGUMENT_KIND,
-                                             "task_id");
-      if (openvas_validate (validator, "task_id", task_id))
-        task_id = NULL;
-
-      result_id = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "result_id");
-      if (openvas_validate (validator, "result_id", result_id))
-        result_id = NULL;
-
-      report_id = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "report_id");
-      if (openvas_validate (validator, "report_id", report_id))
-        report_id = NULL;
-
-      report_format_id = MHD_lookup_connection_value (connection,
-                                                      MHD_GET_ARGUMENT_KIND,
-                                                      "report_format_id");
-      if (openvas_validate (validator, "report_format_id", report_format_id))
-        report_format_id = NULL;
-
-      note_id = MHD_lookup_connection_value (connection,
-                                             MHD_GET_ARGUMENT_KIND,
-                                             "note_id");
-      if (openvas_validate (validator, "note_id", note_id))
-        note_id = NULL;
-
-      override_id = MHD_lookup_connection_value (connection,
-                                                 MHD_GET_ARGUMENT_KIND,
-                                                 "override_id");
-      if (openvas_validate (validator, "override_id", override_id))
-        override_id = NULL;
-
-      override_task_id = MHD_lookup_connection_value (connection,
-                                                      MHD_GET_ARGUMENT_KIND,
-                                                      "override_task_id");
-      if (openvas_validate (validator, "override_task_id", override_task_id))
-        override_task_id = NULL;
-
-      override_result_id = MHD_lookup_connection_value (connection,
-                                                        MHD_GET_ARGUMENT_KIND,
-                                                        "override_result_id");
-      if (openvas_validate (validator,
-                            "override_result_id",
-                            override_result_id))
-        override_result_id = NULL;
-
-      next = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "next");
-      if (openvas_validate (validator, "page", next))
-        next = NULL;
-
-      oid = MHD_lookup_connection_value (connection,
-                                         MHD_GET_ARGUMENT_KIND,
-                                         "oid");
-      if (openvas_validate (validator, "oid", oid))
-        oid = NULL;
-
-      agent_format = MHD_lookup_connection_value
-                      (connection,
-                       MHD_GET_ARGUMENT_KIND,
-                       "agent_format");
-      if (openvas_validate (validator, "agent_format", agent_format))
-        agent_format = NULL;
-
-      format = MHD_lookup_connection_value (connection,
-                                            MHD_GET_ARGUMENT_KIND,
-                                            "format");
-      if (openvas_validate (validator, "format", format))
-        format = NULL;
-
-      preference_name = MHD_lookup_connection_value
-                         (connection,
-                          MHD_GET_ARGUMENT_KIND,
-                          "preference_name");
-      if (openvas_validate (validator, "preference_name", preference_name))
-        preference_name = NULL;
-
-      name = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "name");
-      if (openvas_validate (validator, "name", name))
-        name = NULL;
-
-      package_format = MHD_lookup_connection_value
-                        (connection,
-                         MHD_GET_ARGUMENT_KIND,
-                         "package_format");
-      if (openvas_validate (validator, "package_format", package_format))
-        package_format = NULL;
-
-      name = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "name");
-      if (openvas_validate (validator, "name", name))
-        name = NULL;
-
-      family = MHD_lookup_connection_value (connection,
-                                            MHD_GET_ARGUMENT_KIND,
-                                            "family");
-      if (openvas_validate (validator, "family", family))
-        family = NULL;
-
-      first_result = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "first_result");
-      if (openvas_validate (validator, "first_result", first_result))
-        first_result = NULL;
-
-      max_results = MHD_lookup_connection_value (connection,
-                                                 MHD_GET_ARGUMENT_KIND,
-                                                 "max_results");
-      if (openvas_validate (validator, "max_results", max_results))
-        max_results = NULL;
-
-      esc_first_result = MHD_lookup_connection_value (connection,
-                                                      MHD_GET_ARGUMENT_KIND,
-                                                      "esc_first_result");
-      if (openvas_validate (validator, "first_result", esc_first_result))
-        esc_first_result = NULL;
-
-      esc_max_results = MHD_lookup_connection_value (connection,
-                                                     MHD_GET_ARGUMENT_KIND,
-                                                     "esc_max_results");
-      if (openvas_validate (validator, "max_results", esc_max_results))
-        esc_max_results = NULL;
-
-      sort_field = MHD_lookup_connection_value (connection,
-                                                MHD_GET_ARGUMENT_KIND,
-                                                "sort_field");
-      if (openvas_validate (validator, "sort_field", sort_field))
-        sort_field = NULL;
-
-      refresh_interval = MHD_lookup_connection_value (connection,
-                                                      MHD_GET_ARGUMENT_KIND,
-                                                      "refresh_interval");
-      if (openvas_validate (validator, "refresh_interval", refresh_interval))
-        refresh_interval = NULL;
-
-      duration = MHD_lookup_connection_value (connection,
-                                              MHD_GET_ARGUMENT_KIND,
-                                              "duration");
-      if (openvas_validate (validator, "duration", duration))
-        duration = NULL;
-
-      sort_order = MHD_lookup_connection_value (connection,
-                                                MHD_GET_ARGUMENT_KIND,
-                                                "sort_order");
-      if (openvas_validate (validator, "sort_order", sort_order))
-        sort_order = NULL;
-
-      schedule_id = MHD_lookup_connection_value (connection,
-                                                 MHD_GET_ARGUMENT_KIND,
-                                                 "schedule_id");
-      if (openvas_validate (validator, "schedule_id", schedule_id))
-        schedule_id = NULL;
-
-      type = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "type");
-      if (openvas_validate (validator, "type", type))
-        type = NULL;
-
-      lsc_credential_id = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "lsc_credential_id");
-      if (openvas_validate (validator, "lsc_credential_id", lsc_credential_id))
-        lsc_credential_id = NULL;
-
-      slave_id = MHD_lookup_connection_value (connection,
-                                              MHD_GET_ARGUMENT_KIND,
-                                              "slave_id");
-      if (openvas_validate (validator, "slave_id", slave_id))
-        slave_id = NULL;
-
-      target_id = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "target_id");
-      if (openvas_validate (validator, "target_id", target_id))
-        target_id = NULL;
-
-      levels = MHD_lookup_connection_value (connection,
-                                            MHD_GET_ARGUMENT_KIND,
-                                            "levels");
-      if (levels)
-        {
-          /* "levels" overrides "level_*". */
-          if (openvas_validate (validator, "levels", levels))
-            levels = NULL;
-        }
-      else
-        {
-          const char *level;
-
-          level = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "level_high");
-          if (openvas_validate (validator, "level_high", level))
-            high = 0;
-          else
-            high = atoi (level);
-
-          level = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "level_medium");
-          if (openvas_validate (validator, "level_medium", level))
-            medium = 0;
-          else
-            medium = atoi (level);
-
-          level = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "level_low");
-          if (openvas_validate (validator, "level_low", level))
-            low = 0;
-          else
-            low = atoi (level);
-
-          level = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "level_log");
-          if (openvas_validate (validator, "level_log", level))
-            log = 0;
-          else
-            log = atoi (level);
-
-          level = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "level_false_positive");
-          if (openvas_validate (validator, "level_false_positive", level))
-            false_positive = 0;
-          else
-            false_positive = atoi (level);
-        }
-
-      notes = MHD_lookup_connection_value (connection,
-                                           MHD_GET_ARGUMENT_KIND,
-                                           "notes");
-      if (notes)
-        {
-          if (openvas_validate (validator, "notes", notes))
-            notes = NULL;
-        }
-      else
-        notes = "0";
-
-      overrides = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "overrides");
-      if (overrides)
-        {
-          if (openvas_validate (validator, "overrides", overrides))
-            overrides = NULL;
-        }
-      else
-        overrides = "0";
-
-      result_hosts_only = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "result_hosts_only");
-      if (result_hosts_only)
-        {
-          if (openvas_validate (validator,
-                                "result_hosts_only",
-                                result_hosts_only))
-            result_hosts_only = NULL;
-        }
-      else
-        result_hosts_only = "0";
-
-      search_phrase = MHD_lookup_connection_value (connection,
-                                                   MHD_GET_ARGUMENT_KIND,
-                                                   "search_phrase");
-      if (search_phrase)
-        {
-          if (openvas_validate (validator, "search_phrase", search_phrase))
-            search_phrase = NULL;
-        }
-      else
-        search_phrase = "";
-
-      min_cvss_base = MHD_lookup_connection_value (connection,
-                                                   MHD_GET_ARGUMENT_KIND,
-                                                   "min_cvss_base");
-      if (min_cvss_base)
-        {
-          if (openvas_validate (validator, "min_cvss_base", min_cvss_base))
-            min_cvss_base = NULL;
-          else
-            {
-              const char *apply_min;
-              apply_min = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "apply_min_cvss_base");
-              if (apply_min == NULL || (strcmp (apply_min, "0") == 0))
-                min_cvss_base = "";
-            }
-        }
-      else
-        min_cvss_base = "";
-
-      esc_levels = MHD_lookup_connection_value (connection,
-                                                MHD_GET_ARGUMENT_KIND,
-                                                "esc_levels");
-      if (esc_levels)
-        {
-          if (openvas_validate (validator, "levels", esc_levels))
-            esc_levels = NULL;
-        }
-
-      esc_notes = MHD_lookup_connection_value (connection,
-                                               MHD_GET_ARGUMENT_KIND,
-                                               "esc_notes");
-      if (esc_notes)
-        {
-          if (openvas_validate (validator, "notes", esc_notes))
-            esc_notes = NULL;
-        }
-      else
-        esc_notes = "0";
-
-      esc_overrides = MHD_lookup_connection_value (connection,
-                                                   MHD_GET_ARGUMENT_KIND,
-                                                   "esc_overrides");
-      if (esc_overrides)
-        {
-          if (openvas_validate (validator, "overrides", esc_overrides))
-            esc_overrides = NULL;
-        }
-      else
-        esc_overrides = "0";
-
-      esc_result_hosts_only =
-       MHD_lookup_connection_value (connection,
-                                    MHD_GET_ARGUMENT_KIND,
-                                    "esc_result_hosts_only");
-      if (esc_result_hosts_only)
-        {
-          if (openvas_validate (validator,
-                                "result_hosts_only",
-                                esc_result_hosts_only))
-            esc_result_hosts_only = NULL;
-        }
-      else
-        esc_result_hosts_only = "0";
-
-      esc_search_phrase = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "esc_search_phrase");
-      if (esc_search_phrase)
-        {
-          if (openvas_validate (validator, "search_phrase", esc_search_phrase))
-            esc_search_phrase = NULL;
-        }
-      else
-        esc_search_phrase = "";
-
-      esc_min_cvss_base = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "esc_min_cvss_base");
-      if (esc_min_cvss_base)
-        {
-          if (openvas_validate (validator, "min_cvss_base", esc_min_cvss_base))
-            esc_min_cvss_base = NULL;
-          else
-            {
-              const char *apply_min;
-              apply_min = MHD_lookup_connection_value (connection,
-                                                       MHD_GET_ARGUMENT_KIND,
-                                                       "esc_apply_min_cvss_base");
-              if (apply_min == NULL || (strcmp (apply_min, "0") == 0))
-                esc_min_cvss_base = "";
-            }
-        }
-      else
-        esc_min_cvss_base = "";
-
-      hosts = MHD_lookup_connection_value (connection,
-                                           MHD_GET_ARGUMENT_KIND,
-                                           "hosts");
-      if (openvas_validate (validator, "hosts", hosts))
-        hosts = NULL;
-
-      port = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "port");
-      if (port)
-        {
-          if (openvas_validate (validator, "port", port))
-            port = NULL;
-        }
-
-      threat = MHD_lookup_connection_value (connection,
-                                            MHD_GET_ARGUMENT_KIND,
-                                            "threat");
-      if (threat)
-        {
-          if (openvas_validate (validator, "threat", threat))
-            threat = NULL;
-        }
-
-      new_threat = MHD_lookup_connection_value (connection,
-                                                MHD_GET_ARGUMENT_KIND,
-                                                "new_threat");
-      if (new_threat)
-        {
-          if (openvas_validate (validator, "new_threat", threat))
-            threat = NULL;
-        }
-
-      text = MHD_lookup_connection_value (connection,
-                                          MHD_GET_ARGUMENT_KIND,
-                                          "text");
-      if (text)
-        {
-          if (openvas_validate (validator, "text", text))
-            text = NULL;
-        }
-      else
-        text = "";
     }
   else
     return gsad_message (credentials,
@@ -3125,10 +1415,10 @@ exec_omp_get (struct MHD_Connection *connection,
                          "Diagnostics: No valid command for omp.",
                          "/omp?cmd=get_tasks");
 
-  /** @todo Pass sort_order and sort_field to all page handlers. */
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
   /* Check cmd and precondition, start respective OMP command(s). */
+
   if (!strcmp (cmd, "new_task"))
     return new_task_omp (credentials, params);
 
@@ -3152,6 +1442,9 @@ exec_omp_get (struct MHD_Connection *connection,
     {
       char *html;
       gchar *lsc_credential_login;
+      const char *package_format;
+
+      package_format = params_value (params, "package_format");
 
       if (export_lsc_credential_omp (credentials,
                                      params,
@@ -3160,6 +1453,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                      &lsc_credential_login))
         return html;
 
+      /* Returned above if package_format was NULL. */
       content_type_from_format_string (content_type, package_format);
       free (*content_disposition);
       *content_disposition = g_strdup_printf
@@ -4384,9 +2678,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                          MHD_COOKIE_KIND,
                                          "SID");
       if (openvas_validate (validator, "token", sid))
-        con_info->req_parms.cookie = NULL;
+        con_info->cookie = NULL;
       else
-        con_info->req_parms.cookie = g_strdup (sid);
+        con_info->cookie = g_strdup (sid);
 
       new_sid = NULL;
       ret = exec_omp_post (con_info, &user, &new_sid);
@@ -4394,9 +2688,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (ret == 1)
         {
           gchar *url;
-          /* @todo Validate con_info->req_parms.text. */
           url = g_strdup_printf ("%s&token=%s",
-                                 con_info->req_parms.text,
+                                 params_value (con_info->params, "text"),
                                  user->token);
           user_release (user);
           send_redirect_header (connection, url, user);

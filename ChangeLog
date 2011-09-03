@@ -1,3 +1,19 @@
+2011-09-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Remove old param mechanism.
+
+	* src/gsad.c (init_validator): Add login command and caller rule.
+	(free_gchar_array, struct req_parms, append_chunk_string)
+	(append_chunk_binary): Remove.
+	(struct gsad_connection_info): Add cookie.  Was in struct req_parms.
+	(free_resources): Remove req_parms, add cookie.
+	(serve_post): Remove old param inits.
+	(ELSE, ELSE_OAP): Get cmd from new params.
+	(exec_omp_post): Get all params from new mechanism.
+	(exec_omp_get): Remove old param inits.  Get package_format from new
+	params.
+	(request_handler): Use new cookie location.  Get text from new params.
+
 2011-09-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Convert last pages to new param mechanism.
