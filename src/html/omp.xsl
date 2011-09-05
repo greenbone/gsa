@@ -10272,6 +10272,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
+      <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
       <div class="float_right">
         <a href="?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Back to Assets</a>
       </div>
@@ -10305,14 +10306,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Last Report:</td>
+          <td>Report:</td>
           <td>
             <xsl:choose>
               <xsl:when test="start/text() != ''">
-                <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
+                <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
+                <xsl:choose>
+                  <xsl:when test="$pos &lt; $report_count">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}">
+                      &lt;&lt;
+                    </a>
+                  </xsl:when>
+                </xsl:choose>
+                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
                   <xsl:value-of select="substring(start/text(),5,6)"/>
                   <xsl:value-of select="substring(start/text(),20,21)"/>
                 </a>
+                <xsl:choose>
+                  <xsl:when test="$pos &gt; 1">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}">
+                      &gt;&gt;
+                    </a>
+                  </xsl:when>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>(not finished)</xsl:otherwise>
             </xsl:choose>
@@ -10346,7 +10362,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Reports:</td>
           <td>
-            <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
+            <xsl:value-of select="$report_count"/>
           </td>
         </tr>
         <tr>
@@ -11259,7 +11275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;type=assets&amp;get_asset=1&amp;host={ip}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}"
              title="Asset Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>

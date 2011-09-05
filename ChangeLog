@@ -1,5 +1,18 @@
 2011-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add report scrolling to Asset Details page.
+
+	* src/gsad.c (init_validator): Add pos.
+	(get_report_omp): Send host and pos to Manager.  Remove search_phrase
+	hack.
+
+	* src/gsad_omp.c (get_report_omp): If host is given send host as
+	search_phrase and wrap in get_asset.
+
+	* src/html/omp.xsl (host, report [assets]): Add report scrolling.
+
+2011-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add Asset Details page.
 
 	* src/gsad_omp.c (get_report_omp): If host is given send host as

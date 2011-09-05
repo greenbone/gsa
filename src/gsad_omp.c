@@ -7186,7 +7186,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
   const char *escalator_id, *search_phrase, *min_cvss_base, *type;
   const char *notes, *overrides, *result_hosts_only, *report_id, *sort_field;
   const char *sort_order, *result_id, *delta_report_id, *format_id;
-  const char *first_result, *max_results, *host;
+  const char *first_result, *max_results, *host, *pos;
 
   escalator_id = params_value (params, "escalator_id");
   if (escalator_id == NULL)
@@ -7214,6 +7214,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
   type = params_value (params, "type");
   host = params_value (params, "host");
+  pos = params_value (params, "pos");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -7494,7 +7495,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
-                            "%s"
+                            "%s%s%s%s"
+                            " pos=\"%s\""
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -7515,6 +7517,10 @@ get_report_omp (credentials_t * credentials, params_t *params,
                             (type && (strcmp (type, "assets") == 0))
                              ? " type=\"assets\""
                              : "",
+                            host ? " host=\"" : "",
+                            host ? host : "",
+                            host ? "\"" : "",
+                            pos ? pos : "1",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
@@ -7536,7 +7542,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                 : "ascending"),
                             levels->str,
                             delta_states->str,
-                            host ? host : search_phrase,
+                            search_phrase,
                             min_cvss_base)
       == -1)
     {
