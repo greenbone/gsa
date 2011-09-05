@@ -7186,7 +7186,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
   const char *escalator_id, *search_phrase, *min_cvss_base, *type;
   const char *notes, *overrides, *result_hosts_only, *report_id, *sort_field;
   const char *sort_order, *result_id, *delta_report_id, *format_id;
-  const char *first_result, *max_results;
+  const char *first_result, *max_results, *host;
 
   escalator_id = params_value (params, "escalator_id");
   if (escalator_id == NULL)
@@ -7213,6 +7213,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
     min_cvss_base = "";
 
   type = params_value (params, "type");
+  host = params_value (params, "host");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -7535,7 +7536,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                 : "ascending"),
                             levels->str,
                             delta_states->str,
-                            search_phrase,
+                            host ? host : search_phrase,
                             min_cvss_base)
       == -1)
     {
@@ -7667,6 +7668,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
+      else if (host)
+        xml = g_string_new ("<get_asset>");
       else
         xml = g_string_new ("<get_report>");
 
@@ -7695,7 +7698,10 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
       if (type && (strcmp (type, "assets") == 0))
         {
-          g_string_append (xml, "</get_report>");
+          if (host)
+            g_string_append (xml, "</get_asset>");
+          else
+            g_string_append (xml, "</get_report>");
           openvas_server_close (socket, session);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }

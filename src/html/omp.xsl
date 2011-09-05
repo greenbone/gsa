@@ -10260,10 +10260,169 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="host">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Asset Details
+       <a href="/help/configure_targets.html?token={/envelope/token}#assetdetails"
+         title="Help: Assets (Asset Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Back to Assets</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Host:</b></td>
+          <td>
+            <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+            <b><xsl:value-of select="ip"/></b>
+            <xsl:if test="$hostname">
+              <xsl:value-of select="concat(' (', $hostname, ')')"/>
+            </xsl:if>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/high.png" alt="High" title="High"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/medium.png" alt="Medium" title="Medium"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/medium']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/low.png" alt="Low" title="Low"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Last Report:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="start/text() != ''">
+                <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
+                  <xsl:value-of select="substring(start/text(),5,6)"/>
+                  <xsl:value-of select="substring(start/text(),20,21)"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>(not finished)</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>OS:</td>
+          <td>
+            <xsl:call-template name="os-icon">
+              <xsl:with-param name="host" select="../host"/>
+              <xsl:with-param name="current_host" select="ip"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr>
+          <td>Open Ports:</td>
+          <td>
+            <xsl:variable name="ports" select="detail[name/text() = 'ports']/value"/>
+            <xsl:value-of select="count (str:tokenize ($ports, ','))"/>
+            <xsl:if test="$ports">
+              <xsl:value-of select="concat(' (', $ports, ')')"/>
+            </xsl:if>
+          </td>
+        </tr>
+        <tr>
+          <td>Apps:</td>
+          <td>
+            <xsl:value-of select="count (detail[name = 'App'])"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Reports:</td>
+          <td>
+            <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Distance:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="substring-after (detail[name = 'traceroute']/value, ',') = '?'">
+              </xsl:when>
+              <xsl:when test="count (detail[name = 'traceroute']) = 0">
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count (detail[name = 'App']) = 0">
+          <h1>Apps: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Apps</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>CPE</td>
+            </tr>
+            <xsl:for-each select="detail[name = 'App']">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="value"/></td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_reports_response" mode="asset">
+  <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Report
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="report/report/host"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="get_report">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_escalate_response"/>
   <xsl:apply-templates select="get_reports_response"/>
+</xsl:template>
+
+<xsl:template match="get_asset">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_reports_response" mode="asset"/>
 </xsl:template>
 
 <!--     CREATE_NOTE_RESPONSE -->
@@ -11041,6 +11200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>Apps</td>
       <td>Reports</td>
       <td>Distance</td>
+      <td>Actions</td>
     </tr>
     <xsl:for-each select="host">
       <xsl:variable name="current_host" select="ip"/>
@@ -11098,10 +11258,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </td>
+        <td>
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;get_asset=1&amp;host={ip}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}"
+             title="Asset Details" style="margin-left:3px;">
+            <img src="/img/details.png" border="0" alt="Details"/>
+          </a>
+        </td>
       </tr>
     </xsl:for-each>
     <tr>
       <td>Total: <xsl:value-of select="count(host)"/></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>

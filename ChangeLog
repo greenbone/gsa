@@ -1,3 +1,14 @@
+2011-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Asset Details page.
+
+	* src/gsad_omp.c (get_report_omp): If host is given send host as
+	search_phrase and wrap in get_asset.
+
+	* src/html/omp.xsl (host, get_reports_response [asset], get_asset): New
+	template.
+	(report [assets]): Add Actions column.
+
 2011-09-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Remove old param mechanism.
