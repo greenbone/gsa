@@ -7678,7 +7678,17 @@ get_report_omp (credentials_t * credentials, params_t *params,
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
       else if (host)
-        xml = g_string_new ("<get_asset>");
+        {
+          xml = g_string_new ("<get_asset>");
+          g_string_append_printf (xml,
+                                  "<search_phrase>%s</search_phrase>"
+                                  "<levels>%s</levels>"
+                                  "<hosts start=\"%s\" max=\"%s\"/>",
+                                  search_phrase,
+                                  levels->str,
+                                  first_result,
+                                  max_results);
+        }
       else
         xml = g_string_new ("<get_report>");
 

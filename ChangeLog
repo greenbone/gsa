@@ -1,5 +1,13 @@
 2011-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Add filters to GET_ASSET.
+
+	* src/html/omp.xsl: Add stylesheet attribs for functions.
+	(gsa:build-levels): New function.
+	(host, report [assets]): Add filters to links.
+
+2011-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_lsc_credentials): Init sort params.
 
 	* src/html/gsad.xsl (html-gsa-navigation): Clean up some wrapping.

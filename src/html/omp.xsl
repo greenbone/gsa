@@ -3,7 +3,9 @@
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:str="http://exslt.org/strings"
-    extension-element-prefixes="str">
+    xmlns:func = "http://exslt.org/functions"
+    xmlns:gsa="http://openvas.org"
+    extension-element-prefixes="str func">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -541,6 +543,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
 </xsl:template>
+
+<func:function name="gsa:build-levels">
+  <xsl:param name="filters"></xsl:param>
+  <func:result>
+    <xsl:for-each select="$filters/filter">
+      <xsl:choose>
+        <xsl:when test="text()='High'">h</xsl:when>
+        <xsl:when test="text()='Medium'">m</xsl:when>
+        <xsl:when test="text()='Low'">l</xsl:when>
+        <xsl:when test="text()='Log'">g</xsl:when>
+        <xsl:when test="text()='False Positive'">f</xsl:when>
+      </xsl:choose>
+    </xsl:for-each>
+  </func:result>
+</func:function>
 
 <xsl:template name="build-levels">
   <xsl:param name="filters"></xsl:param>
@@ -10274,7 +10291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
       <div class="float_right">
-        <a href="?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Back to Assets</a>
+        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Back to Assets</a>
       </div>
       <table>
         <tr>
@@ -10313,7 +10330,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
                 <xsl:choose>
                   <xsl:when test="$pos &lt; $report_count">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">
                       &lt;&lt;
                     </a>
                   </xsl:when>
@@ -10324,7 +10341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
                 <xsl:choose>
                   <xsl:when test="$pos &gt; 1">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">
                       &gt;&gt;
                     </a>
                   </xsl:when>
@@ -11275,7 +11292,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
              title="Asset Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
