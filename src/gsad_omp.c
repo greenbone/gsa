@@ -2327,6 +2327,9 @@ get_lsc_credentials (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_targets");
     }
 
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
   /* Send the request. */
 
   if (openvas_server_sendf (&session,
