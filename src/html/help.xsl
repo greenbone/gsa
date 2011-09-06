@@ -226,6 +226,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Details</h4>
+      <p>
+       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
+       switch to an overview of this host.
+      </p>
+
       <!--
       <a name="overrides"></a>
       <h3>Overrides</h3>
@@ -254,6 +263,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        It is the same action as clicking on the number of reports in the column "Reports: Total".
       </p>
       -->
+
+      <a name="asset_details"></a>
+      <h2>Asset Details</h2>
+      <p>
+       Provides detailed information about the asset.
+       This includes all the information from the Filtered Assets table, plus the list of
+       open ports and the list of Apps.
+      </p>
     </div>
   </div>
 </xsl:template>

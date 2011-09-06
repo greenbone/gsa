@@ -10283,7 +10283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Asset Details
-       <a href="/help/configure_targets.html?token={/envelope/token}#assetdetails"
+       <a href="/help/assets.html?token={/envelope/token}#asset_details"
          title="Help: Assets (Asset Details)">
          <img src="/img/help.png"/>
        </a>

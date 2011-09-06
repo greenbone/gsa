@@ -1,5 +1,11 @@
 2011-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (host): Correct help link.
+
+	* src/html/help.xsl (assets.html): Add actions and asset details.
+
+2011-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report_omp): Add filters to GET_ASSET.
 
 	* src/html/omp.xsl: Add stylesheet attribs for functions.
