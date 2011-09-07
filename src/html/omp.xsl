@@ -10327,24 +10327,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><img src="/img/high.png" alt="High" title="High"/>:</td>
-          <td>
-            <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="/img/medium.png" alt="Medium" title="Medium"/>:</td>
-          <td>
-            <xsl:value-of select="detail[name/text() = 'report/result_count/medium']/value"/>
-          </td>
-        </tr>
-        <tr>
-          <td><img src="/img/low.png" alt="Low" title="Low"/>:</td>
-          <td>
-            <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
-          </td>
-        </tr>
-        <tr>
           <td>Report:</td>
           <td>
             <xsl:choose>
@@ -10374,6 +10356,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Reports:</td>
+          <td>
+            <xsl:value-of select="$report_count"/>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/high.png" alt="High" title="High"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/high']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/medium.png" alt="Medium" title="Medium"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/medium']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="/img/low.png" alt="Low" title="Low"/>:</td>
+          <td>
+            <xsl:value-of select="detail[name/text() = 'report/result_count/low']/value"/>
+          </td>
+        </tr>
+        <tr>
           <td>OS:</td>
           <td>
             <xsl:call-template name="os-icon">
@@ -10399,12 +10405,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Reports:</td>
-          <td>
-            <xsl:value-of select="$report_count"/>
-          </td>
-        </tr>
-        <tr>
           <td>Distance:</td>
           <td>
             <xsl:choose>
@@ -10425,7 +10425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h1>Apps: None</h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Apps</h1>
+          <h1>Detected Applications</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td rowspan="2">CPE</td>

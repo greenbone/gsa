@@ -1,3 +1,9 @@
+2011-09-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (host): Moved Report info up as all
+	the rest refers to the selected report. Renamed section
+	"Apps" to "Detected Apps".
+
 2011-09-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Add prognosis columns.
