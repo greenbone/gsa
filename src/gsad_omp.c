@@ -282,6 +282,16 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
                          " so modification of the config is forbidden."
                          "</gsad_msg>"));
     }
+  else if (strcmp (status_text, "MODIFY_CONFIG name must be unique") == 0)
+    {
+      free_entity (entity);
+      return xsl_transform_omp
+              (credentials,
+               g_strdup ("<gsad_msg status_text=\"Config name must be unique\""
+                         " operation=\"Save Config\">"
+                         "A config with the given name exists already."
+                         "</gsad_msg>"));
+    }
   else if (strcmp (status_text, "OK"))
     {
       free_entity (entity);
@@ -5876,6 +5886,18 @@ save_config_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *next;
   params_t *preferences, *selects, *trends;
+  const char *config_id, *name, *comment;
+
+  config_id = params_value (params, "config_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+
+  if ((config_id == NULL) || (name == NULL) || (comment == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a config. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_configs");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5892,6 +5914,34 @@ save_config_omp (credentials_t * credentials, params_t *params)
                              "The current list of configs is not available. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_configs");
+    }
+
+  /* Save name and comment. */
+
+  if (openvas_server_sendf_xml (&session,
+                                "<modify_config config_id=\"%s\">"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "</modify_config>",
+                                params_value (params, "config_id"),
+                                name,
+                                comment)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving a config. "
+                           "It is unclear whether the entire config has been saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  ret = check_modify_config (credentials, &session, __FUNCTION__, __LINE__);
+  if (ret)
+    {
+      openvas_server_close (socket, session);
+      return ret;
     }
 
   /* Save preferences. */

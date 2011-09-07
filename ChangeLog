@@ -1,3 +1,10 @@
+2011-09-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (check_modify_config): Add name error case.
+	(save_config_omp): Pass name and comment to Manager.
+
+	* src/html/omp.xsl (html-config-table): Add name and comment editing.
+
 2011-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Correct help link.

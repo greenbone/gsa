@@ -6424,16 +6424,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <br/>
 
-    <table>
-      <tr>
-        <td><b>Name:</b></td>
-        <td><b><xsl:value-of select="$config/name"/></b></td>
-      </tr>
-      <tr>
-        <td>Comment:</td><td><xsl:value-of select="$config/comment"/></td>
-      </tr>
-    </table>
-
     <xsl:choose>
       <xsl:when test="edit">
         <form action="" method="post">
@@ -6442,6 +6432,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="config_id" value="{$config/@id}"/>
           <input type="hidden" name="name" value="{$config/name}"/>
+
+          <table border="0" cellspacing="0" cellpadding="3" width="100%">
+            <tr>
+              <td valign="top" width="125">Name</td>
+              <td>
+                <input type="text" name="name" value="{$config/name}" size="30"
+                       maxlength="80"/>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">Comment (optional)</td>
+              <td>
+                <input type="text" name="comment" size="30" maxlength="400"
+                       value="{$config/comment}"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align:right;">
+                <input type="submit" name="submit" value="Save Config"/>
+              </td>
+            </tr>
+          </table>
 
           <h1>Edit Network Vulnerability Test Families</h1>
 
@@ -6478,6 +6490,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </xsl:when>
       <xsl:otherwise>
+        <table>
+          <tr>
+            <td><b>Name:</b></td>
+            <td><b><xsl:value-of select="$config/name"/></b></td>
+          </tr>
+          <tr>
+            <td>Comment:</td><td><xsl:value-of select="$config/comment"/></td>
+          </tr>
+        </table>
+
         <h1>Network Vulnerability Test Families</h1>
 
         <xsl:apply-templates select="$config" mode="families"/>
