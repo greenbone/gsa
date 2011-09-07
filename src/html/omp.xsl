@@ -10428,7 +10428,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h1>Apps</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
-              <td>CPE</td>
+              <td rowspan="2">CPE</td>
+              <td colspan="4">Prognosis</td>
+            </tr>
+            <tr class="gbntablehead2">
+              <td style="font-size:10px;">Threat</td>
+              <td style="font-size:10px;">CVSS</td>
+              <td style="font-size:10px;">CVE</td>
+              <td style="font-size:10px;">Threats</td>
             </tr>
             <xsl:for-each select="detail[name = 'App']">
               <xsl:variable name="class">
@@ -10437,8 +10444,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:otherwise>odd</xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
+              <xsl:variable name="app" select="value"/>
               <tr class="{$class}">
-                <td><xsl:value-of select="value"/></td>
+                <xsl:variable name="cve"
+                              select="../detail[name = concat ($app, '/CVE')]/value"/>
+                <xsl:variable name="threats"
+                              select="count (../detail[name = concat ($app, '/CVE')])"/>
+                <xsl:variable name="cvss"
+                              select="../detail[name = concat ($app, '/', $cve, '/CVSS')]/value"/>
+                <td><xsl:value-of select="$app"/></td>
+                <td>
+                  <xsl:variable name="threat"
+                                select="../detail[name = concat ($app, '/threat')]/value"/>
+                  <xsl:choose>
+                    <xsl:when test="$threat = 'High'">
+                      <img src="/img/high.png" alt="High" title="High"/>
+                    </xsl:when>
+                    <xsl:when test="$threat = 'Medium'">
+                      <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                    </xsl:when>
+                    <xsl:when test="$threat = 'Low'">
+                      <img src="/img/low.png" alt="Low" title="Low"/>
+                    </xsl:when>
+                    <xsl:when test="$threat = 'Log'">
+                      <img src="/img/log.png" alt="Log" title="Log"/>
+                    </xsl:when>
+                  </xsl:choose>
+                </td>
+                <td><xsl:value-of select="$cvss"/></td>
+                <td><xsl:value-of select="$cve"/></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="$threats &gt; 0">
+                      <xsl:value-of select="$threats"/>
+                    </xsl:when>
+                  </xsl:choose>
+                </td>
               </tr>
             </xsl:for-each>
           </table>
