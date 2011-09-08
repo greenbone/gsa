@@ -10429,7 +10429,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td rowspan="2">CPE</td>
-              <td colspan="4">Prognosis</td>
+              <td colspan="4">
+                Prognosis
+                <xsl:variable name="threat"
+                              select="detail[name = 'prognosis']/value"/>
+                <xsl:choose>
+                  <xsl:when test="$threat = 'High'">
+                    <img src="/img/high.png" alt="High" title="High"/>
+                  </xsl:when>
+                  <xsl:when test="$threat = 'Medium'">
+                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  </xsl:when>
+                  <xsl:when test="$threat = 'Low'">
+                    <img src="/img/low.png" alt="Low" title="Low"/>
+                  </xsl:when>
+                  <xsl:when test="$threat = 'Log'">
+                    <img src="/img/log.png" alt="Log" title="Log"/>
+                  </xsl:when>
+                </xsl:choose>
+              </td>
             </tr>
             <tr class="gbntablehead2">
               <td style="font-size:10px;">Threat</td>
@@ -11296,6 +11314,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>Apps</td>
       <td>Reports</td>
       <td>Distance</td>
+      <td>Prognosis</td>
       <td>Actions</td>
     </tr>
     <xsl:for-each select="host">
@@ -11352,6 +11371,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>
               <xsl:value-of select="count (str:tokenize (detail[name = 'traceroute']/value, ',')) - 1"/>
             </xsl:otherwise>
+          </xsl:choose>
+        </td>
+        <td>
+          <xsl:variable name="threat"
+                        select="detail[name = 'prognosis']/value"/>
+          <xsl:choose>
+            <xsl:when test="$threat = 'High'">
+              <img src="/img/high.png" alt="High" title="High"/>
+            </xsl:when>
+            <xsl:when test="$threat = 'Medium'">
+              <img src="/img/medium.png" alt="Medium" title="Medium"/>
+            </xsl:when>
+            <xsl:when test="$threat = 'Low'">
+              <img src="/img/low.png" alt="Low" title="Low"/>
+            </xsl:when>
+            <xsl:when test="$threat = 'Log'">
+              <img src="/img/log.png" alt="Log" title="Log"/>
+            </xsl:when>
           </xsl:choose>
         </td>
         <td>
