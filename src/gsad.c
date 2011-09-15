@@ -632,7 +632,7 @@ init_validator ()
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
   openvas_validator_add (validator, "trend:",      "^(0|1)$");
   openvas_validator_add (validator, "trend:value", "^(0|1)$");
-  openvas_validator_add (validator, "type",       "^assets$");
+  openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");

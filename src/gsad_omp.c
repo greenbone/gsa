@@ -7548,7 +7548,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
-                            "%s%s%s%s"
+                            "%s%s%s%s%s"
                             " pos=\"%s\""
                             " notes=\"%i\""
                             " notes_details=\"1\""
@@ -7567,6 +7567,9 @@ get_report_omp (credentials_t * credentials, params_t *params,
                             " delta_states=\"%s\""
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
+                            (type && (strcmp (type, "prognostic") == 0))
+                             ? " type=\"prognostic\""
+                             : "",
                             (type && (strcmp (type, "assets") == 0))
                              ? " type=\"assets\""
                              : "",
@@ -7577,7 +7580,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
-                            (type && (strcmp (type, "assets") == 0))
+                            (type && ((strcmp (type, "assets") == 0)
+                                      || (strcmp (type, "prognostic") == 0)))
                              ? ""
                              : report_id,
                             delta_report_id ? delta_report_id : "0",
@@ -7727,9 +7731,12 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         xml = g_string_new ("<get_delta_result>");
-      else if (host)
+      else if (host || (type && (strcmp (type, "prognostic") == 0)))
         {
-          xml = g_string_new ("<get_asset>");
+          if (type && (strcmp (type, "prognostic") == 0))
+            xml = g_string_new ("<get_prognostic_report>");
+          else
+            xml = g_string_new ("<get_asset>");
           g_string_append_printf (xml,
                                   "<search_phrase>%s</search_phrase>"
                                   "<levels>%s</levels>"
@@ -7763,6 +7770,13 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                "The report could not be delivered. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_tasks");
+        }
+
+      if (type && (strcmp (type, "prognostic") == 0))
+        {
+          g_string_append (xml, "</get_prognostic_report>");
+          openvas_server_close (socket, session);
+          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
       if (type && (strcmp (type, "assets") == 0))

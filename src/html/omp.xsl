@@ -799,83 +799,113 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="../../delta">
         Delta
       </xsl:if>
+      <xsl:if test="@type='prognostic'">
+        Prognostic
+      </xsl:if>
       Report Summary
       <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (View Report)">
         <img src="/img/help.png"/>
       </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_report"/>
-          <xsl:choose>
-            <xsl:when test="../../delta">
-              <input type="hidden" name="report_id" value="{report/@id}"/>
-              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-              <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="hidden" name="report_id" value="{report/@id}"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <input type="hidden" name="first_result" value="{report/results/@start}"/>
-          <input type="hidden" name="max_results" value="{report/results/@max}"/>
-          <input type="hidden" name="levels" value="{$levels}"/>
-          <input type="hidden"
-                 name="search_phrase"
-                 value="{report/filters/phrase}"/>
-          <input type="hidden"
-                 name="apply_min_cvss_base"
-                 value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
-          <input type="hidden"
-                 name="min_cvss_base"
-                 value="{report/filters/min_cvss_base}"/>
-          <input type="hidden"
-                 name="sort_field"
-                 value="{report/sort/field/text()}"/>
-          <input type="hidden"
-                 name="sort_order"
-                 value="{report/sort/field/order}"/>
-          <input type="hidden" name="notes" value="{report/filters/notes}"/>
-          <input type="hidden"
-                 name="result_hosts_only"
-                 value="{report/filters/result_hosts_only}"/>
-          <input type="hidden" name="task_id" value="{task/@id}"/>
-          <select style="margin-bottom: 0px;" name="overrides" size="1">
-            <xsl:choose>
-              <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">&#8730;No overrides</option>
-                <option value="1" >Apply overrides</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">No overrides</option>
-                <option value="1" selected="1">&#8730;Apply overrides</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
-          <input type="image"
-                 name="Update"
-                 src="/img/refresh.png"
-                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
-        </form>
-      </div>
+      <xsl:choose>
+        <xsl:when test="@type='prognostic'">
+        </xsl:when>
+        <xsl:otherwise>
+          <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+            <form action="" method="get">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_report"/>
+              <xsl:choose>
+                <xsl:when test="../../delta">
+                  <input type="hidden" name="report_id" value="{report/@id}"/>
+                  <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+                  <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="report_id" value="{report/@id}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <input type="hidden" name="first_result" value="{report/results/@start}"/>
+              <input type="hidden" name="max_results" value="{report/results/@max}"/>
+              <input type="hidden" name="levels" value="{$levels}"/>
+              <input type="hidden"
+                     name="search_phrase"
+                     value="{report/filters/phrase}"/>
+              <input type="hidden"
+                     name="apply_min_cvss_base"
+                     value="{string-length(report/filters/min_cvss_base) &gt; 0}"/>
+              <input type="hidden"
+                     name="min_cvss_base"
+                     value="{report/filters/min_cvss_base}"/>
+              <input type="hidden"
+                     name="sort_field"
+                     value="{report/sort/field/text()}"/>
+              <input type="hidden"
+                     name="sort_order"
+                     value="{report/sort/field/order}"/>
+              <input type="hidden" name="notes" value="{report/filters/notes}"/>
+              <input type="hidden"
+                     name="result_hosts_only"
+                     value="{report/filters/result_hosts_only}"/>
+              <input type="hidden" name="task_id" value="{task/@id}"/>
+              <select style="margin-bottom: 0px;" name="overrides" size="1">
+                <xsl:choose>
+                  <xsl:when test="$apply-overrides = 0">
+                    <option value="0" selected="1">&#8730;No overrides</option>
+                    <option value="1" >Apply overrides</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0">No overrides</option>
+                    <option value="1" selected="1">&#8730;Apply overrides</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </select>
+              <input type="image"
+                     name="Update"
+                     src="/img/refresh.png"
+                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
+            </form>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Task</a>
-      </div>
+      <xsl:choose>
+        <xsl:when test="@type='prognostic'">
+          <div class="float_right">
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={report/filters/text()}&amp;search_phrase={report/filters/phrase}&amp;first_result={report/results/@start}&amp;max_results={report/results/@max}&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Assets</a>
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="float_right">
+            <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Task</a>
+          </div>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <a name="summary"/>
       <table border="0" cellspacing="0" cellpadding="3">
-        <tr>
-          <td><b>Result of Task:</b></td>
-          <td><b><xsl:value-of select="report/task/name"/></b></td>
-        </tr>
-        <tr>
-          <td>Order of results:</td>
-          <td>by host</td>
-        </tr>
         <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+            <tr>
+              <td><b>Host:</b></td>
+              <td><b><xsl:value-of select="report/filters/host"/></b></td>
+            </tr>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td><b>Result of Task:</b></td>
+              <td><b><xsl:value-of select="report/task/name"/></b></td>
+            </tr>
+            <tr>
+              <td>Order of results:</td>
+              <td>by host</td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+          </xsl:when>
           <xsl:when test="../../delta">
             <tr>
               <td>Report 1:</td>
@@ -996,6 +1026,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
           <td>Total</td>
           <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
             <xsl:when test="../../delta">
             </xsl:when>
             <xsl:otherwise>
@@ -1005,6 +1037,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </tr>
         <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+          </xsl:when>
           <xsl:when test="../../delta">
           </xsl:when>
           <xsl:otherwise>
@@ -1129,7 +1163,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <tr>
-          <td>All filtered results:</td>
+          <td>All filtered
+              <xsl:if test="@type='prognostic'">
+                prognostic
+              </xsl:if>
+              results:</td>
           <td>
             <xsl:value-of select="report/result_count/hole/filtered"/>
           </td>
@@ -1149,6 +1187,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered"/>
           </td>
           <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
             <xsl:when test="../../delta">
             </xsl:when>
             <xsl:otherwise>
@@ -1285,13 +1325,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
             <xsl:choose>
               <xsl:when test="count(report/results/result) &gt; 0">
-                Filtered results
+                Filtered
+                <xsl:if test="@type='prognostic'">
+                  prognostic
+                </xsl:if>
+                results
                 <xsl:value-of select="report/results/@start"/>
                 -
                 <xsl:value-of select="$last"/>:
               </xsl:when>
               <xsl:otherwise>
-                Filtered results:
+                Filtered
+                <xsl:if test="@type='prognostic'">
+                  prognostic
+                </xsl:if>
+                results:
               </xsl:otherwise>
             </xsl:choose>
           </td>
@@ -1314,6 +1362,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="count(report/results/result)"/>
           </td>
           <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
             <xsl:when test="../../delta">
             </xsl:when>
             <xsl:otherwise>
@@ -1456,6 +1506,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
+      <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
       <xsl:if test="../../delta">Delta</xsl:if>
       Result Filtering
       <!--
@@ -1467,50 +1518,56 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <!-- TODO: Move to template. -->
-      <p><table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-          <td>
-            Sorting:
-          </td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='ascending'">
-                port ascending
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port ascending</a>
-              </xsl:otherwise>
-            </xsl:choose>
-            |
-            <xsl:choose>
-              <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='descending'">
-                port descending
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port descending</a>
-              </xsl:otherwise>
-            </xsl:choose>
-            |
-            <xsl:choose>
-              <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='ascending'">
-                threat ascending
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat ascending</a>
-              </xsl:otherwise>
-            </xsl:choose>
-            |
-            <xsl:choose>
-              <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='descending'">
-                threat descending
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat descending</a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-      </table></p>
+      <xsl:choose>
+        <xsl:when test="@type='prognostic'">
+        </xsl:when>
+        <xsl:otherwise>
+          <p><table border="0" cellspacing="0" cellpadding="3" width="100%">
+            <tr>
+              <td>
+                Sorting:
+              </td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='ascending'">
+                    port ascending
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port ascending</a>
+                  </xsl:otherwise>
+                </xsl:choose>
+                |
+                <xsl:choose>
+                  <xsl:when test="report/sort/field/text()='port' and report/sort/field/order='descending'">
+                    port descending
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=port&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">port descending</a>
+                  </xsl:otherwise>
+                </xsl:choose>
+                |
+                <xsl:choose>
+                  <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='ascending'">
+                    threat ascending
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=ascending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat ascending</a>
+                  </xsl:otherwise>
+                </xsl:choose>
+                |
+                <xsl:choose>
+                  <xsl:when test="report/sort/field/text()='type' and report/sort/field/order='descending'">
+                    threat descending
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;delta_report_id={report/delta/report/@id}&amp;delta_states={report/filters/delta/text()}&amp;sort_field=type&amp;sort_order=descending&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}">threat descending</a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </table></p>
+        </xsl:otherwise>
+      </xsl:choose>
       <br/>
       <div style="background-color: #EEEEEE;">
         <xsl:variable name="sort_field">
@@ -1524,6 +1581,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
           <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+              <input type="hidden" name="type" value="prognostic"/>
+              <input type="hidden" name="host" value="{report/filters/host}"/>
+            </xsl:when>
             <xsl:when test="../../delta">
               <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
             </xsl:when>
@@ -1594,19 +1655,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{report/results/@max}"
                    maxlength="400"/>
           </div>
+
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
+            <xsl:otherwise>
+              <div style="padding: 2px;">
+                <xsl:choose>
+                  <xsl:when test="report/filters/notes = 0">
+                    <input type="checkbox" name="notes" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="notes" value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Show notes
+              </div>
+            </xsl:otherwise>
+          </xsl:choose>
+
           <div style="padding: 2px;">
             <xsl:choose>
-              <xsl:when test="report/filters/notes = 0">
-                <input type="checkbox" name="notes" value="1"/>
+              <xsl:when test="@type='prognostic' and string-length (report/filters/host/ip) &gt; 0">
+                <input type="checkbox" name="result_hosts_only" value="1" disabled="1"/>
               </xsl:when>
-              <xsl:otherwise>
-                <input type="checkbox" name="notes" value="1" checked="1"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            Show notes
-          </div>
-          <div style="padding: 2px;">
-            <xsl:choose>
               <xsl:when test="report/filters/result_hosts_only = 0">
                 <input type="checkbox" name="result_hosts_only" value="1"/>
               </xsl:when>
@@ -1775,6 +1847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Filtered
       <xsl:if test="../../delta">Delta</xsl:if>
+      <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
       Results
 
       <xsl:choose>
@@ -10539,6 +10612,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="get_reports_response" mode="asset"/>
 </xsl:template>
 
+<xsl:template match="get_prognostic_report">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="get_reports_response"/>
+</xsl:template>
+
 <!--     CREATE_NOTE_RESPONSE -->
 
 <xsl:template match="create_note_response">
@@ -10910,6 +10988,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="show-overrides">0</xsl:param>
   <xsl:param name="result-details"/>
+  <xsl:param name="prognostic"/>
   <xsl:variable name="style">
     <xsl:choose>
        <xsl:when test="threat='Low'">background:#539dcb</xsl:when>
@@ -10919,9 +10998,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <a class="anchor" name="result-{@id}"/>
   <div class="issue_box_head" style="{$style}">
-    <div class="float_right" style="text-align:right">
-      <xsl:value-of select="port"/>
-    </div>
+    <xsl:choose>
+      <xsl:when test="$prognostic=1">
+        <div class="float_right" style="text-align:right">
+          <xsl:value-of select="cve/cpe/@id"/>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <div class="float_right" style="text-align:right">
+          <xsl:value-of select="port"/>
+        </div>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="delta/text()">
       <div style="float: left; font-size: 24px; border: 2px; padding-left: 2px; padding-right: 8px; margin:0px;">
         <xsl:choose>
@@ -10934,6 +11022,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
     <b><xsl:value-of select="threat"/></b>
     <xsl:choose>
+      <xsl:when test="$prognostic=1">
+        <xsl:if test="string-length(cve/cvss_base) &gt; 0">
+          (CVSS: <xsl:value-of select="cve/cvss_base"/>)
+        </xsl:if>
+      </xsl:when>
       <xsl:when test="original_threat">
         <xsl:choose>
           <xsl:when test="threat = original_threat">
@@ -10954,6 +11047,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
     <div>
       <xsl:choose>
+        <xsl:when test="$prognostic=1">
+          <xsl:value-of select="cve/@id"/>
+        </xsl:when>
         <xsl:when test="nvt/@oid = 0">
           <xsl:if test="delta/text()">
             <br/>
@@ -11396,6 +11492,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              title="Asset Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
+          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
+             title="Prognostic Report" style="margin-left:3px;">
+            <img src="/img/new.png" border="0" alt="Prognostic Report"/>
+          </a>
         </td>
       </tr>
     </xsl:for-each>
@@ -11523,11 +11623,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
       <td>Total</td>
     </tr>
-    <xsl:for-each select="host_start" >
-      <xsl:variable name="current_host" select="host/text()"/>
+    <xsl:for-each select="host" >
+      <xsl:variable name="current_host" select="ip"/>
       <tr>
         <td>
-          <xsl:variable name="hostname" select="../host[ip/text() = $current_host]/detail[name/text() = 'hostname']/value"/>
+          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
           <a href="#{$current_host}"><xsl:value-of select="$current_host"/>
           <xsl:if test="$hostname">
             <xsl:value-of select="concat(' (', $hostname, ')')"/>
@@ -11541,12 +11641,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </td>
         <td>
-          <xsl:value-of select="substring(text(),5,6)"/>, <xsl:value-of select="substring(text(),12,8)"/>
+          <xsl:value-of select="substring(start/text(),5,6)"/>, <xsl:value-of select="substring(start/text(),12,8)"/>
         </td>
         <td>
           <xsl:choose>
-            <xsl:when test="../host_end[host=$current_host]/text() != ''">
-              <xsl:value-of select="substring(../host_end[host=$current_host]/text(),5,6)"/>, <xsl:value-of select="substring(../host_end[host=$current_host]/text(),12,8)"/>
+            <xsl:when test="end/text() != ''">
+              <xsl:value-of select="substring(end/text(),5,6)"/>, <xsl:value-of select="substring(end/text(),12,8)"/>
             </xsl:when>
             <xsl:otherwise>(not finished)</xsl:otherwise>
           </xsl:choose>
@@ -11612,26 +11712,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_reports_response/report/report" mode="details">
-  <xsl:for-each select="host_start" >
-    <xsl:variable name="current_host" select="host/text()"/>
-    <a name="{$current_host}"></a>
-    <h2>
-      Port summary for <xsl:value-of select="$current_host"/>
-    </h2>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
-      <tr class="gbntablehead2">
-        <td>Service (Port)</td>
-        <td>Threat</td>
-      </tr>
-      <xsl:apply-templates select="../ports/port[host/text() = $current_host]"/>
-    </table>
+  <xsl:variable name="prognostic">
+    <xsl:if test="@type='prognostic'">1</xsl:if>
+  </xsl:variable>
+  <xsl:for-each select="host" >
+    <xsl:variable name="current_host" select="ip"/>
+    <xsl:choose>
+      <xsl:when test="$prognostic=1">
+      </xsl:when>
+      <xsl:otherwise>
+        <a name="{$current_host}"></a>
+        <h2>
+          Port summary for <xsl:value-of select="$current_host"/>
+        </h2>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Service (Port)</td>
+            <td>Threat</td>
+          </tr>
+          <xsl:apply-templates select="../ports/port[host/text() = $current_host]"/>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
     <a name="{$current_host}"/>
     <h3>
       Security Issues reported for <xsl:value-of select="$current_host"/>
     </h3>
-    <xsl:apply-templates
-      select="../results/result[host/text() = $current_host]"
-      mode="detailed"/>
+    <xsl:for-each select="../results/result[host/text() = $current_host]">
+      <xsl:call-template name="result-detailed">
+        <xsl:with-param name="prognostic" select="$prognostic"/>
+        <xsl:with-param name="details-button">0</xsl:with-param>
+        <xsl:with-param name="note-buttons">0</xsl:with-param>
+        <xsl:with-param name="override-buttons">0</xsl:with-param>
+        <xsl:with-param name="show-overrides">0</xsl:with-param>
+      </xsl:call-template>
+    </xsl:for-each>
     <a href="#summary">Back to summary</a>
   </xsl:for-each>
 </xsl:template>

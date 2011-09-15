@@ -1,3 +1,16 @@
+2011-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add single host prognostic reports.
+
+	* src/gsad.c (init_validator): Add prognostic to type.
+
+	* src/gsad_omp.c (get_report_omp): Add prognostic case.
+
+	* src/html/omp.xsl (html-report-details): Add prognostic report handling.
+	(get_prognostic_report): New template.
+	(result-detailed, report [assets], report [overview])
+	(report [details]): Add prognostic cases.
+
 2011-09-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Add max prognosis threat.
