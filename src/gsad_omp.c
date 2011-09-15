@@ -7734,7 +7734,46 @@ get_report_omp (credentials_t * credentials, params_t *params,
       else if (host || (type && (strcmp (type, "prognostic") == 0)))
         {
           if (type && (strcmp (type, "prognostic") == 0))
-            xml = g_string_new ("<get_prognostic_report>");
+            {
+              const char *host_search_phrase, *host_first_result;
+              const char *host_max_results;
+
+              xml = g_string_new ("<get_prognostic_report>");
+
+              host_search_phrase = params_value (params, "host_search_phrase");
+              if (host_search_phrase == NULL)
+                params_given (params, "host_search_phrase")
+                  || (host_search_phrase = "");
+
+              host_first_result = params_value (params, "host_first_result");
+              if (host_first_result == NULL
+                  || sscanf (host_first_result, "%u", &first) != 1)
+                host_first_result = "1";
+
+              host_max_results = params_value (params, "host_max_results");
+              if (host_max_results == NULL
+                  || sscanf (host_max_results, "%u", &max) != 1)
+                host_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+              if (host_search_phrase == NULL)
+                {
+                  openvas_server_close (socket, session);
+                  xml = g_string_new ("");
+                  g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                                          "Given host search_phrase was invalid",
+                                          "Get Report");
+                  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+                }
+
+              g_string_append_printf (xml,
+                                      "<host_search_phrase>"
+                                      "%s"
+                                      "</host_search_phrase>"
+                                      "<results start=\"%s\" max=\"%s\"/>",
+                                      host_search_phrase,
+                                      host_first_result,
+                                      host_max_results);
+            }
           else
             xml = g_string_new ("<get_asset>");
           g_string_append_printf (xml,

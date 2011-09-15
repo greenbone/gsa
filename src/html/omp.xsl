@@ -873,7 +873,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={report/filters/text()}&amp;search_phrase={report/filters/phrase}&amp;first_result={report/results/@start}&amp;max_results={report/results/@max}&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Assets</a>
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={report/filters/text()}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Assets</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
@@ -11492,7 +11492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              title="Asset Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
-          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;token={/envelope/token}"
              title="Prognostic Report" style="margin-left:3px;">
             <img src="/img/new.png" border="0" alt="Prognostic Report"/>
           </a>

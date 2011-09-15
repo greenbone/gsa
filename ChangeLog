@@ -1,5 +1,18 @@
 2011-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add host filters.
+
+	* src/gsad_omp.c (get_report_omp): Add host filters to
+	GET_PROGNOSTIC_REPORT.
+
+	* src/html/omp.xsl (html-report-details): Get most filters for back link
+	from new GET_PROGNOSTIC_REPORT elements, instead of using the result
+	filters.
+	(report [assets]): Use host names for filter params in prognostic report
+	link.
+
+2011-09-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add single host prognostic reports.
 
 	* src/gsad.c (init_validator): Add prognostic to type.
