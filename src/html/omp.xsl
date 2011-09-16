@@ -780,6 +780,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a style="margin-left: 7px" href="/help/assets.html?token={/envelope/token}" title="Help: Assets">
         <img src="/img/help.png" border="0"/>
       </a>
+      <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={hosts/@start}&amp;host_max_results={hosts/@max}&amp;token={/envelope/token}"
+         title="Prognostic Report" style="margin-left:3px;">
+        <img src="/img/new.png" border="0" alt="Prognostic Report"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="assets"/>
@@ -873,7 +877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={report/filters/text()}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Assets</a>
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Assets</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
@@ -886,10 +890,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="summary"/>
       <table border="0" cellspacing="0" cellpadding="3">
         <xsl:choose>
-          <xsl:when test="@type='prognostic'">
+          <xsl:when test="@type='prognostic' and string-length (report/filters/host) &gt; 0">
             <tr>
               <td><b>Host:</b></td>
               <td><b><xsl:value-of select="report/filters/host"/></b></td>
+            </tr>
+          </xsl:when>
+          <xsl:when test="@type='prognostic'">
+            <tr>
+              <td><b>Multiple hosts</b></td>
+              <td></td>
             </tr>
           </xsl:when>
           <xsl:otherwise>
@@ -1585,6 +1595,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="type" value="prognostic"/>
               <input type="hidden" name="host" value="{report/filters/host}"/>
               <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+              <input type="hidden" name="host_levels" value="{../../host_levels}"/>
               <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
               <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
             </xsl:when>
@@ -1679,17 +1690,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <div style="padding: 2px;">
             <xsl:choose>
-              <xsl:when test="@type='prognostic' and string-length (report/filters/host/ip) &gt; 0">
-                <input type="checkbox" name="result_hosts_only" value="1" disabled="1"/>
+              <xsl:when test="@type='prognostic'">
               </xsl:when>
               <xsl:when test="report/filters/result_hosts_only = 0">
                 <input type="checkbox" name="result_hosts_only" value="1"/>
+                Only show hosts that have results
               </xsl:when>
               <xsl:otherwise>
                 <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
+                Only show hosts that have results
               </xsl:otherwise>
             </xsl:choose>
-            Only show hosts that have results
           </div>
           <div style="padding: 2px;">
             <xsl:choose>

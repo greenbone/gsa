@@ -7735,8 +7735,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
         {
           if (type && (strcmp (type, "prognostic") == 0))
             {
-              const char *host_search_phrase, *host_first_result;
-              const char *host_max_results;
+              const char *host_search_phrase, *host_levels;
+              const char *host_first_result, *host_max_results;
 
               xml = g_string_new ("<get_prognostic_report>");
 
@@ -7744,6 +7744,11 @@ get_report_omp (credentials_t * credentials, params_t *params,
               if (host_search_phrase == NULL)
                 params_given (params, "host_search_phrase")
                   || (host_search_phrase = "");
+
+              host_levels = params_value (params, "host_levels");
+              if (host_levels == NULL)
+                params_given (params, "host_levels")
+                  || (host_levels = "");
 
               host_first_result = params_value (params, "host_first_result");
               if (host_first_result == NULL
@@ -7769,8 +7774,10 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                       "<host_search_phrase>"
                                       "%s"
                                       "</host_search_phrase>"
+                                      "<host_levels>%s</host_levels>"
                                       "<results start=\"%s\" max=\"%s\"/>",
                                       host_search_phrase,
+                                      host_levels,
                                       host_first_result,
                                       host_max_results);
             }
