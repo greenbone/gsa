@@ -10492,6 +10492,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
+      <xsl:choose>
+        <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0">
+          <h1>Hardware: Information not available</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Hardware</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Component</td>
+              <td>Values</td>
+            </tr>
+            <xsl:if test="count (detail[name = 'cpuinfo']) > 0">
+              <tr>
+                <td>CPU</td>
+                <td><xsl:value-of select="detail[name = 'cpuinfo']/value"/></td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="count (detail[name = 'meminfo']) > 0">
+              <tr>
+                <td>Memory</td>
+                <td><xsl:value-of select="detail[name = 'meminfo']/value"/></td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="count (detail[name = 'netinfo']) > 0">
+              <tr>
+                <td>Net</td>
+                <td>
+                  <table>
+                    <xsl:for-each select="str:split(detail[name = 'netinfo']/value, '\n')">
+                      <tr><td><xsl:value-of select="."/></td></tr>
+                    </xsl:for-each>
+                  </table>
+                </td>
+              </tr>
+            </xsl:if>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
 
       <xsl:choose>
         <xsl:when test="count (detail[name = 'App']) = 0">
