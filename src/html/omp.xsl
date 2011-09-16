@@ -1584,6 +1584,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="@type='prognostic'">
               <input type="hidden" name="type" value="prognostic"/>
               <input type="hidden" name="host" value="{report/filters/host}"/>
+              <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+              <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+              <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
             </xsl:when>
             <xsl:when test="../../delta">
               <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>

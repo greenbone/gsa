@@ -1,3 +1,8 @@
+2011-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Pass host filtering params
+	through on result filtering form too.
+
 2011-09-16  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (host): Add hardware information table.
