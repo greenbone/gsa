@@ -1,3 +1,13 @@
+2011-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add multi-host prognosis report.
+
+	* src/gsad.c (init_validator): Add host_levels alias.
+
+	* src/html/omp.xsl (html-report-details): Correct path in Back to Assets
+	link.
+	(report [assets]):
+
 2011-09-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add multi-host prognosis report.
