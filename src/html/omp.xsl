@@ -596,8 +596,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Asset Filtering
-      <a href="/help/assets.html?token={/envelope/token}" title="Help: Assets">
+      Host Filtering
+      <a href="/help/hosts.html?token={/envelope/token}" title="Help: Hosts">
         <img src="/img/help.png" border="0"/>
       </a>
     </div>
@@ -767,7 +767,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
-      Filtered Assets
+      Filtered Hosts
       <xsl:if test = "report/hosts/@start &gt; 1">
         <a style="margin-right: 5px" class="gb_window_part_center" href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&lt;&lt;</a>
       </xsl:if>
@@ -777,7 +777,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test = "$last &lt; report/host_count/filtered">
         <a style="margin-left: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
-      <a style="margin-left: 7px" href="/help/assets.html?token={/envelope/token}" title="Help: Assets">
+      <a style="margin-left: 7px" href="/help/hosts.html?token={/envelope/token}" title="Help: Hosts">
         <img src="/img/help.png" border="0"/>
       </a>
       <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={hosts/@start}&amp;host_max_results={hosts/@max}&amp;token={/envelope/token}"
@@ -877,7 +877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Assets</a>
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Hosts</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
@@ -10391,8 +10391,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Asset Details
-       <a href="/help/assets.html?token={/envelope/token}#asset_details"
+       Host Details
+       <a href="/help/hosts.html?token={/envelope/token}#host_details"
          title="Help: Assets (Asset Details)">
          <img src="/img/help.png"/>
        </a>
@@ -10400,7 +10400,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
       <div class="float_right">
-        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Back to Assets</a>
+        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Back to Hosts</a>
       </div>
       <table>
         <tr>

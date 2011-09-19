@@ -129,32 +129,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="assets.html">
-  <div class="gb_window_part_center">Help: Assets</div>
+<xsl:template mode="help" match="hosts.html">
+  <div class="gb_window_part_center">Help: Hosts</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Assets</h1>
+      <h1>Hosts</h1>
       <p>
        This page provides an overview of all the hosts found in all tasks.
       </p>
 
       <a name="filtering"></a>
-      <h2>Asset Filtering</h2>
+      <h2>Host Filtering</h2>
       <p>
-        The Asset Filtering window shows how the assets of the scan have been
+        The Host Filtering window shows how the hosts of the scan have been
         filtered to produce the overview.  Modifying any of the values and clicking
         the "Apply" button will update the overview.
       </p>
 
       <a name="filtered"></a>
-      <h2>Filtered Assets</h2>
+      <h2>Filtered Hosts</h2>
       <p>
-        The Filtered Assets window shows all the hosts, filtered
-        according to the Asset Filtering window.
+        The Filtered Hosts window shows all the hosts, filtered
+        according to the Hosts Filtering window.
       </p>
 
       <table class="gbntable">
@@ -224,6 +224,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             most recent report.
           </td>
         </tr>
+        <tr>
+          <td>Prognosis</td>
+          <td>
+            The maximum threat on the host, predicted from what is currently
+            known about the host.
+          </td>
+        </tr>
       </table>
 
       <a name="actions"></a>
@@ -233,6 +240,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will
        switch to an overview of this host.
+      </p>
+
+      <h4>Prognostic Report</h4>
+      <p>
+       Pressing the prognostic report icon
+       <img src="/img/new.png" alt="Prognostic Report" title="Prognostic Report" />
+       will switch to a prognostic report on this host.
       </p>
 
       <!--
@@ -264,11 +278,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       -->
 
-      <a name="asset_details"></a>
-      <h2>Asset Details</h2>
+      <a name="host_details"></a>
+      <h2>Host Details</h2>
       <p>
-       Provides detailed information about the asset.
-       This includes all the information from the Filtered Assets table, plus the list of
+       Provides detailed information about the host.
+       This includes all the information from the Filtered Hosts table, plus the list of
        open ports and the list of Apps.
       </p>
     </div>
@@ -1873,6 +1887,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
+          </ul>
+          <li> Asset Management</li>
+          <ul>
+            <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
