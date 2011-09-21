@@ -767,6 +767,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *comment, *config_id, *apply_overrides, *target_id;
   const char *escalator_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
+  const char *observers;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -778,6 +779,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   schedule_id = params_value (params, "schedule_id_optional");
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
+  observers = params_value (params, "observers");
 
   CHECK (name);
   CHECK (comment);
@@ -789,6 +791,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (schedule_id);
   CHECK (max_checks);
   CHECK (max_hosts);
+  CHECK (observers);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -843,8 +846,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               "<value>%s</value>"
                               "</preference>"
                               "</preferences>"
+                              "<observers>%s</observers>"
                               "</create_task>"
                               "<get_tasks"
+                              " actions=\"g\""
                               " sort_field=\"name\""
                               " sort_order=\"ascending\""
                               " apply_overrides=\"%s\"/>"
@@ -858,6 +863,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               comment,
                               max_checks,
                               max_hosts,
+                              observers,
                               apply_overrides);
 
   g_free (schedule_element);
@@ -1085,7 +1091,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   gchar *modify_task;
   const char *comment, *name, *next, *refresh_interval, *sort_field;
   const char *sort_order, *overrides, *escalator_id, *schedule_id;
-  const char *slave_id, *task_id, *max_checks, *max_hosts;
+  const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int apply_overrides;
 
   comment = params_value (params, "comment");
@@ -1108,10 +1114,12 @@ save_task_omp (credentials_t * credentials, params_t *params)
   slave_id = params_value (params, "slave_id");
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
+  observers = params_value (params, "observers");
 
   if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL || max_checks == NULL || max_hosts == NULL)
+      || task_id == NULL || max_checks == NULL || max_hosts == NULL
+      || observers == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -1135,6 +1143,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  "<value>%s</value>"
                                  "</preference>"
                                  "</preferences>"
+                                 "<observers>%s</observers>"
                                  "</modify_task>",
                                  task_id,
                                  name,
@@ -1143,7 +1152,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  schedule_id,
                                  slave_id,
                                  max_checks,
-                                 max_hosts);
+                                 max_hosts,
+                                 observers);
 
   if (strcmp (next, "get_tasks") == 0)
     {
@@ -1630,6 +1640,7 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 "%s"
                                 "<get_tasks"
                                 " task_id=\"%s\""
+                                " actions=\"g\""
                                 " apply_overrides=\"%i\""
                                 " details=\"1\" />"
                                 "<get_report_formats"
@@ -1664,6 +1675,7 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 "<commands>"
                                 "%s"
                                 "<get_tasks"
+                                " actions=\"g\""
                                 " apply_overrides=\"%i\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>"
@@ -2041,6 +2053,7 @@ get_lsc_credential (credentials_t * credentials, params_t *params,
                             "%s"
                             "<get_lsc_credentials"
                             " lsc_credential_id=\"%s\""
+                            " actions=\"g\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>"
                             "</commands>",
@@ -5260,6 +5273,7 @@ get_target_omp (credentials_t * credentials, params_t *params)
   if (openvas_server_sendf (&session,
                             "<get_targets"
                             " target_id=\"%s\""
+                            " actions=\"g\""
                             " tasks=\"1\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
@@ -5780,9 +5794,11 @@ get_config (credentials_t * credentials, params_t *params, int edit)
   if (openvas_server_sendf (&session,
                             "<get_configs"
                             " config_id=\"%s\""
+                            " actions=\"%s\""
                             " families=\"1\""
                             " preferences=\"1\"/>",
-                            config_id)
+                            config_id,
+                            edit ? "" : "g")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -6176,8 +6192,8 @@ get_config_family (credentials_t * credentials, params_t *params, int edit)
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" details=\"1\" family=\"%s\""
-                            " timeout=\"1\" preference_count=\"1\""
+                            " config_id=\"%s\" actions=\"g\" details=\"1\""
+                            " family=\"%s\" timeout=\"1\" preference_count=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,
                             family,
@@ -6460,7 +6476,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
 
   if (openvas_server_sendf (&session,
                             "<get_nvts"
-                            " config_id=\"%s\" nvt_oid=\"%s\""
+                            " config_id=\"%s\" actions=\"g\" nvt_oid=\"%s\""
                             " details=\"1\" preferences=\"1\""
                             " sort_field=\"%s\" sort_order=\"%s\"/>",
                             config_id,

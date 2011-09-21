@@ -1,3 +1,19 @@
+2011-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add task observers.
+
+	* src/gsad.c (init_validator): Add observers.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Add observers.
+	(get_tasks, get_lsc_credentials, get_target_omp, get_config)
+	(get_config_family, get_config_nvt): Add actions param to GET OMPs.
+
+	* src/html/omp.xsl (html-task-table): Add owner column.
+	(html-report-table, report, html-edit-task-form): Add observers field.
+	Turn off icons on observed tasks.
+	(task): Add owner column.  Turn off icons when observing.
+	(new_task): Add observer field.
+
 2011-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl: Rename assets to hosts.
