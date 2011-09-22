@@ -530,7 +530,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="3">Reports</td>
             <td width="1" rowspan="2">Threat</td>
             <td width="1" rowspan="2">Trend</td>
-            <td width="1" rowspan="2">Owner</td>
             <td width="115" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
@@ -3155,6 +3154,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="{$class}">
         <td>
           <b><xsl:value-of select="name"/></b>
+          <div class="float_right">
+            <xsl:choose>
+              <xsl:when test="string-length(slave/@id) &gt; 0">
+                <img src="/img/refresh.png"
+                     style="margin-left:3px;"
+                     border="0"
+                     alt="Task is configured to run on slave {slave/name}"
+                     title="Task is configured to run on slave {slave/name}"/>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="string-length (observers) &gt; 0">
+                <img src="/img/details.png"
+                     border="0"
+                     alt="Task is observed by: {observers}"
+                     title="Task is observed by: {observers}"/>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="owner/name=/envelope/login/text()">
+              </xsl:when>
+              <xsl:otherwise>
+                <img src="/img/new.png"
+                     style="margin-left:3px;"
+                     border="0"
+                     alt="Observing task owned by {owner/name}"
+                     title="Observing task owned by {owner/name}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
           <xsl:choose>
             <xsl:when test="comment != ''">
               <br/>(<xsl:value-of select="comment"/>)
@@ -3225,15 +3258,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>
               <!-- Trend -->
               <xsl:call-template name="trend_meter"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-        <td style="text-align:center;">
-          <xsl:choose>
-            <xsl:when test="owner/name=/envelope/login/text()">
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="owner/name"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>

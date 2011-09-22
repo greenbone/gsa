@@ -1,5 +1,10 @@
 2011-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-task-table, task): Replace owner column with
+	owner icon in task column.  Also add icons for observers and slave.
+
+2011-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl (html-create-user-form, user [edit]): Add observer
 	role.
 
