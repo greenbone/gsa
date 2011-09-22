@@ -23,7 +23,7 @@ Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@greenbone.net>
 
 Copyright:
-Copyright (C) 2009 Greenbone Networks GmbH
+Copyright (C) 2009-2011 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2,
@@ -3153,7 +3153,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:variable>
       <tr class="{$class}">
         <td>
-          <b><xsl:value-of select="name"/></b>
           <div class="float_right">
             <xsl:choose>
               <xsl:when test="string-length(slave/@id) &gt; 0">
@@ -3170,8 +3169,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="string-length (observers) &gt; 0">
                 <img src="/img/details.png"
                      border="0"
-                     alt="Task is observed by: {observers}"
-                     title="Task is observed by: {observers}"/>
+                     alt="Task made visible for: {observers}"
+                     title="Task made visible for: {observers}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -3188,6 +3187,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </div>
+          <b><xsl:value-of select="name"/></b>
           <xsl:choose>
             <xsl:when test="comment != ''">
               <br/>(<xsl:value-of select="comment"/>)
