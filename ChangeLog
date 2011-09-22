@@ -1,3 +1,8 @@
+2011-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/oap.xsl (html-create-user-form, user [edit]): Add observer
+	role.
+
 2011-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add task observers.

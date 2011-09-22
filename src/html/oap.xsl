@@ -74,6 +74,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="role">
                 <option value="Admin">Admin</option>
                 <option value="User" selected="1">User</option>
+                <option value="Observer">Observer</option>
               </select>
             </td>
           </tr>
@@ -373,10 +374,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:when test="role='User'">
                     <option value="Admin">Admin</option>
                     <option value="User" selected="1">User</option>
+                    <option value="Observer">Observer</option>
+                  </xsl:when>
+                  <xsl:when test="role='Observer'">
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                    <option value="Observer" selected="1">Observer</option>
                   </xsl:when>
                   <xsl:otherwise>
                     <option value="Admin" selected="1">Admin</option>
                     <option value="User">User</option>
+                    <option value="Observer">Observer</option>
                   </xsl:otherwise>
                 </xsl:choose>
               </select>
