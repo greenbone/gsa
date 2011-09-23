@@ -5,6 +5,18 @@
     xmlns:str="http://exslt.org/strings"
     xmlns:func = "http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
+    xmlns:vuln="http://scap.nist.gov/schema/vulnerability/0.4"
+    xmlns:cpe-lang="http://cpe.mitre.org/language/2.0"
+    xmlns:scap-core="http://scap.nist.gov/schema/scap-core/0.1"
+    xmlns:cve="http://scap.nist.gov/schema/feed/vulnerability/2.0"
+    xmlns:cvss="http://scap.nist.gov/schema/cvss-v2/0.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:patch="http://scap.nist.gov/schema/patch/0.1"
+    xmlns:meta="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+    xmlns:ns6="http://scap.nist.gov/schema/scap-core/0.1"
+    xmlns:config="http://scap.nist.gov/schema/configuration/0.1"
+    xmlns:cpe="http://cpe.mitre.org/dictionary/2.0"
+    xsi:schemaLocation="http://scap.nist.gov/schema/configuration/0.1 http://nvd.nist.gov/schema/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.3 http://nvd.nist.gov/schema/scap-core_0.3.xsd http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"
     extension-element-prefixes="str func">
     <xsl:output
       method="html"
@@ -8261,6 +8273,186 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END SLAVES MANAGEMENT -->
 
+<!-- BEGIN GET RAW INFO -->
+
+<xsl:template name="get_info_cpe_lnk">
+  <xsl:param name="cpe"/>
+  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;token={/envelope/token}"
+     title="Details"><xsl:value-of select="$cpe"/></a>
+</xsl:template>
+
+<xsl:template name="get_info_cve_lnk">
+  <xsl:param name="cve"/>
+  <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={$cve}&amp;token={/envelope/token}"
+     title="Details"><xsl:value-of select="$cve"/></a>
+</xsl:template>
+
+<xsl:template match="get_info_response">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <xsl:choose>
+      <xsl:when test="count (cve:entry) > 0">
+        <xsl:call-template name="cve-details"/>
+      </xsl:when>
+      <xsl:when test="count (cpe:cpe-item) > 0">
+        <xsl:call-template name="cpe-details"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <div class="gb_window_part_center">Get details</div>
+        <div class="gb_window_part_content">
+          <h1>Information unavailable (unknown element)</h1>
+        </div>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+</xsl:template>
+
+<xsl:template name="cve-details">
+  <div class="gb_window_part_center">CVE Details</div>
+  <div class="gb_window_part_content">
+    <h1>CVE Details</h1>
+    <table>
+      <tr>
+        <td><b>ID</b></td>
+        <td><b>
+          <xsl:call-template name="get_info_cve_lnk">
+            <xsl:with-param name="cve">
+              <xsl:value-of select="cve:entry/@id"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </b></td>
+
+      </tr>
+      <tr>
+        <td><b>Published</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:published-datetime"/></td>
+      </tr>
+      <tr>
+        <td><b>Last modified</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:last-modified-datetime"/></td>
+      </tr>
+      <tr>
+        <td><b>CWE ID</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cwe/@id"/></td>
+      </tr>
+    </table>
+
+    <h2>Description</h2>
+    <xsl:value-of select="cve:entry/vuln:summary/text()"/>
+
+    <h2>CVSS</h2>
+    <table>
+      <tr>
+        <td><b>Base score</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+      </tr>
+      <tr>
+        <td><b>Access vector</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
+      </tr>
+      <tr>
+        <td><b>Access Complexity</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
+      </tr>
+      <tr>
+        <td><b>Authentication</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
+      </tr>
+      <tr>
+        <td><b>Confidentiality impact</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+      </tr>
+      <tr>
+        <td><b>Integrity impact</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+      </tr>
+      <tr>
+        <td><b>Availability impact</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+      </tr>
+      <tr>
+        <td><b>Source</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+      </tr>
+      <tr>
+        <td><b>Generated</b></td>
+        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
+      </tr>
+    </table>
+
+    <h2>References</h2>
+    <table>
+      <xsl:for-each select="cve:entry/vuln:references">
+        <tr>
+          <td><xsl:value-of select="vuln:source/text()"/></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><xsl:value-of select="vuln:reference/text()"/></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><xsl:value-of select="vuln:reference/@href"/></td>
+        </tr>
+      </xsl:for-each>
+    </table>
+
+    <h2>Vulnerable products</h2>
+    <table>
+      <xsl:for-each select="cve:entry/vuln:vulnerable-software-list/vuln:product">
+        <tr><td>
+          <xsl:call-template name="get_info_cpe_lnk">
+            <xsl:with-param name="cpe">
+              <xsl:value-of select="text()"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </td></tr>
+      </xsl:for-each>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="cpe-details">
+  <div class="gb_window_part_center">CPE Details</div>
+  <div class="gb_window_part_content">
+    <h1>CPE Details</h1>
+    <table>
+      <tr>
+        <td><b>Name</b></td>
+        <td><b>
+          <xsl:call-template name="get_info_cpe_lnk">
+            <xsl:with-param name="cpe">
+              <xsl:value-of select="cpe:cpe-item/@name"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </b></td>
+      </tr>
+      <xsl:for-each select="cpe:cpe-item/cpe:title">
+        <tr>
+          <td>Title (<xsl:value-of select="@xml:lang"/>)</td>
+          <td><xsl:value-of select="text()"/></td>
+        </tr>
+      </xsl:for-each>
+      <tr>
+        <td>NVD ID</td>
+        <td><xsl:value-of select="cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
+      </tr>
+      <tr>
+        <td>Last modified</td>
+        <td><xsl:value-of select="cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
+      </tr>
+      <xsl:if test="cpe:cpe-item/@deprecated='true'">
+        <tr>
+          <td>Deprecated by</td>
+          <td><xsl:value-of select="cpe:cpe-item/@deprecated_by"/></td>
+        </tr>
+      </xsl:if>
+    </table>
+  </div>
+</xsl:template>
+
+
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
@@ -10674,7 +10866,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                               select="count (../detail[name = concat ($app, '/CVE')])"/>
                 <xsl:variable name="cvss"
                               select="../detail[name = concat ($app, '/', $cve, '/CVSS')]/value"/>
-                <td><xsl:value-of select="$app"/></td>
+                <td>
+                  <xsl:call-template name="get_info_cpe_lnk">
+                    <xsl:with-param name="cpe">
+                      <xsl:value-of select="$app"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </td>
                 <td>
                   <xsl:variable name="threat"
                                 select="../detail[name = concat ($app, '/threat')]/value"/>
@@ -10694,7 +10892,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </td>
                 <td><xsl:value-of select="$cvss"/></td>
-                <td><xsl:value-of select="$cve"/></td>
+                <td>
+                  <xsl:call-template name="get_info_cve_lnk">
+                    <xsl:with-param name="cve">
+                      <xsl:value-of select="$cve"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </td>
                 <td>
                   <xsl:choose>
                     <xsl:when test="$threats &gt; 0">

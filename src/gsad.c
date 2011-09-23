@@ -488,6 +488,7 @@ init_validator ()
                          "|(get_feed)"
                          "|(get_escalator)"
                          "|(get_escalators)"
+                         "|(get_info)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
                          "|(get_note)"
@@ -595,6 +596,8 @@ init_validator ()
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "override_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "info_name",  "^(\\R|.)*$");
+  openvas_validator_add (validator, "info_type",  "^(\\R|.)*$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "observers",       "^[-_ [:alnum:]]*$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
@@ -1505,6 +1508,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (get_escalator)
   ELSE (get_escalators)
+  ELSE (get_info)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)
   ELSE (get_note)

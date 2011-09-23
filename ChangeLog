@@ -1,3 +1,19 @@
+2011-09-22  Henri Doreau <henri.doreau@greenbone.net>
+
+	Add new CVE and CPE details dialog.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add get_info command.
+
+	* src/gsad_omp.c (get_info, get_info_omp): New functions.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/omp.xsl (stylesheet): Add SCAP namespaces.
+	(get_info_cpe_lnk, get_info_cve_lnk, get_info_response, cve_details)
+	(cpe_details): Add CVE and CPE details dialog.
+	(host): Apply get_info_cpe_lnk and get_info_cve_lnk to make CPE and
+	CVE clickable.
+
 2011-09-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (task): Slightly improved appearance of icons

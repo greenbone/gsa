@@ -1490,6 +1490,78 @@ start_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Requests RAW information details, accepting extra commands.
+ *
+ * @param[in]  credentials  Credentials for the manager connection.
+ * @param[in]  type         Type of the requested information.
+ * @param[in]  name         Name or identifier of the requested information.
+ * @param[in]  commands     Extra commands to run before the others.
+ *
+ * @return XSL transformed NVT details response or error message.
+ */
+static char*
+get_info (credentials_t *credentials, const char *type, const char *name,
+          const char *commands)
+{
+  GString *xml = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting raw information. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_info"
+                            " type=\"%s\""
+                            " name=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            type,
+                            name)
+        == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting raw information. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("<get_info>");
+  if (read_string (&session, &xml))
+    {
+      openvas_server_close (socket, session);
+      g_string_free (xml, TRUE);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting raw information. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  g_string_append (xml, "</get_info>");
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
@@ -1565,6 +1637,32 @@ get_nvts (credentials_t *credentials, const char *oid,
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Requests raw information.
+ *
+ * @param[in]  credentials  Credentials for the manager connection.
+ * @param[in]  params       Request parameters.
+ *
+ * @return XSL transformed NVT details response or error message.
+ */
+char*
+get_info_omp (credentials_t *credentials, params_t *params)
+{
+  const char *type, *name;
+
+  type = params_value (params, "info_type");
+  name = params_value (params, "info_name");
+
+  if ((type == NULL) || (name == NULL))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting raw information. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  return get_info (credentials, type, name, NULL);
 }
 
 /**
