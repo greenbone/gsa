@@ -11353,7 +11353,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$prognostic=1">
         <div class="float_right" style="text-align:right">
-          <xsl:value-of select="cve/cpe/@id"/>
+          <xsl:call-template name="get_info_cpe_lnk">
+            <xsl:with-param name="cpe" select="cve/cpe/@id"/>
+          </xsl:call-template>
         </div>
       </xsl:when>
       <xsl:otherwise>
@@ -11400,7 +11402,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div>
       <xsl:choose>
         <xsl:when test="$prognostic=1">
-          <xsl:value-of select="cve/@id"/>
+          <xsl:call-template name="get_info_cve_lnk">
+            <xsl:with-param name="cve" select="cve/@id"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:when test="nvt/@oid = 0">
           <xsl:if test="delta/text()">
