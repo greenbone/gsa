@@ -8310,7 +8310,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>
         <div class="gb_window_part_center">Get details</div>
         <div class="gb_window_part_content">
-          <h1>Information unavailable (unknown element)</h1>
+          <h1>Unknown element</h1>
+          <p>
+            <xsl:value-of select="@status_text"/>
+          </p>
+          <xsl:choose>
+            <xsl:when test="contains (@status_text, 'cpe:/')">
+              <p>
+                This is not necessarily an error. This CPE was likely referenced
+                by one or more CVE but isn't present in the official CPE dictionary.
+              </p>
+            </xsl:when>
+            <xsl:when test="contains (@status_text, 'CVE-')">
+              <p>
+                Please ensure that your SCAP data is up to date. If the
+                problem persists after a sync, please report this as a bug.
+              </p>
+            </xsl:when>
+            <xsl:otherwise>
+              <p>
+                Unknown element type. Ensure that the URL is correct and
+                especially that the <code>info_type</code> and
+                <code>info_name</code> parameters are consistent.
+              </p>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
       </xsl:otherwise>
     </xsl:choose>
