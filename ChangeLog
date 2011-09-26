@@ -1,5 +1,9 @@
 2011-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Correct format specifier.
+
+2011-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Replace \\R with (?s) in regexps.
 
 2011-09-26  Henri Doreau <henri.doreau@greenbone.net>

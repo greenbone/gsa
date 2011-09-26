@@ -8085,8 +8085,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                   " report_id=\"%s\""
                                   " delta_report_id=\"%s\""
                                   " format=\"XML\""
-                                  " first_result=\"%u\""
-                                  " max_results=\"%u\""
+                                  " first_result=\"%s\""
+                                  " max_results=\"%s\""
                                   " levels=\"hmlg\""
                                   " search_phrase=\"%s\"/>",
                                   report_id,
