@@ -8409,9 +8409,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:for-each select="cve:entry/vuln:vulnerable-software-list/vuln:product">
         <tr><td>
           <xsl:call-template name="get_info_cpe_lnk">
-            <xsl:with-param name="cpe">
-              <xsl:value-of select="text()"/>
-            </xsl:with-param>
+            <xsl:with-param name="cpe" select="text()"/>
           </xsl:call-template>
         </td></tr>
       </xsl:for-each>
@@ -8478,12 +8476,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
             <xsl:for-each select="str:tokenize (cve_id, ', ')">
               <xsl:call-template name="get_info_cve_lnk">
-                <xsl:with-param name="cve">
-                  <xsl:value-of select="text()"/>
-                </xsl:with-param>
-                <xsl:with-param name="gsa_token">
-                  <xsl:value-of select="$gsa_token"/>
-                </xsl:with-param>
+                <xsl:with-param name="cve" select="text()"/>
+                <xsl:with-param name="gsa_token" select="$gsa_token"/>
               </xsl:call-template>
               <xsl:text> </xsl:text>
             </xsl:for-each>    
@@ -10885,9 +10879,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                               select="../detail[name = concat ($app, '/', $cve, '/CVSS')]/value"/>
                 <td>
                   <xsl:call-template name="get_info_cpe_lnk">
-                    <xsl:with-param name="cpe">
-                      <xsl:value-of select="$app"/>
-                    </xsl:with-param>
+                    <xsl:with-param name="cpe" select="$app"/>
                   </xsl:call-template>
                 </td>
                 <td>
@@ -10911,9 +10903,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td><xsl:value-of select="$cvss"/></td>
                 <td>
                   <xsl:call-template name="get_info_cve_lnk">
-                    <xsl:with-param name="cve">
-                      <xsl:value-of select="$cve"/>
-                    </xsl:with-param>
+                    <xsl:with-param name="cve" select="$cve"/>
                   </xsl:call-template>
                 </td>
                 <td>
