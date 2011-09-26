@@ -8283,8 +8283,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="get_info_cve_lnk">
   <xsl:param name="cve"/>
-  <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={$cve}&amp;token={/envelope/token}"
-     title="Details"><xsl:value-of select="$cve"/></a>
+  <xsl:param name="gsa_token"/>
+  <xsl:choose>
+    <xsl:when test="$gsa_token = ''">
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={$cve}&amp;token={/envelope/token}"
+         title="Details"><xsl:value-of select="$cve"/></a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={$cve}&amp;token={$gsa_token}"
+         title="Details"><xsl:value-of select="$cve"/></a>  
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="get_info_response">
@@ -8464,7 +8473,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="cve_id = 'NOCVE'">
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="cve_id"/>
+            <!-- get the GSA token before entering the for-each loop over the str:tokenize elements -->
+            <xsl:variable name="gsa_token" select="/envelope/token"/>
+
+            <xsl:for-each select="str:tokenize (cve_id, ', ')">
+              <xsl:call-template name="get_info_cve_lnk">
+                <xsl:with-param name="cve">
+                  <xsl:value-of select="text()"/>
+                </xsl:with-param>
+                <xsl:with-param name="gsa_token">
+                  <xsl:value-of select="$gsa_token"/>
+                </xsl:with-param>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
+            </xsl:for-each>    
           </xsl:otherwise>
         </xsl:choose>
       </td>

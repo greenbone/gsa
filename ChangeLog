@@ -1,5 +1,11 @@
 2011-09-26  Henri Doreau <henri.doreau@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Add links to the CVE details dialog.
+	(get_info_cve_lnk): Add an optional gsa_token parameter, to let the
+	caller set the value if not available from within the template.
+
+2011-09-26  Henri Doreau <henri.doreau@greenbone.net>
+
 	* src/html/omp.xsl (get_cve_details, get_cpe_details): Make item name
 	unclickable to prevent these recursive links to confuse users.
 
