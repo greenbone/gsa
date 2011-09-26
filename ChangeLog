@@ -1,3 +1,8 @@
+2011-09-26  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_cve_details, get_cpe_details): Make item name
+	unclickable to prevent these recursive links to confuse users.
+
 2011-09-22  Henri Doreau <henri.doreau@greenbone.net>
 
 	Add new CVE and CPE details dialog.

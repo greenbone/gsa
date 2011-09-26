@@ -8315,14 +8315,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table>
       <tr>
         <td><b>ID</b></td>
-        <td><b>
-          <xsl:call-template name="get_info_cve_lnk">
-            <xsl:with-param name="cve">
-              <xsl:value-of select="cve:entry/@id"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </b></td>
-
+        <td>
+          <b>
+            <xsl:value-of select="cve:entry/@id"/>
+          </b>
+        </td>
       </tr>
       <tr>
         <td><b>Published</b></td>
@@ -8420,13 +8417,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table>
       <tr>
         <td><b>Name</b></td>
-        <td><b>
-          <xsl:call-template name="get_info_cpe_lnk">
-            <xsl:with-param name="cpe">
-              <xsl:value-of select="cpe:cpe-item/@name"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </b></td>
+        <td>
+          <b>
+            <xsl:value-of select="cpe:cpe-item/@name"/>
+          </b>
+        </td>
       </tr>
       <xsl:for-each select="cpe:cpe-item/cpe:title">
         <tr>
