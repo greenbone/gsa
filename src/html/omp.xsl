@@ -8318,7 +8318,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="cve-details">
-  <div class="gb_window_part_center">CVE Details</div>
+  <div class="gb_window_part_center">CVE Details
+    <a href="/help/cve.html?token={/envelope/token}#cvedetails"
+       title="Help: CVE (CVE Details)">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <h1>CVE Details</h1>
     <table>
@@ -8418,7 +8423,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="cpe-details">
-  <div class="gb_window_part_center">CPE Details</div>
+  <div class="gb_window_part_center">CPE Details
+    <a href="/help/cpe.html?token={/envelope/token}#cpedetails"
+       title="Help: CPE (CPE Details)">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <h1>CPE Details</h1>
     <table>

@@ -1891,6 +1891,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Asset Management</li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
+            <li> <a href="cpe.html?token={/envelope/token}">CPE</a></li>
+            <li> <a href="cve.html?token={/envelope/token}">CVE</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
@@ -1927,6 +1929,56 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
         </ul>
       </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="cpe.html">
+  <div class="gb_window_part_center">Help: CPE</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="nvts"></a>
+      <h1>Common Platform Enumeration (CPE)</h1>
+      <p>
+       Currently, there is one page in the web interface
+       about <a href="glossary.html?token={/envelope/token}#cpe">CPE</a>.
+      </p>
+
+      <a name="cpedetails"></a>
+      <h2>CPE Details</h2>
+      <p>
+       A page that provides the original detailed information about a CPE.
+       This includes the title(s), date of last modification and deprecation status if any.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="cve.html">
+  <div class="gb_window_part_center">Help: CVE</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="nvts"></a>
+      <h1>Common Vulnerabilities and Exposures (CVE)</h1>
+      <p>
+       Currently, there is one page in the web interface
+       about <a href="glossary.html?token={/envelope/token}#cve">CVE</a>.
+      </p>
+
+      <a name="cvedetails"></a>
+      <h2>CVE Details</h2>
+      <p>
+       A page that provides the original detailed information about an CVE.
+       This includes the dates of publication and last modification, the
+       description, CVSS information, list of vulnerable products and
+       references.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -2053,6 +2105,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        misinterpretation, this page summarizes the
        definitions of these
        terms as they are used in GSA.
+      </p>
+
+      <a name="cpe"></a>
+      <h2>CPE</h2>
+      <p>
+        Common Platform Enumeration is a structured naming scheme for
+        information technology systems, platforms, and packages. Based upon the
+        generic syntax for Uniform Resource Identifiers (URI), CPE includes a
+        formal name format, a language for describing complex platforms, a
+        method for checking names against a system, and a description format
+        for binding text and tests to a name.
+      </p>
+      <p>
+        (Source http://cpe.mitre.org).
+      </p>
+
+      <a name="cve"></a>
+      <h2>CVE</h2>
+      <p>
+        Common Vulnerabilities and Exposures is a dictionary of publicly known
+        information security vulnerabilities and exposures.
+      </p>
+      <p>
+        (Source: http://cve.mitre.org).
       </p>
 
       <a name="escalator"></a>

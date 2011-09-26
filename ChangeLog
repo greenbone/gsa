@@ -1,5 +1,13 @@
 2011-09-26  Henri Doreau <henri.doreau@greenbone.net>
 
+	* src/html/omp.xsl (cve-details, cpe-details): Add help icons.
+
+	* src/html/help.xsl (contents.html, glossary.html): Document CPE and
+	CVE.
+	(cpe.html, cve.html): New help pages.
+
+2011-09-26  Henri Doreau <henri.doreau@greenbone.net>
+
 	* src/html/omp.xsl (cve-details, nvt, host): Use one-liners to
 	transmit template parameters, to improve readability.
 
