@@ -554,7 +554,7 @@ init_validator ()
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "condition_data:value", "^(\\R|.)*$");
+  openvas_validator_add (validator, "condition_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
@@ -563,7 +563,7 @@ init_validator ()
   openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "escalator_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
-  openvas_validator_add (validator, "event_data:value", "^(\\R|.)*$");
+  openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
@@ -580,10 +580,10 @@ init_validator ()
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
-  openvas_validator_add (validator, "howto_use",   "^(\\R|.)*$");
-  openvas_validator_add (validator, "howto_install",  "^(\\R|.)*$");
-  openvas_validator_add (validator, "installer",      "^(\\R|.)*$");
-  openvas_validator_add (validator, "installer_sig",  "^(\\R|.)*$");
+  openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
+  openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
+  openvas_validator_add (validator, "installer",      "(?s)^.*$");
+  openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "login",      "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
@@ -596,8 +596,8 @@ init_validator ()
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "override_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
-  openvas_validator_add (validator, "info_name",  "^(\\R|.)*$");
-  openvas_validator_add (validator, "info_type",  "^(\\R|.)*$");
+  openvas_validator_add (validator, "info_name",  "(?s)^.*$");
+  openvas_validator_add (validator, "info_type",  "(?s)^.*$");
   openvas_validator_add (validator, "number",     "^[0-9]+$");
   openvas_validator_add (validator, "observers",       "^[-_ [:alnum:]]*$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
@@ -605,7 +605,7 @@ init_validator ()
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
-  openvas_validator_add (validator, "password:value", "^(\\R|.)*$");
+  openvas_validator_add (validator, "password:value", "(?s)^.*$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, ]{1,400}))$");
   /** @todo Better regex. */
@@ -613,10 +613,10 @@ init_validator ()
   openvas_validator_add (validator, "preference:",      "^$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "^(.*){0,400}$");
-  openvas_validator_add (validator, "private_key",      "^(\\R|.)*$");
-  openvas_validator_add (validator, "public_key",       "^(\\R|.)*$");
+  openvas_validator_add (validator, "private_key",      "(?s)^.*$");
+  openvas_validator_add (validator, "public_key",       "(?s)^.*$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
-  openvas_validator_add (validator, "xml_file",   "^(\\R|.)*$");
+  openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
@@ -625,8 +625,8 @@ init_validator ()
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
-  openvas_validator_add (validator, "method_data:value", "^(\\R|.)*$");
-  openvas_validator_add (validator, "nvt:name",          "^(\\R|.)*$");
+  openvas_validator_add (validator, "method_data:value", "(?s)^.*$");
+  openvas_validator_add (validator, "nvt:name",          "(?s)^.*$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
