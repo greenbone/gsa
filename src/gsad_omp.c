@@ -151,11 +151,14 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
                                  "<time>%s</time>"
+                                 "<timezone>%s</timezone>"
                                  "<login>%s</login>"
                                  "<role>%s</role>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
+                                 credentials->timezone
+                                   ? credentials->timezone : "",
                                  credentials->username,
                                  credentials->role);
   g_string_append (string, res);
@@ -13785,6 +13788,20 @@ get_trash_omp (credentials_t * credentials, params_t *params)
 {
   return get_trash (credentials, params_value (params, "sort_field"),
                     params_value (params, "sort_order"), NULL);
+}
+
+/**
+ * @brief Returns page with user's settings.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_my_settings_omp (credentials_t * credentials, params_t *params)
+{
+  return xsl_transform_omp (credentials, g_strdup ("<my_settings/>"));
 }
 
 

@@ -501,6 +501,7 @@ init_validator ()
                          "|(get_info)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
+                         "|(get_my_settings)"
                          "|(get_note)"
                          "|(get_notes)"
                          "|(get_nvts)"
@@ -1528,6 +1529,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_info)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)
+  ELSE (get_my_settings)
   ELSE (get_note)
   ELSE (get_notes)
   ELSE (get_override)

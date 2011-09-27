@@ -514,7 +514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
-            <b><xsl:value-of select="$username"/></b> |
+            <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |
           </xsl:otherwise>
         </xsl:choose>
         <a href="/logout?token={/envelope/token}" title="Logout" style="margin-left:3px;">Logout</a>
@@ -790,6 +790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
+      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
       <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
      </ul>
     </li>
@@ -1014,6 +1015,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="time">
+</xsl:template>
+
+<xsl:template match="timezone">
 </xsl:template>
 
 <xsl:template match="role">

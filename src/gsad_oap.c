@@ -203,11 +203,14 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
                                  "<time>%s</time>"
+                                 "<timezone>%s</timezone>"
                                  "<login>%s</login>"
                                  "<role>%s</role>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
+                                 credentials->timezone
+                                   ? credentials->timezone : "",
                                  credentials->username,
                                  credentials->role);
   g_string_append (string, res);

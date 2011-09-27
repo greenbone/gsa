@@ -12804,6 +12804,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<!-- MY SETTINGS -->
+
+<xsl:template match="my_settings">
+  <xsl:apply-templates select="gsad_msg"/>
+
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">My Settings
+      <a href="/help/my_settings.html?token={/envelope/token}"
+         title="Help: My Settings">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Value</td>
+            <td width="100">Actions</td>
+          </tr>
+          <tr>
+            <td>Timezone</td>
+            <td><xsl:value-of select="/envelope/timezone"/></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <!-- COMMANDS_RESPONSE -->
 
 <xsl:template match="commands_response">
