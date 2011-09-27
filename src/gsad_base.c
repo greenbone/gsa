@@ -85,10 +85,20 @@ gsad_base_init ()
 char*
 ctime_r_strip_newline (time_t *time, char *string)
 {
-  char* ret = ctime_r (time, string);
-  if (ret && strlen (ret) > 0)
-    ret[strlen (ret) - 1] = '\0';
-  return ret;
+  struct tm *tm;
+
+  tm = localtime (time);
+  if (tm == NULL
+      || (strftime (string,
+                    199,
+                    "%c %Z",
+                    tm)
+          == 0))
+    {
+      string[0] = '\0';
+      return string;
+    }
+  return string;
 }
 
 /**

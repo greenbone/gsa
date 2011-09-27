@@ -64,6 +64,8 @@ typedef struct
 {
   char *username;  ///< Name of user.
   char *password;  ///< User's password.
+  char *role;      ///< User's role.
+  char *timezone;  ///< User's timezone.
   char *token;     ///< Session token.
   char *caller;    ///< Caller URL, for POST relogin.
 } credentials_t;

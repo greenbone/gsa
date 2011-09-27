@@ -1,5 +1,37 @@
 2011-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Use the timezone given in the OMP AUTHENTICATE.  Store this timezone in
+	the session.  Similarly for the user role, adding the role to the
+	page header.
+
+	* src/gsad_base.c (ctime_r_strip_newline): Use strftime to include
+	timezone.
+
+	* src/gsad_base.h (credentials_t): Add role and timezone.
+
+	* src/gsad.c: Increase size of buffers passed to ctime_r_strip_newline.
+	(struct user): Add role and timezone.
+	(user_add): Add role and timezone args.
+	(exec_omp_post): Pass role and timezone from authenticate_omp to user_add.
+	(request_handler): Set role and timezone in credentials for page handlers.
+
+	* src/gsad_oap.c: Increase size of buffers passed to
+	ctime_r_strip_newline.
+	(xsl_transform_oap): Set timezone if present.  Add role to ENVELOPE.
+
+	* src/gsad_omp.c: Increase size of buffers passed to
+	ctime_r_strip_newline.
+	(xsl_transform_oap): Set timezone if present.  Add role to ENVELOPE.
+	(authenticate_omp): Add role and timezone return args.  Call
+	omp_authenticate_info to set them.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add role.  Remove timezone.
+	(role): New template.
+
+2011-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp/xsl (get_info_cve_lnk, nvt): Flush trailing whitespace.
 	(report [details]): Turn result icons back on for normal cases.  These
 	were accidentally turned off during addition of prognostic results.

@@ -92,7 +92,7 @@ administrator_connect (credentials_t *credentials, int *socket,
       time_t now;
       gchar *xml;
       char *res;
-      char ctime_now[27];
+      char ctime_now[200];
       int ret;
 
       tracef ("socket is not there!\n");
@@ -185,10 +185,15 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
   gchar *res;
   GString *string;
   char *html;
-  char ctime_now[27];
+  char ctime_now[200];
 
   assert (credentials);
 
+  if (credentials->timezone)
+    {
+      setenv ("TZ", credentials->timezone, 1);
+      tzset ();
+    }
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
@@ -198,11 +203,13 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
                                  "<time>%s</time>"
-                                 "<login>%s</login>",
+                                 "<login>%s</login>"
+                                 "<role>%s</role>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
-                                 credentials->username);
+                                 credentials->username,
+                                 credentials->role);
   g_string_append (string, res);
   g_free (res);
   g_string_append_printf (string, "%s</envelope>", xml);

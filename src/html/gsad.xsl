@@ -513,13 +513,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$username = ''">
           </xsl:when>
           <xsl:otherwise>
-            Logged in as <b><xsl:value-of select="$username"/></b> |
+            Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
+            <b><xsl:value-of select="$username"/></b> |
           </xsl:otherwise>
         </xsl:choose>
         <a href="/logout?token={/envelope/token}" title="Logout" style="margin-left:3px;">Logout</a>
         <br/>
         <br/>
-        <xsl:value-of select="$time"/> (UTC)
+        <xsl:value-of select="$time"/>
       </div>
       <div class="status_panel">
         <xsl:apply-templates select="gsad_msg"
@@ -1013,6 +1014,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="time">
+</xsl:template>
+
+<xsl:template match="role">
 </xsl:template>
 
 <xsl:template match="envelope">

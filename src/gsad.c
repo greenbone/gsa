@@ -210,6 +210,8 @@ struct user
   char *token;        ///< Request session token.
   gchar *username;    ///< Login name.
   gchar *password;    ///< Password.
+  gchar *role;        ///< Role.
+  gchar *timezone;    ///< Timezone.
   time_t time;        ///< Login time.
 };
 
@@ -230,11 +232,13 @@ static GMutex *mutex = NULL;
  *
  * @param[in]  username  Name of user.
  * @param[in]  password  Password for user.
+ * @param[in]  timezone  Timezone of user, or NULL.
  *
  * @return Added user.
  */
 user_t *
-user_add (const gchar *username, const gchar *password)
+user_add (const gchar *username, const gchar *password, const gchar *timezone,
+          const gchar *role)
 {
   user_t *user = NULL;
   int index;
@@ -257,6 +261,10 @@ user_add (const gchar *username, const gchar *password)
       user->cookie = openvas_uuid_make ();
       g_free (user->password);
       user->password = g_strdup (password);
+      g_free (user->role);
+      user->role = g_strdup (role);
+      g_free (user->timezone);
+      user->timezone = g_strdup (timezone);
     }
   else
     {
@@ -265,6 +273,8 @@ user_add (const gchar *username, const gchar *password)
       user->token = openvas_uuid_make ();
       user->username = g_strdup (username);
       user->password = g_strdup (password);
+      user->role = g_strdup (role);
+      user->timezone = g_strdup (timezone);
       g_ptr_array_add (users, (gpointer) user);
     }
   user->time = time (NULL);
@@ -1085,14 +1095,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           && params_value (con_info->params, "password"))
         {
           int ret;
+          gchar *timezone, *role;
           ret = authenticate_omp (params_value (con_info->params, "login"),
-                                  params_value (con_info->params, "password"));
+                                  params_value (con_info->params, "password"),
+                                  &role,
+                                  &timezone);
           if (ret)
             {
               time_t now;
               gchar *xml;
               char *res;
-              char ctime_now[27];
+              char ctime_now[200];
 
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
@@ -1114,9 +1127,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             {
               user_t *user;
               user = user_add (params_value (con_info->params, "login"),
-                               params_value (con_info->params, "password"));
+                               params_value (con_info->params, "password"),
+                               timezone,
+                               role);
               /* Redirect to get_tasks. */
               *user_return = user;
+              g_free (timezone);
+              g_free (role);
               return 1;
             }
         }
@@ -1167,7 +1184,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       time_t now;
       gchar *xml;
-      char ctime_now[27];
+      char ctime_now[200];
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
@@ -1198,7 +1215,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       time_t now;
       gchar *xml;
-      char ctime_now[27];
+      char ctime_now[200];
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
@@ -1995,7 +2012,7 @@ file_content_response (credentials_t *credentials,
       time_t now;
       gchar *xml;
       char *res;
-      char ctime_now[27];
+      char ctime_now[200];
 
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
@@ -2388,7 +2405,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           gchar *xml;
           char *res;
           gchar *full_url;
-          char ctime_now[27];
+          char ctime_now[200];
           const char *cmd, *report_format_id;
           int export;
 
@@ -2450,7 +2467,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           time_t now;
           gchar *xml;
           char *res;
-          char ctime_now[27];
+          char ctime_now[200];
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
@@ -2481,9 +2498,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (credentials == NULL) abort ();
       assert (user->username);
       assert (user->password);
+      assert (user->role);
+      assert (user->timezone);
       assert (user->token);
       credentials->username = strdup (user->username);
       credentials->password = strdup (user->password);
+      credentials->role = strdup (user->role);
+      credentials->timezone = strdup (user->timezone);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
 
@@ -2581,7 +2602,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
               time_t now;
-              char ctime_now[27];
+              char ctime_now[200];
               gchar *xml;
 
               assert (credentials->token);

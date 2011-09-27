@@ -133,10 +133,15 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   gchar *res;
   GString *string;
   char *html;
-  char ctime_now[27];
+  char ctime_now[200];
 
   assert (credentials);
 
+  if (credentials->timezone)
+    {
+      setenv ("TZ", credentials->timezone, 1);
+      tzset ();
+    }
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
@@ -146,11 +151,13 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
                                  "<time>%s</time>"
-                                 "<login>%s</login>",
+                                 "<login>%s</login>"
+                                 "<role>%s</role>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
-                                 credentials->username);
+                                 credentials->username,
+                                 credentials->role);
   g_string_append (string, res);
   g_free (res);
   g_string_append_printf (string, "%s</envelope>", xml);
@@ -13788,11 +13795,14 @@ get_trash_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  username  Username.
  * @param[in]  password  Password.
+ * @param[out] role      Role.
+ * @param[out] timezone  Timezone.
  *
  * @return 0 if valid, 1 failed, 2 manager down.
  */
 int
-authenticate_omp (const gchar * username, const gchar * password)
+authenticate_omp (const gchar * username, const gchar * password,
+                  char **role, char **timezone)
 {
   gnutls_session_t session;
   int socket;
@@ -13821,7 +13831,7 @@ authenticate_omp (const gchar * username, const gchar * password)
   sleep (20);
 #endif
 
-  auth = omp_authenticate (&session, username, password);
+  auth = omp_authenticate_info (&session, username, password, role, timezone);
   if (auth == 0)
     {
       openvas_server_close (socket, session);
@@ -13863,7 +13873,7 @@ manager_connect (credentials_t *credentials, int *socket,
       time_t now;
       gchar *xml;
       char *res;
-      char ctime_now[27];
+      char ctime_now[200];
       int ret;
 
       if (html == NULL)
