@@ -7453,8 +7453,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
   else
     {
       delta_states = g_string_new ("");
-      if (params_value (params, "delta_state_change")
-          && atoi (params_value (params, "delta_state_change")))
+      if (params_value (params, "delta_state_changed")
+          && atoi (params_value (params, "delta_state_changed")))
         g_string_append (delta_states, "c");
       if (params_value (params, "delta_state_gone")
           && atoi (params_value (params, "delta_state_gone")))
