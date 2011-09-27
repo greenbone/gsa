@@ -1,5 +1,11 @@
 2011-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp/xsl (get_info_cve_lnk, nvt): Flush trailing whitespace.
+	(report [details]): Turn result icons back on for normal cases.  These
+	were accidentally turned off during addition of prognostic results.
+
+2011-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report_omp): Correct delta state param name.
 
 2011-09-26  Henri Doreau <henri.doreau@greenbone.net>

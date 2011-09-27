@@ -8291,7 +8291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={$cve}&amp;token={$gsa_token}"
-         title="Details"><xsl:value-of select="$cve"/></a>  
+         title="Details"><xsl:value-of select="$cve"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -8514,7 +8514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="gsa_token" select="$gsa_token"/>
               </xsl:call-template>
               <xsl:text> </xsl:text>
-            </xsl:for-each>    
+            </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -12118,13 +12118,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h3>
       Security Issues reported for <xsl:value-of select="$current_host"/>
     </h3>
+    <xsl:variable name="on">
+      <xsl:choose>
+        <xsl:when test="$prognostic=1">0</xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:for-each select="../results/result[host/text() = $current_host]">
       <xsl:call-template name="result-detailed">
         <xsl:with-param name="prognostic" select="$prognostic"/>
-        <xsl:with-param name="details-button">0</xsl:with-param>
-        <xsl:with-param name="note-buttons">0</xsl:with-param>
-        <xsl:with-param name="override-buttons">0</xsl:with-param>
-        <xsl:with-param name="show-overrides">0</xsl:with-param>
+        <xsl:with-param name="details-button" select="$on"/>
+        <xsl:with-param name="note-buttons" select="$on"/>
+        <xsl:with-param name="override-buttons" select="$on"/>
+        <xsl:with-param name="show-overrides" select="$on"/>
       </xsl:call-template>
     </xsl:for-each>
     <a href="#summary">Back to summary</a>
