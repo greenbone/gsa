@@ -13795,13 +13795,148 @@ get_trash_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_my_settings (credentials_t * credentials, params_t *params,
+                 const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<get_my_settings>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</get_my_settings>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page with user's settings.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_my_settings_omp (credentials_t * credentials, params_t *params)
 {
-  return xsl_transform_omp (credentials, g_strdup ("<my_settings/>"));
+  return get_my_settings (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page with user's settings, for editing.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+edit_my_settings (credentials_t * credentials, params_t *params,
+                  const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<edit_my_settings>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</edit_my_settings>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page with user's settings, for editing.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_my_settings_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_my_settings (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page with user's settings, for editing.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_my_settings_omp (credentials_t * credentials, params_t *params)
+{
+  int socket;
+  gnutls_session_t session;
+  gchar *html;
+  const char *text;
+  gchar *text_64;
+  GString *xml;
+
+  if (params_value (params, "text") == NULL)
+    return edit_my_settings (credentials, params,
+                             GSAD_MESSAGE_INVALID_PARAM
+                               ("Save My Settings"));
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving settings. "
+                             "The settings remains the same. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+    }
+
+  text = params_value (params, "text");
+  text_64 = text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup ("");
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting>"
+                            "<name>Timezone</name>"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            text_64)
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (text_64);
+
+  xml = g_string_new ("");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
+  openvas_server_close (socket, session);
+  return get_my_settings (credentials, params, g_string_free (xml, FALSE));
 }
 
 

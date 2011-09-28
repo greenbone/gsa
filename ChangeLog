@@ -1,5 +1,23 @@
 2011-09-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add editing of My Settings.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
+	edit_my_settings and save_my_settings.
+
+	* src/gsad_omp.c (get_my_settings, edit_my_settings)
+	(edit_my_settings_omp, save_my_settings_omp): New function.
+	(get_my_settings_omp): Call through to get_my_settings.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/omp.xsl (modify_settings_response, edit_my_settings): New
+	templates.
+	(my_settings): Remove.  Renamed to get_my_settings.
+	(get_my_settings): New template.  Was my_settings.  Add edit icon.
+
+2011-09-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Initialise role and timezone in credentials.
 
 2011-09-27  Matthew Mundell <matthew.mundell@greenbone.net>

@@ -12806,8 +12806,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- MY SETTINGS -->
 
-<xsl:template match="my_settings">
+<xsl:template match="modify_settings_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Settings</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="get_my_settings">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_settings_response"/>
 
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -12816,6 +12829,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/my_settings.html?token={/envelope/token}"
          title="Help: My Settings">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
+         title="Edit My Settings"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">
@@ -12832,6 +12850,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td></td>
           </tr>
         </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_my_settings">
+  <xsl:apply-templates select="gsad_msg"/>
+
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit My Settings
+      <a href="/help/my_settings.html?token={/envelope/token}#edit"
+         title="Help: My Settings (Edit)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="save_my_settings"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Value</td>
+            </tr>
+            <tr>
+              <td>Timezone</td>
+              <td>
+                <input type="text" name="text" size="40" maxlength="800"
+                       value="{/envelope/timezone}"/>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align:right;">
+                <input type="submit" name="submit" value="Save My Settings"/>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
     </div>
   </div>

@@ -477,6 +477,7 @@ init_validator ()
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
                          "|(edit_lsc_credential)"
+                         "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
                          "|(edit_report_format)"
@@ -539,6 +540,7 @@ init_validator ()
                          "|(save_config_family)"
                          "|(save_config_nvt)"
                          "|(save_lsc_credential)"
+                         "|(save_my_settings)"
                          "|(save_note)"
                          "|(save_override)"
                          "|(save_report_format)"
@@ -1332,6 +1334,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_config_family)
   ELSE (save_config_nvt)
   ELSE (save_lsc_credential)
+  ELSE (save_my_settings)
   ELSE (save_note)
   ELSE (save_override)
   ELSE (save_report_format)
@@ -1456,6 +1459,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
   ELSE (edit_lsc_credential)
+  ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
   ELSE (edit_report_format)
