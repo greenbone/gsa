@@ -1251,6 +1251,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   assert (user->token);
   credentials->username = strdup (user->username);
   credentials->password = strdup (user->password);
+  credentials->role = user->role ? strdup (user->role) : NULL;
+  credentials->timezone = user->timezone ? strdup (user->timezone) : NULL;
   credentials->token = strdup (user->token);
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
