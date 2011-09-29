@@ -189,11 +189,6 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
 
   assert (credentials);
 
-  if (credentials->timezone)
-    {
-      setenv ("TZ", credentials->timezone, 1);
-      tzset ();
-    }
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 

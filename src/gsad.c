@@ -1297,6 +1297,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   user_release (user);
 
+  /* Set the timezone. */
+
+  if (credentials->timezone)
+    {
+      if (setenv ("TZ", credentials->timezone, 1) == -1)
+        {
+          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+      tzset ();
+    }
+
   /* Handle the usual commands. */
 
   if (!cmd)
@@ -1487,6 +1499,19 @@ exec_omp_get (struct MHD_Connection *connection,
                          "An internal error occured inside GSA daemon. "
                          "Diagnostics: No valid command for omp.",
                          "/omp?cmd=get_tasks");
+
+
+  /* Set the timezone. */
+
+  if (credentials->timezone)
+    {
+      if (setenv ("TZ", credentials->timezone, 1) == -1)
+        {
+          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+      tzset ();
+    }
 
   /** @todo Ensure that XSL passes on sort_order and sort_field. */
 
