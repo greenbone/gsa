@@ -1,5 +1,14 @@
 2011-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings): Ensure that timezone return arg is
+	always set.  If timezone param is "" return "UTC" instead of "".
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/gsad.c (exec_omp_post): Free timezone.
+
+2011-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (user_set_timezone): New function.
 	(exec_omp_post): Update timezone after save_my_settings.
 

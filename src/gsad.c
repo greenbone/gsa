@@ -1368,12 +1368,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
-      const char *timezone;
+      char *timezone;
       con_info->response = save_my_settings_omp (credentials, con_info->params,
                                                  &timezone);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->username, timezone);
+      g_free (timezone);
     }
   ELSE (save_note)
   ELSE (save_override)

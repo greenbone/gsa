@@ -13865,13 +13865,13 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
- * @param[out] timezone     Timezone.
+ * @param[out] timezone     Timezone.  Caller must free.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_my_settings_omp (credentials_t * credentials, params_t *params,
-                      const char **timezone)
+                      char **timezone)
 {
   int socket;
   gnutls_session_t session;
@@ -13880,6 +13880,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   gchar *text_64;
   GString *xml;
   entity_t entity;
+
+  *timezone = NULL;
 
   if (params_value (params, "text") == NULL)
     return edit_my_settings (credentials, params,
@@ -13904,14 +13906,14 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   text = params_value (params, "text");
-  text_64 = text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup ("");
+  text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
 
   if (openvas_server_sendf (&session,
                             "<modify_setting>"
                             "<name>Timezone</name>"
                             "<value>%s</value>"
                             "</modify_setting>",
-                            text_64)
+                            text_64 ? text_64 : "")
       == -1)
     {
       g_free (text_64);
@@ -13943,11 +13945,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   if (status && (strlen (status) > 0) && (status[0] == '2'))
     {
       g_free (credentials->timezone);
-      credentials->timezone = g_strdup (text);
-      *timezone = text;
+      credentials->timezone = g_strdup (strlen (text) ? text : "UTC");
+      *timezone = g_strdup (strlen (text) ? text : "UTC");
     }
-  else
-    *timezone = NULL;
 
   free_entity (entity);
   openvas_server_close (socket, session);
