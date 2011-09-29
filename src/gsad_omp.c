@@ -13865,18 +13865,21 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
+ * @param[out] timezone     Timezone.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_my_settings_omp (credentials_t * credentials, params_t *params)
+save_my_settings_omp (credentials_t * credentials, params_t *params,
+                      const char **timezone)
 {
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text;
+  const char *text, *status;
   gchar *text_64;
   GString *xml;
+  entity_t entity;
 
   if (params_value (params, "text") == NULL)
     return edit_my_settings (credentials, params,
@@ -13924,7 +13927,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  if (read_string (&session, &xml))
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -13935,6 +13939,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_my_settings");
     }
 
+  status = entity_attribute (entity, "status");
+  if (status && (strlen (status) > 0) && (status[0] == '2'))
+    {
+      g_free (credentials->timezone);
+      credentials->timezone = g_strdup (text);
+      *timezone = text;
+    }
+  else
+    *timezone = NULL;
+
+  free_entity (entity);
   openvas_server_close (socket, session);
   return get_my_settings (credentials, params, g_string_free (xml, FALSE));
 }
