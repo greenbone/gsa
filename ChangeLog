@@ -1,5 +1,11 @@
 2011-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (modify_settings_response): Remove.  Now
+	modify_setting_response.
+	(modify_setting_response): New template.  Was modify_settings_response.
+
+2011-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_my_settings): Ensure that timezone return arg is
 	always set.  If timezone param is "" return "UTC" instead of "".
 

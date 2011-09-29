@@ -12806,7 +12806,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- MY SETTINGS -->
 
-<xsl:template match="modify_settings_response">
+<xsl:template match="modify_setting_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Settings</xsl:with-param>
     <xsl:with-param name="status">
@@ -12820,7 +12820,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_my_settings">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="modify_settings_response"/>
+  <xsl:apply-templates select="modify_setting_response"/>
 
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
