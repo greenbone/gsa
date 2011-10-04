@@ -1,8 +1,8 @@
-2011-10-04  Henri Doreau <henri.doreau@gmail.com>
+2011-10-04  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/help.xsl (browse_infosec.html): Improve help page.
 
-2011-10-04  Henri Doreau <henri.doreau@gmail.com>
+2011-10-04  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/help.xsl (browse_infosec.html): Add help page for the
 	Security Information Browser.
@@ -11,7 +11,7 @@
 	* src/html/dialog.xsl (browse_infosec.html): Add help icon linking to
 	the corresponding help page.
 
-2011-10-04  Henri Doreau <henri.doreau@gmail.com>
+2011-10-04  Henri Doreau <henri.doreau@greenbone.net>
 
 	Add a form for security information lookup.
 
