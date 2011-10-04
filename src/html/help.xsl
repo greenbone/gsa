@@ -1923,6 +1923,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Browser</a></li>
             <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
@@ -2917,6 +2918,25 @@ Public License instead of this License.
        A page that provides detailed information about an NVT.
        This includes the NVT family and the full description of the NVT,
        as well as a table listing all notes on the NVT.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="browse_infosec.html">
+  <div class="gb_window_part_center">Help: SecInfo browser</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Security Information Browser</h1>
+
+      <p>
+       A page that provides access to the security information database to
+       lookup details for a given element.
       </p>
     </div>
   </div>
