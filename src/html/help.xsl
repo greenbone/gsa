@@ -2933,10 +2933,38 @@ Public License instead of this License.
 
       <br/>
       <h1>Security Information Browser</h1>
-
       <p>
        A page that provides access to the security information database to
-       lookup details for a given element.
+       lookup details for a given element. Valid elements are CPE and CVE.
+       Identifiers must be formatted correctly.
+      </p>
+
+      <h2>CVE</h2>
+      <p>
+        A CVE identifier is built using a specific scheme:
+        <code>CVE-YYYY-ZZZZ</code>.
+        <br/>
+        Where:
+        <ul>
+          <li>YYYY is the year of publication of the CVE (on 4 digits)</li>
+          <li>ZZZZ is the unique identifier of the CVE (on 4 digits too)</li>
+        </ul>
+        e.g. <code>CVE-2011-0245</code>
+      </p>
+
+      <h2>CPE</h2>
+      <p>
+        A CPE name starts with "cpe:/", followed by up to seven colon-separated components:
+        <ul>
+          <li>part (h, o or a)</li>
+          <li>vendor</li>
+          <li>product</li>
+          <li>version</li>
+          <li>update</li>
+          <li>edition</li>
+          <li>language</li>
+        </ul>
+        e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
       </p>
     </div>
   </div>

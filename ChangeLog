@@ -1,5 +1,9 @@
 2011-10-04  Henri Doreau <henri.doreau@gmail.com>
 
+	* src/html/help.xsl (browse_infosec.html): Improve help page.
+
+2011-10-04  Henri Doreau <henri.doreau@gmail.com>
+
 	* src/html/help.xsl (browse_infosec.html): Add help page for the
 	Security Information Browser.
 	(contents.html): Link the new help page.
