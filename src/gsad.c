@@ -120,9 +120,9 @@
 #define POST_BUFFER_SIZE 500000
 
 /**
- * @brief Maximum length of "file name" for /help/ URLs.
+ * @brief Maximum length of "file name" for /help/ or /dialog/ URLs.
  */
-#define MAX_HELP_NAME_SIZE 128
+#define MAX_FILE_NAME_SIZE 128
 
 /**
  * @brief Max number of minutes between activity in a session.
@@ -2659,6 +2659,48 @@ request_handler (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
         }
+      else if (!strncmp (&url[0], "/dialog/",
+                         strlen ("/dialog/"))) /* flawfinder: ignore,
+                                                  it is a const str */
+        {
+          if (! g_ascii_isalpha (url[8]))
+            {
+              res = gsad_message (credentials,
+                                  "Invalid request", __FUNCTION__, __LINE__,
+                                  "The requested dialog page does not exist.",
+                                  "/dialog/contents.html");
+            }
+          else
+            {
+              gchar *page = g_strndup ((gchar *) &url[8], MAX_FILE_NAME_SIZE);
+              // XXX: url subsearch could be nicer and xsl transform could
+              // be generalized with the other transforms.
+              time_t now;
+              char ctime_now[200];
+              gchar *xml;
+
+              assert (credentials->token);
+
+              now = time (NULL);
+              ctime_r_strip_newline (&now, ctime_now);
+
+              xml = g_markup_printf_escaped ("<envelope>"
+                                             "<token>%s</token>"
+                                             "<time>%s</time>"
+                                             "<login>%s</login>"
+                                             "<dialog><%s/></dialog>"
+                                             "</envelope>",
+                                             credentials->token,
+                                             ctime_now,
+                                             credentials->username,
+                                             page);
+
+              g_free (page);
+              res = xsl_transform (xml);
+            }
+          response = MHD_create_response_from_data (strlen (res), res,
+                                                    MHD_NO, MHD_YES);
+        }
       else if (!strncmp (&url[0], "/help/",
                          strlen ("/help/"))) /* flawfinder: ignore,
                                                 it is a const str */
@@ -2672,7 +2714,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
-              gchar *page = g_strndup ((gchar *) &url[6], MAX_HELP_NAME_SIZE);
+              gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
               time_t now;

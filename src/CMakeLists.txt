@@ -139,6 +139,10 @@ if (PATH_TO_XSLTPROC)
                                      COMMENT "Checking syntax of gsad.xsl"
                                      COMMAND xsltproc html/gsad.xsl
                                      DEPENDS html/gsad.xsl)
+  add_custom_target (dialog-xsl-syntax ALL
+                                     COMMENT "Checking syntax of dialog.xsl"
+                                     COMMAND xsltproc html/dialog.xsl
+                                     DEPENDS html/dialog.xsl)
   add_custom_target (help-xsl-syntax ALL
                                      COMMENT "Checking syntax of help.xsl"
                                      COMMAND xsltproc html/help.xsl

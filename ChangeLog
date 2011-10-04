@@ -1,3 +1,19 @@
+2011-10-04  Henri Doreau <henri.doreau@gmail.com>
+
+	Add a form for security information lookup.
+
+	* src/gsad.c (request_handler): Handle /dialog/<filename> URLs.
+
+	* src/html/dialog.xsl: New. Handle intermediate pages that don't
+	directly issue OMP commands.
+
+	* src/html/gsad.xsl: Include dialog.xsl
+	(html-gsa-navigation): Add a link to the new form.
+
+	* src/CMakeLists.txt: Add syntax check for dialog.xsl
+
+	* CMakeLists.txt: Update install procedure accordingly (handle dialog.xsl).
+
 2011-09-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Set the timezone early, so that it's in effect for the entire page

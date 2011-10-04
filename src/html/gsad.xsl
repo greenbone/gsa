@@ -792,6 +792,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
       <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
       <li class="last"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
+      <li><a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a></li>
      </ul>
     </li>
     <li>
@@ -957,6 +958,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- OAP -->
 
 <xsl:include href="oap.xsl"/>
+
+<!-- Dialog -->
+
+<xsl:include href="dialog.xsl"/>
 
 <!-- Help -->
 
