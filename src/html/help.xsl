@@ -2929,6 +2929,9 @@ Public License instead of this License.
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
+    <div class="float_right">
+      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Jump to dialog</a>
+    </div>
     <div style="text-align:left">
 
       <br/>

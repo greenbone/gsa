@@ -1,3 +1,11 @@
+2011-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Move "last" class to SecInfo.
+
+	* src/html/help.xsl (browse_infosec.html): Add jump to dialog.
+
+	* src/html/omp.xsl (html-create-schedule-form): Remove stray UTC.
+
 2011-10-04  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/help.xsl (browse_infosec.html): Improve help page.
