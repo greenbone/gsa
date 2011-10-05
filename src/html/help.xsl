@@ -2969,6 +2969,21 @@ Public License instead of this License.
         </ul>
         e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
       </p>
+      
+      <h2>NVT</h2>
+      <p>
+        NVTs are uniquely identified using OIDs like
+        <code>1.3.6.1.4.1.25623.1.0.XXXXX</code>.
+        <br/>
+        Where:
+        <ul>
+          <li>1.3.6.1.4.1.25623.1.0 is the standard prefix for legacy IDs</li>
+          <li>XXXXX is the ID of the script</li>
+        </ul>
+        Note that this is an example and even the prefix can vary. OID ranges
+        are described more precisely on
+        http://www.openvas.org/openvas-oids.html
+      </p>
     </div>
   </div>
 </xsl:template>

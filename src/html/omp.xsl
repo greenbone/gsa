@@ -8306,6 +8306,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="count (cpe:cpe-item) > 0">
         <xsl:call-template name="cpe-details"/>
       </xsl:when>
+      <xsl:when test="count (nvt) > 0">
+        <div class="gb_window_part_center">NVT Details
+          <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
+             title="Help: NVTS (NVT Details)">
+            <img src="/img/help.png"/>
+          </a>
+        </div>
+        <div class="gb_window_part_content">
+          <xsl:apply-templates/>
+        </div>
+      </xsl:when>
       <xsl:otherwise>
         <div class="gb_window_part_center">Get details</div>
         <div class="gb_window_part_content">

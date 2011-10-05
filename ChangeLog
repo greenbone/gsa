@@ -1,3 +1,13 @@
+2011-10-05  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_info_response): Add NVT details handling.
+
+	* src/html/dialog.xsl (browse_infosec.html): Add input field for NVT
+	lookups.
+
+	* src/html/help.xsl (browse_infosec.html): Update help message
+	accordingly.
+
 2011-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Move "last" class to SecInfo.

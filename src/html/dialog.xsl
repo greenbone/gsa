@@ -103,6 +103,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </form> 
           </td>
         </tr>
+        <tr>
+          <td>
+            <h2>NVT Lookup</h2>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <form name="input"
+                  action="/omp"
+                  method="get">
+              <input type="text" name="info_name" value="1.3.6.1.4.1.25623.1.0."/>
+              <input type="hidden" name="cmd" value="get_info"/>
+              <input type="hidden" name="info_type" value="NVT"/>
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="submit" value="Search"/>
+            </form> 
+          </td>
+        </tr>
       </table>
     </div>
   </div>
