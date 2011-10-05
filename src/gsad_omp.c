@@ -13878,7 +13878,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   *timezone = NULL;
 
-  if (params_value (params, "text") == NULL)
+  if ((params_value (params, "text") == NULL)
+      || (params_value (params, "password") == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"));
@@ -13898,6 +13899,47 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                              "The settings remains the same. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_my_settings");
+    }
+
+  xml = g_string_new ("");
+
+  if (params_value (params, "enable"))
+    {
+      text = params_value (params, "password");
+      text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text)) : g_strdup (""));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting>"
+                                "<name>Password</name>"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
+          == -1)
+        {
+          g_free (text_64);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings");
+        }
+      g_free (text_64);
+
+      xml = g_string_new ("");
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings");
+        }
     }
 
   text = params_value (params, "text");
@@ -13921,8 +13963,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   g_free (text_64);
-
-  xml = g_string_new ("");
 
   entity = NULL;
   if (read_entity_and_string (&session, &entity, &xml))

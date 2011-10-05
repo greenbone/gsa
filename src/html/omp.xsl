@@ -12895,6 +12895,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        value="{/envelope/timezone}"/>
               </td>
             </tr>
+            <tr class="odd">
+              <td valign="top">Password</td>
+              <td>
+                <input type="checkbox" name="enable" value="1"/>
+                Replace existing value with:
+                <br/>
+                <input type="password" autocomplete="off" name="password"
+                       size="30" maxlength="400" value=""/>
+              </td>
+            </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="Save My Settings"/>

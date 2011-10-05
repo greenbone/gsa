@@ -1,3 +1,9 @@
+2011-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_my_settings_omp): Add Password case.
+
+	* src/html/omp.xsl (edit_my_settings): Add Password input.
+
 2011-10-05  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (get_info_response): Add NVT details handling.
