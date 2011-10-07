@@ -12859,6 +12859,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="/envelope/timezone"/></td>
             <td></td>
           </tr>
+          <tr class="odd">
+            <td>Password</td>
+            <td>********</td>
+          </tr>
         </table>
       </div>
     </div>

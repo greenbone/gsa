@@ -1,3 +1,9 @@
+2011-10-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (get_my_settings): Add dummy Password
+	entry to make clear to user she could change it if pressing
+	the edit icon.
+
 2011-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_my_settings_omp): Add Password case.
