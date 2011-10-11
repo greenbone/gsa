@@ -225,10 +225,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Prognosis</td>
+          <td valign="top">Prognosis</td>
           <td>
             The maximum threat on the host, predicted from what is currently
-            known about the host.
+            known about the host. Threat is determined by comparing the
+            detected applications for this host to a list of vulnerable ones.
+            Note that the host might be only vulnerable for specific
+            configurations or combinations of applications.
           </td>
         </tr>
       </table>
