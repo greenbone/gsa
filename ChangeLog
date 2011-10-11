@@ -1,3 +1,13 @@
+2011-10-11  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 3.0+beta5 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Update openvas-libraries dependency.
+
+	* INSTALL: Document updated openvas-libraries dependency.
+
 2011-10-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (get_my_settings): Add dummy Password

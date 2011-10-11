@@ -84,7 +84,7 @@ pkg_check_modules (LIBXML REQUIRED libxml-2.0)
 pkg_check_modules (GLIB REQUIRED glib-2.0>=2.14)
 pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
-pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=4.0.0)
+pkg_check_modules (LIBOPENVAS REQUIRED libopenvas>=5.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls)
 

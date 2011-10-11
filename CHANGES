@@ -1,3 +1,28 @@
+gsa 3.0+beta5 (2011-10-11)
+
+This is the fifth beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for a number of new features, including asset
+management, displaying SCAP data, prognostic scans, task observers and
+individual settings for users. It also features a redesigned user interface and
+improved internal handling of request parameters.
+
+Many thanks to everyone who has contributed to this release:
+Henri Doreau, Matthew Mundell, Michael Wiegand and Jan-Oliver Wagner.
+
+Main changes since 3.0+beta4:
+* Support for asset management has been added.
+* The internal handling of request parameters has been improved.
+* The user interface design has been updated.
+* Support for prognostic scans has been added.
+* Support for task observers has been added.
+* Support for displaying SCAP data has been added.
+* Support for individual user settings has been added.
+* Support for individual time zones for users has been added.
+
+
 gsa 3.0+beta4 (2011-07-21)
 
 This is the fourth beta version of the upcoming 3.0 release of the Greenbone
