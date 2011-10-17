@@ -1,3 +1,7 @@
+2011-10-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_tasks, get_notes): Sort notes by NVT name, text.
+
 2011-10-11  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/help.xsl (hosts.html): Improved help message for prognostic

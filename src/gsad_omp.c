@@ -1750,7 +1750,7 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>"
                                 "<get_notes"
-                                " sort_field=\"notes.nvt, notes.text\""
+                                " sort_field=\"notes_nvt_name, notes.text\""
                                 " task_id=\"%s\"/>"
                                 "<get_overrides"
                                 " sort_field=\"overrides.nvt, overrides.text\""
@@ -8380,7 +8380,7 @@ get_notes (credentials_t *credentials, const char *commands)
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "%s"
-                            "<get_notes sort_field=\"notes.nvt, notes.text\"/>"
+                            "<get_notes sort_field=\"notes_nvt_name, notes.text\"/>"
                             "</commands>",
                             commands ? commands : "")
       == -1)
