@@ -1,5 +1,9 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings_omp): Set TZ when the timezone changes.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (user_set_password): New function.
 	(exec_omp_post): Set password for session after save_my_settings_omp.
 

@@ -13993,6 +13993,15 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (credentials->timezone);
       credentials->timezone = g_strdup (strlen (text) ? text : "UTC");
       *timezone = g_strdup (strlen (text) ? text : "UTC");
+
+      /* Set the timezone, so that the ENVELOPE/TIME uses the right timezone. */
+
+      if (setenv ("TZ", credentials->timezone, 1) == -1)
+        {
+          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+          exit (EXIT_FAILURE);
+        }
+      tzset ();
     }
 
   free_entity (entity);
