@@ -1,5 +1,10 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add missing max_results to All
+	Filtered case.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Add ROLE to ENVELOPE in help and dialog
 	cases, for header bar.
 
