@@ -1,5 +1,15 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (user_set_password): New function.
+	(exec_omp_post): Set password for session after save_my_settings_omp.
+
+	* src/gsad_omp.c (save_my_settings_omp): Add password return.  Set when
+	password successfully changed.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove "login" size limitation, to match
 	Administrator.
 

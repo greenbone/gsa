@@ -339,9 +339,7 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
 }
 
 /**
- * @brief Get a user.
- *
- * If a user is returned, it's up to the caller to release the user.
+ * @brief Set timezone of user.
  *
  * @param[in]   name      User name.
  * @param[in]   timezone  Timezone.
@@ -362,6 +360,36 @@ user_set_timezone (const gchar *name, const gchar *timezone)
         {
           g_free (item->timezone);
           item->timezone = g_strdup (timezone);
+          ret = 0;
+          break;
+        }
+    }
+  g_mutex_unlock (mutex);
+  return ret;
+}
+
+/**
+ * @brief Set password of user.
+ *
+ * @param[in]   name      User name.
+ * @param[in]   password  Password.
+ *
+ * @return 0 ok, 1 failed to find user.
+ */
+int
+user_set_password (const gchar *name, const gchar *password)
+{
+  int index, ret;
+  ret = 1;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, name) == 0)
+        {
+          g_free (item->password);
+          item->password = g_strdup (password);
           ret = 0;
           break;
         }
@@ -1383,12 +1411,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
-      char *timezone;
+      char *timezone, *password;
       con_info->response = save_my_settings_omp (credentials, con_info->params,
-                                                 &timezone);
+                                                 &timezone, &password);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->username, timezone);
+      if (password)
+        /* credentials->password set in save_my_settings_omp before XSLT. */
+        user_set_password (credentials->username, password);
       g_free (timezone);
     }
   ELSE (save_note)

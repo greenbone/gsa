@@ -13862,12 +13862,13 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params)
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] timezone     Timezone.  Caller must free.
+ * @param[out] password     Password.  Caller must free.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_my_settings_omp (credentials_t * credentials, params_t *params,
-                      char **timezone)
+                      char **timezone, char **password)
 {
   int socket;
   gnutls_session_t session;
@@ -13878,6 +13879,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   entity_t entity;
 
   *timezone = NULL;
+  *password = NULL;
 
   if ((params_value (params, "text") == NULL)
       || (params_value (params, "password") == NULL))
@@ -13940,6 +13942,14 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "An internal error occurred while saving settings. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings");
+        }
+
+      status = entity_attribute (entity, "status");
+      if (status && (strlen (status) > 0) && (status[0] == '2'))
+        {
+          g_free (credentials->password);
+          credentials->password = g_strdup (text);
+          *password = g_strdup (text);
         }
     }
 
