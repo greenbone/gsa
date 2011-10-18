@@ -1,5 +1,10 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Add ROLE to ENVELOPE in help and dialog
+	cases, for header bar.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_my_settings_omp): Set TZ when the timezone changes.
 
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>

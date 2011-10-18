@@ -2722,11 +2722,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                              "<token>%s</token>"
                                              "<time>%s</time>"
                                              "<login>%s</login>"
+                                             "<role>%s</role>"
                                              "<dialog><%s/></dialog>"
                                              "</envelope>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
+                                             credentials->role,
                                              page);
 
               g_free (page);
@@ -2764,11 +2766,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                              "<token>%s</token>"
                                              "<time>%s</time>"
                                              "<login>%s</login>"
+                                             "<role>%s</role>"
                                              "<help><%s/></help>"
                                              "</envelope>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
+                                             credentials->role,
                                              page);
 
               g_free (page);
