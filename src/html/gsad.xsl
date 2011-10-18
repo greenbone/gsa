@@ -512,6 +512,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$username = ''">
           </xsl:when>
+          <xsl:when test="string-length ($username) &gt; 45">
+            Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
+            <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="substring ($username, 1, 45)"/>...</a></b> |
+          </xsl:when>
           <xsl:otherwise>
             Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |

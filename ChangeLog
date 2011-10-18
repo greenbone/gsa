@@ -1,5 +1,18 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Remove "login" size limitation, to match
+	Administrator.
+
+	* src/gsad_oap.c (edit_user_oap): Replace assertion on name with error
+	return.  Expect login name in "login" param.
+
+	* src/html/oap.xsl (user): Pass edit_user username in "login" instead of
+	"name".
+
+	* src/html/gsad.xsl (html-gsa-logo): Truncate name at 45 characters.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_tasks, get_overrides): Sort overrides by NVT name,
 	text.
 

@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
-      <a href="/oap?cmd=edit_user&amp;name={name}&amp;token={/envelope/token}"
+      <a href="/oap?cmd=edit_user&amp;login={name}&amp;token={/envelope/token}"
          title="Edit User"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>

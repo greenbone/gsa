@@ -606,7 +606,12 @@ edit_user_oap (credentials_t * credentials, params_t * params)
   int socket;
   gchar *html;
 
-  assert (params_value (params, "name"));
+  if (params_value (params, "login") == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting the user. "
+                         "Diagnostics: Username error.",
+                         "/omp?cmd=get_users");
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -630,7 +635,7 @@ edit_user_oap (credentials_t * credentials, params_t * params)
 
   if (openvas_server_sendf (&session,
                             "<get_users name=\"%s\"/>",
-                            params_value (params, "name"))
+                            params_value (params, "login"))
       == -1)
     {
       return gsad_message (credentials,
