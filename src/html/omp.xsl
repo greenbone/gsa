@@ -3706,7 +3706,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Credential
-      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential"
+      <a href="/help/configure_credentials.html?token={/envelope/token}#edit"
          title="Help: Edit Credential">
         <img src="/img/help.png"/>
       </a>

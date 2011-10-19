@@ -1,5 +1,12 @@
 2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-lsc-credential-form): Correct help link.
+
+	* src/html/help.xsl (configure_credentials.html): Add Edit Credential
+	action.
+
+2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_my_settings): Add missing TD.
 
 2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>

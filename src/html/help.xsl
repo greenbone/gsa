@@ -553,6 +553,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will show details about the credential.
       </p>
 
+      <a name="edit"></a>
+      <h4>Edit Credential</h4>
+      <p>
+       Pressing the Edit icon <img src="/img/edit.png" alt="Edit Credential"
+         title="Edit Credential" /> will
+       switch to an overview of the credential and allows
+       editing of some of the properties.
+      </p>
+
       <h4>Download RPM Package</h4>
       <p>
        Pressing the RPM icon
