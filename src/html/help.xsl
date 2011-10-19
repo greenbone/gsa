@@ -1889,7 +1889,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
             <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
-            <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
           </ul>
           <li> Asset Management</li>
           <ul>
@@ -1925,8 +1924,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Miscellaneous</li>
           <ul>
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
-            <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
+            <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
+            <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Browser</a></li>
+            <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
             <li> <a href="glossary.html?token={/envelope/token}">Glossary</a></li>
@@ -2634,6 +2635,44 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="my_settings.html">
+  <div class="gb_window_part_center">Help: My Settings</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>My Settings</h1>
+      <p>
+        This page lists the settings of the current user, like the user's timezone.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Name of setting.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>Value of setting.  For passwords the value is replaced with a sequence of *'s.</td>
+        </tr>
+      </table>
+
+      <a name="edit"></a>
+      <h2>Edit My Settings</h2>
+      <p>
+        This table provides an editable version of the current user's settings, including
+        timezone and password.
+      </p>
+
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="new_task.html">
   <div class="gb_window_part_center">Help: New Task</div>
   <div class="gb_window_part_content">
@@ -2972,7 +3011,7 @@ Public License instead of this License.
         </ul>
         e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
       </p>
-      
+
       <h2>NVT</h2>
       <p>
         NVTs are uniquely identified using OIDs like

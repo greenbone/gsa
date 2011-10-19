@@ -1,5 +1,12 @@
 2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (contents.html): Move performance to Miscellaneous
+	with other Extras.  Add My Settings.  Move SecInfo up to match Extras
+	order.
+	(my_settings.html): New template.
+
+2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add missing max_results to All
 	Filtered case.
 
