@@ -1,4 +1,8 @@
-2011-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (get_my_settings): Add missing TD.
+
+2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (contents.html): Move performance to Miscellaneous
 	with other Extras.  Add My Settings.  Move SecInfo up to match Extras
