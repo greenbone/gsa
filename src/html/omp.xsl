@@ -3761,15 +3761,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
-                  <input type="checkbox" name="enable_off" value="yes"
+                  <input type="checkbox" name="enable_off" value="1"
                          disabled="1"/>
                   Replace existing value with:
                   <br/>
-                  <input type="text" name="login" size="30" maxlength="400"
+                  <input type="password" name="password" size="30" maxlength="400"
                          disabled="1" value=""/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="checkbox" name="enable" value="yes"/>
+                  <input type="checkbox" name="enable" value="1"/>
                   Replace existing value with:
                   <br/>
                   <input type="password" autocomplete="off" name="password"

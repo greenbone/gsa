@@ -1,5 +1,19 @@
 2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get Credential saving working.
+
+	* src/gsad_omp.c (save_lsc_credential_omp): Get change_login from the
+	presence of the login param.  This is how it was before the big parameter
+	passing patch.  Use the right parameter for the login, "credential_login".
+	Get change_password from "enable" instead of "login", because that's the
+	form is using.
+
+	* src/html/omp.xsl (html-edit-lsc-credential-form): Use 1 instead of yes
+	for "enable" parameters, because that's what validation requires.  Use
+	"password" consistently for the password, as it is safe to do so.
+
+2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-lsc-credential-form): Correct help link.
 
 	* src/html/help.xsl (configure_credentials.html): Add Edit Credential

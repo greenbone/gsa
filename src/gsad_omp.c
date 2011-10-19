@@ -2644,13 +2644,13 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   gchar *html;
 
-  change_login = (params_value (params, "enable") ? 1 : 0);
-  change_password = (params_value (params, "login") ? 1 : 0);
+  change_login = params_given (params, "credential_login");
+  change_password = (params_value (params, "enable") ? 1 : 0);
 
   if (params_value (params, "comment") == NULL
       || params_value (params, "name") == NULL
       || (change_password && params_value (params, "password") == NULL)
-      || (change_login && params_value (params, "login") == NULL))
+      || (change_login && params_value (params, "credential_login") == NULL))
     return edit_lsc_credential (credentials,
                                 params,
                                 GSAD_MESSAGE_INVALID_PARAM
@@ -2693,7 +2693,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                                       params_value (params, "lsc_credential_id"),
                                       params_value (params, "name"),
                                       params_value (params, "comment"),
-                                      params_value (params, "login"),
+                                      params_value (params, "credential_login"),
                                       params_value (params, "password"));
   else if (change_login)
     modify = g_strdup_printf ("<modify_lsc_credential"
@@ -2705,7 +2705,7 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                               params_value (params, "lsc_credential_id"),
                               params_value (params, "name"),
                               params_value (params, "comment"),
-                              params_value (params, "login"));
+                              params_value (params, "credential_login"));
   else if (change_password)
     modify = g_strdup_printf ("<modify_lsc_credential"
                               " lsc_credential_id=\"%s\">"
