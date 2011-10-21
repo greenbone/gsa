@@ -73,16 +73,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>
+          <td width="350">
             <form name="input"
                   action="/omp"
                   method="get">
-              <input type="text" name="info_name" value="CVE-"/>
+              <input style="width: 240px" type="text" name="info_name" value="CVE-"/>
               <input type="hidden" name="cmd" value="get_info"/>
               <input type="hidden" name="info_type" value="CVE"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="submit" value="Search"/>
-            </form> 
+            </form>
           </td>
         </tr>
         <tr>
@@ -95,12 +95,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <form name="input"
                   action="/omp"
                   method="get">
-              <input type="text" name="info_name" value="cpe:/a:"/>
+              <input style="width: 240px" type="text" name="info_name" value="cpe:/a:"/>
               <input type="hidden" name="cmd" value="get_info"/>
               <input type="hidden" name="info_type" value="CPE"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="submit" value="Search"/>
-            </form> 
+            </form>
           </td>
         </tr>
         <tr>
@@ -113,12 +113,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <form name="input"
                   action="/omp"
                   method="get">
-              <input type="text" name="info_name" value="1.3.6.1.4.1.25623.1.0."/>
+              <input style="width: 240px" type="text" name="info_name" value="1.3.6.1.4.1.25623.1.0."/>
               <input type="hidden" name="cmd" value="get_info"/>
               <input type="hidden" name="info_type" value="NVT"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="submit" value="Search"/>
-            </form> 
+            </form>
           </td>
         </tr>
       </table>
