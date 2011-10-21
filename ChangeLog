@@ -1,3 +1,7 @@
+2011-10-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/help.xsl: Correct help message for port range.
+
 2011-10-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get Credential saving working.

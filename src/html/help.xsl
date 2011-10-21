@@ -1522,7 +1522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>yes</td>
           <td>400</td>
           <td>Comma separated list of port ranges</td>
-          <td>0-1000,1649,2102-2104</td>
+          <td>1-1000,1649,2102-2104</td>
         </tr>
         <tr class="even">
           <td>SSH Credential</td>
