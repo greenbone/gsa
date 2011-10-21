@@ -8301,10 +8301,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <xsl:choose>
-      <xsl:when test="count (cve:entry) > 0">
+      <xsl:when test="count (cve) > 0">
         <xsl:call-template name="cve-details"/>
       </xsl:when>
-      <xsl:when test="count (cpe:cpe-item) > 0">
+      <xsl:when test="count (cpe) > 0">
         <xsl:call-template name="cpe-details"/>
       </xsl:when>
       <xsl:when test="count (nvt) > 0">
@@ -8366,70 +8366,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><b>ID</b></td>
         <td>
           <b>
-            <xsl:value-of select="cve:entry/@id"/>
+            <xsl:value-of select="cve/cve:entry/@id"/>
           </b>
         </td>
       </tr>
       <tr>
         <td><b>Published</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:published-datetime"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:published-datetime"/></td>
       </tr>
       <tr>
         <td><b>Last modified</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:last-modified-datetime"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:last-modified-datetime"/></td>
       </tr>
       <tr>
         <td><b>CWE ID</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cwe/@id"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cwe/@id"/></td>
       </tr>
     </table>
 
     <h2>Description</h2>
-    <xsl:value-of select="cve:entry/vuln:summary/text()"/>
+    <xsl:value-of select="cve/cve:entry/vuln:summary/text()"/>
 
     <h2>CVSS</h2>
     <table>
       <tr>
         <td><b>Base score</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
       </tr>
       <tr>
         <td><b>Access vector</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
       </tr>
       <tr>
         <td><b>Access Complexity</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
       </tr>
       <tr>
         <td><b>Authentication</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
       </tr>
       <tr>
         <td><b>Confidentiality impact</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
       </tr>
       <tr>
         <td><b>Integrity impact</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
       </tr>
       <tr>
         <td><b>Availability impact</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
       </tr>
       <tr>
         <td><b>Source</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
       </tr>
       <tr>
         <td><b>Generated</b></td>
-        <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
+        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
       </tr>
     </table>
 
     <h2>References</h2>
     <table>
-      <xsl:for-each select="cve:entry/vuln:references">
+      <xsl:for-each select="cve/cve:entry/vuln:references">
         <tr>
           <td><xsl:value-of select="vuln:source/text()"/></td>
         </tr>
@@ -8446,7 +8446,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <h2>Vulnerable products</h2>
     <table>
-      <xsl:for-each select="cve:entry/vuln:vulnerable-software-list/vuln:product">
+      <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
         <tr><td>
           <xsl:call-template name="get_info_cpe_lnk">
             <xsl:with-param name="cpe" select="text()"/>
@@ -8471,11 +8471,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><b>Name</b></td>
         <td>
           <b>
-            <xsl:value-of select="cpe:cpe-item/@name"/>
+            <xsl:value-of select="cpe/cpe:cpe-item/@name"/>
           </b>
         </td>
       </tr>
-      <xsl:for-each select="cpe:cpe-item/cpe:title">
+      <xsl:for-each select="cpe/cpe:cpe-item/cpe:title">
         <tr>
           <td>Title (<xsl:value-of select="@xml:lang"/>)</td>
           <td><xsl:value-of select="text()"/></td>
@@ -8483,16 +8483,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
       <tr>
         <td>NVD ID</td>
-        <td><xsl:value-of select="cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
+        <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
       </tr>
       <tr>
         <td>Last modified</td>
-        <td><xsl:value-of select="cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
+        <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
       </tr>
-      <xsl:if test="cpe:cpe-item/@deprecated='true'">
+      <xsl:if test="cpe/cpe:cpe-item/@deprecated='true'">
         <tr>
           <td>Deprecated by</td>
-          <td><xsl:value-of select="cpe:cpe-item/@deprecated_by"/></td>
+          <td><xsl:value-of select="cpe/cpe:cpe-item/@deprecated_by"/></td>
         </tr>
       </xsl:if>
     </table>
