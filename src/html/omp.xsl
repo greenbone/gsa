@@ -8371,15 +8371,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
       </tr>
       <tr>
-        <td><b>Published</b></td>
+        <td>Published</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:published-datetime"/></td>
       </tr>
       <tr>
-        <td><b>Last modified</b></td>
+        <td>Last modified</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:last-modified-datetime"/></td>
       </tr>
       <tr>
-        <td><b>CWE ID</b></td>
+        <td>CWE ID</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cwe/@id"/></td>
       </tr>
     </table>
@@ -8390,39 +8390,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h2>CVSS</h2>
     <table>
       <tr>
-        <td><b>Base score</b></td>
+        <td>Base score</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
       </tr>
       <tr>
-        <td><b>Access vector</b></td>
+        <td>Access vector</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
       </tr>
       <tr>
-        <td><b>Access Complexity</b></td>
+        <td>Access Complexity</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
       </tr>
       <tr>
-        <td><b>Authentication</b></td>
+        <td>Authentication</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
       </tr>
       <tr>
-        <td><b>Confidentiality impact</b></td>
+        <td>Confidentiality impact</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
       </tr>
       <tr>
-        <td><b>Integrity impact</b></td>
+        <td>Integrity impact</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
       </tr>
       <tr>
-        <td><b>Availability impact</b></td>
+        <td>Availability impact</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
       </tr>
       <tr>
-        <td><b>Source</b></td>
+        <td>Source</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
       </tr>
       <tr>
-        <td><b>Generated</b></td>
+        <td>Generated</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
       </tr>
     </table>

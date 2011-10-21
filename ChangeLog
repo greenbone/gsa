@@ -1,5 +1,10 @@
 2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Bold only the ID field, as in other
+	pages.
+
+2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (cve-details): Add table of NVTs that address the CVE.
 
 2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
