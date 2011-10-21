@@ -1,5 +1,9 @@
 2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Add table of NVTs that address the CVE.
+
+2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/dialog.xsl (browse_infosec.html): Make the text inputs wider
 	so that an entire NVT OID fits in the field.
 

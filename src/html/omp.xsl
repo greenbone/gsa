@@ -8454,6 +8454,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td></tr>
       </xsl:for-each>
     </table>
+
+    <xsl:choose>
+      <xsl:when test="count(cve/nvts/nvt) = 0">
+        <h1>NVTs addressing this CVE: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h2>NVTs addressing this CVE</h2>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Actions</td>
+          </tr>
+          <xsl:for-each select="cve/nvts/nvt">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                <xsl:otherwise>odd</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <tr class="{$class}">
+              <td><xsl:value-of select="name"/></td>
+              <td width="100">
+                <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="Details">
+                  <img src="/img/details.png"
+                       border="0"
+                       alt="Details"
+                       style="margin-left:3px;"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
 </xsl:template>
 
