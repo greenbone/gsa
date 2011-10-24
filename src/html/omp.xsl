@@ -8530,6 +8530,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </xsl:if>
     </table>
+    <xsl:choose>
+      <xsl:when test="count(cpe/cves/cve) = 0">
+        <h1>Reported vulnerabilites: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>Reported vulnerabilites</h1>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>CVSS</td>
+            <td>Actions</td>
+          </tr>
+          <xsl:for-each select="cpe/cves/cve">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                <xsl:otherwise>odd</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <tr class="{$class}">
+              <td><xsl:value-of select="cve:entry/@id"/></td>
+              <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+              <td width="100">
+                <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;token={/envelope/token}" title="Details">
+                  <img src="/img/details.png"
+                       border="0"
+                       alt="Details"
+                       style="margin-left:3px;"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
 </xsl:template>
 
