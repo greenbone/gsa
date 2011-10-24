@@ -11021,11 +11021,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </td>
                 <td>
-                  <xsl:choose>
-                    <xsl:when test="$threats &gt; 0">
-                      <xsl:value-of select="$threats"/>
-                    </xsl:when>
-                  </xsl:choose>
+                  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$app}&amp;token={/envelope/token}"
+                     title="Details">
+                    <xsl:choose>
+                      <xsl:when test="$threats &gt; 0">
+                        <xsl:value-of select="$threats"/>
+                      </xsl:when>
+                    </xsl:choose>
+                  </a>
                 </td>
               </tr>
             </xsl:for-each>

@@ -1,5 +1,9 @@
 2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (host): Link threat count to CPE Details page.
+
+2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (cpe-details): Add list of reported vulnerabilites.
 
 2011-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
