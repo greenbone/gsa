@@ -1,5 +1,9 @@
 2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_info_response): Make heading depend on type.
+
+2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (host): Link threat count to CPE Details page.
 
 2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
