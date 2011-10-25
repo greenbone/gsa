@@ -8368,7 +8368,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <h1>CVE Details</h1>
+    <div class="float_right">
+      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Back to SecInfo Management</a>
+    </div>
     <table>
       <tr>
         <td><b>ID</b></td>
@@ -8392,10 +8394,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
     </table>
 
-    <h2>Description</h2>
+    <h1>Description</h1>
     <xsl:value-of select="cve/cve:entry/vuln:summary/text()"/>
 
-    <h2>CVSS</h2>
+    <h1>CVSS</h1>
     <table>
       <tr>
         <td>Base score</td>
@@ -8435,7 +8437,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
     </table>
 
-    <h2>References</h2>
+    <h1>References</h1>
     <table>
       <xsl:for-each select="cve/cve:entry/vuln:references">
         <tr>
@@ -8452,7 +8454,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </table>
 
-    <h2>Vulnerable products</h2>
+    <h1>Vulnerable products</h1>
     <table>
       <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
         <tr><td>
@@ -8507,7 +8509,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <h1>CPE Details</h1>
+    <div class="float_right">
+      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Back to SecInfo Management</a>
+    </div>
     <table>
       <tr>
         <td><b>Name</b></td>

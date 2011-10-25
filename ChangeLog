@@ -1,6 +1,16 @@
 2011-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (cve-details): Use h1 for both NVT list cases.
+	Bring the SecInfo pages closer to the others.
+
+	* src/html/dialog.xsl (browse_infosec.html): Remove main heading.  Use H1
+	for headings.
+
+	* src/html/omp.xsl (cve-details, cpe-details): Remove main heading.  Use
+	H1 for headings.  Add "Back to" link.
+
+2011-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (cve-details): Use H1 for both NVT list cases.
 
 2011-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
 

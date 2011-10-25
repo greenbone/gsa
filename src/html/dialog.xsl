@@ -65,11 +65,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <div style="text-align:left">
-      <h1>Security Information browser</h1>
       <table>
         <tr>
           <td>
-            <h2>CVE Lookup</h2>
+            <h1>CVE Lookup</h1>
           </td>
         </tr>
         <tr>
@@ -87,7 +86,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <h2>CPE Lookup</h2>
+            <h1>CPE Lookup</h1>
           </td>
         </tr>
         <tr>
@@ -105,7 +104,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <h2>NVT Lookup</h2>
+            <h1>NVT Lookup</h1>
           </td>
         </tr>
         <tr>
