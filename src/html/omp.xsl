@@ -8468,7 +8468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <h1>NVTs addressing this CVE: None</h1>
       </xsl:when>
       <xsl:otherwise>
-        <h2>NVTs addressing this CVE</h2>
+        <h1>NVTs addressing this CVE</h1>
         <table class="gbntable" cellspacing="2" cellpadding="4">
           <tr class="gbntablehead2">
             <td>Name</td>
