@@ -8437,33 +8437,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
     </table>
 
-    <h1>References</h1>
-    <table>
-      <xsl:for-each select="cve/cve:entry/vuln:references">
-        <tr>
-          <td><xsl:value-of select="vuln:source/text()"/></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><xsl:value-of select="vuln:reference/text()"/></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><xsl:value-of select="vuln:reference/@href"/></td>
-        </tr>
-      </xsl:for-each>
-    </table>
+    <xsl:choose>
+      <xsl:when test="count(cve/cve:entry/vuln:references) = 0">
+        <h1>References: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>References</h1>
+        <table>
+          <xsl:for-each select="cve/cve:entry/vuln:references">
+            <tr>
+              <td><xsl:value-of select="vuln:source/text()"/></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><xsl:value-of select="vuln:reference/text()"/></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><xsl:value-of select="vuln:reference/@href"/></td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
 
-    <h1>Vulnerable products</h1>
-    <table>
-      <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
-        <tr><td>
-          <xsl:call-template name="get_info_cpe_lnk">
-            <xsl:with-param name="cpe" select="text()"/>
-          </xsl:call-template>
-        </td></tr>
-      </xsl:for-each>
-    </table>
+    <xsl:choose>
+      <xsl:when test="count(cve/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
+        <h1>Vulnerable products: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>Vulnerable products</h1>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Actions</td>
+          </tr>
+          <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                <xsl:otherwise>odd</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <tr class="{$class}">
+              <td><xsl:value-of select="text()"/></td>
+              <td width="100">
+                <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;token={/envelope/token}"
+                   title="Details">
+                  <img src="/img/details.png"
+                       border="0"
+                       alt="Details"
+                       style="margin-left:3px;"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <xsl:choose>
       <xsl:when test="count(cve/nvts/nvt) = 0">

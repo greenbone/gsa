@@ -1,5 +1,10 @@
 2011-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Add "none" case for References and
+	Vulnerable Products.  Format Vulnerable Products like other tables.
+
+2011-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Bring the SecInfo pages closer to the others.
 
 	* src/html/dialog.xsl (browse_infosec.html): Remove main heading.  Use H1
