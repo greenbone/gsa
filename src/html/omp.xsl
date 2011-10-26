@@ -3291,6 +3291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
@@ -3304,6 +3305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
@@ -3325,6 +3327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
@@ -3336,6 +3339,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
@@ -3366,6 +3370,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
@@ -3384,6 +3389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
                   <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>

@@ -1,3 +1,14 @@
+2011-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Maintain the refresh interval across most of the actions on the get_tasks
+	page.
+
+	* src/html/omp.xsl (task): Add refresh_interval to icons.
+
+	* src/gsad_omp.c (delete_task_omp stop_task_omp pause_task_omp)
+	(resume_paused_task_omp resume_stopped_task_omp start_task_omp): Pass
+	refresh_interval to get_tasks.
+
 2011-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (cve-details): Add "none" case for References and

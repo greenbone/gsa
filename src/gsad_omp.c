@@ -932,7 +932,8 @@ delete_task_omp (credentials_t * credentials, params_t *params)
                          "/omp?cmd=get_tasks");
 
   delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, delete_task,
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"), delete_task,
                    strcmp (overrides, "0"), NULL);
   g_free (delete_task);
   return ret;
@@ -1302,7 +1303,8 @@ stop_task_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, stop_task,
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"), stop_task,
                    apply_overrides, NULL);
   g_free (stop_task);
   return ret;
@@ -1348,7 +1350,8 @@ pause_task_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, pause_task,
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"), pause_task,
                    apply_overrides, NULL);
   g_free (pause_task);
   return ret;
@@ -1395,8 +1398,9 @@ resume_paused_task_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, resume_paused_task,
-                   apply_overrides, NULL);
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"),
+                   resume_paused_task, apply_overrides, NULL);
   g_free (resume_paused_task);
   return ret;
 }
@@ -1442,7 +1446,8 @@ resume_stopped_task_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, resume_stopped,
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"), resume_stopped,
                    apply_overrides, NULL);
   g_free (resume_stopped);
   return ret;
@@ -1488,7 +1493,8 @@ start_task_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending", NULL, start_task,
+  ret = get_tasks (credentials, NULL, "name", "ascending",
+                   params_value (params, "refresh_interval"), start_task,
                    apply_overrides, NULL);
   g_free (start_task);
   return ret;
