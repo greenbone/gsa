@@ -1,5 +1,20 @@
 2011-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add note and override exporting.
+
+	* src/html/omp.xsl (note, note [nvt-details], override)
+	(override [nvt-details], note-detailed, override-detailed): Add export
+	button.
+
+	* src/gsad.c (init_validator): Add export commands.
+	(exec_omp_get): Add export calls.
+
+	* src/gsad_omp.c (export_note_omp, export_override_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+2011-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Maintain the refresh interval across most of the actions on the get_tasks
 	page.
 

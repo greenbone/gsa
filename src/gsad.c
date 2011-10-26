@@ -548,6 +548,8 @@ init_validator ()
                          "|(escalate_report)"
                          "|(export_config)"
                          "|(export_lsc_credential)"
+                         "|(export_note)"
+                         "|(export_override)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
                          "|(get_agent)"
@@ -1599,6 +1601,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return html;
     }
+
+  else if (!strcmp (cmd, "export_note"))
+    return export_note_omp (credentials, params, content_type,
+                            content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_override"))
+    return export_override_omp (credentials, params, content_type,
+                                content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_preference_file"))
     return export_preference_file_omp (credentials, params, content_type,

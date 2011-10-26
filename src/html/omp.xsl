@@ -9188,6 +9188,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
+      <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
+         title="Export Note"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -9228,6 +9233,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Edit Note"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
+      <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
+         title="Export Note"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
       </a>
     </td>
   </tr>
@@ -9941,6 +9951,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
+      <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
+         title="Export Override"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -9984,6 +9999,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Edit Override"
          style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
+      </a>
+      <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
+         title="Export Override"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
       </a>
     </td>
   </tr>
@@ -11270,6 +11290,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:otherwise>
         </xsl:choose>
+        <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
+           title="Export Note"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export"/>
+        </a>
       </div>
     </xsl:if>
     Last modified: <xsl:value-of select="modification_time"/>.
@@ -11367,6 +11392,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:otherwise>
         </xsl:choose>
+        <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
+           title="Export Override"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export"/>
+        </a>
       </div>
     </xsl:if>
     Last modified: <xsl:value-of select="modification_time"/>.
