@@ -207,12 +207,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
 
-  <xsl:for-each select="str:tokenize($string, '&#10;')">
-    <xsl:call-template name="wrap-line">
-      <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>
+  <xsl:for-each select="str:split($string, '&#10;&#10;')">
+    <xsl:for-each select="str:tokenize(text(), '&#10;')">
+      <xsl:call-template name="wrap-line">
+        <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
+      </xsl:call-template>
+      <xsl:text>
 </xsl:text>
+    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="position() = last()">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>
+</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
 </xsl:template>
 
