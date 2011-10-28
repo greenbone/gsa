@@ -1,5 +1,14 @@
 2011-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (assets): Grey progostic report icon when list is
+	empty.
+	(report [assets]): Grey prognostic icon in actions when Apps is 0.  Move
+	Reports column to end as other columns all refer to current report.
+
+	* src/html/help.xsl (hosts.html): Update icon.
+
+2011-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (wrap): Add outer loop on paragraphs, because
 	tokenizing on lines swallows empty lines.
 

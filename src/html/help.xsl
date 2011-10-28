@@ -248,7 +248,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Prognostic Report</h4>
       <p>
        Pressing the prognostic report icon
-       <img src="/img/new.png" alt="Prognostic Report" title="Prognostic Report" />
+       <img src="/img/list.png" alt="Prognostic Report" title="Prognostic Report" />
        will switch to a prognostic report on this host.
       </p>
 

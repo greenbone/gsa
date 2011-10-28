@@ -802,10 +802,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a style="margin-left: 7px" href="/help/hosts.html?token={/envelope/token}" title="Help: Hosts">
         <img src="/img/help.png" border="0"/>
       </a>
-      <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={hosts/@start}&amp;host_max_results={hosts/@max}&amp;token={/envelope/token}"
-         title="Prognostic Report" style="margin-left:3px;">
-        <img src="/img/new.png" border="0" alt="Prognostic Report"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="count (report/host)=0">
+          <img src="/img/list_inactive.png" border="0" alt="Prognostic Report"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={hosts/@start}&amp;host_max_results={hosts/@max}&amp;token={/envelope/token}"
+             title="Prognostic Report" style="margin-left:3px;">
+            <img src="/img/list.png" border="0" alt="Prognostic Report"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="gb_window_part_content">
       <xsl:apply-templates select="report" mode="assets"/>
@@ -11960,9 +11968,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>OS</td>
       <td>Ports</td>
       <td>Apps</td>
-      <td>Reports</td>
       <td>Distance</td>
       <td>Prognosis</td>
+      <td>Reports</td>
       <td>Actions</td>
     </tr>
     <xsl:for-each select="host">
@@ -12008,9 +12016,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="count (detail[name = 'App'])"/>
         </td>
         <td>
-          <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
-        </td>
-        <td>
           <xsl:choose>
             <xsl:when test="substring-after (detail[name = 'traceroute']/value, ',') = '?'">
             </xsl:when>
@@ -12040,14 +12045,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
+          <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
+        </td>
+        <td>
           <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
              title="Asset Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
-          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;token={/envelope/token}"
-             title="Prognostic Report" style="margin-left:3px;">
-            <img src="/img/new.png" border="0" alt="Prognostic Report"/>
-          </a>
+          <xsl:choose>
+            <xsl:when test="count (detail[name = 'App'])=0">
+              <img src="/img/list_inactive.png" border="0" alt="Prognostic Report"
+                   style="margin-left:3px;"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;token={/envelope/token}"
+                 title="Prognostic Report" style="margin-left:3px;">
+                <img src="/img/list.png" border="0" alt="Prognostic Report"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
         </td>
       </tr>
     </xsl:for-each>
