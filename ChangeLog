@@ -1,3 +1,8 @@
+2011-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add prognostic case for the page
+	arrows, because these need extra params.
+
 2011-10-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets): Grey progostic report icon when list is
