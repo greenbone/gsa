@@ -1,3 +1,9 @@
+2011-11-01  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (get_info_response, cpe-details): Display associated
+	vulnerabilities of a CPE even if this one isn't present in the
+	official CPE dictionary.
+
 2011-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add prognostic case for the page

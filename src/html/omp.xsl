@@ -8334,7 +8334,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="count (cve) > 0">
         <xsl:call-template name="cve-details"/>
       </xsl:when>
-      <xsl:when test="count (cpe) > 0">
+      <!--
+        Display CPEs that have no details associated if they are referenced
+        by one or several CVEs.
+      -->
+      <xsl:when test="count (cpe) > 0 and (count (cpe/cpe:item/cpe:title) > 0 or count (cpe/cves/cve) > 0)">
         <xsl:call-template name="cpe-details"/>
       </xsl:when>
       <xsl:when test="count (nvt) > 0">
@@ -8352,14 +8356,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_center">Get details</div>
         <div class="gb_window_part_content">
           <xsl:choose>
-            <xsl:when test="contains (@status_text, 'cpe:/')">
+            <xsl:when test="contains (@status_text, 'cpe:/') or @status = '200'">
               <h1>Unknown product</h1>
+              <xsl:if test="@status != '200'">
+                <p>
+                  <xsl:value-of select="@status_text"/>
+                </p>
+              </xsl:if>
               <p>
-                <xsl:value-of select="@status_text"/>
-              </p>
-              <p>
-                This is not necessarily an error. This CPE was likely referenced
-                by one or more CVE but isn't present in the official CPE dictionary.
+                Please ensure that your SCAP data is up to date. If the
+                problem persists after a sync, please report this as a bug.
               </p>
             </xsl:when>
             <xsl:when test="contains (@status_text, 'CVE-')">
@@ -8588,21 +8594,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="text()"/></td>
         </tr>
       </xsl:for-each>
-      <tr>
-        <td>NVD ID</td>
-        <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
-      </tr>
-      <tr>
-        <td>Last modified</td>
-        <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
-      </tr>
-      <xsl:if test="cpe/cpe:cpe-item/@deprecated='true'">
+      <xsl:if test="count(cpe/cpe:cpe-item/meta:item-metadata) &gt; 0">
         <tr>
-          <td>Deprecated by</td>
-          <td><xsl:value-of select="cpe/cpe:cpe-item/@deprecated_by"/></td>
+          <td>NVD ID</td>
+          <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
         </tr>
+        <tr>
+          <td>Last modified</td>
+          <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
+        </tr>
+        <xsl:if test="cpe/cpe:cpe-item/@deprecated='true'">
+          <tr>
+            <td>Deprecated by</td>
+            <td><xsl:value-of select="cpe/cpe:cpe-item/@deprecated_by"/></td>
+          </tr>
+        </xsl:if>
       </xsl:if>
     </table>
+    <xsl:if test="count(cpe/cpe:cpe-item/cpe:title) = 0">
+      This CPE doesn't appear in the CPE dictionary but is referenced by one
+      or more CVE.
+    </xsl:if>
     <xsl:choose>
       <xsl:when test="count(cpe/cves/cve) = 0">
         <h1>Reported vulnerabilites: None</h1>
