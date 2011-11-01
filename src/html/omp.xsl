@@ -808,7 +808,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Prognostic Report" style="margin-left:3px;">
             <img src="/img/list.png" border="0" alt="Prognostic Report"/>
           </a>
@@ -1721,8 +1721,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <div style="padding: 2px;">
             <xsl:choose>
-              <xsl:when test="@type='prognostic'">
-              </xsl:when>
               <xsl:when test="report/filters/result_hosts_only = 0">
                 <input type="checkbox" name="result_hosts_only" value="1"/>
                 Only show hosts that have results
@@ -12076,7 +12074,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
                  title="Prognostic Report" style="margin-left:3px;">
                 <img src="/img/list.png" border="0" alt="Prognostic Report"/>
               </a>

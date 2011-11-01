@@ -1,5 +1,12 @@
 2011-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (assets, report [assets]): Add result_hosts_only to
+	prognostic report links.
+	(html-report-details): Include the "Only show hosts..." checkbox for
+	prognostic reports too.
+
+2011-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (assets): Add missing report element to prognostic
 	report link.
 	(html-report-details): Add missing host filter params to page arrows.
