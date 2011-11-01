@@ -1,3 +1,9 @@
+2011-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (assets): Add missing report element to prognostic
+	report link.
+	(html-report-details): Add missing host filter params to page arrows.
+
 2011-11-01  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (get_info_response, cpe-details): Display associated
