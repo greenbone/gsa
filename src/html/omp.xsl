@@ -8712,7 +8712,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
     </tr>
     <tr>
-      <td>Tags:</td>
+      <td valign="top">Tags:</td>
       <td>
         <!-- "NOTAG" means no tags, skip. -->
         <xsl:choose>
