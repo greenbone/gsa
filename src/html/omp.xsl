@@ -804,7 +804,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:choose>
         <xsl:when test="count (report/host)=0">
-          <img src="/img/list_inactive.png" border="0" alt="Prognostic Report"
+          <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
@@ -12080,7 +12080,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
           <xsl:choose>
             <xsl:when test="count (detail[name = 'App'])=0">
-              <img src="/img/list_inactive.png" border="0" alt="Prognostic Report"
+              <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
