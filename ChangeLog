@@ -1,5 +1,14 @@
 2011-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/provide_view.png, src/html/img/view_other.png: New.
+
+	* CMakeLists.txt: Install new icons.
+
+	* src/html/omp.xsl (task): Exchanged temporary view icons
+	by final ones.
+
+2011-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/prognosis.png, src/html/img/prognosis_inactive.png: New.
 
 	* CMakeLists.txt: Install new icons.

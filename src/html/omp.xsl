@@ -3202,7 +3202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="string-length (observers) &gt; 0">
-                <img src="/img/details.png"
+                <img src="/img/provide_view.png"
                      border="0"
                      alt="Task made visible for: {observers}"
                      title="Task made visible for: {observers}"/>
@@ -3214,7 +3214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="owner/name=/envelope/login/text()">
               </xsl:when>
               <xsl:otherwise>
-                <img src="/img/new.png"
+                <img src="/img/view_other.png"
                      style="margin-left:3px;"
                      border="0"
                      alt="Observing task owned by {owner/name}"
