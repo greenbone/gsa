@@ -1,5 +1,9 @@
 2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Add version field.
+
+2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (cpe-details): Add width to Name column, otherwise it's
 	all crammed up when there's only one row.  Separate note from table by
 	adding P.
