@@ -10892,7 +10892,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
        Host Details
        <a href="/help/hosts.html?token={/envelope/token}#host_details"
-         title="Help: Assets (Asset Details)">
+         title="Help: Hosts (Host Details)">
          <img src="/img/help.png"/>
        </a>
     </div>
@@ -12065,7 +12065,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
         <td>
           <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
-             title="Asset Details" style="margin-left:3px;">
+             title="Host Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
           <xsl:choose>

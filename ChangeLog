@@ -1,3 +1,8 @@
+2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (host, report [assets]): Change "Asset" to "Host" in
+	tooltip and title.
+
 2011-11-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets, report [assets]): Add result_hosts_only to
