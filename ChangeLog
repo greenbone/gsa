@@ -1,5 +1,14 @@
 2011-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/img/prognosis.png, src/html/img/prognosis_inactive.png: New.
+
+	* CMakeLists.txt: Install new icons.
+
+	* src/html/omp.xsl (report): Exchanged temporary prognosis icon
+	by final one.
+
+2011-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/img/os_slackware.png: New.
 
 	* CMakeLists.txt: Install the new icon.

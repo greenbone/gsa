@@ -810,7 +810,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              title="Prognostic Report" style="margin-left:3px;">
-            <img src="/img/list.png" border="0" alt="Prognostic Report"/>
+            <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -10903,7 +10903,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
        <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../../../../search_phrase}&amp;host_levels={../../../../levels}&amp;host_first_result={../../../../hosts/@start}&amp;host_max_results={../../../../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
           title="Prognostic Report" style="margin-left:3px;">
-         <img src="/img/list.png" border="0" alt="Prognostic Report"/>
+         <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
        </a>
     </div>
     <div class="gb_window_part_content">
@@ -12086,7 +12086,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>
               <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
                  title="Prognostic Report" style="margin-left:3px;">
-                <img src="/img/list.png" border="0" alt="Prognostic Report"/>
+                <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
