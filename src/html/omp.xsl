@@ -8579,7 +8579,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <table>
       <tr>
-        <td><b>Name</b></td>
+        <td width="100"><b>Name</b></td>
         <td>
           <b>
             <xsl:value-of select="cpe/cpe:cpe-item/@name"/>
@@ -8610,8 +8610,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </table>
     <xsl:if test="count(cpe/cpe:cpe-item/cpe:title) = 0">
-      This CPE doesn't appear in the CPE dictionary but is referenced by one
-      or more CVE.
+      <p>
+        This CPE doesn't appear in the CPE dictionary but is referenced by one
+        or more CVE.
+      </p>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="count(cpe/cves/cve) = 0">
