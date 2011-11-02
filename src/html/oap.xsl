@@ -255,7 +255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_users&amp;token={/envelope/token}">Back to Users</a>
+        <a href="?cmd=get_users&amp;token={/envelope/token}">Users</a>
       </div>
       <table>
         <tr>
@@ -341,7 +341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_users&amp;token={/envelope/token}">Back to Users</a>
+        <a href="?cmd=get_users&amp;token={/envelope/token}">Users</a>
       </div>
       <form action="/oap" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
