@@ -1,5 +1,9 @@
 2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Put each tag neatly on a line.
+
+2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl: Remove "Back to" from all "Back to" links.
 
 2011-11-02  Matthew Mundell <matthew.mundell@greenbone.net>

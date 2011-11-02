@@ -8719,7 +8719,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="tags = 'NOTAG'">
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="tags"/>
+            <xsl:for-each select="str:split (tags, '|')">
+              <xsl:value-of select="substring-before (., '=')"/>:
+              <xsl:value-of select="substring-after (., '=')"/><br/>
+            </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
       </td>
