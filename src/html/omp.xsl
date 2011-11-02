@@ -907,12 +907,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Back to Hosts</a>
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Hosts</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right">
-            <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Back to Task</a>
+            <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;token={/envelope/token}">Task</a>
           </div>
         </xsl:otherwise>
       </xsl:choose>
@@ -2102,7 +2102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">Back to Tasks</a>
+        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">Tasks</a>
       </div>
       <table>
         <tr>
@@ -3952,7 +3952,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_lsc_credentials&amp;token={/envelope/token}">Back to Credentials</a>
+        <a href="?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a>
       </div>
       <table>
         <tr>
@@ -4772,7 +4772,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_escalators&amp;token={/envelope/token}">Back to Escalators</a>
+        <a href="?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a>
       </div>
       <table>
         <tr>
@@ -5339,7 +5339,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_targets&amp;token={/envelope/token}">Back to Targets</a>
+        <a href="?cmd=get_targets&amp;token={/envelope/token}">Targets</a>
       </div>
       <table>
         <tr>
@@ -5587,12 +5587,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="edit">
           <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-            Back to Config Details
+            Config Details
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
-            Back to Config Details
+            Config Details
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -6219,12 +6219,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="edit">
           <a href="?cmd=edit_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
-            Back to Config Family Details
+            Config Family Details
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}">
-            Back to Config Family Details
+            Config Family Details
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -6627,7 +6627,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <xsl:variable name="config" select="get_configs_response/config"/>
     <div class="float_right">
-      <a href="?cmd=get_configs&amp;token={/envelope/token}">Back to Configs</a>
+      <a href="?cmd=get_configs&amp;token={/envelope/token}">Configs</a>
     </div>
     <br/>
 
@@ -7867,7 +7867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_schedules&amp;token={/envelope/token}">Back to Schedules</a>
+        <a href="?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a>
       </div>
       <table>
         <tr>
@@ -8216,7 +8216,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_slaves&amp;token={/envelope/token}">Back to Slaves</a>
+        <a href="?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a>
       </div>
       <table>
         <tr>
@@ -8403,7 +8403,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <div class="float_right">
-      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Back to SecInfo Management</a>
+      <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
     </div>
     <table>
       <tr>
@@ -8575,7 +8575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <div class="float_right">
-      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Back to SecInfo Management</a>
+      <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
     </div>
     <table>
       <tr>
@@ -9295,7 +9295,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_notes&amp;token={/envelope/token}">Back to Notes</a>
+        <a href="?cmd=get_notes&amp;token={/envelope/token}">Notes</a>
       </div>
       <table>
         <tr>
@@ -10061,7 +10061,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_overrides&amp;token={/envelope/token}">Back to Overrides</a>
+        <a href="?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a>
       </div>
       <table>
         <tr>
@@ -10756,7 +10756,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_report_formats&amp;token={/envelope/token}">Back to Report Formats</a>
+        <a href="?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a>
       </div>
       <table>
         <tr>
@@ -10903,7 +10903,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
       <div class="float_right">
-        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Back to Hosts</a>
+        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Hosts</a>
       </div>
       <table>
         <tr>
@@ -11517,10 +11517,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;token={/envelope/token}">Back to Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;apply_min_cvss_base={string-length (../../../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;token={/envelope/token}">Report</a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;token={/envelope/token}">Back to Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;token={/envelope/token}">Report</a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
