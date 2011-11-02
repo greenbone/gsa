@@ -371,6 +371,7 @@ install (FILES  src/html/img/os_aix.png
                 src/html/img/os_novell.png
                 src/html/img/os_openbsd.png
                 src/html/img/os_redhat.png
+                src/html/img/os_slackware.png
                 src/html/img/os_sun.png
                 src/html/img/os_suse.png
                 src/html/img/os_trustix.png
