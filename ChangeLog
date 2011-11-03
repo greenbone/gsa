@@ -1,3 +1,9 @@
+2011-11-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (request_handler): Add URL trace message.  Add favicon.ico
+	special case, to prevent the session from expiring when the browser
+	requests this file.
+
 2011-11-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/sensor.png: New.

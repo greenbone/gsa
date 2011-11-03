@@ -2390,6 +2390,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
    * way to logout, however, is with a token.  I guess this is where a cookie
    * would be useful. */
 
+  tracef ("============= url: %s\n", url);
+
   if (!strcmp (&url[0], url_base))
     {
       send_redirect_header (connection, default_file, NULL);
@@ -2436,6 +2438,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
         }
 
       if (!strcmp (url, "/gsa-style.css")
+          || !strcmp (url, "/favicon.ico")
           || !strcmp (url, "/favicon.gif"))
         {
           response = file_content_response (credentials,
