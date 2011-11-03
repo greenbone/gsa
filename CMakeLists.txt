@@ -344,6 +344,7 @@ install (FILES src/html/img/agent.png src/html/img/descending.png
                src/html/img/prognosis_inactive.png
                src/html/img/provide_view.png
                src/html/img/view_other.png
+               src/html/img/sensor.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
 install (FILES src/html/img/style/logo_l.png src/html/img/style/logo_r.png

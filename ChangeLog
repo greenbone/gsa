@@ -1,3 +1,11 @@
+2011-11-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/sensor.png: New.
+
+	* CMakeLists.txt: Install new icon.
+
+	* src/html/omp.xsl (task): Replace temporary icon by final one.
+
 2011-10-03  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Removed duplicate entry.

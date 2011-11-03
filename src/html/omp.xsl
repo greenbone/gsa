@@ -3191,7 +3191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="float_right">
             <xsl:choose>
               <xsl:when test="string-length(slave/@id) &gt; 0">
-                <img src="/img/refresh.png"
+                <img src="/img/sensor.png"
                      style="margin-left:3px;"
                      border="0"
                      alt="Task is configured to run on slave {slave/name}"
