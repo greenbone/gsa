@@ -440,11 +440,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <icon>os_slackware.png</icon>
     </operating_system>
     <operating_system>
-        <pattern>cpe:/o:slackware:slackware_linux:8.1</pattern>
-        <title>Slackware Linux 8.1</title>
-        <icon>os_slackware.png</icon>
-    </operating_system>
-    <operating_system>
         <pattern>cpe:/o:slackware:slackware_linux:9.0</pattern>
         <title>Slackware Linux 9.0</title>
         <icon>os_slackware.png</icon>
