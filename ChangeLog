@@ -1,3 +1,9 @@
+2011-11-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-table, html-overrides-table): Add active
+	column.
+	(override, override [details]): Add active state.
+
 2011-11-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Add URL trace message.  Add favicon.ico

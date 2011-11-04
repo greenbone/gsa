@@ -2391,6 +2391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>From</td>
             <td>To</td>
             <td>Text</td>
+            <td>Active</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
@@ -9974,6 +9975,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="active='0'">
+          no
+        </xsl:when>
+        <xsl:otherwise>
+          yes
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:call-template name="delete-icon">
         <xsl:with-param name="type" select="'override'"/>
         <xsl:with-param name="id" select="@id"/>
@@ -10098,6 +10109,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Last Modified:</td>
           <td><xsl:value-of select="modification_time"/></td>
         </tr>
+        <tr>
+          <td>Active:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="active='0'">
+                no
+              </xsl:when>
+              <xsl:when test="active='1' and end_time">
+                yes
+                <xsl:value-of select="end_time"/>
+              </xsl:when>
+              <xsl:otherwise>
+                yes
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
       </table>
 
       <h1>Application</h1>
@@ -10217,6 +10245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>From</td>
             <td>To</td>
             <td>Text</td>
+            <td>Active</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="override"/>
