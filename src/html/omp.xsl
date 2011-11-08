@@ -9574,6 +9574,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
+            <td valign="center" width="125">
+              Active
+            </td>
+            <td>
+              <div>
+                <input type="radio" name="active" value="-1" checked="1"/>
+                yes, always
+              </div>
+              <div>
+                <input type="radio" name="active" value="1"/>
+                yes, for the next
+                <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                days
+              </div>
+              <div>
+                <input type="radio" name="active" value="0"/>
+                no
+              </div>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="125">
               Hosts
             </td>
@@ -9740,6 +9761,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </a>
+            </td>
+          </tr>
+          <tr>
+            <td valign="center">Active</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="get_overrides_response/override/active='1' and string-length(get_overrides_response/override/end_time) &gt; 0">
+                  <div>
+                    <input type="radio" name="active" value="-1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="-2" checked="1"/>
+                    yes, until
+                    <xsl:value-of select="get_overrides_response/override/end_time"/>
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0"/>
+                    no
+                  </div>
+                </xsl:when>
+                <xsl:when test="get_overrides_response/override/active='1'">
+                  <div>
+                    <input type="radio" name="active" value="-1" checked="1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0"/>
+                    no
+                  </div>
+                </xsl:when>
+                <xsl:otherwise>
+                  <div>
+                    <input type="radio" name="active" value="-1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0" checked="1"/>
+                    no
+                  </div>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10124,8 +10205,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="active='0'">
                 no
               </xsl:when>
-              <xsl:when test="active='1' and end_time">
-                yes
+              <xsl:when test="active='1' and string-length (end_time) &gt; 0">
+                yes, until
                 <xsl:value-of select="end_time"/>
               </xsl:when>
               <xsl:otherwise>
@@ -11388,7 +11469,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="delta"/>
   <xsl:param name="next">get_report</xsl:param>
-  <div class="override_box_box">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="active='0'">issue_box_box</xsl:when>
+      <xsl:otherwise>override_box_box</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <div class="{$class}">
     <b>
       Override from
       <xsl:choose>
@@ -11405,6 +11492,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
       </xsl:call-template>
     </pre>
+    <div>
+      Active:
+      <xsl:choose>
+        <xsl:when test="active='0'">
+          no.
+        </xsl:when>
+        <xsl:when test="active='1' and string-length (end_time) &gt; 0">
+          yes, until
+          <xsl:value-of select="end_time"/>.
+        </xsl:when>
+        <xsl:otherwise>
+          yes.
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
     <xsl:if test="$override-buttons = 1">
       <div class="float_right" style="text-align:right">
         <div style="display: inline">
@@ -11480,7 +11582,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
-    Last modified: <xsl:value-of select="modification_time"/>.
+    <div>Last modified: <xsl:value-of select="modification_time"/>.</div>
   </div>
 </xsl:template>
 

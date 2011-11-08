@@ -10542,7 +10542,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
   const char *min_cvss_base, *text, *task_id;
   /* For get_report. */
   const char *levels, *result_hosts_only, *notes, *overrides, *report_id;
-  const char *first_result, *max_results, *sort_order, *sort_field;
+  const char *first_result, *max_results, *sort_order, *sort_field, *active;
+  const char *days;
 
   next = params_value (params, "next");
   search_phrase = params_value (params, "search_phrase");
@@ -10623,7 +10624,9 @@ create_override_omp (credentials_t *credentials, params_t *params)
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_overrides");
 
-  if (threat == NULL || port == NULL || hosts == NULL)
+  active = params_value (params, "active");
+
+  if (threat == NULL || port == NULL || hosts == NULL || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new override. "
@@ -10640,8 +10643,10 @@ create_override_omp (credentials_t *credentials, params_t *params)
                          "/omp?cmd=get_overrides");
 
   text = params_value (params, "text");
+  days = params_value (params, "days");
 
   create_override = g_strdup_printf ("<create_override>"
+                                     "<active>%s</active>"
                                      "<nvt oid=\"%s\"/>"
                                      "<hosts>%s</hosts>"
                                      "<port>%s</port>"
@@ -10651,6 +10656,9 @@ create_override_omp (credentials_t *credentials, params_t *params)
                                      "<task id=\"%s\"/>"
                                      "<result id=\"%s\"/>"
                                      "</create_override>",
+                                     strcmp (active, "1")
+                                      ? active
+                                      : (days ? days : "-1"),
                                      oid,
                                      hosts,
                                      port,
@@ -11436,7 +11444,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
   unsigned int first_result, max_results;
   const char *sort_field, *sort_order, *levels, *notes, *overrides;
   const char *result_hosts_only, *search_phrase, *min_cvss_base;
-  const char *oid, *task_id, *task_name, *result_id;
+  const char *oid, *task_id, *task_name, *result_id, *active, *days;
 
   override_id = params_value (params, "override_id");
 
@@ -11490,9 +11498,10 @@ save_override_omp (credentials_t * credentials, params_t *params)
   task_id = params_value (params, "task_id");
   task_name = params_value (params, "name");
   result_id = params_value (params, "result_id");
+  active = params_value (params, "active");
 
   if (next == NULL || override_task_id == NULL || override_result_id == NULL
-      || new_threat == NULL)
+      || new_threat == NULL || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving an override. "
@@ -11606,7 +11615,10 @@ save_override_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_overrides");
     }
 
+  days = params_value (params, "days");
+
   modify_override = g_strdup_printf ("<modify_override override_id=\"%s\">"
+                                     "<active>%s</active>"
                                      "<hosts>%s</hosts>"
                                      "<port>%s</port>"
                                      "<threat>%s</threat>"
@@ -11616,6 +11628,9 @@ save_override_omp (credentials_t * credentials, params_t *params)
                                      "<result id=\"%s\"/>"
                                      "</modify_override>",
                                      override_id,
+                                     strcmp (active, "1")
+                                      ? active
+                                      : (days ? days : "-1"),
                                      hosts ? hosts : "",
                                      port ? port : "",
                                      threat ? threat : "",
