@@ -1,3 +1,7 @@
+2011-11-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (cve-detail, cpe-details): Add last SCAP update time.
+
 2011-11-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-table, html-overrides-table): Add active

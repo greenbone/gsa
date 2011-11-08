@@ -8424,6 +8424,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><xsl:value-of select="cve/cve:entry/vuln:last-modified-datetime"/></td>
       </tr>
       <tr>
+        <td>Last updated</td>
+        <td><xsl:value-of select="cve/update_time"/></td>
+      </tr>
+      <tr>
         <td>CWE ID</td>
         <td><xsl:value-of select="cve/cve:entry/vuln:cwe/@id"/></td>
       </tr>
@@ -8609,6 +8613,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </xsl:if>
       </xsl:if>
+      <tr>
+        <td>Last updated</td>
+        <td><xsl:value-of select="cpe/update_time"/></td>
+      </tr>
     </table>
     <xsl:if test="count(cpe/cpe:cpe-item/cpe:title) = 0">
       <p>
