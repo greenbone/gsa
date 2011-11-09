@@ -11493,17 +11493,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </pre>
     <div>
-      Active:
       <xsl:choose>
         <xsl:when test="active='0'">
-          no.
+          Active: no.
         </xsl:when>
         <xsl:when test="active='1' and string-length (end_time) &gt; 0">
-          yes, until
+          Active: Until
           <xsl:value-of select="end_time"/>.
         </xsl:when>
         <xsl:otherwise>
-          yes.
         </xsl:otherwise>
       </xsl:choose>
     </div>

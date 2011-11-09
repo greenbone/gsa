@@ -1,3 +1,8 @@
+2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (override-detailed): Skip active field if always on.
+	Simplify active field if on with time limit.
+
 2011-11-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add active and days.
