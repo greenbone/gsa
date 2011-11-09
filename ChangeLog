@@ -1,5 +1,15 @@
 2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_note_omp, delete_note_omp, save_note_omp)
+	(create_override_omp, delete_override_omp, save_override_omp): Use
+	apply_min_cvss_base instead of apply_min, which was the name of the
+	variable used to pass the URL param before the param passing change.
+
+	* src/html/omp.xsl: Cast all min_cvss_base comparisons to number, so that
+	the result is "0" or "1" instead of "true" or "false".
+
+2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (override-detailed): Use apply_overrides for overrides
 	param.  GSA delete_notes expects apply_overrides there, and uses that
 	param for both override and apply_overrides in the OMP GET_REPORT.

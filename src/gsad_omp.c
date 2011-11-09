@@ -8963,8 +8963,8 @@ create_note_omp (credentials_t *credentials, params_t *params)
     {
       if (params_valid (params, "min_cvss_base"))
         {
-          if (params_value (params, "apply_min")
-              && strcmp (params_value (params, "apply_min"), "0"))
+          if (params_value (params, "apply_min_cvss_base")
+              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
             min_cvss_base = params_value (params, "min_cvss_base");
           else
             min_cvss_base = "";
@@ -9424,8 +9424,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
     {
       if (params_valid (params, "min_cvss_base"))
         {
-          if (params_value (params, "apply_min")
-              && strcmp (params_value (params, "apply_min"), "0"))
+          if (params_value (params, "apply_min_cvss_base")
+              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
             min_cvss_base = params_value (params, "min_cvss_base");
           else
             min_cvss_base = "";
@@ -9916,8 +9916,8 @@ save_note_omp (credentials_t * credentials, params_t *params)
         {
           if (params_valid (params, "min_cvss_base"))
             {
-              if (params_value (params, "apply_min")
-                  && strcmp (params_value (params, "apply_min"), "0"))
+              if (params_value (params, "apply_min_cvss_base")
+                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
                 min_cvss_base = params_value (params, "min_cvss_base");
               else
                 min_cvss_base = "";
@@ -10581,8 +10581,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
     {
       if (params_valid (params, "min_cvss_base"))
         {
-          if (params_value (params, "apply_min")
-              && strcmp (params_value (params, "apply_min"), "0"))
+          if (params_value (params, "apply_min_cvss_base")
+              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
             min_cvss_base = params_value (params, "min_cvss_base");
           else
             min_cvss_base = "";
@@ -11052,8 +11052,8 @@ delete_override_omp (credentials_t * credentials, params_t *params)
     {
       if (params_valid (params, "min_cvss_base"))
         {
-          if (params_value (params, "apply_min")
-              && strcmp (params_value (params, "apply_min"), "0"))
+          if (params_value (params, "apply_min_cvss_base")
+              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
             min_cvss_base = params_value (params, "min_cvss_base");
           else
             min_cvss_base = "";
@@ -11549,8 +11549,8 @@ save_override_omp (credentials_t * credentials, params_t *params)
         {
           if (params_valid (params, "min_cvss_base"))
             {
-              if (params_value (params, "apply_min")
-                  && strcmp (params_value (params, "apply_min"), "0"))
+              if (params_value (params, "apply_min_cvss_base")
+                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
                 min_cvss_base = params_value (params, "min_cvss_base");
               else
                 min_cvss_base = "";
