@@ -11546,7 +11546,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
                 <input type="hidden" name="apply_min_cvss_base" value="{string-length (../../../../filters/min_cvss_base) &gt; 0}"/>
                 <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
-                <input type="hidden" name="overrides" value="{../../../../filters/overrides}"/>
+                <input type="hidden" name="overrides" value="{../../../../filters/apply_overrides}"/>
                 <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
               </xsl:otherwise>
             </xsl:choose>

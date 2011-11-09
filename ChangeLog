@@ -1,5 +1,11 @@
 2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (override-detailed): Use apply_overrides for overrides
+	param.  GSA delete_notes expects apply_overrides there, and uses that
+	param for both override and apply_overrides in the OMP GET_REPORT.
+
+2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (override-detailed): Skip active field if always on.
 	Simplify active field if on with time limit.
 
