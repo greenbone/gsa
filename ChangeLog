@@ -1,3 +1,8 @@
+2011-11-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (host): Get the right pos, from the XML, for the
+	prognostic report icon.
+
 2011-11-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_note_omp, delete_note_omp, save_note_omp)
