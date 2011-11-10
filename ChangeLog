@@ -1,3 +1,8 @@
+2011-11-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (override-detailed): Little improvement of text
+	for ative flag.
+
 2011-11-10  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/CMakeLists.txt: Adjust path to make XSLT validation work for

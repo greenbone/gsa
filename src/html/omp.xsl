@@ -11498,7 +11498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           Active: no.
         </xsl:when>
         <xsl:when test="active='1' and string-length (end_time) &gt; 0">
-          Active: Until
+          Active until:
           <xsl:value-of select="end_time"/>.
         </xsl:when>
         <xsl:otherwise>
