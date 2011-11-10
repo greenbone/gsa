@@ -386,7 +386,7 @@ install (FILES  src/html/img/os_aix.png
                 src/html/img/os_windows.png
          DESTINATION ${GSA_DATA_DIR}/img)
 
-install (FILES src/gsad_log.conf
+install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
          DESTINATION ${GSA_CONFIG_DIR})
 
 ## Program

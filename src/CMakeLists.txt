@@ -129,24 +129,24 @@ add_dependencies (check splint rats flawfinder)
 if (PATH_TO_XSLTPROC)
   add_custom_target (oap-xsl-syntax ALL
                                     COMMENT "Checking syntax of oap.xsl"
-                                    COMMAND xsltproc html/oap.xsl
-                                    DEPENDS html/oap.xsl)
+                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/oap.xsl
+                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/oap.xsl)
   add_custom_target (omp-xsl-syntax ALL
                                     COMMENT "Checking syntax of omp.xsl"
-                                    COMMAND xsltproc html/omp.xsl
-                                    DEPENDS html/omp.xsl)
+                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/omp.xsl
+                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/omp.xsl)
   add_custom_target (gsad-xsl-syntax ALL
                                      COMMENT "Checking syntax of gsad.xsl"
-                                     COMMAND xsltproc html/gsad.xsl
-                                     DEPENDS html/gsad.xsl)
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl)
   add_custom_target (dialog-xsl-syntax ALL
                                      COMMENT "Checking syntax of dialog.xsl"
-                                     COMMAND xsltproc html/dialog.xsl
-                                     DEPENDS html/dialog.xsl)
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/dialog.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/dialog.xsl)
   add_custom_target (help-xsl-syntax ALL
                                      COMMENT "Checking syntax of help.xsl"
-                                     COMMAND xsltproc html/help.xsl
-                                     DEPENDS html/help.xsl)
+                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/help.xsl
+                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/help.xsl)
 else (PATH_TO_XSLTPROC)
   message ("Not performing simple stylesheet tests -- xsltproc not found.")
 endif (PATH_TO_XSLTPROC)

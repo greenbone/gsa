@@ -1,3 +1,11 @@
+2011-11-10  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/CMakeLists.txt: Adjust path to make XSLT validation work for
+	out-of-source builds.
+
+	* CMakeLists.txt: Adjust source locations in install command to enable
+	installation from an out-of-source build.
+
 2011-11-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Get the right pos, from the XML, for the
