@@ -10307,11 +10307,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h1>Appearance</h1>
-      <div class="override_top_line"></div>
-      <xsl:call-template name="override-detailed">
-        <xsl:with-param name="override-buttons">0</xsl:with-param>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="active = '0'">
+          <h1>Appearance</h1>
+          (Does not appear in reports, because it is not active.)
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Appearance</h1>
+          <div class="override_top_line"></div>
+          <xsl:call-template name="override-detailed">
+            <xsl:with-param name="override-buttons">0</xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
@@ -11988,32 +11996,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
       <a class="anchor" name="overrides-{@id}"/>
       <xsl:for-each select="overrides/override">
-        <xsl:call-template name="override-detailed">
-          <xsl:with-param name="override-buttons">
-            <xsl:value-of select="$override-buttons"/>
-          </xsl:with-param>
-          <xsl:with-param name="delta" select="$delta"/>
-          <xsl:with-param name="next">
-            <xsl:choose>
-              <xsl:when test="$result-details">get_result</xsl:when>
-              <xsl:otherwise>get_report</xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
+        <xsl:choose>
+          <xsl:when test="active = 0">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="override-detailed">
+              <xsl:with-param name="override-buttons">
+                <xsl:value-of select="$override-buttons"/>
+              </xsl:with-param>
+              <xsl:with-param name="delta" select="$delta"/>
+              <xsl:with-param name="next">
+                <xsl:choose>
+                  <xsl:when test="$result-details">get_result</xsl:when>
+                  <xsl:otherwise>get_report</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
       <xsl:for-each select="delta/overrides/override">
-        <xsl:call-template name="override-detailed">
-          <xsl:with-param name="override-buttons">
-            <xsl:value-of select="$override-buttons"/>
-          </xsl:with-param>
-          <xsl:with-param name="delta" select="2"/>
-          <xsl:with-param name="next">
-            <xsl:choose>
-              <xsl:when test="$result-details">get_result</xsl:when>
-              <xsl:otherwise>get_report</xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
+        <xsl:choose>
+          <xsl:when test="active = 0">
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="override-detailed">
+              <xsl:with-param name="override-buttons">
+                <xsl:value-of select="$override-buttons"/>
+              </xsl:with-param>
+              <xsl:with-param name="delta" select="2"/>
+              <xsl:with-param name="next">
+                <xsl:choose>
+                  <xsl:when test="$result-details">get_result</xsl:when>
+                  <xsl:otherwise>get_report</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>

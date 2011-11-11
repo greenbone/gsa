@@ -1,3 +1,8 @@
+2011-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (override [details]): Only show appearance when active.
+	(result-detailed): Show overrides only when they are active.
+
 2011-11-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (override-detailed): Little improvement of text
