@@ -1,3 +1,8 @@
+2011-11-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (get_info_response): Explain better the situation
+	if no CPE/CVE entry was found.
+
 2011-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (override [details]): Show the override in the active

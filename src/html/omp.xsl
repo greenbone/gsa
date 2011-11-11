@@ -8363,8 +8363,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </p>
               </xsl:if>
               <p>
-                Please ensure that your SCAP data is up to date. If the
-                problem persists after a sync, please report this as a bug.
+                Please ensure that your SCAP data is up to date and that you
+                entered a valid CPE with correct spelling of product. If the
+                problem persists after a sync, the product name your searched
+                for is not available. In some cases this is a temporary situation because
+                some CPE entries are initially used for CVEs and enter the official
+                CPE database only with some delay. Many older CPEs are also not yet included
+                in the CPE database.
               </p>
             </xsl:when>
             <xsl:when test="contains (@status_text, 'CVE-')">
@@ -8373,8 +8378,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="@status_text"/>
               </p>
               <p>
-                Please ensure that your SCAP data is up to date. If the
-                problem persists after a sync, please report this as a bug.
+                Please ensure that your SCAP data is up to date and that you entered
+                a valid CVE. If the problem persists, the CVE is not available.
+                In some cases, CVE references are reserved but did not
+                enter the offical CVE database yet. Some were reserved and used as
+                a reference by vendors, but never entered the CVE database.
               </p>
             </xsl:when>
             <xsl:otherwise>
