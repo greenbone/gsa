@@ -10309,17 +10309,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="active = '0'">
-          <h1>Appearance</h1>
-          (Does not appear in reports, because it is not active.)
+          <h1>Appearance when Active</h1>
         </xsl:when>
         <xsl:otherwise>
           <h1>Appearance</h1>
-          <div class="override_top_line"></div>
-          <xsl:call-template name="override-detailed">
-            <xsl:with-param name="override-buttons">0</xsl:with-param>
-          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
+      <div class="override_top_line"></div>
+      <xsl:call-template name="override-detailed">
+        <xsl:with-param name="override-buttons">0</xsl:with-param>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -11477,13 +11476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="delta"/>
   <xsl:param name="next">get_report</xsl:param>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="active='0'">issue_box_box</xsl:when>
-      <xsl:otherwise>override_box_box</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <div class="{$class}">
+  <div class="override_box_box">
     <b>
       Override from
       <xsl:choose>
@@ -11503,7 +11496,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div>
       <xsl:choose>
         <xsl:when test="active='0'">
-          Active: no.
         </xsl:when>
         <xsl:when test="active='1' and string-length (end_time) &gt; 0">
           Active until:

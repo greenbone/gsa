@@ -1,5 +1,13 @@
 2011-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (override [details]): Show the override in the active
+	style always, with a hint in the title when it's off.  This allows the
+	user to see the full text, even when the override is off.
+	(override-detailed): Use the override_box_box always, and remove the
+	"Active: no".
+
+2011-11-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (override [details]): Only show appearance when active.
 	(result-detailed): Show overrides only when they are active.
 
