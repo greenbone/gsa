@@ -652,7 +652,7 @@ init_validator ()
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
   openvas_validator_add (validator, "host",       "^[[:alnum:]\\.]{1,80}$");
-  openvas_validator_add (validator, "hostport",   "^[[:alnum:]\\. :]{1,80}$");
+  openvas_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
   openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]{1,2000}$");
   openvas_validator_add (validator, "hosts_allow", "^0|1|2$");
   openvas_validator_add (validator, "hosts_opt",  "^[[:alnum:], \\./]{0,80}$");
