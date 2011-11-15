@@ -1,5 +1,15 @@
 2011-11-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (assets): Add override selector.  Add overrides flag
+	to links.
+	(html-report-details): Add overrides flag to Prognostic Report link.
+	(host): Add override selector.  Add overrides flag to links.
+	(report [assets]): Add overrides flag to links.
+
+	* src/html/help.xsl (hosts.html): Add note about applying overrides.
+
+2011-11-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (assets): When there are 0 hosts skip the host
 	counts and table, and put "0 hosts".  This matches the behaviour for
 	0 results in a report.

@@ -622,6 +622,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/hosts.html?token={/envelope/token}" title="Help: Hosts">
         <img src="/img/help.png" border="0"/>
       </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="type" value="assets"/>
+          <input type="hidden" name="levels" value="{$levels}"/>
+          <input type="hidden" name="search_phrase" value="{report/filters/phrase}"/>
+          <!-- Switch back to the first page if the override state changes, because
+               this could lead to changes in the number of hosts in the table. -->
+          <input type="hidden" name="first_result" value="1"/>
+          <input type="hidden" name="max_results" value="{report/hosts/@max}"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="1">&#8730;No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <div style="background-color: #EEEEEE;">
@@ -814,7 +843,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
              title="Prognostic Report" style="margin-left:3px;">
             <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
           </a>
@@ -922,7 +951,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="float_right">
-            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;token={/envelope/token}">Hosts</a>
+            <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
@@ -11040,6 +11069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="host">
+  <xsl:variable name="apply-overrides" select="../filters/apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -11053,11 +11083,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           title="Prognostic Report" style="margin-left:3px;">
          <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
        </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="type" value="assets"/>
+          <input type="hidden" name="pos" value="{detail[name/text() = 'report/pos']/value}"/>
+          <input type="hidden" name="host" value="{ip}"/>
+          <input type="hidden" name="levels" value="{../../../../levels}"/>
+          <input type="hidden" name="search_phrase" value="{../../../../search_phrase}"/>
+          <!-- Switch back to the first page if the override state changes, because
+               this could lead to changes in the number of hosts in the table. -->
+          <input type="hidden" name="first_result" value="1"/>
+          <input type="hidden" name="max_results" value="{../../../../hosts/@max}"/>
+          <select style="margin-bottom: 0px;" name="overrides" size="1">
+            <xsl:choose>
+              <xsl:when test="$apply-overrides = 0">
+                <option value="0" selected="1">&#8730;No overrides</option>
+                <option value="1" >Apply overrides</option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="0">No overrides</option>
+                <option value="1" selected="1">&#8730;Apply overrides</option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </select>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="report_count" select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
       <div class="float_right">
-        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">Hosts</a>
+        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
       </div>
       <table>
         <tr>
@@ -11078,18 +11139,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
                 <xsl:choose>
                   <xsl:when test="$pos &lt; $report_count">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
                       &lt;&lt;
                     </a>
                   </xsl:when>
                 </xsl:choose>
-                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
+                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides={$apply-overrides}&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
                   <xsl:value-of select="substring(start/text(),5,6)"/>
                   <xsl:value-of select="substring(start/text(),20,21)"/>
                 </a>
                 <xsl:choose>
                   <xsl:when test="$pos &gt; 1">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
                       &gt;&gt;
                     </a>
                   </xsl:when>
@@ -12246,7 +12307,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
              title="Host Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
@@ -12256,7 +12317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    style="margin-left:3px;"/>
             </xsl:when>
             <xsl:otherwise>
-              <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
                  title="Prognostic Report" style="margin-left:3px;">
                 <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
               </a>

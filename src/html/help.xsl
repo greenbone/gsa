@@ -150,6 +150,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         the "Apply" button will update the overview.
       </p>
 
+      <a name="overrides"></a>
+      <h3>Overrides</h3>
+      <p>
+       By default the configured <a href="glossary.html?token={/envelope/token}#override">overrides</a> are applied.
+       The selection allows to switch to a view without applying overrides.
+       In the Filtered Hosts table the hosts and the threat counts might change
+       when switching this selection.
+       By pressing the refresh
+       <img src="/img/refresh.png" alt="Refresh" title="Refresh" /> icon a change is confirmed.
+      </p>
+      <p>
+       The selection that is active for the present page is marked with a hook (&#8730;).
+      </p>
+
       <a name="filtered"></a>
       <h2>Filtered Hosts</h2>
       <p>
