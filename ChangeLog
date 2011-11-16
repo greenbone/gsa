@@ -1,3 +1,7 @@
+2011-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (assets): Remove duplicate &amp;.
+
 2011-11-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
