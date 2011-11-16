@@ -1,3 +1,30 @@
+gsa 3.0+beta6 (2011-11-16)
+
+This is the sixth beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for changing the user password through GSA, improves
+the display of SCAP data and adds support for exporting notes and overrides and
+for override lifetimes. It also fixes a bug which cause sessions to expire
+prematurely and a bug in the hostname validation for LDAP hosts.
+
+Many thanks to everyone who has contributed to this release:
+Henri Doreau, Matthew Mundell, Michael Wiegand and Jan-Oliver Wagner.
+
+Main changes since 3.0+beta5:
+* Support for changing user passwords has been added.
+* Support for listing NVTs addressing a certain CVE has been added.
+* Support for listing CVEs affecting a certain CPE has been added.
+* Support for exporting notes and overrides has been added.
+* A bug which caused sessions to expire prematurely with some browsers has been
+  fixed.
+* Support for displaying the SCAP update timestamp has been added.
+* Support for override lifetimes has been added.
+* A bug which caused valid hostnames to be rejected in the LDAP host field has
+  been fixed.
+
+
 gsa 3.0+beta5 (2011-10-11)
 
 This is the fifth beta version of the upcoming 3.0 release of the Greenbone
