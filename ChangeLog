@@ -1,3 +1,8 @@
+2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details, short_timestamp_first)
+	(short_timestamp_last, report, report [overview]): Filter ISO dates.
+
 2011-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (assets): Remove duplicate &amp;.

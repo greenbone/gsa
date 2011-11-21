@@ -17,7 +17,8 @@
     xmlns:config="http://scap.nist.gov/schema/configuration/0.1"
     xmlns:cpe="http://cpe.mitre.org/dictionary/2.0"
     xsi:schemaLocation="http://scap.nist.gov/schema/configuration/0.1 http://nvd.nist.gov/schema/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.3 http://nvd.nist.gov/schema/scap-core_0.3.xsd http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"
-    extension-element-prefixes="str func">
+    xmlns:date="http://exslt.org/dates-and-times"
+    extension-element-prefixes="str func date">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -1067,11 +1068,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <tr>
               <td><b>Scan started:</b></td>
-              <td><b><xsl:value-of select="report/scan_start"/></b></td>
+              <td><b><xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/></b></td>
             </tr>
             <tr>
               <td>Scan ended:</td>
-              <td><xsl:value-of select="report/scan_end"/></td>
+              <td><xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end))"/></td>
             </tr>
             <tr>
               <td>Scan status:</td>
@@ -2456,18 +2457,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="short_timestamp_first">
-  <xsl:value-of select="substring(first_report/report/timestamp,5,6)"/>
-  <xsl:value-of select="substring(first_report/report/timestamp,20,21)"/>
+  <xsl:if test="first_report/report/timestamp">
+    <xsl:value-of select="concat (date:month-abbreviation(first_report/report/timestamp), ' ', date:day-in-month(first_report/report/timestamp), ' ', date:year(first_report/report/timestamp))"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="short_timestamp_last">
-  <xsl:value-of select="substring(last_report/report/timestamp,5,6)"/>
-  <xsl:value-of select="substring(last_report/report/timestamp,20,21)"/>
+  <xsl:if test="first_report/report/timestamp">
+    <xsl:value-of select="concat (date:month-abbreviation(last_report/report/timestamp), ' ', date:day-in-month(last_report/report/timestamp), ' ', date:year(last_report/report/timestamp))"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="short_timestamp_second_last">
-  <xsl:value-of select="substring(second_last_report/report/timestamp,5,6)"/>
-  <xsl:value-of select="substring(second_last_report/report/timestamp,20,21)"/>
+  <xsl:if test="first_report/report/timestamp">
+    <xsl:value-of select="concat (date:month-abbreviation(second_last_report/report/timestamp), ' ', date:day-in-month(second_last_report/report/timestamp), ' ', date:year(second_last_report/report/timestamp))"/>
+  </xsl:if>
 </xsl:template>
 
 <!-- TREND METER -->
@@ -2819,7 +2823,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="timestamp"/></b><br/>
+      <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
       <xsl:choose>
         <xsl:when test="$container=1 and scan_run_status='Running'">
           <xsl:text>Uploading</xsl:text>
@@ -12468,12 +12472,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </td>
         <td>
-          <xsl:value-of select="substring(start/text(),5,6)"/>, <xsl:value-of select="substring(start/text(),12,8)"/>
+          <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
         </td>
         <td>
           <xsl:choose>
             <xsl:when test="end/text() != ''">
-              <xsl:value-of select="substring(end/text(),5,6)"/>, <xsl:value-of select="substring(end/text(),12,8)"/>
+              <xsl:value-of select="concat (date:month-abbreviation(end/text()), ' ', date:day-in-month(end/text()), ', ', format-number(date:hour-in-day(end/text()), '00'), ':', format-number(date:minute-in-hour(end/text()), '00'), ':', format-number(date:second-in-minute(end/text()), '00'))"/>
             </xsl:when>
             <xsl:otherwise>(not finished)</xsl:otherwise>
           </xsl:choose>
