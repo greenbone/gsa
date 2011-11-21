@@ -1,5 +1,12 @@
 2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:long-time): New function.
+	(html-report-table, agent, agent [trash], schedule, schedule [details])
+	(note [details], override [details], report_format, report_format [trash])
+	(note-detailed, override-detailed): Neaten ISO times.
+
+2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details, short_timestamp_first)
 	(short_timestamp_last, report, report [overview]): Filter ISO dates.
 

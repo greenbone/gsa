@@ -53,6 +53,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+<!-- XPATH FUNCTIONS -->
+
+<func:function name="gsa:long-time">
+  <xsl:param name="time"></xsl:param>
+  <func:result>
+    <xsl:value-of select="concat (date:day-abbreviation ($time), ' ', date:month-abbreviation ($time), ' ', date:day-in-month ($time), ' ', format-number(date:hour-in-day($time), '00'), ':', format-number(date:minute-in-hour($time), '00'), ':', format-number(date:second-in-minute($time), '00'), ' ', date:year($time))"/>
+  </func:result>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <xsl:template name="trash-delete-icon">
@@ -2188,7 +2197,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   (Next due: over)
                 </xsl:when>
                 <xsl:otherwise>
-                  (Next due: <xsl:value-of select="task/schedule/next_time"/>)
+                  (Next due: <xsl:value-of select="gsa:long-time (task/schedule/next_time)"/>)
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>
@@ -4221,8 +4230,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="installer/trust/text()"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
-          <br/>(<xsl:value-of select="substring(installer/trust/time,5,6)"/>
-                <xsl:value-of select="substring(installer/trust/time,20,5)"/>)
+          <br/>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -4273,8 +4281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="installer/trust/text()"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
-          <br/>(<xsl:value-of select="substring(installer/trust/time,5,6)"/>
-                <xsl:value-of select="substring(installer/trust/time,20,5)"/>)
+          <br/>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -7752,7 +7759,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="first_time"/>
+      <xsl:value-of select="gsa:long-time (first_time)"/>
     </td>
     <td>
       <xsl:choose>
@@ -7929,11 +7936,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>First time:</td>
-          <td><xsl:value-of select="first_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (first_time)"/></td>
         </tr>
         <tr>
           <td>Next time:</td>
-          <td><xsl:value-of select="next_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (next_time)"/></td>
         </tr>
         <tr>
           <td>Period:</td>
@@ -9391,11 +9398,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Created:</td>
-          <td><xsl:value-of select="creation_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
         </tr>
         <tr>
           <td>Last Modified:</td>
-          <td><xsl:value-of select="modification_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
       </table>
 
@@ -10248,11 +10255,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>Created:</td>
-          <td><xsl:value-of select="creation_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
         </tr>
         <tr>
           <td>Last Modified:</td>
-          <td><xsl:value-of select="modification_time"/></td>
+          <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
         <tr>
           <td>Active:</td>
@@ -10263,7 +10270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:when test="active='1' and string-length (end_time) &gt; 0">
                 yes, until
-                <xsl:value-of select="end_time"/>
+                <xsl:value-of select="gsa:long-time (end_time)"/>
               </xsl:when>
               <xsl:otherwise>
                 yes
@@ -10686,8 +10693,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="trust/text()"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
-          <br/>(<xsl:value-of select="substring(trust/time,5,6)"/>
-                <xsl:value-of select="substring(trust/time,20,5)"/>)
+          <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -10762,8 +10768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="trust/text()"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
-          <br/>(<xsl:value-of select="substring(trust/time,5,6)"/>
-                <xsl:value-of select="substring(trust/time,20,5)"/>)
+          <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -11554,7 +11559,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
-    Last modified: <xsl:value-of select="modification_time"/>.
+    Last modified: <xsl:value-of select="gsa:long-time (modification_time)"/>.
   </div>
 </xsl:template>
 
@@ -11587,7 +11592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:when test="active='1' and string-length (end_time) &gt; 0">
           Active until:
-          <xsl:value-of select="end_time"/>.
+          <xsl:value-of select="gsa:long-time (end_time)"/>.
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
@@ -11668,7 +11673,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
-    <div>Last modified: <xsl:value-of select="modification_time"/>.</div>
+    <div>Last modified: <xsl:value-of select="gsa:long-time (modification_time)"/>.</div>
   </div>
 </xsl:template>
 
