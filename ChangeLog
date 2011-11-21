@@ -1,5 +1,10 @@
 2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report_omp): Set both overrides OMP flags from the
+	URL param.
+
+2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (gsa:long-time, html-report-details): Add length check.
 	(html-report-table): Correct next_time check.
 	(report [assets]): Handle ISO time.

@@ -7789,7 +7789,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
-                                " overrides=\"1\""
+                                " overrides=\"%i\""
                                 " overrides_details=\"1\""
                                 " result_hosts_only=\"%i\""
                                 " report_id=\"%s\""
@@ -7803,6 +7803,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                 " min_cvss_base=\"%s\""
                                 " escalator_id=\"%s\"/>",
                                 strcmp (esc_notes, "0") ? 1 : 0,
+                                strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_result_hosts_only, "0") ? 1 : 0,
                                 report_id,
@@ -7898,7 +7899,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
-                            " overrides=\"1\""
+                            " overrides=\"%i\""
                             " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
@@ -7923,6 +7924,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                             host ? "\"" : "",
                             pos ? pos : "1",
                             strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             (type && ((strcmp (type, "assets") == 0)
