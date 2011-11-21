@@ -1,5 +1,11 @@
 2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:long-time, html-report-details): Add length check.
+	(html-report-table): Correct next_time check.
+	(report [assets]): Handle ISO time.
+
+2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (gsa:long-time): New function.
 	(html-report-table, agent, agent [trash], schedule, schedule [details])
 	(note [details], override [details], report_format, report_format [trash])

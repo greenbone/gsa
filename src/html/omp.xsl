@@ -58,7 +58,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:long-time">
   <xsl:param name="time"></xsl:param>
   <func:result>
-    <xsl:value-of select="concat (date:day-abbreviation ($time), ' ', date:month-abbreviation ($time), ' ', date:day-in-month ($time), ' ', format-number(date:hour-in-day($time), '00'), ':', format-number(date:minute-in-hour($time), '00'), ':', format-number(date:second-in-minute($time), '00'), ' ', date:year($time))"/>
+    <xsl:if test="string-length ($time) &gt; 0">
+      <xsl:value-of select="concat (date:day-abbreviation ($time), ' ', date:month-abbreviation ($time), ' ', date:day-in-month ($time), ' ', format-number(date:hour-in-day($time), '00'), ':', format-number(date:minute-in-hour($time), '00'), ':', format-number(date:second-in-minute($time), '00'), ' ', date:year($time))"/>
+    </xsl:if>
   </func:result>
 </func:function>
 
@@ -1081,7 +1083,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
             <tr>
               <td>Scan ended:</td>
-              <td><xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end))"/></td>
+              <td>
+                <xsl:if test="string-length (report/scan_end)">
+                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end))"/>
+                </xsl:if>
+              </td>
             </tr>
             <tr>
               <td>Scan status:</td>
@@ -2193,7 +2199,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="task/schedule/name"/>
               </a>
               <xsl:choose>
-                <xsl:when test="task/schedule/next_time = 0">
+                <xsl:when test="task/schedule/next_time = 'over'">
                   (Next due: over)
                 </xsl:when>
                 <xsl:otherwise>
@@ -12264,8 +12270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="start/text() != ''">
               <a href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides=1&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
-                <xsl:value-of select="substring(start/text(),5,6)"/>
-                <xsl:value-of select="substring(start/text(),20,21)"/>
+                <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
               </a>
             </xsl:when>
             <xsl:otherwise>(not finished)</xsl:otherwise>
