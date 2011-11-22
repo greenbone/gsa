@@ -11160,8 +11160,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:when>
                 </xsl:choose>
                 <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides={$apply-overrides}&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
-                  <xsl:value-of select="substring(start/text(),5,6)"/>
-                  <xsl:value-of select="substring(start/text(),20,21)"/>
+                  <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
                 </a>
                 <xsl:choose>
                   <xsl:when test="$pos &gt; 1">
@@ -12394,8 +12393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="../scan_start/text() != ''">
               <a href="/omp?cmd=get_report&amp;report_id={../@id}&amp;notes={../filters/notes}&amp;overrides={../filters/apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}">
-                <xsl:value-of select="substring(../scan_start/text(),5,6)"/>
-                <xsl:value-of select="substring(../scan_start/text(),20,21)"/>
+                <xsl:value-of select="concat (date:month-abbreviation (../scan_start/text()), ' ', date:day-in-month (../scan_start/text()), ' ', date:year (../scan_start/text()))"/>
               </a>
             </xsl:when>
             <xsl:otherwise>(not finished)</xsl:otherwise>
