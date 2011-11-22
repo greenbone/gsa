@@ -11149,28 +11149,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Report:</td>
           <td>
+            <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
+            <xsl:choose>
+              <xsl:when test="$pos &lt; $report_count">
+                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                  &lt;&lt;
+                </a>
+              </xsl:when>
+            </xsl:choose>
             <xsl:choose>
               <xsl:when test="start/text() != ''">
-                <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
-                <xsl:choose>
-                  <xsl:when test="$pos &lt; $report_count">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
-                      &lt;&lt;
-                    </a>
-                  </xsl:when>
-                </xsl:choose>
                 <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides={$apply-overrides}&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
                   <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
                 </a>
-                <xsl:choose>
-                  <xsl:when test="$pos &gt; 1">
-                    <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
-                      &gt;&gt;
-                    </a>
-                  </xsl:when>
-                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>(not finished)</xsl:otherwise>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="$pos &gt; 1">
+                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                  &gt;&gt;
+                </a>
+              </xsl:when>
             </xsl:choose>
           </td>
         </tr>

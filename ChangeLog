@@ -1,5 +1,9 @@
 2011-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (host): Always print arrows, even if time is empty.
+
+2011-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (host, report [report-assets]): Handle ISO time.
 
 2011-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
