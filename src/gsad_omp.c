@@ -8498,7 +8498,7 @@ get_result (credentials_t *credentials, const char *result_id,
                             " result_id=\"%s\""
                             " task_id=\"%s\""
                             " apply_overrides=\"%s\""
-                            " overrides=\"1\""
+                            " overrides=\"%s\""
                             " overrides_details=\"1\""
                             " notes=\"1\""
                             " notes_details=\"1\"/>"
@@ -8506,6 +8506,7 @@ get_result (credentials_t *credentials, const char *result_id,
                             commands ? commands : "",
                             result_id,
                             task_id,
+                            apply_overrides,
                             apply_overrides)
       == -1)
     {

@@ -1,5 +1,10 @@
 2011-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_result): Set both overrides OMP flags from the
+	URL param, so that overrides only show when "apply overrides" is chosen.
+
+2011-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp, save_note_omp): Pass active state
 	through.
 
