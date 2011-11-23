@@ -8934,7 +8934,8 @@ create_note_omp (credentials_t *credentials, params_t *params)
   const char *min_cvss_base, *text, *task_id;
   /* For get_report. */
   const char *levels, *result_hosts_only, *notes, *overrides, *report_id;
-  const char *first_result, *max_results, *sort_order, *sort_field;
+  const char *first_result, *max_results, *sort_order, *sort_field, *active;
+  const char *days;
 
   next = params_value (params, "next");
   search_phrase = params_value (params, "search_phrase");
@@ -9008,7 +9009,9 @@ create_note_omp (credentials_t *credentials, params_t *params)
                          "Diagnostics: OID was NULL.",
                          "/omp?cmd=get_notes");
 
-  if (threat == NULL || port == NULL || hosts == NULL)
+  active = params_value (params, "active");
+
+  if (threat == NULL || port == NULL || hosts == NULL || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while creating a new note. "
@@ -9044,6 +9047,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
   text = params_value (params, "text");
 
   create_note = g_strdup_printf ("<create_note>"
+                                 "<active>%s</active>"
                                  "<nvt oid=\"%s\"/>"
                                  "<hosts>%s</hosts>"
                                  "<port>%s</port>"
@@ -9052,6 +9056,9 @@ create_note_omp (credentials_t *credentials, params_t *params)
                                  "<task id=\"%s\"/>"
                                  "<result id=\"%s\"/>"
                                  "</create_note>",
+                                 strcmp (active, "1")
+                                  ? active
+                                  : (days ? days : "-1"),
                                  oid,
                                  hosts,
                                  port,
@@ -9816,7 +9823,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
   unsigned int first_result, max_results;
   const char *sort_field, *sort_order, *levels, *notes, *overrides;
   const char *result_hosts_only, *search_phrase, *min_cvss_base;
-  const char *oid, *task_id, *task_name, *result_id;
+  const char *oid, *task_id, *task_name, *result_id, *active, *days;
 
   note_id = params_value (params, "note_id");
 
@@ -9869,8 +9876,10 @@ save_note_omp (credentials_t * credentials, params_t *params)
   task_id = params_value (params, "task_id");
   task_name = params_value (params, "name");
   result_id = params_value (params, "result_id");
+  active = params_value (params, "active");
 
-  if (next == NULL || note_task_id == NULL || note_result_id == NULL)
+  if (next == NULL || note_task_id == NULL || note_result_id == NULL
+      || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a note. "
@@ -9985,6 +9994,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
     }
 
   modify_note = g_strdup_printf ("<modify_note note_id=\"%s\">"
+                                 "<active>%s</active>"
                                  "<hosts>%s</hosts>"
                                  "<port>%s</port>"
                                  "<threat>%s</threat>"
@@ -9993,6 +10003,9 @@ save_note_omp (credentials_t * credentials, params_t *params)
                                  "<result id=\"%s\"/>"
                                  "</modify_note>",
                                  note_id,
+                                 strcmp (active, "1")
+                                  ? active
+                                  : (days ? days : "-1"),
                                  hosts ? hosts : "",
                                  port ? port : "",
                                  threat ? threat : "",

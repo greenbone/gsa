@@ -2412,6 +2412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>NVT</td>
             <td>Text</td>
+            <td>Active</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
@@ -8946,6 +8947,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
+            <td valign="center" width="125">
+              Active
+            </td>
+            <td>
+              <div>
+                <input type="radio" name="active" value="-1" checked="1"/>
+                yes, always
+              </div>
+              <div>
+                <input type="radio" name="active" value="1"/>
+                yes, for the next
+                <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                days
+              </div>
+              <div>
+                <input type="radio" name="active" value="0"/>
+                no
+              </div>
+            </td>
+          </tr>
+          <tr>
             <td valign="top" width="125">
               Hosts
             </td>
@@ -9098,6 +9120,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </a>
+            </td>
+          </tr>
+          <tr>
+            <td valign="center">Active</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="get_overrides_response/override/active='1' and string-length(get_overrides_response/override/end_time) &gt; 0">
+                  <div>
+                    <input type="radio" name="active" value="-1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="-2" checked="1"/>
+                    yes, until
+                    <xsl:value-of select="get_overrides_response/override/end_time"/>
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0"/>
+                    no
+                  </div>
+                </xsl:when>
+                <xsl:when test="get_overrides_response/override/active='1'">
+                  <div>
+                    <input type="radio" name="active" value="-1" checked="1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0"/>
+                    no
+                  </div>
+                </xsl:when>
+                <xsl:otherwise>
+                  <div>
+                    <input type="radio" name="active" value="-1"/>
+                    yes, always
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="1"/>
+                    yes, for the next
+                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                    days
+                  </div>
+                  <div>
+                    <input type="radio" name="active" value="0" checked="1"/>
+                    no
+                  </div>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -9289,6 +9371,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="active='0'">
+          no
+        </xsl:when>
+        <xsl:otherwise>
+          yes
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:call-template name="delete-icon">
         <xsl:with-param name="type" select="'note'"/>
         <xsl:with-param name="id" select="@id"/>
@@ -9410,6 +9502,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Last Modified:</td>
           <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
+        <tr>
+          <td>Active:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="active='0'">
+                no
+              </xsl:when>
+              <xsl:when test="active='1' and string-length (end_time) &gt; 0">
+                yes, until
+                <xsl:value-of select="gsa:long-time (end_time)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                yes
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
       </table>
 
       <h1>Application</h1>
@@ -9521,6 +9630,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>NVT</td>
             <td>Text</td>
+            <td>Active</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="note"/>
@@ -11489,6 +11599,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="string"><xsl:value-of select="text"/></xsl:with-param>
       </xsl:call-template>
     </pre>
+    <div>
+      <xsl:choose>
+        <xsl:when test="active='0'">
+        </xsl:when>
+        <xsl:when test="active='1' and string-length (end_time) &gt; 0">
+          Active until:
+          <xsl:value-of select="gsa:long-time (end_time)"/>.
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
         <div style="display: inline">

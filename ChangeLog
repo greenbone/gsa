@@ -1,3 +1,14 @@
+2011-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_note_omp, save_note_omp): Pass active state
+	through.
+
+	* src/html/omp.xsl (html-report-table, note, html-notes-table): Add active
+	column.
+	(html-create-note-form, html-edit-note-form): Add active field.
+	(note [details]): Add active field.
+	(note-detailed): Add active status above modification time.
+
 2011-11-23  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
