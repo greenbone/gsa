@@ -1,3 +1,23 @@
+gsa 3.0+beta7 (2011-11-23)
+
+This is the seventh beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release add support for improved handling of ISO timestamps and fixes
+visual inconsistencies in asset management and override information display.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell and Michael Wiegand.
+
+Main changes since 3.0+beta6:
+* Support for improved handling of ISO timestamps has been added.
+* A number of visual inconsistencies in the asset management have been
+  addressed.
+* A bug with cause override information to be displayed even when no overrides
+  were applied has been fixed.
+
+
 gsa 3.0+beta6 (2011-11-16)
 
 This is the sixth beta version of the upcoming 3.0 release of the Greenbone

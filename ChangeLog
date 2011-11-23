@@ -1,3 +1,9 @@
+2011-11-23  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 3.0+beta7 release.
+
+	* CHANGES: Updated.
+
 2011-11-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Always print arrows, even if time is empty.
