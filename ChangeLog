@@ -1,3 +1,11 @@
+2011-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_note_omp): Add missing days init.
+
+	* src/html/omp.xsl (html-edit-note-form): Correct tag name.
+	(note [details]): When note is off put "when Active" in heading.
+	(result-detailed): Only show active notes.
+
 2011-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_result): Set both overrides OMP flags from the

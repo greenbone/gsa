@@ -9878,6 +9878,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
   task_name = params_value (params, "name");
   result_id = params_value (params, "result_id");
   active = params_value (params, "active");
+  days = params_value (params, "days");
 
   if (next == NULL || note_task_id == NULL || note_result_id == NULL
       || active == NULL)
@@ -9905,7 +9906,8 @@ save_note_omp (credentials_t * credentials, params_t *params)
       || text == NULL
       || hosts == NULL
       || port == NULL
-      || threat == NULL)
+      || threat == NULL
+      || days == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a note. "

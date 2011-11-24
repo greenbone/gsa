@@ -9126,7 +9126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="center">Active</td>
             <td>
               <xsl:choose>
-                <xsl:when test="get_overrides_response/override/active='1' and string-length(get_overrides_response/override/end_time) &gt; 0">
+                <xsl:when test="get_notes_response/note/active='1' and string-length(get_notes_response/note/end_time) &gt; 0">
                   <div>
                     <input type="radio" name="active" value="-1"/>
                     yes, always
@@ -9134,7 +9134,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <div>
                     <input type="radio" name="active" value="-2" checked="1"/>
                     yes, until
-                    <xsl:value-of select="get_overrides_response/override/end_time"/>
+                    <xsl:value-of select="get_notes_response/note/end_time"/>
                   </div>
                   <div>
                     <input type="radio" name="active" value="1"/>
@@ -9147,7 +9147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     no
                   </div>
                 </xsl:when>
-                <xsl:when test="get_overrides_response/override/active='1'">
+                <xsl:when test="get_notes_response/note/active='1'">
                   <div>
                     <input type="radio" name="active" value="-1" checked="1"/>
                     yes, always
@@ -9605,7 +9605,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h1>Appearance</h1>
+      <xsl:choose>
+        <xsl:when test="active = '0'">
+          <h1>Appearance when Active</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Appearance</h1>
+        </xsl:otherwise>
+      </xsl:choose>
       <div class="note_top_line"></div>
       <xsl:call-template name="note-detailed">
         <xsl:with-param name="note-buttons">0</xsl:with-param>
@@ -12177,32 +12184,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <a class="anchor" name="notes-{@id}"/>
   <xsl:for-each select="notes/note">
-    <xsl:call-template name="note-detailed">
-      <xsl:with-param name="note-buttons">
-        <xsl:value-of select="$note-buttons"/>
-      </xsl:with-param>
-      <xsl:with-param name="delta" select="$delta"/>
-      <xsl:with-param name="next">
-        <xsl:choose>
-          <xsl:when test="$result-details">get_result</xsl:when>
-          <xsl:otherwise>get_report</xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="active = 0">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="note-detailed">
+          <xsl:with-param name="note-buttons">
+            <xsl:value-of select="$note-buttons"/>
+          </xsl:with-param>
+          <xsl:with-param name="delta" select="$delta"/>
+          <xsl:with-param name="next">
+            <xsl:choose>
+              <xsl:when test="$result-details">get_result</xsl:when>
+              <xsl:otherwise>get_report</xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
   <xsl:for-each select="delta/notes/note">
-    <xsl:call-template name="note-detailed">
-      <xsl:with-param name="note-buttons">
-        <xsl:value-of select="$note-buttons"/>
-      </xsl:with-param>
-      <xsl:with-param name="delta" select="2"/>
-      <xsl:with-param name="next">
-        <xsl:choose>
-          <xsl:when test="$result-details">get_result</xsl:when>
-          <xsl:otherwise>get_report</xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:choose>
+      <xsl:when test="active = 0">
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="note-detailed">
+          <xsl:with-param name="note-buttons">
+            <xsl:value-of select="$note-buttons"/>
+          </xsl:with-param>
+          <xsl:with-param name="delta" select="2"/>
+          <xsl:with-param name="next">
+            <xsl:choose>
+              <xsl:when test="$result-details">get_result</xsl:when>
+              <xsl:otherwise>get_report</xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
   <xsl:choose>
     <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
