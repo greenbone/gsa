@@ -10970,6 +10970,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           "<next>%s</next>"
                           /* Parameters for get_report. */
                           "<report id=\"%s\"/>"
+                          "<delta><report id=\"%s\"/></delta>"
                           "<first_result>%i</first_result>"
                           "<max_results>%i</max_results>"
                           "<sort_field>%s</sort_field>"
@@ -10980,6 +10981,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           "<result_hosts_only>%s</result_hosts_only>"
                           "<search_phrase>%s</search_phrase>"
                           "<min_cvss_base>%s</min_cvss_base>"
+                          "<delta_states>%s</delta_states>"
                           /* Parameters for get_nvts. */
                           "<nvt id=\"%s\"/>"
                           /* Parameters for get_result. */
@@ -10988,6 +10990,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           "<task id=\"%s\"><name>%s</name></task>",
                           next,
                           params_value (params, "report_id"),
+                          params_value (params, "delta_report_id"),
                           first_result,
                           max_results,
                           params_value (params, "sort_field"),
@@ -10998,6 +11001,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "result_hosts_only"),
                           params_value (params, "search_phrase"),
                           params_value (params, "min_cvss_base"),
+                          params_value (params, "delta_states"),
                           params_value (params, "oid"),
                           params_value (params, "result_id"),
                           params_value (params, "task_id"),
@@ -11035,12 +11039,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
 char *
 save_override_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  char *response = NULL;
-  gnutls_session_t session;
-  int socket;
   gchar *modify_override;
-  gchar *html;
 
   const char *override_id, *text, *hosts, *port, *threat, *new_threat;
   const char *override_task_id, *override_result_id, *next, *report_id;
@@ -11300,128 +11299,21 @@ save_override_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving an override. "
-                             "The override was not saved. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
   if (strcmp (next, "get_report") == 0)
     {
-      if (search_phrase == NULL || min_cvss_base == NULL)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving an override. "
-                               "The override remains the same. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_overrides");
-        }
-
-      if (levels == NULL || strlen (levels) == 0) levels = "hm";
-
-      if (notes == NULL || strlen (notes) == 0) notes = "0";
-
-      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
-
-      if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
-        result_hosts_only = "1";
-
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "%s"
-                                "<get_reports"
-                                " notes=\"%i\""
-                                " notes_details=\"1\""
-                                " apply_overrides=\"%i\""
-                                " overrides=\"1\""
-                                " overrides_details=\"1\""
-                                " result_hosts_only=\"%i\""
-                                " report_id=\"%s\""
-                                " format=\"XML\""
-                                " first_result=\"%u\""
-                                " max_results=\"%u\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " levels=\"%s\""
-                                " search_phrase=\"%s\""
-                                " min_cvss_base=\"%s\"/>"
-                                "<get_report_formats"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "<get_escalators"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "</commands>",
-                                modify_override,
-                                strcmp (notes, "0") ? 1 : 0,
-                                strcmp (overrides, "0") ? 1 : 0,
-                                strcmp (result_hosts_only, "0") ? 1 : 0,
-                                report_id,
-                                first_result,
-                                max_results,
-                                sort_field ? sort_field : "type",
-                                sort_order
-                                 ? sort_order
-                                 : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0)
-                                    ? "descending"
-                                    : "ascending"),
-                                levels,
-                                search_phrase,
-                                min_cvss_base)
-          == -1)
-        {
-          g_free (modify_override);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving an override. "
-                               "It is unclear whether the override has been saved or not. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
+      char *ret = get_report (credentials, params, modify_override, NULL, NULL,
+                              NULL);
       g_free (modify_override);
-    }
-  else
-    {
-      g_free (modify_override);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving an override. "
-                           "The override remains the same. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks");
+      return ret;
     }
 
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving an override. "
-                           "It is unclear whether the override has been saved or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, response);
+  g_free (modify_override);
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving an override. "
+                       "The override remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_tasks");
 }
 
 /**

@@ -1,5 +1,15 @@
 2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_override_omp): Add delta params.
+	(save_override_omp): Call get_report instead of getting the report by hand.
+	This means the delta case is now handled properly.
+
+	* src/html/omp.xsl (html-edit-override-form): Add delta params to save_override
+	form.
+	(override-detailed): Add delta params to edit_override link.
+
+2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (delete_override_omp): Call get_report instead of getting
 	the report by hand.  This means the delta case is now handled properly.
 
