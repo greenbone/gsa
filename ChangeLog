@@ -1,5 +1,14 @@
 2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (note-detailed-delete-params)
+	(override-detailed-delete-params): New templates.
+	(note-detailed, override-detailed): Call new template to put down the
+	delete icon params.  Use the correct base path for result 2, which is more
+	deeply nested.  Adjust the paths similarly in the edit icon link.  This
+	ensures that the parameters are added to the icons on result 2.
+
+2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (edit_override_omp): Add delta params.
 	(save_override_omp): Call get_report instead of getting the report by hand.
 	This means the delta case is now handled properly.

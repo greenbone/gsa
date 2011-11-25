@@ -11599,6 +11599,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     NOTE -->
 
+<xsl:template name="note-detailed-delete-params">
+  <xsl:param name="base" select="."/>
+  <input type="hidden" name="report_id" value="{$base/@id}"/>
+  <input type="hidden" name="first_result" value="{$base/results/@start}"/>
+  <input type="hidden" name="max_results" value="{$base/results/@max}"/>
+  <input type="hidden" name="levels" value="{$base/filters/text()}"/>
+  <input type="hidden" name="sort_field" value="{$base/sort/field/text()}"/>
+  <input type="hidden" name="sort_order" value="{$base/sort/field/order}"/>
+  <input type="hidden" name="search_phrase" value="{$base/filters/phrase}"/>
+  <input type="hidden" name="min_cvss_base" value="{$base/filters/min_cvss_base}"/>
+  <input type="hidden" name="apply_min_cvss_base" value="{number (string-length ($base/filters/min_cvss_base) &gt; 0)}"/>
+  <input type="hidden" name="notes" value="{$base/filters/notes}"/>
+  <input type="hidden" name="overrides" value="{$base/filters/apply_overrides}"/>
+  <input type="hidden" name="result_hosts_only={$base/filters/result_hosts_only}"/>
+</xsl:template>
+
 <xsl:template name="note-detailed" match="note" mode="detailed">
   <xsl:param name="note-buttons">1</xsl:param>
   <xsl:param name="delta"/>
@@ -11653,23 +11669,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="result_hosts_only={../../../../../../filters/result_hosts_only}"/>
               </xsl:when>
               <xsl:otherwise>
-                <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
-                <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
-                <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
-                <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
-                <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
-                <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
-                <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
-                <input type="hidden" name="apply_min_cvss_base" value="{number (string-length (../../../../filters/min_cvss_base) &gt; 0)}"/>
-                <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
-                <input type="hidden" name="overrides" value="{../../../../filters/apply_overrides}"/>
-                <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
                 <xsl:choose>
-                  <xsl:when test="$delta and $delta &gt; 0">
+                  <xsl:when test="$delta = 1">
+                    <xsl:call-template name="note-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
                     <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
                     <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
                   </xsl:when>
+                  <xsl:when test="$delta = 2">
+                    <xsl:call-template name="note-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="note-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
@@ -11683,6 +11702,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;first_result={../../../../../../results/@start}&amp;max_results={../../../../../../results/@max}&amp;sort_field={../../../../../../sort/field/text()}&amp;sort_order={../../../../../../sort/field/order}&amp;levels={../../../../../../filters/text()}&amp;notes={../../../../../../filters/notes}&amp;overrides={../../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../../filters/phrase}&amp;min_cvss_base={../../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$delta = 2">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -11708,6 +11734,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!--     OVERRIDE -->
+
+<xsl:template name="override-detailed-delete-params">
+  <xsl:param name="base" select="."/>
+  <input type="hidden" name="report_id" value="{$base/@id}"/>
+  <input type="hidden" name="first_result" value="{$base/results/@start}"/>
+  <input type="hidden" name="max_results" value="{$base/results/@max}"/>
+  <input type="hidden" name="levels" value="{$base/filters/text()}"/>
+  <input type="hidden" name="sort_field" value="{$base/sort/field/text()}"/>
+  <input type="hidden" name="sort_order" value="{$base/sort/field/order}"/>
+  <input type="hidden" name="search_phrase" value="{$base/filters/phrase}"/>
+  <input type="hidden" name="min_cvss_base" value="{$base/filters/min_cvss_base}"/>
+  <input type="hidden" name="apply_min_cvss_base" value="{number (string-length ($base/filters/min_cvss_base) &gt; 0)}"/>
+  <input type="hidden" name="notes" value="{$base/filters/notes}"/>
+  <input type="hidden" name="overrides" value="{$base/filters/apply_overrides}"/>
+  <input type="hidden" name="result_hosts_only={$base/filters/result_hosts_only}"/>
+</xsl:template>
 
 <xsl:template name="override-detailed" match="override" mode="detailed">
   <xsl:param name="override-buttons">1</xsl:param>
@@ -11773,23 +11815,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="result_hosts_only={../../../../../../filters/result_hosts_only}"/>
               </xsl:when>
               <xsl:otherwise>
-                <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                <input type="hidden" name="first_result" value="{../../../../results/@start}"/>
-                <input type="hidden" name="max_results" value="{../../../../results/@max}"/>
-                <input type="hidden" name="levels" value="{../../../../filters/text()}"/>
-                <input type="hidden" name="sort_field" value="{../../../../sort/field/text()}"/>
-                <input type="hidden" name="sort_order" value="{../../../../sort/field/order}"/>
-                <input type="hidden" name="search_phrase" value="{../../../../filters/phrase}"/>
-                <input type="hidden" name="min_cvss_base" value="{../../../../filters/min_cvss_base}"/>
-                <input type="hidden" name="apply_min_cvss_base" value="{number (string-length (../../../../filters/min_cvss_base) &gt; 0)}"/>
-                <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
-                <input type="hidden" name="overrides" value="{../../../../filters/apply_overrides}"/>
-                <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
                 <xsl:choose>
-                  <xsl:when test="$delta and $delta &gt; 0">
+                  <xsl:when test="$delta = 1">
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
                     <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
                     <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
                   </xsl:when>
+                  <xsl:when test="$delta = 2">
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
@@ -11803,6 +11848,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;first_result={../../../../../../results/@start}&amp;max_results={../../../../../../results/@max}&amp;sort_field={../../../../../../sort/field/text()}&amp;sort_order={../../../../../../sort/field/order}&amp;levels={../../../../../../filters/text()}&amp;notes={../../../../../../filters/notes}&amp;overrides={../../../../../../filters/overrides}&amp;result_hosts_only={../../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../../filters/phrase}&amp;min_cvss_base={../../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;token={/envelope/token}"
+               title="Edit Override"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$delta = 2">
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
