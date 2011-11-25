@@ -11783,6 +11783,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="notes" value="{../../../../filters/notes}"/>
                 <input type="hidden" name="overrides" value="{../../../../filters/apply_overrides}"/>
                 <input type="hidden" name="result_hosts_only={../../../../filters/result_hosts_only}"/>
+                <xsl:choose>
+                  <xsl:when test="$delta and $delta &gt; 0">
+                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
             <input type="hidden" name="next" value="{$next}"/>

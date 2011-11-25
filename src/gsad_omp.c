@@ -10738,17 +10738,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
 char *
 delete_override_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
   const char *next, *override_id;
-
-  unsigned int first, max;
-  const char *sort_field, *sort_order, *levels, *notes, *overrides;
-  const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
-  const char *task_name, *result_id, *first_result, *max_results, *report_id;
 
   next = params_value (params, "next");
   override_id = params_value (params, "override_id");
@@ -10760,6 +10750,15 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                          "The override remains intact. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_overrides");
+
+  if (strcmp (next, "get_report") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                                      override_id);
+      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+      g_free (extra);
+      return ret;
+    }
 
   if (strcmp (next, "get_nvts") == 0)
     {
@@ -10821,202 +10820,12 @@ delete_override_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  task_name = params_value (params, "name");
-  first_result = params_value (params, "first_result");
-  max_results = params_value (params, "max_results");
-  result_id = params_value (params, "result_id");
-  task_id = params_value (params, "task_id");
-
-  overrides = params_value (params, "overrides");
-  if (overrides == NULL)
-    params_given (params, "overrides") || (overrides = "0");
-
-  report_id = params_value (params, "report_id");
-  levels = params_value (params, "levels");
-
-  search_phrase = params_value (params, "search_phrase");
-  if (search_phrase == NULL)
-    params_given (params, "search_phrase") || (search_phrase = "");
-
-  notes = params_value (params, "notes");
-  if (notes == NULL)
-    params_given (params, "notes") || (notes = "0");
-
-  if (params_given (params, "min_cvss_base"))
-    {
-      if (params_valid (params, "min_cvss_base"))
-        {
-          if (params_value (params, "apply_min_cvss_base")
-              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
-            min_cvss_base = params_value (params, "min_cvss_base");
-          else
-            min_cvss_base = "";
-        }
-      else
-        min_cvss_base = NULL;
-    }
-  else
-    min_cvss_base = "";
-
-  result_hosts_only = params_value (params, "result_hosts_only");
-  if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only")
-      || (result_hosts_only = "0");
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (sscanf (first_result, "%u", &first) != 1)
-    first_result = "1";
-
-  if (sscanf (max_results, "%u", &max) != 1)
-    max_results = G_STRINGIFY (RESULTS_PER_PAGE);
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      gchar *extra;
-      char *ret;
-
-      if (task_name == NULL || first_result == NULL || max_results == NULL
-          || result_id == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an override. "
-                             "The override remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_overrides");
-
-
-      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                                      override_id);
-      ret = get_result (credentials, result_id, task_id, task_name,
-                        overrides, extra, report_id, first_result,
-                        max_results, levels, search_phrase, notes,
-                        overrides, min_cvss_base, result_hosts_only,
-                        sort_field, sort_order, NULL, NULL);
-      g_free (extra);
-      return ret;
-    }
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an override. "
-                             "The override was not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      if (search_phrase == NULL || min_cvss_base == NULL || report_id == NULL)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while deleting an override. "
-                               "The override remains intact. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_overrides");
-        }
-
-      if (levels == NULL || strlen (levels) == 0) levels = "hm";
-
-      if (notes == NULL || strlen (notes) == 0) notes = "0";
-
-      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
-
-      if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
-        result_hosts_only = "1";
-
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "<delete_override override_id=\"%s\" />"
-                                "<get_reports"
-                                " notes=\"%i\""
-                                " notes_details=\"1\""
-                                " apply_overrides=\"%i\""
-                                " overrides=\"1\""
-                                " overrides_details=\"1\""
-                                " result_hosts_only=\"%i\""
-                                " report_id=\"%s\""
-                                " format=\"XML\""
-                                " first_result=\"%s\""
-                                " max_results=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " levels=\"%s\""
-                                " search_phrase=\"%s\""
-                                " min_cvss_base=\"%s\"/>"
-                                "<get_report_formats"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "<get_escalators"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "</commands>",
-                                override_id,
-                                strcmp (notes, "0") ? 1 : 0,
-                                strcmp (overrides, "0") ? 1 : 0,
-                                strcmp (result_hosts_only, "0") ? 1 : 0,
-                                report_id,
-                                first_result,
-                                max_results,
-                                sort_field ? sort_field : "type",
-                                sort_order
-                                 ? sort_order
-                                 : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0)
-                                    ? "descending"
-                                    : "ascending"),
-                                levels,
-                                search_phrase,
-                                min_cvss_base)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while deleting an override. "
-                               "It is unclear whether the override has been deleted or not. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-    }
-  else
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an override. "
-                           "The override remains intact. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an override. "
-                           "It is unclear whether the override has been deleted or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while deleting an override. "
+                       "The override remains intact. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_tasks");
 }
 
 /**
