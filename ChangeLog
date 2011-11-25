@@ -1,5 +1,15 @@
 2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_note_omp): Add delta params.
+	(save_note_omp): Call get_report instead of getting the report by hand.
+	The means the delta case is now handled properly.
+
+	* src/html/omp.xsl (html-edit-note-form): Add delta params to save_note
+	form.
+	(note-detailed): Add delta params to edit_note link.
+
+2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): New function.  Body from get_report_omp.
 	Add commands arg for extra commands.
 	(get_report_omp): Call through to get_report.
