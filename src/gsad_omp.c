@@ -7560,6 +7560,7 @@ delete_report_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  commands     Extra commands to run before the others.
  * @param[out] report_len   Length of report.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
@@ -7567,13 +7568,12 @@ delete_report_omp (credentials_t * credentials, params_t *params)
  * @return Report.
  */
 char *
-get_report_omp (credentials_t * credentials, params_t *params,
-                gsize *report_len, gchar ** content_type,
-                char **content_disposition)
+get_report (credentials_t * credentials, params_t *params, const char *commands,
+            gsize *report_len, gchar **content_type, char **content_disposition)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
-  GString *xml;
+  GString *xml, *commands_xml;
   entity_t entity;
   entity_t report_entity;
   gnutls_session_t session;
@@ -7626,8 +7626,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
   if (result_hosts_only == NULL)
     params_given (params, "result_hosts_only") || (result_hosts_only = "0");
 
-  *content_type = NULL;
-  *report_len = 0;
+  if (content_type) *content_type = NULL;
+  if (report_len) *report_len = 0;
 
   if (escalator_id == NULL)
     return gsad_message (credentials,
@@ -7678,6 +7678,39 @@ get_report_omp (credentials_t * credentials, params_t *params,
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
     }
+
+  /* Run any extra commands. */
+
+  if (commands)
+    {
+      commands_xml = g_string_new ("");
+      if (openvas_server_send (&session, commands)
+          == -1)
+        {
+          g_string_free (commands_xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to send extra commands to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &commands_xml))
+        {
+          g_string_free (commands_xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
+
+  /* Get the report. */
 
   if (params_value (params, "delta_states"))
     delta_states = g_string_new (params_value (params, "delta_states"));
@@ -7824,6 +7857,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -7836,6 +7870,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
       if (read_entity (&session, &entity))
         {
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -7850,6 +7885,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
         {
           free_entity (entity);
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -7872,6 +7908,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
           g_free (msg);
           free_entity (entity);
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           return ret;
         }
@@ -7952,6 +7989,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
     {
       openvas_server_close (socket, session);
       g_string_free (delta_states, TRUE);
+      g_string_free (commands_xml, TRUE);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -7964,12 +8002,12 @@ get_report_omp (credentials_t * credentials, params_t *params,
 
   if (format_id)
     {
+      g_string_free (commands_xml, TRUE);
       if (strcmp (format_id, "d5da9f67-8551-4e51-807b-b6a873d70e34") == 0)
         {
           const char *extension, *type;
           /* Manager sends XML report as plain XML. */
 
-          xml = g_string_new ("");
           if (read_entity (&session, &entity))
             {
               g_string_free (xml, TRUE);
@@ -7996,7 +8034,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
             }
           extension = entity_attribute (report, "extension");
           type = entity_attribute (report, "content_type");
-          if (extension && type)
+          if (extension && type && content_type && content_disposition)
             {
               *content_type = g_strdup (type);
               *content_disposition
@@ -8012,12 +8050,21 @@ get_report_omp (credentials_t * credentials, params_t *params,
         {
           /* "nbe", "pdf", "dvi", "html", "html-pdf"... */
 
-          xml = g_string_new ("<commands_response>");
+          g_string_free (xml, TRUE);
+
+          if (report_len == NULL)
+            {
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Parameter error.",
+                                   "/omp?cmd=get_tasks");
+            }
 
           entity = NULL;
           if (read_entity (&session, &entity))
             {
-              g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -8043,7 +8090,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                   report_decoded = (gchar *) g_strdup ("");
                   *report_len = 0;
                 }
-              if (extension && type)
+              if (extension && type && content_type && content_disposition)
                 {
                   *content_type = g_strdup (type);
                   *content_disposition
@@ -8052,14 +8099,12 @@ get_report_omp (credentials_t * credentials, params_t *params,
                                        extension);
                 }
               free_entity (entity);
-              g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return report_decoded;
             }
           else
             {
               free_entity (entity);
-              g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -8142,6 +8187,12 @@ get_report_omp (credentials_t * credentials, params_t *params,
       else
         xml = g_string_new ("<get_report>");
 
+      if (commands)
+        {
+          g_string_append (xml, commands_xml->str);
+          g_string_free (commands_xml, TRUE);
+        }
+
       if (strcmp (escalator_id, "0"))
         g_string_append_printf (xml, "<get_reports_escalate_response"
                                      " status=\"200\""
@@ -8157,6 +8208,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
       if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -8169,6 +8221,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
         {
           g_string_append (xml, "</get_prognostic_report>");
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
@@ -8179,6 +8232,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
           else
             g_string_append (xml, "</get_report>");
           openvas_server_close (socket, session);
+          g_string_free (commands_xml, TRUE);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
@@ -8358,6 +8412,26 @@ get_report_omp (credentials_t * credentials, params_t *params,
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
+}
+
+/**
+ * @brief Get a report and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] report_len   Length of report.
+ * @param[out] content_type         Content type if known, else NULL.
+ * @param[out] content_disposition  Content disposition, if content_type set.
+ *
+ * @return Report.
+ */
+char *
+get_report_omp (credentials_t * credentials, params_t *params,
+                gsize *report_len, gchar ** content_type,
+                char **content_disposition)
+{
+  return get_report (credentials, params, NULL, report_len, content_type,
+                     content_disposition);
 }
 
 #define REQUIRE(arg)                                                  \
@@ -9327,17 +9401,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
 char *
 delete_note_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
   const char *next, *note_id;
-
-  unsigned int first, max;
-  const char *sort_field, *sort_order, *levels, *notes, *overrides;
-  const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
-  const char *task_name, *result_id, *first_result, *max_results, *report_id;
 
   next = params_value (params, "next");
   note_id = params_value (params, "note_id");
@@ -9349,6 +9413,14 @@ delete_note_omp (credentials_t * credentials, params_t *params)
                          "The note remains intact. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_notes");
+
+  if (strcmp (next, "get_report") == 0)
+    {
+      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+      g_free (extra);
+      return ret;
+    }
 
   if (strcmp (next, "get_nvts") == 0)
     {
@@ -9409,200 +9481,12 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
-  task_name = params_value (params, "name");
-  first_result = params_value (params, "first_result");
-  max_results = params_value (params, "max_results");
-  result_id = params_value (params, "result_id");
-  task_id = params_value (params, "task_id");
-
-  overrides = params_value (params, "overrides");
-  if (overrides == NULL)
-    params_given (params, "overrides") || (overrides = "0");
-
-  report_id = params_value (params, "report_id");
-  levels = params_value (params, "levels");
-
-  search_phrase = params_value (params, "search_phrase");
-  if (search_phrase == NULL)
-    params_given (params, "search_phrase") || (search_phrase = "");
-
-  notes = params_value (params, "notes");
-  if (notes == NULL)
-    params_given (params, "notes") || (notes = "0");
-
-  if (params_given (params, "min_cvss_base"))
-    {
-      if (params_valid (params, "min_cvss_base"))
-        {
-          if (params_value (params, "apply_min_cvss_base")
-              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
-            min_cvss_base = params_value (params, "min_cvss_base");
-          else
-            min_cvss_base = "";
-        }
-      else
-        min_cvss_base = NULL;
-    }
-  else
-    min_cvss_base = "";
-
-  result_hosts_only = params_value (params, "result_hosts_only");
-  if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only")
-      || (result_hosts_only = "0");
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (sscanf (first_result, "%u", &first) != 1)
-    first_result = "1";
-
-  if (sscanf (max_results, "%u", &max) != 1)
-    max_results = G_STRINGIFY (RESULTS_PER_PAGE);
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      gchar *extra;
-      char *ret;
-
-      if (task_name == NULL || first_result == NULL || max_results == NULL
-          || result_id == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a note. "
-                             "The note remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_notes");
-
-      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_result (credentials, result_id, task_id, task_name,
-                        overrides, extra, report_id, first_result,
-                        max_results, levels, search_phrase, notes,
-                        overrides, min_cvss_base, result_hosts_only,
-                        sort_field, sort_order, NULL, NULL);
-      g_free (extra);
-      return ret;
-    }
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a note. "
-                             "The note was not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      if (search_phrase == NULL || min_cvss_base == NULL || report_id == NULL)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while deleting a note. "
-                               "The note remains intact. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_notes");
-        }
-
-      if (levels == NULL || strlen (levels) == 0) levels = "hm";
-
-      if (notes == NULL || strlen (notes) == 0) notes = "0";
-
-      if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
-
-      if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
-        result_hosts_only = "1";
-
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "<delete_note note_id=\"%s\" />"
-                                "<get_reports"
-                                " notes=\"%i\""
-                                " notes_details=\"1\""
-                                " apply_overrides=\"%i\""
-                                " overrides=\"1\""
-                                " overrides_details=\"1\""
-                                " result_hosts_only=\"%i\""
-                                " report_id=\"%s\""
-                                " format=\"XML\""
-                                " first_result=\"%s\""
-                                " max_results=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " levels=\"%s\""
-                                " search_phrase=\"%s\""
-                                " min_cvss_base=\"%s\"/>"
-                                "<get_report_formats"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "<get_escalators"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "</commands>",
-                                note_id,
-                                strcmp (notes, "0") ? 1 : 0,
-                                strcmp (overrides, "0") ? 1 : 0,
-                                strcmp (result_hosts_only, "0") ? 1 : 0,
-                                report_id,
-                                first_result,
-                                max_results,
-                                sort_field ? sort_field : "type",
-                                sort_order
-                                 ? sort_order
-                                 : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0)
-                                    ? "descending"
-                                    : "ascending"),
-                                levels,
-                                search_phrase,
-                                min_cvss_base)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while deleting a note. "
-                               "It is unclear whether the note has been deleted or not. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-    }
-  else
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a note. "
-                           "The note remains intact. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a note. "
-                           "It is unclear whether the note has been deleted or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while deleting a note. "
+                       "The note remains intact. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_tasks");
 }
 
 /**
