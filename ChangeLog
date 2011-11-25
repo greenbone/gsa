@@ -1,3 +1,7 @@
+2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (note-detailed): Send delta params in delta case.
+
 2011-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_note_omp): Add missing days init.
