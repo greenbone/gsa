@@ -1,5 +1,11 @@
 2011-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (note-detailed-delete-params, note-detailed)
+	(override-detailed-delete-params, override-detailed): Add missing text to
+	result_host_only hidden param.
+
+2011-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (delete_note_omp, delete_override_omp): Resurrect
 	get_result case removed earlier.
 
