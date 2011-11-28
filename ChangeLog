@@ -1,5 +1,10 @@
 2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (result-detailed): Add missing case for delete icons
+	on the Result Details page.
+
+2011-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (note-detailed-delete-params)
 	(override-detailed-delete-params): New templates.
 	(note-detailed, override-detailed): Call new template to put down the

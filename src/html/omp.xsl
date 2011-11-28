@@ -12164,6 +12164,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
+          <xsl:when test="$result-details">
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}"
+               title="Add Note" style="margin-left:3px;">
+              <img src="/img/new_note.png" border="0" alt="Add Note"/>
+            </a>
+          </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
             <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
@@ -12192,6 +12198,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
             <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}"
+               title="Add Override" style="margin-left:3px;">
+              <img src="/img/new_override.png" border="0" alt="Add Override"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$result-details">
+            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={(string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
