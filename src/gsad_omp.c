@@ -9481,6 +9481,86 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       return ret;
     }
 
+  if (strcmp (next, "get_result") == 0)
+    {
+      unsigned int first, max;
+      const char *sort_field, *sort_order, *levels, *notes, *overrides;
+      const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
+      const char *task_name, *result_id, *first_result, *max_results;
+      const char *report_id;
+      gchar *extra;
+      char *ret;
+
+      task_name = params_value (params, "name");
+      first_result = params_value (params, "first_result");
+      max_results = params_value (params, "max_results");
+      result_id = params_value (params, "result_id");
+      task_id = params_value (params, "task_id");
+
+      overrides = params_value (params, "overrides");
+      if (overrides == NULL)
+        params_given (params, "overrides") || (overrides = "0");
+
+      report_id = params_value (params, "report_id");
+      levels = params_value (params, "levels");
+
+      search_phrase = params_value (params, "search_phrase");
+      if (search_phrase == NULL)
+        params_given (params, "search_phrase") || (search_phrase = "");
+
+      notes = params_value (params, "notes");
+      if (notes == NULL)
+        params_given (params, "notes") || (notes = "0");
+
+      if (params_given (params, "min_cvss_base"))
+        {
+          if (params_valid (params, "min_cvss_base"))
+            {
+              if (params_value (params, "apply_min_cvss_base")
+                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
+                min_cvss_base = params_value (params, "min_cvss_base");
+              else
+                min_cvss_base = "";
+            }
+          else
+            min_cvss_base = NULL;
+        }
+      else
+        min_cvss_base = "";
+
+      result_hosts_only = params_value (params, "result_hosts_only");
+      if (result_hosts_only == NULL)
+        params_given (params, "result_hosts_only")
+          || (result_hosts_only = "0");
+
+      sort_field = params_value (params, "sort_field");
+      sort_order = params_value (params, "sort_order");
+
+      if (sscanf (first_result, "%u", &first) != 1)
+        first_result = "1";
+
+      if (sscanf (max_results, "%u", &max) != 1)
+        max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+      if (task_name == NULL || first_result == NULL || max_results == NULL
+          || result_id == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a note. "
+                             "The note remains intact. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_notes");
+
+      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
+      ret = get_result (credentials, result_id, task_id, task_name,
+                        overrides, extra, report_id, first_result,
+                        max_results, levels, search_phrase, notes,
+                        overrides, min_cvss_base, result_hosts_only,
+                        sort_field, sort_order, NULL, NULL);
+      g_free (extra);
+      return ret;
+    }
+
   return gsad_message (credentials,
                        "Internal error", __FUNCTION__, __LINE__,
                        "An internal error occurred while deleting a note. "
@@ -10816,6 +10896,87 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                        overrides ? strcmp (overrides, "0") : 0,
                        NULL);
 
+      g_free (extra);
+      return ret;
+    }
+
+  if (strcmp (next, "get_result") == 0)
+    {
+      unsigned int first, max;
+      const char *sort_field, *sort_order, *levels, *notes, *overrides;
+      const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
+      const char *task_name, *result_id, *first_result, *max_results, *report_id;
+      gchar *extra;
+      char *ret;
+
+      task_name = params_value (params, "name");
+      first_result = params_value (params, "first_result");
+      max_results = params_value (params, "max_results");
+      result_id = params_value (params, "result_id");
+      task_id = params_value (params, "task_id");
+
+      overrides = params_value (params, "overrides");
+      if (overrides == NULL)
+        params_given (params, "overrides") || (overrides = "0");
+
+      report_id = params_value (params, "report_id");
+      levels = params_value (params, "levels");
+
+      search_phrase = params_value (params, "search_phrase");
+      if (search_phrase == NULL)
+        params_given (params, "search_phrase") || (search_phrase = "");
+
+      notes = params_value (params, "notes");
+      if (notes == NULL)
+        params_given (params, "notes") || (notes = "0");
+
+      if (params_given (params, "min_cvss_base"))
+        {
+          if (params_valid (params, "min_cvss_base"))
+            {
+              if (params_value (params, "apply_min_cvss_base")
+                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
+                min_cvss_base = params_value (params, "min_cvss_base");
+              else
+                min_cvss_base = "";
+            }
+          else
+            min_cvss_base = NULL;
+        }
+      else
+        min_cvss_base = "";
+
+      result_hosts_only = params_value (params, "result_hosts_only");
+      if (result_hosts_only == NULL)
+        params_given (params, "result_hosts_only")
+          || (result_hosts_only = "0");
+
+      sort_field = params_value (params, "sort_field");
+      sort_order = params_value (params, "sort_order");
+
+      if (sscanf (first_result, "%u", &first) != 1)
+        first_result = "1";
+
+      if (sscanf (max_results, "%u", &max) != 1)
+        max_results = G_STRINGIFY (RESULTS_PER_PAGE);
+
+      if (task_name == NULL || first_result == NULL || max_results == NULL
+          || result_id == NULL)
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting an override. "
+                             "The override remains intact. "
+                             "Diagnostics: Required parameter was NULL.",
+                             "/omp?cmd=get_overrides");
+
+
+      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
+                                      override_id);
+      ret = get_result (credentials, result_id, task_id, task_name,
+                        overrides, extra, report_id, first_result,
+                        max_results, levels, search_phrase, notes,
+                        overrides, min_cvss_base, result_hosts_only,
+                        sort_field, sort_order, NULL, NULL);
       g_free (extra);
       return ret;
     }
