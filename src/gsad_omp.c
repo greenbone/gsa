@@ -8444,6 +8444,16 @@ get_report_omp (credentials_t * credentials, params_t *params,
                          "\" was NULL.",                              \
                          "/omp?cmd=get_tasks")
 
+#define REQUIRE2(arg, backurl)                                        \
+  if (arg == NULL)                                                    \
+    return gsad_message (credentials,                                 \
+                         "Internal error", __FUNCTION__, __LINE__,    \
+                         "An internal error occurred."                \
+                         " Diagnostics: Required parameter \""        \
+                         G_STRINGIFY (arg)                            \
+                         "\" was NULL.",                              \
+                         backurl)
+
 /**
  * @brief Get one result, XSL transform the result.
  *
@@ -8519,9 +8529,14 @@ get_result (credentials_t *credentials, const char *result_id,
                              "/omp?cmd=get_results");
     }
 
-  xml = g_string_new ("<get_result>");
+  if (delta_report_id)
+    xml = g_string_new ("<get_delta_result>");
+  else
+    xml = g_string_new ("<get_result>");
+
 
   g_string_append_printf (xml,
+                          "<result id=\"%s\"/>"
                           "<task id=\"%s\"><name>%s</name></task>"
                           "<report id=\"%s\"/>"
                           "<delta><report id=\"%s\"/></delta>"
@@ -8546,6 +8561,7 @@ get_result (credentials_t *credentials, const char *result_id,
                           "<order>%s</order>"
                           "</field>"
                           "</sort>",
+                          result_id,
                           task_id,
                           task_name,
                           report_id,
@@ -8565,24 +8581,56 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Get the result. */
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_results"
-                            " result_id=\"%s\""
-                            " task_id=\"%s\""
-                            " apply_overrides=\"%s\""
-                            " overrides=\"%s\""
-                            " overrides_details=\"1\""
-                            " notes=\"1\""
-                            " notes_details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            result_id,
-                            task_id,
-                            apply_overrides,
-                            apply_overrides)
-      == -1)
+  if (delta_report_id)
+    {
+      if (openvas_server_sendf (&session,
+                                "<commands>"
+                                "%s"
+                                "<get_reports"
+                                " report_id=\"%s\""
+                                " delta_report_id=\"%s\""
+                                " result_id=\"%s\""
+                                " apply_overrides=\"%s\""
+                                " overrides=\"%s\""
+                                " overrides_details=\"1\""
+                                " notes=\"1\""
+                                " notes_details=\"1\"/>"
+                                "</commands>",
+                                commands ? commands : "",
+                                report_id,
+                                delta_report_id,
+                                result_id,
+                                apply_overrides,
+                                apply_overrides)
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a result. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_results");
+        }
+    }
+  else if (openvas_server_sendf (&session,
+                                 "<commands>"
+                                 "%s"
+                                 "<get_results"
+                                 " result_id=\"%s\""
+                                 " task_id=\"%s\""
+                                 " apply_overrides=\"%s\""
+                                 " overrides=\"%s\""
+                                 " overrides_details=\"1\""
+                                 " notes=\"1\""
+                                 " notes_details=\"1\"/>"
+                                 "</commands>",
+                                 commands ? commands : "",
+                                 result_id,
+                                 task_id,
+                                 apply_overrides,
+                                 apply_overrides)
+           == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -8606,7 +8654,10 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_result>");
+  if (delta_report_id)
+    g_string_append (xml, "</get_delta_result>");
+  else
+    g_string_append (xml, "</get_result>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -9406,13 +9457,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
   next = params_value (params, "next");
   note_id = params_value (params, "note_id");
 
-  if ((next == NULL) || (note_id == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a note. "
-                         "The note remains intact. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_notes");
+  REQUIRE (next);
+  REQUIRE (note_id);
 
   if (strcmp (next, "get_report") == 0)
     {
@@ -9487,7 +9533,7 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       const char *sort_field, *sort_order, *levels, *notes, *overrides;
       const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
       const char *task_name, *result_id, *first_result, *max_results;
-      const char *report_id;
+      const char *report_id, *delta_report_id, *delta_states;
       gchar *extra;
       char *ret;
 
@@ -9495,6 +9541,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       first_result = params_value (params, "first_result");
       max_results = params_value (params, "max_results");
       result_id = params_value (params, "result_id");
+      delta_report_id = params_value (params, "delta_report_id");
+      delta_states = params_value (params, "delta_states");
       task_id = params_value (params, "task_id");
 
       overrides = params_value (params, "overrides");
@@ -9536,27 +9584,23 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       sort_field = params_value (params, "sort_field");
       sort_order = params_value (params, "sort_order");
 
+      REQUIRE2 (task_name, "/omp?cmd=get_notes");
+      REQUIRE2 (first_result, "/omp?cmd=get_notes");
+      REQUIRE2 (max_results, "/omp?cmd=get_notes");
+      REQUIRE2 (result_id, "/omp?cmd=get_notes");
+
       if (sscanf (first_result, "%u", &first) != 1)
         first_result = "1";
 
       if (sscanf (max_results, "%u", &max) != 1)
         max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
-      if (task_name == NULL || first_result == NULL || max_results == NULL
-          || result_id == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a note. "
-                             "The note remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_notes");
-
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
       ret = get_result (credentials, result_id, task_id, task_name,
                         overrides, extra, report_id, first_result,
                         max_results, levels, search_phrase, notes,
                         overrides, min_cvss_base, result_hosts_only,
-                        sort_field, sort_order, NULL, NULL);
+                        sort_field, sort_order, delta_report_id, delta_states);
       g_free (extra);
       return ret;
     }
@@ -10906,6 +10950,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
       const char *sort_field, *sort_order, *levels, *notes, *overrides;
       const char *result_hosts_only, *search_phrase, *min_cvss_base, *task_id;
       const char *task_name, *result_id, *first_result, *max_results, *report_id;
+      const char *delta_report_id, *delta_states;
       gchar *extra;
       char *ret;
 
@@ -10913,6 +10958,8 @@ delete_override_omp (credentials_t * credentials, params_t *params)
       first_result = params_value (params, "first_result");
       max_results = params_value (params, "max_results");
       result_id = params_value (params, "result_id");
+      delta_report_id = params_value (params, "delta_report_id");
+      delta_states = params_value (params, "delta_states");
       task_id = params_value (params, "task_id");
 
       overrides = params_value (params, "overrides");
@@ -10960,15 +11007,10 @@ delete_override_omp (credentials_t * credentials, params_t *params)
       if (sscanf (max_results, "%u", &max) != 1)
         max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
-      if (task_name == NULL || first_result == NULL || max_results == NULL
-          || result_id == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an override. "
-                             "The override remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_overrides");
-
+      REQUIRE (task_name);
+      REQUIRE (first_result);
+      REQUIRE (max_results);
+      REQUIRE (result_id);
 
       extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
@@ -10976,7 +11018,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                         overrides, extra, report_id, first_result,
                         max_results, levels, search_phrase, notes,
                         overrides, min_cvss_base, result_hosts_only,
-                        sort_field, sort_order, NULL, NULL);
+                        sort_field, sort_order, delta_report_id, delta_states);
       g_free (extra);
       return ret;
     }

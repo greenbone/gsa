@@ -11601,7 +11601,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="note-detailed-delete-params">
   <xsl:param name="base" select="."/>
-  <input type="hidden" name="report_id" value="{$base/@id}"/>
   <input type="hidden" name="first_result" value="{$base/results/@start}"/>
   <input type="hidden" name="max_results" value="{$base/results/@max}"/>
   <input type="hidden" name="levels" value="{$base/filters/text()}"/>
@@ -11650,27 +11649,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    name="Delete" value="Delete" title="Delete"/>
             <xsl:choose>
               <xsl:when test="$next='get_result'">
-                <input type="hidden" name="result_id" value="{../../@id}"/>
-                <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
-                <input type="hidden" name="name" value="{../../../../../../task/name}"/>
-                <input type="hidden" name="apply_overrides" value="{../../../../../../filters/apply_overrides}"/>
 
-                <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
-                <input type="hidden" name="first_result" value="{../../../../../../results/@start}"/>
-                <input type="hidden" name="max_results" value="{../../../../../../results/@max}"/>
-                <input type="hidden" name="levels" value="{../../../../../../filters/text()}"/>
-                <input type="hidden" name="sort_field" value="{../../../../../../sort/field/text()}"/>
-                <input type="hidden" name="sort_order" value="{../../../../../../sort/field/order}"/>
-                <input type="hidden" name="search_phrase" value="{../../../../../../filters/phrase}"/>
-                <input type="hidden" name="min_cvss_base" value="{../../../../../../filters/min_cvss_base}"/>
-                <input type="hidden" name="apply_min_cvss_base" value="{number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}"/>
-                <input type="hidden" name="notes" value="{../../../../../../filters/notes}"/>
-                <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
-                <input type="hidden" name="result_hosts_only" value="{../../../../../../filters/result_hosts_only}"/>
+                <xsl:choose>
+                  <xsl:when test="$delta = 1">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <input type="hidden" name="result_id" value="{../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../filters/apply_overrides}"/>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:when test="$delta = 2">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <input type="hidden" name="result_id" value="{../../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../../filters/apply_overrides}"/>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                    <input type="hidden" name="result_id" value="{../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../../../filters/apply_overrides}"/>
+                    <xsl:call-template name="note-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../../."/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:choose>
                   <xsl:when test="$delta = 1">
+                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
                     <xsl:call-template name="note-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../."/>
                     </xsl:call-template>
@@ -11678,6 +11698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
                   </xsl:when>
                   <xsl:when test="$delta = 2">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
                     <xsl:call-template name="note-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../../."/>
                     </xsl:call-template>
@@ -11685,6 +11706,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
                   </xsl:when>
                   <xsl:otherwise>
+                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
                     <xsl:call-template name="note-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../."/>
                     </xsl:call-template>
@@ -11737,7 +11759,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="override-detailed-delete-params">
   <xsl:param name="base" select="."/>
-  <input type="hidden" name="report_id" value="{$base/@id}"/>
   <input type="hidden" name="first_result" value="{$base/results/@start}"/>
   <input type="hidden" name="max_results" value="{$base/results/@max}"/>
   <input type="hidden" name="levels" value="{$base/filters/text()}"/>
@@ -11796,27 +11817,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    name="Delete" value="Delete" title="Delete"/>
             <xsl:choose>
               <xsl:when test="$next='get_result'">
-                <input type="hidden" name="result_id" value="{../../@id}"/>
-                <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
-                <input type="hidden" name="name" value="{../../../../../../task/name}"/>
-                <input type="hidden" name="apply_overrides" value="{../../../../../../filters/apply_overrides}"/>
-
-                <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
-                <input type="hidden" name="first_result" value="{../../../../../../results/@start}"/>
-                <input type="hidden" name="max_results" value="{../../../../../../results/@max}"/>
-                <input type="hidden" name="levels" value="{../../../../../../filters/text()}"/>
-                <input type="hidden" name="sort_field" value="{../../../../../../sort/field/text()}"/>
-                <input type="hidden" name="sort_order" value="{../../../../../../sort/field/order}"/>
-                <input type="hidden" name="search_phrase" value="{../../../../../../filters/phrase}"/>
-                <input type="hidden" name="min_cvss_base" value="{../../../../../../filters/min_cvss_base}"/>
-                <input type="hidden" name="apply_min_cvss_base" value="{number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}"/>
-                <input type="hidden" name="notes" value="{../../../../../../filters/notes}"/>
-                <input type="hidden" name="overrides" value="{../../../../../../filters/apply_overrides}"/>
-                <input type="hidden" name="result_hosts_only" value="{../../../../../../filters/result_hosts_only}"/>
-              </xsl:when>
-              <xsl:otherwise>
                 <xsl:choose>
                   <xsl:when test="$delta = 1">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <input type="hidden" name="result_id" value="{../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../filters/apply_overrides}"/>
                     <xsl:call-template name="override-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../."/>
                     </xsl:call-template>
@@ -11824,6 +11831,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
                   </xsl:when>
                   <xsl:when test="$delta = 2">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <input type="hidden" name="result_id" value="{../../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../../filters/apply_overrides}"/>
                     <xsl:call-template name="override-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../../."/>
                     </xsl:call-template>
@@ -11831,6 +11843,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
                   </xsl:when>
                   <xsl:otherwise>
+                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                    <input type="hidden" name="result_id" value="{../../@id}"/>
+                    <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                    <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                    <input type="hidden" name="apply_overrides" value="{../../../../../../filters/apply_overrides}"/>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../../."/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:choose>
+                  <xsl:when test="$delta = 1">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:when test="$delta = 2">
+                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                    <xsl:call-template name="override-detailed-delete-params">
+                      <xsl:with-param name="base" select="../../../../../."/>
+                    </xsl:call-template>
+                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
                     <xsl:call-template name="override-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../."/>
                     </xsl:call-template>
@@ -12384,6 +12427,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_results_response"/>
   <xsl:apply-templates select="commands_response/get_results_response"/>
+  <xsl:apply-templates select="commands_response/get_reports_response"/>
 </xsl:template>
 
 <xsl:template match="get_delta_result">
@@ -12391,6 +12435,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="task_id" select="task/@id"/>
   <xsl:variable name="task_name" select="task/name"/>
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:for-each select="commands_response/get_reports_response/report/report/results/result[@id=$result_id]">
+    <xsl:call-template name="result-details">
+      <xsl:with-param name="delta" select="1"/>
+      <xsl:with-param name="task_id" select="$task_id"/>
+      <xsl:with-param name="task_name" select="$task_name"/>
+    </xsl:call-template>
+  </xsl:for-each>
   <xsl:for-each select="get_reports_response/report/report/results/result[@id=$result_id]">
     <xsl:call-template name="result-details">
       <xsl:with-param name="delta" select="1"/>

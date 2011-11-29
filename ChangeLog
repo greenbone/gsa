@@ -1,3 +1,22 @@
+2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the delete icons working on the result details page, for delta
+	results.
+
+	* src/gsad_omp.c (REQUIRE2): New macro.
+	(get_result): Add the delta case.
+	(delete_note_omp, delete_override_omp): Make param errors a bit nicer.
+	Pass the delta params through to get_result.
+
+	* src/html/omp.xsl (note-detailed-delete-params)
+	(override-detailed-delete-params): Remove report_id.
+	(note-detailed, override-detailed): Add delta handling to the get_result
+	case.
+	(get_result): Match get_reports_response too, because the delta result
+	detail uses this.
+	(get_delta_result): Add a result loop with a "commands_respons" prefix for
+	the result details page.
+
 2011-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (note-detailed-delete-params, note-detailed)
