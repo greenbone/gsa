@@ -11657,7 +11657,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
                     <input type="hidden" name="name" value="{../../../../task/name}"/>
                     <input type="hidden" name="apply_overrides" value="{../../../../filters/apply_overrides}"/>
-                    <xsl:call-template name="override-detailed-delete-params">
+                    <xsl:call-template name="note-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../."/>
                     </xsl:call-template>
                     <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
@@ -11669,7 +11669,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
                     <input type="hidden" name="name" value="{../../../../../task/name}"/>
                     <input type="hidden" name="apply_overrides" value="{../../../../../filters/apply_overrides}"/>
-                    <xsl:call-template name="override-detailed-delete-params">
+                    <xsl:call-template name="note-detailed-delete-params">
                       <xsl:with-param name="base" select="../../../../../."/>
                     </xsl:call-template>
                     <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
@@ -11843,7 +11843,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                    <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
                     <input type="hidden" name="result_id" value="{../../@id}"/>
                     <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
                     <input type="hidden" name="name" value="{../../../../../../task/name}"/>

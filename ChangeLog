@@ -1,5 +1,18 @@
 2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get the note and override delete icons working, even directly after a
+	delete operation.
+
+	* src/gsad_omp.c (get_result): Remove the delta case.  Now done in caller.
+	(delete_note_omp, delete_override_omp): Call get_report directly in the
+	delta case when leading to get_result, instead of complicating get_result.
+	Remove the parameter checks which should be done in get_result.
+
+	* src/html/omp.xsl (note-detailed): Call the right template.
+	(override-detailed): Access report ID lower down, as in the note case.
+
+2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the delete icons working on the result details page, for delta
 	results.
 
@@ -14,8 +27,8 @@
 	case.
 	(get_result): Match get_reports_response too, because the delta result
 	detail uses this.
-	(get_delta_result): Add a result loop with a "commands_respons" prefix for
-	the result details page.
+	(get_delta_result): Add a result loop with a "commands_response" prefix
+	for the result details page.
 
 2011-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
