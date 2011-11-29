@@ -1,5 +1,17 @@
 2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get the result details delta case of the note edit icons working.
+
+	* src/gsad_omp.c (REQUIRE_PARAM): New macro.
+	(edit_note_omp): Make param errors a bit nicer.
+	(save_note_omp): For get_result call get_report for the delta case instead
+	of get_result.
+
+	* src/html/omp.xsl (note-detailed): Add delta result details cases of the
+	edit icons.
+
+2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the note and override delete icons working, even directly after a
 	delete operation.
 

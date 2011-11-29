@@ -11722,6 +11722,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
         <xsl:choose>
+          <xsl:when test="$next='get_result' and $delta = 1">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$next='get_result' and $delta = 2">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;first_result={../../../../../../results/@start}&amp;max_results={../../../../../../results/@max}&amp;sort_field={../../../../../../sort/field/text()}&amp;sort_order={../../../../../../sort/field/order}&amp;levels={../../../../../../filters/text()}&amp;notes={../../../../../../filters/notes}&amp;overrides={../../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../../filters/phrase}&amp;min_cvss_base={../../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;token={/envelope/token}"
                title="Edit Note"
