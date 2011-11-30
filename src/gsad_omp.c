@@ -7681,9 +7681,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   /* Run any extra commands. */
 
+  commands_xml = g_string_new ("");
   if (commands)
     {
-      commands_xml = g_string_new ("");
       if (openvas_server_send (&session, commands)
           == -1)
         {
@@ -7859,6 +7859,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
+          g_string_free (levels, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -7872,6 +7873,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
+          g_string_free (levels, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -7910,6 +7912,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
+          g_string_free (levels, TRUE);
           return ret;
         }
       free_entity (entity);
@@ -7990,6 +7993,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       openvas_server_close (socket, session);
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
+      g_string_free (levels, TRUE);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -8003,6 +8007,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (format_id)
     {
       g_string_free (commands_xml, TRUE);
+      g_string_free (levels, TRUE);
       if (strcmp (format_id, "d5da9f67-8551-4e51-807b-b6a873d70e34") == 0)
         {
           const char *extension, *type;
@@ -8010,7 +8015,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           if (read_entity (&session, &entity))
             {
-              g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -8024,7 +8028,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report == NULL)
             {
               free_entity (entity);
-              g_string_free (xml, TRUE);
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -8042,6 +8045,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    report_id,
                                    extension);
             }
+          xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
           return g_string_free (xml, FALSE);
@@ -8049,8 +8053,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         {
           /* "nbe", "pdf", "dvi", "html", "html-pdf"... */
-
-          g_string_free (xml, TRUE);
 
           if (report_len == NULL)
             {
@@ -8155,6 +8157,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               if (host_search_phrase == NULL)
                 {
                   openvas_server_close (socket, session);
+                  g_string_free (commands_xml, TRUE);
+                  g_string_free (levels, TRUE);
+                  g_string_free (xml, TRUE);
                   xml = g_string_new ("");
                   g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
                                           "Given host search_phrase was invalid",
@@ -8188,10 +8193,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         xml = g_string_new ("<get_report>");
 
       if (commands)
-        {
-          g_string_append (xml, commands_xml->str);
-          g_string_free (commands_xml, TRUE);
-        }
+        g_string_append (xml, commands_xml->str);
+      g_string_free (commands_xml, TRUE);
+      g_string_free (levels, TRUE);
 
       if (strcmp (escalator_id, "0"))
         g_string_append_printf (xml, "<get_reports_escalate_response"
@@ -8208,7 +8212,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
-          g_string_free (commands_xml, TRUE);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -8221,7 +8224,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_append (xml, "</get_prognostic_report>");
           openvas_server_close (socket, session);
-          g_string_free (commands_xml, TRUE);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
@@ -8232,7 +8234,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           else
             g_string_append (xml, "</get_report>");
           openvas_server_close (socket, session);
-          g_string_free (commands_xml, TRUE);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
