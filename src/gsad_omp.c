@@ -9138,6 +9138,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
     }
 
   text = params_value (params, "text");
+  days = params_value (params, "days");
 
   create_note = g_strdup_printf ("<create_note>"
                                  "<active>%s</active>"

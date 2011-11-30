@@ -1,5 +1,9 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_note_omp): Add missing days init.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp, create_override_omp): Set both
 	GET_REPORT overrides OMP flags from the URL param, so that overrides only
 	show when "apply overrides" is chosen.
