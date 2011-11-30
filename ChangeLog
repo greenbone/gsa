@@ -1,5 +1,10 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Allow empty passwords.  If login is empty
+	go to the login page with fail message, instead of an internal error page.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp): Add missing days init.
 
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>

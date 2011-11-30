@@ -1161,13 +1161,20 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (cmd && !strcmp (cmd, "login"))
     {
+      const char *password;
+
+      password = params_value (con_info->params, "password");
+      if ((password == NULL)
+          && (params_original_value (con_info->params, "password") == NULL))
+        password = "";
+
       if (params_value (con_info->params, "login")
-          && params_value (con_info->params, "password"))
+          && password)
         {
           int ret;
           gchar *timezone, *role;
           ret = authenticate_omp (params_value (con_info->params, "login"),
-                                  params_value (con_info->params, "password"),
+                                  password,
                                   &role,
                                   &timezone);
           if (ret)
@@ -1197,7 +1204,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             {
               user_t *user;
               user = user_add (params_value (con_info->params, "login"),
-                               params_value (con_info->params, "password"),
+                               password,
                                timezone,
                                role);
               /* Redirect to get_tasks. */
@@ -1207,6 +1214,32 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               return 1;
             }
         }
+      else if ((params_value (con_info->params, "login") == NULL)
+               && ((params_original_value (con_info->params, "login") == NULL)
+                   || (strcmp (params_original_value (con_info->params, "login"),
+                               "")
+                       == 0)))
+        {
+          time_t now;
+          gchar *xml;
+          char *res;
+          char ctime_now[200];
+
+          now = time (NULL);
+          ctime_r_strip_newline (&now, ctime_now);
+
+          xml = g_strdup_printf ("<login_page>"
+                                 "<message>"
+                                 "Login failed."
+                                 "</message>"
+                                 "<token></token>"
+                                 "<time>%s</time>"
+                                 "</login_page>",
+                                 ctime_now);
+          res = xsl_transform (xml);
+          g_free (xml);
+          con_info->response = res;
+        }
       else
         {
           con_info->response = gsad_message (credentials,
@@ -1214,7 +1247,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                              __FUNCTION__,
                                              __LINE__,
                                              "An internal error occured inside GSA daemon. "
-                                             "Diagnostics: Login or password missing.",
+                                             "Diagnostics: Error in login or password.",
                                              "/omp?cmd=get_tasks");
         }
       con_info->answercode = MHD_HTTP_OK;
