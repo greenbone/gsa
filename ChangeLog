@@ -1,5 +1,10 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [assets]): Only enable the Prognostic Report
+	icon when there is a prognosis.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Allow space around numbers.
 	(params_mhd_validate_values, params_mhd_validate): If the rule is "number"
 	or an alias for "number", then strip any leading and trailing space from

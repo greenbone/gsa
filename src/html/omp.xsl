@@ -12620,12 +12620,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="detail[name = 'report_count' and source/name = 'openvasmd']/value"/>
         </td>
         <td>
+          <xsl:variable name="threat"
+                        select="detail[name = 'prognosis']/value"/>
           <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
              title="Host Details" style="margin-left:3px;">
             <img src="/img/details.png" border="0" alt="Details"/>
           </a>
           <xsl:choose>
-            <xsl:when test="count (detail[name = 'App'])=0">
+            <xsl:when test="(count (detail[name = 'App']) = 0) or (string-length ($threat) = 0)">
               <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
                    style="margin-left:3px;"/>
             </xsl:when>
