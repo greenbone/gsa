@@ -678,7 +678,8 @@ init_validator ()
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "info_name",  "(?s)^.*$");
   openvas_validator_add (validator, "info_type",  "(?s)^.*$");
-  openvas_validator_add (validator, "number",     "^[0-9]+$");
+  /* Number is special cased in params_mhd_validate to remove the space. */
+  openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
   openvas_validator_add (validator, "observers",       "^[-_ [:alnum:]]*$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
@@ -1067,7 +1068,17 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->valid = 0;
               }
             else
-              param->valid = 1;
+              {
+                const gchar *alias_for;
+
+                param->valid = 1;
+
+                alias_for = openvas_validator_alias_for (validator, name);
+                if ((param->value && (strcmp ((gchar*) name, "number") == 0))
+                    || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
+                  /* Remove any leading or trailing space from numbers. */
+                  param->value = g_strstrip (param->value);
+              }
             break;
           case 2:
           default:
@@ -1102,6 +1113,7 @@ params_mhd_validate (void *params)
     {
       param_t *param;
       param = (param_t*) value;
+
       if (openvas_validate (validator, name, param->value))
         {
           param->original_value = param->value;
@@ -1109,7 +1121,17 @@ params_mhd_validate (void *params)
           param->valid = 0;
         }
       else
-        param->valid = 1;
+        {
+          const gchar *alias_for;
+
+          param->valid = 1;
+
+          alias_for = openvas_validator_alias_for (validator, name);
+          if ((param->value && (strcmp ((gchar*) name, "number") == 0))
+              || (alias_for && (strcmp ((gchar*) alias_for, "number") == 0)))
+            /* Remove any leading or trailing space from numbers. */
+            param->value = g_strstrip (param->value);
+        }
 
       if (param->values)
         params_mhd_validate_values (name, param->values);

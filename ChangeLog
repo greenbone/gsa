@@ -1,5 +1,12 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Allow space around numbers.
+	(params_mhd_validate_values, params_mhd_validate): If the rule is "number"
+	or an alias for "number", then strip any leading and trailing space from
+	the number if it is valid.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	In the validator, also store the rule name for aliases.
 
 	* src/validator.c (openvas_validator_rule_new)
