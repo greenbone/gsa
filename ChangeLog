@@ -1,5 +1,19 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	In the validator, also store the rule name for aliases.
+
+	* src/validator.c (openvas_validator_rule_new)
+	(openvas_validator_rule_free, openvas_validator_alias_for): New functions.
+	(openvas_validator_new, openvas_validator_add, openvas_validator_alias)
+	(openvas_validate): Use validator_rule_t instead of regexp as hashtable
+	value.
+
+	* src/validator.h: Add header accordingly.
+	(struct validator_rule): New structure.
+	(validator_rule_t): New type.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Allow empty passwords.  If login is empty
 	go to the login page with fail message, instead of an internal error page.
 

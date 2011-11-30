@@ -24,6 +24,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <assert.h>
+
 #include "tracef.h"
 #include "validator.h"
 
@@ -46,6 +48,39 @@
  */
 
 /**
+ * @brief Create a new validator rule.
+ *
+ * The validator must be freed with \ref validator_rule_free.
+ *
+ * @return A newly allocated validator.
+ */
+validator_rule_t *
+openvas_validator_rule_new (const char *regex)
+{
+  validator_rule_t *rule;
+  rule = g_malloc (sizeof (validator_rule_t));
+  rule->regex = g_strdup (regex);
+  rule->alias_for = NULL;
+  return rule;
+}
+
+
+/**
+ * @brief Free a validator rule.
+ *
+ * @param  rule  Validator rule.
+ */
+void
+openvas_validator_rule_free (validator_rule_t *rule)
+{
+  if (rule)
+    {
+      g_free (rule->alias_for);
+      g_free (rule->regex);
+    }
+}
+
+/**
  * @brief Create a new validator.
  *
  * The validator must be freed with \ref openvas_validator_free.
@@ -58,7 +93,7 @@ openvas_validator_new ()
   return g_hash_table_new_full (g_str_hash,
                                 g_str_equal,
                                 g_free,
-                                g_free);
+                                (void (*) (gpointer)) openvas_validator_rule_free);
 }
 
 /**
@@ -75,7 +110,7 @@ openvas_validator_add (validator_t validator,
 {
   g_hash_table_insert (validator,
                        (gpointer) g_strdup (name),
-                       (gpointer) g_strdup (regex));
+                       (gpointer) openvas_validator_rule_new (regex));
 }
 
 /**
@@ -92,16 +127,46 @@ openvas_validator_alias (validator_t validator,
                          const char *alias,
                          const char *name)
 {
-  gpointer key, regex;
+  gpointer key, value_rule;
 
-  if (g_hash_table_lookup_extended (validator, name, &key, &regex))
+  if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
+      validator_rule_t *alias_rule, *rule;
+      rule = (validator_rule_t*) value_rule;
+      alias_rule = openvas_validator_rule_new (rule->regex
+                                                ? g_strdup (rule->regex)
+                                                : NULL);
+      alias_rule->alias_for = g_strdup (name);
       g_hash_table_insert (validator,
                            (gpointer) g_strdup (alias),
-                           (gpointer) (regex ? g_strdup (regex) : NULL));
+                           (gpointer) alias_rule);
       return 0;
     }
   return -1;
+}
+
+/**
+ * @brief Get the name of the rule for which a rule is an alias.
+ *
+ * @param  validator  Validator.
+ * @param  alias      Name of alias.
+ *
+ * @return Rule name if \p alias is an alias, else NULL.  Freed by
+ *         openvas_validator_free.
+ */
+gchar *
+openvas_validator_alias_for (validator_t validator, const char *alias)
+{
+  gpointer key, value_rule;
+
+  if (g_hash_table_lookup_extended (validator, alias, &key, &value_rule))
+    {
+      validator_rule_t *rule;
+      assert (value_rule);
+      rule = (validator_rule_t*) value_rule;
+      return rule->alias_for;
+    }
+  return NULL;
 }
 
 /**
@@ -117,13 +182,19 @@ openvas_validator_alias (validator_t validator,
 int
 openvas_validate (validator_t validator, const char *name, const char *value)
 {
-  gpointer key, regex;
+  gpointer key, value_rule;
 
   tracef ("%s: name %s value %s", __FUNCTION__, name, value);
 
-  if (g_hash_table_lookup_extended (validator, name, &key, &regex))
+  if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
-      if (regex == NULL)
+      validator_rule_t *rule;
+
+      assert (value_rule);
+
+      rule = (validator_rule_t*) value_rule;
+
+      if (rule->regex == NULL)
         {
           if (value == NULL)
             {
@@ -140,8 +211,8 @@ openvas_validate (validator_t validator, const char *name, const char *value)
           return 2;
         }
 
-      tracef ("matching <%s> against <%s>: ", (char *) regex, value);
-      if (g_regex_match_simple ((const gchar *) regex,
+      tracef ("matching <%s> against <%s>: ", (char *) rule->regex, value);
+      if (g_regex_match_simple (rule->regex,
                                 (const gchar *) value,
                                 0,
                                 0))
