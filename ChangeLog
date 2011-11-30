@@ -1,5 +1,11 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_note_omp, create_override_omp): Set both
+	GET_REPORT overrides OMP flags from the URL param, so that overrides only
+	show when "apply overrides" is chosen.
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get the result details delta case of the override edit icons working.
 
 	* src/gsad_omp.c (edit_override_omp): Make param errors a bit nicer.

@@ -9247,7 +9247,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
-                            " overrides=\"1\""
+                            " overrides=\"%i\""
                             " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
@@ -9260,6 +9260,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
@@ -10619,7 +10620,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
-                            " overrides=\"1\""
+                            " overrides=\"%i\""
                             " overrides_details=\"1\""
                             " result_hosts_only=\"%i\""
                             " report_id=\"%s\""
@@ -10632,6 +10633,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                             " search_phrase=\"%s\""
                             " min_cvss_base=\"%s\"/>",
                             strcmp (notes, "0") ? 1 : 0,
+                            strcmp (overrides, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (result_hosts_only, "0") ? 1 : 0,
                             report_id,
