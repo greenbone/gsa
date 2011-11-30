@@ -10985,23 +10985,17 @@ edit_override_omp (credentials_t * credentials, params_t *params)
   if ((strcmp (next, "get_result") == 0)
       || (strcmp (next, "get_report") == 0))
     {
-      if ((params_value (params, "report_id") == NULL)
-          || (params_value (params, "first_result") == NULL)
-          || (params_value (params, "max_results") == NULL)
-          || (params_value (params, "sort_field") == NULL)
-          || (params_value (params, "sort_order") == NULL)
-          || (params_value (params, "levels") == NULL)
-          || (params_value (params, "notes") == NULL)
-          || (params_value (params, "overrides") == NULL)
-          || (params_value (params, "result_hosts_only") == NULL)
-          || (params_value (params, "search_phrase") == NULL)
-          || (params_value (params, "min_cvss_base") == NULL))
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing an override. "
-                             "The override remains as it was. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("report_id", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("first_result", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("max_results", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("sort_field", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("sort_order", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("levels", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("notes", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("overrides", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("result_hosts_only", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("search_phrase", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("min_cvss_base", "/omp?cmd=get_overrides");
 
       if (sscanf (params_value (params, "first_result"), "%u", &first_result)
           != 1)
@@ -11364,16 +11358,29 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_result") == 0)
     {
-      gchar *first = g_strdup_printf ("%u", first_result);
-      gchar *max = g_strdup_printf ("%u", max_results);
-      char *ret = get_result (credentials, result_id, task_id, task_name,
-                              overrides, modify_override, report_id,
-                              first, max, levels, search_phrase, notes,
-                              overrides, min_cvss_base, result_hosts_only,
-                              sort_field, sort_order, NULL, NULL);
+      char *ret;
+
+      if (params_value (params, "delta_report_id"))
+        ret = get_report (credentials, params, modify_override, NULL, NULL,
+                          NULL);
+      else
+        {
+          gchar *first, *max;
+
+          first = g_strdup_printf ("%u", first_result);
+          max = g_strdup_printf ("%u", max_results);
+
+          ret = get_result (credentials, result_id, task_id, task_name,
+                            overrides, modify_override, report_id,
+                            first, max, levels, search_phrase, notes,
+                            overrides, min_cvss_base, result_hosts_only,
+                            sort_field, sort_order, NULL, NULL);
+
+          g_free (first);
+          g_free (max);
+        }
+
       g_free (modify_override);
-      g_free (first);
-      g_free (max);
       return ret;
     }
 

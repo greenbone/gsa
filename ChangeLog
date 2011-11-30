@@ -1,3 +1,14 @@
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the result details delta case of the override edit icons working.
+
+	* src/gsad_omp.c (edit_override_omp): Make param errors a bit nicer.
+	(save_override_omp): For get_result call get_report for the delta case
+	instead of get_result.
+
+	* src/html/omp.xsl (note-detailed): Correct edit icons min_cvss_base path.
+	(override-detailed): Add delta result details cases of the edit icons.
+
 2011-11-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get the result details delta case of the note edit icons working.
