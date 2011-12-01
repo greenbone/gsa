@@ -641,8 +641,8 @@ init_validator ()
   openvas_validator_add (validator, "escalator_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
-  openvas_validator_add (validator, "family",     "^[-_[:alnum:] :]{1,200}$");
-  openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :]{1,200}$");
+  openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
+  openvas_validator_add (validator, "family_page", "^[-_[:alnum:] :.]{1,200}$");
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   openvas_validator_add (validator, "file:value",   "^yes$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");

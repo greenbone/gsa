@@ -1,6 +1,13 @@
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/gsad_omp.c (init_validator): Allow space around numbers.
+	* src/gsad_omp.c (init_validator): Add . to family rules, for
+	"PCI DSS 2.0".
+
+2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Make sure commands_xml is always defined,
+	because it is always freed.  Free levels.  Remove some cases where xml is
+	freed erroneously.
 
 2011-11-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
