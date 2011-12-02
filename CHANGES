@@ -1,3 +1,22 @@
+gsa 3.0+beta8 (2011-12-02)
+
+This is the eigth beta version of the upcoming 3.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for note lifetimes and empty passwords and improves
+input validation and the navigation when viewing delta reports.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell and Michael Wiegand.
+
+Main changes since 3.0+beta7:
+* The navigation when viewing delta reports had been improved.
+* Support for note lifetimes has been added.
+* Support for empty passwords has been added.
+* Input validation has been improved.
+
+
 gsa 3.0+beta7 (2011-11-23)
 
 This is the seventh beta version of the upcoming 3.0 release of the Greenbone
