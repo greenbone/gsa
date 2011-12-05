@@ -7974,7 +7974,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             delta_report_id ? delta_report_id : "0",
                             format_id
                              ? format_id
-                             : "d5da9f67-8551-4e51-807b-b6a873d70e34",
+                             : "a994b278-1f62-11e1-96ac-406186ea4fc5",
                             first_result,
                             max_results,
                             sort_field ? sort_field : "type",
@@ -8008,7 +8008,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     {
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
-      if (strcmp (format_id, "d5da9f67-8551-4e51-807b-b6a873d70e34") == 0)
+      if (strcmp (format_id, "a994b278-1f62-11e1-96ac-406186ea4fc5") == 0)
         {
           const char *extension, *type;
           /* Manager sends XML report as plain XML. */
