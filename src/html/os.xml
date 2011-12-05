@@ -435,6 +435,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:greenbone:greenbone_os:1.6.0</pattern><title>Greenbone OS 1.6</title><icon>os_gos.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:greenbone:greenbone_os</pattern><title>Greenbone OS</title><icon>os_gos.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:slackware:slackware_linux:8.1</pattern>
         <title>Slackware Linux 8.1</title>
         <icon>os_slackware.png</icon>
