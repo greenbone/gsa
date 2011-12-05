@@ -766,15 +766,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
      </ul>
     </li>
-    <ul>
-     <li>
+    <li>
       <a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Asset Management</a>
       <ul>
        <li class="pointy"></li>
        <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Hosts</a></li>
       </ul>
-     </li>
-    </ul>
+    </li>
     <li>
      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Configuration</a>
      <ul>

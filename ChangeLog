@@ -1,3 +1,8 @@
+2011-12-05  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Fixed bug that caused
+	problems for IE7.
+
 2011-12-05  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (result-detailed): Added product detection box as of
