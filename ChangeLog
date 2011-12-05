@@ -1,5 +1,10 @@
 2011-12-05  Henri Doreau <henri.doreau@greenbone.net>
 
+	* src/html/omp.xsl (result-detailed): Added product detection box as of
+	CR#57 implementation.
+
+2011-12-05  Henri Doreau <henri.doreau@greenbone.net>
+
 	* src/html/os.xml: Added entry for Greenbone OS 1.7.
 
 2011-12-05  Henri Doreau <henri.doreau@greenbone.net>

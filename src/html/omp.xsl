@@ -12165,6 +12165,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
+  <xsl:if test="count (detection)">
+    <div class="issue_box_box">
+      Product detection result:
+      <xsl:call-template name="get_info_cpe_lnk">
+        <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
+      </xsl:call-template>
+      by <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
+          <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
+         </a>
+      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../../report/results/@start}&amp;max_results={../../../report/results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;apply_min_cvss_base={string-length (../../filters/min_cvss_base) &gt; 0}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;token={/envelope/token}"
+       title="Product detection results" style="margin-left:6px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </div>
+  </xsl:if>
   <div class="issue_box_box">
     <xsl:if test="$details-button = 1">
       <xsl:choose>
