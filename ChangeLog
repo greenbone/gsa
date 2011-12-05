@@ -1,5 +1,9 @@
 2011-12-05  Henri Doreau <henri.doreau@greenbone.net>
 
+	* src/html/os.xml: Added entry for Greenbone OS 1.7.
+
+2011-12-05  Henri Doreau <henri.doreau@greenbone.net>
+
 	* src/html/os.xml: Added unnumbered entry for Greenbone OS.
 
 2011-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
