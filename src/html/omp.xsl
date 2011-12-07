@@ -12522,14 +12522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- One system detected: display the corresponding icon and name from our database -->
       <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
       <xsl:variable name="img_desc">
-        <xsl:choose>
-          <xsl:when test="$best_os_txt">
-            <xsl:value-of select="$best_os_txt"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
       </xsl:variable>
       <xsl:choose>
         <xsl:when test="$os_icon">

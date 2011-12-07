@@ -1,3 +1,8 @@
+2011-12-07  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (os-icon): Always display OS icon title as defined
+	in os.xml to ensure consistency.
+
 2011-12-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Switch to new report format UUID.
