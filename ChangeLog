@@ -1,5 +1,9 @@
 2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl: Wrap all radio inputs in labels.
+
+2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Wrap all checkbox inputs in labels.
 
 2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>

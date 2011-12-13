@@ -81,13 +81,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="even">
             <td valign="top">Host Access</td>
             <td>
-              <input type="radio" name="hosts_allow" value="2" checked="1"/>
-              Allow All
+              <label>
+                <input type="radio" name="hosts_allow" value="2" checked="1"/>
+                Allow All
+              </label>
               <br/>
-              <input type="radio" name="hosts_allow" value="1"/>
-              Allow:
-              <input type="radio" name="hosts_allow" value="0"/>
-              Deny:
+              <label>
+                <input type="radio" name="hosts_allow" value="1"/>
+                Allow:
+              </label>
+              <label>
+                <input type="radio" name="hosts_allow" value="0"/>
+                Deny:
+              </label>
               <br/>
               <input type="text" name="access_hosts" value="" size="30"
                      maxlength="500"/>
@@ -358,8 +364,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="125">Password</td>
             <td>
-              <input type="radio" name="modify_password" value="0" checked="1"/>
-              Use existing value
+              <label>
+                <input type="radio" name="modify_password" value="0" checked="1"/>
+                Use existing value
+              </label>
               <br/>
               <input type="radio" name="modify_password" value="1"/>
               <input type="password" name="password" value="" size="30"
@@ -393,34 +401,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top">Host Access</td>
             <td>
-              <xsl:choose>
-                <xsl:when test="count(hosts) = 0 or hosts/@allow &gt; 1">
-                  <input type="radio" name="hosts_allow" value="2" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="hosts_allow" value="2"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              Allow All
+              <label>
+                <xsl:choose>
+                  <xsl:when test="count(hosts) = 0 or hosts/@allow &gt; 1">
+                    <input type="radio" name="hosts_allow" value="2" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="2"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow All
+              </label>
               <br/>
-              <xsl:choose>
-                <xsl:when test="hosts/@allow = 1">
-                  <input type="radio" name="hosts_allow" value="1" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="hosts_allow" value="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              Allow:
-              <xsl:choose>
-                <xsl:when test="hosts/@allow = 0">
-                  <input type="radio" name="hosts_allow" value="0" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="hosts_allow" value="0"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              Deny:
+              <label>
+                <xsl:choose>
+                  <xsl:when test="hosts/@allow = 1">
+                    <input type="radio" name="hosts_allow" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Allow:
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="hosts/@allow = 0">
+                    <input type="radio" name="hosts_allow" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Deny:
+              </label>
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
                      maxlength="500"/>
