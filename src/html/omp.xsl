@@ -689,27 +689,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
 <!--
           <div style="padding: 2px;">
-            <xsl:choose>
-              <xsl:when test="report/filters/result_hosts_only = 0">
-                <input type="checkbox" name="result_hosts_only" value="1"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            Only show hosts that have results
+            <label>
+              <xsl:choose>
+                <xsl:when test="report/filters/result_hosts_only = 0">
+                  <input type="checkbox" name="result_hosts_only" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              Only show hosts that have results
+            </label>
           </div>
           <div style="padding: 2px;">
-            <xsl:choose>
-              <xsl:when test="report/filters/min_cvss_base = ''">
-                <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="checkbox" name="apply_min_cvss_base" value="1"
-                       checked="1"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            CVSS &gt;=
+            <label>
+              <xsl:choose>
+                <xsl:when test="report/filters/min_cvss_base = ''">
+                  <input type="checkbox" name="apply_min_cvss_base" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="apply_min_cvss_base" value="1"
+                         checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              CVSS &gt;=
+            </label>
             <select name="min_cvss_base">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'10.0'"/>
@@ -782,40 +786,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <table style="display: inline">
               <tr>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='High']">
-                      <input type="checkbox" name="level_high" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_high" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/high.png" alt="High" title="High"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='High']">
+                        <input type="checkbox" name="level_high" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_high" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/high.png" alt="High" title="High"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Medium']">
-                      <input type="checkbox" name="level_medium" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_medium" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Medium']">
+                        <input type="checkbox" name="level_medium" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_medium" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Low']">
-                      <input type="checkbox" name="level_low" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_low" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/low.png" alt="Low" title="Low"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Low']">
+                        <input type="checkbox" name="level_low" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_low" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/low.png" alt="Low" title="Low"/>
+                  </label>
                 </td>
               </tr>
             </table>
@@ -1705,52 +1715,60 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div style="float: right;">
               <div style="padding: 2px;">Show delta results:</div>
               <div style="margin-left: 8px;">
-                <xsl:choose>
-                  <xsl:when test="report/filters/delta/same = 0">
-                    <input type="checkbox" name="delta_state_same" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="delta_state_same"
-                           value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                = same
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/delta/same = 0">
+                      <input type="checkbox" name="delta_state_same" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="delta_state_same"
+                             value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  = same
+                </label>
               </div>
               <div style="margin-left: 8px;">
-                <xsl:choose>
-                  <xsl:when test="report/filters/delta/new = 0">
-                    <input type="checkbox" name="delta_state_new" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="delta_state_new"
-                           value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                + new
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/delta/new = 0">
+                      <input type="checkbox" name="delta_state_new" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="delta_state_new"
+                             value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  + new
+                </label>
               </div>
               <div style="margin-left: 8px;">
-                <xsl:choose>
-                  <xsl:when test="report/filters/delta/gone = 0">
-                    <input type="checkbox" name="delta_state_gone" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="delta_state_gone"
-                           value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                &#8722; gone
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/delta/gone = 0">
+                      <input type="checkbox" name="delta_state_gone" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="delta_state_gone"
+                             value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  &#8722; gone
+                </label>
               </div>
               <div style="margin-left: 8px;">
-                <xsl:choose>
-                  <xsl:when test="report/filters/delta/changed = 0">
-                    <input type="checkbox" name="delta_state_changed" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="delta_state_changed"
-                           value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                ~ changed
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/delta/changed = 0">
+                      <input type="checkbox" name="delta_state_changed" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="delta_state_changed"
+                             value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  ~ changed
+                </label>
               </div>
             </div>
           </xsl:if>
@@ -1766,15 +1784,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <div style="padding: 2px;">
-                <xsl:choose>
-                  <xsl:when test="report/filters/notes = 0">
-                    <input type="checkbox" name="notes" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="notes" value="1" checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                Show notes
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/notes = 0">
+                      <input type="checkbox" name="notes" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="notes" value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  Show notes
+                </label>
               </div>
             </xsl:otherwise>
           </xsl:choose>
@@ -1782,26 +1802,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div style="padding: 2px;">
             <xsl:choose>
               <xsl:when test="report/filters/result_hosts_only = 0">
-                <input type="checkbox" name="result_hosts_only" value="1"/>
-                Only show hosts that have results
+                <label>
+                  <input type="checkbox" name="result_hosts_only" value="1"/>
+                  Only show hosts that have results
+                </label>
               </xsl:when>
               <xsl:otherwise>
-                <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
-                Only show hosts that have results
+                <label>
+                  <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
+                  Only show hosts that have results
+                </label>
               </xsl:otherwise>
             </xsl:choose>
           </div>
           <div style="padding: 2px;">
-            <xsl:choose>
-              <xsl:when test="report/filters/min_cvss_base = ''">
-                <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="checkbox" name="apply_min_cvss_base" value="1"
-                       checked="1"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            CVSS &gt;=
+            <label>
+              <xsl:choose>
+                <xsl:when test="report/filters/min_cvss_base = ''">
+                  <input type="checkbox" name="apply_min_cvss_base" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="apply_min_cvss_base" value="1"
+                         checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              CVSS &gt;=
+            </label>
             <select name="min_cvss_base">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'10.0'"/>
@@ -1873,68 +1899,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <table style="display: inline">
               <tr>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='High']">
-                      <input type="checkbox" name="level_high" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_high" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/high.png" alt="High" title="High"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='High']">
+                        <input type="checkbox" name="level_high" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_high" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/high.png" alt="High" title="High"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Medium']">
-                      <input type="checkbox" name="level_medium" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_medium" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Medium']">
+                        <input type="checkbox" name="level_medium" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_medium" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Low']">
-                      <input type="checkbox" name="level_low" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_low" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/low.png" alt="Low" title="Low"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Low']">
+                        <input type="checkbox" name="level_low" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_low" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/low.png" alt="Low" title="Low"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='Log']">
-                      <input type="checkbox" name="level_log" value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="level_log" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/log.png" alt="Log" title="Log"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='Log']">
+                        <input type="checkbox" name="level_log" value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="level_log" value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/log.png" alt="Log" title="Log"/>
+                  </label>
                 </td>
                 <td class="threat_info_table_h">
-                  <xsl:choose>
-                    <xsl:when test="report/filters/filter[text()='False Positive']">
-                      <input type="checkbox"
-                             name="level_false_positive"
-                             value="1"
-                             checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox"
-                             name="level_false_positive"
-                             value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/filter[text()='False Positive']">
+                        <input type="checkbox"
+                               name="level_false_positive"
+                               value="1"
+                               checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox"
+                               name="level_false_positive"
+                               value="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
+                  </label>
                 </td>
               </tr>
             </table>
@@ -3858,23 +3894,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top">Password</td>
             <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
-                  <input type="checkbox" name="enable_off" value="1"
-                         disabled="1"/>
-                  Replace existing value with:
-                  <br/>
-                  <input type="password" name="password" size="30" maxlength="400"
-                         disabled="1" value=""/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="checkbox" name="enable" value="1"/>
-                  Replace existing value with:
-                  <br/>
-                  <input type="password" autocomplete="off" name="password"
-                         size="30" maxlength="400" value=""/>
-                </xsl:otherwise>
-              </xsl:choose>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                    <input type="checkbox" name="enable_off" value="1"
+                           disabled="1"/>
+                    Replace existing value with:
+                    <br/>
+                    <input type="password" name="password" size="30" maxlength="400"
+                           disabled="1" value=""/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="enable" value="1"/>
+                    Replace existing value with:
+                    <br/>
+                    <input type="password" autocomplete="off" name="password"
+                           size="30" maxlength="400" value=""/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </label>
             </td>
           </tr>
           <tr>
@@ -6030,25 +6068,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </xsl:when>
         <xsl:when test="type='password'">
-          <input type="checkbox" name="password:{nvt/name}[password]:{name}"
-                 value="yes"/>
-          Replace existing value with:
+          <label>
+            <input type="checkbox" name="password:{nvt/name}[password]:{name}"
+                   value="yes"/>
+            Replace existing value with:
+          </label>
           <br/>
           <input type="password" autocomplete="off"
                  name="preference:{nvt/name}[password]:{name}"
                  value="{value}" size="30" maxlength="40"/>
         </xsl:when>
         <xsl:when test="type='file'">
-          <input type="checkbox" name="file:{nvt/name}[file]:{name}"
-                 value="yes"/>
-          <xsl:choose>
-            <xsl:when test="string-length(value) &gt; 0">
-              Replace existing file with:
-            </xsl:when>
-            <xsl:otherwise>
-              Upload file:
-            </xsl:otherwise>
-          </xsl:choose>
+          <label>
+            <input type="checkbox" name="file:{nvt/name}[file]:{name}"
+                   value="yes"/>
+            <xsl:choose>
+              <xsl:when test="string-length(value) &gt; 0">
+                Replace existing file with:
+              </xsl:when>
+              <xsl:otherwise>
+                Upload file:
+              </xsl:otherwise>
+            </xsl:choose>
+          </label>
           <br/>
           <input type="file" name="preference:{nvt/name}[file]:{name}" size="30"/>
         </xsl:when>
@@ -13910,8 +13952,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="odd">
               <td valign="top">Password</td>
               <td>
-                <input type="checkbox" name="enable" value="1"/>
-                Replace existing value with:
+                <label>
+                  <input type="checkbox" name="enable" value="1"/>
+                  Replace existing value with:
+                </label>
                 <br/>
                 <input type="password" autocomplete="off" name="password"
                        size="30" maxlength="400" value=""/>
