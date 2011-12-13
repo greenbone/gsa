@@ -1,3 +1,9 @@
+2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add missing command.
+
+	* src/gsad_omp.c (save_container_task_omp): Save the observers too.
+
 2011-12-07  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (os-icon): Always display OS icon title as defined

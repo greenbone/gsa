@@ -601,6 +601,7 @@ init_validator ()
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
+                         "|(save_container_task)"
                          "|(save_lsc_credential)"
                          "|(save_my_settings)"
                          "|(save_note)"

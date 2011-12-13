@@ -1201,7 +1201,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
   const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
-  const char *overrides, *refresh_interval;
+  const char *overrides, *refresh_interval, *observers;
   int apply_overrides;
 
   comment = params_value (params, "comment");
@@ -1212,10 +1212,11 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   task_id = params_value (params, "task_id");
   overrides = params_value (params, "overrides");
   refresh_interval = params_value (params, "refresh_interval");
+  observers = params_value (params, "observers");
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
-  if (comment == NULL || name == NULL)
+  if (comment == NULL || name == NULL || observers == NULL)
     return edit_task (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
@@ -1231,10 +1232,12 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
                                  "<comment>%s</comment>"
+                                 "<observers>%s</observers>"
                                  "</modify_task>",
                                  task_id,
                                  name,
-                                 comment);
+                                 comment,
+                                 observers);
 
   if (strcmp (next, "get_tasks") == 0)
     {
