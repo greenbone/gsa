@@ -8438,17 +8438,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                      content_disposition);
 }
 
-#define REQUIRE(arg)                                                  \
-  if (arg == NULL)                                                    \
-    return gsad_message (credentials,                                 \
-                         "Internal error", __FUNCTION__, __LINE__,    \
-                         "An internal error occurred."                \
-                         " Diagnostics: Required parameter \""        \
-                         G_STRINGIFY (arg)                            \
-                         "\" was NULL.",                              \
-                         "/omp?cmd=get_tasks")
-
-#define REQUIRE2(arg, backurl)                                        \
+#define REQUIRE(arg, backurl)                                         \
   if (arg == NULL)                                                    \
     return gsad_message (credentials,                                 \
                          "Internal error", __FUNCTION__, __LINE__,    \
@@ -8509,14 +8499,14 @@ get_result (credentials_t *credentials, const char *result_id,
   int socket;
   gchar *html;
 
-  REQUIRE (apply_overrides);
-  REQUIRE (task_name);
-  REQUIRE (notes);
-  REQUIRE (overrides);
-  REQUIRE (min_cvss_base);
-  REQUIRE (result_hosts_only);
-  REQUIRE (sort_field);
-  REQUIRE (sort_order);
+  REQUIRE (apply_overrides, "/omp?cmd=get_tasks");
+  REQUIRE (task_name, "/omp?cmd=get_tasks");
+  REQUIRE (notes, "/omp?cmd=get_tasks");
+  REQUIRE (overrides, "/omp?cmd=get_tasks");
+  REQUIRE (min_cvss_base, "/omp?cmd=get_tasks");
+  REQUIRE (result_hosts_only, "/omp?cmd=get_tasks");
+  REQUIRE (sort_field, "/omp?cmd=get_tasks");
+  REQUIRE (sort_order, "/omp?cmd=get_tasks");
 
   if (apply_overrides == NULL || task_name == NULL || notes == NULL
       || overrides == NULL || min_cvss_base == NULL || result_hosts_only == NULL
@@ -8540,7 +8530,7 @@ get_result (credentials_t *credentials, const char *result_id,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while getting a result. "
                              "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_results");
+                             "/omp?cmd=get_tasks");
     }
 
   xml = g_string_new ("<get_result>");
@@ -8612,7 +8602,7 @@ get_result (credentials_t *credentials, const char *result_id,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_results");
+                           "/omp?cmd=get_tasks");
     }
 
   if (read_string (&session, &xml))
@@ -8623,7 +8613,7 @@ get_result (credentials_t *credentials, const char *result_id,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a result. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_results");
+                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
@@ -9430,8 +9420,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
   next = params_value (params, "next");
   note_id = params_value (params, "note_id");
 
-  REQUIRE (next);
-  REQUIRE (note_id);
+  REQUIRE (next, "/omp?cmd=get_notes");
+  REQUIRE (note_id, "/omp?cmd=get_notes");
 
   if (strcmp (next, "get_report") == 0)
     {

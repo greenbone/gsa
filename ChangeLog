@@ -1,5 +1,10 @@
 2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (REQUIRE): Add backurl arg.  Update callers.
+	(REQUIRE2): Remove.  Now same as REQUIRE.
+
+2011-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add missing command.
 
 	* src/gsad_omp.c (save_container_task_omp): Save the observers too.
