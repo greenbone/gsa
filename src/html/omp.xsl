@@ -3672,14 +3672,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table>
                 <tr>
                   <td colspan="3">
-                    <input type="radio" name="base" value="gen"/>
-                    Autogenerate credential
+                    <label>
+                      <input type="radio" name="base" value="gen"/>
+                      Autogenerate credential
+                    </label>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base" value="pass" checked="1"/>
-                    Password
+                    <label>
+                      <input type="radio" name="base" value="pass" checked="1"/>
+                      Password
+                    </label>
                   </td>
                   <td>
                     <input type="password" autocomplete="off"
@@ -3689,8 +3693,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td colspan="3">
-                    <input type="radio" name="base" value="key"/>
-                    Key pair
+                    <label>
+                      <input type="radio" name="base" value="key"/>
+                      Key pair
+                    </label>
                   </td>
                 </tr>
                 <tr>
@@ -4361,8 +4367,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="2" valign="top">
-                    <input type="radio" name="event" value="Task run status changed" checked="1"/>
-                    Task run status changed to
+                    <label>
+                      <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                      Task run status changed to
+                    </label>
                     <select name="event_data:status">
                       <option value="Delete Requested">Delete Requested</option>
                       <option value="Done" selected="1">Done</option>
@@ -4383,14 +4391,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="2" valign="top">
-                    <input type="radio" name="condition" value="Always" checked="1"/>
-                    Always
+                    <label>
+                      <input type="radio" name="condition" value="Always" checked="1"/>
+                      Always
+                    </label>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
-                    <input type="radio" name="condition" value="Threat level at least"/>
-                    Threat level is at least
+                    <label>
+                      <input type="radio" name="condition" value="Threat level at least"/>
+                      Threat level is at least
+                    </label>
                     <select name="condition_data:level">
                       <option value="High" selected="1">High</option>
                       <option value="Medium">Medium</option>
@@ -4401,8 +4413,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
-                    <input type="radio" name="condition" value="Threat level changed"/>
-                    Threat level
+                    <label>
+                      <input type="radio" name="condition" value="Threat level changed"/>
+                      Threat level
+                    </label>
                     <select name="condition_data:direction">
                       <option value="changed" selected="1">changed</option>
                       <option value="increased">increased</option>
@@ -4419,8 +4433,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="3" valign="top">
-                    <input type="radio" name="method" value="Email" checked="1"/>
-                    Email
+                    <label>
+                      <input type="radio" name="method" value="Email" checked="1"/>
+                      Email
+                    </label>
                   </td>
                 </tr>
                 <tr>
@@ -4444,14 +4460,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <table>
                       <tr>
                         <td colspan="3" valign="top">
-                          <input type="radio" name="method_data:notice" value="1" checked="1"/>
-                          Simple notice
+                          <label>
+                            <input type="radio" name="method_data:notice" value="1" checked="1"/>
+                            Simple notice
+                          </label>
                         </td>
                       </tr>
                       <tr>
                         <td colspan="3" valign="top">
-                          <input type="radio" name="method_data:notice" value="0"/>
-                          Include report
+                          <label>
+                            <input type="radio" name="method_data:notice" value="0"/>
+                            Include report
+                          </label>
                           <select name="method_data:notice_report_format">
                             <xsl:for-each select="$report-formats/report_format">
                               <xsl:if test="substring(content_type, 1, 5) = 'text/'">
@@ -4474,8 +4494,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </tr>
                       <tr>
                         <td colspan="3" valign="top">
-                          <input type="radio" name="method_data:notice" value="2"/>
-                          Attach report
+                          <label>
+                            <input type="radio" name="method_data:notice" value="2"/>
+                            Attach report
+                          </label>
                           <select name="method_data:notice_attach_format">
                             <xsl:for-each select="$report-formats/report_format">
                               <xsl:choose>
@@ -4506,8 +4528,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="3" valign="top">
-                    <input type="radio" name="method" value="syslog syslog"/>
-                    System Logger (Syslog)
+                    <label>
+                      <input type="radio" name="method" value="syslog syslog"/>
+                      System Logger (Syslog)
+                    </label>
                   </td>
                 </tr>
               </table>
@@ -4519,8 +4543,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="3" valign="top">
-                    <input type="radio" name="method" value="syslog SNMP"/>
-                    SNMP
+                    <label>
+                      <input type="radio" name="method" value="syslog SNMP"/>
+                      SNMP
+                    </label>
                   </td>
                 </tr>
               </table>
@@ -4532,8 +4558,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="3" valign="top">
-                    <input type="radio" name="method" value="HTTP Get"/>
-                    HTTP Get
+                    <label>
+                      <input type="radio" name="method" value="HTTP Get"/>
+                      HTTP Get
+                    </label>
                   </td>
                 </tr>
                 <tr>
@@ -4552,8 +4580,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table border="0" width="100%">
                 <tr>
                   <td colspan="3" valign="top">
-                    <input type="radio" name="method" value="Sourcefire Connector"/>
-                    Sourcefire Connector
+                    <label>
+                      <input type="radio" name="method" value="Sourcefire Connector"/>
+                      Sourcefire Connector
+                    </label>
                   </td>
                 </tr>
                 <tr>
@@ -5100,9 +5130,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <table>
                   <tr>
                     <td>
-                      <input type="radio" name="target_source" value="manual"
-                             checked="1"/>
-                      Manual
+                      <label>
+                        <input type="radio" name="target_source" value="manual"
+                               checked="1"/>
+                        Manual
+                      </label>
                     </td>
                     <td>
                       <input type="text" name="hosts" value="localhost" size="30"
@@ -5111,8 +5143,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </tr>
                   <tr>
                     <td>
-                      <input type="radio" name="target_source" value="import"/>
-                      Import
+                      <label>
+                        <input type="radio" name="target_source" value="import"/>
+                        Import
+                      </label>
                     </td>
                     <td>
                       <select name="target_locator">
@@ -5552,17 +5586,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base"
-                           value="085569ce-73ed-11df-83c3-002264764cea"
-                           checked="1"/>
-                    Empty, static and fast
+                    <label>
+                      <input type="radio" name="base"
+                             value="085569ce-73ed-11df-83c3-002264764cea"
+                             checked="1"/>
+                      Empty, static and fast
+                    </label>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <input type="radio" name="base"
-                           value="daba56c8-73ec-11df-a475-002264764cea"/>
-                    Full and fast
+                    <label>
+                      <input type="radio" name="base"
+                             value="daba56c8-73ec-11df-a475-002264764cea"/>
+                      Full and fast
+                    </label>
                   </td>
                 </tr>
               </table>
@@ -5966,20 +6004,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="type='checkbox'">
           <xsl:choose>
             <xsl:when test="value='yes'">
-              <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
-                     value="yes" checked="1"/>
-              yes
-              <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
-                     value="no"/>
-              no
+              <label>
+                <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
+                       value="yes" checked="1"/>
+                yes
+              </label>
+              <label>
+                <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
+                       value="no"/>
+                no
+              </label>
             </xsl:when>
             <xsl:otherwise>
-              <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
-                     value="yes"/>
-              yes
-              <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
-                     value="no" checked="1"/>
-              no
+              <label>
+                <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
+                       value="yes"/>
+                yes
+              </label>
+              <label>
+                <input type="radio" name="preference:{nvt/name}[checkbox]:{name}"
+                       value="no" checked="1"/>
+                no
+              </label>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -6011,15 +6057,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  value="{value}" size="30" maxlength="400"/>
         </xsl:when>
         <xsl:when test="type='radio'">
-          <input type="radio" name="preference:{nvt/name}[radio]:{name}"
-                 value="{value}" checked="1"/>
-          <xsl:value-of select="value"/>
+          <label>
+            <input type="radio" name="preference:{nvt/name}[radio]:{name}"
+                   value="{value}" checked="1"/>
+            <xsl:value-of select="value"/>
+          </label>
           <xsl:for-each select="alt">
             <br/>
-            <input type="radio"
-                   name="preference:{../nvt/name}[radio]:{../name}"
-                   value="{text()}"/>
-            <xsl:value-of select="."/>
+            <label>
+              <input type="radio"
+                     name="preference:{../nvt/name}[radio]:{../name}"
+                     value="{text()}"/>
+              <xsl:value-of select="."/>
+            </label>
           </xsl:for-each>
         </xsl:when>
         <xsl:when test="type=''">
@@ -6027,20 +6077,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="name='ping_hosts' or name='reverse_lookup' or name='unscanned_closed' or name='nasl_no_signature_check' or name='ping_hosts' or name='reverse_lookup' or name='unscanned_closed' or name='auto_enable_dependencies' or name='kb_dont_replay_attacks' or name='kb_dont_replay_denials' or name='kb_dont_replay_info_gathering' or name='kb_dont_replay_scanners' or name='kb_restore' or name='log_whole_attack' or name='only_test_hosts_whose_kb_we_dont_have' or name='only_test_hosts_whose_kb_we_have' or name='optimize_test' or name='safe_checks' or name='save_knowledge_base' or name='silent_dependencies' or name='slice_network_addresses' or name='use_mac_addr' or name='drop_privileges' or name='network_scan'">
               <xsl:choose>
                 <xsl:when test="value='yes'">
-                  <input type="radio" name="preference:scanner[scanner]:{name}"
-                         value="yes" checked="1"/>
-                  yes
-                  <input type="radio" name="preference:scanner[scanner]:{name}"
-                         value="no"/>
-                  no
+                  <label>
+                    <input type="radio" name="preference:scanner[scanner]:{name}"
+                           value="yes" checked="1"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="preference:scanner[scanner]:{name}"
+                           value="no"/>
+                    no
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="preference:scanner[scanner]:{name}"
-                         value="yes"/>
-                  yes
-                  <input type="radio" name="preference:scanner[scanner]:{name}"
-                         value="no" checked="1"/>
-                  no
+                  <label>
+                    <input type="radio" name="preference:scanner[scanner]:{name}"
+                           value="yes"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="preference:scanner[scanner]:{name}"
+                           value="no" checked="1"/>
+                    no
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
@@ -6156,20 +6214,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="even">
         <td>Timeout</td>
         <td>
-          <xsl:choose>
-            <xsl:when test="string-length(timeout) &gt; 0">
-              <input type="radio"
-                     name="timeout"
-                     value="0"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="radio"
-                     name="timeout"
-                     value="0"
-                     checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          Apply default timeout
+          <label>
+            <xsl:choose>
+              <xsl:when test="string-length(timeout) &gt; 0">
+                <input type="radio"
+                       name="timeout"
+                       value="0"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="radio"
+                       name="timeout"
+                       value="0"
+                       checked="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            Apply default timeout
+          </label>
           <br/>
           <xsl:choose>
             <xsl:when test="string-length(timeout) &gt; 0">
@@ -6387,45 +6447,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td style="text-align:center;">
-          <xsl:choose>
-            <xsl:when test="$config-family">
-              <xsl:choose>
-                <xsl:when test="$config-family/growing=1">
-                  <input type="radio" name="trend:{$current_name}" value="1"
-                         checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="trend:{$current_name}" value="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="radio" name="trend:{$current_name}" value="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <img src="/img/trend_more.png"
-               alt="Grows"
-               title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
-          <xsl:choose>
-            <xsl:when test="$config-family">
-              <xsl:choose>
-                <xsl:when test="$config-family/growing=0">
-                  <input type="radio" name="trend:{$current_name}" value="0"
-                         checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="trend:{$current_name}" value="0"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="radio" name="trend:{$current_name}" value="0"
-                     checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <img src="/img/trend_nochange.png"
-               alt="Static"
-               title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+          <label>
+            <xsl:choose>
+              <xsl:when test="$config-family">
+                <xsl:choose>
+                  <xsl:when test="$config-family/growing=1">
+                    <input type="radio" name="trend:{$current_name}" value="1"
+                           checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="trend:{$current_name}" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="radio" name="trend:{$current_name}" value="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <img src="/img/trend_more.png"
+                 alt="Grows"
+                 title="The NVT selection is DYNAMIC. New NVT's will automatically be added and considered."/>
+          </label>
+          <label>
+            <xsl:choose>
+              <xsl:when test="$config-family">
+                <xsl:choose>
+                  <xsl:when test="$config-family/growing=0">
+                    <input type="radio" name="trend:{$current_name}" value="0"
+                           checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="trend:{$current_name}" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="radio" name="trend:{$current_name}" value="0"
+                       checked="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <img src="/img/trend_nochange.png"
+                 alt="Static"
+                 title="The NVT selection is STATIC. New NVT's will NOT automatically be added or considered."/>
+          </label>
         </td>
         <td style="text-align:center;">
           <xsl:choose>
@@ -6586,24 +6650,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           Family
           <xsl:choose>
             <xsl:when test="$config/family_count/growing=1">
-              <input type="radio" name="trend:" value="1" checked="1"/>
-              <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
-              <input type="radio" name="trend:" value="0"/>
-              <img src="/img/trend_nochange.png"
-                   alt="Static"
-                   title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+              <label>
+                <input type="radio" name="trend:" value="1" checked="1"/>
+                <img src="/img/trend_more.png"
+                     alt="Grows"
+                     title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+              </label>
+              <label>
+                <input type="radio" name="trend:" value="0"/>
+                <img src="/img/trend_nochange.png"
+                     alt="Static"
+                     title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+              </label>
             </xsl:when>
             <xsl:otherwise>
-              <input type="radio" name="trend:" value="1"/>
-              <img src="/img/trend_more.png"
-                   alt="Grows"
-                   title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
-              <input type="radio" name="trend:" value="0" checked="0"/>
-              <img src="/img/trend_nochange.png"
-                   alt="Static"
-                   title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+              <label>
+                <input type="radio" name="trend:" value="1"/>
+                <img src="/img/trend_more.png"
+                     alt="Grows"
+                     title="The family selection is DYNAMIC. New families will automatically be added and considered."/>
+              </label>
+              <label>
+                <input type="radio" name="trend:" value="0" checked="0"/>
+                <img src="/img/trend_nochange.png"
+                     alt="Static"
+                     title="The family selection is STATIC. New families will NOT automatically be added or considered."/>
+              </label>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -8952,18 +9024,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <div>
-                <input type="radio" name="active" value="-1" checked="1"/>
-                yes, always
+                <label>
+                  <input type="radio" name="active" value="-1" checked="1"/>
+                  yes, always
+                </label>
               </div>
               <div>
-                <input type="radio" name="active" value="1"/>
-                yes, for the next
-                <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                days
+                <label>
+                  <input type="radio" name="active" value="1"/>
+                  yes, for the next
+                </label>
+                <label>
+                  <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                  days
+                </label>
               </div>
               <div>
-                <input type="radio" name="active" value="0"/>
-                no
+                <label>
+                  <input type="radio" name="active" value="0"/>
+                  no
+                </label>
               </div>
             </td>
           </tr>
@@ -8972,10 +9052,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Hosts
             </td>
             <td>
-              <input type="radio" name="hosts" value=""/>
-              Any
-              <input type="radio" name="hosts" value="{hosts}" checked="1"/>
-              <xsl:value-of select="hosts"/>
+              <label>
+                <input type="radio" name="hosts" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="hosts" value="{hosts}" checked="1"/>
+                <xsl:value-of select="hosts"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -8983,10 +9067,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Port
             </td>
             <td>
-              <input type="radio" name="port" value=""/>
-              Any
-              <input type="radio" name="port" value="{port}" checked="1"/>
-              <xsl:value-of select="port"/>
+              <label>
+                <input type="radio" name="port" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="port" value="{port}" checked="1"/>
+                <xsl:value-of select="port"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -8994,10 +9082,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Threat
             </td>
             <td>
-              <input type="radio" name="threat" value=""/>
-              Any
-              <input type="radio" name="threat" value="{threat}" checked="1"/>
-              <xsl:value-of select="threat"/>
+              <label>
+                <input type="radio" name="threat" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="threat" value="{threat}" checked="1"/>
+                <xsl:value-of select="threat"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9005,11 +9097,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Task
             </td>
             <td>
-              <input type="radio" name="note_task_id" value=""/>
-              Any
-              <input type="radio" name="note_task_id" value="{task/@id}"
-                     checked="1"/>
-              <xsl:value-of select="task/name"/>
+              <label>
+                <input type="radio" name="note_task_id" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="note_task_id" value="{task/@id}"
+                       checked="1"/>
+                <xsl:value-of select="task/name"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9017,10 +9113,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Result
             </td>
             <td>
-              <input type="radio" name="note_result_id" value="" checked="1"/>
-              Any
-              <input type="radio" name="note_result_id" value="{result/@id}"/>
-              <xsl:value-of select="result/@id"/>
+              <label>
+                <input type="radio" name="note_result_id" value="" checked="1"/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="note_result_id" value="{result/@id}"/>
+                <xsl:value-of select="result/@id"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9130,55 +9230,81 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:choose>
                 <xsl:when test="get_notes_response/note/active='1' and string-length(get_notes_response/note/end_time) &gt; 0">
                   <div>
-                    <input type="radio" name="active" value="-1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="-2" checked="1"/>
-                    yes, until
-                    <xsl:value-of select="get_notes_response/note/end_time"/>
+                    <label>
+                      <input type="radio" name="active" value="-2" checked="1"/>
+                      yes, until
+                      <xsl:value-of select="get_notes_response/note/end_time"/>
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    days
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
+                    <label>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      days
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0"/>
+                      no
+                    </label>
                   </div>
                 </xsl:when>
                 <xsl:when test="get_notes_response/note/active='1'">
                   <div>
-                    <input type="radio" name="active" value="-1" checked="1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1" checked="1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    days
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
+                    <label>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      days
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0"/>
+                      no
+                    </label>
                   </div>
                 </xsl:when>
                 <xsl:otherwise>
                   <div>
-                    <input type="radio" name="active" value="-1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    days
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
+                    <label>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      days
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0" checked="1"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0" checked="1"/>
+                      no
+                    </label>
                   </div>
                 </xsl:otherwise>
               </xsl:choose>
@@ -9191,16 +9317,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_notes_response/note/hosts) = 0">
-                  <input type="radio" name="hosts" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="hosts" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="hosts" value=""/>
-                  Any
-                  <input type="radio" name="hosts" value="{get_notes_response/note/hosts}"
-                         checked="1"/>
-                  <xsl:value-of select="get_notes_response/note/hosts"/>
+                  <label>
+                    <input type="radio" name="hosts" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="hosts" value="{get_notes_response/note/hosts}"
+                           checked="1"/>
+                    <xsl:value-of select="get_notes_response/note/hosts"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -9212,15 +9344,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_notes_response/note/port) = 0">
-                  <input type="radio" name="port" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="port" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="port" value=""/>
-                  Any
-                  <input type="radio" name="port" value="{get_notes_response/note/port}" checked="1"/>
-                  <xsl:value-of select="get_notes_response/note/port"/>
+                  <label>
+                    <input type="radio" name="port" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="port" value="{get_notes_response/note/port}" checked="1"/>
+                    <xsl:value-of select="get_notes_response/note/port"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -9232,16 +9370,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_notes_response/note/threat) = 0">
-                  <input type="radio" name="threat" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="threat" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="threat" value=""/>
-                  Any
-                  <input type="radio" name="threat" value="{get_notes_response/note/threat}"
-                         checked="1"/>
-                  <xsl:value-of select="get_notes_response/note/threat"/>
+                  <label>
+                    <input type="radio" name="threat" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="{get_notes_response/note/threat}"
+                           checked="1"/>
+                    <xsl:value-of select="get_notes_response/note/threat"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -9253,16 +9397,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_notes_response/note/task/@id) = 0">
-                  <input type="radio" name="note_task_id" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="note_task_id" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="note_task_id" value=""/>
-                  Any
-                  <input type="radio" name="note_task_id" value="{get_notes_response/note/task/@id}"
-                         checked="1"/>
-                  <xsl:value-of select="get_notes_response/note/task/name"/>
+                  <label>
+                    <input type="radio" name="note_task_id" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="note_task_id" value="{get_notes_response/note/task/@id}"
+                           checked="1"/>
+                    <xsl:value-of select="get_notes_response/note/task/name"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -9274,16 +9424,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_notes_response/note/result/@id) = 0">
-                  <input type="radio" name="note_result_id" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="note_result_id" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="note_result_id" value=""/>
-                  Any
-                  <input type="radio" name="note_result_id"
-                         value="{get_notes_response/note/result/@id}" checked="1"/>
-                  <xsl:value-of select="get_notes_response/note/result/@id"/>
+                  <label>
+                    <input type="radio" name="note_result_id" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="note_result_id"
+                           value="{get_notes_response/note/result/@id}" checked="1"/>
+                    <xsl:value-of select="get_notes_response/note/result/@id"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -9767,18 +9923,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <div>
-                <input type="radio" name="active" value="-1" checked="1"/>
-                yes, always
+                <label>
+                  <input type="radio" name="active" value="-1" checked="1"/>
+                  yes, always
+                </label>
               </div>
               <div>
-                <input type="radio" name="active" value="1"/>
-                yes, for the next
+                <label>
+                  <input type="radio" name="active" value="1"/>
+                  yes, for the next
+                </label>
                 <input type="text" name="days" size="3" maxlength="7" value="30"/>
                 days
               </div>
               <div>
-                <input type="radio" name="active" value="0"/>
-                no
+                <label>
+                  <input type="radio" name="active" value="0"/>
+                  no
+                </label>
               </div>
             </td>
           </tr>
@@ -9787,10 +9949,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Hosts
             </td>
             <td>
-              <input type="radio" name="hosts" value=""/>
-              Any
-              <input type="radio" name="hosts" value="{hosts}" checked="1"/>
-              <xsl:value-of select="hosts"/>
+              <label>
+                <input type="radio" name="hosts" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="hosts" value="{hosts}" checked="1"/>
+                <xsl:value-of select="hosts"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9798,10 +9964,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Port
             </td>
             <td>
-              <input type="radio" name="port" value=""/>
-              Any
-              <input type="radio" name="port" value="{port}" checked="1"/>
-              <xsl:value-of select="port"/>
+              <label>
+                <input type="radio" name="port" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="port" value="{port}" checked="1"/>
+                <xsl:value-of select="port"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9809,10 +9979,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Threat
             </td>
             <td>
-              <input type="radio" name="threat" value=""/>
-              Any
-              <input type="radio" name="threat" value="{threat}" checked="1"/>
-              <xsl:value-of select="threat"/>
+              <label>
+                <input type="radio" name="threat" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="threat" value="{threat}" checked="1"/>
+                <xsl:value-of select="threat"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9834,11 +10008,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Task
             </td>
             <td>
-              <input type="radio" name="override_task_id" value=""/>
-              Any
-              <input type="radio" name="override_task_id" value="{task/@id}"
-                     checked="1"/>
-              <xsl:value-of select="task/name"/>
+              <label>
+                <input type="radio" name="override_task_id" value=""/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="override_task_id" value="{task/@id}"
+                       checked="1"/>
+                <xsl:value-of select="task/name"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9846,10 +10024,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Result
             </td>
             <td>
-              <input type="radio" name="note_result_id" value="" checked="1"/>
-              Any
-              <input type="radio" name="note_result_id" value="{result/@id}"/>
-              <xsl:value-of select="result/@id"/>
+              <label>
+                <input type="radio" name="note_result_id" value="" checked="1"/>
+                Any
+              </label>
+              <label>
+                <input type="radio" name="note_result_id" value="{result/@id}"/>
+                <xsl:value-of select="result/@id"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -9959,55 +10141,75 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:choose>
                 <xsl:when test="get_overrides_response/override/active='1' and string-length(get_overrides_response/override/end_time) &gt; 0">
                   <div>
-                    <input type="radio" name="active" value="-1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="-2" checked="1"/>
-                    yes, until
-                    <xsl:value-of select="get_overrides_response/override/end_time"/>
+                    <label>
+                      <input type="radio" name="active" value="-2" checked="1"/>
+                      yes, until
+                      <xsl:value-of select="get_overrides_response/override/end_time"/>
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
                     <input type="text" name="days" size="3" maxlength="7" value="30"/>
                     days
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0"/>
+                      no
+                    </label>
                   </div>
                 </xsl:when>
                 <xsl:when test="get_overrides_response/override/active='1'">
                   <div>
-                    <input type="radio" name="active" value="-1" checked="1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1" checked="1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
                     <input type="text" name="days" size="3" maxlength="7" value="30"/>
                     days
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0"/>
+                      no
+                    </label>
                   </div>
                 </xsl:when>
                 <xsl:otherwise>
                   <div>
-                    <input type="radio" name="active" value="-1"/>
-                    yes, always
+                    <label>
+                      <input type="radio" name="active" value="-1"/>
+                      yes, always
+                    </label>
                   </div>
                   <div>
-                    <input type="radio" name="active" value="1"/>
-                    yes, for the next
+                    <label>
+                      <input type="radio" name="active" value="1"/>
+                      yes, for the next
+                    </label>
                     <input type="text" name="days" size="3" maxlength="7" value="30"/>
                     days
                   </div>
                   <div>
-                    <input type="radio" name="active" value="0" checked="1"/>
-                    no
+                    <label>
+                      <input type="radio" name="active" value="0" checked="1"/>
+                      no
+                    </label>
                   </div>
                 </xsl:otherwise>
               </xsl:choose>
@@ -10020,16 +10222,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_overrides_response/override/hosts) = 0">
-                  <input type="radio" name="hosts" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="hosts" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="hosts" value=""/>
-                  Any
-                  <input type="radio" name="hosts" value="{get_overrides_response/override/hosts}"
-                         checked="1"/>
-                  <xsl:value-of select="get_overrides_response/override/hosts"/>
+                  <label>
+                    <input type="radio" name="hosts" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="hosts" value="{get_overrides_response/override/hosts}"
+                           checked="1"/>
+                    <xsl:value-of select="get_overrides_response/override/hosts"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10041,15 +10249,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_overrides_response/override/port) = 0">
-                  <input type="radio" name="port" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="port" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="port" value=""/>
-                  Any
-                  <input type="radio" name="port" value="{get_overrides_response/override/port}" checked="1"/>
-                  <xsl:value-of select="get_overrides_response/override/port"/>
+                  <label>
+                    <input type="radio" name="port" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="port" value="{get_overrides_response/override/port}" checked="1"/>
+                    <xsl:value-of select="get_overrides_response/override/port"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10061,16 +10275,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_overrides_response/override/threat) = 0">
-                  <input type="radio" name="threat" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="threat" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="threat" value=""/>
-                  Any
-                  <input type="radio" name="threat" value="{get_overrides_response/override/threat}"
-                         checked="1"/>
-                  <xsl:value-of select="get_overrides_response/override/threat"/>
+                  <label>
+                    <input type="radio" name="threat" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="{get_overrides_response/override/threat}"
+                           checked="1"/>
+                    <xsl:value-of select="get_overrides_response/override/threat"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10121,16 +10341,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_overrides_response/override/task/@id) = 0">
-                  <input type="radio" name="override_task_id" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="override_task_id" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="override_task_id" value=""/>
-                  Any
-                  <input type="radio" name="override_task_id" value="{get_overrides_response/override/task/@id}"
-                         checked="1"/>
-                  <xsl:value-of select="get_overrides_response/override/task/name"/>
+                  <label>
+                    <input type="radio" name="override_task_id" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="override_task_id" value="{get_overrides_response/override/task/@id}"
+                           checked="1"/>
+                    <xsl:value-of select="get_overrides_response/override/task/name"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10142,16 +10368,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="string-length (get_overrides_response/override/result/@id) = 0">
-                  <input type="radio" name="override_result_id" value="" checked="1"
-                         readonly="1"/>
-                  Any
+                  <label>
+                    <input type="radio" name="override_result_id" value="" checked="1"
+                           readonly="1"/>
+                    Any
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="override_result_id" value=""/>
-                  Any
-                  <input type="radio" name="override_result_id"
-                         value="{get_overrides_response/override/result/@id}" checked="1"/>
-                  <xsl:value-of select="get_overrides_response/override/result/@id"/>
+                  <label>
+                    <input type="radio" name="override_result_id" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="override_result_id"
+                           value="{get_overrides_response/override/result/@id}" checked="1"/>
+                    <xsl:value-of select="get_overrides_response/override/result/@id"/>
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10737,16 +10969,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
-                  <input type="radio" name="enable" value="1" checked="1"/>
-                  yes
-                  <input type="radio" name="enable" value="0"/>
-                  no
+                  <label>
+                    <input type="radio" name="enable" value="1" checked="1"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="enable" value="0"/>
+                    no
+                  </label>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="radio" name="enable" value="1"/>
-                  yes
-                  <input type="radio" name="enable" value="0" checked="1"/>
-                  no
+                  <label>
+                    <input type="radio" name="enable" value="1"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="enable" value="0" checked="1"/>
+                    no
+                  </label>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -10962,16 +11202,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="type/text() = 'boolean'">
                 <xsl:choose>
                   <xsl:when test="value='0'">
-                    <input type="radio" name="preference:nvt[radio]:{name}" value="1"/>
-                    yes
-                    <input type="radio" name="preference:nvt[radio]:{name}" value="0" checked="1"/>
-                    no
+                    <label>
+                      <input type="radio" name="preference:nvt[radio]:{name}" value="1"/>
+                      yes
+                    </label>
+                    <label>
+                      <input type="radio" name="preference:nvt[radio]:{name}" value="0" checked="1"/>
+                      no
+                    </label>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="preference:nvt[radio]:{name}" value="1" checked="1"/>
-                    yes
-                    <input type="radio" name="preference:nvt[radio]:{name}" value="0"/>
-                    no
+                    <label>
+                      <input type="radio" name="preference:nvt[radio]:{name}" value="1" checked="1"/>
+                      yes
+                    </label>
+                    <label>
+                      <input type="radio" name="preference:nvt[radio]:{name}" value="0"/>
+                      no
+                    </label>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:when>
