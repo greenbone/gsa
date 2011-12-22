@@ -1,5 +1,9 @@
 2011-12-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (my_settings.html): Add timezone description.
+
+2011-12-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (user_find): Use the right variable.
 	(attach_sid): Switch to GMT around the printing of the expiry time.
 	Switching the locale only affects the formatting of the time.
