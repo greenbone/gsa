@@ -309,7 +309,7 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
           if ((cookie == NULL) || strcmp (item->cookie, cookie))
             {
               /* Check if the session has expired. */
-              if (time (NULL) - user->time > (session_timeout * 60))
+              if (time (NULL) - item->time > (session_timeout * 60))
                 /* Probably the browser removed the cookie. */
                 ret = 2;
               else
@@ -1808,8 +1808,18 @@ attach_sid (struct MHD_Response *response, const char *sid)
   char expires[EXPIRES_LENGTH + 1];
   struct tm expire_time_broken;
   time_t now, expire_time;
+  gchar *tz;
 
   /* Set up the expires param. */
+
+  /* Store current TZ, switch to GMT. */
+  tz = getenv ("TZ") ? g_strdup (getenv ("TZ")) : NULL;
+  if (setenv ("TZ", "GMT", 1) == -1)
+    {
+      g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+      exit (EXIT_FAILURE);
+    }
+  tzset ();
 
   locale = setlocale (LC_ALL, "C");
   now = time (NULL);
@@ -1822,6 +1832,19 @@ attach_sid (struct MHD_Response *response, const char *sid)
     abort ();
 
   setlocale (LC_ALL, locale);
+
+  /* Revert to stored TZ. */
+  if (tz)
+    {
+      if (setenv ("TZ", tz, 1) == -1)
+        {
+          g_warning ("%s: Failed to switch to original TZ", __FUNCTION__);
+          g_free (tz);
+          exit (EXIT_FAILURE);
+        }
+    }
+  else
+    unsetenv ("TZ");
 
   /* Add the cookie.
    *
