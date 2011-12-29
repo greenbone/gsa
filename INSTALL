@@ -1,17 +1,26 @@
-Installing Greenbone Security Assistant
+INSTALLATION INSTRUCTIONS FOR GREENBONE SECURITY ASSISTANT
+==========================================================
 
-The reference system used by the developers is Debian GNU Linux 'Lenny' 5.0.
-The build might fail on any other systems.  Also it is necessary to install
-dependent development packages.
+Please note: The reference systems used by most of the developers are Debian
+GNU/Linux 'Lenny' 5.0 and Debian GNU/Linux 'Squeeze' 6.0.  The build might fail
+on any other systems.  Also it is necessary to install dependent development
+packages.
+
+
+Prerequisites for Greenbone Security Assistant
+----------------------------------------------
+
+See at the end of this section how to easily install these prerequisites on
+some supported platforms.
 
 Prerequisites:
-* openvas-libraries 5.0.0 or greater
+* openvas-libraries (>= 5.0.0)
 * gnutls
 * cmake
 * glib-2.0 (>= 2.14)
 * libxml
 * libxslt
-* libmicrohttpd
+* libmicrohttpd (>= 0.4.2)
 * libexslt
 * pkg-config
 * xsltproc
@@ -19,6 +28,12 @@ Prerequisites:
 Prerequisites for building documentation:
 * Doxygen
 * xmltoman (optional, for building man page)
+
+Install prerequistes on Debian GNU/Linux 'Squeeze' 6.0:
+# apt-get install libmicrohttpd-dev libxml2-dev libxslt1-dev
+
+Compiling Greenbone Security Assistant
+--------------------------------------
 
 If you have installed required libraries to a non-standard location, remember to
 set the PKG_CONFIG_PATH environment variable to the location of you pkg-config
