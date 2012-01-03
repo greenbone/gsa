@@ -1,3 +1,9 @@
+2012-01-03  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/omp.xsl (ref_cve_list, ref_bid_list, ref_xref_list): New.
+	List vulnerability references.
+	(result-detailed): Added a reference box.
+
 2011-12-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* INSTALL: Re-arranged text a bit and added some Debian 6 info.

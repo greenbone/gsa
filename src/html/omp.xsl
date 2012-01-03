@@ -8480,6 +8480,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN GET RAW INFO -->
 
+<xsl:template name="ref_cve_list">
+  <xsl:param name="cvelist"/>
+
+  <xsl:variable name="token" select="/envelope/token"/>
+
+  <xsl:variable name="cvecount" select="count(str:split($cvelist, ','))"/>
+  <xsl:if test="$cvecount &gt; 0">
+    <tr valign="top">
+      <td>CVE:</td>
+      <td>
+        <xsl:for-each select="str:split($cvelist, ',')">
+          <xsl:call-template name="get_info_cve_lnk">
+            <xsl:with-param name="cve" select="."/>
+            <xsl:with-param name="gsa_token" select="$token"/>
+          </xsl:call-template>
+          <xsl:if test="position() &lt; $cvecount">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+      
+<xsl:template name="ref_bid_list">
+  <xsl:param name="bidlist"/>
+
+  <xsl:variable name="token" select="/envelope/token"/>
+
+  <xsl:variable name="bidcount" select="count(str:split($bidlist, ','))"/>
+  <xsl:if test="$bidcount &gt; 0">
+    <tr valign="top">
+      <td>BID:</td>
+      <td>
+        <xsl:for-each select="str:split($bidlist, ',')">
+          <xsl:value-of select="."/>
+          <xsl:if test="position() &lt; $bidcount">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </td>
+    </tr>
+  </xsl:if>
+</xsl:template>
+      
+<xsl:template name="ref_xref_list">
+  <xsl:param name="xreflist"/>
+
+  <xsl:variable name="token" select="/envelope/token"/>
+
+  <xsl:variable name="xrefcount" select="count(str:split($xreflist, ','))"/>
+  <xsl:if test="$xrefcount &gt; 0">
+    <tr valign="top"><td>Other:</td></tr>
+    <xsl:for-each select="str:split($xreflist, ',')">
+      <tr valign="top">
+        <td></td>
+        <td><xsl:value-of select="."/></td>
+      </tr>
+    </xsl:for-each>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;token={/envelope/token}"
@@ -12610,6 +12672,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </pre>
   </div>
+  <xsl:variable name="cve_ref">
+    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
+      <xsl:value-of select="nvt/cve/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="bid_ref">
+    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
+      <xsl:value-of select="nvt/bid/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="xref">
+    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
+      <xsl:value-of select="nvt/xref/text()"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != ''">
+    <div class="issue_box_box">
+      <b>References</b><br/>
+
+      <table>
+        <xsl:call-template name="ref_cve_list">
+          <xsl:with-param name="cvelist" select="$cve_ref"/>
+        </xsl:call-template>
+        <xsl:call-template name="ref_bid_list">
+          <xsl:with-param name="bidlist" select="$bid_ref"/>
+        </xsl:call-template>
+        <xsl:call-template name="ref_xref_list">
+          <xsl:with-param name="xreflist" select="$xref"/>
+        </xsl:call-template>
+      </table>
+    </div>
+  </xsl:if>
+
   <xsl:if test="delta">
     <xsl:choose>
       <xsl:when test="delta/text() = 'changed'">
