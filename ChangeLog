@@ -1,3 +1,8 @@
+2011-01-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsa-style.css (gb_menu): Adjusted to work with
+	the Chrome browser family. Patch by Karl-Heinz Ruskowski.
+
 2012-01-03  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/omp.xsl (ref_cve_list, ref_bid_list, ref_xref_list): New.

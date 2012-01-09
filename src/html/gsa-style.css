@@ -441,10 +441,15 @@ table.odd {
  margin-left: 25px;
 }
 
-#gb_menu ul li:hover,
-#gb_menu ul li:hover ul,
-#gb_menu ul li:hover ul li {
- display:block;
+#gb_menu li:hover ul ul,
+#gb_menu li:hover ul ul ul {
+ display: none;
+}
+
+#gb_menu li:hover a,
+#gb_menu li:hover ul,
+#gb_menu li:hover ul li {
+ display: block;
 }
 
 /* Logo Bar */
