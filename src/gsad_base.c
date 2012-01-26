@@ -527,7 +527,7 @@ params_append_bin (params_t *params, const char *name, const char *chunk_data,
     }
 
   new_value = realloc (param->value,
-                       strlen (param->value) + chunk_size + 1);
+                       param->value_size + chunk_size + 1);
   if (new_value == NULL)
     return NULL;
   param->value = new_value;
