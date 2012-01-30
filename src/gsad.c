@@ -929,7 +929,9 @@ params_append_mhd (params_t *params,
                    int chunk_size,
                    int chunk_offset)
 {
-  if ((strncmp (name, "file:", strlen ("file:")) == 0)
+  if ((strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
+      || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
+      || (strncmp (name, "file:", strlen ("file:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
       || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)

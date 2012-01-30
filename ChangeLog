@@ -1,3 +1,8 @@
+2012-01-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (params_append_mhd): Add missing condition_data and
+	event_data cases.
+
 2012-01-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_base.c (params_append_bin): Get the length of the value from
