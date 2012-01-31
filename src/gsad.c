@@ -745,6 +745,7 @@ init_validator ()
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "esc_first_result", "first_result");
+  openvas_validator_alias (validator, "esc_levels",       "levels");
   openvas_validator_alias (validator, "esc_max_results",  "max_results");
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");

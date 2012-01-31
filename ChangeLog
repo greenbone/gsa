@@ -1,3 +1,7 @@
+2012-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add missing esc_levels.
+
 2012-01-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (params_append_mhd): Add missing condition_data and
