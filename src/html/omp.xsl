@@ -9319,7 +9319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
-                    <abbr title="{$nvt/name}"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
+                    <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="$nvt/name"/>
@@ -9614,7 +9614,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="max" select="35"/>
       <xsl:choose>
         <xsl:when test="string-length(nvt/name) &gt; $max">
-          <abbr title="{nvt/name}"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+          <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt/name"/>
@@ -9743,7 +9743,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
-                  <abbr title="{nvt/name}"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+                  <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="nvt/name"/>
@@ -10230,7 +10230,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="max" select="70"/>
                 <xsl:choose>
                   <xsl:when test="string-length($nvt/name) &gt; $max">
-                    <abbr title="{$nvt/name}"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
+                    <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="$nvt/name"/>
@@ -10558,7 +10558,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="max" select="35"/>
       <xsl:choose>
         <xsl:when test="string-length(nvt/name) &gt; $max">
-          <abbr title="{nvt/name}"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+          <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt/name"/>
@@ -10703,7 +10703,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="max" select="70"/>
               <xsl:choose>
                 <xsl:when test="string-length(nvt/name) &gt; $max">
-                  <abbr title="{nvt/name}"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+                  <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="nvt/name"/>
@@ -12502,7 +12502,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
             <xsl:choose>
               <xsl:when test="string-length(nvt/name) &gt; $max">
-                <abbr title="{nvt/name}"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+                <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="nvt/name"/>
