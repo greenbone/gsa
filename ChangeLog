@@ -1,3 +1,31 @@
+2012-02-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add initial port list handling.
+
+	* src/gsad.c (init_validator): Add port list commands and params.
+	(exec_omp_post, exec_omp_get): Add port list commands.
+
+	* src/gsad_omp.c (get_trash): Get port lists too.
+	(get_port_list_omp, get_port_lists_omp, delete_port_list_omp)
+	(delete_trash_port_list_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/gsad.xsl (create_port_list_response)
+	(delete_port_list_response): New templates.
+	(html-gsa-navigation): Add port lists.
+
+	* src/html/omp.xsl (html-targets-table, target, target [trash])
+	(target [details]): Switch port range to port list.
+	(html-create-port_list-form, html-port-lists-table)
+	(create_port_list_response, delete_port_list_response, port_list)
+	(port_list [trash], port_list [details], get_port_list)
+	(get_port_lists): New templates.
+	(host): Add TCP and UDP port fields.
+	(html-port-lists-trash-table): New template.
+	(html-targets-trash-table): Switch to port list.
+	(get_trash): Add port lists.
+
 2011-02-10  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/html/os.xml: Added new entry for VMWare ESXi.

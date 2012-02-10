@@ -135,6 +135,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_port_list_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Port List'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_report_format_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -228,6 +236,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
     <xsl:with-param name="command" select="'Delete Override'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_port_list_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Port List'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -783,6 +799,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
       <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
       <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
+      <li><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
       <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
       <li class="last"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
      </ul>

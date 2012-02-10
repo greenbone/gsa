@@ -129,6 +129,11 @@ char * save_note_omp (credentials_t *, params_t *);
 char * export_note_omp (credentials_t *, params_t *, enum content_type *,
                         char **, gsize *);
 
+char * get_port_list_omp (credentials_t *, params_t *);
+char * get_port_lists_omp (credentials_t *, params_t *);
+char * delete_port_list_omp (credentials_t *, params_t *);
+char * delete_trash_port_list_omp (credentials_t *, params_t *);
+
 char * get_overrides_omp (credentials_t *, params_t *);
 char * get_override_omp (credentials_t *, params_t *);
 char * new_override_omp (credentials_t *, params_t *);

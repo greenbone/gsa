@@ -517,6 +517,7 @@ init_validator ()
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
+                         "|(delete_port_list)"
                          "|(delete_report)"
                          "|(delete_report_format)"
                          "|(delete_schedule)"
@@ -527,6 +528,7 @@ init_validator ()
                          "|(delete_trash_config)"
                          "|(delete_trash_escalator)"
                          "|(delete_trash_lsc_credential)"
+                         "|(delete_trash_port_list)"
                          "|(delete_trash_report_format)"
                          "|(delete_trash_schedule)"
                          "|(delete_trash_slave)"
@@ -570,6 +572,8 @@ init_validator ()
                          "|(get_nvts)"
                          "|(get_override)"
                          "|(get_overrides)"
+                         "|(get_port_list)"
+                         "|(get_port_lists)"
                          "|(get_report)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
@@ -689,7 +693,7 @@ init_validator ()
   openvas_validator_add (validator, "password",   "^.{0,40}$");
   openvas_validator_add (validator, "password:value", "(?s)^.*$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
-  openvas_validator_add (validator, "port_range", "^((default)|([-0-9, ]{1,400}))$");
+  openvas_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:",      "^$");
@@ -703,6 +707,7 @@ init_validator ()
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
+  openvas_validator_add (validator, "port_list_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
@@ -1433,6 +1438,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
+  ELSE (delete_port_list)
   ELSE (delete_report)
   ELSE (delete_report_format)
   ELSE (delete_schedule)
@@ -1443,6 +1449,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_config)
   ELSE (delete_trash_escalator)
   ELSE (delete_trash_lsc_credential)
+  ELSE (delete_trash_port_list)
   ELSE (delete_trash_report_format)
   ELSE (delete_trash_schedule)
   ELSE (delete_trash_slave)
@@ -1711,6 +1718,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_notes)
   ELSE (get_override)
   ELSE (get_overrides)
+  ELSE (get_port_list)
+  ELSE (get_port_lists)
 
   else if (!strcmp (cmd, "get_report"))
     {

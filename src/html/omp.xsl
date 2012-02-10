@@ -5288,7 +5288,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Hosts</td>
             <td>IPs</td>
-            <td>Port Range</td>
+            <td>Port List</td>
             <td>SSH Credential</td>
             <td>SMB Credential</td>
             <td width="100">Actions</td>
@@ -5351,7 +5351,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
-    <td><xsl:value-of select="port_range"/></td>
+    <td>
+      <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+        <xsl:value-of select="port_list/name"/>
+      </a>
+    </td>
     <td>
       <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={ssh_lsc_credential/@id}&amp;token={/envelope/token}">
         <xsl:value-of select="ssh_lsc_credential/name"/>
@@ -5404,7 +5408,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td><xsl:value-of select="hosts"/></td>
     <td><xsl:value-of select="max_hosts"/></td>
-    <td><xsl:value-of select="port_range"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="port_list/trash = '1'">
+          <xsl:value-of select="port_list/name"/>
+          <br/>(in trashcan)
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+            <xsl:value-of select="port_list/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td>
       <xsl:choose>
         <xsl:when test="ssh_lsc_credential/trash = '1'">
@@ -5433,7 +5449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1'">
+        <xsl:when test="ssh_lsc_credential/trash = '1' or smb_lsc_credential/trash = '1' or port_list/trash = '1'">
           <img src="/img/restore_inactive.png" border="0" alt="Restore"
                style="margin-left:3px;"/>
         </xsl:when>
@@ -5494,8 +5510,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="max_hosts"/></td>
         </tr>
         <tr>
-          <td>Port Range:</td>
-          <td><xsl:value-of select="port_range"/></td>
+          <td>Port List:</td>
+          <td>
+            <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="port_list/name"/>
+            </a>
+          </td>
         </tr>
         <tr>
           <td>SSH Credential:</td>
@@ -10929,6 +10949,325 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END OVERRIDES MANAGEMENT -->
 
+<!-- BEGIN PORT_LISTS MANAGEMENT -->
+
+<xsl:template name="html-create-port_list-form">
+  <xsl:param name="lsc-credentials"></xsl:param>
+  <xsl:param name="port_list-sources"></xsl:param>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Port List
+      <a href="/help/configure_port_lists.html?token={/envelope/token}#new_port_list"
+         title="Help: Configure Port Lists (New Port List)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_port_list"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Port Range</td>
+            <td>
+              <input type="text" name="port_range" value="default" size="30"
+                     maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">SSH Credential (optional)</td>
+            <td>
+              <select name="lsc_credential_id">
+                <option value="--">--</option>
+                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
+              </select>
+              on port
+              <input type="text" name="port" value="22" size="6"
+                     maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Port List"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-port-lists-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Port Lists
+      <a href="/help/configure_port_lists.html?token={/envelope/token}#port_lists"
+         title="Help: Configure Port Lists (Port Lists)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="port_list"/>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     CREATE_PORT_LIST_RESPONSE -->
+
+<xsl:template match="create_port_list_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Port List</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     DELETE_PORT_LIST_RESPONSE -->
+
+<xsl:template match="delete_port_list_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Port_List
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     PORT_LIST -->
+
+<xsl:template match="port_list">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'port_list'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="To Trashcan"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;token={/envelope/token}"
+         title="Port List Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="port_list" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'port_list'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="port_list" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Port List Details
+       <a href="/help/configure_port_lists.html?token={/envelope/token}#port_list_details"
+         title="Help: Configure Port Lists (Port List Details)">
+         <img src="/img/help.png"/>
+       </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right">
+        <a href="?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+      </table>
+
+      <h1>Port Ranges</h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Start</td>
+          <td>End</td>
+          <td>Protocol</td>
+          <td>Actions</td>
+        </tr>
+        <xsl:for-each select="port_ranges/port_range">
+          <xsl:variable name="class">
+            <xsl:choose>
+              <xsl:when test="position() mod 2 = 0">even</xsl:when>
+              <xsl:otherwise>odd</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <tr class="{$class}">
+            <td><xsl:value-of select="start"/></td>
+            <td><xsl:value-of select="end"/></td>
+            <td><xsl:value-of select="type"/></td>
+            <td width="100">
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+
+      <xsl:choose>
+        <xsl:when test="count(targets/target) = 0">
+          <h1>Targets using this Port List: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Targets using this Port List</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="targets/target">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_PORT_LIST -->
+
+<xsl:template match="get_port_list">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_port_list_response"/>
+  <xsl:apply-templates select="get_port_lists_response/port_list" mode="details"/>
+</xsl:template>
+
+<!--     GET_PORT_LISTS -->
+
+<xsl:template match="get_port_lists">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_port_list_response"/>
+  <xsl:apply-templates select="create_port_list_response"/>
+  <!--
+  <xsl:call-template name="html-create-port_list-form">
+    <xsl:with-param
+      name="lsc-credentials"
+      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="port_list-sources"
+      select="get_port_list_locators_response | commands_response/get_port_list_locators_response"/>
+  </xsl:call-template>
+  -->
+  <!-- The for-each makes the get_port_lists_response the current node. -->
+  <xsl:for-each select="get_port_lists_response | commands_response/get_port_lists_response">
+    <xsl:call-template name="html-port-lists-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END PORT_LISTS MANAGEMENT -->
+
 <!-- BEGIN REPORT FORMATS MANAGEMENT -->
 
 <xsl:template name="html-report-formats-table">
@@ -11680,13 +12019,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </td>
         </tr>
+        <xsl:variable name="tcp_ports" select="detail[name/text() = 'ports']/value"/>
+        <xsl:variable name="udp_ports" select="detail[name/text() = 'udp_ports']/value"/>
         <tr>
           <td>Open Ports:</td>
           <td>
-            <xsl:variable name="ports" select="detail[name/text() = 'ports']/value"/>
-            <xsl:value-of select="count (str:tokenize ($ports, ','))"/>
-            <xsl:if test="$ports">
-              <xsl:value-of select="concat(' (', $ports, ')')"/>
+            <xsl:value-of select="count (str:tokenize ($tcp_ports, ',')) + count (str:tokenize ($udp_ports, ','))"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Open TCP Ports:</td>
+          <td>
+            <xsl:value-of select="count (str:tokenize ($tcp_ports, ','))"/>
+            <xsl:if test="$tcp_ports">
+              <xsl:value-of select="concat(' (', $tcp_ports, ')')"/>
+            </xsl:if>
+          </td>
+        </tr>
+        <tr>
+          <td>Open UDP Ports:</td>
+          <td>
+            <xsl:value-of select="count (str:tokenize ($udp_ports, ','))"/>
+            <xsl:if test="$udp_ports">
+              <xsl:value-of select="concat(' (', $udp_ports, ')')"/>
             </xsl:if>
           </td>
         </tr>
@@ -13553,6 +13908,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-port-lists-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="port_list" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-report-formats-trash-table">
   <div id="tasks">
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -13607,7 +13974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Name</td>
         <td>Hosts</td>
         <td>IPs</td>
-        <td>Port Range</td>
+        <td>Port List</td>
         <td>SSH Credential</td>
         <td>SMB Credential</td>
         <td width="100">Actions</td>
@@ -13644,6 +14011,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:apply-templates select="delete_escalator_response"/>
   <xsl:apply-templates select="delete_lsc_credential_response"/>
+  <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
   <xsl:apply-templates select="delete_slave_response"/>
@@ -13696,22 +14064,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="count(get_escalators_response/escalator)"/></td>
         </tr>
         <tr class="even">
+          <td><a href="#port_lists">Port Lists</a></td>
+          <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
+        </tr>
+        <tr class="odd">
           <td><a href="#report_formats">Report Formats</a></td>
           <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><a href="#schedules">Schedules</a></td>
           <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td><a href="#slaves">Slaves</a></td>
           <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><a href="#targets">Targets</a></td>
           <td><xsl:value-of select="count(get_targets_response/target)"/></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td><a href="#the_tasks">Tasks</a></td>
           <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
         </tr>
@@ -13743,6 +14115,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- The for-each makes the get_escalators_response the current node. -->
       <xsl:for-each select="get_escalators_response">
         <xsl:call-template name="html-escalators-trash-table"/>
+      </xsl:for-each>
+
+      <a name="port_lists"></a>
+      <h1>Port Lists</h1>
+      <!-- The for-each makes the get_port_lists_response the current node. -->
+      <xsl:for-each select="get_port_lists_response">
+        <xsl:call-template name="html-port-lists-trash-table"/>
       </xsl:for-each>
 
       <a name="report_formats"></a>
