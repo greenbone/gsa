@@ -1,3 +1,7 @@
+2011-02-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/os_vmware.png: New.
+
 2011-02-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl, src/html/gsad.xsl, src/html/help.xsl: Extend
