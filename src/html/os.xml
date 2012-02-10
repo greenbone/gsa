@@ -480,4 +480,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <title>Slackware Linux 12.0</title>
         <icon>os_slackware.png</icon>
     </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:vmware:esxi</pattern>
+        <title>VMWare ESXi</title>
+        <icon>os_vmware.png</icon>
+    </operating_system>
 </operating_systems>

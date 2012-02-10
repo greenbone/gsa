@@ -1,3 +1,7 @@
+2011-02-10  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/html/os.xml: Added new entry for VMWare ESXi.
+
 2011-02-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/os_vmware.png: New.
