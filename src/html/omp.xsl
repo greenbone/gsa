@@ -5124,9 +5124,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
+<xsl:template match="port_list" mode="select">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
 <xsl:template name="html-create-target-form">
   <xsl:param name="lsc-credentials"></xsl:param>
   <xsl:param name="target-sources"></xsl:param>
+  <xsl:param name="port-lists"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -5233,10 +5238,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Port Range</td>
+            <td valign="top" width="175">Port List</td>
             <td>
-              <input type="text" name="port_range" value="default" size="30"
-                     maxlength="400"/>
+              <select name="port_list_id">
+                <xsl:apply-templates select="$port-lists" mode="select"/>
+              </select>
             </td>
           </tr>
           <tr>
@@ -5597,6 +5603,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param
       name="target-sources"
       select="get_target_locators_response | commands_response/get_target_locators_response"/>
+    <xsl:with-param
+      name="port-lists"
+      select="get_port_lists_response | commands_response/get_port_lists_response"/>
   </xsl:call-template>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">
@@ -10952,8 +10961,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN PORT_LISTS MANAGEMENT -->
 
 <xsl:template name="html-create-port_list-form">
-  <xsl:param name="lsc-credentials"></xsl:param>
-  <xsl:param name="port_list-sources"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -10984,21 +10991,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Port Range</td>
+            <td valign="top" width="175">Port Ranges</td>
             <td>
               <input type="text" name="port_range" value="default" size="30"
-                     maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">SSH Credential (optional)</td>
-            <td>
-              <select name="lsc_credential_id">
-                <option value="--">--</option>
-                <xsl:apply-templates select="$lsc-credentials" mode="select"/>
-              </select>
-              on port
-              <input type="text" name="port" value="22" size="6"
                      maxlength="400"/>
             </td>
           </tr>
@@ -11250,16 +11245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:apply-templates select="create_port_list_response"/>
-  <!--
-  <xsl:call-template name="html-create-port_list-form">
-    <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
-    <xsl:with-param
-      name="port_list-sources"
-      select="get_port_list_locators_response | commands_response/get_port_list_locators_response"/>
-  </xsl:call-template>
-  -->
+  <xsl:call-template name="html-create-port_list-form"/>
   <!-- The for-each makes the get_port_lists_response the current node. -->
   <xsl:for-each select="get_port_lists_response | commands_response/get_port_lists_response">
     <xsl:call-template name="html-port-lists-table"/>

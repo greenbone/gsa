@@ -505,6 +505,7 @@ init_validator ()
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
+                         "|(create_port_list)"
                          "|(create_report)"
                          "|(create_schedule)"
                          "|(create_slave)"
@@ -1423,6 +1424,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_agent)
   ELSE (create_escalator)
   ELSE (create_lsc_credential)
+  ELSE (create_port_list)
   ELSE (create_report)
   ELSE (create_task)
   ELSE_OAP (create_user)

@@ -1,3 +1,24 @@
+2012-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add simple form for creating port lists.  Switch target creation from
+	port ranges to port lists.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add create_port_list.
+
+	* src/gsad_omp.c (create_target_omp): Replace port range with port list
+	ID.  Get the port lists too.
+	(get_targets_omp): Get the port lists too.
+	(CHECK): New macro.
+	(create_port_list_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (port_list [select]): New template.
+	(html-create-target-form): Replace port range field with port lists.
+	(get_targets): Pass port lists to html-create-target-form.
+	(html-create-port_list-form): Convert to port lists.
+	(get_port_lists): Enable call to html-create-port_list-form.
+
 2012-02-12  Henri Doreau <henri.doreau@greenbone.net>
 
 	* MakeLists.txt: Install VMWare OS icon.
