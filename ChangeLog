@@ -1,3 +1,8 @@
+2012-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-port_list-form): Replace "default" in
+	port range with a range example.
+
 2012-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add simple form for creating port lists.  Switch target creation from

@@ -10993,7 +10993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="175">Port Ranges</td>
             <td>
-              <input type="text" name="port_range" value="default" size="30"
+              <input type="text" name="port_range" value="T:1-5,7,9,U:1-3,5,7,9" size="30"
                      maxlength="400"/>
             </td>
           </tr>
