@@ -4404,6 +4404,9 @@ delete_target_omp (credentials_t * credentials, params_t *params)
                             "<get_lsc_credentials"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
+                            "<get_port_lists"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
                             "</commands>",
                             target_id)
       == -1)

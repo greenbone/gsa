@@ -1,3 +1,8 @@
+2012-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (delete_target_omp): Get the port lists too, for the
+	follow on page.
+
 2012-02-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-create-port_list-form): Replace "default" in
