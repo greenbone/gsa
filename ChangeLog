@@ -1,5 +1,15 @@
 2012-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add file and from_file.
+
+	* src/gsad_omp.c (create_port_list_omp): Get port ranges from file if
+	given in file.
+
+	* src/html/omp.xsl (html-create-port_list-form): Add file option for
+	ranges.
+
+2012-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (delete_target_omp): Get the port lists too, for the
 	follow on page.
 

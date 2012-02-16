@@ -13964,7 +13964,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
   GString *xml;
   int socket;
   gchar *html;
-  const char *name, *comment, *port_range;
+  const char *name, *comment, *port_range, *from_file;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -13988,10 +13988,12 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   port_range = params_value (params, "port_range");
+  from_file = params_value (params, "from_file");
 
   CHECK (name);
   else CHECK (comment);
   else CHECK (port_range);
+  else CHECK (from_file);
   else
     {
       int ret;
@@ -14005,7 +14007,9 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
                                   "<comment>%s</comment>"
                                   "</create_port_list>",
                                   name,
-                                  port_range,
+                                  strcmp (from_file, "0")
+                                   ? params_value (params, "file")
+                                   : port_range,
                                   comment ? comment : "");
 
       if (ret == -1)
