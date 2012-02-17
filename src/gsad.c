@@ -506,6 +506,7 @@ init_validator ()
                          "|(create_note)"
                          "|(create_override)"
                          "|(create_port_list)"
+                         "|(create_port_range)"
                          "|(create_report)"
                          "|(create_schedule)"
                          "|(create_slave)"
@@ -696,6 +697,7 @@ init_validator ()
   openvas_validator_add (validator, "password:value", "(?s)^.*$");
   openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
+  openvas_validator_add (validator, "port_type", "^tcp|udp$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:",      "^$");
@@ -787,7 +789,9 @@ init_validator ()
   openvas_validator_alias (validator, "override_task_id", "optional_task_id");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "password:name", "preference_name");
-  openvas_validator_alias (validator, "pos",           "number");
+  openvas_validator_alias (validator, "port_range_end",    "number");
+  openvas_validator_alias (validator, "port_range_start",  "number");
+  openvas_validator_alias (validator, "pos",               "number");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
   openvas_validator_alias (validator, "period",       "optional_number");
@@ -1427,6 +1431,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_escalator)
   ELSE (create_lsc_credential)
   ELSE (create_port_list)
+  ELSE (create_port_range)
   ELSE (create_report)
   ELSE (create_task)
   ELSE_OAP (create_user)

@@ -1,3 +1,23 @@
+2012-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add "New port range" section to Port List Details page.
+
+	* src/gsad.c (init_validator): Add create_port_range command and port
+	range rules.
+	(exec_omp_post): Add create_port_range.
+
+	* src/gsad_omp.c (create_port_range_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (create_port_range_response): New template.
+	(html-gsa-logo): Add create_port_range green icon case.
+
+	* src/html/omp.xsl (delete_port_list_response): Correct name.
+	(port_list [details]): Add "New port range" form.
+	(create_port_range_response): New template.
+	(get_port_list): Match create_port_range_response.
+
 2012-02-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add file and from_file.

@@ -11060,7 +11060,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="delete_port_list_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
-      Delete Port_List
+      Delete Port List
     </xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
@@ -11178,6 +11178,89 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
+      <h2>New port range</h2>
+
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_port_range"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="port_list_id" value="{@id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top">Start</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="count(targets/target) = 0">
+                  <input type="text" name="port_range_start" value=""
+                         size="30" maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="port_range_start" value=""
+                         size="30" maxlength="400" disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">End</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="count(targets/target) = 0">
+                  <input type="text" name="port_range_end" value=""
+                         size="30" maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="port_range_end" value=""
+                         size="30" maxlength="400" disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Type</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="count(targets/target) = 0">
+                    <input type="radio" name="port_type" value="tcp" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="port_type" value="tcp" checked="1"
+                           disabled="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                TCP
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="count(targets/target) = 0">
+                    <input type="radio" name="port_type" value="udp"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="port_type" value="udp"
+                           disabled="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                UDP
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="count(targets/target) = 0">
+                  <input type="submit" name="submit" value="Add port range"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="Add port range"
+                         disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </table>
+      </form>
+
       <h1>Port Ranges</h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
@@ -11240,10 +11323,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="create_port_range_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Create Port Range
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     GET_PORT_LIST -->
 
 <xsl:template match="get_port_list">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_port_range_response"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:apply-templates select="get_port_lists_response/port_list" mode="details"/>
 </xsl:template>

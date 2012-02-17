@@ -14077,6 +14077,135 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 #undef CHECK
 
 /**
+ * @brief Add a range to a port list, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_port_range_omp (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *port_list_id, *sort_field, *sort_order, *start, *end, *type;
+
+  port_list_id = params_value (params, "port_list_id");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  start = params_value (params, "port_range_start");
+  end = params_value (params, "port_range_end");
+  type = params_value (params, "port_type");
+
+  if (port_list_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a port range. "
+                         "No new port range was created. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_port_lists");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a port list. "
+                             "The port lists is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_port_lists");
+    }
+
+  xml = g_string_new ("<get_port_list>");
+
+  /* Create the port range. */
+
+  if (openvas_server_sendf (&session,
+                            "<create_port_range>"
+                            "<port_list id=\"%s\"/>"
+                            "<start>%s</start>"
+                            "<end>%s</end>"
+                            "<type>%s</type>"
+                            "</create_port_range>",
+                            port_list_id,
+                            start,
+                            end,
+                            type)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a port list. "
+                           "The port list is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a port list. "
+                           "The port list is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  /* Get the port list. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_port_lists"
+                            " port_list_id=\"%s\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            port_list_id,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a port list. "
+                           "The port list is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a port list. "
+                           "The port list is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_port_list>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Get one port_list, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
