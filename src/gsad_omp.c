@@ -14210,11 +14210,13 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  commands     Extra commands to run before the others.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_port_list_omp (credentials_t * credentials, params_t *params)
+get_port_list (credentials_t * credentials, params_t *params,
+               const char * commands)
 {
   GString *xml;
   gnutls_session_t session;
@@ -14255,10 +14257,14 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
   /* Get the port_list. */
 
   if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
                             "<get_port_lists"
                             " port_list_id=\"%s\""
                             " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " sort_order=\"%s\"/>"
+                            "</commands>",
+                            commands ? commands : "",
                             port_list_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
@@ -14291,6 +14297,20 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
   g_string_append (xml, "</get_port_list>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get one port_list, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_port_list_omp (credentials_t * credentials, params_t *params)
+{
+  return get_port_list (credentials, params, NULL);
 }
 
 /**
@@ -14542,6 +14562,39 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
   ret = get_trash (credentials, NULL, NULL, xml->str);
   g_string_free (xml, FALSE);
   return ret;
+}
+
+/**
+ * @brief Delete a port range, get the port list, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_port_range_omp (credentials_t * credentials, params_t *params)
+{
+  gchar *html, *delete;
+  const char *port_range_id, *port_list_id;
+
+  port_range_id = params_value (params, "port_range_id");
+  port_list_id = params_value (params, "port_list_id");
+
+  if (port_range_id == NULL || port_list_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a port range. "
+                         "The port range was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_port_ranges");
+
+  delete = g_strdup_printf ("<delete_port_range port_range_id=\"%s\"/>",
+                            port_range_id);
+
+  html = get_port_list (credentials, params, delete);
+  g_free (delete);
+  return html;
 }
 
 

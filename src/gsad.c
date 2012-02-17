@@ -520,6 +520,7 @@ init_validator ()
                          "|(delete_note)"
                          "|(delete_override)"
                          "|(delete_port_list)"
+                         "|(delete_port_range)"
                          "|(delete_report)"
                          "|(delete_report_format)"
                          "|(delete_schedule)"
@@ -709,9 +710,10 @@ init_validator ()
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "result_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
-  openvas_validator_add (validator, "port_list_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
@@ -1448,6 +1450,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_note)
   ELSE (delete_override)
   ELSE (delete_port_list)
+  ELSE (delete_port_range)
   ELSE (delete_report)
   ELSE (delete_report_format)
   ELSE (delete_schedule)

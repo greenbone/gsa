@@ -1,5 +1,25 @@
 2012-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add port range deletion.
+
+	* src/gsad.c (init_validator): Add delete_port_range command and rules.
+	(exec_omp_post): Add delete_port_range.
+
+	* src/gsad_omp.c (get_port_list_omp): Move body to get_port_list.
+	(get_port_list, delete_port_range_omp): New functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (delete_port_range_response): New template.
+	(html-gsa-logo): Add delete_port_range green icon case.
+
+	* src/html/omp.xsl (delete_port_range_response): New template.
+	(port_list [details]): Add delete icon.
+	(get_port_list): Match delete_port_range_response and port list after
+	delete.
+
+2012-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add "New port range" section to Port List Details page.
 
 	* src/gsad.c (init_validator): Add create_port_range command and port

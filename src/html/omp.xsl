@@ -11071,6 +11071,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     DELETE_PORT_RANGE_RESPONSE -->
+
+<xsl:template match="delete_port_range_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Port Range
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     PORT_LIST -->
 
 <xsl:template match="port_list">
@@ -11269,6 +11285,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Protocol</td>
           <td>Actions</td>
         </tr>
+        <xsl:variable name="id" select="@id"/>
+        <xsl:variable name="in_use" select="in_use"/>
         <xsl:for-each select="port_ranges/port_range">
           <xsl:variable name="class">
             <xsl:choose>
@@ -11281,6 +11299,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="end"/></td>
             <td><xsl:value-of select="type"/></td>
             <td width="100">
+              <xsl:choose>
+                <xsl:when test="$in_use = 0">
+                  <xsl:call-template name="delete-icon">
+                    <xsl:with-param name="type">port_range</xsl:with-param>
+                    <xsl:with-param name="id" select="@id"/>
+                    <xsl:with-param name="params">
+                      <input type="hidden" name="port_list_id" value="{$id}"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/delete_inactive.png"
+                       border="0"
+                       alt="Delete"
+                       style="margin-left:3px;"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
         </xsl:for-each>
@@ -11343,7 +11378,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_port_range_response"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
+  <xsl:apply-templates select="commands_response/delete_port_range_response"/>
   <xsl:apply-templates select="get_port_lists_response/port_list" mode="details"/>
+  <xsl:apply-templates select="commands_response/get_port_lists_response/port_list"
+                       mode="details"/>
 </xsl:template>
 
 <!--     GET_PORT_LISTS -->

@@ -255,6 +255,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="delete_port_range_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Port Range'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="delete_report_format_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -632,6 +640,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_overrides/commands_response/modify_override_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_port_list/create_port_range_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_port_list/commands_response/delete_port_range_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/get_reports_escalate_response"
                              mode="response-indicator"/>
