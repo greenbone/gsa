@@ -555,6 +555,7 @@ init_validator ()
                          "|(export_lsc_credential)"
                          "|(export_note)"
                          "|(export_override)"
+                         "|(export_port_list)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
                          "|(get_agent)"
@@ -1689,6 +1690,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_override"))
     return export_override_omp (credentials, params, content_type,
                                 content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_port_list"))
+    return export_port_list_omp (credentials, params, content_type,
+                                 content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_preference_file"))
     return export_preference_file_omp (credentials, params, content_type,

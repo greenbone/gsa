@@ -11125,6 +11125,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Port List Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
+      <a href="/omp?cmd=export_port_list&amp;port_list_id={@id}&amp;token={/envelope/token}"
+         title="Export Port List"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

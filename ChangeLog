@@ -1,3 +1,15 @@
+2012-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add port range export.
+
+	* src/gsad.c (init_validator, export_omp_get): Add export_port_range.
+
+	* src/gsad_omp.c (export_port_list_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (port_list): Add export icon.
+
 2012-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add port range deletion.
