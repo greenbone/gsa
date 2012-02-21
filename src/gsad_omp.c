@@ -14707,6 +14707,109 @@ delete_port_range_omp (credentials_t * credentials, params_t *params)
   return html;
 }
 
+/**
+ * @brief Import port list, get all port lists, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+import_port_list_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  GString *xml = NULL;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while importing a port list. "
+                             "No new port list was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_port_lists");
+    }
+
+  xml = g_string_new ("<get_port_lists>");
+
+  /* Create the port_list. */
+
+  if (openvas_server_sendf (&session,
+                            "<create_port_list>"
+                            "%s"
+                            "</create_port_list>",
+                            params_value (params, "xml_file"))
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a port list. "
+                           "No new port list was created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a port list. "
+                           "It is unclear whether the port list has been created or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  /* Get all the port_lists. */
+
+  if (openvas_server_send (&session,
+                           "<get_port_lists"
+                           " sort_field=\"name\""
+                           " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a port list. "
+                           "The new port list was, however, created. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while importing a port list. "
+                           "The new port list was, however, created. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_port_lists");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</get_port_lists>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
 
 /* Manager communication. */
 

@@ -595,6 +595,7 @@ init_validator ()
                          "|(get_user)"
                          "|(get_users)"
                          "|(import_config)"
+                         "|(import_port_list)"
                          "|(import_report_format)"
                          "|(login)"
                          "|(modify_auth)"
@@ -1482,6 +1483,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   ELSE (get_tasks)
   ELSE (import_config)
+  ELSE (import_port_list)
   ELSE (import_report_format)
   ELSE_OAP (modify_auth)
   ELSE (pause_task)

@@ -11377,6 +11377,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="html-import-port-list-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Import Port List
+      <a href="/help/configure_port_lists.html?token={/envelope/token}#import_port_list"
+         title="Help: Configure Port Lists (Import Port Lists)">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="import_port_list"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">
+              Import XML port list
+            </td>
+            <td><input type="file" name="xml_file" size="30"/></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Import Port List"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
 <!--     GET_PORT_LIST -->
 
 <xsl:template match="get_port_list">
@@ -11396,6 +11431,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:apply-templates select="create_port_list_response"/>
   <xsl:call-template name="html-create-port_list-form"/>
+  <xsl:call-template name="html-import-port-list-form"/>
   <!-- The for-each makes the get_port_lists_response the current node. -->
   <xsl:for-each select="get_port_lists_response | commands_response/get_port_lists_response">
     <xsl:call-template name="html-port-lists-table"/>

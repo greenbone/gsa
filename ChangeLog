@@ -1,8 +1,21 @@
+2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add port list import.
+
+	* src/gsad.c (init_validator, export_omp_get): Add import_port_range.
+
+	* src/gsad_omp.c (export_port_list_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (html-import-port-list-form): New template.
+	(get_port_lists): Add import form.
+
 2012-02-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Add port range export.
+	Add port list export.
 
-	* src/gsad.c (init_validator, export_omp_get): Add export_port_range.
+	* src/gsad.c (init_validator, export_omp_get): Add export_port_list.
 
 	* src/gsad_omp.c (export_port_list_omp): New function.
 
