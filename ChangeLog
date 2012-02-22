@@ -1,5 +1,9 @@
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-port-lists-table, port_list): Add count columns.
+
+2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add port list import.
 
 	* src/gsad.c (init_validator, export_omp_get): Add import_port_range.

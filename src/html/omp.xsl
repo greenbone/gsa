@@ -11031,8 +11031,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td>Name</td>
-            <td width="100">Actions</td>
+            <td rowspan="2">Name</td>
+            <td colspan="3">Port Counts</td>
+            <td width="115" rowspan="2">Actions</td>
+          </tr>
+          <tr class="gbntablehead2">
+            <td width="1" style="font-size:10px;">Total</td>
+            <td style="font-size:10px;">TCP</td>
+            <td style="font-size:10px;">UDP</td>
           </tr>
           <xsl:apply-templates select="port_list"/>
         </table>
@@ -11105,6 +11111,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="port_count/all"/>
+    </td>
+    <td>
+      <xsl:value-of select="port_count/tcp"/>
+    </td>
+    <td>
+      <xsl:value-of select="port_count/udp"/>
     </td>
     <td>
       <xsl:choose>
@@ -11196,6 +11211,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Comment:</td>
           <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Port count:</td>
+          <td><xsl:value-of select="port_count/all"/></td>
+        </tr>
+        <tr>
+          <td>TCP Port count:</td>
+          <td><xsl:value-of select="port_count/tcp"/></td>
+        </tr>
+        <tr>
+          <td>UDP Port count:</td>
+          <td><xsl:value-of select="port_count/udp"/></td>
         </tr>
       </table>
 
