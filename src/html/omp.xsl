@@ -11238,7 +11238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Start</td>
             <td>
               <xsl:choose>
-                <xsl:when test="count(targets/target) = 0">
+                <xsl:when test="in_use = 0">
                   <input type="text" name="port_range_start" value=""
                          size="30" maxlength="400"/>
                 </xsl:when>
@@ -11253,7 +11253,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">End</td>
             <td>
               <xsl:choose>
-                <xsl:when test="count(targets/target) = 0">
+                <xsl:when test="in_use = 0">
                   <input type="text" name="port_range_end" value=""
                          size="30" maxlength="400"/>
                 </xsl:when>
@@ -11269,7 +11269,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <label>
                 <xsl:choose>
-                  <xsl:when test="count(targets/target) = 0">
+                  <xsl:when test="in_use = 0">
                     <input type="radio" name="port_type" value="tcp" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -11281,7 +11281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <label>
                 <xsl:choose>
-                  <xsl:when test="count(targets/target) = 0">
+                  <xsl:when test="in_use = 0">
                     <input type="radio" name="port_type" value="udp"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -11296,7 +11296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
-                <xsl:when test="count(targets/target) = 0">
+                <xsl:when test="in_use = 0">
                   <input type="submit" name="submit" value="Add port range"/>
                 </xsl:when>
                 <xsl:otherwise>

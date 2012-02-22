@@ -1,6 +1,13 @@
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (port_list [details]): Use the in_use element to check
+	if the New Port Range form should be enabled, because the predefined
+	targets are marked with in_use.
+
+2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-port-lists-table, port_list): Add count columns.
+	(port_list [details]): Add count fields.
 
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
