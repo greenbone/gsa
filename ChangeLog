@@ -1,8 +1,16 @@
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (configure_port_lists.html): New template.
+	(configure_targets.html): Convert port ranges to port lists.
+
+	* src/html/omp.xsl (port_list [details]): Rename the New Port Range field
+	Type to Protocol, and the button to Create port range.
+
+2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (port_list [details]): Use the in_use element to check
 	if the New Port Range form should be enabled, because the predefined
-	targets are marked with in_use.
+	port lists are marked with in_use.
 
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 

@@ -812,6 +812,302 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="configure_port_lists.html">
+  <div class="gb_window_part_center">Help: Configure Port Lists</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Configure Port Lists</h1>
+      <p>
+       <a href="glossary.html?token={/envelope/token}#port_list">Port lists</a>
+       indicate which ports must be scanned for a
+       <a href="glossary.html?token={/envelope/token}#target">target</a>.
+       There are some predefined port lists, for convenience.
+      </p>
+
+      <a name="newport_list"></a>
+      <h2>New Port List</h2>
+      <p>
+       For creating a new port list the dialog offers these entries.
+       Hit the button "Create Port List" to submit the new port list.
+       The list of port lists will be updated.
+      </p>
+
+      <p>
+        <table class="gbntable">
+          <tr class="gbntablehead2">
+            <td></td>
+            <td>Mandatory</td>
+            <td>Max Length</td>
+            <td>Syntax</td>
+            <td>Example</td>
+          </tr>
+          <tr class="odd">
+            <td>Name</td>
+            <td>yes</td>
+            <td>80</td>
+            <td>Alphanumeric</td>
+            <td>All privileged UDP</td>
+          </tr>
+          <tr class="odd">
+            <td>Comment</td>
+            <td>no</td>
+            <td>400</td>
+            <td>Alphanumeric</td>
+            <td>Every privileged UDP port.</td>
+          </tr>
+          <tr class="odd">
+            <td>Port Ranges</td>
+            <td>yes</td>
+            <td>400</td>
+            <td>Comma separated list of port ranges, either directly or from a file</td>
+            <td>U:1-1023</td>
+          </tr>
+        </table>
+
+        Note on <b>Port Ranges</b>:
+        <ul>
+          <li>
+            The port ranges parameter is a comma-separated list of values.  The
+            list can be input directly or uploaded in a file.  In the file both
+            newlines and commas can separate values.  Each value in the list
+            can be
+            <ul>
+              <li>a single port (e.g. <tt>7</tt>)</li>
+              <li>a range (e.g. <tt>9-11</tt>)</li>
+            </ul>
+            These options can be mixed (e.g. <tt>1-3,7,9-11</tt>).
+          </li>
+          <li>
+            A value in the list can be preceded by a protocol specifier.  Either
+            "T:" or "U:".  This has the effect of setting the protocol for all
+            following ranges.  For example <tt>T:1-3,U:7,9-11</tt> defines the TCP
+            ports 1, 2 and 3, and the UDP ports 7, 9, 10 and 11.
+          </li>
+          <li>
+            Multiple protocol specifiers toggle the protocol.  For example
+            <tt>T:1-3,U:7,T:9-11</tt> defines the TCP ports 1, 2, 3, 9, 10 and 11,
+            and the UDP port 7.
+          </li>
+          <li>
+            Initially the protocol is TCP.  So for example <tt>1-3,U:7</tt>
+            defines the TCP ports 1, 2, and 3, and the UDP port 7.
+          </li>
+        </ul>
+      </p>
+
+      <a name="predefined_port_lists"></a>
+      <h2>Predefined Port Lists</h2>
+      <p>
+        The predefined port lists include:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Name</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>All IANA assigned TCP 2012-02-10</td>
+          <td>
+            All TCP ports assigned by IANA, as at 10 February 2012.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All IANA assigned TCP and UDP 2012-02-10</td>
+          <td>
+            All TCP and UDP ports assigned by IANA, as at 10 February 2012.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All TCP</td>
+          <td>
+            Every TCP port.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All TCP and Nmap 5.51 top 100 UDP</td>
+          <td>
+            Every TCP port, and the top 100 UDP ports according to Nmap 5.51.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All TCP and Nmap 5.51 top 1000 UDP</td>
+          <td>
+            Every TCP port, and the top 1000 UDP ports according to Nmap 5.51.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All privileged TCP</td>
+          <td>
+            Every privileged TCP port.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>All privileged TCP and UDP</td>
+          <td>
+            Every privileged TCP port and every privileged UDP port.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Nmap 5.51 top 2000 TCP and top 100 UDP</td>
+          <td>
+            The top 2000 TCP ports and the top 100 UDP ports, according to Nmap 5.51.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>OpenVAS Default</td>
+          <td>
+            The TCP ports that are scanned by the OpenVAS-4 Scanner
+            when passed the "default" port_range preference.
+          </td>
+        </tr>
+      </table>
+
+      <a name="import_port_list"></a>
+      <h2>Import Port List</h2>
+      <p>
+       To import a port list, select the import file and hit the
+       "Import Port List" button to submit the port list.
+       The list of port lists will be updated.
+       Note that the import will fail with an error message if the port list
+       already exists on your system, or if an existing port list has the
+       same name.
+      </p>
+      <p>
+       To create a file that can be imported in another installation, refer to the
+       <a href="#export">export action</a>.
+      </p>
+
+      <a name="port_list"></a>
+      <h2>Port Lists</h2>
+      <p>
+       This table provides an overview of all configured port lists.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>
+            Shows name of the port list and,
+            if specified, the comment in brackets below
+            the name.
+          </td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts Total</td>
+         <td>
+           The total number of ports in the port list.
+         </td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts TCP</td>
+         <td>
+           The total number of TCP ports in the port list.
+         </td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts UDP</td>
+         <td>
+           The total number of UDP ports in the port list.
+         </td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       For Port Lists the following actions are available.
+      </p>
+
+      <h4>Move Port List to Trashcan</h4>
+      <p>
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
+      </p>
+
+      <h4>Port List Details</h4>
+      <p>
+       Activating the details icon
+       <img src="/img/details.png" alt="Port List Details" title="Port List Details" />
+       will open the <a href="#target_details">Port List Details</a>
+       dialog to provide details of the port list.
+      </p>
+
+      <a name="export"></a>
+      <h4>Export Port List XML</h4>
+      <p>
+       A Port List can be saved to file, e.g. for sharing or backup.
+       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
+       will let you download a file describing this port list.
+      </p>
+      <p>
+       The file can later be imported by chosing to
+       <a href="#import_port_list">Import a Port List</a>.
+      </p>
+
+      <a name="port_list_details"></a>
+      <h2>Port List Details</h2>
+      <p>
+       Provides detailed information about the port list.
+      </p>
+
+      <h3>New Port Range</h3>
+      <p>
+       For adding a new port range to a port list the dialog offers these
+       entries.  Hit the button "Create Port Range" to submit the new port
+       list.  The port list details will be updated.
+      </p>
+
+      <p>
+        <table class="gbntable">
+          <tr class="gbntablehead2">
+            <td></td>
+            <td>Mandatory</td>
+            <td>Max Length</td>
+            <td>Syntax</td>
+            <td>Example</td>
+          </tr>
+          <tr class="odd">
+            <td>Start</td>
+            <td>yes</td>
+            <td>80</td>
+            <td>Numeric 1-65535</td>
+            <td>5</td>
+          </tr>
+          <tr class="odd">
+            <td>End</td>
+            <td>yes</td>
+            <td>80</td>
+            <td>Numeric 1-65535</td>
+            <td>7</td>
+          </tr>
+          <tr class="odd">
+            <td>Protocol</td>
+            <td>yes</td>
+            <td>--</td>
+            <td>Radio button</td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+
+      <h3>Port Ranges</h3>
+      <p>
+       This table lists all the port ranges in the port list.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="configure_report_formats.html">
   <div class="gb_window_part_center">Help: Configure Report Formats</div>
   <div class="gb_window_part_content">
@@ -1532,11 +1828,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Covers both of our web staging systems</td>
         </tr>
         <tr class="odd">
-          <td>Port Range</td>
+          <td>Port List</td>
           <td>yes</td>
-          <td>400</td>
-          <td>Comma separated list of port ranges</td>
-          <td>1-1000,1649,2102-2104</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
+          <td>All privileged TCP</td>
         </tr>
         <tr class="even">
           <td>SSH Credential</td>
@@ -1635,8 +1931,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               hosts specification.</td>
         </tr>
         <tr class="even">
-          <td>Port Range</td>
-          <td>The comma separated list of target ports.</td>
+          <td>Port List</td>
+          <td>Associated port list, that can be clicked on to view details.</td>
         </tr>
         <tr class="odd">
           <td>SSH Credential</td>
@@ -1935,6 +2231,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
             <li> <a href="configure_escalators.html?token={/envelope/token}">Configure Escalators</a></li>
             <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
+            <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
             <li> <a href="configure_slaves.html?token={/envelope/token}">Configure Slaves</a></li>
           </ul>
@@ -2202,6 +2499,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        as False Positives (e.g. an incorrect or expected finding)
        or emphasize items that are of higher threat in the
        observed scenario.
+      </p>
+
+      <a name="port_list"></a>
+      <h2>Port List</h2>
+      <p>
+       A port list is a list of ports.  Each <a href="#target">Target</a> is
+       associated with a Port List.  This determines which ports are scanned
+       during a scan of the Target.
       </p>
 
       <a name="report"></a>

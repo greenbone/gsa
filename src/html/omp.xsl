@@ -11265,7 +11265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top">Type</td>
+            <td valign="top">Protocol</td>
             <td>
               <label>
                 <xsl:choose>
@@ -11297,10 +11297,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="in_use = 0">
-                  <input type="submit" name="submit" value="Add port range"/>
+                  <input type="submit" name="submit" value="Create port range"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="Add port range"
+                  <input type="submit" name="submit" value="Create port range"
                          disabled="1"/>
                 </xsl:otherwise>
               </xsl:choose>
