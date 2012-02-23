@@ -1,3 +1,8 @@
+2012-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_port_range_omp, get_port_list): Add details flag
+	to GET_PORT_LISTS call.
+
 2012-02-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (configure_port_lists.html): New template.

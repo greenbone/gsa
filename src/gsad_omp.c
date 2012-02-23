@@ -14279,6 +14279,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
   if (openvas_server_sendf (&session,
                             "<get_port_lists"
                             " port_list_id=\"%s\""
+                            " details=\"1\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
                             port_list_id,
@@ -14371,6 +14372,7 @@ get_port_list (credentials_t * credentials, params_t *params,
                             "%s"
                             "<get_port_lists"
                             " port_list_id=\"%s\""
+                            " details=\"1\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>"
                             "</commands>",
