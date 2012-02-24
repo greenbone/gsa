@@ -1,5 +1,16 @@
 2012-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Allow upload of targets from a file.
+
+	* src/gsad.c (init_validator): Add file to target_source.
+
+	* src/gsad_omp.c (create_target_omp): Get hosts from file param if
+	target_source is file.
+
+	* src/html/omp.xsl (html-create-target-form): Add file target source.
+
+2012-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add target_source.
 
 	* src/gsad_omp.c (create_target_omp): Make the type of Hosts input depend

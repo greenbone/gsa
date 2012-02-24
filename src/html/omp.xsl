@@ -5187,6 +5187,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>
                       <label>
+                        <input type="radio" name="target_source" value="file"/>
+                        From file
+                      </label>
+                    </td>
+                    <td>
+                      <input type="file" name="file" size="30"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
                         <input type="radio" name="target_source" value="import"/>
                         Import
                       </label>

@@ -4184,7 +4184,9 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                   "</create_target>",
                                   name,
                                   (strcmp (source_element, "") == 0)
-                                    ? hosts
+                                    ? ((strcmp (target_source, "file") == 0)
+                                         ? params_value (params, "file")
+                                         : hosts)
                                     : "",
                                   port_list_id,
                                   comment_element,
