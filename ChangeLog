@@ -1,3 +1,17 @@
+2012-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add target_source.
+
+	* src/gsad_omp.c (create_target_omp): Make the type of Hosts input depend
+	on the target_source param instead of on the value of the Import dropdown.
+	Seems like this was or should have been the original intention.  This
+	prevents the input of an empty hosts string in the Manual case, which was
+	leading a target with Hosts "(null)".
+
+	* src/html/omp.xsl (html-create-target-form): Remove the "--" option
+	because a source is required and the radio parameter signals which Host
+	input type to use.
+
 2012-02-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_port_range_omp, get_port_list): Add details flag

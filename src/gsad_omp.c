@@ -4087,7 +4087,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   int socket;
   gchar *html;
   const char *name, *hosts, *target_locator, *comment, *port_list_id;
-  const char *target_credential, *port, *target_smb_credential;
+  const char *target_credential, *port, *target_smb_credential, *target_source;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4111,6 +4111,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   target_locator = params_value (params, "target_locator");
+  target_source = params_value (params, "target_source");
   comment = params_value (params, "comment");
   port_list_id = params_value (params, "port_list_id");
   target_credential = params_value (params, "lsc_credential_id");
@@ -4118,8 +4119,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
 
   CHECK (name);
-  else if (hosts == NULL && target_locator == NULL)
+  else CHECK (target_source);
+  else if (hosts == NULL && strcmp (target_source, "manual") == 0)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
+  else CHECK (target_locator);
   else CHECK (comment);
   else CHECK (port_list_id);
   else CHECK (target_credential);
@@ -4141,7 +4144,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
       else
         comment_element = g_strdup ("");
 
-      if (target_locator != NULL && strcmp (target_locator, "--") != 0)
+      if (strcmp (target_source, "import") == 0)
         source_element = g_markup_printf_escaped ("<target_locator>"
                                                   "%s"
                                                   "<username>%s</username>"

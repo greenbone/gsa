@@ -5193,7 +5193,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                     <td>
                       <select name="target_locator">
-                        <option value="--">--</option>
                         <xsl:apply-templates select="$target-sources" mode="select"/>
                       </select>
                     </td>

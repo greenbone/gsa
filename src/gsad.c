@@ -735,6 +735,7 @@ init_validator ()
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "target_source", "^(import|manual)$");
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
