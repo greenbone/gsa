@@ -5161,15 +5161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="not ($target-sources/target_locator)">
               <!-- No target locator(s) given. -->
               <td>
-                <input type="hidden" name="target_source" value="manual"/>
-                <input type="text" name="hosts" value="localhost" size="30"
-                        maxlength="2000"/>
-              </td>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- Target locator(s) given. -->
-              <td>
-               <xsl:value-of select="$target-sources"/>
+                <xsl:value-of select="$target-sources"/>
                 <table>
                   <tr>
                     <td>
@@ -5181,7 +5173,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                     <td>
                       <input type="text" name="hosts" value="localhost" size="30"
-                             maxlength="80"/>
+                              maxlength="2000"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="file"/>
+                        From file
+                      </label>
+                    </td>
+                    <td>
+                      <input type="file" name="file" size="30"/>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- Target locator(s) given. -->
+              <td>
+                <xsl:value-of select="$target-sources"/>
+                <table>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="manual"
+                               checked="1"/>
+                        Manual
+                      </label>
+                    </td>
+                    <td>
+                      <input type="text" name="hosts" value="localhost" size="30"
+                             maxlength="2000"/>
                     </td>
                   </tr>
                   <tr>

@@ -1,5 +1,14 @@
 2012-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Only check target_locator when
+	importing.
+
+	* src/html/omp.xsl (html-create-target-form): Add the "From file" option
+	to the case where target sources is empty.  Correct the maxlength in the
+	other case.
+
+2012-02-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Allow upload of targets from a file.
 
 	* src/gsad.c (init_validator): Add file to target_source.

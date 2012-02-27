@@ -4122,7 +4122,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
   else CHECK (target_source);
   else if (hosts == NULL && strcmp (target_source, "manual") == 0)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
-  else CHECK (target_locator);
+  else if (strcmp (target_source, "import") == 0 && name == NULL)
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                            "Given target_locator was invalid",
+                            "Create Target");
   else CHECK (comment);
   else CHECK (port_list_id);
   else CHECK (target_credential);
