@@ -5389,7 +5389,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td><xsl:value-of select="hosts"/></td>
+    <td>
+      <xsl:variable name="max" select="500"/>
+      <xsl:choose>
+        <xsl:when test="string-length(hosts) &gt; $max">
+          <xsl:value-of select="substring (hosts, 0, $max)"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="hosts"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td><xsl:value-of select="max_hosts"/></td>
     <td>
       <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">

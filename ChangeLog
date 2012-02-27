@@ -1,5 +1,9 @@
 2012-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (target): Limit the hosts column to 500 chars.
+
+2012-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (configure_targets.html): Adjust for "From file" Hosts
 	option.
 
