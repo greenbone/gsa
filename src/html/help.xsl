@@ -1814,13 +1814,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Staging webservers</td>
         </tr>
         <tr class="even">
-          <td>Hosts</td>
-          <td>yes</td>
+          <td>Hosts: Manual</td>
+          <td>--</td>
           <td>200</td>
-          <td>Comma separated list of IPs and/or hostnames</td>
+          <td>Comma separated list of IPs and/or hostnames.</td>
           <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
         </tr>
         <tr class="odd">
+          <td>Hosts: From file</td>
+          <td>--</td>
+          <td>--</td>
+          <td>
+            File containing comma separated list of IPs and/or hostnames,
+            optionally over multiple lines.
+          </td>
+          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
+        </tr>
+        <tr class="even">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
@@ -1870,15 +1880,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Syntax</td>
           <td>Example</td>
         </tr>
-        <tr class="odd">
-          <td>Manual</td>
-          <td>---</td>
-          <td>80</td>
-          <td>Comma separated list of IPs and/or hostnames</td>
-          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
-        </tr>
         <tr class="even">
-          <td>Import</td>
+          <td>Hosts: Import</td>
           <td>---</td>
           <td>---</td>
           <td>Selection of configured services</td>
