@@ -1,3 +1,7 @@
+2012-02-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_schedule_omp): Get minutes from correct param.
+
 2012-02-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (target): Limit the hosts column to 500 chars.

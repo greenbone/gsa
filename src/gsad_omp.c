@@ -12237,7 +12237,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   hour = params_value (params, "hour");
-  minute = params_value (params, "hour");
+  minute = params_value (params, "minute");
   day_of_month = params_value (params, "day_of_month");
   duration = params_value (params, "duration");
   duration_unit = params_value (params, "duration_unit");
