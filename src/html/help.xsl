@@ -3852,11 +3852,11 @@ Public License instead of this License.
         </tr>
         <tr class="even">
           <td>Name</td>
-          <td>Shows the name of a prefence for an NVT.</td>
+          <td>Shows the name of a preference for an NVT.</td>
         </tr>
         <tr class="odd">
           <td>Value</td>
-          <td>Shows current value of a prefence for an NVT.</td>
+          <td>Shows current value of a preference for an NVT.</td>
         </tr>
       </table>
 
@@ -4002,11 +4002,11 @@ Public License instead of this License.
         </tr>
         <tr class="even">
           <td>Name</td>
-          <td>Shows the name of a prefence for an NVT.</td>
+          <td>Shows the name of a preference for an NVT.</td>
         </tr>
         <tr class="odd">
           <td>Value</td>
-          <td>Shows current value of a prefence for an NVT.</td>
+          <td>Shows current value of a preference for an NVT.</td>
         </tr>
       </table>
 
