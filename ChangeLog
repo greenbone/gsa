@@ -1,5 +1,9 @@
 2012-03-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/html/help.xsl: Corrected typos (aspell run).
+
+2012-03-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	* src/html/help.xsl: Corrected typos.
 
 2012-02-29  Matthew Mundell <matthew.mundell@greenbone.net>

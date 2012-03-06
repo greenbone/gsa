@@ -585,7 +585,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        With installing this package on a RPM-based systems (e.g. SUSE, RedHat, Fedora, Centos)
        a low privileged user account is created on that target system to allow
-       the scan engine to access the system retrieve information about intalled software
+       the scan engine to access the system retrieve information about installed software
        and other product information. De-installation of the package will disable the access.
       </p>
 
@@ -611,7 +611,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        With installing this package on a Windows systems (e.g. XP, 2003)
        a low privileged user account is created on that target system to allow
-       the scan engine to access the system retrieve information about intalled software
+       the scan engine to access the system retrieve information about installed software
        and other product information. De-installation of the package will disable the access.
       </p>
 
@@ -660,7 +660,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        (e.g. a task finished), a chosen condition is checked (e.g. vulnerability
        with high threat level detected).
        If the condition is met, an action is performed (e.g. an email is sent to a
-       specified adress).
+       specified address).
       </p>
 
       <a name="newescalator"></a>
@@ -1050,7 +1050,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will let you download a file describing this port list.
       </p>
       <p>
-       The file can later be imported by chosing to
+       The file can later be imported by choosing to
        <a href="#import_port_list">Import a Port List</a>.
       </p>
 
@@ -1274,7 +1274,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will let you download a file describing this report format.
       </p>
       <p>
-       The file can later be imported by chosing to
+       The file can later be imported by choosing to
        <a href="#import_report_format">Import a Report Format</a>.
       </p>
 
@@ -1435,7 +1435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Scan Config Details</h4>
       <p>
-       Issueing the details icon
+       Issuing the details icon
        <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
        will open the <a href="scanconfig_details.html?token={/envelope/token}">Scan Config Details</a>
        dialog to provide details on the configuration
@@ -1463,7 +1463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will let you download a file describing this scan config.
       </p>
       <p>
-       The file can later be imported by chosing to <a href="#importconfig">Import a Scan Config</a>.
+       The file can later be imported by choosing to <a href="#importconfig">Import a Scan Config</a>.
       </p>
     </div>
   </div>
@@ -2121,7 +2121,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="even">
           <td>ADS Host</td>
-          <td>Adress and optional port of the ADS host to bind to.</td>
+          <td>Address and optional port of the ADS host to bind to.</td>
           <td>ads.example.com:389</td>
         </tr>
         <tr class="odd">
@@ -2174,7 +2174,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Details</h4>
       <p>
        Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will lead to a page
-       dispalying user details.
+       displaying user details.
       </p>
 
       <h4>Edit</h4>
@@ -2368,7 +2368,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </li></p>
         <p><li>
           Logout: In case of serious problems where neither of the
-          two other options helps, you shoud log out of GSA. As long
+          two other options helps, you should log out of GSA. As long
           as GSA is still running, you will get the login dialog.
         </li></p>
       </ol>
@@ -2494,7 +2494,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="override"></a>
       <h2>Override</h2>
       <p>
-       An overide is a rule to change the threat of items
+       An override is a rule to change the threat of items
        within one or many <a href="#report">report</a>s.
       </p>
       <p>
@@ -2523,7 +2523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        A report is always associated with a
        <a href="#task">task</a>. The
        <a href="#scanconfig">Scan Configuration</a> that
-       detemines the extend of the report is part of the
+       determines the extend of the report is part of the
        associated task and can not be modified. Therefore,
        for any report it is ensured that its execution
        configuration is preserved and available.
@@ -2552,13 +2552,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        The progress is shown as a percentage of
        total number of tests to be executed. The
        duration of a scan is determined by the number
-       <a href="#target">tagets</a> and the complexity
+       <a href="#target">targets</a> and the complexity
        of the <a href="#scanconfig">Scan Configuration</a>
        and ranges from 1 minute to many hours or even days.
       </p>
       <p>
        The task overview offers an option to stop a scan.
-       The resulting report will then be imcomplete.
+       The resulting report will then be incomplete.
       </p>
 
       <a name="scanconfig"></a>
@@ -3205,7 +3205,7 @@ Public License instead of this License.
        <img src="/img/details.png" alt="Details" title="Details" />
        will show the  <a href="#notedetails">Note Details</a> page.  This page has
        full details of the note, including the note text and all
-       contraints on the note.
+       constraints on the note.
       </p>
 
       <h4>Edit Note</h4>
@@ -3547,7 +3547,7 @@ Public License instead of this License.
           <td>yes</td>
           <td>600</td>
           <td>Free form text</td>
-          <td>This specific version is needed and patched. In intranet: Patched Sytem 1-42.</td>
+          <td>This specific version is needed and patched. In intranet: Patched System 1-42.</td>
         </tr>
       </table>
 
@@ -3658,7 +3658,7 @@ Public License instead of this License.
         <tr class="odd">
           <td>Scan Results</td>
           <td>This column lists the number
-            of occurances for each severity level.
+            of occurrences for each severity level.
             <br />
             <table>
               <tr><td valign="top"><img src="/img/high.png" alt="High" title="High" /></td><td>
@@ -3671,7 +3671,7 @@ Public License instead of this License.
                   The number of issues of severity "Low" found during the scan.
               </td></tr>
               <tr><td valign="top"><img src="/img/log.png" alt="Log" title="Log" /></td><td>
-                  The number of log-entries that occured during the scan.
+                  The number of log-entries that occurred during the scan.
               </td></tr>
             </table>
           </td>
@@ -3771,7 +3771,7 @@ Public License instead of this License.
       <p>
        This table provides an overview of the selected NVTs and NVT Families.
        A Trend icon next to the Family column of the table indicates whether new
-       families will automaticall be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" />
+       families will automatically be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" />
        or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static" />.
       </p>
 
@@ -3927,7 +3927,7 @@ Public License instead of this License.
         <tr class="odd">
           <td>Family</td>
           <td>Shows the name of the NVT Family. The trend icon in the Family column
-              header allows to specify whether new families will automaticall be
+              header allows to specify whether new families will automatically be
               included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or not ("Static")
               <img src="/img/trend_nochange.png" alt="Static" title="Static" />.</td>
         </tr>
@@ -4259,7 +4259,7 @@ Public License instead of this License.
       </p>
 
       <p>
-       Risk catogories:
+       Risk categories:
       </p>
 
       <table class="gbntable">
