@@ -1,5 +1,10 @@
 2012-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-report-details): Add some space between the back
+	arrows and the first number in the Filtered Results dialog heading.
+
+2012-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Apply missing port list responses for
 	indicator icon.
 
