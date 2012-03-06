@@ -1,3 +1,8 @@
+2012-03-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply missing port list responses for
+	indicator icon.
+
 2012-03-06  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Corrected typos (aspell run).
