@@ -1139,6 +1139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test="@type='prognostic'">
             </xsl:when>
             <xsl:when test="../../delta">
+              <td>Download</td>
             </xsl:when>
             <xsl:otherwise>
               <td>Escalate</td>
@@ -1374,12 +1375,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </form>
                 </div>
               </td>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
+            <xsl:otherwise>
               <td>
                 <div id="small_form" style="float:right;">
                   <form action="" method="get">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_report"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
+
+                    <xsl:choose>
+                      <xsl:when test="../../delta">
+                        <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+                      </xsl:when>
+                    </xsl:choose>
+
                     <input type="hidden" name="first_result" value="{report/results/@start}"/>
                     <input type="hidden" name="max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
                     <input type="hidden" name="levels" value="{$levels}"/>
@@ -1552,12 +1567,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </form>
                 </div>
               </td>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
+            <xsl:otherwise>
               <td>
                 <div id="small_form" class="float_right">
                   <form action="" method="get">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_report"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
+
+                    <xsl:choose>
+                      <xsl:when test="../../delta">
+                        <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+                      </xsl:when>
+                    </xsl:choose>
+
                     <input type="hidden" name="first_result" value="{report/results/@start}"/>
                     <input type="hidden" name="max_results" value="{report/results/@max}"/>
                     <input type="hidden" name="levels" value="{$levels}"/>
