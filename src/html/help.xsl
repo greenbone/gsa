@@ -3790,15 +3790,6 @@ Public License instead of this License.
               with the current NVT set and the total number of NVTs in this family.</td>
         </tr>
         <tr class="odd">
-          <td>Family</td>
-          <td>Shows the name of the NVT Family.</td>
-        </tr>
-        <tr class="even">
-          <td>NVT's selected</td>
-          <td>The number of NVTs that would be considered
-              with the current NVT set and the total number of NVTs in this family.</td>
-        </tr>
-        <tr class="odd">
           <td>Trend</td>
           <td>Shows the Trend, which indicates whether new NVTs of this family are
               automatically added to the configuration ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow" /> or

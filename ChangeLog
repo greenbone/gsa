@@ -1,3 +1,8 @@
+2012-03-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/html/help.xsl: Removed double entries for scan config details
+	  table.
+
 2012-03-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Add Download column.
