@@ -8196,7 +8196,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (levels, TRUE);
       if (strcmp (format_id, "a994b278-1f62-11e1-96ac-406186ea4fc5") == 0)
         {
-          const char *extension, *type;
+          const char *extension, *requested_content_type;
           /* Manager sends XML report as plain XML. */
 
           if (read_entity (&session, &entity))
@@ -8222,13 +8222,17 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks");
             }
           extension = entity_attribute (report, "extension");
-          type = entity_attribute (report, "content_type");
-          if (extension && type && content_type && content_disposition)
+          requested_content_type = entity_attribute (report, "content_type");
+          if (extension && requested_content_type && content_type
+              && content_disposition)
             {
-              *content_type = g_strdup (type);
+              *content_type = g_strdup (requested_content_type);
               *content_disposition
                 = g_strdup_printf ("attachment; filename=report-%s.%s",
-                                   report_id,
+                                   (type && ((strcmp (type, "assets") == 0)
+                                             || (strcmp (type, "prognostic") == 0)))
+                                    ? type
+                                    : report_id,
                                    extension);
             }
           xml = g_string_new ("");

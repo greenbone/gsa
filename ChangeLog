@@ -1,5 +1,10 @@
 2012-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Replace the UUID with a fixed string in the
+	report name of the XML report, when it's a prognostic report.
+
+2012-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add download of prognostic reports.
 
 	* src/gsad_omp.c (get_report): Replace the UUID with a fixed string in the
