@@ -1137,6 +1137,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Total</td>
           <xsl:choose>
             <xsl:when test="@type='prognostic'">
+              <td>Download</td>
             </xsl:when>
             <xsl:when test="../../delta">
               <td>Download</td>
@@ -1378,7 +1379,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
-            <xsl:when test="@type='prognostic'">
+            <xsl:when test="false">
             </xsl:when>
             <xsl:otherwise>
               <td>
@@ -1392,6 +1393,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:when test="../../delta">
                         <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
                         <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="@type='prognostic'">
+                        <input type="hidden" name="type" value="prognostic"/>
+                        <input type="hidden" name="host" value="{report/filters/host}"/>
+                        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+                        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+                        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+                        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
                       </xsl:when>
                     </xsl:choose>
 
@@ -1570,7 +1579,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
-            <xsl:when test="@type='prognostic'">
+            <xsl:when test="false">
             </xsl:when>
             <xsl:otherwise>
               <td>
@@ -1584,6 +1593,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:when test="../../delta">
                         <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
                         <input type="hidden" name="delta_states" value="{report/filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="@type='prognostic'">
+                        <input type="hidden" name="type" value="prognostic"/>
+                        <input type="hidden" name="host" value="{report/filters/host}"/>
+                        <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+                        <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+                        <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+                        <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
                       </xsl:when>
                     </xsl:choose>
 

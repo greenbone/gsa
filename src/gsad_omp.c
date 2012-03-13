@@ -8265,9 +8265,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           report_entity = entity_child (entity, "report");
           if (report_entity != NULL)
             {
-              const char *extension, *type;
+              const char *extension, *requested_content_type;
               extension = entity_attribute (report_entity, "extension");
-              type = entity_attribute (report_entity, "content_type");
+              requested_content_type = entity_attribute (report_entity,
+                                                         "content_type");
               report_encoded = entity_text (report_entity);
               report_decoded =
                 (gchar *) g_base64_decode (report_encoded, report_len);
@@ -8278,12 +8279,20 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   report_decoded = (gchar *) g_strdup ("");
                   *report_len = 0;
                 }
-              if (extension && type && content_type && content_disposition)
+              if (extension && requested_content_type && content_type
+                  && content_disposition)
                 {
-                  *content_type = g_strdup (type);
+                  const char *id;
+                  if (report_id)
+                    id = report_id;
+                  else if (type && (strcmp (type, "prognostic") == 0))
+                    id = "prognostic";
+                  else
+                    id = "ERROR";
+                  *content_type = g_strdup (requested_content_type);
                   *content_disposition
                     = g_strdup_printf ("attachment; filename=report-%s.%s",
-                                       report_id,
+                                       id,
                                        extension);
                 }
               free_entity (entity);
@@ -8408,7 +8417,35 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (type && (strcmp (type, "prognostic") == 0))
         {
+          if (openvas_server_send (&session, "<get_report_formats"
+                                             " sort_field=\"name\""
+                                             " sort_order=\"ascending\"/>")
+              == -1)
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
+          if (read_string (&session, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
           g_string_append (xml, "</get_prognostic_report>");
+
           openvas_server_close (socket, session);
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }

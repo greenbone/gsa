@@ -1,3 +1,14 @@
+2012-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add download of prognostic reports.
+
+	* src/gsad_omp.c (get_report): Replace the UUID with a fixed string in the
+	report name when it's a prognostic report.  Get the report formats when
+	getting a prognostic report, for the dropdown box.
+
+	* src/html/omp.xsl (html-report-details): Enable the Download column for
+	prognostic reports.
+
 2012-03-09  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Removed double entries for scan config details
