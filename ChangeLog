@@ -1,3 +1,9 @@
+2011-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/wizard.png: New.
+
+	* CMakeLists.txt: Install new icon.
+
 2012-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Replace the UUID with a fixed string in the
