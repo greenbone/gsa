@@ -99,6 +99,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="500"/>
             </td>
           </tr>
+          <!-- Only if ldap-connect is enabled, it is per-user. !-->
+          <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <tr class="odd">
+              <td valign="top">Allow LDAP- Authentication only</td>
+              <td>
+                <input type="checkbox" name="enable_ldap_connect" value="1" checked="1"/>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create User"/>
@@ -127,6 +136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Role</td>
             <td>Host Access</td>
+            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              <td>LDAP Authentication</td>
+            </xsl:if>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="user">
@@ -215,6 +227,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
       </xsl:choose>
     </td>
+    <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+      <td>
+        <xsl:choose>
+          <xsl:when test="sources/source/text() = 'ldap_connect'">
+            <input type="checkbox" name="-" value="-" checked="checked" disabled="true"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="checkbox" name="-" value="-" disabled="true"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </xsl:if>
     <td>
       <xsl:choose>
         <xsl:when test="name=/envelope/login/text()">
@@ -293,6 +317,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </td>
         </tr>
+        <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+          <tr>
+            <td>LDAP-Authentication:</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="sources/source/text() = 'ldap_connect'">
+                  Yes
+                </xsl:when>
+                <xsl:otherwise>
+                  No
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:if>
+
       </table>
 
 <!--
@@ -440,6 +480,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      maxlength="500"/>
             </td>
           </tr>
+          <!-- Only if per-user ldap enabled. -->
+          <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <tr class="odd">
+              <td valign="top">Authentication via LDAP</td>
+              <td>
+               <xsl:choose>
+                 <xsl:when test="sources/source/text() = 'ldap_connect'">
+                   <input type="checkbox" name="enable_ldap_connect" value="1" checked="checked"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <input type="checkbox" name="enable_ldap_connect" value="1"/>
+                 </xsl:otherwise>
+               </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Save User"/>
@@ -774,12 +830,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="Help: Configure Users (ADS Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:when>
-        <xsl:otherwise>
-          LDAP Authentication
+        <xsl:when test="@name='method:ldap'">
+          LDAP Authentication and Authorization
           <a href="/help/configure_users.html?token={/envelope/token}#ldapauthentication"
-            title="Help: Configure Users (LDAP Authentication)">
+            title="Help: Configure Users (LDAP Authentication and Authorization)">
           <img src="/img/help.png"/></a>
-        </xsl:otherwise>
+        </xsl:when>
+        <xsl:when test="@name='method:ldap_connect'">
+          LDAP per-User Authentication
+          <a href="/help/configure_users.html?token={/envelope/token}#peruserldapauthentication"
+            title="Help: Configure Users (LDAP per-User Authentication)">
+          <img src="/img/help.png"/></a>
+        </xsl:when>
       </xsl:choose>
     </div>
     <div class="gb_window_part_content_no_pad">
@@ -814,9 +876,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:when test="@name='method:ads'">
                     ADS
                   </xsl:when>
-                  <xsl:otherwise>
+                  <xsl:when test="@name='method:ldap'">
                     LDAP
-                  </xsl:otherwise>
+                  </xsl:when>
+                  <xsl:when test="@name='method:ldap_connect'">
+                    LDAP
+                  </xsl:when>
                 </xsl:choose>
                 Host</td>
                 <td><input type="text" name="ldaphost" size="30"
@@ -866,6 +931,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="describe_auth_response" mode="show">
   <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap']"/>
   <xsl:apply-templates select="../describe_auth_response/group[@name='method:ads']"/>
+  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap_connect']"/>
 </xsl:template>
 
 <!-- END AUTHENTICATION DESCRIPTION -->

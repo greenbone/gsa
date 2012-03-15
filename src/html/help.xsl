@@ -2061,12 +2061,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>"Allow all", "Allow:" and "<tt>192.168.13.2/31,192.168.14.12</tt>"</td>
         </tr>
       </table>
+      <p>
+        If per-User-LDAP Authentification is configured, an additional checkbox
+        ("Allow LDAP- Authentication only") is shown. When ticked, the user can only
+        log in via the configured LDAP-Server.
+      </p>
 
-      <a name="ldapauthentication"></a>
-      <h2>LDAP Authentication</h2>
+      <a name="peruserldapauthentication"></a>
+      <h2>LDAP per-User Authentication</h2>
       <p>
        This dialog box is only visible if the backend
-       is configured to support LDAP authentication.
+       is configured to support "per-User" LDAP authentication.
+      </p>
+      <p>
+       Changes will be saved after confirming with the "Save" button,
+       but <b>only get into effect after</b> the backend is restarted.
+      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Description</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Enable</td>
+          <td>Whether or not to use ldap authentication.</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>LDAP Host</td>
+          <td>Hostname or IP with optional port
+              of the LDAP service. If no port is given, 389 will
+              be used the default for LDAP services. </td>
+          <td>ldap.example.com:389</td>
+        </tr>
+        <tr class="odd">
+          <td>Auth. DN</td>
+          <td>The DN to authenticate against. Place a single %s where the
+              username will be put.</td>
+          <td>uid=%s,cn=users,o=center,d=org</td>
+        </tr>
+      </table>
+
+      <a name="ldapauthentication"></a>
+      <h2>LDAP Authentication and Authorization</h2>
+      <p>
+       This dialog box is only visible if the backend
+       is configured to support LDAP authentication and authorization.
       </p>
       <p>
        Changes will be saved after confirming with the "Save" button,
@@ -2102,7 +2143,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>ADS Authentication</h2>
       <p>
        This dialog box is only visible if the backend
-       is configured to support ADS authentication.
+       is configured to support ADS authentication and Authorization.
       </p>
       <p>
        Changes will be saved after confirming with the "Save" button,
@@ -2156,6 +2197,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Host access rules of the user.</td>
         </tr>
       </table>
+
+      <p>
+        If per-User-LDAP Authentification is configured, an additional column
+        ("LDAP Authentication") with checkboxes is shown. When the checkbox for
+        a given user is ticked, the user can only log in via the configured LDAP-Server.
+      </p>
 
       <a name="actions"></a>
       <h3>Actions</h3>
