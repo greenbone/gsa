@@ -253,7 +253,8 @@ create_user_oap (credentials_t * credentials, params_t *params)
   GString *xml;
   int socket;
   gchar *html;
-  const char *name, *password, *role, *hosts, *hosts_allow;
+  const char *name, *password, *role, *hosts, *hosts_allow,
+             *enable_ldap_connect;
 
   switch (administrator_connect (credentials, &socket, &session, &html))
     {
@@ -279,6 +280,7 @@ create_user_oap (credentials_t * credentials, params_t *params)
   role = params_value (params, "role");
   hosts = params_value (params, "access_hosts");
   hosts_allow = params_value (params, "hosts_allow");
+  enable_ldap_connect = params_value (params, "enable_ldap_connect");
 
   if (name == NULL || password == NULL || role == NULL || hosts == NULL
       || hosts_allow == NULL)
@@ -289,29 +291,34 @@ create_user_oap (credentials_t * credentials, params_t *params)
 
       /* Create the user. */
 
-      if (strcmp (hosts_allow, "2") && strlen (hosts))
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_user>"
+      GString * string = g_string_new ("<create_user>");
+      gchar * buf = g_markup_printf_escaped (
                                         "<name>%s</name>"
                                         "<password>%s</password>"
-                                        "<role>%s</role>"
-                                        "<hosts allow=\"%s\">%s</hosts>"
-                                        "</create_user>",
-                                        name,
-                                        password,
-                                        role,
-                                        hosts_allow,
-                                        hosts);
-      else
-        ret = openvas_server_sendf_xml (&session,
-                                        "<create_user>"
-                                        "<name>%s</name>"
-                                        "<password>%s</password>"
-                                        "<role>%s</role>"
-                                        "</create_user>",
+                                        "<role>%s</role>",
                                         name,
                                         password,
                                         role);
+      g_string_append (string, buf);
+      g_free (buf);
+      if (strcmp (hosts_allow, "2") && strlen (hosts))
+        {
+          buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
+                                         hosts_allow,
+                                         hosts);
+          g_string_append (string, buf);
+          g_free (buf);
+        }
+      if ((enable_ldap_connect) && (strcmp (enable_ldap_connect, "1") == 0))
+        {
+          g_string_append (string,
+            "<sources><source>ldap_connect</source></sources>");
+        }
+      g_string_append (string, "</create_user>");
+
+      buf = g_string_free (string, FALSE);
+      ret = openvas_server_send (&session, buf);
+      g_free (buf);
 
       if (ret == -1)
         {
@@ -340,7 +347,7 @@ create_user_oap (credentials_t * credentials, params_t *params)
 
   /* Get all users. */
 
-  if (openvas_server_send (&session, "<get_users/>") == -1)
+  if (openvas_server_send (&session, "<commands><get_users/><describe_auth/></commands>") == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -372,7 +379,7 @@ create_user_oap (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Save a user, get all users, XSL transform the result.
+ * @brief Save a maybe modified user, get all users, XSL transform the result.
  *
  * @param[in]  credentials      Username and password for authentication
  * @param[in]  name             User name.
@@ -414,7 +421,7 @@ save_user_oap (credentials_t * credentials, params_t *params)
     {
       int ret;
       const gchar *name, *modify_password, *password, *role, *hosts;
-      const gchar *hosts_allow;
+      const gchar *hosts_allow, *enable_ldap_connect;
 
       name = params_value (params, "login");
       modify_password = params_value (params, "modify_password");
@@ -426,34 +433,46 @@ save_user_oap (credentials_t * credentials, params_t *params)
        * access. */
       hosts_allow = params_value (params, "hosts_allow");
 
+      enable_ldap_connect = params_value (params, "enable_ldap_connect");
+
       /* Modify the user. */
 
+      GString * command = g_string_new ("<modify_user>");
+      gchar * buf = g_markup_printf_escaped ("<name>%s</name>"
+                                             "<password modify=\"%s\">"
+                                             "%s</password>"
+                                             "<role>%s</role>",
+                                             name,
+                                             modify_password,
+                                             password,
+                                             role);
+      g_string_append (command, buf);
+      g_free (buf);
       if (strcmp (hosts_allow, "2") && strlen (hosts))
-        ret = openvas_server_sendf_xml (&session,
-                                        "<modify_user>"
-                                        "<name>%s</name>"
-                                        "<password modify=\"%s\">%s</password>"
-                                        "<role>%s</role>"
-                                        "<hosts allow=\"%s\">%s</hosts>"
-                                        "</modify_user>",
-                                        name,
-                                        modify_password,
-                                        password,
-                                        role,
-                                        hosts_allow,
-                                        hosts);
+        {
+          buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
+                                         hosts_allow, hosts);
+        }
       else
-        ret = openvas_server_sendf_xml (&session,
-                                        "<modify_user>"
-                                        "<name>%s</name>"
-                                        "<password modify=\"%s\">%s</password>"
-                                        "<role>%s</role>"
-                                        "<hosts allow=\"0\"></hosts>"
-                                        "</modify_user>",
-                                        name,
-                                        modify_password,
-                                        password,
-                                        role);
+        {
+          buf = g_strdup ("<hosts allow=\"0\"></hosts>");
+        }
+      g_string_append (command, buf);
+      g_free (buf);
+
+      if (enable_ldap_connect && strcmp (enable_ldap_connect, "1") == 0)
+        {
+          g_string_append (command, "<sources><source>ldap_connect</source></sources>");
+        }
+      else
+        {
+          g_string_append (command, "<sources><source></source></sources>");
+        }
+      g_string_append (command, "</modify_user>");
+
+      buf = g_string_free (command, FALSE);
+      ret = openvas_server_send (&session, buf);
+      g_free (buf);
 
       if (ret == -1)
         {
@@ -484,7 +503,7 @@ save_user_oap (credentials_t * credentials, params_t *params)
 
   /* Get all users. */
 
-  if (openvas_server_send (&session, "<get_users/>") == -1)
+  if (openvas_server_send (&session, "<commands><get_users/><describe_auth/></commands>") == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -634,7 +653,10 @@ edit_user_oap (credentials_t * credentials, params_t * params)
     }
 
   if (openvas_server_sendf (&session,
-                            "<get_users name=\"%s\"/>",
+                            "<commands>"
+                            "<get_users name=\"%s\"/>"
+                            "<describe_auth/>"
+                            "</commands>",
                             params_value (params, "login"))
       == -1)
     {
@@ -711,7 +733,7 @@ get_user_oap (credentials_t * credentials, params_t *params)
     }
 
   if (openvas_server_sendf (&session,
-                            "<get_users name=\"%s\"/>",
+                            "<commands><get_users name=\"%s\"/><describe_auth/></commands>",
                             name)
       == -1)
     {
@@ -1232,7 +1254,7 @@ save_settings_oap (credentials_t * credentials, params_t *params)
 char*
 modify_auth_oap (credentials_t* credentials, params_t *params)
 {
-  tracef ("In modify_ldap_auth_oap\n");
+  tracef ("In modify_auth_oap\n");
   entity_t entity;
   gnutls_session_t session;
   int socket;
@@ -1274,7 +1296,8 @@ modify_auth_oap (credentials_t* credentials, params_t *params)
 
   if (ldaphost == NULL || method == NULL
       || (strcmp (method, "method:ldap") == 0 && authdn == NULL)
-      || (strcmp (method, "method:ads")  == 0 && domain == NULL))
+      || (strcmp (method, "method:ads")  == 0 && domain == NULL)
+      || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
     {
       /* Parameter validation failed. Only send get_users and describe_auth. */
        if (openvas_server_send (&session,

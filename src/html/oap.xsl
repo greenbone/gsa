@@ -521,14 +521,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_user">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_users_response/user" mode="edit"/>
+  <xsl:apply-templates select="commands_response/get_users_response/user" mode="edit"/>
 </xsl:template>
 
 <!--     GET_USER -->
 
 <xsl:template match="get_user">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_users_response/user" mode="details"/>
+  <xsl:apply-templates select="commands_response/get_users_response/user" mode="details"/>
 </xsl:template>
 
 <!-- END USERS MANAGEMENT -->
