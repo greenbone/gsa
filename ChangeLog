@@ -1,15 +1,15 @@
 2012-03-15  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/oap.xsl: Match user (edit/details) in a commands_response,
-	  as these now have to include response to describe_auth, too.
+	as these now have to include response to describe_auth, too.
 
 	* src/gsad_oap.c (create_user_oap): Modify create-user command if
-	  enable_ldap_connect parameter is set and issue describe_auth.
-	  (save_user_oap): Include sources element in oap command and include
-	  desribe_auth command.
-	  (edit_user_oap): Include describe_auth command.
-	  (modify_auth_oap): Allow ldap_connect method, fixed typo in trace
-	   msg.
+	enable_ldap_connect parameter is set and issue describe_auth.
+	(save_user_oap): Include sources element in oap command and include
+	desribe_auth command.
+	(edit_user_oap): Include describe_auth command.
+	(modify_auth_oap): Allow ldap_connect method, fixed typo in trace
+	msg.
 
 2011-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
@@ -30,20 +30,20 @@
 2012-03-15  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/oap.xsl (html-create-user-form): If per-user-ldap auth. is
-	  configured and enabled, allow to create a user with "ldap only"-
-	  option.
-	  (html-users-table, user): If per-user-ldap auth, add column to show
-	  if user is allowed to use ldap-auth only; allow modifications, too.
-	  (group): Include per-user-ldap-conf and link to help.
-	  (describe_auth_response): Match ldap_connect.
+	configured and enabled, allow to create a user with "ldap only"-
+	option.
+	(html-users-table, user): If per-user-ldap auth, add column to show
+	if user is allowed to use ldap-auth only; allow modifications, too.
+	(group): Include per-user-ldap-conf and link to help.
+	(describe_auth_response): Match ldap_connect.
 
 	* src/html/help.xsl: Added basic help for per-user ldap configuration.
 
 2012-03-15  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/gsad.c (init_validator): Added new validation target
-	  "enable_ldap_connect", allow "ldap_connect" for "group" parameter,
-	  allow "@" within login names for "user@domain"- scenarios.
+	"enable_ldap_connect", allow "ldap_connect" for "group" parameter,
+	allow "@" within login names for "user@domain"- scenarios.
 
 2011-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
