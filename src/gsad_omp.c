@@ -9236,16 +9236,13 @@ new_note_omp (credentials_t *credentials, params_t *params)
 char *
 create_note_omp (credentials_t *credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml;
-  int socket;
-  gchar *html, *create_note;
+  char *ret;
+  gchar *create_note;
   unsigned int first, max;
   const char *next, *search_phrase, *oid, *threat, *port, *hosts;
   const char *min_cvss_base, *text, *task_id;
   /* For get_report. */
-  const char *levels, *result_hosts_only, *notes, *overrides, *report_id;
-  const char *first_result, *max_results, *sort_order, *sort_field, *active;
+  const char *first_result, *max_results, *active;
   const char *days;
 
   next = params_value (params, "next");
@@ -9338,23 +9335,6 @@ create_note_omp (credentials_t *credentials, params_t *params)
                          "Diagnostics: A required parameter was NULL.",
                          "/omp?cmd=get_notes");
 
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new note. "
-                             "No new note was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_notes");
-    }
-
   text = params_value (params, "text");
   days = params_value (params, "days");
 
@@ -9403,229 +9383,9 @@ create_note_omp (credentials_t *credentials, params_t *params)
       return ret;
     }
 
-  xml = g_string_new ("<commands_response>");
-
-  if (text == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Note"));
-  else
-    {
-      int ret;
-
-      /* Create the note. */
-
-      ret = openvas_server_sendf (&session, create_note);
-
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new note. "
-                               "No new note was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_notes");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new note. "
-                               "It is unclear whether the note has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_notes");
-        }
-    }
+  ret = get_report (credentials, params, create_note, NULL, NULL, NULL);
   g_free (create_note);
-
-  /* Get the report. */
-
-  levels = params_value (params, "levels");
-  result_hosts_only = params_value (params, "result_hosts_only");
-  notes = params_value (params, "notes");
-  overrides = params_value (params, "overrides");
-
-  if (levels == NULL || strlen (levels) == 0) levels = "hm";
-
-  if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
-    result_hosts_only = "1";
-
-  if (notes == NULL || strlen (notes) == 0) notes = "0";
-
-  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
-
-  report_id = params_value (params, "report_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (openvas_server_sendf (&session,
-                            "<get_reports"
-                            " notes=\"%i\""
-                            " notes_details=\"1\""
-                            " apply_overrides=\"%i\""
-                            " overrides=\"%i\""
-                            " overrides_details=\"1\""
-                            " result_hosts_only=\"%i\""
-                            " report_id=\"%s\""
-                            " format=\"XML\""
-                            " first_result=\"%s\""
-                            " max_results=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
-                            " levels=\"%s\""
-                            " search_phrase=\"%s\""
-                            " min_cvss_base=\"%s\"/>",
-                            strcmp (notes, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (result_hosts_only, "0") ? 1 : 0,
-                            report_id,
-                            first_result,
-                            max_results,
-                            sort_field ? sort_field : "type",
-                            sort_order
-                             ? sort_order
-                             : ((sort_field == NULL
-                                 || strcmp (sort_field, "type") == 0)
-                                ? "descending"
-                                : "ascending"),
-                            levels,
-                            search_phrase,
-                            min_cvss_base)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report. "
-                           "The new note was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report. "
-                           "The new note was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_send (&session, "<get_report_formats"
-                                     " sort_field=\"name\""
-                                     " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_send (&session, "<get_escalators"
-                                     " sort_field=\"name\""
-                                     " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  {
-
-    /* As a temporary hack until there's a reasonable way to do it in the
-     * Manager, get the report again with all threat levels, so that the XSL
-     * can count per-host grand totals. */
-
-    g_string_append (xml, "<all>");
-
-    if (openvas_server_sendf (&session,
-                              "<get_reports"
-                              " report_id=\"%s\""
-                              " format=\"XML\""
-                              " first_result=\"%u\""
-                              " max_results=\"%u\""
-                              " levels=\"hmlg\""
-                              " search_phrase=\"%s\""
-                              " search_phrase=\"%s\"/>",
-                              report_id,
-                              first_result,
-                              max_results,
-                              search_phrase,
-                              min_cvss_base)
-        == -1)
-      {
-        g_string_free (xml, TRUE);
-        openvas_server_close (socket, session);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report. "
-                             "The new note was, however, created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks");
-      }
-
-    if (read_string (&session, &xml))
-      {
-        g_string_free (xml, TRUE);
-        openvas_server_close (socket, session);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report. "
-                             "The new note was, however, created. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks");
-      }
-
-    g_string_append (xml, "</all>");
-  }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</commands_response>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return ret;
 }
 
 /**
@@ -10600,16 +10360,13 @@ new_override_omp (credentials_t *credentials, params_t *params)
 char *
 create_override_omp (credentials_t *credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml;
-  int socket;
-  gchar *html, *create_override;
+  char *ret;
+  gchar *create_override;
   unsigned int first, max;
   const char *next, *search_phrase, *oid, *threat, *new_threat, *port, *hosts;
   const char *min_cvss_base, *text, *task_id;
   /* For get_report. */
-  const char *levels, *result_hosts_only, *notes, *overrides, *report_id;
-  const char *first_result, *max_results, *sort_order, *sort_field, *active;
+  const char *first_result, *max_results, *active;
   const char *days;
 
   next = params_value (params, "next");
@@ -10759,246 +10516,9 @@ create_override_omp (credentials_t *credentials, params_t *params)
       return ret;
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new override. "
-                             "No new override was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_overrides");
-    }
-
-  xml = g_string_new ("<commands_response>");
-
-  if (text == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Override"));
-  else
-    {
-      int ret;
-
-      /* Create the override. */
-
-      ret = openvas_server_sendf (&session, create_override);
-
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new override. "
-                               "No new override was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_overrides");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new override. "
-                               "It is unclear whether the override has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_overrides");
-        }
-    }
+  ret = get_report (credentials, params, create_override, NULL, NULL, NULL);
   g_free (create_override);
-
-  /* Get the report. */
-
-  levels = params_value (params, "levels");
-  result_hosts_only = params_value (params, "result_hosts_only");
-  notes = params_value (params, "notes");
-  overrides = params_value (params, "overrides");
-
-  if (levels == NULL || strlen (levels) == 0) levels = "hm";
-
-  if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
-    result_hosts_only = "1";
-
-  if (notes == NULL || strlen (notes) == 0) notes = "0";
-
-  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
-
-  report_id = params_value (params, "report_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (openvas_server_sendf (&session,
-                            "<get_reports"
-                            " notes=\"%i\""
-                            " notes_details=\"1\""
-                            " apply_overrides=\"%i\""
-                            " overrides=\"%i\""
-                            " overrides_details=\"1\""
-                            " result_hosts_only=\"%i\""
-                            " report_id=\"%s\""
-                            " format=\"XML\""
-                            " first_result=\"%s\""
-                            " max_results=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
-                            " levels=\"%s\""
-                            " search_phrase=\"%s\""
-                            " min_cvss_base=\"%s\"/>",
-                            strcmp (notes, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (result_hosts_only, "0") ? 1 : 0,
-                            report_id,
-                            first_result,
-                            max_results,
-                            sort_field ? sort_field : "type",
-                            sort_order
-                             ? sort_order
-                             : ((sort_field == NULL
-                                 || strcmp (sort_field, "type") == 0)
-                                ? "descending"
-                                : "ascending"),
-                            levels,
-                            search_phrase,
-                            min_cvss_base)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report. "
-                           "The new override was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report. "
-                           "The new override was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_send (&session, "<get_report_formats"
-                                     " sort_field=\"name\""
-                                     " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_send (&session, "<get_escalators"
-                                     " sort_field=\"name\""
-                                     " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report. "
-                           "The report could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  {
-
-    /* As a temporary hack until there's a reasonable way to do it in the
-     * Manager, get the report again with all threat levels, so that the XSL
-     * can count per-host grand totals. */
-
-    g_string_append (xml, "<all>");
-
-    if (openvas_server_sendf (&session,
-                              "<get_reports"
-                              " report_id=\"%s\""
-                              " format=\"XML\""
-                              " first_result=\"%u\""
-                              " max_results=\"%u\""
-                              " levels=\"hmlg\""
-                              " search_phrase=\"%s\""
-                              " search_phrase=\"%s\"/>",
-                              report_id,
-                              first_result,
-                              max_results,
-                              search_phrase,
-                              min_cvss_base)
-        == -1)
-      {
-        g_string_free (xml, TRUE);
-        openvas_server_close (socket, session);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report. "
-                             "The new override was, however, created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_tasks");
-      }
-
-    if (read_string (&session, &xml))
-      {
-        g_string_free (xml, TRUE);
-        openvas_server_close (socket, session);
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report. "
-                             "The new override was, however, created. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_tasks");
-      }
-
-    g_string_append (xml, "</all>");
-  }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</commands_response>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return ret;
 }
 
 /**
