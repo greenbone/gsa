@@ -1,3 +1,9 @@
+2012-03-15  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/gsad.c (init_validator): Added new validation target
+	  "enable_ldap_connect", allow "ldap_connect" for "group" parameter,
+	  allow "@" within login names for "user@domain"- scenarios.
+
 2011-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/wizard.png: New.

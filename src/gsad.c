@@ -659,7 +659,7 @@ init_validator ()
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
-  openvas_validator_add (validator, "group",        "^method:(ads|ldap)$");
+  openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
   openvas_validator_add (validator, "host",       "^[[:alnum:]\\.]{1,80}$");
@@ -676,7 +676,7 @@ init_validator ()
   /* Used for Administrator users, LSC credentials, login for target
    * locator and slave login name.  Needs to match validate_username in
    * Administrator. */
-  openvas_validator_add (validator, "login",      "^[[:alnum:]-_]+$");
+  openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
   openvas_validator_add (validator, "lsc_credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
@@ -757,6 +757,7 @@ init_validator ()
   openvas_validator_alias (validator, "duration",     "optional_number");
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
+  openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "esc_first_result", "first_result");
   openvas_validator_alias (validator, "esc_levels",       "levels");
