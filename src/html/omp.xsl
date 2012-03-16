@@ -1089,7 +1089,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <tr>
               <td><b>Scan started:</b></td>
-              <td><b><xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/></b></td>
+              <td>
+                <xsl:if test="string-length (report/scan_start)">
+                  <b><xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/></b>
+                </xsl:if>
+              </td>
             </tr>
             <tr>
               <td>Scan ended:</td>
@@ -12514,6 +12518,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_report">
+  <xsl:apply-templates select="create_note_response"/>
+  <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_escalate_response"/>
   <xsl:apply-templates select="get_reports_response"/>

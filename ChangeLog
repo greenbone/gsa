@@ -1,3 +1,13 @@
+2012-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Ensure scan start is available
+	before printing it, otherwise it ends up as NaNs.
+	(get_report): Match create responses.  Needed after last commit, which
+	moves location of these responses.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply note and override create and
+	delete indicator icon responses.
+
 2012-03-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_note_omp, create_override_omp): Replace explicit
