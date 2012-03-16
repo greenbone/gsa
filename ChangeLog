@@ -1,3 +1,8 @@
+2012-03-16  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/html/help.xsl: Include examples of how to use ADS (domain\user)
+	with new per-user-ldap authentication.
+
 2012-03-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Ensure scan start is available

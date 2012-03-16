@@ -2076,6 +2076,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Changes will be saved after confirming with the "Save" button,
        but <b>only get into effect after</b> the backend is restarted.
+       Take a look at the Auth. DN examples in following table to enable
+       authentication against an ADS.
       </p>
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -2099,7 +2101,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Auth. DN</td>
           <td>The DN to authenticate against. Place a single %s where the
               username will be put.</td>
-          <td>uid=%s,cn=users,o=center,d=org</td>
+          <td>uid=%s,cn=users,o=center,d=org<br/>
+              %s@mydomain<br/>
+              mydomain\%s</td>
         </tr>
       </table>
 
