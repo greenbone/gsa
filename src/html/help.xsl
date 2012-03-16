@@ -755,7 +755,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>User-given name of the escalator.</td>
         </tr>
         <tr class="even">
-          <td>event</td>
+          <td>Event</td>
           <td>Shows the event for which the condition has to be checked.</td>
         </tr>
         <tr class="odd">

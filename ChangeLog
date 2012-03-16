@@ -1,5 +1,9 @@
 2012-03-16  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
+	* src/html/help.xsl: Fixed case for consistency.
+
+2012-03-16  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
 	* src/html/help.xsl: Include examples of how to use ADS (domain\user)
 	with new per-user-ldap authentication.
 
