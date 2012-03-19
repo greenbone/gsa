@@ -1,3 +1,8 @@
+2012-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add , to observers now that it is accepted
+	as a separator.
+
 2012-03-16  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Fixed case for consistency.

@@ -691,7 +691,7 @@ init_validator ()
   openvas_validator_add (validator, "info_type",  "(?s)^.*$");
   /* Number is special cased in params_mhd_validate to remove the space. */
   openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
-  openvas_validator_add (validator, "observers",       "^[-_ [:alnum:]]*$");
+  openvas_validator_add (validator, "observers",       "^[-_ [:alnum:],]*$");
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^[0-9.]{1,80}$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
