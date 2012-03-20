@@ -11666,7 +11666,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Report Format
-      <a href="/help/report_formats.html?token={/envelope/token}#edit_report_format"
+      <a href="/help/configure_report_formats.html?token={/envelope/token}#edit_report_format"
          title="Help: Edit Report Format">
         <img src="/img/help.png"/>
       </a>

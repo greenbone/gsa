@@ -1,3 +1,12 @@
+2012-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-report-format-form): Correct help link.
+
+	* src/html/help.xsl (configure_report_formats.html): Correct anchor.  Add
+	Edit Report Format action.
+	(configure_users.html): Make wording a bit nicer.  Add note about roles.
+	Add observer to list.
+
 2012-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add , to observers now that it is accepted

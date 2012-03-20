@@ -1210,7 +1210,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <a href="#export">export action</a>.
       </p>
 
-      <a name="report_format"></a>
+      <a name="report_formats"></a>
       <h2>Report Formats</h2>
       <p>
        This table provides an overview of all configured report formats.
@@ -1264,6 +1264,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <img src="/img/details.png" alt="Report Format Details" title="Report Format Details" />
        will open the <a href="#target_details">Report Format Details</a>
        dialog to provide details of the report format.
+      </p>
+
+      <a name="edit_report_format"></a>
+      <h4>Edit Report Format</h4>
+      <p>
+       Pressing the "Edit Report Format" icon
+       <img src="/img/edit.png" alt="Edit Report Format" title="Edit Report Format" />
+       will switch to an overview of the configuration for this report format and allows
+       editing of the report format properties and parameters.
       </p>
 
       <a name="export"></a>
@@ -2007,7 +2016,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <br/>
       <h1>Configure Users</h1>
       <p>
-       The administration of users is only accessible for users that own
+       The administration of users is only accessible for users who own
        the "Administrator" role.
       </p>
 
@@ -2022,6 +2031,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Note on <b>Host Access</b>: If "Deny:" or "Allow:" is chosen, the text field should
        contain a list of comma-separated IPs.
        The CIDR notation (e.g. <tt>192.168.10.0/24</tt>) can be used.
+      </p>
+      <p>
+       Note on <b>Role</b>s:
+       <ul>
+         <li>
+           A "User" has enough privileges for everyday use.
+         </li>
+         <li>
+           An "Administrator" has extra administration privileges, like adding
+           users or synchronising the feed.
+         </li>
+         <li>
+           An "Observer" has only enough privileges to view resources.  That
+           is, an observer is forbidden from creating, removing, modifying
+           or using all tasks, targets, configs, etc.  Furthermore, an
+           observer may only view these resources when the owner of the
+           task adds the observer to the task's observer list.
+         </li>
+       </ul>
       </p>
 
       <table class="gbntable">
@@ -2050,7 +2078,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Role</td>
           <td>yes</td>
           <td>---</td>
-          <td>"User" or "Administrator"</td>
+          <td>"User", "Administrator" or "Observer"</td>
           <td>User</td>
         </tr>
         <tr class="even">
