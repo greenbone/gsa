@@ -1,5 +1,13 @@
 2012-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-note-form, note, note [details])
+	(html-edit-override-form, override, override [details]): Explicitly print
+	an explanation instead of an NVT name when the result was an open port.
+	This is because the open port results come from the PORT OTP message and
+	so lack an association with an NVT.
+
+2012-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-report-format-form): Correct help link.
 
 	* src/html/help.xsl (configure_report_formats.html): Correct anchor.  Add

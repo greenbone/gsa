@@ -9438,17 +9438,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_notes_response/note/nvt"/>
-              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
-                <xsl:variable name="max" select="70"/>
-                <xsl:choose>
-                  <xsl:when test="string-length($nvt/name) &gt; $max">
+              <xsl:variable name="max" select="70"/>
+              <xsl:choose>
+                <xsl:when test="$nvt/@oid = 0">
+                  None.  Result was an open port.
+                </xsl:when>
+                <xsl:when test="string-length($nvt/name) &gt; $max">
+                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                     <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
-                  </xsl:when>
-                  <xsl:otherwise>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                     <xsl:value-of select="$nvt/name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </a>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -9736,6 +9741,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:variable name="max" select="35"/>
       <xsl:choose>
+        <xsl:when test="nvt/@oid = 0">
+          <abbr title="Result was an open port.">None</abbr>
+        </xsl:when>
         <xsl:when test="string-length(nvt/name) &gt; $max">
           <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
         </xsl:when>
@@ -9862,22 +9870,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-              <xsl:variable name="max" select="70"/>
-              <xsl:choose>
-                <xsl:when test="string-length(nvt/name) &gt; $max">
+            <xsl:variable name="max" select="70"/>
+            <xsl:choose>
+              <xsl:when test="nvt/@oid = 0">
+                None.  Result was an open port.
+              </xsl:when>
+              <xsl:when test="string-length(nvt/name) &gt; $max">
+                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
-                </xsl:when>
-                <xsl:otherwise>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </a>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
         <tr>
           <td>NVT OID:</td>
-          <td><xsl:value-of select="nvt/@oid"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="nvt/@oid = 0"></xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="nvt/@oid"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td>Created:</td>
@@ -10349,17 +10369,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><b>NVT Name</b></td>
             <td>
               <xsl:variable name="nvt" select="get_overrides_response/override/nvt"/>
-              <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
-                <xsl:variable name="max" select="70"/>
-                <xsl:choose>
-                  <xsl:when test="string-length($nvt/name) &gt; $max">
+              <xsl:variable name="max" select="70"/>
+              <xsl:choose>
+                <xsl:when test="$nvt/@oid = 0">
+                  None.  Result was an open port.
+                </xsl:when>
+                <xsl:when test="string-length($nvt/name) &gt; $max">
+                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                     <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
-                  </xsl:when>
-                  <xsl:otherwise>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
                     <xsl:value-of select="$nvt/name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </a>
+                  </a>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10680,6 +10705,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:variable name="max" select="35"/>
       <xsl:choose>
+        <xsl:when test="nvt/@oid = 0">
+          <abbr title="Result was an open port.">None</abbr>
+        </xsl:when>
         <xsl:when test="string-length(nvt/name) &gt; $max">
           <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
         </xsl:when>
@@ -10822,22 +10850,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td><b>NVT Name:</b></td>
           <td>
-            <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-              <xsl:variable name="max" select="70"/>
-              <xsl:choose>
-                <xsl:when test="string-length(nvt/name) &gt; $max">
+            <xsl:variable name="max" select="70"/>
+            <xsl:choose>
+              <xsl:when test="nvt/@oid = 0">
+                None.  Result was an open port.
+              </xsl:when>
+              <xsl:when test="string-length(nvt/name) &gt; $max">
+                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                   <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
-                </xsl:when>
-                <xsl:otherwise>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
                   <xsl:value-of select="nvt/name"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </a>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
         <tr>
           <td>NVT OID:</td>
-          <td><xsl:value-of select="nvt/@oid"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="nvt/@oid = 0"></xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="nvt/@oid"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td>Created:</td>
