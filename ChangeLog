@@ -1,3 +1,8 @@
+2012-03-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (delete_user_oap): Add DESCRIBE_AUTH to commands, as this is
+	needed for the Users page.
+
 2012-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-note-form, note, note [details])

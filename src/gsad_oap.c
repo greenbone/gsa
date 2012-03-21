@@ -581,7 +581,11 @@ delete_user_oap (credentials_t * credentials, params_t *params)
 
   if (openvas_server_sendf
       (&session,
-       "<commands><delete_user name=\"%s\"/><get_users/></commands>",
+       "<commands>"
+       "<delete_user name=\"%s\"/>"
+       "<get_users/>"
+       "<describe_auth/>"
+       "</commands>",
        user_name) == -1)
     {
       openvas_server_close (socket, session);
