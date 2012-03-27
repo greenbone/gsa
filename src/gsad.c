@@ -633,7 +633,7 @@ init_validator ()
   openvas_validator_add (validator, "authdn",     "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "caller",     "^.*$");
-  openvas_validator_add (validator, "comment",    "^[-_[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  openvas_validator_add (validator, "comment",    "^[-_;'[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "config_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
