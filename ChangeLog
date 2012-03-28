@@ -1,5 +1,17 @@
 2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add export of Targets.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add command export_targets.
+
+	* src/gsad_omp.c (export_targets_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (html-targets-table): Add export button to Targets.
+
+2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add filter.
 
 	* src/gsad_omp.c (get_targets_omp): Send filter through to manager.

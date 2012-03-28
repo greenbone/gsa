@@ -5637,6 +5637,96 @@ get_targets_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Export a target.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Targets XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_targets_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL;
+  gchar *html;
+  const char *filter;
+
+  *content_length = 0;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a target. "
+                             "The target could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  filter = params_value (params, "filter");
+  if (filter == NULL)
+    {
+      GString *xml;
+      xml = g_string_new ("<get_targets>");
+      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Targets"));
+      g_string_append (xml, "</get_targets>");
+      openvas_server_close (socket, session);
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_targets"
+                            " filter=\"%s\"/>",
+                            filter)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the targets. "
+                           "The targets could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &content))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the targets. "
+                           "The targets could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  *content_disposition = g_strdup_printf ("attachment;"
+                                          " filename=\"targets.xml\"");
+  *content_length = strlen (content);
+  free_entity (entity);
+  openvas_server_close (socket, session);
+  return content;
+}
+
+/**
  * @brief Create config, get all configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

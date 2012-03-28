@@ -91,8 +91,10 @@ char * delete_trash_schedule_omp (credentials_t *, params_t *);
 char * get_schedule_omp (credentials_t *, params_t *);
 char * get_schedules_omp (credentials_t *, params_t *);
 
-char * get_target_omp (credentials_t *, params_t *params);
-char * get_targets_omp (credentials_t *, params_t *params);
+char * get_target_omp (credentials_t *, params_t *);
+char * get_targets_omp (credentials_t *, params_t *);
+char * export_targets_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
 char * create_target_omp (credentials_t *, params_t *);
 char * delete_target_omp (credentials_t *, params_t *);
 char * delete_trash_target_omp (credentials_t *, params_t *);

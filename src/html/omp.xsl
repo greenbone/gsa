@@ -5370,6 +5370,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Configure Targets (Targets)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+         title="Export Configs XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <div style="background-color: #EEEEEE;">
