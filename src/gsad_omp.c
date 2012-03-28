@@ -5508,14 +5508,14 @@ get_targets_omp (credentials_t * credentials, params_t *params)
 
   /* Get the targets. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_targets"
-                            " filter=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            filter ? filter : "",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
+  if (openvas_server_sendf_xml (&session,
+                                "<get_targets"
+                                " filter=\"%s\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                filter ? filter : "",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
       == -1)
     {
       g_string_free (xml, TRUE);

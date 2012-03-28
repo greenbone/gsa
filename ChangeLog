@@ -1,5 +1,10 @@
 2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_targets_omp): Send with openvas_server_sendf_xml as
+	there may be XML in the filter.
+
+2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add export of Targets.
 
 	* src/gsad.c (init_validator, exec_omp_get): Add command export_targets.
