@@ -609,9 +609,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="all">
 </xsl:template>
 
-<xsl:template match="get_reports_escalate_response">
+<xsl:template match="get_reports_alert_response">
   <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Escalate</xsl:with-param>
+    <xsl:with-param name="operation">Run Alert</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -1147,7 +1147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Download</td>
             </xsl:when>
             <xsl:otherwise>
-              <td>Escalate</td>
+              <td>Run Alert</td>
               <td>Download</td>
             </xsl:otherwise>
           </xsl:choose>
@@ -1182,7 +1182,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div id="small_form" style="float:right;">
                   <form action="" method="post">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
                     <input type="hidden" name="first_result" value="{report/results/@start}"/>
@@ -1215,7 +1215,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <!-- Escalator filters. -->
+                    <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="1"/>
                     <input type="hidden" name="esc_max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
                     <input type="hidden" name="esc_notes" value="1"/>
@@ -1223,19 +1223,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="esc_result_hosts_only" value="1"/>
                     <input type="hidden" name="esc_levels" value="hmlgf"/>
 
-                    <select name="escalator_id" title="Escalator">
-                      <xsl:for-each select="../../get_escalators_response/escalator">
+                    <select name="alert_id" title="Alert">
+                      <xsl:for-each select="../../get_alerts_response/alert">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
                     </select>
                     <input type="image"
                            name="submit"
-                           value="Escalate"
-                           title="Escalate"
+                           value="Run Alert"
+                           title="Run Alert"
                            src="/img/start.png"
                            border="0"
                            style="margin-left:3px;"
-                           alt="Escalate"/>
+                           alt="Run Alert"/>
                   </form>
                 </div>
               </td>
@@ -1312,7 +1312,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div id="small_form" style="float:right;">
                   <form action="" method="post">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
 
@@ -1343,7 +1343,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <!-- Escalator filters. -->
+                    <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
                     <input type="hidden" name="esc_max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
                     <input type="hidden" name="esc_levels" value="{$levels}"/>
@@ -1364,19 +1364,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="esc_result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <select name="escalator_id" title="Escalator">
-                      <xsl:for-each select="../../get_escalators_response/escalator">
+                    <select name="alert_id" title="Alert">
+                      <xsl:for-each select="../../get_alerts_response/alert">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
                     </select>
                     <input type="image"
                            name="submit"
-                           value="Escalate"
-                           title="Escalate"
+                           value="Run Alert"
+                           title="Run Alert"
                            src="/img/start.png"
                            border="0"
                            style="margin-left:3px;"
-                           alt="Escalate"/>
+                           alt="Run Alert"/>
                   </form>
                 </div>
               </td>
@@ -1510,7 +1510,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <div id="small_form" class="float_right">
                   <form action="" method="post">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="escalate_report"/>
+                    <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
 
@@ -1541,7 +1541,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <!-- Escalator filters. -->
+                    <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
                     <input type="hidden" name="esc_max_results" value="{report/results/@max}"/>
                     <input type="hidden" name="esc_levels" value="{$levels}"/>
@@ -1564,19 +1564,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            name="esc_result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
 
-                    <select name="escalator_id" title="Escalator">
-                      <xsl:for-each select="../../get_escalators_response/escalator">
+                    <select name="alert_id" title="Alert">
+                      <xsl:for-each select="../../get_alerts_response/alert">
                         <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:for-each>
                     </select>
                     <input type="image"
                            name="submit"
-                           value="Escalate"
-                           title="Escalate"
+                           value="Run Alert"
+                           title="Run Alert"
                            src="/img/start.png"
                            border="0"
                            style="margin-left:3px;"
-                           alt="Escalate"/>
+                           alt="Run Alert"/>
                   </form>
                 </div>
               </td>
@@ -2268,11 +2268,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Escalator:</td>
+          <td>Alert:</td>
           <td>
-            <xsl:if test="task/escalator">
-              <a href="/omp?cmd=get_escalator&amp;escalator_id={task/escalator/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="task/escalator/name"/>
+            <xsl:if test="task/alert">
+              <a href="/omp?cmd=get_alert&amp;alert_id={task/alert/@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="task/alert/name"/>
               </a>
             </xsl:if>
           </td>
@@ -2612,7 +2612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
-<xsl:template match="escalator" mode="newtask">
+<xsl:template match="alert" mode="newtask">
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
@@ -3137,23 +3137,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
               </tr>
               <tr>
-                <td>Escalator (optional)</td>
+                <td>Alert (optional)</td>
                 <td>
-                  <select name="escalator_id">
-                    <xsl:variable name="escalator_id">
-                      <xsl:value-of select="commands_response/get_tasks_response/task/escalator/@id"/>
+                  <select name="alert_id">
+                    <xsl:variable name="alert_id">
+                      <xsl:value-of select="commands_response/get_tasks_response/task/alert/@id"/>
                     </xsl:variable>
                     <xsl:choose>
-                      <xsl:when test="string-length ($escalator_id) &gt; 0">
+                      <xsl:when test="string-length ($alert_id) &gt; 0">
                         <option value="0">--</option>
                       </xsl:when>
                       <xsl:otherwise>
                         <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="commands_response/get_escalators_response/escalator">
+                    <xsl:for-each select="commands_response/get_alerts_response/alert">
                       <xsl:choose>
-                        <xsl:when test="@id = $escalator_id">
+                        <xsl:when test="@id = $alert_id">
                           <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                         </xsl:when>
                         <xsl:otherwise>
@@ -3663,7 +3663,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0')  and (escalator/trash = '0')">
+        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0')  and (alert/trash = '0')">
           <xsl:call-template name="restore-icon">
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
@@ -4416,24 +4416,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END AGENTS MANAGEMENT -->
 
-<!-- BEGIN ESCALATORS MANAGEMENT -->
+<!-- BEGIN ALERTS MANAGEMENT -->
 
-<xsl:template name="html-create-escalator-form">
+<xsl:template name="html-create-alert-form">
   <xsl:param name="lsc-credentials"></xsl:param>
   <xsl:param name="report-formats"></xsl:param>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Escalator
-      <a href="/help/configure_escalators.html?token={/envelope/token}#newescalator"
-         title="Help: Configure Escalators (New Escalator)">
+    <div class="gb_window_part_center">New Alert
+      <a href="/help/configure_alerts.html?token={/envelope/token}#newalert"
+         title="Help: Configure Alerts (New Alert)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="create_escalator"/>
+        <input type="hidden" name="cmd" value="create_alert"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
@@ -4702,7 +4702,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <tr class="even">
             <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Create Escalator"/>
+              <input type="submit" name="submit" value="Create Alert"/>
             </td>
           </tr>
         </table>
@@ -4711,13 +4711,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="html-escalators-table">
+<xsl:template name="html-alerts-table">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Escalators
-      <a href="/help/configure_escalators.html?token={/envelope/token}#escalators"
-         title="Help: Configure Escalators (Escalators)">
+    <div class="gb_window_part_center">Alerts
+      <a href="/help/configure_alerts.html?token={/envelope/token}#alerts"
+         title="Help: Configure Alerts (Alerts)">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -4731,21 +4731,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Method</td>
             <td width="100">Actions</td>
           </tr>
-          <xsl:apply-templates select="escalator"/>
+          <xsl:apply-templates select="alert"/>
         </table>
       </div>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template match="get_escalators_response">
+<xsl:template match="get_alerts_response">
 </xsl:template>
 
-<!--     CREATE_ESCALATOR_RESPONSE -->
+<!--     CREATE_ALERT_RESPONSE -->
 
-<xsl:template match="create_escalator_response">
+<xsl:template match="create_alert_response">
   <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Create Escalator</xsl:with-param>
+    <xsl:with-param name="operation">Create Alert</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -4755,12 +4755,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!--     DELETE_ESCALATOR_RESPONSE -->
+<!--     DELETE_ALERT_RESPONSE -->
 
-<xsl:template match="delete_escalator_response">
+<xsl:template match="delete_alert_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
-      Delete Escalator
+      Delete Alert
     </xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
@@ -4771,11 +4771,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!--     TEST_ESCALATOR_RESPONSE -->
+<!--     TEST_ALERT_RESPONSE -->
 
-<xsl:template match="test_escalator_response">
+<xsl:template match="test_alert_response">
   <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Test Escalator</xsl:with-param>
+    <xsl:with-param name="operation">Test Alert</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -4785,9 +4785,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<!--     ESCALATOR -->
+<!--     ALERT -->
 
-<xsl:template match="escalator">
+<xsl:template match="alert">
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -4842,7 +4842,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'escalator'"/>
+            <xsl:with-param name="type" select="'alert'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
         </xsl:when>
@@ -4853,21 +4853,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_escalator&amp;escalator_id={@id}&amp;token={/envelope/token}"
-         title="Escalator Details" style="margin-left:3px;">
+      <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}"
+         title="Alert Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:call-template name="start-icon">
-        <xsl:with-param name="type">escalator</xsl:with-param>
+        <xsl:with-param name="type">alert</xsl:with-param>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="cmd">test_escalator</xsl:with-param>
+        <xsl:with-param name="cmd">test_alert</xsl:with-param>
         <xsl:with-param name="alt">Test</xsl:with-param>
       </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
 
-<xsl:template match="escalator" mode="trash">
+<xsl:template match="alert" mode="trash">
   <xsl:variable name="class">
     <xsl:choose>
       <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -4925,7 +4925,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
-            <xsl:with-param name="type" select="'escalator'"/>
+            <xsl:with-param name="type" select="'alert'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
         </xsl:when>
@@ -4940,20 +4940,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="escalator" mode="details">
+<xsl:template match="alert" mode="details">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Escalator Details
-      <a href="/help/configure_escalators.html?token={/envelope/token}#escalatordetails"
-         title="Help: Configure Escalators (Escalator Details)">
+      Alert Details
+      <a href="/help/configure_alerts.html?token={/envelope/token}#alertdetails"
+         title="Help: Configure Alerts (Alert Details)">
         <img src="/img/help.png"/>
       </a>
     </div>
     <div class="gb_window_part_content">
       <div class="float_right">
-        <a href="?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a>
+        <a href="?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a>
       </div>
       <table>
         <tr>
@@ -5098,10 +5098,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:choose>
         <xsl:when test="count(tasks/task) = 0">
-          <h1>Tasks using this Escalator: None</h1>
+          <h1>Tasks using this Alert: None</h1>
         </xsl:when>
         <xsl:otherwise>
-          <h1>Tasks using this Escalator</h1>
+          <h1>Tasks using this Alert</h1>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>Name</td>
@@ -5133,22 +5133,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!--     GET_ESCALATOR -->
+<!--     GET_ALERT -->
 
-<xsl:template match="get_escalator">
+<xsl:template match="get_alert">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_escalator_response"/>
-  <xsl:apply-templates select="get_escalators_response/escalator" mode="details"/>
+  <xsl:apply-templates select="commands_response/delete_alert_response"/>
+  <xsl:apply-templates select="get_alerts_response/alert" mode="details"/>
 </xsl:template>
 
-<!--     GET_ESCALATORS_RESPONSE -->
+<!--     GET_ALERTS_RESPONSE -->
 
-<xsl:template match="get_escalators">
+<xsl:template match="get_alerts">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_escalator_response"/>
-  <xsl:apply-templates select="create_escalator_response"/>
-  <xsl:apply-templates select="test_escalator_response"/>
-  <xsl:call-template name="html-create-escalator-form">
+  <xsl:apply-templates select="commands_response/delete_alert_response"/>
+  <xsl:apply-templates select="create_alert_response"/>
+  <xsl:apply-templates select="test_alert_response"/>
+  <xsl:call-template name="html-create-alert-form">
     <xsl:with-param
       name="lsc-credentials"
       select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
@@ -5156,13 +5156,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       name="report-formats"
       select="get_report_formats_response | commands_response/get_report_formats_response"/>
   </xsl:call-template>
-  <!-- The for-each makes the get_escalators_response the current node. -->
-  <xsl:for-each select="get_escalators_response | commands_response/get_escalators_response">
-    <xsl:call-template name="html-escalators-table"/>
+  <!-- The for-each makes the get_alerts_response the current node. -->
+  <xsl:for-each select="get_alerts_response | commands_response/get_alerts_response">
+    <xsl:call-template name="html-alerts-table"/>
   </xsl:for-each>
 </xsl:template>
 
-<!-- END ESCALATORS MANAGEMENT -->
+<!-- END ALERTS MANAGEMENT -->
 
 <!-- BEGIN TARGET LOCATORS MANAGEMENT -->
 
@@ -12561,7 +12561,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_note_response"/>
   <xsl:apply-templates select="create_override_response"/>
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="get_reports_escalate_response"/>
+  <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>
 </xsl:template>
 
@@ -14214,7 +14214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="html-escalators-trash-table">
+<xsl:template name="html-alerts-trash-table">
   <div id="tasks">
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
@@ -14224,7 +14224,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Method</td>
         <td width="100">Actions</td>
       </tr>
-      <xsl:apply-templates select="escalator" mode="trash"/>
+      <xsl:apply-templates select="alert" mode="trash"/>
     </table>
   </div>
 </xsl:template>
@@ -14344,7 +14344,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_agent_response"/>
   <xsl:apply-templates select="delete_config_response"/>
-  <xsl:apply-templates select="delete_escalator_response"/>
+  <xsl:apply-templates select="delete_alert_response"/>
   <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
@@ -14387,16 +14387,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
         </tr>
         <tr class="odd">
+          <td><a href="#alerts">Alerts</a></td>
+          <td><xsl:value-of select="count(get_alerts_response/alert)"/></td>
+        </tr>
+        <tr class="odd">
           <td><a href="#configs">Scan Configs</a></td>
           <td><xsl:value-of select="count(get_configs_response/config)"/></td>
         </tr>
         <tr class="even">
           <td><a href="#credentials">Credentials</a></td>
           <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
-        </tr>
-        <tr class="odd">
-          <td><a href="#escalators">Escalators</a></td>
-          <td><xsl:value-of select="count(get_escalators_response/escalator)"/></td>
         </tr>
         <tr class="even">
           <td><a href="#port_lists">Port Lists</a></td>
@@ -14431,6 +14431,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="html-agents-trash-table"/>
       </xsl:for-each>
 
+      <a name="alerts"></a>
+      <h1>Alerts</h1>
+      <!-- The for-each makes the get_alerts_response the current node. -->
+      <xsl:for-each select="get_alerts_response">
+        <xsl:call-template name="html-alerts-trash-table"/>
+      </xsl:for-each>
+
       <a name="configs"></a>
       <h1>Scan Configs</h1>
       <!-- The for-each makes the get_configs_response the current node. -->
@@ -14443,13 +14450,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- The for-each makes the get_lsc_credentials_response the current node. -->
       <xsl:for-each select="get_lsc_credentials_response">
         <xsl:call-template name="html-lsc-credentials-trash-table"/>
-      </xsl:for-each>
-
-      <a name="escalators"></a>
-      <h1>Escalators</h1>
-      <!-- The for-each makes the get_escalators_response the current node. -->
-      <xsl:for-each select="get_escalators_response">
-        <xsl:call-template name="html-escalators-trash-table"/>
       </xsl:for-each>
 
       <a name="port_lists"></a>
@@ -14552,11 +14552,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Escalator (optional)</td>
+          <td>Alert (optional)</td>
           <td>
-            <select name="escalator_id_optional">
+            <select name="alert_id_optional">
               <option value="--">--</option>
-              <xsl:apply-templates select="get_escalators_response/escalator"
+              <xsl:apply-templates select="get_alerts_response/alert"
                                    mode="newtask"/>
             </select>
           </td>

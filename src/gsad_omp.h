@@ -60,12 +60,12 @@ char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
 
 char * get_result_omp (credentials_t *, params_t *);
 
-char * create_escalator_omp (credentials_t *, params_t *);
-char * delete_escalator_omp (credentials_t *, params_t *);
-char * delete_trash_escalator_omp (credentials_t *, params_t *);
-char * test_escalator_omp (credentials_t *, params_t *);
-char * get_escalator_omp (credentials_t *, params_t *);
-char * get_escalators_omp (credentials_t *, params_t *);
+char * create_alert_omp (credentials_t *, params_t *);
+char * delete_alert_omp (credentials_t *, params_t *);
+char * delete_trash_alert_omp (credentials_t *, params_t *);
+char * test_alert_omp (credentials_t *, params_t *);
+char * get_alert_omp (credentials_t *, params_t *);
+char * get_alerts_omp (credentials_t *, params_t *);
 
 int export_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
                                char **);

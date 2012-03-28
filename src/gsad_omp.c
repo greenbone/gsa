@@ -520,9 +520,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
                            "/omp?cmd=get_tasks");
     }
 
-  /* Get escalators to select in new task UI. */
+  /* Get alerts to select in new task UI. */
   if (openvas_server_send (&session,
-                           "<get_escalators"
+                           "<get_alerts"
                            " sort_field=\"name\""
                            " sort_order=\"ascending\"/>")
       == -1)
@@ -531,8 +531,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalator list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting alert list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
@@ -543,8 +543,8 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalator list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting alert list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
@@ -768,10 +768,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   char *text = NULL;
   int socket, ret;
-  gchar *schedule_element, *escalator_element, *slave_element;
+  gchar *schedule_element, *alert_element, *slave_element;
   gchar *html;
   const char *name, *comment, *config_id, *apply_overrides, *target_id;
-  const char *escalator_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
+  const char *alert_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
   const char *observers;
 
   name = params_value (params, "name");
@@ -779,7 +779,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   config_id = params_value (params, "config_id");
   apply_overrides = params_value (params, "overrides");
   target_id = params_value (params, "target_id");
-  escalator_id = params_value (params, "escalator_id_optional");
+  alert_id = params_value (params, "alert_id_optional");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
   max_checks = params_value (params, "max_checks");
@@ -791,7 +791,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (config_id);
   CHECK (apply_overrides);
   CHECK (target_id);
-  CHECK (escalator_id);
+  CHECK (alert_id);
   CHECK (slave_id);
   CHECK (schedule_id);
   CHECK (max_checks);
@@ -820,11 +820,11 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     schedule_element = g_strdup_printf ("<schedule id=\"%s\"/>", schedule_id);
 
-  if (escalator_id == NULL || strcmp (escalator_id, "--") == 0)
-    escalator_element = g_strdup ("");
+  if (alert_id == NULL || strcmp (alert_id, "--") == 0)
+    alert_element = g_strdup ("");
   else
-    escalator_element = g_strdup_printf ("<escalator id=\"%s\"/>",
-                                         escalator_id);
+    alert_element = g_strdup_printf ("<alert id=\"%s\"/>",
+                                     alert_id);
 
   if (slave_id == NULL || strcmp (slave_id, "--") == 0)
     slave_element = g_strdup ("");
@@ -861,7 +861,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               "</commands>",
                               config_id,
                               schedule_element,
-                              escalator_element,
+                              alert_element,
                               slave_element,
                               target_id,
                               name,
@@ -872,7 +872,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               apply_overrides);
 
   g_free (schedule_element);
-  g_free (escalator_element);
+  g_free (alert_element);
   g_free (slave_element);
 
   if (ret == -1)
@@ -1002,7 +1002,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "<get_configs"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
-                            "<get_escalators"
+                            "<get_alerts"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "<get_schedules"
@@ -1096,7 +1096,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
   const char *comment, *name, *next, *refresh_interval, *sort_field;
-  const char *sort_order, *overrides, *escalator_id, *schedule_id;
+  const char *sort_order, *overrides, *alert_id, *schedule_id;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int apply_overrides;
 
@@ -1115,14 +1115,14 @@ save_task_omp (credentials_t * credentials, params_t *params)
     return edit_task (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
-  escalator_id = params_value (params, "escalator_id");
+  alert_id = params_value (params, "alert_id");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
 
-  if (escalator_id == NULL || schedule_id == NULL || slave_id == NULL
+  if (alert_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
       || task_id == NULL || max_checks == NULL || max_hosts == NULL
       || observers == NULL)
@@ -1136,7 +1136,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
                                  "<comment>%s</comment>"
-                                 "<escalator id=\"%s\"/>"
+                                 "<alert id=\"%s\"/>"
                                  "<schedule id=\"%s\"/>"
                                  "<slave id=\"%s\"/>"
                                  "<preferences>"
@@ -1154,7 +1154,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  task_id,
                                  name,
                                  comment,
-                                 escalator_id,
+                                 alert_id,
                                  schedule_id,
                                  slave_id,
                                  max_checks,
@@ -3351,7 +3351,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Send data for an escalator.
+ * @brief Send data for an alert.
  *
  * @param[in]   session  GNUTLS session.
  * @param[out]  data     Data.
@@ -3359,7 +3359,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
  * @return 0 on success, -1 on error.
  */
 static int
-send_escalator_data (gnutls_session_t *session, params_t *data)
+send_alert_data (gnutls_session_t *session, params_t *data)
 {
   if (data)
     {
@@ -3380,7 +3380,7 @@ send_escalator_data (gnutls_session_t *session, params_t *data)
 }
 
 /**
- * @brief Send method data for an escalator.
+ * @brief Send method data for an alert.
  *
  * @param[in]   session  GNUTLS session.
  * @param[out]  data     Data.
@@ -3389,7 +3389,7 @@ send_escalator_data (gnutls_session_t *session, params_t *data)
  * @return 0 on success, -1 on error.
  */
 static int
-send_escalator_method_data (gnutls_session_t *session, params_t *data,
+send_alert_method_data (gnutls_session_t *session, params_t *data,
                             const char *method)
 {
   if (data)
@@ -3446,7 +3446,7 @@ send_escalator_method_data (gnutls_session_t *session, params_t *data,
 }
 
 /**
- * @brief Create an escalator, get all escalators, XSL transform the result.
+ * @brief Create an alert, get all alerts, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3454,7 +3454,7 @@ send_escalator_method_data (gnutls_session_t *session, params_t *data,
  * @return Result of XSL transformation.
  */
 char *
-create_escalator_omp (credentials_t * credentials, params_t *params)
+create_alert_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
   GString *xml;
@@ -3479,7 +3479,7 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_targets");
     }
 
-  xml = g_string_new ("<get_escalators>");
+  xml = g_string_new ("<get_alerts>");
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -3489,12 +3489,12 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
 
   if (name == NULL || comment == NULL || condition == NULL || event == NULL
       || method == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Escalator"));
+    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Alert"));
   else
     {
       params_t *method_data, *event_data, *condition_data;
 
-      /* Create the escalator. */
+      /* Create the alert. */
 
       method_data = params_values (params, "method_data:");
       event_data = params_values (params, "event_data:");
@@ -3509,7 +3509,7 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
         }
 
       if (openvas_server_sendf (&session,
-                                "<create_escalator>"
+                                "<create_alert>"
                                 "<name>%s</name>"
                                 "%s%s%s",
                                 name,
@@ -3517,25 +3517,25 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
                                 comment ? comment : "",
                                 comment ? "</comment>" : "")
           || openvas_server_sendf (&session, "<event>%s", event)
-          || send_escalator_data (&session, event_data)
+          || send_alert_data (&session, event_data)
           || openvas_server_send (&session, "</event>")
           || openvas_server_sendf (&session, "<method>%s", method)
-          || send_escalator_method_data (&session, method_data, method)
+          || send_alert_method_data (&session, method_data, method)
           || openvas_server_send (&session, "</method>")
           || openvas_server_sendf (&session, "<condition>%s", condition)
-          || send_escalator_data (&session, condition_data)
+          || send_alert_data (&session, condition_data)
           || openvas_server_send (&session,
                                   "</condition>"
-                                  "</create_escalator>"))
+                                  "</create_alert>"))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new escalator. "
-                               "No new escalator was created. "
+                               "An internal error occurred while creating a new alert. "
+                               "No new alert was created. "
                                "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_escalators");
+                               "/omp?cmd=get_alerts");
         }
 
       if (read_string (&session, &xml))
@@ -3544,17 +3544,17 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
           openvas_server_close (socket, session);
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new escalator. "
-                               "It is unclear whether the escalator has been created or not. "
+                               "An internal error occurred while creating a new alert. "
+                               "It is unclear whether the alert has been created or not. "
                                "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_escalators");
+                               "/omp?cmd=get_alerts");
         }
     }
 
-  /* Get all the escalators. */
+  /* Get all the alerts. */
 
   if (openvas_server_send (&session,
-                           "<get_escalators"
+                           "<get_alerts"
                            " sort_field=\"name\""
                            " sort_order=\"ascending\"/>")
       == -1)
@@ -3563,10 +3563,10 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -3575,10 +3575,10 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Get report formats. */
@@ -3593,10 +3593,10 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -3605,21 +3605,21 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_escalators>");
+  g_string_append (xml, "</get_alerts>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
- * @brief Delete an escalator, get all escalators, XSL transform the result.
+ * @brief Delete an alert, get all alerts, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3627,23 +3627,23 @@ create_escalator_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-delete_escalator_omp (credentials_t * credentials, params_t *params)
+delete_alert_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *escalator_id;
+  const char *alert_id;
 
-  escalator_id = params_value (params, "escalator_id");
+  alert_id = params_value (params, "alert_id");
 
-  if (escalator_id == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an escalator. "
-                         "The escalator was not deleted. "
+                         "An internal error occurred while deleting an alert. "
+                         "The alert was not deleted. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_escalators");
+                         "/omp?cmd=get_alerts");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3656,37 +3656,37 @@ delete_escalator_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a escalator. "
-                             "The escalator is not deleted. "
+                             "An internal error occurred while deleting a alert. "
+                             "The alert is not deleted. "
                              "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_escalators");
+                             "/omp?cmd=get_alerts");
     }
 
-  xml = g_string_new ("<get_escalators>");
+  xml = g_string_new ("<get_alerts>");
 
-  /* Delete escalator and get all escalators. */
+  /* Delete alert and get all alerts. */
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<delete_escalator escalator_id=\"%s\"/>"
-                            "<get_escalators"
+                            "<delete_alert alert_id=\"%s\"/>"
+                            "<get_alerts"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "<get_report_formats"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
                             "</commands>",
-                            escalator_id)
+                            alert_id)
       == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an escalator. "
-                           "The escalator was not deleted. "
+                           "An internal error occurred while deleting an alert. "
+                           "The alert was not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -3695,21 +3695,21 @@ delete_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an escalator. "
-                           "It is unclear whether the escalator has been deleted or not. "
+                           "An internal error occurred while deleting an alert. "
+                           "It is unclear whether the alert has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_escalators>");
+  g_string_append (xml, "</get_alerts>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
- * @brief Get one escalator, XSL transform the result.
+ * @brief Get one alert, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3717,24 +3717,24 @@ delete_escalator_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-get_escalator_omp (credentials_t * credentials, params_t *params)
+get_alert_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *escalator_id, *sort_field, *sort_order;
+  const char *alert_id, *sort_field, *sort_order;
 
-  escalator_id = params_value (params, "escalator_id");
+  alert_id = params_value (params, "alert_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (escalator_id == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an escalator. "
+                         "An internal error occurred while getting an alert. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_escalators");
+                         "/omp?cmd=get_alerts");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3747,21 +3747,21 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting an escalator. "
+                             "An internal error occurred while getting an alert. "
                              "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_escalators");
+                             "/omp?cmd=get_alerts");
     }
 
-  xml = g_string_new ("<get_escalator>");
+  xml = g_string_new ("<get_alert>");
 
-  /* Get the escalator. */
+  /* Get the alert. */
 
   if (openvas_server_sendf (&session,
-                            "<get_escalators"
-                            " escalator_id=\"%s\""
+                            "<get_alerts"
+                            " alert_id=\"%s\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
-                            escalator_id,
+                            alert_id,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
       == -1)
@@ -3770,9 +3770,9 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an escalator. "
+                           "An internal error occurred while getting an alert. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -3781,9 +3781,9 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an escalator. "
+                           "An internal error occurred while getting an alert. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Get the report formats. */
@@ -3796,9 +3796,9 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an escalator. "
+                           "An internal error occurred while getting an alert. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -3807,20 +3807,20 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an escalator. "
+                           "An internal error occurred while getting an alert. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_escalator>");
+  g_string_append (xml, "</get_alert>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
- * @brief Get all escalators, reading the result into a string.
+ * @brief Get all alerts, reading the result into a string.
  *
  * @param[in]   credentials  User authentication information.
  * @param[in]   session      GNUTLS session.
@@ -3831,12 +3831,12 @@ get_escalator_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation on error, NULL on success.
  */
 char *
-get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
+get_alerts_xml (credentials_t *credentials, gnutls_session_t *session,
                     GString *xml, const char *sort_field,
                     const char *sort_order)
 {
   if (openvas_server_sendf (session,
-                            "<get_escalators"
+                            "<get_alerts"
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
                             sort_field ? sort_field : "name",
@@ -3844,16 +3844,16 @@ get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
       == -1)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting escalators list. "
-                         "The current list of escalators is not available. "
+                         "An internal error occurred while getting alerts list. "
+                         "The current list of alerts is not available. "
                          "Diagnostics: Failure to send command to manager daemon.",
                          "/omp?cmd=get_tasks");
 
   if (read_string (session, &xml))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting escalators list. "
-                         "The current list of escalators is not available. "
+                         "An internal error occurred while getting alerts list. "
+                         "The current list of alerts is not available. "
                          "Diagnostics: Failure to receive response from manager daemon.",
                          "/omp?cmd=get_tasks");
 
@@ -3861,7 +3861,7 @@ get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
 }
 
 /**
- * @brief Get all escalators, XSL transform the result.
+ * @brief Get all alerts, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3869,7 +3869,7 @@ get_escalators_xml (credentials_t *credentials, gnutls_session_t *session,
  * @return Result of XSL transformation.
  */
 char *
-get_escalators_omp (credentials_t * credentials, params_t *params)
+get_alerts_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
@@ -3888,15 +3888,15 @@ get_escalators_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting escalator list. "
-                             "The current list of escalators is not available. "
+                             "An internal error occurred while getting alert list. "
+                             "The current list of alerts is not available. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
     }
 
-  xml = g_string_new ("<get_escalators>");
+  xml = g_string_new ("<get_alerts>");
 
-  ret = get_escalators_xml (credentials, &session, xml,
+  ret = get_alerts_xml (credentials, &session, xml,
                             params_value (params, "sort_field"),
                             params_value (params, "sort_order"));
   if (ret)
@@ -3916,8 +3916,8 @@ get_escalators_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the escalator list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting the alert list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
@@ -3928,19 +3928,19 @@ get_escalators_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the escalator list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting the alert list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_tasks");
     }
 
-  g_string_append (xml, "</get_escalators>");
+  g_string_append (xml, "</get_alerts>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 /**
- * @brief Test an escalator, get all escalators XSL transform the result.
+ * @brief Test an alert, get all alerts XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -3948,25 +3948,25 @@ get_escalators_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-test_escalator_omp (credentials_t * credentials, params_t *params)
+test_alert_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   char *ret;
   gchar *html;
-  const char *escalator_id, *sort_field, *sort_order;
+  const char *alert_id, *sort_field, *sort_order;
 
-  escalator_id = params_value (params, "escalator_id");
+  alert_id = params_value (params, "alert_id");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (escalator_id == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while testing an escalator. "
+                         "An internal error occurred while testing an alert. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_escalators");
+                         "/omp?cmd=get_alerts");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -3979,25 +3979,25 @@ test_escalator_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while testing an escalator. "
+                             "An internal error occurred while testing an alert. "
                              "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_escalators");
+                             "/omp?cmd=get_alerts");
     }
 
-  xml = g_string_new ("<get_escalators>");
+  xml = g_string_new ("<get_alerts>");
 
-  /* Test the escalator. */
+  /* Test the alert. */
 
   if (openvas_server_sendf (&session,
-                            "<test_escalator escalator_id=\"%s\"/>",
-                            escalator_id)
+                            "<test_alert alert_id=\"%s\"/>",
+                            alert_id)
       == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while testing an escalator. "
+                           "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_targets");
     }
@@ -4008,14 +4008,14 @@ test_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while testing an escalator. "
+                           "An internal error occurred while testing an alert. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
 
-  /* Get all escalators. */
+  /* Get all alerts. */
 
-  ret = get_escalators_xml (credentials, &session, xml, sort_field, sort_order);
+  ret = get_alerts_xml (credentials, &session, xml, sort_field, sort_order);
   if (ret)
     {
       g_string_free (xml, TRUE);
@@ -4035,10 +4035,10 @@ test_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   if (read_string (&session, &xml))
@@ -4047,15 +4047,15 @@ test_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new escalator. "
-                           "A new escalator was, however, created. "
+                           "An internal error occurred while creating a new alert. "
+                           "A new alert was, however, created. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_escalators>");
+  g_string_append (xml, "</get_alerts>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -4621,7 +4621,7 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Delete a trash escalator, get all trash, XSL transform the result.
+ * @brief Delete a trash alert, get all trash, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -4629,24 +4629,24 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_escalator_omp (credentials_t * credentials, params_t *params)
+delete_trash_alert_omp (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gchar *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *escalator_id;
+  const char *alert_id;
 
-  escalator_id = params_value (params, "escalator_id");
+  alert_id = params_value (params, "alert_id");
 
-  if (escalator_id == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a escalator. "
-                         "The escalator was not deleted. "
+                         "An internal error occurred while deleting a alert. "
+                         "The alert was not deleted. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_escalators");
+                         "/omp?cmd=get_alerts");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4659,29 +4659,29 @@ delete_trash_escalator_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a escalator. "
-                             "The escalator is not deleted. "
+                             "An internal error occurred while deleting a alert. "
+                             "The alert is not deleted. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_trash");
     }
 
   xml = g_string_new ("");
 
-  /* Delete the escalator. */
+  /* Delete the alert. */
 
   if (openvas_server_sendf (&session,
-                            "<delete_escalator"
-                            " escalator_id=\"%s\""
+                            "<delete_alert"
+                            " alert_id=\"%s\""
                             " ultimate=\"1\"/>",
-                            escalator_id)
+                            alert_id)
       == -1)
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a escalator. "
-                           "The escalator is not deleted. "
+                           "An internal error occurred while deleting a alert. "
+                           "The alert is not deleted. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_trash");
     }
@@ -4692,8 +4692,8 @@ delete_trash_escalator_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a escalator. "
-                           "It is unclear whether the escalator has been deleted or not. "
+                           "An internal error occurred while deleting a alert. "
+                           "It is unclear whether the alert has been deleted or not. "
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_trash");
     }
@@ -7767,14 +7767,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *escalator_id, *search_phrase, *min_cvss_base, *type;
+  const char *alert_id, *search_phrase, *min_cvss_base, *type;
   const char *notes, *overrides, *result_hosts_only, *report_id, *sort_field;
   const char *sort_order, *result_id, *delta_report_id, *format_id;
   const char *first_result, *max_results, *host, *pos;
 
-  escalator_id = params_value (params, "escalator_id");
-  if (escalator_id == NULL)
-    params_given (params, "escalator_id") || (escalator_id = "0");
+  alert_id = params_value (params, "alert_id");
+  if (alert_id == NULL)
+    params_given (params, "alert_id") || (alert_id = "0");
 
   search_phrase = params_value (params, "search_phrase");
   if (search_phrase == NULL)
@@ -7815,12 +7815,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (content_type) *content_type = NULL;
   if (report_len) *report_len = 0;
 
-  if (escalator_id == NULL)
+  if (alert_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a report. "
                          "The report could not be delivered. "
-                         "Diagnostics: escalator_id was NULL.",
+                         "Diagnostics: alert_id was NULL.",
                          "/omp?cmd=get_tasks");
 
   if (search_phrase == NULL)
@@ -7953,7 +7953,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   sort_order = params_value (params, "sort_order");
   report_id = params_value (params, "report_id");
 
-  if (strcmp (escalator_id, "0"))
+  if (strcmp (alert_id, "0"))
     {
       const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
       const char *esc_first_result, *esc_max_results;
@@ -8020,7 +8020,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " delta_states=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\""
-                                " escalator_id=\"%s\"/>",
+                                " alert_id=\"%s\"/>",
                                 strcmp (esc_notes, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
@@ -8039,7 +8039,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 delta_states->str,
                                 esc_search_phrase,
                                 esc_min_cvss_base,
-                                escalator_id)
+                                alert_id)
           == -1)
         {
           openvas_server_close (socket, session);
@@ -8088,7 +8088,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           gchar *msg;
           msg = g_strdup_printf ("An internal error occurred while getting a report. "
                                  "The report could not be delivered. "
-                                 "Diagnostics: GET_REPORT escalation failed: %s.",
+                                 "Diagnostics: GET_REPORT alert failed: %s.",
                                  entity_attribute (entity, "status_text"));
           ret = gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -8396,8 +8396,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
 
-      if (strcmp (escalator_id, "0"))
-        g_string_append_printf (xml, "<get_reports_escalate_response"
+      if (strcmp (alert_id, "0"))
+        g_string_append_printf (xml, "<get_reports_alert_response"
                                      " status=\"200\""
                                      " status_text=\"OK\"/>");
       else if (delta_report_id)
@@ -8560,7 +8560,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks");
         }
 
-      if (openvas_server_send (&session, "<get_escalators"
+      if (openvas_server_send (&session, "<get_alerts"
                                          " sort_field=\"name\""
                                          " sort_order=\"ascending\"/>")
           == -1)
@@ -13139,10 +13139,10 @@ get_trash (credentials_t * credentials, const char * sort_field,
                            "/omp?cmd=get_tasks");
     }
 
-  /* Get the escalators. */
+  /* Get the alerts. */
 
   if (openvas_server_sendf (&session,
-                            "<get_escalators"
+                            "<get_alerts"
                             " trash=\"1\""
                             " sort_field=\"%s\""
                             " sort_order=\"%s\"/>",
@@ -13154,8 +13154,8 @@ get_trash (credentials_t * credentials, const char * sort_field,
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalators list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting alerts list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
@@ -13166,10 +13166,10 @@ get_trash (credentials_t * credentials, const char * sort_field,
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting escalators list. "
-                           "The current list of escalators is not available. "
+                           "An internal error occurred while getting alerts list. "
+                           "The current list of alerts is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_escalators");
+                           "/omp?cmd=get_alerts");
     }
 
   /* Get the port lists. */

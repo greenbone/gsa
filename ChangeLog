@@ -1,3 +1,8 @@
+2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h, src/html/omp.xsl,
+	src/html/gsad.xsl, src/html/help.xsl: Rename escalator to alert everywhere.
+
 2012-03-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post branch version bump.

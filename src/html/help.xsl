@@ -645,31 +645,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_escalators.html">
-  <div class="gb_window_part_center">Help: Configure Escalator</div>
+<xsl:template mode="help" match="configure_alerts.html">
+  <div class="gb_window_part_center">Help: Configure Alert</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Configure Escalators</h1>
+      <h1>Configure Alerts</h1>
       <p>
-       Escalators can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
-       Escalators are hooked into the system. Whenever a configured event happens
+       Alerts can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
+       Alerts are hooked into the system. Whenever a configured event happens
        (e.g. a task finished), a chosen condition is checked (e.g. vulnerability
        with high threat level detected).
        If the condition is met, an action is performed (e.g. an email is sent to a
        specified address).
       </p>
 
-      <a name="newescalator"></a>
-      <h2>New Escalator</h2>
+      <a name="newalert"></a>
+      <h2>New Alert</h2>
 
       <p>
-       To create an escalator the dialog offers these entries.
-       Hit the button "Create Escalator" to submit the new escalator.
-       The list of escalators will be updated.
+       To create an alert the dialog offers these entries.
+       Hit the button "Create Alert" to submit the new alert.
+       The list of alerts will be updated.
       </p>
 
       <table class="gbntable">
@@ -717,7 +717,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h3>Escalation Methods</h3>
+      <h3>Alert Methods</h3>
 
       <h4>HTTP Get</h4>
 
@@ -739,10 +739,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li> $c: condition description </li>
       </ul>
 
-      <a name="escalators"></a>
-      <h2>Escalators</h2>
+      <a name="alerts"></a>
+      <h2>Alerts</h2>
       <p>
-       This table provides an overview of all created escalators.
+       This table provides an overview of all created alerts.
       </p>
 
       <table class="gbntable">
@@ -752,7 +752,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>Name</td>
-          <td>User-given name of the escalator.</td>
+          <td>User-given name of the alert.</td>
         </tr>
         <tr class="even">
           <td>Event</td>
@@ -771,40 +771,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>Move Escalator to Trashcan</h4>
+      <h4>Move Alert to Trashcan</h4>
       <p>
        Pressing the trashcan icon
        <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
        will move the entry to the trashcan and update the list.
       </p>
       <p>
-       It is not possible to remove an escalator that is in use by a task.
+       It is not possible to remove an alert that is in use by a task.
       </p>
 
-      <h4>Escalator Details</h4>
+      <h4>Alert Details</h4>
       <p>
-       Details of an escalator can be seen by clicking on the details icon
+       Details of an alert can be seen by clicking on the details icon
        <img src="/img/details.png" alt="Details" title="Details" />.
       </p>
 
-      <h4>Test Escalator</h4>
+      <h4>Test Alert</h4>
       <p>
        By clicking on the start icon
-       <img src="/img/start.png" alt="Test Escalator" title="Test Escalator" />
-       the corresponding escalator is immediately executed with some
+       <img src="/img/start.png" alt="Test Alert" title="Test Alert" />
+       the corresponding alert is immediately executed with some
        dummy data.
       </p>
 
-      <a name="escalatordetails"></a>
-      <h2>Escalator Details</h2>
+      <a name="alertdetails"></a>
+      <h2>Alert Details</h2>
       <p>
-       Provides information about an escalator like the name, comment, condition and
+       Provides information about an alert like the name, comment, condition and
        notification method.
       </p>
 
-      <h3>Tasks using this Escalators</h3>
+      <h3>Tasks using this Alerts</h3>
       <p>
-       This table provides an overview of the tasks associated with this escalator.
+       This table provides an overview of the tasks associated with this alert.
        Details of these tasks can be seen after a click on the Details
        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
@@ -2311,7 +2311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_targets.html?token={/envelope/token}">Configure Targets</a></li>
             <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
             <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
-            <li> <a href="configure_escalators.html?token={/envelope/token}">Configure Escalators</a></li>
+            <li> <a href="configure_alerts.html?token={/envelope/token}">Configure Alerts</a></li>
             <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
@@ -2538,10 +2538,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         (Source: http://cve.mitre.org).
       </p>
 
-      <a name="escalator"></a>
-      <h2>Escalator</h2>
+      <a name="alert"></a>
+      <h2>Alert</h2>
       <p>
-       An escalator is an action that can be triggered at certain events.
+       An alert is an action that can be triggered at certain events.
        Usually this means notification, e.g. via e-mail in case of
        new found vulnerabilities.
       </p>
@@ -3168,7 +3168,7 @@ Public License instead of this License.
           <td>Localhost</td>
         </tr>
         <tr class="odd">
-          <td>Escalator</td>
+          <td>Alert</td>
           <td>no</td>
           <td>---</td>
           <td>Choice</td>
@@ -3670,10 +3670,10 @@ Public License instead of this License.
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.
        It also lists the <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Config</a>,
-       <a href="glossary.html?token={/envelope/token}#escalator">Escalator</a>,
+       <a href="glossary.html?token={/envelope/token}#alert">Alert</a>,
        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
        <a href="glossary.html?token={/envelope/token}#target">Target</a> for the shown report, if
-       any were chosen. Information about the chosen Scan Config, Escalator,
+       any were chosen. Information about the chosen Scan Config, Alert,
        Schedule or Target is accessible by clicking on the respective items
        name.
       </p>

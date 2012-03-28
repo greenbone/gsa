@@ -501,7 +501,7 @@ init_validator ()
                          "cmd",
                          "^(create_agent)"
                          "|(create_config)"
-                         "|(create_escalator)"
+                         "|(create_alert)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
@@ -515,7 +515,7 @@ init_validator ()
                          "|(create_user)"
                          "|(delete_agent)"
                          "|(delete_config)"
-                         "|(delete_escalator)"
+                         "|(delete_alert)"
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
@@ -529,7 +529,7 @@ init_validator ()
                          "|(delete_task)"
                          "|(delete_trash_agent)"
                          "|(delete_trash_config)"
-                         "|(delete_trash_escalator)"
+                         "|(delete_trash_alert)"
                          "|(delete_trash_lsc_credential)"
                          "|(delete_trash_port_list)"
                          "|(delete_trash_report_format)"
@@ -550,7 +550,7 @@ init_validator ()
                          "|(edit_task)"
                          "|(edit_user)"
                          "|(empty_trashcan)"
-                         "|(escalate_report)"
+                         "|(alert_report)"
                          "|(export_config)"
                          "|(export_lsc_credential)"
                          "|(export_note)"
@@ -565,8 +565,8 @@ init_validator ()
                          "|(get_config_nvt)"
                          "|(get_configs)"
                          "|(get_feed)"
-                         "|(get_escalator)"
-                         "|(get_escalators)"
+                         "|(get_alert)"
+                         "|(get_alerts)"
                          "|(get_info)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
@@ -606,7 +606,7 @@ init_validator ()
                          "|(restore)"
                          "|(resume_paused_task)"
                          "|(resume_stopped_task)"
-                         "|(test_escalator)"
+                         "|(test_alert)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -647,8 +647,8 @@ init_validator ()
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
-  openvas_validator_add (validator, "escalator_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "escalator_id_optional", "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "alert_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
@@ -1434,7 +1434,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "/omp?cmd=get_tasks");
     }
   ELSE (create_agent)
-  ELSE (create_escalator)
+  ELSE (create_alert)
   ELSE (create_lsc_credential)
   ELSE (create_port_list)
   ELSE (create_port_range)
@@ -1449,7 +1449,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_override)
   ELSE (delete_agent)
   ELSE (delete_task)
-  ELSE (delete_escalator)
+  ELSE (delete_alert)
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
@@ -1463,7 +1463,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_target)
   ELSE (delete_trash_agent)
   ELSE (delete_trash_config)
-  ELSE (delete_trash_escalator)
+  ELSE (delete_trash_alert)
   ELSE (delete_trash_lsc_credential)
   ELSE (delete_trash_port_list)
   ELSE (delete_trash_report_format)
@@ -1473,7 +1473,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_task)
   ELSE (delete_config)
   ELSE (empty_trashcan)
-  else if (!strcmp (cmd, "escalate_report"))
+  else if (!strcmp (cmd, "alert_report"))
     {
       gchar *content_type_omp;
       gsize response_size;
@@ -1519,7 +1519,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (start_task)
   ELSE (stop_task)
   ELSE_OAP (sync_feed)
-  ELSE (test_escalator)
+  ELSE (test_alert)
   else
     {
       con_info->response = gsad_message (credentials,
@@ -1729,8 +1729,8 @@ exec_omp_get (struct MHD_Connection *connection,
       return html;
     }
 
-  ELSE (get_escalator)
-  ELSE (get_escalators)
+  ELSE (get_alert)
+  ELSE (get_alerts)
   ELSE (get_info)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)

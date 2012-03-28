@@ -103,11 +103,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="create_escalator_response" mode="response-indicator">
+<xsl:template match="create_alert_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Create Escalator'"/>
+    <xsl:with-param name="command" select="'Create Alert'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -215,11 +215,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="delete_escalator_response" mode="response-indicator">
+<xsl:template match="delete_alert_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Delete Escalator'"/>
+    <xsl:with-param name="command" select="'Delete Alert'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -327,11 +327,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="get_reports_escalate_response" mode="response-indicator">
+<xsl:template match="get_reports_alert_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Escalate'"/>
+    <xsl:with-param name="command" select="'Alert'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -455,11 +455,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="test_escalator_response" mode="response-indicator">
+<xsl:template match="test_alert_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Test Escalator'"/>
+    <xsl:with-param name="command" select="'Test Alert'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -597,17 +597,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_lsc_credential/gsad_msg"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalator/commands_response/delete_escalator_response"
+        <xsl:apply-templates select="get_alert/commands_response/delete_alert_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalator/gsad_msg"
+        <xsl:apply-templates select="get_alert/gsad_msg"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalators/create_escalator_response"
+        <xsl:apply-templates select="get_alerts/create_alert_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalators/commands_response/delete_escalator_response"
+        <xsl:apply-templates select="get_alerts/commands_response/delete_alert_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalators/gsad_msg"
+        <xsl:apply-templates select="get_alerts/gsad_msg"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_escalators/test_escalator_response"
+        <xsl:apply-templates select="get_alerts/test_alert_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_lsc_credential/commands_response/delete_lsc_credential_response"
                              mode="response-indicator"/>
@@ -655,7 +655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/delete_override_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_report/get_reports_escalate_response"
+        <xsl:apply-templates select="get_report/get_reports_alert_response"
                              mode="response-indicator"/>
 <!--
         <xsl:apply-templates select="get_report/get_reports_response"
@@ -741,7 +741,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_config_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_trash/delete_escalator_response"
+        <xsl:apply-templates select="get_trash/delete_alert_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/delete_lsc_credential_response"
                              mode="response-indicator"/>
@@ -829,7 +829,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
       <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
-      <li><a href="/omp?cmd=get_escalators&amp;token={/envelope/token}">Escalators</a></li>
+      <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
       <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
       <li><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
       <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
