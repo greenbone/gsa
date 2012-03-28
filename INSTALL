@@ -15,9 +15,9 @@ some supported platforms.
 
 Prerequisites:
 * openvas-libraries (>= 5.0.0)
-* gnutls
+* gnutls (>= 2.2)
 * cmake
-* glib-2.0 (>= 2.14)
+* glib-2.0 (>= 2.16)
 * libxml
 * libxslt
 * libmicrohttpd (>= 0.4.2)
