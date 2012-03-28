@@ -657,6 +657,7 @@ init_validator ()
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   openvas_validator_add (validator, "file:value",   "^yes$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
+  openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");

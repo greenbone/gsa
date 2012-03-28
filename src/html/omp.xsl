@@ -5371,6 +5371,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
     </div>
+    <div class="gb_window_part_content">
+      <div style="background-color: #EEEEEE;">
+        <xsl:variable name="sort_field">
+          <xsl:value-of select="report/sort/field/text()"/>
+        </xsl:variable>
+        <xsl:variable name="sort_order">
+          <xsl:value-of select="report/sort/field/order"/>
+        </xsl:variable>
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_targets"/>
+<!--
+          <div style="padding: 2px;">
+            Results per page:
+            <input type="text" name="max_results" size="5"
+                   value="{report/results/@max}"
+                   maxlength="400"/>
+          </div>
+-->
+          <div style="float: right">
+            <input type="submit" value="Apply" title="Apply"/>
+          </div>
+          <div style="padding: 2px;">
+            Filter:
+            <input type="text" name="filter" size="50"
+                   value="{filters/term}"
+                   maxlength="1000"/>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">

@@ -1,5 +1,13 @@
 2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add filter.
+
+	* src/gsad_omp.c (get_targets_omp): Send filter through to manager.
+
+	* src/html/omp.xsl (html-targets-table): Add filter section to Targets.
+
+2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h, src/html/omp.xsl,
 	src/html/gsad.xsl, src/html/help.xsl: Rename escalator to alert everywhere.
 
