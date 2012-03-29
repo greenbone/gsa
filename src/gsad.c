@@ -602,6 +602,7 @@ init_validator ()
                          "|(modify_auth)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_target)"
                          "|(new_task)"
                          "|(pause_task)"
                          "|(restore)"
@@ -1640,9 +1641,10 @@ exec_omp_get (struct MHD_Connection *connection,
 
   /* Check cmd and precondition, start respective OMP command(s). */
 
-  if (!strcmp (cmd, "new_task"))
-    return new_task_omp (credentials, params);
+  if (!strcmp (cmd, "new_target"))
+    return new_target_omp (credentials, params);
 
+  ELSE (new_task)
   ELSE (get_tasks)
   ELSE (edit_config)
   ELSE (edit_config_family)

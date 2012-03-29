@@ -5190,12 +5190,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Configure Targets (New Target)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+         title="Targets" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Targets"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="filter" value="{filters/term}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name
@@ -5370,8 +5375,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Configure Targets (Targets)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;token={/envelope/token}"
+         title="New Target">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
       <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
-         title="Export Configs XML"
+         title="Export Targets XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
@@ -5726,17 +5735,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_target_response"/>
   <xsl:apply-templates select="create_target_response"/>
-  <xsl:call-template name="html-create-target-form">
-    <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
-    <xsl:with-param
-      name="target-sources"
-      select="get_target_locators_response | commands_response/get_target_locators_response"/>
-    <xsl:with-param
-      name="port-lists"
-      select="get_port_lists_response | commands_response/get_port_lists_response"/>
-  </xsl:call-template>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">
     <xsl:call-template name="html-targets-table"/>
@@ -14534,6 +14532,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END TRASH MANAGEMENT -->
+
+<!-- NEW_TARGET -->
+
+<xsl:template match="new_target">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="create_target_response"/>
+  <xsl:call-template name="html-create-target-form">
+    <xsl:with-param
+      name="lsc-credentials"
+      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="target-sources"
+      select="get_target_locators_response | commands_response/get_target_locators_response"/>
+    <xsl:with-param
+      name="port-lists"
+      select="get_port_lists_response | commands_response/get_port_lists_response"/>
+  </xsl:call-template>
+</xsl:template>
 
 <!-- NEW_TASK -->
 

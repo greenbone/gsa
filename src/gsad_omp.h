@@ -98,6 +98,7 @@ char * export_targets_omp (credentials_t *, params_t *, enum content_type *,
 char * create_target_omp (credentials_t *, params_t *);
 char * delete_target_omp (credentials_t *, params_t *);
 char * delete_trash_target_omp (credentials_t *, params_t *);
+char * new_target_omp (credentials_t *, params_t *);
 
 char * edit_config_omp (credentials_t *, params_t *);
 char * get_config_omp (credentials_t *, params_t *);

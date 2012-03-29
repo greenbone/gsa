@@ -1,5 +1,25 @@
 2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Move the New Target window to a separate page.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add new_target.
+
+	* src/gsad_omp.c (new_target, new_target_omp): New functions.
+	(CHECK): Invoke new_target page instead of going through to get_targets.
+	(create_target_omp): Pass filter through to GET_TARGETS.  If GET_TARGETS
+	fails go to new_target instead of get_targets page.  Remove OMP that was
+	for New Target window.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (html-create-user-form): Add list icon to link to
+	Targets page.  Pass filter through.
+	(html-targets-table): Add New Target icon.  Correct export tooltip.
+	(get_targets): Remove html-create-target-form.
+	(new_target): New template.
+
+2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_targets_omp): Send with openvas_server_sendf_xml as
 	there may be XML in the filter.
 

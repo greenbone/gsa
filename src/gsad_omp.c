@@ -4061,15 +4061,178 @@ test_alert_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Returns page to create a new target.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *end;
+  const char *filter;
+
+  filter = params_value (params, "filter");
+  if (filter == NULL)
+    filter = "";
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting targets list. "
+                             "The current list of targets is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  xml = g_string_new ("<new_target>");
+
+  g_string_append (xml, extra_xml);
+
+  /* Get the credentials. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_lsc_credentials"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  /* Get target locators. */
+  if (openvas_server_send (&session,
+                           "<get_target_locators/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the list "
+                           "of target locators. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the list "
+                           "of target locators. "
+                           "The current list of schedules is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Get the port lists. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_port_lists"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting targets list. "
+                           "The current list of targets is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
+                                 "</new_target>",
+                                 filter);
+  g_string_append (xml, end);
+  g_free (end);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new target.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_target_omp (credentials_t *credentials, params_t *params)
+{
+  return new_target (credentials, params, NULL);
+}
+
+/**
  * @brief Check a param.
  *
  * @param[in]  name  Param name.
  */
 #define CHECK(name)                                                            \
   if (name == NULL)                                                            \
-    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,                         \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                             "Given " G_STRINGIFY (name) " was invalid",        \
-                            "Create Target")
+                            "Create Target");                                  \
+      html = new_target (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
 
 /**
  * @brief Create a target, get all targets, XSL transform the result.
@@ -4088,6 +4251,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *hosts, *target_locator, *comment, *port_list_id;
   const char *target_credential, *port, *target_smb_credential, *target_source;
+  const char *filter;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4117,27 +4281,36 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  filter = params_value (params, "filter");
 
-  CHECK (name);
-  else CHECK (target_source);
+  CHECK (name)
+  else CHECK (target_source)
   else if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
+    return new_target (credentials, params,
+                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
   else if (strcmp (target_source, "import") == 0 && name == NULL)
-    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+    {
+      gchar *msg;
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_locator was invalid",
                             "Create Target");
-  else CHECK (comment);
-  else CHECK (port_list_id);
-  else CHECK (target_credential);
-  else CHECK (port);
-  else CHECK (target_smb_credential);
+      html = new_target (credentials, params, msg);
+      g_free (msg);
+      return html;
+    }
+  else CHECK (comment)
+  else CHECK (port_list_id)
+  else CHECK (target_credential)
+  else CHECK (port)
+  else CHECK (target_smb_credential)
   else
     {
       int ret;
-      gchar *credentials_element, *smb_credentials_element;
+      gchar *credentials_element, *smb_credentials_element, *response;
       gchar* source_element = NULL;
       gchar* comment_element = NULL;
-      const char *username, *password;
+      const char *username, *password, *status;
+      entity_t entity;
 
       username = params_value (params, "login");
       password = params_value (params, "password");
@@ -4214,7 +4387,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                "/omp?cmd=get_targets");
         }
 
-      if (read_string (&session, &xml))
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
         {
           g_string_free (xml, TRUE);
           openvas_server_close (socket, session);
@@ -4225,14 +4399,43 @@ create_target_omp (credentials_t * credentials, params_t *params)
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_targets");
         }
+
+      status = entity_attribute (entity, "status");
+      if ((status == NULL)
+          || (strlen (status) == 0))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while creating a new target. "
+                               "It is unclear whether the target has been created or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_targets");
+        }
+
+      if (status[0] != '2')
+        {
+          g_string_free (xml, TRUE);
+          html = new_target (credentials, params, response);
+          g_free (response);
+          free_entity (entity);
+          return html;
+        }
+
+      g_string_append (xml, response);
+      g_free (response);
+      free_entity (entity);
     }
 
   /* Get all the targets. */
 
-  if (openvas_server_send (&session,
-                           "<get_targets"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
+  if (openvas_server_sendf_xml (&session,
+                               "<get_targets"
+                               " filter=\"%s\""
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>",
+                               filter)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -5538,95 +5741,6 @@ get_targets_omp (credentials_t * credentials, params_t *params)
                            "The current list of targets is not available. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_targets");
-    }
-
-  /* Get the credentials. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_lsc_credentials"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Get target locators. */
-  if (openvas_server_send (&session,
-                           "<get_target_locators/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the list "
-                           "of target locators. "
-                           "The current list of schedules is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the list "
-                           "of target locators. "
-                           "The current list of schedules is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get the port lists. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
     }
 
   /* Cleanup, and return transformed XML. */
