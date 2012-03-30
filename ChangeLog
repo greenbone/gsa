@@ -1,3 +1,9 @@
+2012-03-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/upload.png: New.
+
+	* CMakeLists.txt: Added handling of new icon.
+
 2012-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Targets pagination.
