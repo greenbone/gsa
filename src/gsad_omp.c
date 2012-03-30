@@ -5684,9 +5684,11 @@ get_targets_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *filter, *sort_field, *sort_order;
+  const char *filter, *first, *max, *sort_field, *sort_order;
 
   filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
@@ -5714,9 +5716,13 @@ get_targets_omp (credentials_t * credentials, params_t *params)
   if (openvas_server_sendf_xml (&session,
                                 "<get_targets"
                                 " filter=\"%s\""
+                                " first=\"%s\""
+                                " max=\"%s\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
                                 filter ? filter : "",
+                                first ? first : "1",
+                                max ? max : "10",
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
       == -1)

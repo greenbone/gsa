@@ -1,3 +1,13 @@
+2012-03-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Targets pagination.
+
+	* src/gsad.c (init_validator): Add first and max.
+
+	* src/gsad_omp.c (get_targets_omp): Pass first and max to GET_TARGETS.
+
+	* src/html/omp.xsl (html-targets-table): Add page control.
+
 2012-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move the New Target window to a separate page.

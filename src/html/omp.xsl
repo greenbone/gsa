@@ -5371,6 +5371,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Targets
+      <xsl:choose>
+        <xsl:when test="count(target) &gt; 0">
+          <xsl:variable name="last" select="targets/@start + count(target) - 1"/>
+          <xsl:if test = "targets/@start &gt; 1">
+            <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start - targets/@max}&amp;max={targets/@max}&amp;token={/envelope/token}">&lt;&lt;</a>
+          </xsl:if>
+          <xsl:value-of select="targets/@start"/> -
+          <xsl:value-of select="$last"/>
+          of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="target_count/filtered"/></div>
+          <xsl:if test = "$last &lt; target_count/filtered">
+            <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start + targets/@max}&amp;max={targets/@max}&amp;token={/envelope/token}">&gt;&gt;</a>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="/help/configure_targets.html?token={/envelope/token}#targets"
          title="Help: Configure Targets (Targets)">
         <img src="/img/help.png"/>
