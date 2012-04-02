@@ -6284,6 +6284,23 @@ edit_config_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Config");                                    \
+      html = new_target (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
  * @brief Save details of an NVT for a config and return the next page.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -6306,12 +6323,15 @@ save_config_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  if ((config_id == NULL) || (name == NULL) || (comment == NULL))
+  if (config_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a config. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_configs");
+
+  CHECK (name);
+  CHECK (comment);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6525,6 +6545,8 @@ save_config_omp (credentials_t * credentials, params_t *params)
     return get_config (credentials, params, 1);
   return get_config_family (credentials, params, 1);
 }
+
+#undef CHECK
 
 /**
  * @brief Get details of a family for a config, XSL transform the result.
