@@ -1,5 +1,9 @@
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-targets-table): Add Rows field to filtering.
+
+2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (CHECK): New macro.
 	(save_config_omp): Respond with an error if name or comment is NULL,
 	instead of with an internal error.

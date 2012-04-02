@@ -5412,14 +5412,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_targets"/>
-<!--
-          <div style="padding: 2px;">
-            Results per page:
-            <input type="text" name="max_results" size="5"
-                   value="{report/results/@max}"
-                   maxlength="400"/>
-          </div>
--->
           <div style="float: right">
             <input type="submit" value="Apply" title="Apply"/>
           </div>
@@ -5428,6 +5420,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="text" name="filter" size="50"
                    value="{filters/term}"
                    maxlength="1000"/>
+            Rows:
+            <input type="text" name="max" size="5"
+                   value="{targets/@max}"
+                   maxlength="400"/>
           </div>
         </form>
       </div>
