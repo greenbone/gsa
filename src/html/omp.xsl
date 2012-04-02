@@ -5421,6 +5421,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="text" name="filter" size="50"
                    value="{filters/term}"
                    maxlength="1000"/>
+            First:
+            <input type="text" name="first" size="5"
+                   value="{targets/@start}"
+                   maxlength="400"/>
             Rows:
             <input type="text" name="max" size="5"
                    value="{targets/@max}"
