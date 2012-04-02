@@ -1,5 +1,24 @@
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add new, list and export icons on Target Details page.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add export_target.
+
+	* src/gsad_omp.c (new_target): Add target ID to XML for icon on Target
+	Details page.
+	(create_target_omp): If target ID present, go to Target Details page.
+	(get_target): New function.  Body from get_target_omp.
+	(get_target_omp): Pass through to get_target.
+	(export_target_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (html-gsa-logo): Add create_target indicator match for
+	Target Details page.
+	(html-create-target-form): Add new, list and export icons.
+
+2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-targets-table): Add Rows field to filtering.
 
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>

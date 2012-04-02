@@ -5200,6 +5200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_target"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="target_id" value="{target/@id}"/>
         <input type="hidden" name="filter" value="{filters/term}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
@@ -5643,6 +5644,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <a href="/help/configure_targets.html?token={/envelope/token}#targetdetails"
          title="Help: Configure Targets (Target Details)">
          <img src="/img/help.png"/>
+       </a>
+       <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;target_id={@id}&amp;token={/envelope/token}"
+          title="New Target">
+         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+       </a>
+       <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+          title="Targets" style="margin-left:3px;">
+         <img src="/img/list.png" border="0" alt="Targets"/>
+       </a>
+       <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={filters/term}&amp;token={/envelope/token}"
+          title="Export Target XML"
+          style="margin-left:3px;">
+         <img src="/img/download.png" border="0" alt="Export XML"/>
        </a>
     </div>
     <div class="gb_window_part_content">

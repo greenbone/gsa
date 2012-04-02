@@ -4076,11 +4076,19 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *filter;
+  const char *filter, *target_id;
 
   filter = params_value (params, "filter");
   if (filter == NULL)
     filter = "";
+
+  target_id = params_value (params, "target_id");
+  if (target_id == NULL && params_given (params, "target_id"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a credential. "
+                         "Diagnostics: Error in parameter target_id.",
+                         "/omp?cmd=get_targets");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4193,8 +4201,10 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
+                                 "<target id=\"%s\"/>"
                                  "</new_target>",
-                                 filter);
+                                 filter,
+                                 target_id ? target_id : "0");
   g_string_append (xml, end);
   g_free (end);
 
@@ -4233,6 +4243,8 @@ new_target_omp (credentials_t *credentials, params_t *params)
       return html;                                                             \
     }
 
+char *
+get_target (credentials_t *, params_t *, const char *);
 
 /**
  * @brief Create a target, get all targets, XSL transform the result.
@@ -4251,7 +4263,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *hosts, *target_locator, *comment, *port_list_id;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *filter;
+  const char *filter, *target_id;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4282,6 +4294,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
   filter = params_value (params, "filter");
+  target_id = params_value (params, "target_id");
 
   CHECK (name)
   else CHECK (target_source)
@@ -4421,6 +4434,16 @@ create_target_omp (credentials_t * credentials, params_t *params)
           g_free (response);
           free_entity (entity);
           return html;
+        }
+
+      if (target_id && strcmp (target_id, "0"))
+        {
+          gchar *ret;
+          g_string_free (xml, TRUE);
+          ret = get_target (credentials, params, response);
+          g_free (response);
+          free_entity (entity);
+          return ret;
         }
 
       g_string_append (xml, response);
@@ -5584,11 +5607,13 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (credentials_t * credentials, params_t *params)
+get_target (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -5625,6 +5650,9 @@ get_target_omp (credentials_t * credentials, params_t *params)
     }
 
   xml = g_string_new ("<get_target>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get the target. */
 
@@ -5667,6 +5695,20 @@ get_target_omp (credentials_t * credentials, params_t *params)
   g_string_append (xml, "</get_target>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get one target, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_target_omp (credentials_t * credentials, params_t *params)
+{
+  return get_target (credentials, params, NULL);
 }
 
 /**
@@ -5758,6 +5800,95 @@ get_targets_omp (credentials_t * credentials, params_t *params)
 
 /**
  * @brief Export a target.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Target XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_target_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL;
+  gchar *html;
+  const char *target_id;
+
+  *content_length = 0;
+
+  target_id = params_value (params, "target_id");
+
+  if (target_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while exporting a target. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_targets");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a target. "
+                             "The target could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_targets"
+                            " target_id=\"%s\"/>",
+                            target_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the targets. "
+                           "The targets could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &content))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the targets. "
+                           "The targets could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  *content_disposition = g_strdup_printf ("attachment;"
+                                          " filename=\"target-%s.xml\"",
+                                          target_id);
+  *content_length = strlen (content);
+  free_entity (entity);
+  openvas_server_close (socket, session);
+  return content;
+}
+
+/**
+ * @brief Export a list of target.
  *
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
