@@ -1,5 +1,10 @@
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (target [details]): Remove Targets link.  Superseded by
+	is a list icon.
+
+2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-targets-table): Add reset button to filtering.
 
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>

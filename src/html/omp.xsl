@@ -5674,9 +5674,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_targets&amp;token={/envelope/token}">Targets</a>
-      </div>
       <table>
         <tr>
           <td><b>Name:</b></td>
