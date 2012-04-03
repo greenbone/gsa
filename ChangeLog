@@ -1,5 +1,9 @@
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-targets-table): Add reset button to filtering.
+
+2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-targets-table): Add First field to filtering.
 
 2012-04-02  Matthew Mundell <matthew.mundell@greenbone.net>

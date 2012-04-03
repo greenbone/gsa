@@ -5410,6 +5410,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:variable name="sort_order">
           <xsl:value-of select="report/sort/field/order"/>
         </xsl:variable>
+        <div style="float: right">
+          <form action="" method="get">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="get_targets"/>
+              <input type="submit" value="Reset" title="Reset"/>
+            <input type="hidden" name="filter" value=""/>
+            <input type="hidden" name="first" value=""/>
+            <input type="hidden" name="max" value=""/>
+          </form>
+        </div>
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_targets"/>
