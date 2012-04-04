@@ -1,5 +1,17 @@
 2012-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Split targets configuration help into three pages.
+
+	* src/html/help.xsl (configure_targets.html): Remove.
+	(contents.html): Split targets link into three.
+	(new_target.html, target_details.html, targets.html): New templates.
+	Bodies from configure_targets.html.
+
+	* src/html/omp.xsl (html-create-target-form, html-targets-table)
+	(target [details]): Switch to new target help pages.
+
+2012-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_targets_omp): Make max -1 if it fails instead of 10,
 	so that it is possible to get all targets.
 

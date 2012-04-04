@@ -5186,8 +5186,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Target
-      <a href="/help/configure_targets.html?token={/envelope/token}#newtarget"
-         title="Help: Configure Targets (New Target)">
+      <a href="/help/new_target.html?token={/envelope/token}"
+         title="Help: New Target">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
@@ -5388,8 +5388,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/help/configure_targets.html?token={/envelope/token}#targets"
-         title="Help: Configure Targets (Targets)">
+      <a href="/help/targets.html?token={/envelope/token}"
+         title="Help: Targets">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;token={/envelope/token}"
@@ -5655,8 +5655,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Target Details
-       <a href="/help/configure_targets.html?token={/envelope/token}#targetdetails"
-         title="Help: Configure Targets (Target Details)">
+       <a href="/help/target_details.html?token={/envelope/token}"
+         title="Help: Target Details">
          <img src="/img/help.png"/>
        </a>
        <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;target_id={@id}&amp;token={/envelope/token}"

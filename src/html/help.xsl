@@ -1753,259 +1753,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_targets.html">
-  <div class="gb_window_part_center">Help: Configure Targets</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <h1>Configure Targets</h1>
-      <p>
-       Any <a href="glossary.html?token={/envelope/token}#task">task</a> is associated with
-       a <a href="glossary.html?token={/envelope/token}#target">target</a>.
-       The configured targets will appear as selection
-       in the dialog for creating a <a href="new_task.html?token={/envelope/token}">new task</a>.
-      </p>
-
-      <a name="newtarget"></a>
-      <h2>New Target</h2>
-      <p>
-       For creating a new target the dialog offers these entries.
-       Hit the button "Create Target" to submit the new target.
-       The list of targets will be updated.
-      </p>
-      <p>
-       Note on <b>Hosts</b>:
-        <ul>
-          <li>
-            The hosts parameter is a comma-separated list of values.  Each value
-            can be
-            <ul>
-              <li>an IPv4 address (e.g. <tt>192.168.13.1</tt>)</li>
-              <li>a hostname (e.g. <tt>myhost1.domain</tt>)</li>
-              <li>an IPv4 address range in long format
-                  (e.g. <tt>192.168.1.116-192.168.1.124</tt>)</li>
-              <li>an IPv4 address range in short format
-                  (e.g. <tt>192.168.1.116-124</tt>)</li>
-              <li>an IPv4 address range in CIDR notation
-                  (e.g. <tt>192.168.13.0/24</tt>)</li>
-              <li>an IPv6 address
-                  (e.g. <tt>fe80::222:64ff:fe76:4cea/64</tt>).</li>
-            </ul>
-            These options can be mixed (e.g.
-            <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
-          </li>
-          <li>
-            The netmask in CIDR notation is limited to 20 (4095 hosts).
-          </li>
-          <li>
-            The Scanner currently expects IPv6 addresses to name a single host,
-            and always replaces the netmasks of IPv6 addresses with 128.
-          </li>
-        </ul>
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>Staging webservers</td>
-        </tr>
-        <tr class="even">
-          <td>Hosts: Manual</td>
-          <td>--</td>
-          <td>200</td>
-          <td>Comma separated list of IPs and/or hostnames.</td>
-          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
-        </tr>
-        <tr class="odd">
-          <td>Hosts: From file</td>
-          <td>--</td>
-          <td>--</td>
-          <td>
-            File containing comma separated list of IPs and/or hostnames,
-            optionally over multiple lines.
-          </td>
-          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
-        </tr>
-        <tr class="even">
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td>Covers both of our web staging systems</td>
-        </tr>
-        <tr class="odd">
-          <td>Port List</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Any of the <a href="configure_port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
-          <td>All privileged TCP</td>
-        </tr>
-        <tr class="even">
-          <td>SSH Credential</td>
-          <td>no</td>
-          <td>--</td>
-          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
-          <td>Security Scan Account for SSH</td>
-        </tr>
-        <tr class="even">
-          <td>SSH Port</td>
-          <td>no</td>
-          <td>400</td>
-          <td>A port number.</td>
-          <td>22</td>
-        </tr>
-        <tr class="even">
-          <td>SMB Credential</td>
-          <td>no</td>
-          <td>--</td>
-          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
-          <td>Security Scan Account for SMB</td>
-        </tr>
-      </table>
-
-      <p>
-      If the backend is configured to support LDAP, additional fields for hosts will appear
-      that allow to import target systems from management systems:
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="even">
-          <td>Hosts: Import</td>
-          <td>---</td>
-          <td>---</td>
-          <td>Selection of configured services</td>
-          <td>UCS 2.3</td>
-        </tr>
-        <tr class="odd">
-          <td>Username</td>
-          <td>yes</td>
-          <td>40</td>
-          <td>Account name for the selected service.</td>
-          <td>smith</td>
-        </tr>
-        <tr class="even">
-          <td>Password</td>
-          <td>yes</td>
-          <td>40</td>
-          <td>Password corresponding to the above username.</td>
-          <td></td>
-        </tr>
-      </table>
-
-      <a name="targets"></a>
-      <h2>Targets</h2>
-      <p>
-       This table provides an overview of all configured
-       targets. The complete contents of the target entries
-       are shown (name, comment and hosts).
-       If credentials are linked to the target, they are listed as well.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the target and,
-              if specified, the comment in brackets below
-              the name.</td>
-        </tr>
-        <tr class="even">
-          <td>Hosts</td>
-          <td>The comma separated list of target hosts, specified
-              either via hostname or IP.</td>
-        </tr>
-        <tr class="odd">
-          <td>IPs</td>
-          <td>The total number of IPs that results from the
-              hosts specification.</td>
-        </tr>
-        <tr class="even">
-          <td>Port List</td>
-          <td>Associated port list, that can be clicked on to view details.</td>
-        </tr>
-        <tr class="odd">
-          <td>SSH Credential</td>
-          <td>Associated SSH credential, that can be clicked on to view details.</td>
-        </tr>
-        <tr class="even">
-          <td>SMB Credential</td>
-          <td>Associated SMB credential, that can be clicked on to view details.</td>
-        </tr>
-      </table>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-      <p>
-       Target specifications can only be inspected or deleted.
-       <em>Editing a target</em> is not foreseen.
-       You may copy the contents from the list to the above
-       shown "New Target" dialog and create a new target from this
-       with a different name.
-      </p>
-
-      <h4>Move Target to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       Note that if a target is associated with at least one task, it is not possible
-       to move it. In this case the button is greyed
-       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
-      </p>
-
-      <h4>Target Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show details of the target specification and Tasks that use this target.
-      </p>
-
-      <a name="targetdetails"></a>
-      <h2>Target Details</h2>
-      <p>
-       Provides detailed information about the target.
-       This includes the name, comment and the maximum number of hosts to scan.
-       If credentials are associated with this target, their names can be seen. A click
-       on a credential name will show more information about the associated
-       credential.
-      </p>
-
-      <h3>Tasks using this Target</h3>
-      <p>
-       This table provides an overview of the tasks that are associated to the target
-       (if any).
-       Details of these tasks can be seen after a click on the Details
-       <img src="/img/details.png" alt="Details" title="Details" /> icon.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template mode="help" match="configure_users.html">
   <div class="gb_window_part_center">Help: Configure Users</div>
   <div class="gb_window_part_content">
@@ -2308,7 +2055,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <li> <a href="scanconfig_editor_nvt_families.html?token={/envelope/token}">Scan Config Family Editor</a></li>
               <li> <a href="scanconfig_editor_nvt.html?token={/envelope/token}">Scan Config NVT Editor</a></li>
             </ul>
-            <li> <a href="configure_targets.html?token={/envelope/token}">Configure Targets</a></li>
+            <li> <a href="targets.html?token={/envelope/token}">Targets</a></li>
+              <ul>
+                <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
+                <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
+              </ul>
             <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
             <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
             <li> <a href="configure_alerts.html?token={/envelope/token}">Configure Alerts</a></li>
@@ -3109,6 +2860,164 @@ Public License instead of this License.
         header bar.  If the timezone was correctly specified this should show the
         current time.
       </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_target.html">
+  <div class="gb_window_part_center">Help: New Target
+    <a href="/omp?cmd=new_target&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>New Target</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#target">Target</a>
+        the dialog offers these entries.
+        Hit the button "Create Target" to submit the new target.
+        The Targets page will be shown.
+      </p>
+      <p>
+        Note on <b>Hosts</b>:
+        <ul>
+          <li>
+            The hosts parameter is a comma-separated list of values.  Each value
+            can be
+            <ul>
+              <li>an IPv4 address (e.g. <tt>192.168.13.1</tt>)</li>
+              <li>a hostname (e.g. <tt>myhost1.domain</tt>)</li>
+              <li>an IPv4 address range in long format
+                  (e.g. <tt>192.168.1.116-192.168.1.124</tt>)</li>
+              <li>an IPv4 address range in short format
+                  (e.g. <tt>192.168.1.116-124</tt>)</li>
+              <li>an IPv4 address range in CIDR notation
+                  (e.g. <tt>192.168.13.0/24</tt>)</li>
+              <li>an IPv6 address
+                  (e.g. <tt>fe80::222:64ff:fe76:4cea/64</tt>).</li>
+            </ul>
+            These options can be mixed (e.g.
+            <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
+          </li>
+          <li>
+            The netmask in CIDR notation is limited to 20 (4095 hosts).
+          </li>
+          <li>
+            The Scanner currently expects IPv6 addresses to name a single host,
+            and always replaces the netmasks of IPv6 addresses with 128.
+          </li>
+        </ul>
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Staging webservers</td>
+        </tr>
+        <tr class="even">
+          <td>Hosts: Manual</td>
+          <td>--</td>
+          <td>200</td>
+          <td>Comma separated list of IPs and/or hostnames.</td>
+          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
+        </tr>
+        <tr class="odd">
+          <td>Hosts: From file</td>
+          <td>--</td>
+          <td>--</td>
+          <td>
+            File containing comma separated list of IPs and/or hostnames,
+            optionally over multiple lines.
+          </td>
+          <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>Covers both of our web staging systems</td>
+        </tr>
+        <tr class="odd">
+          <td>Port List</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
+          <td>All privileged TCP</td>
+        </tr>
+        <tr class="even">
+          <td>SSH Credential</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Security Scan Account for SSH</td>
+        </tr>
+        <tr class="even">
+          <td>SSH Port</td>
+          <td>no</td>
+          <td>400</td>
+          <td>A port number.</td>
+          <td>22</td>
+        </tr>
+        <tr class="even">
+          <td>SMB Credential</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Security Scan Account for SMB</td>
+        </tr>
+      </table>
+
+      <p>
+        If the backend is configured to support LDAP, additional fields for hosts will appear
+        that allow to import target systems from management systems:
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="even">
+          <td>Hosts: Import</td>
+          <td>---</td>
+          <td>---</td>
+          <td>Selection of configured services</td>
+          <td>UCS 2.3</td>
+        </tr>
+        <tr class="odd">
+          <td>Username</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Account name for the selected service.</td>
+          <td>smith</td>
+        </tr>
+        <tr class="even">
+          <td>Password</td>
+          <td>yes</td>
+          <td>40</td>
+          <td>Password corresponding to the above username.</td>
+          <td></td>
+        </tr>
+      </table>
     </div>
   </div>
 </xsl:template>
@@ -4423,6 +4332,127 @@ Public License instead of this License.
       <p>
        This dialog allows you to view the current settings of your installation.
       </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="target_details.html">
+  <div class="gb_window_part_center">Help: Target Details
+    <a href="/omp?cmd=get_target&amp;target_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
+      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Target Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#target">Target</a>.
+        This includes the name, comment and the maximum number of hosts to scan.
+        If credentials are associated with the target, their names can be seen. A click
+        on a credential name will show more information about the associated
+        credential.
+      </p>
+
+      <h3>Tasks using this Target</h3>
+      <p>
+        This table provides an overview of the tasks that are associated to the target
+        (if any).
+        Details of these tasks can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="targets.html">
+  <div class="gb_window_part_center">Help: Targets
+    <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+       title="Targets" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Targets"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Targets</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#target">Targets</a>.
+       The complete contents of the target entries
+       are shown (name, comment and hosts).
+       If credentials are linked to the target, they are listed as well.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the target and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Hosts</td>
+          <td>The comma separated list of target hosts, specified
+              either via hostname or IP.</td>
+        </tr>
+        <tr class="odd">
+          <td>IPs</td>
+          <td>The total number of IPs that results from the
+              hosts specification.</td>
+        </tr>
+        <tr class="even">
+          <td>Port List</td>
+          <td>Associated port list, that can be clicked on to view details.</td>
+        </tr>
+        <tr class="odd">
+          <td>SSH Credential</td>
+          <td>Associated SSH credential, that can be clicked on to view details.</td>
+        </tr>
+        <tr class="even">
+          <td>SMB Credential</td>
+          <td>Associated SMB credential, that can be clicked on to view details.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+      <p>
+       Target specifications can only be inspected or deleted.
+       <em>Editing a target</em> is not foreseen.
+       You may copy the contents from the list to the above
+       shown "New Target" dialog and create a new target from this
+       with a different name.
+      </p>
+
+      <h4>Move Target to Trashcan</h4>
+      <p>
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
+      </p>
+      <p>
+       Note that if a target is associated with at least one task, it is not possible
+       to move it. In this case the button is greyed
+       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
+      </p>
+
+      <h4>Target Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show details of the target specification and Tasks that use this target.
+      </p>
+
     </div>
   </div>
 </xsl:template>
