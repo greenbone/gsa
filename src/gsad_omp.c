@@ -5764,7 +5764,7 @@ get_targets_omp (credentials_t * credentials, params_t *params)
                                 " sort_order=\"%s\"/>",
                                 filter ? filter : "",
                                 first ? first : "1",
-                                max ? max : "10",
+                                max ? max : "-1",
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
       == -1)
