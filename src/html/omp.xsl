@@ -14461,11 +14461,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><a href="#alerts">Alerts</a></td>
           <td><xsl:value-of select="count(get_alerts_response/alert)"/></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><a href="#configs">Scan Configs</a></td>
           <td><xsl:value-of select="count(get_configs_response/config)"/></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td><a href="#credentials">Credentials</a></td>
           <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
         </tr>
