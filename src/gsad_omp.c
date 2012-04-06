@@ -13771,9 +13771,61 @@ get_my_settings (credentials_t * credentials, params_t *params,
                  const char *extra_xml)
 {
   GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the settings. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
   xml = g_string_new ("<get_my_settings>");
+
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  /* Get the settings. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_settings"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
   g_string_append (xml, "</get_my_settings>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }

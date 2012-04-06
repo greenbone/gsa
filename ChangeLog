@@ -1,3 +1,9 @@
+2012-04-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_my_settings): Call OMP GET_SETTINGS.
+
+	* src/html/omp.xsl (get_my_settings): Add Rows Per Page.
+
 2012-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Split targets configuration help into three pages.

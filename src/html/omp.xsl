@@ -14813,6 +14813,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>********</td>
             <td></td>
           </tr>
+          <tr>
+            <td>Rows Per Page</td>
+            <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
+            <td></td>
+          </tr>
         </table>
       </div>
     </div>
