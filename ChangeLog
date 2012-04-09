@@ -1,5 +1,12 @@
 2012-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_my_settings): Get setting from manager.
+	(save_my_settings): Save Rows Per Page.
+
+	* src/html/omp.xsl (edit_my_settings): Add Rows Per Page.
+
+2012-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Allow max to be negative and empty.
 
 	* src/gsad_omp.c (create_target_omp): Add max to GET_TARGETS.

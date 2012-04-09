@@ -13859,9 +13859,61 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                   const char *extra_xml)
 {
   GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the settings. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+    }
+
   xml = g_string_new ("<edit_my_settings>");
+
   if (extra_xml)
     g_string_append (xml, extra_xml);
+
+  /* Get the settings. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_settings"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the settings. "
+                           "The current list of settings is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
   g_string_append (xml, "</edit_my_settings>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
@@ -13897,8 +13949,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   int socket;
   gnutls_session_t session;
   gchar *html;
-  const char *text, *status;
-  gchar *text_64;
+  const char *text, *status, *max;
+  gchar *text_64, *max_64;
   GString *xml;
   entity_t entity;
 
@@ -13906,7 +13958,8 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   *password = NULL;
 
   if ((params_value (params, "text") == NULL)
-      || (params_value (params, "password") == NULL))
+      || (params_value (params, "password") == NULL)
+      || (params_value (params, "max") == NULL))
     return edit_my_settings (credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"));
@@ -14026,6 +14079,43 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           exit (EXIT_FAILURE);
         }
       tzset ();
+    }
+
+  max = params_value (params, "max");
+  max_64 = (max
+             ? g_base64_encode ((guchar*) max, strlen (max))
+             : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            max_64 ? max_64 : "")
+      == -1)
+    {
+      g_free (max_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (max_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
     }
 
   free_entity (entity);

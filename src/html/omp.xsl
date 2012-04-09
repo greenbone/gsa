@@ -14876,6 +14876,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
             <tr>
+              <td>Rows Per Page</td>
+              <td>
+                <input type="text" name="max" size="40" maxlength="800"
+                       value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="Save My Settings"/>
               </td>
