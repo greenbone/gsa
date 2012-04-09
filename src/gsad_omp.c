@@ -4455,6 +4455,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
 
   if (openvas_server_sendf_xml (&session,
                                "<get_targets"
+                               " max=\"-2\""
                                " filter=\"%s\""
                                " sort_field=\"name\""
                                " sort_order=\"ascending\"/>",
@@ -5764,7 +5765,7 @@ get_targets_omp (credentials_t * credentials, params_t *params)
                                 " sort_order=\"%s\"/>",
                                 filter ? filter : "",
                                 first ? first : "1",
-                                max ? max : "-1",
+                                max ? max : "-2",
                                 sort_field ? sort_field : "name",
                                 sort_order ? sort_order : "ascending")
       == -1)

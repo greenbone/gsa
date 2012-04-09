@@ -1,3 +1,15 @@
+2012-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow max to be negative and empty.
+
+	* src/gsad_omp.c (create_target_omp): Add max to GET_TARGETS.
+	(get_targets_omp): If max is NULL use -2 instead of -1, to get the Rows
+	Per Page rows instead of all rows.
+
+	* src/html/omp.xsl (html-targets-table): Use -2 for max in reset, to get
+	Rows Per Page rows instead of all.  When Rows is -1 make it empty, because
+	that looks nicer.
+
 2012-04-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_trash): Correct odds and evens.

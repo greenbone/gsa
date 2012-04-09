@@ -5417,7 +5417,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="submit" value="Reset" title="Reset"/>
             <input type="hidden" name="filter" value=""/>
             <input type="hidden" name="first" value=""/>
-            <input type="hidden" name="max" value=""/>
+            <input type="hidden" name="max" value="-2"/>
           </form>
         </div>
         <form action="" method="get">
@@ -5436,9 +5436,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{targets/@start}"
                    maxlength="400"/>
             Rows:
-            <input type="text" name="max" size="5"
-                   value="{targets/@max}"
-                   maxlength="400"/>
+            <xsl:choose>
+              <xsl:when test="targets/@max = '-1'">
+                <input type="text" name="max" size="5"
+                       value=""
+                       maxlength="400"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="text" name="max" size="5"
+                       value="{targets/@max}"
+                       maxlength="400"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </form>
       </div>
