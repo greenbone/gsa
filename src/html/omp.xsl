@@ -5190,7 +5190,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Target">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
          title="Targets" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Targets"/>
       </a>
@@ -5202,6 +5202,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="target_id" value="{target/@id}"/>
         <input type="hidden" name="filter" value="{filters/term}"/>
+        <input type="hidden" name="first" value="{targets/@start}"/>
+        <input type="hidden" name="max" value="{targets/@max}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="175">Name
@@ -5367,6 +5369,274 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-edit-target-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Target
+      <a href="/help/targets.html?token={/envelope/token}#edit_target" title="Help: Edit Target">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+         title="Targets" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Targets"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_target&amp;target_id={commands_response/get_targets_response/target/@id}&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+           title="Target Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_target"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="target_id"
+               value="{commands_response/get_targets_response/target/@id}"/>
+        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="filter" value="{filters/term}"/>
+        <input type="hidden" name="first" value="{targets/@start}"/>
+        <input type="hidden" name="max" value="{targets/@max}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text"
+                     name="name"
+                     value="{commands_response/get_targets_response/target/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+          <td valign="top" width="175">Hosts</td>
+          <xsl:choose>
+            <xsl:when test="not (commands_response/get_target_locators_response/target_locator)">
+              <!-- No target locator(s) given. -->
+              <td>
+                <table>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="manual"
+                               checked="1"/>
+                        Manual
+                      </label>
+                    </td>
+                    <td>
+                      <input type="text" name="hosts" value="localhost" size="30"
+                              maxlength="2000"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="file"/>
+                        From file
+                      </label>
+                    </td>
+                    <td>
+                      <input type="file" name="file" size="30"/>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- Target locator(s) given. -->
+              <td>
+                <table>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="manual"
+                               checked="1"/>
+                        Manual
+                      </label>
+                    </td>
+                    <td>
+                      <input type="text" name="hosts"
+                             value="{commands_response/get_targets_response/target/hosts}"
+                             size="30"
+                             maxlength="2000"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="file"/>
+                        From file
+                      </label>
+                    </td>
+                    <td>
+                      <input type="file" name="file" size="30"/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>
+                        <input type="radio" name="target_source" value="import"/>
+                        Import
+                      </label>
+                    </td>
+                    <td>
+                      <select name="target_locator">
+                        <xsl:apply-templates select="commands_response/get_target_locators_response/target_locator"
+                                             mode="select"/>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      Import Authentication
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <table>
+                      <tr>
+                        <td>Username</td>
+                        <td>
+                          <input type="text" name="login" value="" size="15"
+                                maxlength="80"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Password</td>
+                        <td>
+                          <input type="password" autocomplete="off"
+                                 name="password" value="" size="15"
+                                 maxlength="80"/>
+                        </td>
+                      </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_targets_response/target/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Port List</td>
+            <td>
+              <select name="port_list_id">
+                <xsl:variable name="port_list_id">
+                  <xsl:value-of select="commands_response/get_targets_response/target/port_list/@id"/>
+                </xsl:variable>
+                <xsl:for-each select="commands_response/get_port_lists_response/port_list">
+                  <xsl:choose>
+                    <xsl:when test="@id = $port_list_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">SSH Credential (optional)</td>
+            <td>
+              <select name="lsc_credential_id">
+                <xsl:variable name="lsc_credential_id">
+                  <xsl:value-of select="commands_response/get_targets_response/target/ssh_lsc_credential/@id"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                  <xsl:choose>
+                    <xsl:when test="@id = $lsc_credential_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              on port
+              <xsl:choose>
+                <xsl:when test="commands_response/get_targets_response/target/ssh_lsc_credential">
+                  <input type="text"
+                         name="port"
+                         value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
+                         size="6"
+                         maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="port" value="22" size="6" maxlength="400"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">SMB Credential (optional)</td>
+            <td>
+              <select name="lsc_smb_credential_id">
+                <xsl:variable name="lsc_credential_id">
+                  <xsl:value-of select="commands_response/get_targets_response/target/smb_lsc_credential/@id"/>
+                </xsl:variable>
+                <xsl:choose>
+                  <xsl:when test="string-length ($lsc_credential_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="commands_response/get_lsc_credentials_response/lsc_credential">
+                  <xsl:choose>
+                    <xsl:when test="@id = $lsc_credential_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Target"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_target">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-target-form"/>
+</xsl:template>
+
 <xsl:template name="html-targets-table">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -5392,11 +5662,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Targets">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
          title="New Target">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
-      <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
          title="Export Targets XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -5553,6 +5823,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'target'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="filter" value="{../filters/term}"/>
+              <input type="hidden" name="first" value="{../targets/@start}"/>
+              <input type="hidden" name="max" value="{../targets/@max}"/>
+            </xsl:with-param>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -5562,10 +5837,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
          title="Target Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <a href="/omp?cmd=edit_target&amp;target_id={@id}&amp;next=get_targets&amp;filter={../filters/term}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
+             title="Edit Target"
+             style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="Edit"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -5668,19 +5956,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Target Details">
          <img src="/img/help.png"/>
        </a>
-       <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;target_id={@id}&amp;token={/envelope/token}"
+       <a href="/omp?cmd=new_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;target_id={@id}&amp;token={/envelope/token}"
           title="New Target">
          <img src="/img/new.png" border="0" style="margin-left:3px;"/>
        </a>
-       <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;token={/envelope/token}"
+       <a href="/omp?cmd=get_targets&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
           title="Targets" style="margin-left:3px;">
          <img src="/img/list.png" border="0" alt="Targets"/>
        </a>
-       <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={filters/term}&amp;token={/envelope/token}"
-          title="Export Target XML"
-          style="margin-left:3px;">
-         <img src="/img/download.png" border="0" alt="Export XML"/>
-       </a>
+       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+         <a href="/omp?cmd=edit_target&amp;target_id={@id}&amp;next=get_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
+            title="Edit Target">
+           <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+         </a>
+         <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
+            title="Export Target XML"
+            style="margin-left:3px;">
+           <img src="/img/download.png" border="0" alt="Export XML"/>
+         </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <table>

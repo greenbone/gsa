@@ -4076,11 +4076,19 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *filter, *target_id;
+  const char *filter, *first, *max, *target_id;
 
   filter = params_value (params, "filter");
   if (filter == NULL)
     filter = "";
+
+  first = params_value (params, "first");
+  if (first == NULL)
+    first = "";
+
+  max = params_value (params, "max");
+  if (max == NULL)
+    max = "";
 
   target_id = params_value (params, "target_id");
   if (target_id == NULL && params_given (params, "target_id"))
@@ -4201,9 +4209,12 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
+                                 "<targets start=\"%s\" max=\"%s\"/>"
                                  "<target id=\"%s\"/>"
                                  "</new_target>",
                                  filter,
+                                 first,
+                                 max,
                                  target_id ? target_id : "0");
   g_string_append (xml, end);
   g_free (end);
@@ -4246,6 +4257,9 @@ new_target_omp (credentials_t *credentials, params_t *params)
 char *
 get_target (credentials_t *, params_t *, const char *);
 
+char *
+get_targets (credentials_t *, params_t *, const char *);
+
 /**
  * @brief Create a target, get all targets, XSL transform the result.
  *
@@ -4258,9 +4272,8 @@ char *
 create_target_omp (credentials_t * credentials, params_t *params)
 {
   gnutls_session_t session;
-  GString *xml;
   int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *name, *hosts, *target_locator, *comment, *port_list_id;
   const char *target_credential, *port, *target_smb_credential, *target_source;
   const char *filter, *target_id;
@@ -4282,8 +4295,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_targets");
     }
 
-  xml = g_string_new ("<get_targets>");
-
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   target_locator = params_value (params, "target_locator");
@@ -4296,12 +4307,12 @@ create_target_omp (credentials_t * credentials, params_t *params)
   filter = params_value (params, "filter");
   target_id = params_value (params, "target_id");
 
-  CHECK (name)
-  else CHECK (target_source)
-  else if (hosts == NULL && strcmp (target_source, "manual") == 0)
+  CHECK (name);
+  CHECK (target_source)
+  if (hosts == NULL && strcmp (target_source, "manual") == 0)
     return new_target (credentials, params,
                        GSAD_MESSAGE_INVALID_PARAM ("Create Target"));
-  else if (strcmp (target_source, "import") == 0 && name == NULL)
+  if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       gchar *msg;
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
@@ -4311,272 +4322,142 @@ create_target_omp (credentials_t * credentials, params_t *params)
       g_free (msg);
       return html;
     }
-  else CHECK (comment)
-  else CHECK (port_list_id)
-  else CHECK (target_credential)
-  else CHECK (port)
-  else CHECK (target_smb_credential)
-  else
-    {
-      int ret;
-      gchar *credentials_element, *smb_credentials_element, *response;
-      gchar* source_element = NULL;
-      gchar* comment_element = NULL;
-      const char *username, *password, *status;
-      entity_t entity;
+  CHECK (comment);
+  CHECK (port_list_id);
+  CHECK (target_credential);
+  CHECK (port);
+  CHECK (target_smb_credential);
 
-      username = params_value (params, "login");
-      password = params_value (params, "password");
+  {
+    int ret;
+    gchar *credentials_element, *smb_credentials_element;
+    gchar* source_element = NULL;
+    gchar* comment_element = NULL;
+    const char *username, *password, *status;
+    entity_t entity;
 
-      if (comment != NULL)
-        comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
-      else
-        comment_element = g_strdup ("");
+    username = params_value (params, "login");
+    password = params_value (params, "password");
 
-      if (strcmp (target_source, "import") == 0)
-        source_element = g_markup_printf_escaped ("<target_locator>"
-                                                  "%s"
-                                                  "<username>%s</username>"
-                                                  "<password>%s</password>"
-                                                  "</target_locator>",
-                                                  target_locator,
-                                                  username ? username : "",
-                                                  password ? password : "");
-      else
-        source_element = g_strdup ("");
+    if (comment != NULL)
+      comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
+    else
+      comment_element = g_strdup ("");
 
-      if (strcmp (target_credential, "--") == 0)
-        credentials_element = g_strdup ("");
-      else
-        credentials_element =
-          g_strdup_printf ("<ssh_lsc_credential id=\"%s\">"
-                           "<port>%s</port>"
-                           "</ssh_lsc_credential>",
-                           target_credential,
-                           port);
+    if (strcmp (target_source, "import") == 0)
+      source_element = g_markup_printf_escaped ("<target_locator>"
+                                                "%s"
+                                                "<username>%s</username>"
+                                                "<password>%s</password>"
+                                                "</target_locator>",
+                                                target_locator,
+                                                username ? username : "",
+                                                password ? password : "");
+    else
+      source_element = g_strdup ("");
 
-      if (strcmp (target_smb_credential, "--") == 0)
-        smb_credentials_element = g_strdup ("");
-      else
-        smb_credentials_element =
-          g_strdup_printf ("<smb_lsc_credential id=\"%s\"/>",
-                           target_smb_credential);
+    if (strcmp (target_credential, "--") == 0)
+      credentials_element = g_strdup ("");
+    else
+      credentials_element =
+        g_strdup_printf ("<ssh_lsc_credential id=\"%s\">"
+                         "<port>%s</port>"
+                         "</ssh_lsc_credential>",
+                         target_credential,
+                         port);
 
-      /* Create the target. */
+    if (strcmp (target_smb_credential, "--") == 0)
+      smb_credentials_element = g_strdup ("");
+    else
+      smb_credentials_element =
+        g_strdup_printf ("<smb_lsc_credential id=\"%s\"/>",
+                         target_smb_credential);
 
-      ret = openvas_server_sendf (&session,
-                                  "<create_target>"
-                                  "<name>%s</name>"
-                                  "<hosts>%s</hosts>"
-                                  "<port_list id=\"%s\"/>"
-                                  "%s%s%s%s"
-                                  "</create_target>",
-                                  name,
-                                  (strcmp (source_element, "") == 0)
-                                    ? ((strcmp (target_source, "file") == 0)
-                                         ? params_value (params, "file")
-                                         : hosts)
-                                    : "",
-                                  port_list_id,
-                                  comment_element,
-                                  source_element,
-                                  credentials_element,
-                                  smb_credentials_element);
+    /* Create the target. */
 
-      g_free (comment_element);
-      g_free (credentials_element);
-      g_free (smb_credentials_element);
-      g_free (source_element);
+    ret = openvas_server_sendf (&session,
+                                "<create_target>"
+                                "<name>%s</name>"
+                                "<hosts>%s</hosts>"
+                                "<port_list id=\"%s\"/>"
+                                "%s%s%s%s"
+                                "</create_target>",
+                                name,
+                                (strcmp (source_element, "") == 0)
+                                  ? ((strcmp (target_source, "file") == 0)
+                                       ? params_value (params, "file")
+                                       : hosts)
+                                  : "",
+                                port_list_id,
+                                comment_element,
+                                source_element,
+                                credentials_element,
+                                smb_credentials_element);
 
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new target. "
-                               "No new target was created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_targets");
-        }
+    g_free (comment_element);
+    g_free (credentials_element);
+    g_free (smb_credentials_element);
+    g_free (source_element);
 
-      entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new target. "
-                               "It is unclear whether the target has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets");
-        }
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new target. "
+                             "No new target was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
 
-      status = entity_attribute (entity, "status");
-      if ((status == NULL)
-          || (strlen (status) == 0))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new target. "
-                               "It is unclear whether the target has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_targets");
-        }
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new target. "
+                             "It is unclear whether the target has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
 
-      if (status[0] != '2')
-        {
-          g_string_free (xml, TRUE);
-          html = new_target (credentials, params, response);
-          g_free (response);
-          free_entity (entity);
-          return html;
-        }
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new target. "
+                             "It is unclear whether the target has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
 
-      if (target_id && strcmp (target_id, "0"))
-        {
-          gchar *ret;
-          g_string_free (xml, TRUE);
-          ret = get_target (credentials, params, response);
-          g_free (response);
-          free_entity (entity);
-          return ret;
-        }
+    if (status[0] != '2')
+      {
+        html = new_target (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
 
-      g_string_append (xml, response);
-      g_free (response);
-      free_entity (entity);
-    }
+    if (target_id && strcmp (target_id, "0"))
+      {
+        gchar *ret;
+        ret = get_target (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return ret;
+      }
 
-  /* Get all the targets. */
+    free_entity (entity);
+  }
 
-  if (openvas_server_sendf_xml (&session,
-                               "<get_targets"
-                               " max=\"-2\""
-                               " filter=\"%s\""
-                               " sort_field=\"name\""
-                               " sort_order=\"ascending\"/>",
-                               filter)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Get the target locators. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_target_locators/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Get the credentials. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_lsc_credentials"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Get the port lists. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new target. "
-                           "A new target was, however, created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_targets>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  html = get_targets (credentials, params, response);
+  g_free (response);
+  return html;
 }
 
 #undef CHECK
@@ -4592,11 +4473,11 @@ create_target_omp (credentials_t * credentials, params_t *params)
 char *
 delete_target_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
   gnutls_session_t session;
   int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *target_id;
+  entity_t entity;
 
   target_id = params_value (params, "target_id");
 
@@ -4625,28 +4506,13 @@ delete_target_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_targets");
     }
 
-  xml = g_string_new ("<get_targets>");
-
   /* Delete the target and get all targets. */
 
   if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_target target_id=\"%s\"/>"
-                            "<get_targets"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "<get_target_locators/>"
-                            "<get_lsc_credentials"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
+                            "<delete_target target_id=\"%s\"/>",
                             target_id)
       == -1)
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4656,9 +4522,9 @@ delete_target_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_targets");
     }
 
-  if (read_string (&session, &xml))
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
     {
-      g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4667,12 +4533,15 @@ delete_target_omp (credentials_t * credentials, params_t *params)
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_targets");
     }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
 
   /* Cleanup, and return transformed XML. */
 
-  g_string_append (xml, "</get_targets>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  html = get_targets (credentials, params, response);
+  g_free (response);
+  return html;
 }
 
 /**
@@ -5604,6 +5473,132 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_target XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_target (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *target_id, *next, *filter, *first, *max;
+
+  target_id = params_value (params, "target_id");
+  next = params_value (params, "next");
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+
+  if (target_id == NULL || next == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a target. "
+                         "The target remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_targets");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a target. "
+                             "The target remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_targets"
+                            " target_id=\"%s\""
+                            " details=\"1\"/>"
+                            "<get_lsc_credentials"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "<get_target_locators/>"
+                            "<get_port_lists"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>"
+                            "</commands>",
+                            target_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting target info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<edit_target>"
+                          "<target id=\"%s\"/>"
+                          /* Page that follows. */
+                          "<next>%s</next>"
+                          /* Passthroughs. */
+                          "<filters><term>%s</term></filters>"
+                          "<targets start=\"%s\" max=\"%s\"/>",
+                          target_id,
+                          next,
+                          filter,
+                          first,
+                          max);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting target info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_targets");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_target>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_target XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_target_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_target (credentials, params, NULL);
+}
+
+/**
  * @brief Get one target, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -5620,7 +5615,7 @@ get_target (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *target_id, *sort_field, *sort_order;
+  const char *target_id, *sort_field, *sort_order, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
   sort_field = params_value (params, "sort_field");
@@ -5651,6 +5646,17 @@ get_target (credentials_t * credentials, params_t *params,
     }
 
   xml = g_string_new ("<get_target>");
+
+  /* Pass through params for get_targets. */
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+  g_string_append_printf (xml,
+                          "<filters><term>%s</term></filters>"
+                          "<targets start=\"%s\" max=\"%s\"/>",
+                          filter ? filter : "",
+                          first ? first : "",
+                          max ? max : "");
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
@@ -5717,11 +5723,13 @@ get_target_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (credentials_t * credentials, params_t *params)
+get_targets (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -5753,6 +5761,9 @@ get_targets_omp (credentials_t * credentials, params_t *params)
     }
 
   xml = g_string_new ("<get_targets>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get the targets. */
 
@@ -5798,6 +5809,256 @@ get_targets_omp (credentials_t * credentials, params_t *params)
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
+
+/**
+ * @brief Get all targets, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_targets_omp (credentials_t * credentials, params_t *params)
+{
+  return get_targets (credentials, params, NULL);
+}
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Modify Target");                                  \
+      html = new_target (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a target, get all targets, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_target_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *name, *next, *hosts, *target_locator, *comment, *port_list_id;
+  const char *target_credential, *port, *target_smb_credential, *target_source;
+  const char *target_id;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a target. "
+                             "The target was not modified. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  name = params_value (params, "name");
+  next = params_value (params, "next");
+  hosts = params_value (params, "hosts");
+  target_locator = params_value (params, "target_locator");
+  target_source = params_value (params, "target_source");
+  comment = params_value (params, "comment");
+  port_list_id = params_value (params, "port_list_id");
+  target_credential = params_value (params, "lsc_credential_id");
+  port = params_value (params, "port");
+  target_smb_credential = params_value (params, "lsc_smb_credential_id");
+  target_id = params_value (params, "target_id");
+
+  CHECK (name);
+  CHECK (target_id);
+  CHECK (next);
+  CHECK (target_source);
+  if (hosts == NULL && strcmp (target_source, "manual") == 0)
+    return new_target (credentials, params,
+                       GSAD_MESSAGE_INVALID_PARAM ("Modify Target"));
+  if (strcmp (target_source, "import") == 0 && name == NULL)
+    {
+      gchar *msg;
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
+                            "Given target_locator was invalid",
+                            "Modify Target");
+      html = new_target (credentials, params, msg);
+      g_free (msg);
+      return html;
+    }
+  CHECK (comment);
+  CHECK (port_list_id);
+  CHECK (target_credential);
+  CHECK (port);
+  CHECK (target_smb_credential);
+
+  {
+    int ret;
+    gchar *credentials_element, *smb_credentials_element;
+    gchar* source_element = NULL;
+    gchar* comment_element;
+    const char *username, *password, *status;
+    entity_t entity;
+
+    username = params_value (params, "login");
+    password = params_value (params, "password");
+
+    if (comment)
+      comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
+    else
+      comment_element = g_strdup ("");
+
+    if (strcmp (target_source, "import") == 0)
+      source_element = g_markup_printf_escaped ("<target_locator>"
+                                                "%s"
+                                                "<username>%s</username>"
+                                                "<password>%s</password>"
+                                                "</target_locator>",
+                                                target_locator,
+                                                username ? username : "",
+                                                password ? password : "");
+    else
+      source_element = g_strdup ("");
+
+    if (strcmp (target_credential, "--") == 0)
+      credentials_element = g_strdup ("");
+    else
+      credentials_element =
+        g_strdup_printf ("<ssh_lsc_credential id=\"%s\">"
+                         "<port>%s</port>"
+                         "</ssh_lsc_credential>",
+                         target_credential,
+                         port);
+
+    if (strcmp (target_smb_credential, "--") == 0)
+      smb_credentials_element = g_strdup ("");
+    else
+      smb_credentials_element =
+        g_strdup_printf ("<smb_lsc_credential id=\"%s\"/>",
+                         target_smb_credential);
+
+    /* Modify the target. */
+
+    ret = openvas_server_sendf (&session,
+                                "<modify_target target_id=\"%s\">"
+                                "<name>%s</name>"
+                                "<hosts>%s</hosts>"
+                                "<port_list id=\"%s\"/>"
+                                "%s%s%s%s"
+                                "</modify_target>",
+                                target_id,
+                                name,
+                                (strcmp (source_element, "") == 0)
+                                  ? ((strcmp (target_source, "file") == 0)
+                                       ? params_value (params, "file")
+                                       : hosts)
+                                  : "",
+                                port_list_id,
+                                comment_element,
+                                source_element,
+                                credentials_element,
+                                smb_credentials_element);
+
+    g_free (comment_element);
+    g_free (credentials_element);
+    g_free (smb_credentials_element);
+    g_free (source_element);
+
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying target. "
+                             "No target was modified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
+
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a target. "
+                             "It is unclear whether the target has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
+
+    openvas_server_close (socket, session);
+
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a target. "
+                             "It is unclear whether the target has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_targets");
+      }
+
+    if (status[0] != '2')
+      {
+        html = edit_target (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
+
+    free_entity (entity);
+  }
+
+  /* Pass response to handler of following page. */
+
+  if (strcmp (params_value (params, "next"), "get_targets") == 0)
+    {
+      html = get_targets (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  if (strcmp (params_value (params, "next"), "get_target") == 0)
+    {
+      html = get_target (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  g_free (response);
+
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a target. "
+                       "The target remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_targets");
+}
+
+#undef CHECK
 
 /**
  * @brief Export a target.
