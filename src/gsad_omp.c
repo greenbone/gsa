@@ -5839,7 +5839,7 @@ get_targets_omp (credentials_t * credentials, params_t *params)
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                             "Given " G_STRINGIFY (name) " was invalid",        \
                             "Modify Target");                                  \
-      html = new_target (credentials, params, msg);                            \
+      html = edit_target (credentials, params, msg);                           \
       g_free (msg);                                                            \
       return html;                                                             \
     }
@@ -5911,8 +5911,11 @@ save_target_omp (credentials_t * credentials, params_t *params)
   CHECK (comment);
   CHECK (port_list_id);
   CHECK (target_credential);
-  CHECK (port);
   CHECK (target_smb_credential);
+  if (target_credential
+      && strcmp (target_credential, "--")
+      && strcmp (target_credential, "0"))
+    CHECK (port);
 
   {
     int ret;

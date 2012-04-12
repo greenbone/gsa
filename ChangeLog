@@ -1,3 +1,8 @@
+2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (CHECK): Go to right page on error.
+	(save_target_omp): Only check port if there's an SSH credential.
+
 2012-04-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_target, get_target): Print pass through info
