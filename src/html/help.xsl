@@ -2867,7 +2867,7 @@ Public License instead of this License.
 
 <xsl:template mode="help" match="new_target.html">
   <div class="gb_window_part_center">Help: New Target
-    <a href="/omp?cmd=new_target&amp;token={/envelope/token}">
+    <a href="/omp?cmd=new_target&amp;max=-2&amp;token={/envelope/token}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
   </div>
@@ -4614,13 +4614,6 @@ Public License instead of this License.
 
       <a name="actions"></a>
       <h3>Actions</h3>
-      <p>
-       Target specifications can only be inspected or deleted.
-       <em>Editing a target</em> is not foreseen.
-       You may copy the contents from the list to the above
-       shown "New Target" dialog and create a new target from this
-       with a different name.
-      </p>
 
       <h4>Move Target to Trashcan</h4>
       <p>
