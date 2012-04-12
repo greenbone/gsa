@@ -3019,6 +3019,13 @@ Public License instead of this License.
           <td></td>
         </tr>
       </table>
+
+      <h4>Targets</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Targets" title="Targets"/>
+       will switch to the targets page.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -4484,6 +4491,35 @@ Public License instead of this License.
         credential.
       </p>
 
+      <h4>New Target</h4>
+      <p>
+        To create a new target click the
+        new icon <img src="/img/new.png" alt="New Target" title="New Target" /> which
+        goes to the <a href="new_target.html?token={/envelope/token}">New Target</a>
+        page.
+      </p>
+
+      <h4>Targets</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Targets" title="Targets"/>
+       will switch to the targets page.
+      </p>
+
+      <h4>Edit Target</h4>
+      <p>
+       Pressing the "Edit Target" icon
+       <img src="/img/edit.png" alt="Edit Target" title="Edit Target"/>
+       will switch to an overview of the configuration for this target and
+       allows editing the target's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the target as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
       <h3>Tasks using this Target</h3>
       <p>
         This table provides an overview of the tasks that are associated to the target
@@ -4551,8 +4587,22 @@ Public License instead of this License.
         </tr>
       </table>
 
+      <h3>New Target</h3>
+      <p>
+        To create a new target click the
+        new icon <img src="/img/new.png" alt="New Target" title="New Target" /> which
+        goes to the <a href="new_target.html?token={/envelope/token}">New Target</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of targets as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
       <a name="filtering"></a>
-      <h3>Target Filtering</h3>
+      <h3>Filtering</h3>
       <p>
         The Filtering section of the Targets window shows how the targets have been
         filtered to produce the list.  Modifying any of the values and clicking
@@ -4596,7 +4646,7 @@ Public License instead of this License.
        Pressing the "Edit Target" icon
        <img src="/img/edit.png" alt="Edit Target" title="Edit Target"/>
        will switch to an overview of the configuration for this target and
-       allows editing the targets properties.
+       allows editing the target's properties.
       </p>
 
     </div>

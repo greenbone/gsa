@@ -1,5 +1,10 @@
 2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (new_targets.html, target_details.html)
+	(targets.html): Describe new icons on target pages.  Correct typo.
+
+2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add powerfilter.
 	(powerfilter.html): New template.
 	(targets.html): Add filtering section and edit icon.
