@@ -1,5 +1,16 @@
 2012-04-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_target, get_target): Print pass through info
+	with g_markup_printf_escaped.
+
+	* src/html/omp.xsl (modify_target_response): New template.
+
+	* src/html/gsad.xsl (modify_task_response [response-indicator]): New
+	template.
+	(html-gsa-logo): Match modify_task_response for indicator.
+
+2012-04-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add editing of targets.
 
 	* src/gsad.c (init_validator, exec_omp_post): Add edit_target and

@@ -5488,7 +5488,7 @@ edit_target (credentials_t * credentials, params_t *params,
   GString *xml;
   gnutls_session_t session;
   int socket;
-  gchar *html;
+  gchar *html, *edit;
   const char *target_id, *next, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
@@ -5552,19 +5552,21 @@ edit_target (credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  g_string_append_printf (xml,
-                          "<edit_target>"
-                          "<target id=\"%s\"/>"
-                          /* Page that follows. */
-                          "<next>%s</next>"
-                          /* Passthroughs. */
-                          "<filters><term>%s</term></filters>"
-                          "<targets start=\"%s\" max=\"%s\"/>",
-                          target_id,
-                          next,
-                          filter,
-                          first,
-                          max);
+
+  edit = g_markup_printf_escaped ("<edit_target>"
+                                  "<target id=\"%s\"/>"
+                                  /* Page that follows. */
+                                  "<next>%s</next>"
+                                  /* Passthroughs. */
+                                  "<filters><term>%s</term></filters>"
+                                  "<targets start=\"%s\" max=\"%s\"/>",
+                                  target_id,
+                                  next,
+                                  filter,
+                                  first,
+                                  max);
+  g_string_append (xml, edit);
+  g_free (edit);
 
   if (read_string (&session, &xml))
     {
@@ -5614,7 +5616,7 @@ get_target (credentials_t * credentials, params_t *params,
   GString *xml;
   gnutls_session_t session;
   int socket;
-  gchar *html;
+  gchar *html, *end;
   const char *target_id, *sort_field, *sort_order, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
@@ -5651,12 +5653,13 @@ get_target (credentials_t * credentials, params_t *params,
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
-  g_string_append_printf (xml,
-                          "<filters><term>%s</term></filters>"
-                          "<targets start=\"%s\" max=\"%s\"/>",
-                          filter ? filter : "",
-                          first ? first : "",
-                          max ? max : "");
+  end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
+                                 "<targets start=\"%s\" max=\"%s\"/>",
+                                 filter ? filter : "",
+                                 first ? first : "",
+                                 max ? max : "");
+  g_string_append (xml, end);
+  g_free (end);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);

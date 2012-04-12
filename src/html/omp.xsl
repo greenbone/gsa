@@ -5174,6 +5174,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN TARGETS MANAGEMENT -->
 
+<xsl:template match="modify_target_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Target</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="port_list" mode="select">
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
