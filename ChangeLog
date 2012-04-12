@@ -1,5 +1,9 @@
 2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.c (target [details]): Add UUID where back link was.
+
+2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (new_target.html): Add max to the new_target link,
 	otherwise the empty value is interpreted as "all".
 	(targets.html): Remove out of date section.
