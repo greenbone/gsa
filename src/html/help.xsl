@@ -2079,6 +2079,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
+            <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Browser</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
@@ -3565,6 +3566,132 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="powerfilter.html">
+  <div class="gb_window_part_center">Help: Powerfilter
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>Powerfilter</h1>
+      <p>
+        A powerfilter is a line of text that describes how to reduce a list
+        of items into a smaller subset of items.  This filtering is
+        similar to the search term given to a search engine.
+      </p>
+
+      <a name="examples"></a>
+      <h3>Examples</h3>
+      <ul>
+        <li>
+          127.0.0.1
+          <ul>
+            <li>
+              Include any item that has "127.0.0.1" anywhere in the text of
+              any column.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          127.0.0.1 IANA
+          <ul>
+            <li>
+              Include any item that has "127.0.0.1" or "IANA" anywhere in the
+              text of any column.  This will match targets that have the port
+              list "All IANA assigned TCP 2012-02-10", for example.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          127.0.0.1 and IANA
+          <ul>
+            <li>
+              Include any item that has "127.0.0.1" anywhere in the
+              text of any column, and "IANA" anywhere in the text of any
+              column.  This will match targets that have the port
+              list "All IANA assigned TCP 2012-02-10" that scan host 127.0.0.1,
+              for example.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          "Darling Street Headquarters"
+          <ul>
+            <li>
+              Include any item that has the phrase "Darling Street Headquarters"
+              anywhere in the text of any column.  This will match targets that
+              have this phrase in the comment, for example.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          name=Localhost
+          <ul>
+            <li>
+              Include any item that has the exact name "Localhost".
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          name~local
+          <ul>
+            <li>
+              Include any item that has "local" anywhere in the name.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          port_list~TCP
+          <ul>
+            <li>
+              Include any item that has "TCP" anywhere in the port list name.  This
+              shows how to reference a column that has a space in the name: convert
+              the space to an underscore.
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <a name="syntax"></a>
+      <h3>Syntax</h3>
+      <p>
+        A powerfilter consists of any number of whitespace separated keywords.
+        The keywords are case-folded, so "aBc" works the same as "AbC".
+      </p>
+      <p>
+        Whole phrases can be quoted with double quotes "like this" to include
+        spaces in the keywords.
+      </p>
+      <p>
+        The special keyword "and" requires that the
+        keywords on either side of it are both present.  The special keyword "or"
+        has similar behaviour, but is redundant, since terms are normally OR'd.
+      </p>
+      <p>
+        A keyword can also be
+        prefixed with a column using one of the special characters =, ~, &lt;
+        and &gt;, like "name=Localhost".
+      </p>
+      <p>
+        To search for one of these characters, enclose the term in double quotes.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="reports.html">
   <div class="gb_window_part_center">Help: Reports</div>
   <div class="gb_window_part_content">
@@ -4424,6 +4551,17 @@ Public License instead of this License.
         </tr>
       </table>
 
+      <a name="filtering"></a>
+      <h3>Target Filtering</h3>
+      <p>
+        The Filtering section of the Targets window shows how the targets have been
+        filtered to produce the list.  Modifying any of the values and clicking
+        the "Apply" button will update the list.  The "Reset" button clears the
+        filter.  The filter syntax is described on the
+        <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
+        page.
+      </p>
+
       <a name="actions"></a>
       <h3>Actions</h3>
       <p>
@@ -4451,6 +4589,14 @@ Public License instead of this License.
        Pressing the details icon
        <img src="/img/details.png" alt="Details" title="Details" />
        will show details of the target specification and Tasks that use this target.
+      </p>
+
+      <h4>Edit Target</h4>
+      <p>
+       Pressing the "Edit Target" icon
+       <img src="/img/edit.png" alt="Edit Target" title="Edit Target"/>
+       will switch to an overview of the configuration for this target and
+       allows editing the targets properties.
       </p>
 
     </div>

@@ -1,5 +1,11 @@
 2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (contents.html): Add powerfilter.
+	(powerfilter.html): New template.
+	(targets.html): Add filtering section and edit icon.
+
+2012-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (CHECK): Go to right page on error.
 	(save_target_omp): Only check port if there's an SSH credential.
 
