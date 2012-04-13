@@ -5963,29 +5963,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Target Details
-       <a href="/help/target_details.html?token={/envelope/token}"
-         title="Help: Target Details">
-         <img src="/img/help.png"/>
-       </a>
-       <a href="/omp?cmd=new_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;target_id={@id}&amp;token={/envelope/token}"
-          title="New Target">
-         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-       </a>
-       <a href="/omp?cmd=get_targets&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
-          title="Targets" style="margin-left:3px;">
-         <img src="/img/list.png" border="0" alt="Targets"/>
-       </a>
-       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-         <a href="/omp?cmd=edit_target&amp;target_id={@id}&amp;next=get_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
-            title="Edit Target">
-           <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-         </a>
-         <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
-            title="Export Target XML"
-            style="margin-left:3px;">
-           <img src="/img/download.png" border="0" alt="Export XML"/>
-         </a>
+      Target Details
+      <a href="/help/target_details.html?token={/envelope/token}"
+        title="Help: Target Details">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=new_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;target_id={@id}&amp;token={/envelope/token}"
+         title="New Target">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_targets&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
+         title="Targets" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Targets"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <xsl:choose>
+          <xsl:when test="in_use='0'">
+            <xsl:call-template name="trashcan-icon">
+              <xsl:with-param name="type" select="'target'"/>
+              <xsl:with-param name="id" select="@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="filter" value="{../../filters/term}"/>
+                <input type="hidden" name="first" value="{../../targets/@start}"/>
+                <input type="hidden" name="max" value="{../../targets/@max}"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <a href="/omp?cmd=edit_target&amp;target_id={@id}&amp;next=get_target&amp;filter={../../filters/term}&amp;first={../../targets/@start}&amp;max={../../targets/@max}&amp;token={/envelope/token}"
+           title="Edit Target">
+          <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+        </a>
+        <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
+           title="Export Target XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
       </div>
     </div>
     <div class="gb_window_part_content">
