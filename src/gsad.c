@@ -3297,7 +3297,7 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
-      printf ("Copyright (C) 2010 Greenbone Networks GmbH\n");
+      printf ("Copyright (C) 2010-2012 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
       printf
         ("This is free software: you are free to change and redistribute it.\n"
