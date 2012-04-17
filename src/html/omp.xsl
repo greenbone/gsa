@@ -3944,25 +3944,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top">Password</td>
             <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+              <xsl:choose>
+                <xsl:when test="commands_response/get_lsc_credentials_response/lsc_credential/type = 'gen'">
+                  <label>
                     <input type="checkbox" name="enable_off" value="1"
                            disabled="1"/>
                     Replace existing value with:
                     <br/>
-                    <input type="password" name="password" size="30" maxlength="400"
-                           disabled="1" value=""/>
-                  </xsl:when>
-                  <xsl:otherwise>
+                  </label>
+                  <input type="password" name="password" size="30" maxlength="400"
+                         disabled="1" value=""/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
                     <input type="checkbox" name="enable" value="1"/>
                     Replace existing value with:
                     <br/>
-                    <input type="password" autocomplete="off" name="password"
-                           size="30" maxlength="400" value=""/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </label>
+                  </label>
+                  <input type="password" autocomplete="off" name="password"
+                         size="30" maxlength="400" value=""/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -11535,9 +11537,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <label>
                 <input type="radio" name="from_file" value="0" checked="1"/>
-                <input type="text" name="port_range" value="T:1-5,7,9,U:1-3,5,7,9"
-                       size="30" maxlength="400"/>
               </label>
+              <input type="text" name="port_range" value="T:1-5,7,9,U:1-3,5,7,9"
+                     size="30" maxlength="400"/>
               <br/>
               <label>
                 <input type="radio" name="from_file" value="1"/>

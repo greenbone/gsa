@@ -1,3 +1,10 @@
+2012-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-lsc-credential-form)
+	(html-create-port_list-form): Move text and password inputs out of labels
+	because Firefox 3.5 jumps to the associated radio when the input area is
+	clicked.
+
 2012-04-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c (main): Updated Copyright years.
