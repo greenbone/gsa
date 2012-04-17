@@ -6107,7 +6107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_targets">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_target_response"/>
+  <xsl:apply-templates select="delete_target_response"/>
   <xsl:apply-templates select="create_target_response"/>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">

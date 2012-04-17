@@ -1,5 +1,11 @@
 2012-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Adjust for new path.
+
+	* src/html/omp.xsl (get_targets): Adjust for new path.
+
+2012-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-lsc-credential-form)
 	(html-create-port_list-form): Move text and password inputs out of labels
 	because Firefox 3.5 jumps to the associated radio when the input area is
