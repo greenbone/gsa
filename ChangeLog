@@ -1,5 +1,9 @@
 2012-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (powerfilter.html): Improve slightly.  Add NOT.
+
+2012-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Adjust for new path.
 
 	* src/html/omp.xsl (get_targets): Adjust for new path.

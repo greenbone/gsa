@@ -3676,24 +3676,31 @@ Public License instead of this License.
       <h3>Syntax</h3>
       <p>
         A powerfilter consists of any number of whitespace separated keywords.
-        The keywords are case-folded, so "aBc" works the same as "AbC".
+        Whole keywords are case-folded, so "aBc" works the same as "AbC".
       </p>
       <p>
-        Whole phrases can be quoted with double quotes "like this" to include
+        Phrases can be quoted with double quotes "like this" to include
         spaces in the keywords.
       </p>
       <p>
-        The special keyword "and" requires that the
-        keywords on either side of it are both present.  The special keyword "or"
-        has similar behaviour, but is redundant, since terms are normally OR'd.
+        The special keyword "<b>and</b>" requires that the
+        keywords on either side of it are both present.  The special keyword
+        "<b>or</b>" has similar behaviour, but is redundant, since terms are
+        normally OR'd.
+      </p>
+      <p>
+        The special keyword "<b>not</b>" inverts the sense of the following keyword.
       </p>
       <p>
         A keyword can also be
         prefixed with a column using one of the special characters =, ~, &lt;
-        and &gt;, like "name=Localhost".
+        and &gt;, like "name=Localhost".  In the case of the = relation the
+        keyword is case sensitive; for other relations the keyword is case
+        insensitive as usual.
       </p>
       <p>
-        To search for one of these characters, enclose the term in double quotes.
+        To search for one of the special characters, enclose the term in
+        double quotes.
       </p>
     </div>
   </div>
