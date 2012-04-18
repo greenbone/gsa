@@ -5833,7 +5833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="in_use='0'">
+        <xsl:when test="writable='0'">
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'target'"/>
             <xsl:with-param name="id" select="@id"/>
@@ -5856,7 +5856,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:choose>
-        <xsl:when test="in_use='0'">
+        <xsl:when test="writable='0'">
           <a href="/omp?cmd=edit_target&amp;target_id={@id}&amp;next=get_targets&amp;filter={../filters/term}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}"
              title="Edit Target"
              style="margin-left:3px;">
