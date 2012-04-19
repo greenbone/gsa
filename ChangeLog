@@ -1,5 +1,9 @@
 2012-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-targets-table): Add count to export tooltip.
+
+2012-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (port_list): Make the trashcan icon depend on WRITABLE
 	instead of IN_USE.
 

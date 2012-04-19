@@ -5681,7 +5681,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
-         title="Export Targets XML"
+         title="Export {target_count/filtered} filtered Targets as XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
