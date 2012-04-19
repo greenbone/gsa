@@ -11665,7 +11665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="in_use='0'">
+        <xsl:when test="writable='0'">
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'port_list'"/>
             <xsl:with-param name="id" select="@id"/>
