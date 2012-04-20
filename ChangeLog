@@ -1,5 +1,14 @@
 2012-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a generic GET page handler, because the handlers for the types are
+	basically the same.  Use the new handler for targets and agents.
+
+	* src/gsad_omp.c (get_many, get_agents): New functions.
+	(get_agents_omp): Call through to get_agents.
+	(get_targets): Call through to get_many.
+
+2012-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-targets-table): Add count to export tooltip.
 
 2012-04-19  Matthew Mundell <matthew.mundell@greenbone.net>

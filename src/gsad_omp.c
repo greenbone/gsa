@@ -381,6 +381,104 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
 }
 
 
+/* Generic page handlers. */
+
+/**
+ * @brief Get all of a particular type of resource, XSL transform the result.
+ *
+ * @param[in]  type         Resource type.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_many (const char *type, credentials_t * credentials, params_t *params,
+          const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *filter, *first, *max, *sort_field, *sort_order;
+
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a resource list. "
+                             "The current list of resources is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<get_%ss>", type);
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  /* Get the list. */
+
+  if (openvas_server_sendf_xml (&session,
+                                "<get_%ss"
+                                " filter=\"%s\""
+                                " first=\"%s\""
+                                " max=\"%s\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                type,
+                                filter ? filter : "",
+                                first ? first : "1",
+                                max ? max : "-2",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting resources list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append_printf (xml, "</get_%ss>", type);
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+
 /* Page handlers. */
 
 /**
@@ -3190,7 +3288,22 @@ get_agent_omp (credentials_t * credentials,
 }
 
 /**
- * @brief Get one or all agents, XSL transform the result.
+ * @brief Get all agents, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_agents (credentials_t * credentials, params_t *params, const char *extra_xml)
+{
+  return get_many ("agent", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Get all agents, XSL transform the result.
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
@@ -3200,74 +3313,7 @@ get_agent_omp (credentials_t * credentials,
 char *
 get_agents_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  gnutls_session_t session;
-  int socket;
-  gchar *connect_html;
-  char *text = NULL;
-  const char *sort_field, *sort_order;
-
-  switch (manager_connect (credentials, &socket, &session, &connect_html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (connect_html)
-          {
-            return connect_html;
-          }
-        /* Fall through. */
-      default:
-        {
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the agent list. "
-                               "The current list of agents is not available. "
-                               "Diagnostics: Failure to connect to manager daemon.",
-                               "/omp?cmd=get_agents");
-        }
-    }
-
-  /* Send the request. */
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_agents"
-                            " sort_field=\"%s\" sort_order=\"%s\"/>"
-                            "</commands>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting agent list. "
-                           "The current list of agents is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_agents");
-    }
-
-  /* Read and handle the response. */
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting agent list. "
-                           "The current list of agents is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return get_agents (credentials, params, NULL);
 }
 
 /**
@@ -5734,83 +5780,7 @@ char *
 get_targets (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *filter, *first, *max, *sort_field, *sort_order;
-
-  filter = params_value (params, "filter");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting targets list. "
-                             "The current list of targets is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
-
-  xml = g_string_new ("<get_targets>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  /* Get the targets. */
-
-  if (openvas_server_sendf_xml (&session,
-                                "<get_targets"
-                                " filter=\"%s\""
-                                " first=\"%s\""
-                                " max=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\"/>",
-                                filter ? filter : "",
-                                first ? first : "1",
-                                max ? max : "-2",
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting targets list. "
-                           "The current list of targets is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_targets>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_many ("target", credentials, params, extra_xml);
 }
 
 /**
