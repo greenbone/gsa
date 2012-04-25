@@ -25,30 +25,24 @@
 
 ## Config
 
-#TODO: Unify this with the target properties for gsad below
-include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS} ${GLIB_INCLUDE_DIRS} ${GTHREAD_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS} ${OPENVAS_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS} ${GNUTLS_INCLUDE_DIRS})
-link_directories    (${LIBMICROHTTPD_LIBRARY_DIRS} ${LIBXML_LIBRARY_DIRS} ${GLIB_LIBRARY_DIRS} ${GTHREAD_LIBRARY_DIRS} ${LIBEXSLT_LIBRARY_DIRS} ${OPENVAS_LIBRARY_DIRS} ${LIBXSLT_LIBRARY_DIRS} ${GNUTLS_LIBRARY_DIRS})
-
 ## Libraries
 
-#TODO: Unify this with the target properties for gsad below
 add_library (gsad_base STATIC gsad_base.c)
-set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_base ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES})
+set_target_properties (gsad_base PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
+target_link_libraries (gsad_base "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
 
 add_library (gsad_omp STATIC gsad_omp.c)
-set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_omp ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES} openvas_omp)
+set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
+target_link_libraries (gsad_omp "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
 
 add_library (gsad_oap STATIC gsad_oap.c)
-set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS}")
-target_link_libraries (gsad_oap ${LIBMICROHTTPD_LIBRARIES} ${LIBXML_LIBRARIES} ${GLIB_LIBRARIES} ${GTHREAD_LIBRARIES} ${LIBEXSLT_LIBRARIES} ${OPENVAS_LIBRARIES})
+set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
+target_link_libraries (gsad_oap "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
 
 ## Program
 
-#TODO: Unify this with the target properties for gsad below
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_oap gsad_base ${LIBXSLT_LIBRARIES} ${GNUTLS_LIBRARIES})
+target_link_libraries (gsad gsad_omp gsad_oap gsad_base)
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
@@ -97,12 +91,8 @@ endif (GSA_CONFIG_DIR)
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 
-set_target_properties (gsad PROPERTIES LINK_FLAGS
-                       "${OPENVAS_LDFLAGS} ${LIBMICROHTTPD_LDFLAGS} ${LIBEXSLT_LDFLAGS}")
-
 set_target_properties (gsad PROPERTIES COMPILE_FLAGS
-                       "${OPENVAS_CFLAGS}")
-
+                       "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
 ## Install
 
 install (TARGETS gsad

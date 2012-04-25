@@ -1,3 +1,21 @@
+2012-04-25  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Clean up CMake infrastructure and ensure that compilation with modern
+	gccs works. Backport from trunk; initially committed in r13354.
+
+	* CMakeLists.txt: Remove setting of OPENVAS_LIB_INSTALL_DIR and
+	OPENVAS_HEADER_INSTALL_DIR as they were never used and the information
+	is retrieved via pkg-config now.
+
+	* src/CMakeLists.txt: Move include_directories and link_directories to
+	target_properties and target_link_libraries. Set link libraries via
+	target_link_libraries and not via LINK_FLAGS since this breaks
+	compilation with more modern gccs. Take the correct flags from
+	pkg-config output.
+
+	* INSTALL: Remove references to superfluous OPENVAS_LIB_INSTALL_DIR
+	and OPENVAS_HEADER_INSTALL_DIR variables.
+
 2012-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Update UUID of PDF report
