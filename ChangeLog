@@ -1,5 +1,10 @@
 2012-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Update UUID of PDF report
+	format.  Backport from trunk; initially committed in r13322.
+
+2012-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-lsc-credential-form)
 	(html-create-port_list-form): Move text and password inputs out of labels
 	because Firefox 3.5 jumps to the associated radio when the input area is
