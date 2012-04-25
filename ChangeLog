@@ -1,3 +1,10 @@
+2012-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-lsc-credential-form)
+	(html-create-port_list-form): Move text and password inputs out of labels
+	because Firefox 3.5 jumps to the associated radio when the input area is
+	clicked.  Backport from trunk; initially committed in r13260.
+
 2012-03-28  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt, INSTALL: Set dependency for glib and gnutls
