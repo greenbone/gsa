@@ -39,6 +39,8 @@
 
 void omp_init (const gchar *, int);
 
+char * clone_omp (credentials_t *, params_t *);
+
 char * create_report_omp (credentials_t *, params_t *);
 char * create_task_omp (credentials_t *, params_t *);
 char * delete_task_omp (credentials_t *, params_t *);

@@ -499,7 +499,8 @@ init_validator ()
 
   openvas_validator_add (validator,
                          "cmd",
-                         "^(create_agent)"
+                         "^(clone)"
+                         "|(create_agent)"
                          "|(create_config)"
                          "|(create_alert)"
                          "|(create_lsc_credential)"
@@ -678,6 +679,7 @@ init_validator ()
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
   openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
   openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
+  openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
@@ -724,6 +726,7 @@ init_validator ()
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "resource_type",    "^(agent|target)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
@@ -1441,6 +1444,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "Diagnostics: Empty command.",
                                          "/omp?cmd=get_tasks");
     }
+  ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_lsc_credential)

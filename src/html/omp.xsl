@@ -5867,6 +5867,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
+      <div style="display: inline">
+        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="cmd" value="clone"/>
+          <input type="hidden" name="resource_type" value="target"/>
+          <input type="hidden" name="next" value="get_targets"/>
+          <input type="hidden" name="id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{../filters/term}"/>
+          <input type="hidden" name="first" value="{../targets/@start}"/>
+          <input type="hidden" name="max" value="{../targets/@max}"/>
+          <input type="image" src="/img/new.png" alt="Clone Target"
+                 name="Clone" value="Clone" title="Clone"/>
+        </form>
+      </div>
     </td>
   </tr>
 </xsl:template>

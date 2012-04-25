@@ -4509,6 +4509,119 @@ create_target_omp (credentials_t * credentials, params_t *params)
 #undef CHECK
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                               \
+  if (name == NULL)                                                               \
+    return gsad_message (credentials,                                             \
+                         "Internal error", __FUNCTION__, __LINE__,                \
+                         "An internal error occurred while cloning a resource. "  \
+                         "The resource was not cloned. "                          \
+                         "Diagnostics: Required parameter '" G_STRINGIFY (name)   \
+                         "' was NULL.",                                           \
+                         "/omp?cmd=get_tasks");
+
+/**
+ * @brief Clone a target, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+clone_omp (credentials_t *credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *id, *type, *next;
+  entity_t entity;
+
+  id = params_value (params, "id");
+  type = params_value (params, "resource_type");
+  next = params_value (params, "next");
+
+  CHECK (id);
+  CHECK (type);
+  CHECK (next);
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while cloning a resource. "
+                             "The resource was not cloned. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Clone the target and get all targets. */
+
+  if (openvas_server_sendf (&session,
+                            "<create_%s>"
+                            "<copy>%s</copy>"
+                            "</create_%s>",
+                            type,
+                            id,
+                            type)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while cloning a resource. "
+                           "The resource was not cloned. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while cloning a resource. "
+                           "It is unclear whether the resource has been cloned or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  if (strcmp (next, "get_targets") == 0)
+    {
+      html = get_targets (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  g_free (response);
+
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while cloning a resource. "
+                       "The resource remains the same. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_tasks");
+}
+
+#undef CHECK
+
+/**
  * @brief Delete a target, get all targets, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
