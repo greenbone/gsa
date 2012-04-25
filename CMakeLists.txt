@@ -264,8 +264,6 @@ set (OPENVAS_LOG_DIR   "${LOCALSTATEDIR}/log/openvas")
 set (GSAD_PID_DIR   "${LOCALSTATEDIR}/run")
 set (GSA_DATA_DIR "${DATADIR}/openvas/gsa")
 
-set (OPENVAS_LIB_INSTALL_DIR    "${LIBDIR}")
-set (OPENVAS_HEADER_INSTALL_DIR "${INCLUDEDIR}")
 # TODO: Eventually use own certificates
 set (OPENVAS_SERVER_CERTIFICATE "${OPENVAS_STATE_DIR}/CA/servercert.pem")
 set (OPENVAS_SERVER_KEY         "${OPENVAS_STATE_DIR}/private/CA/serverkey.pem")

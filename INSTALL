@@ -63,8 +63,6 @@ Thereafter, the following commands are useful.
 
 In case you have installed the Greenbone Security Assistant into a path
 different from the other OpenVAS modules, you might need to set some paths
-explicitly before running cmake. The variables OPENVAS_LIB_INSTALL_DIR and
-OPENVAS_HEADER_INSTALL_DIR in the "Variables" section of the top level
-CMakeLists.txt can be edited to link to a custom installation of OpenVAS. The
-certificate and key locations in OPENVAS_SERVER_CERTIFICATE, OPENVAS_SERVER_KEY
-and OPENVAS_CA_CERTIFICATE may also need modifying.
+explicitly before running cmake. The certificate and key locations in
+OPENVAS_SERVER_CERTIFICATE, OPENVAS_SERVER_KEY and OPENVAS_CA_CERTIFICATE in
+the top level CMakeLists.txt may need modifying.
