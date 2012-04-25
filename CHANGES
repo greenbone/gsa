@@ -1,3 +1,27 @@
+gsa 3.0.1 (2012-04-25)
+
+This is the first maintenance release of the Greenbone Security Assistant (GSA)
+3.0 module for the Open Vulnerability Assessment System release 5 (OpenVAS-5).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes a number of issues which were discovered after the release
+of Greenbone Security Assistant 3.0.0. For details please refer to the list
+below.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Michael Wiegand and Jan-Oliver Wagner.
+
+Main changes since 3.0.0:
+* The minimum version requirements for the glib and gnutls libraries have been
+  set to the minimum requirements of OpenVAS Libraries (2.16 for glib and 2.2
+  for gnutls).
+* The CMake infrastructure has been cleaned up to ensure that compilation with
+  modern gccs works.
+* The validation of scan config comments has been improved.
+* A compatibility issue with Firefox 3.5 has been resolved.
+
+
 gsa 3.0.0 (2012-03-26)
 
 This is the first release of the Greenbone Security Assistant (GSA) 3.0 module
