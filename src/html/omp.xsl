@@ -66,6 +66,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<xsl:template name="filter-window-part">
+  <xsl:param name="type"/>
+  <xsl:param name="list"/>
+  <div class="gb_window_part_content">
+    <div style="background-color: #EEEEEE;">
+      <div style="float: right">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_{$type}s"/>
+            <input type="submit" value="Reset" title="Reset"/>
+          <input type="hidden" name="filter" value=""/>
+          <input type="hidden" name="first" value=""/>
+          <input type="hidden" name="max" value="-2"/>
+        </form>
+      </div>
+      <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="get_{$type}s"/>
+        <div style="float: right">
+          <input type="submit" value="Apply" title="Apply"/>
+        </div>
+        <div style="padding: 2px;">
+          Filter:
+          <input type="text" name="filter" size="50"
+                 value="{filters/term}"
+                 maxlength="1000"/>
+          First:
+          <input type="text" name="first" size="5"
+                 value="{$list/@start}"
+                 maxlength="400"/>
+          Rows:
+          <xsl:choose>
+            <xsl:when test="$list/@max = '-1'">
+              <input type="text" name="max" size="5"
+                     value=""
+                     maxlength="400"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="text" name="max" size="5"
+                     value="{$list/@max}"
+                     maxlength="400"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template name="trash-delete-icon">
   <xsl:param name="type"></xsl:param>
   <xsl:param name="id"></xsl:param>
@@ -4266,6 +4315,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
     </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'agent'"/>
+      <xsl:with-param name="list" select="agents"/>
+    </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -5685,56 +5738,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
     </div>
-    <div class="gb_window_part_content">
-      <div style="background-color: #EEEEEE;">
-        <xsl:variable name="sort_field">
-          <xsl:value-of select="report/sort/field/text()"/>
-        </xsl:variable>
-        <xsl:variable name="sort_order">
-          <xsl:value-of select="report/sort/field/order"/>
-        </xsl:variable>
-        <div style="float: right">
-          <form action="" method="get">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="get_targets"/>
-              <input type="submit" value="Reset" title="Reset"/>
-            <input type="hidden" name="filter" value=""/>
-            <input type="hidden" name="first" value=""/>
-            <input type="hidden" name="max" value="-2"/>
-          </form>
-        </div>
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_targets"/>
-          <div style="float: right">
-            <input type="submit" value="Apply" title="Apply"/>
-          </div>
-          <div style="padding: 2px;">
-            Filter:
-            <input type="text" name="filter" size="50"
-                   value="{filters/term}"
-                   maxlength="1000"/>
-            First:
-            <input type="text" name="first" size="5"
-                   value="{targets/@start}"
-                   maxlength="400"/>
-            Rows:
-            <xsl:choose>
-              <xsl:when test="targets/@max = '-1'">
-                <input type="text" name="max" size="5"
-                       value=""
-                       maxlength="400"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="text" name="max" size="5"
-                       value="{targets/@max}"
-                       maxlength="400"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-        </form>
-      </div>
-    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'target'"/>
+      <xsl:with-param name="list" select="targets"/>
+    </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">

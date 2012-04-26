@@ -1,3 +1,9 @@
+2012-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-part): New template.
+	(html-agents-table): Add filtering controls.
+	(html-targets-table): Call filter-window-part to add filtering controls.
+
 2012-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add cloning of targets.
