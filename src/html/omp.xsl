@@ -5732,11 +5732,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="New Target">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
-      <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
-         title="Export {target_count/filtered} filtered Targets as XML"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export XML"/>
-      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+           title="Export {target_count/filtered} filtered Targets as XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'target'"/>
@@ -5802,7 +5804,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -5885,10 +5891,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="filter" value="{../filters/term}"/>
           <input type="hidden" name="first" value="{../targets/@start}"/>
           <input type="hidden" name="max" value="{../targets/@max}"/>
-          <input type="image" src="/img/new.png" alt="Clone Target"
+          <input type="image" src="/img/clone.png" alt="Clone Target"
                  name="Clone" value="Clone" title="Clone"/>
         </form>
       </div>
+      <a href="/omp?cmd=export_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
+         title="Export Target XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
     </td>
   </tr>
 </xsl:template>

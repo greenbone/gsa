@@ -1,5 +1,12 @@
 2012-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-targets-table): Offset the export icon slightly
+	from the others.
+	(target): Make the target name a link to Target Details.  Use the clone
+	image for the clone icon.  Add per-target export icon.
+
+2012-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-part): New template.
 	(html-agents-table): Add filtering controls.
 	(html-targets-table): Call filter-window-part to add filtering controls.
