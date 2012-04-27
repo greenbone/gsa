@@ -1,5 +1,10 @@
 2012-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css: Remove underline from link text decoration.
+	Show underline on mouse-over.
+
+2012-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-targets-table): Offset the export icon slightly
 	from the others.
 	(target): Make the target name a link to Target Details.  Use the clone

@@ -35,8 +35,14 @@ body {
  color: #1A1A1A;
 }
 
-a {
+a:link {
  color: blue;
+ text-decoration: none;
+}
+
+a:hover, a:focus {
+ color: blue;
+ text-decoration: underline;
 }
 
 img {
