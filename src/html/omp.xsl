@@ -6042,6 +6042,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <div class="float_right">
         <div style="font-size: 10px;">ID: <xsl:value-of select="@id"/></div>
+        <div style="font-size: 10px;">Last Modified: <xsl:value-of select="gsa:long-time (modification_time)"/></div>
       </div>
       <table>
         <tr>
