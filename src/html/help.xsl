@@ -36,6 +36,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+<xsl:template name="availability">
+  <xsl:param name="command" select="GET_TASKS"/>
+  <xsl:choose>
+    <xsl:when test="/envelope/capabilities/help_response/schema/command[name=$command]">
+    </xsl:when>
+    <xsl:otherwise>
+      <p>
+        <b>Note:</b> This feature is not available with the current OMP Server connection.
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="help">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -313,6 +326,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="float_right"><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_AGENTS'"/>
+      </xsl:call-template>
+
       <h1>Configure Agents</h1>
       <p>
        This feature allows to store agent tools.
@@ -439,6 +457,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
+      </xsl:call-template>
+
       <h1>Configure Credentials for Local Security Checks</h1>
 
       <p>
@@ -653,6 +676,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ALERTS'"/>
+      </xsl:call-template>
+
       <h1>Configure Alerts</h1>
       <p>
        Alerts can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
@@ -820,6 +848,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_PORT_LISTS'"/>
+      </xsl:call-template>
+
       <h1>Configure Port Lists</h1>
       <p>
        <a href="glossary.html?token={/envelope/token}#port_list">Port lists</a>
@@ -1116,6 +1149,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_REPORT_FORMATS'"/>
+      </xsl:call-template>
+
       <h1>Configure Report Formats</h1>
       <p>
        <a href="glossary.html?token={/envelope/token}#report">Reports</a> can be downloaded in a number
@@ -1310,6 +1348,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+
       <h1>Configure Scan Configs</h1>
       <p>
        Any <a href="glossary.html?token={/envelope/token}#task">task</a> is associated with
@@ -1486,6 +1529,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SCHEDULES'"/>
+      </xsl:call-template>
+
       <h1>Configure Schedules</h1>
       <p>
         Schedules can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
@@ -1620,6 +1668,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SLAVES'"/>
+      </xsl:call-template>
+
       <h1>Configure Slaves</h1>
       <p>
         <a href="glossary.html?token={/envelope/token}#task">Tasks</a> can be configured to run on slave
@@ -2806,6 +2859,11 @@ Public License instead of this License.
 
       <br/>
       <h1>My Settings</h1>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SETTINGS'"/>
+      </xsl:call-template>
+
       <p>
         This page lists the settings of the current user, like the user's timezone.
       </p>
@@ -2826,6 +2884,11 @@ Public License instead of this License.
 
       <a name="edit"></a>
       <h2>Edit My Settings</h2>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'MODIFY_SETTING'"/>
+      </xsl:call-template>
+
       <p>
         This table provides an editable version of the current user's settings, including
         timezone and password.
@@ -2876,6 +2939,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_TARGET'"/>
+      </xsl:call-template>
+
       <h1>New Target</h1>
       <p>
         For creating a new
@@ -3038,6 +3106,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_TASK'"/>
+      </xsl:call-template>
+
       <h1>New Task</h1>
 
       <p>
@@ -3159,6 +3232,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_NOTES'"/>
+      </xsl:call-template>
+
       <a name="notes"></a>
       <h1>Notes</h1>
       <p>
@@ -3304,6 +3382,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_NVTS'"/>
+      </xsl:call-template>
+
       <a name="nvts"></a>
       <h1>Network Vulnerability Tests (NVTs)</h1>
       <p>
@@ -3334,6 +3417,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
       <h1>Security Information Browser</h1>
       <p>
        A page that provides access to the security information database to
@@ -3395,6 +3483,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SYSTEM_REPORTS'"/>
+      </xsl:call-template>
+
       <a name="performance"></a>
       <h1>Performance</h1>
       <p>
@@ -3418,6 +3511,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_OVERRIDES'"/>
+      </xsl:call-template>
+
       <a name="overrides"></a>
       <h1>Overrides</h1>
       <p>
@@ -3714,6 +3812,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TASKS'"/>
+      </xsl:call-template>
+
       <a name="tasksummary"></a>
       <h1>Task Summary</h1>
       <p>
@@ -3889,6 +3992,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+
       <h1>Scan Config Details</h1>
       <p>
        This dialog shows the name and comment of a given
@@ -4007,6 +4115,14 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
+      </xsl:call-template>
+
       <h1>Scan Config Editor</h1>
       <p>
        The Scan Config Editor allows modification of all parameters of a
@@ -4167,6 +4283,14 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
+      </xsl:call-template>
+
       <a name="editscanconfigfamilydetails"></a>
       <h1>Edit Scan Config Family Details</h1>
       <p>
@@ -4242,6 +4366,14 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
+      </xsl:call-template>
+
       <h1>Edit Scan Config NVT Details</h1>
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
@@ -4300,6 +4432,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+
       <a name="scanconfigfamilydetails"></a>
       <h1>Scan Config Family Details</h1>
       <p>
@@ -4362,6 +4499,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_CONFIGS'"/>
+      </xsl:call-template>
+
       <h1>Scan Config NVT Details</h1>
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
@@ -4488,6 +4630,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TARGETS'"/>
+      </xsl:call-template>
+
       <h1>Target Details</h1>
       <p>
         Provides detailed information about a
@@ -4550,6 +4697,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TARGETS'"/>
+      </xsl:call-template>
+
       <h1>Targets</h1>
       <p>
        This table provides an overview of all configured
@@ -4661,6 +4813,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TASKS'"/>
+      </xsl:call-template>
+
       <a name="tasks"></a>
       <h1>Tasks</h1>
       <p>
@@ -5079,6 +5236,11 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_REPORTS'"/>
+      </xsl:call-template>
+
       <a name="viewreport"></a>
       <h1>View Report</h1>
       <p>
