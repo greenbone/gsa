@@ -14834,118 +14834,158 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="gbntablehead2">
           <td>Type</td>
           <td>Items</td>
-      </tr>
-        <tr class="even">
-          <td><a href="#agents">Agents</a></td>
-          <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
         </tr>
-        <tr class="odd">
-          <td><a href="#alerts">Alerts</a></td>
-          <td><xsl:value-of select="count(get_alerts_response/alert)"/></td>
-        </tr>
-        <tr class="even">
-          <td><a href="#configs">Scan Configs</a></td>
-          <td><xsl:value-of select="count(get_configs_response/config)"/></td>
-        </tr>
-        <tr class="odd">
-          <td><a href="#credentials">Credentials</a></td>
-          <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
-        </tr>
-        <tr class="even">
-          <td><a href="#port_lists">Port Lists</a></td>
-          <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
-        </tr>
-        <tr class="odd">
-          <td><a href="#report_formats">Report Formats</a></td>
-          <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
-        </tr>
-        <tr class="even">
-          <td><a href="#schedules">Schedules</a></td>
-          <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
-        </tr>
-        <tr class="odd">
-          <td><a href="#slaves">Slaves</a></td>
-          <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
-        </tr>
-        <tr class="even">
-          <td><a href="#targets">Targets</a></td>
-          <td><xsl:value-of select="count(get_targets_response/target)"/></td>
-        </tr>
-        <tr class="odd">
-          <td><a href="#the_tasks">Tasks</a></td>
-          <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
-        </tr>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+          <tr class="even">
+            <td><a href="#agents">Agents</a></td>
+            <td><xsl:value-of select="count(get_agents_response/agent)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+          <tr class="odd">
+            <td><a href="#alerts">Alerts</a></td>
+            <td><xsl:value-of select="count(get_alerts_response/alert)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+          <tr class="even">
+            <td><a href="#configs">Scan Configs</a></td>
+            <td><xsl:value-of select="count(get_configs_response/config)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+          <tr class="odd">
+            <td><a href="#credentials">Credentials</a></td>
+            <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+          <tr class="even">
+            <td><a href="#port_lists">Port Lists</a></td>
+            <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+          <tr class="odd">
+            <td><a href="#report_formats">Report Formats</a></td>
+            <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+          <tr class="even">
+            <td><a href="#schedules">Schedules</a></td>
+            <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+          <tr class="odd">
+            <td><a href="#slaves">Slaves</a></td>
+            <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+          <tr class="even">
+            <td><a href="#targets">Targets</a></td>
+            <td><xsl:value-of select="count(get_targets_response/target)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+          <tr class="odd">
+            <td><a href="#the_tasks">Tasks</a></td>
+            <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
+          </tr>
+        </xsl:if>
       </table>
 
-      <a name="agents"></a>
-      <h1>Agents</h1>
-      <!-- The for-each makes the get_agents_response the current node. -->
-      <xsl:for-each select="get_agents_response">
-        <xsl:call-template name="html-agents-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+        <a name="agents"></a>
+        <h1>Agents</h1>
+        <!-- The for-each makes the get_agents_response the current node. -->
+        <xsl:for-each select="get_agents_response">
+          <xsl:call-template name="html-agents-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="alerts"></a>
-      <h1>Alerts</h1>
-      <!-- The for-each makes the get_alerts_response the current node. -->
-      <xsl:for-each select="get_alerts_response">
-        <xsl:call-template name="html-alerts-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+        <a name="alerts"></a>
+        <h1>Alerts</h1>
+        <!-- The for-each makes the get_alerts_response the current node. -->
+        <xsl:for-each select="get_alerts_response">
+          <xsl:call-template name="html-alerts-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="configs"></a>
-      <h1>Scan Configs</h1>
-      <!-- The for-each makes the get_configs_response the current node. -->
-      <xsl:for-each select="get_configs_response">
-        <xsl:call-template name="html-configs-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+        <a name="configs"></a>
+        <h1>Scan Configs</h1>
+        <!-- The for-each makes the get_configs_response the current node. -->
+        <xsl:for-each select="get_configs_response">
+          <xsl:call-template name="html-configs-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="credentials"></a>
-      <h1>Credentials</h1>
-      <!-- The for-each makes the get_lsc_credentials_response the current node. -->
-      <xsl:for-each select="get_lsc_credentials_response">
-        <xsl:call-template name="html-lsc-credentials-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+        <a name="credentials"></a>
+        <h1>Credentials</h1>
+        <!-- The for-each makes the get_lsc_credentials_response the current node. -->
+        <xsl:for-each select="get_lsc_credentials_response">
+          <xsl:call-template name="html-lsc-credentials-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="port_lists"></a>
-      <h1>Port Lists</h1>
-      <!-- The for-each makes the get_port_lists_response the current node. -->
-      <xsl:for-each select="get_port_lists_response">
-        <xsl:call-template name="html-port-lists-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+        <a name="port_lists"></a>
+        <h1>Port Lists</h1>
+        <!-- The for-each makes the get_port_lists_response the current node. -->
+        <xsl:for-each select="get_port_lists_response">
+          <xsl:call-template name="html-port-lists-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="report_formats"></a>
-      <h1>Report Formats</h1>
-      <!-- The for-each makes the get_report_formats_response the current node. -->
-      <xsl:for-each select="get_report_formats_response">
-        <xsl:call-template name="html-report-formats-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+        <a name="report_formats"></a>
+        <h1>Report Formats</h1>
+        <!-- The for-each makes the get_report_formats_response the current node. -->
+        <xsl:for-each select="get_report_formats_response">
+          <xsl:call-template name="html-report-formats-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="schedules"></a>
-      <h1>Schedules</h1>
-      <!-- The for-each makes the get_schedules_response the current node. -->
-      <xsl:for-each select="get_schedules_response">
-        <xsl:call-template name="html-schedules-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+        <a name="schedules"></a>
+        <h1>Schedules</h1>
+        <!-- The for-each makes the get_schedules_response the current node. -->
+        <xsl:for-each select="get_schedules_response">
+          <xsl:call-template name="html-schedules-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="slaves"></a>
-      <h1>Slaves</h1>
-      <!-- The for-each makes the get_slaves_response the current node. -->
-      <xsl:for-each select="get_slaves_response">
-        <xsl:call-template name="html-slaves-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+        <a name="slaves"></a>
+        <h1>Slaves</h1>
+        <!-- The for-each makes the get_slaves_response the current node. -->
+        <xsl:for-each select="get_slaves_response">
+          <xsl:call-template name="html-slaves-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="targets"></a>
-      <h1>Targets</h1>
-      <!-- The for-each makes the get_targets_response the current node. -->
-      <xsl:for-each select="get_targets_response">
-        <xsl:call-template name="html-targets-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+        <a name="targets"></a>
+        <h1>Targets</h1>
+        <!-- The for-each makes the get_targets_response the current node. -->
+        <xsl:for-each select="get_targets_response">
+          <xsl:call-template name="html-targets-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
 
-      <a name="the_tasks"></a>
-      <h1>Tasks</h1>
-      <!-- The for-each makes the get_tasks_response the current node. -->
-      <xsl:for-each select="get_tasks_response">
-        <xsl:call-template name="html-tasks-trash-table"/>
-      </xsl:for-each>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+        <a name="the_tasks"></a>
+        <h1>Tasks</h1>
+        <!-- The for-each makes the get_tasks_response the current node. -->
+        <xsl:for-each select="get_tasks_response">
+          <xsl:call-template name="html-tasks-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
     </div>
   </div>
 </xsl:template>

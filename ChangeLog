@@ -1,5 +1,12 @@
 2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (command_enabled): New function.
+	(get_trash): Check if command is enabled before sending.
+
+	* src/html/omp.xsl (get_trash): Include enabled resources only.
+
+2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl: Add availability check to many pages.
 	(availability): New template.
 
