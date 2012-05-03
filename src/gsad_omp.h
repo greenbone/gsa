@@ -187,7 +187,8 @@ char * edit_my_settings_omp (credentials_t *, params_t *);
 char * get_my_settings_omp (credentials_t *, params_t *);
 char * save_my_settings_omp (credentials_t *, params_t *, char **, char **);
 
-int authenticate_omp (const gchar *, const gchar *, gchar **, gchar **);
+int authenticate_omp (const gchar *, const gchar *, gchar **, gchar **,
+                      gchar **);
 
 char * get_info_omp (credentials_t *, params_t *);
 char * get_nvts_omp (credentials_t *, params_t *);

@@ -1,3 +1,22 @@
+2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add OMP capabilities support.  Match the menu to the capabilities of the
+	manager.
+
+	* src/gsad.c (struct user, user_add): Add capabilities.
+	(exec_omp_post): Setup user capabilities, handle new return.
+	(request_handler): Setup credential capabilities.  Add to envelope.
+
+	* src/gsad_base.h, src/gsad_omp.h (credentials_t): Add capabilities.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add capabilities to envelope.
+	(authenticate_omp): Add capabilities return arg.  Get capabilities from
+	manager.
+
+	* src/html/omp.xsl (html-gsa-navigation): Check if menu items are
+	supported before including them.
+	(help_response): New template.
+
 2012-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (target [details]): Add "Last Modified".

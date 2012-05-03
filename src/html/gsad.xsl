@@ -820,10 +820,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Scan Management</a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
-      <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
-      <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
-      <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+        <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK']">
+        <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+        <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
+        <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+      </xsl:if>
      </ul>
     </li>
     <li>
@@ -837,15 +845,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Configuration</a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
-      <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
-      <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
-      <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
-      <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
-      <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
-      <li><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
-      <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
-      <li class="last"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+        <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
+        <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+        <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+        <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+        <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+        <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+        <xsl:choose>
+          <xsl:when test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS'] or /envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+            <li><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
+          </xsl:when>
+          <xsl:otherwise>
+            <li class="last"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+        <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+        <li class="last"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
+      </xsl:if>
      </ul>
     </li>
     <li>
@@ -853,9 +886,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Trashcan</a></li>
-      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
-      <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
-      <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a></li>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SETTINGS']">
+        <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">My Settings</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SYSTEM_REPORTS']">
+        <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
+        <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a></li>
+      </xsl:if>
      </ul>
     </li>
     <li>
@@ -1089,6 +1128,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="role">
+</xsl:template>
+
+<xsl:template match="help_response">
 </xsl:template>
 
 <xsl:template match="envelope">

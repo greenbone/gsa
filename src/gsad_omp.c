@@ -158,7 +158,12 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->role);
   g_string_append (string, res);
   g_free (res);
-  g_string_append_printf (string, "%s</envelope>", xml);
+  g_string_append_printf (string,
+                          "<capabilities>%s</capabilities>"
+                          "%s"
+                          "</envelope>",
+                          credentials->capabilities,
+                          xml);
 
   html = xsl_transform (string->str);
   g_string_free (string, TRUE);
@@ -15246,16 +15251,17 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
 /**
  * @brief Check authentication credentials.
  *
- * @param[in]  username  Username.
- * @param[in]  password  Password.
- * @param[out] role      Role.
- * @param[out] timezone  Timezone.
+ * @param[in]  username      Username.
+ * @param[in]  password      Password.
+ * @param[out] role          Role.
+ * @param[out] timezone      Timezone.
+ * @param[out] capabilities  Capabilities of manager.
  *
- * @return 0 if valid, 1 failed, 2 manager down.
+ * @return 0 if valid, 1 failed, 2 manager down, -1 error.
  */
 int
 authenticate_omp (const gchar * username, const gchar * password,
-                  char **role, char **timezone)
+                  gchar **role, gchar **timezone, gchar **capabilities)
 {
   gnutls_session_t session;
   int socket;
@@ -15287,8 +15293,50 @@ authenticate_omp (const gchar * username, const gchar * password,
   auth = omp_authenticate_info (&session, username, password, role, timezone);
   if (auth == 0)
     {
+      entity_t entity;
+      const char* status;
+      char first;
+      gchar *response;
+      int ret;
+
+      /* Request help. */
+
+      ret = openvas_server_send (&session,
+                                 "<help format=\"XML\" type=\"brief\"/>");
+      if (ret)
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
+
+      /* Read the response. */
+
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
+        {
+          openvas_server_close (socket, session);
+          return 2;
+        }
       openvas_server_close (socket, session);
-      return 0;
+
+      /* Check the response. */
+
+      status = entity_attribute (entity, "status");
+      if (status == NULL
+          || strlen (status) == 0)
+        {
+          free_entity (entity);
+          return -1;
+        }
+      first = status[0];
+      free_entity (entity);
+      if (first == '2')
+        {
+          *capabilities = response;
+          return 0;
+        }
+
+      return -1;
     }
   else
     {

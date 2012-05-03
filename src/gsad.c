@@ -206,13 +206,14 @@ GPtrArray *users = NULL;
  */
 struct user
 {
-  char *cookie;       ///< Cookie token.
-  char *token;        ///< Request session token.
-  gchar *username;    ///< Login name.
-  gchar *password;    ///< Password.
-  gchar *role;        ///< Role.
-  gchar *timezone;    ///< Timezone.
-  time_t time;        ///< Login time.
+  char *cookie;        ///< Cookie token.
+  char *token;         ///< Request session token.
+  gchar *username;     ///< Login name.
+  gchar *password;     ///< Password.
+  gchar *role;         ///< Role.
+  gchar *timezone;     ///< Timezone.
+  gchar *capabilities; ///< Capabilities.
+  time_t time;         ///< Login time.
 };
 
 /**
@@ -230,15 +231,17 @@ static GMutex *mutex = NULL;
  *
  * It's up to the caller to release the returned user.
  *
- * @param[in]  username  Name of user.
- * @param[in]  password  Password for user.
- * @param[in]  timezone  Timezone of user, or NULL.
+ * @param[in]  username      Name of user.
+ * @param[in]  password      Password for user.
+ * @param[in]  timezone      Timezone of user.
+ * @param[in]  role          Role of user.
+ * @param[in]  capabilities  Capabilities of manager.
  *
  * @return Added user.
  */
 user_t *
 user_add (const gchar *username, const gchar *password, const gchar *timezone,
-          const gchar *role)
+          const gchar *role, const gchar *capabilities)
 {
   user_t *user = NULL;
   int index;
@@ -265,6 +268,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->role = g_strdup (role);
       g_free (user->timezone);
       user->timezone = g_strdup (timezone);
+      g_free (user->capabilities);
+      user->capabilities = g_strdup (capabilities);
     }
   else
     {
@@ -275,6 +280,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       user->password = g_strdup (password);
       user->role = g_strdup (role);
       user->timezone = g_strdup (timezone);
+      user->capabilities = g_strdup (capabilities);
       g_ptr_array_add (users, (gpointer) user);
     }
   user->time = time (NULL);
@@ -1227,11 +1233,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           && password)
         {
           int ret;
-          gchar *timezone, *role;
+          gchar *timezone, *role, *capabilities;
           ret = authenticate_omp (params_value (con_info->params, "login"),
                                   password,
                                   &role,
-                                  &timezone);
+                                  &timezone,
+                                  &capabilities);
           if (ret)
             {
               time_t now;
@@ -1249,7 +1256,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                      "<token></token>"
                                      "<time>%s</time>"
                                      "</login_page>",
-                                     ret == 2 ? "  OMP service is down." : "",
+                                     ret == 2
+                                      ? "  OMP service is down."
+                                      : (ret == -1
+                                          ? "  Error during authentication."
+                                          : ""),
                                      ctime_now);
               res = xsl_transform (xml);
               g_free (xml);
@@ -1261,7 +1272,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               user = user_add (params_value (con_info->params, "login"),
                                password,
                                timezone,
-                               role);
+                               role,
+                               capabilities);
               /* Redirect to get_tasks. */
               *user_return = user;
               g_free (timezone);
@@ -1410,6 +1422,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials->password = strdup (user->password);
   credentials->role = user->role ? strdup (user->role) : NULL;
   credentials->timezone = user->timezone ? strdup (user->timezone) : NULL;
+  credentials->capabilities = user->capabilities
+                               ? strdup (user->capabilities)
+                               : NULL;
   credentials->token = strdup (user->token);
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
@@ -2758,11 +2773,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
       assert (user->password);
       assert (user->role);
       assert (user->timezone);
+      assert (user->capabilities);
       assert (user->token);
       credentials->username = strdup (user->username);
       credentials->password = strdup (user->password);
       credentials->role = strdup (user->role);
       credentials->timezone = strdup (user->timezone);
+      credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
 
@@ -2861,26 +2878,30 @@ request_handler (void *cls, struct MHD_Connection *connection,
               // be generalized with the other transforms.
               time_t now;
               char ctime_now[200];
-              gchar *xml;
+              gchar *xml, *pre;
 
               assert (credentials->token);
 
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
-              xml = g_markup_printf_escaped ("<envelope>"
+              pre = g_markup_printf_escaped ("<envelope>"
                                              "<token>%s</token>"
                                              "<time>%s</time>"
                                              "<login>%s</login>"
                                              "<role>%s</role>"
-                                             "<dialog><%s/></dialog>"
-                                             "</envelope>",
+                                             "<dialog><%s/></dialog>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
                                              credentials->role,
                                              page);
-
+              xml = g_strdup_printf ("%s"
+                                     "<capabilities>%s</capabilities>"
+                                     "</envelope>",
+                                     pre,
+                                     credentials->capabilities);
+              g_free (pre);
               g_free (page);
               res = xsl_transform (xml);
             }
@@ -2905,26 +2926,30 @@ request_handler (void *cls, struct MHD_Connection *connection,
               // be generalized with the other transforms.
               time_t now;
               char ctime_now[200];
-              gchar *xml;
+              gchar *xml, *pre;
 
               assert (credentials->token);
 
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
-              xml = g_markup_printf_escaped ("<envelope>"
+              pre = g_markup_printf_escaped ("<envelope>"
                                              "<token>%s</token>"
                                              "<time>%s</time>"
                                              "<login>%s</login>"
                                              "<role>%s</role>"
-                                             "<help><%s/></help>"
-                                             "</envelope>",
+                                             "<help><%s/></help>",
                                              credentials->token,
                                              ctime_now,
                                              credentials->username,
                                              credentials->role,
                                              page);
-
+              xml = g_strdup_printf ("%s"
+                                     "<capabilities>%s</capabilities>"
+                                     "</envelope>",
+                                     pre,
+                                     credentials->capabilities);
+              g_free (pre);
               g_free (page);
               res = xsl_transform (xml);
             }
