@@ -1,5 +1,18 @@
 2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get GSA working better when certain commands are disabled in Manager.
+
+	* src/gsad_omp.c (new_task, get_tasks, get_report): Check if commands are
+	enabled before sending.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add GET commands to New Task
+	requirements.
+
+	* src/html/omp.xsl (html-task-table): Test for required commands before
+	adding New Task button.
+
+2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (command_enabled): New function.
 	(get_trash): Check if command is enabled before sending.
 

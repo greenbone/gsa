@@ -457,10 +457,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
-      <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-         title="New Task">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+        <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
+           title="New Task">
+          <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+        </a>
+      </xsl:if>
       <div id="small_inline_form" style="margin-left:40px; display: inline">
         <form method="get" action="">
           <input type="hidden" name="token" value="{/envelope/token}"/>

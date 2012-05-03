@@ -636,91 +636,100 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
                            "/omp?cmd=get_tasks");
     }
 
-  /* Get alerts to select in new task UI. */
-  if (openvas_server_send (&session,
-                           "<get_alerts"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
+  if (command_enabled (credentials, "GET_ALERTS"))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting alert list. "
-                           "The current list of alerts is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
+      /* Get alerts to select in new task UI. */
+      if (openvas_server_send (&session,
+                               "<get_alerts"
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting alert list. "
+                               "The current list of alerts is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting alert list. "
+                               "The current list of alerts is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
-  if (read_string (&session, &xml))
+  if (command_enabled (credentials, "GET_SCHEDULES"))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting alert list. "
-                           "The current list of alerts is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
+      /* Get schedules to select in new task UI. */
+      if (openvas_server_send (&session,
+                               "<get_schedules"
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the schedule list. "
+                               "The current list of schedules is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the schedule list. "
+                               "The current list of schedules is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
-  /* Get schedules to select in new task UI. */
-  if (openvas_server_send (&session,
-                           "<get_schedules"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
+  if (command_enabled (credentials, "GET_SLAVES"))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the schedule list. "
-                           "The current list of schedules is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
+      /* Get slaves to select in new task UI. */
+      if (openvas_server_send (&session,
+                               "<get_slaves"
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the slave list. "
+                               "The current list of slaves is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
 
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the schedule list. "
-                           "The current list of schedules is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get slaves to select in new task UI. */
-  if (openvas_server_send (&session,
-                           "<get_slaves"
-                           " sort_field=\"name\""
-                           " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the slave list. "
-                           "The current list of slaves is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the slave list. "
-                           "The current list of slaves is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the slave list. "
+                               "The current list of slaves is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
   if (message)
@@ -1863,6 +1872,9 @@ get_tasks (credentials_t * credentials, const char *task_id,
 
   if (task_id)
     {
+      int notes, overrides;
+      notes = command_enabled (credentials, "GET_NOTES");
+      overrides = command_enabled (credentials, "GET_OVERRIDES");
       if (openvas_server_sendf (&session,
                                 "<commands>"
                                 "%s"
@@ -1871,20 +1883,26 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 " actions=\"g\""
                                 " apply_overrides=\"%i\""
                                 " details=\"1\" />"
-                                "<get_report_formats"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>"
-                                "<get_notes"
-                                " sort_field=\"notes_nvt_name, notes.text\""
-                                " task_id=\"%s\"/>"
-                                "<get_overrides"
-                                " sort_field=\"overrides_nvt_name, overrides.text\""
-                                " task_id=\"%s\"/>"
+                                "%s%s%s"
+                                "%s%s%s"
                                 "</commands>",
                                 commands ? commands : "",
                                 task_id,
                                 apply_overrides,
-                                task_id,
+                                notes
+                                 ? "<get_notes"
+                                   " sort_field=\"notes_nvt_name, notes.text\""
+                                   " task_id=\""
+                                 : "",
+                                notes ? task_id : "",
+                                notes ? "\"/>" : "",
+                                overrides
+                                 ? "<get_overrides"
+                                   " sort_field=\"overrides_nvt_name, overrides.text\""
+                                   " task_id=\""
+                                 : "",
+                                overrides ? task_id : "",
+                                overrides ? "\"/>" : "",
                                 task_id)
           == -1)
         {
@@ -9268,58 +9286,64 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
         }
 
-      if (openvas_server_send (&session, "<get_report_formats"
-                                         " sort_field=\"name\""
-                                         " sort_order=\"ascending\"/>")
-          == -1)
+      if (command_enabled (credentials, "GET_REPORT_FORMATS"))
         {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
+          if (openvas_server_send (&session, "<get_report_formats"
+                                             " sort_field=\"name\""
+                                             " sort_order=\"ascending\"/>")
+              == -1)
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
+          if (read_string (&session, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
         }
 
-      if (read_string (&session, &xml))
+      if (command_enabled (credentials, "GET_ALERTS"))
         {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
+          if (openvas_server_send (&session, "<get_alerts"
+                                             " sort_field=\"name\""
+                                             " sort_order=\"ascending\"/>")
+              == -1)
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
 
-      if (openvas_server_send (&session, "<get_alerts"
-                                         " sort_field=\"name\""
-                                         " sort_order=\"ascending\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks");
+          if (read_string (&session, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting a report. "
+                                   "The report could not be delivered. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
         }
 
       {
