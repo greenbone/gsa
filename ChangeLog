@@ -1,3 +1,9 @@
+2012-05-04  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 4.0+beta3 release.
+
+	* CHANGES: Updated.
+
 2012-05-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Fixed icon inconsistency.
