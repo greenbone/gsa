@@ -1,3 +1,7 @@
+2012-05-04  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/html/help.xsl: Fixed icon inconsistency.
+
 2012-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get GSA working better when certain commands are disabled in Manager.
