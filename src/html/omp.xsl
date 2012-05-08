@@ -66,6 +66,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<xsl:template name="filter-window-pager">
+  <xsl:param name="type"/>
+  <xsl:param name="list"/>
+  <xsl:param name="count"/>
+  <xsl:param name="filtered_count"/>
+  <xsl:choose>
+    <xsl:when test="$count &gt; 0">
+      <xsl:variable name="last" select="$list/@start + $count - 1"/>
+      <xsl:if test = "$list/@start &gt; 1">
+        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter={filters/term}&amp;first={$list/@start - $list/@max}&amp;max={$list/@max}&amp;token={/envelope/token}">&lt;&lt;</a>
+      </xsl:if>
+      <xsl:value-of select="$list/@start"/> -
+      <xsl:value-of select="$last"/>
+      of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
+      <xsl:if test = "$last &lt; $filtered_count">
+        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter={filters/term}&amp;first={$list/@start + $list/@max}&amp;max={$list/@max}&amp;token={/envelope/token}">&gt;&gt;</a>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="filter-window-part">
   <xsl:param name="type"/>
   <xsl:param name="list"/>
@@ -4312,6 +4335,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Agents
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'agent'"/>
+        <xsl:with-param name="list" select="agents"/>
+        <xsl:with-param name="count" select="count(agent)"/>
+        <xsl:with-param name="filtered_count" select="agent_count/filtered"/>
+      </xsl:call-template>
       <a href="/help/configure_agents.html?token={/envelope/token}#agents"
          title="Help: Configure Agents (Agents)">
         <img src="/img/help.png"/>
@@ -5710,22 +5739,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Targets
-      <xsl:choose>
-        <xsl:when test="count(target) &gt; 0">
-          <xsl:variable name="last" select="targets/@start + count(target) - 1"/>
-          <xsl:if test = "targets/@start &gt; 1">
-            <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start - targets/@max}&amp;max={targets/@max}&amp;token={/envelope/token}">&lt;&lt;</a>
-          </xsl:if>
-          <xsl:value-of select="targets/@start"/> -
-          <xsl:value-of select="$last"/>
-          of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="target_count/filtered"/></div>
-          <xsl:if test = "$last &lt; target_count/filtered">
-            <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start + targets/@max}&amp;max={targets/@max}&amp;token={/envelope/token}">&gt;&gt;</a>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'target'"/>
+        <xsl:with-param name="list" select="targets"/>
+        <xsl:with-param name="count" select="count(target)"/>
+        <xsl:with-param name="filtered_count" select="target_count/filtered"/>
+      </xsl:call-template>
       <a href="/help/targets.html?token={/envelope/token}"
          title="Help: Targets">
         <img src="/img/help.png"/>

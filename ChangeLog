@@ -1,3 +1,9 @@
+2012-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-pager): New template.
+	(html-agents-table): Add pager to filter window.
+	(html-targets-table): Call filter-window-pager to produce the pager.
+
 2012-05-04  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump to 4.0+beta4.
