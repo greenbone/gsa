@@ -1909,6 +1909,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <div style="padding: 2px;">
                 <label>
                   <xsl:choose>
+                    <xsl:when test="report/filters/autofp = 0">
+                      <input type="checkbox" name="autofp" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="autofp" value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  Auto FP: Authenticated tests overrule remote tests
+                </label>
+              </div>
+            </xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+            </xsl:when>
+            <xsl:otherwise>
+              <div style="padding: 2px;">
+                <label>
+                  <xsl:choose>
                     <xsl:when test="report/filters/notes = 0">
                       <input type="checkbox" name="notes" value="1"/>
                     </xsl:when>

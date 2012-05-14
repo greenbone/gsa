@@ -1,3 +1,17 @@
+2012-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Start Auto FP support.  Slight modification of patch from Henri Doreau.
+
+	* src/gsad.c (init_validator): Add autofp.
+
+	* src/gsad_omp.c (get_report): Pass autofp param through to Manager.
+
+	* src/html/omp.xsl (html-report-details): Add Auto FP checkbox.
+	(get_result, get_results_omp, new_note_omp, create_note_omp)
+	(delete_note_omp, edit_note_omp, save_note_omp, new_override_omp)
+	(create_override_omp, delete_override_omp, edit_override_omp)
+	(save_override_omp): Add autofp param.
+
 2012-05-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (filter-window-pager): New template.
