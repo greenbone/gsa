@@ -1,3 +1,8 @@
+2012-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl: Add autofp param to all get_report links, and to all
+	links that could return to get_report.
+
 2012-05-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Start Auto FP support.  Slight modification of patch from Henri Doreau.
