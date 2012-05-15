@@ -3769,6 +3769,32 @@ Public License instead of this License.
           </ul>
         </li>
       </ul>
+      <ul>
+        <li>
+          modified&gt;2012-05-03 and modified&lt;2012-05-05
+          <ul>
+            <li>
+              Include any item that was modified between 2012-05-03 0h00
+              and 2012-05-05 0h00.  This filter covers a range of two complete
+              days, the third and fourth of May.
+              The timezone used is the current timezone of the user.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          created&gt;2012-05-03T13h00
+          <ul>
+            <li>
+              Include any item that was created after 13h00 on 2012-05-03.  This
+              example shows the long date format, which includes hours and
+              minutes.
+              The timezone used is the current timezone of the user.
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <a name="syntax"></a>
       <h3>Syntax</h3>
