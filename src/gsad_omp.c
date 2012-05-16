@@ -9360,55 +9360,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             }
         }
 
-      {
-
-        /* As a temporary hack until there's a reasonable way to do it in the
-         * manager, get the report again with all threat levels, so that the XSL
-         * can count per-host grand totals. */
-
-        g_string_append (xml, "<all>");
-
-        if (openvas_server_sendf (&session,
-                                  "<get_reports"
-                                  " report_id=\"%s\""
-                                  " delta_report_id=\"%s\""
-                                  " format=\"XML\""
-                                  " first_result=\"%s\""
-                                  " max_results=\"%s\""
-                                  " levels=\"hmlg\""
-                                  " search_phrase=\"%s\"/>",
-                                  report_id,
-                                  delta_report_id ? delta_report_id : "0",
-                                  first_result,
-                                  max_results,
-                                  search_phrase)
-            == -1)
-          {
-            g_string_free (xml, TRUE);
-            openvas_server_close (socket, session);
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred while getting a report. "
-                                 "The report could not be delivered. "
-                                 "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks");
-          }
-
-        if (read_string (&session, &xml))
-          {
-            g_string_free (xml, TRUE);
-            openvas_server_close (socket, session);
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred while getting a report. "
-                                 "The report could not be delivered. "
-                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks");
-          }
-
-        g_string_append (xml, "</all>");
-      }
-
       g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));

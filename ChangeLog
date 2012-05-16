@@ -1,5 +1,10 @@
 2012-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Remove extra GET_REPORT, as it looks like
+	the XSL stopped using this at some point.
+
+2012-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add autofp arg to paging links.
 
 2012-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
