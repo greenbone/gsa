@@ -1,5 +1,10 @@
 2012-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Rework auto-fp control layout
+	a bit.
+
+2012-05-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (powerfilter.html): Add date examples.
 
 2012-05-15  Matthew Mundell <matthew.mundell@greenbone.net>

@@ -1908,17 +1908,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:when>
             <xsl:otherwise>
               <div style="padding: 2px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/autofp = 0">
-                      <input type="checkbox" name="autofp" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="autofp" value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  Auto FP: Authenticated tests overrule remote tests
-                </label>
+                Auto-FP:
+                <div style="margin-left: 30px">
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/autofp = 0">
+                        <input type="checkbox" name="autofp" value="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="autofp" value="1" checked="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    Trust vendor security updates
+                  </label>
+                  <div style="margin-left: 30px">
+                    <label>
+                      <input type="radio" name="full_cve_match" value="1"/>
+                      Full CVE match
+                    </label>
+                    <br/>
+                    <label>
+                      <input type="radio" name="full_cve_match" value="0" checked="1"/>
+                      Partial CVE match
+                    </label>
+                  </div>
+                </div>
               </div>
             </xsl:otherwise>
           </xsl:choose>
