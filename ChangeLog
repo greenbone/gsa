@@ -1,5 +1,11 @@
 2012-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [details]): Add "NVTs closed by updates" section
+	for each host, as a start towards putting the closed CVEs there.  This is
+	all the info available in the report itself.
+
+2012-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Remove extra GET_REPORT, as it looks like
 	the XSL stopped using this at some point.
 
