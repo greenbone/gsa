@@ -1,3 +1,16 @@
+2012-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get the full/partial CVE filter working.
+
+	* src/gsad.c (init_validator): Add autofp_value.
+
+	* src/gsad_omp.c (get_report): Pass autofp_value in GET_REPORTS instead
+	of 1 or 0.
+
+	* src/html/omp.xsl (html-report-details): Make the "Trust vendor" radio
+	depend the autofp value.  Rename it to autofp_value.
+	(report [details]): Add commented "All host details" section.
+
 2012-05-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [details]): Add "NVTs closed by updates" section

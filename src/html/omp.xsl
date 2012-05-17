@@ -1923,12 +1923,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </label>
                   <div style="margin-left: 30px">
                     <label>
-                      <input type="radio" name="full_cve_match" value="1"/>
+                      <xsl:choose>
+                        <xsl:when test="report/filters/autofp = 2">
+                          <input type="radio" name="autofp_value" value="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="radio" name="autofp_value" value="1" checked="1"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       Full CVE match
                     </label>
                     <br/>
                     <label>
-                      <input type="radio" name="full_cve_match" value="0" checked="1"/>
+                      <xsl:choose>
+                        <xsl:when test="report/filters/autofp = 2">
+                          <input type="radio" name="autofp_value" value="2" checked="1"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="radio" name="autofp_value" value="2"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                       Partial CVE match
                     </label>
                   </div>
@@ -14463,6 +14477,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <a name="{$current_host}"></a>
+<!--
+        <h2>
+          All host details
+        </h2>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Value</td>
+            <td>Source Type</td>
+            <td>Source Name</td>
+            <td>Source Description</td>
+          </tr>
+          <xsl:for-each select="../host[ip = $current_host]/detail">
+            <tr>
+              <td><xsl:value-of select="name"/></td>
+              <td><xsl:value-of select="value"/></td>
+              <td><xsl:value-of select="source/type"/></td>
+              <td><xsl:value-of select="source/name"/></td>
+              <td><xsl:value-of select="source/description"/></td>
+            </tr>
+          </xsl:for-each>
+        </table>
+-->
         <h2>
           NVTs closed by vendor security updates for <xsl:value-of select="$current_host"/>
         </h2>

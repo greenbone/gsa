@@ -8521,9 +8521,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   unsigned int first, max;
   GString *levels, *delta_states;
   const char *alert_id, *search_phrase, *min_cvss_base, *type;
-  const char *autofp, *notes, *overrides, *result_hosts_only, *report_id, *sort_field;
-  const char *sort_order, *result_id, *delta_report_id, *format_id;
-  const char *first_result, *max_results, *host, *pos;
+  const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
+  const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
+  const char *format_id, *first_result, *max_results, *host, *pos;
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -8556,6 +8556,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   autofp = params_value (params, "autofp");
   if (autofp == NULL)
     params_given (params, "autofp") || (autofp = "0");
+
+  autofp_value = params_value (params, "autofp_value");
+  if (autofp_value == NULL)
+    params_given (params, "autofp_value") || (autofp_value = "1");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -8599,6 +8603,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     }
 
   if (autofp == NULL || strlen (autofp) == 0) autofp = "0";
+
+  if (autofp_value == NULL || strlen (autofp_value) == 0) autofp_value = "1";
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
@@ -8718,6 +8724,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       const char *esc_first_result, *esc_max_results;
       const char *esc_search_phrase, *esc_min_cvss_base;
 
+      // FIX
       esc_autofp = params_value (params, "esc_autofp");
       if (esc_autofp == NULL)
         params_given (params, "esc_autofp") || (esc_autofp = "0");
@@ -8768,7 +8775,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (openvas_server_sendf (&session,
                                 "<get_reports"
-                                " autofp=\"%i\""
+                                " autofp=\"%s\""
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -8785,7 +8792,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\""
                                 " alert_id=\"%s\"/>",
-                                strcmp (esc_autofp, "0") ? 1 : 0,
+                                strcmp (esc_autofp, "0") ? "1" : "0",
                                 strcmp (esc_notes, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
@@ -8887,7 +8894,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             "<get_reports"
                             "%s%s%s%s%s"
                             " pos=\"%s\""
-                            " autofp=\"%i\""
+                            " autofp=\"%s\""
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -8915,7 +8922,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             host ? host : "",
                             host ? "\"" : "",
                             pos ? pos : "1",
-                            strcmp (autofp, "0") ? 1 : 0,
+                            strcmp (autofp, "0") ? autofp_value : "0",
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
