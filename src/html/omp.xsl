@@ -5575,8 +5575,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </label>
                     </td>
                     <td>
-                      <input type="text" name="hosts" value="localhost" size="30"
-                              maxlength="2000"/>
+                      <input type="text" name="hosts"
+                             value="{commands_response/get_targets_response/target/hosts}"
+                             size="30"
+                             maxlength="2000"/>
                     </td>
                   </tr>
                   <tr>

@@ -1,3 +1,8 @@
+2012-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-target-form): Get hosts from OMP response
+	in the "no target locators" case too.
+
 2012-05-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get the full/partial CVE filter working.
