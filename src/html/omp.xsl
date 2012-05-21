@@ -14515,15 +14515,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
         <xsl:if test="../../../../show_closed_cves = 1">
           <h2>
-            NVTs closed by vendor security updates for <xsl:value-of select="$current_host"/>
+            CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>
           </h2>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>NVT</td>
+              <td>CVEs</td>
             </tr>
-            <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN']">
+            <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN' and source/description != '']">
               <tr>
                 <td><a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a></td>
+                <td>
+                  <xsl:variable name="cvecount" select="count(str:split(source/description, ','))"/>
+                  <xsl:variable name="token" select="/envelope/token"/>
+                  <xsl:for-each select="str:split(source/description, ',')">
+                    <xsl:call-template name="get_info_cve_lnk">
+                      <xsl:with-param name="cve" select="text()"/>
+                      <xsl:with-param name="gsa_token" select="$token"/>
+                    </xsl:call-template>
+                    <xsl:if test="position() &lt; $cvecount">
+                      <xsl:text>, </xsl:text>
+                    </xsl:if>
+                  </xsl:for-each>
+                </td>
               </tr>
             </xsl:for-each>
           </table>

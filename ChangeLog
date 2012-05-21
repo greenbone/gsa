@@ -1,5 +1,10 @@
 2012-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [details]): Add CVEs from source descriptions
+	to table of closed NVTs.
+
+2012-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add show_closed_cves.
 
 	* src/gsad_omp.c (get_report): Add SHOW_CLOSED_CVES to XML.
