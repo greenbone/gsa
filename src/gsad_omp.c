@@ -8524,6 +8524,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
+  const char *show_closed_cves;
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -8560,6 +8561,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   autofp_value = params_value (params, "autofp_value");
   if (autofp_value == NULL)
     params_given (params, "autofp_value") || (autofp_value = "1");
+
+  show_closed_cves = params_value (params, "show_closed_cves");
+  if (show_closed_cves == NULL)
+    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -8605,6 +8610,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (autofp == NULL || strlen (autofp) == 0) autofp = "0";
 
   if (autofp_value == NULL || strlen (autofp_value) == 0) autofp_value = "1";
+
+  if (show_closed_cves == NULL || strlen (show_closed_cves) == 0)
+    show_closed_cves = "0";
 
   if (notes == NULL || strlen (notes) == 0) notes = "0";
 
@@ -9169,6 +9177,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         g_string_append (xml, commands_xml->str);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
+
+      g_string_append_printf (xml,
+                              "<show_closed_cves>%s</show_closed_cves>",
+                              show_closed_cves ? show_closed_cves : "0");
 
       if (strcmp (alert_id, "0"))
         g_string_append_printf (xml, "<get_reports_alert_response"

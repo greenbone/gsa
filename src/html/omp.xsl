@@ -1946,6 +1946,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       Partial CVE match
                     </label>
                   </div>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="../../show_closed_cves = 0">
+                        <input type="checkbox" name="show_closed_cves" value="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="checkbox" name="show_closed_cves" value="1" checked="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    Show closed CVEs
+                  </label>
                 </div>
               </div>
             </xsl:otherwise>
@@ -14502,19 +14513,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </table>
 -->
-        <h2>
-          NVTs closed by vendor security updates for <xsl:value-of select="$current_host"/>
-        </h2>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>NVT</td>
-          </tr>
-          <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN']">
-            <tr>
-              <td><a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a></td>
+        <xsl:if test="../../../../show_closed_cves = 1">
+          <h2>
+            NVTs closed by vendor security updates for <xsl:value-of select="$current_host"/>
+          </h2>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>NVT</td>
             </tr>
-          </xsl:for-each>
-        </table>
+            <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN']">
+              <tr>
+                <td><a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a></td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:if>
         <h2>
           Port summary for <xsl:value-of select="$current_host"/>
         </h2>
