@@ -14522,23 +14522,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>NVT</td>
               <td>CVEs</td>
             </tr>
-            <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN' and source/description != '']">
-              <tr>
-                <td><a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a></td>
-                <td>
-                  <xsl:variable name="cvecount" select="count(str:split(source/description, ','))"/>
-                  <xsl:variable name="token" select="/envelope/token"/>
-                  <xsl:for-each select="str:split(source/description, ',')">
-                    <xsl:call-template name="get_info_cve_lnk">
-                      <xsl:with-param name="cve" select="text()"/>
-                      <xsl:with-param name="gsa_token" select="$token"/>
-                    </xsl:call-template>
-                    <xsl:if test="position() &lt; $cvecount">
-                      <xsl:text>, </xsl:text>
-                    </xsl:if>
-                  </xsl:for-each>
-                </td>
-              </tr>
+            <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN']">
+              <xsl:variable name="host" select="../."/>
+              <xsl:variable name="oid" select="source/name"/>
+              <xsl:if test="$host/detail[name = 'Closed CVE' and source/name = $oid]">
+                <tr>
+                  <td>
+                    <a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a>
+                  </td>
+                  <td>
+                    <xsl:variable name="cve" select="$host/detail[name = 'Closed CVE' and source/name = $oid]/value"/>
+                    <xsl:variable name="cvecount" select="count(str:split($cve, ','))"/>
+                    <xsl:variable name="token" select="/envelope/token"/>
+                    <xsl:for-each select="str:split($cve, ',')">
+                      <xsl:call-template name="get_info_cve_lnk">
+                        <xsl:with-param name="cve" select="text()"/>
+                        <xsl:with-param name="gsa_token" select="$token"/>
+                      </xsl:call-template>
+                      <xsl:if test="position() &lt; $cvecount">
+                        <xsl:text>, </xsl:text>
+                      </xsl:if>
+                    </xsl:for-each>
+                  </td>
+                </tr>
+              </xsl:if>
             </xsl:for-each>
           </table>
         </xsl:if>

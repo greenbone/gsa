@@ -1,3 +1,8 @@
+2012-05-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report [details]): Adjust closed CVE section for
+	revised location of these CVEs in the host details.
+
 2012-05-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [details]): Add CVEs from source descriptions
