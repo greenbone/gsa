@@ -1,5 +1,14 @@
 2012-05-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Get passing around of autofp working again.
+
+	* src/gsad.c (init_validator): Add 2 to autofp rule.
+
+	* src/gsad_omp.c (get_report): If autofp is 2 then make autofp_value
+	2.
+
+2012-05-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [details]): Adjust closed CVE section for
 	revised location of these CVEs in the host details.
 

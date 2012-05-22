@@ -643,6 +643,7 @@ init_validator ()
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
+  openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
   openvas_validator_add (validator, "boolean",    "^0|1$");
   openvas_validator_add (validator, "caller",     "^.*$");
@@ -766,7 +767,6 @@ init_validator ()
 
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
-  openvas_validator_alias (validator, "autofp",       "boolean");
   openvas_validator_alias (validator, "base",         "name");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");

@@ -8611,6 +8611,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (autofp_value == NULL || strlen (autofp_value) == 0) autofp_value = "1";
 
+  if (strcmp (autofp, "2") == 0)
+    autofp_value = "2";
+
   if (show_closed_cves == NULL || strlen (show_closed_cves) == 0)
     show_closed_cves = "0";
 
