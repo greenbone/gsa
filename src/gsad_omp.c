@@ -9556,6 +9556,7 @@ get_result (credentials_t *credentials, const char *result_id,
                             "%s"
                             "<get_results"
                             " result_id=\"%s\""
+                            " autofp=\"%s\""
                             " task_id=\"%s\""
                             " apply_overrides=\"%s\""
                             " overrides=\"%s\""
@@ -9565,6 +9566,7 @@ get_result (credentials_t *credentials, const char *result_id,
                             "</commands>",
                             commands ? commands : "",
                             result_id,
+                            autofp,
                             task_id,
                             apply_overrides,
                             apply_overrides)

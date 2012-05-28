@@ -1,3 +1,7 @@
+2012-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_result): Add autofp to OMP command.
+
 2012-05-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Get passing around of autofp working again.
