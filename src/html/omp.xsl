@@ -13074,6 +13074,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
         </xsl:otherwise>
       </xsl:choose>
+<!--
+      <h1>All host details</h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Name</td>
+          <td>Value</td>
+          <td>Source Type</td>
+          <td>Source Name</td>
+          <td>Source Description</td>
+        </tr>
+        <xsl:for-each select="detail">
+          <tr>
+            <td><xsl:value-of select="name"/></td>
+            <td><xsl:value-of select="value"/></td>
+            <td><xsl:value-of select="source/type"/></td>
+            <td><xsl:value-of select="source/name"/></td>
+            <td><xsl:value-of select="source/description"/></td>
+          </tr>
+        </xsl:for-each>
+      </table>
+-->
     </div>
   </div>
 </xsl:template>
@@ -14525,10 +14546,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="../host[ip = $current_host]/detail[name = 'EXIT_CODE' and value = 'EXIT_NOTVULN']">
               <xsl:variable name="host" select="../."/>
               <xsl:variable name="oid" select="source/name"/>
-              <xsl:if test="$host/detail[name = 'Closed CVE' and source/name = $oid]">
+              <xsl:variable name="closed" select="$host/detail[name = 'Closed CVE' and source/name = $oid]"/>
+              <xsl:if test="$closed">
                 <tr>
                   <td>
-                    <a href="omp?cmd=get_nvts&amp;oid={source/name}&amp;token={/envelope/token}"><xsl:value-of select="source/name"/></a>
+                    <a href="omp?cmd=get_nvts&amp;oid={$closed/source/name}&amp;token={/envelope/token}">
+                      <xsl:value-of select="$closed/source/description"/>
+                    </a>
                   </td>
                   <td>
                     <xsl:variable name="cve" select="$host/detail[name = 'Closed CVE' and source/name = $oid]/value"/>
