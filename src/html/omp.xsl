@@ -1289,6 +1289,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="1"/>
@@ -1416,6 +1418,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
@@ -1614,6 +1618,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>

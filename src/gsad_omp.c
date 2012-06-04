@@ -8731,14 +8731,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (strcmp (alert_id, "0"))
     {
-      const char *status, *esc_autofp, *esc_notes, *esc_overrides, *esc_result_hosts_only;
+      const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
       const char *esc_first_result, *esc_max_results;
       const char *esc_search_phrase, *esc_min_cvss_base;
-
-      // FIX
-      esc_autofp = params_value (params, "esc_autofp");
-      if (esc_autofp == NULL)
-        params_given (params, "esc_autofp") || (esc_autofp = "0");
 
       esc_notes = params_value (params, "esc_notes");
       if (esc_notes == NULL)
@@ -8803,7 +8798,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\""
                                 " alert_id=\"%s\"/>",
-                                strcmp (esc_autofp, "0") ? "1" : "0",
+                                strcmp (autofp, "0") ? autofp_value : "0",
                                 strcmp (esc_notes, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
