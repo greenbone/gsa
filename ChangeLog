@@ -1,5 +1,10 @@
 2012-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (report [details]): Specify the report that the closed
+	CVEs belong to.
+
+2012-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Pass autofp to the alert OMP command
 	instead of a special esc_autofp param, because they would always be the
 	same.

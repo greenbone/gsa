@@ -14510,6 +14510,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="prognostic">
     <xsl:if test="@type='prognostic'">1</xsl:if>
   </xsl:variable>
+  <xsl:variable name="delta">
+    <xsl:if test="@type='delta'">1</xsl:if>
+  </xsl:variable>
   <xsl:for-each select="host" >
     <xsl:variable name="current_host" select="ip"/>
     <xsl:choose>
@@ -14543,6 +14546,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="../../../../show_closed_cves = 1">
           <h2>
             CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>
+            <xsl:if test="$delta=1">
+              (Report 1)
+            </xsl:if>
           </h2>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
