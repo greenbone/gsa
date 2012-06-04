@@ -1,5 +1,15 @@
 2012-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Hide "Show Closed CVEs" checkbox
+	for delta reports.  The OMP report currently holds the host details for
+	the first report only.  It will take some pain to add the second report
+	host details.  For now the user can go to the report via the links in the
+	summary to see the closed CVEs for that report.
+	(report [details]): Init other case of delta arg.  Hide Closed CVE table
+	for delta case.
+
+2012-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [details]): Specify the report that the closed
 	CVEs belong to.
 

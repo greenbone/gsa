@@ -1952,17 +1952,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       Partial CVE match
                     </label>
                   </div>
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="../../show_closed_cves = 0">
-                        <input type="checkbox" name="show_closed_cves" value="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="show_closed_cves" value="1" checked="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    Show closed CVEs
-                  </label>
+                  <xsl:choose>
+                    <xsl:when test="../../delta">
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <label>
+                        <xsl:choose>
+                          <xsl:when test="../../show_closed_cves = 0">
+                            <input type="checkbox" name="show_closed_cves" value="1"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <input type="checkbox" name="show_closed_cves" value="1" checked="1"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                        Show closed CVEs
+                      </label>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </div>
               </div>
             </xsl:otherwise>
@@ -14511,7 +14517,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="@type='prognostic'">1</xsl:if>
   </xsl:variable>
   <xsl:variable name="delta">
-    <xsl:if test="@type='delta'">1</xsl:if>
+    <xsl:choose>
+      <xsl:when test="@type='delta'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
   <xsl:for-each select="host" >
     <xsl:variable name="current_host" select="ip"/>
@@ -14543,12 +14552,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </table>
 -->
-        <xsl:if test="../../../../show_closed_cves = 1">
+        <xsl:if test="$delta = 0 and ../../../../show_closed_cves = 1">
           <h2>
             CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>
-            <xsl:if test="$delta=1">
-              (Report 1)
-            </xsl:if>
           </h2>
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
