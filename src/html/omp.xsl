@@ -1090,7 +1090,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="../../delta">
             <tr>
               <td>Report 1:</td>
-              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
+              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
             </tr>
             <tr>
               <td><b>Scan 1 started:</b></td>
@@ -1126,7 +1126,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>Report 2:</td>
               <td>
-                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;notes={report/filters/notes}&amp;overrides={report/filters/overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
               </td>
             </tr>
             <tr>

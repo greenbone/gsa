@@ -1,3 +1,8 @@
+2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Add autofp param to report
+	links in delta report.
+
 2012-06-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Hide "Show Closed CVEs" checkbox
