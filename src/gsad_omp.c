@@ -8782,6 +8782,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (openvas_server_sendf (&session,
                                 "<get_reports"
                                 " autofp=\"%s\""
+                                " show_closed_cves=\"%i\""
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -8799,6 +8800,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " min_cvss_base=\"%s\""
                                 " alert_id=\"%s\"/>",
                                 strcmp (autofp, "0") ? autofp_value : "0",
+                                strcmp (show_closed_cves, "0") ? 1 : 0,
                                 strcmp (esc_notes, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
                                 strcmp (esc_overrides, "0") ? 1 : 0,
@@ -8901,6 +8903,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             "%s%s%s%s%s"
                             " pos=\"%s\""
                             " autofp=\"%s\""
+                            " show_closed_cves=\"%i\""
                             " notes=\"%i\""
                             " notes_details=\"1\""
                             " apply_overrides=\"%i\""
@@ -8929,6 +8932,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                             host ? "\"" : "",
                             pos ? pos : "1",
                             strcmp (autofp, "0") ? autofp_value : "0",
+                            strcmp (show_closed_cves, "0") ? 1 : 0,
                             strcmp (notes, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
                             strcmp (overrides, "0") ? 1 : 0,
@@ -9175,10 +9179,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         g_string_append (xml, commands_xml->str);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
-
-      g_string_append_printf (xml,
-                              "<show_closed_cves>%s</show_closed_cves>",
-                              show_closed_cves ? show_closed_cves : "0");
 
       if (strcmp (alert_id, "0"))
         g_string_append_printf (xml, "<get_reports_alert_response"

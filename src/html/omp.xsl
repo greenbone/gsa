@@ -1291,6 +1291,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="{report/filters/result_hosts_only}"/>
                     <input type="hidden" name="autofp"
                            value="{report/filters/autofp}"/>
+                    <input type="hidden" name="show_closed_cves"
+                           value="{report/filters/show_closed_cves}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="1"/>
@@ -1330,6 +1332,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="levels" value="hmlgf"/>
                     <input type="hidden" name="autofp"
                            value="{report/filters/autofp}"/>
+                    <input type="hidden" name="show_closed_cves"
+                           value="{report/filters/show_closed_cves}"/>
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
@@ -1422,6 +1426,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="{report/filters/result_hosts_only}"/>
                     <input type="hidden" name="autofp"
                            value="{report/filters/autofp}"/>
+                    <input type="hidden" name="show_closed_cves"
+                           value="{report/filters/show_closed_cves}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
@@ -1624,6 +1630,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="{report/filters/result_hosts_only}"/>
                     <input type="hidden" name="autofp"
                            value="{report/filters/autofp}"/>
+                    <input type="hidden" name="show_closed_cves"
+                           value="{report/filters/show_closed_cves}"/>
 
                     <!-- Alert filters. -->
                     <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
@@ -1719,6 +1727,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                            value="{report/filters/result_hosts_only}"/>
                     <input type="hidden" name="autofp"
                            value="{report/filters/autofp}"/>
+                    <input type="hidden" name="show_closed_cves"
+                           value="{report/filters/show_closed_cves}"/>
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
@@ -1964,7 +1974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:otherwise>
                       <label>
                         <xsl:choose>
-                          <xsl:when test="../../show_closed_cves = 0">
+                          <xsl:when test="report/filters/show_closed_cves = 0">
                             <input type="checkbox" name="show_closed_cves" value="1"/>
                           </xsl:when>
                           <xsl:otherwise>
@@ -14558,7 +14568,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:for-each>
         </table>
 -->
-        <xsl:if test="$delta = 0 and ../../../../show_closed_cves = 1">
+        <xsl:if test="$delta = 0 and ../filters/show_closed_cves = 1">
           <h2>
             CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>
           </h2>

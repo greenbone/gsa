@@ -1,5 +1,15 @@
 2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Pass show_closed_cves to Manager now that
+	there is OMP support for this.  Remove SHOW_CLOSED_CVES from XML because
+	it's in the OMP report now.
+
+	* src/html/omp.xsl (html-report-details): Add show_closed_cves params to
+	alert and download columns.  Update checks for Closed CVEs checkbox and
+	table to use OMP value of SHOW_CLOSED_CVES.
+
+2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Add autofp param to download
 	column.
 
