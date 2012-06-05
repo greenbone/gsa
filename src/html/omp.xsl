@@ -1328,6 +1328,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden" name="overrides" value="1"/>
                     <input type="hidden" name="result_hosts_only" value="1"/>
                     <input type="hidden" name="levels" value="hmlgf"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
@@ -1511,6 +1513,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
@@ -1713,6 +1717,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <input type="hidden"
                            name="result_hosts_only"
                            value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="autofp"
+                           value="{report/filters/autofp}"/>
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
