@@ -1,5 +1,12 @@
 2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (view_report.html): Update Back to Tasks link text.
+
+	* src/html/omp.xsl (report [details]): Do token in links in Closed CVEs
+	table with a variable because they're inside a for-each.
+
+2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Pass show_closed_cves to Manager now that
 	there is OMP support for this.  Remove SHOW_CLOSED_CVES from XML because
 	it's in the OMP report now.

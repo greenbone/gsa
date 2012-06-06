@@ -5280,7 +5280,7 @@ Public License instead of this License.
        refer to the same page further up or down.
        For example, the host names in the "Host" table link to the host
        results further down the page.
-       The exception is the "Back to Tasks" link that refers to the
+       The exception is the "Tasks" link that refers to the
        <a href="/help/glossary.html?token={/envelope/token}#task">task</a>'s
        <a href="/help/reports.html?token={/envelope/token}">list of reports</a>.
       </p>

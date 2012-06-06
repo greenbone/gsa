@@ -14578,10 +14578,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>NVT</td>
             </tr>
             <xsl:variable name="host" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
             <xsl:for-each select="str:split(detail[name = 'Closed CVEs']/value, ',')">
               <tr>
                 <td>
-                  <xsl:variable name="token" select="/envelope/token"/>
                   <xsl:call-template name="get_info_cve_lnk">
                     <xsl:with-param name="cve" select="."/>
                     <xsl:with-param name="gsa_token" select="$token"/>
@@ -14591,7 +14591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:variable name="cve" select="normalize-space(.)"/>
                   <xsl:variable name="closed_cve"
                                 select="$host/detail[name = 'Closed CVE' and contains(value, $cve)]"/>
-                  <a href="omp?cmd=get_nvts&amp;oid={$closed_cve/source/name}&amp;token={/envelope/token}">
+                  <a href="omp?cmd=get_nvts&amp;oid={$closed_cve/source/name}&amp;token={$token}">
                     <xsl:value-of select="$closed_cve/source/description"/>
                   </a>
                 </td>
