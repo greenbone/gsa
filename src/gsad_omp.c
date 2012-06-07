@@ -9435,10 +9435,11 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @param[in]  first_result  First result.
  * @param[in]  max_results   Max results.
  * @param[in]  levels        Levels.
- * @param[in]  search_phrase  Search phrase.
- * @param[in]  autofp        Auto FP filter flag.
- * @param[in]  notes         Notes filter flag.
- * @param[in]  overrides     Overrides filter flag.
+ * @param[in]  search_phrase      Search phrase.
+ * @param[in]  autofp             Auto FP filter flag.
+ * @param[in]  show_closed_cves   Show closed CVEs filter flag.
+ * @param[in]  notes              Notes filter flag.
+ * @param[in]  overrides          Overrides filter flag.
  * @param[in]  min_cvss_base      Min CVSS base.
  * @param[in]  result_hosts_only  Result hosts only filter flag.
  * @param[in]  sort_field         Sort field.
@@ -9454,7 +9455,8 @@ get_result (credentials_t *credentials, const char *result_id,
             const char *apply_overrides, const char *commands,
             const char *report_id, const char *first_result,
             const char *max_results, const char *levels,
-            const char *search_phrase, const char *autofp, const char *notes,
+            const char *search_phrase, const char *autofp,
+            const char *show_closed_cves, const char *notes,
             const char *overrides, const char *min_cvss_base,
             const char *result_hosts_only, const char *sort_field,
             const char *sort_order, const char *delta_report_id,
@@ -9468,6 +9470,7 @@ get_result (credentials_t *credentials, const char *result_id,
   REQUIRE (apply_overrides, "/omp?cmd=get_tasks");
   REQUIRE (task_name, "/omp?cmd=get_tasks");
   REQUIRE (autofp, "/omp?cmd=get_tasks");
+  REQUIRE (show_closed_cves, "/omp?cmd=get_tasks");
   REQUIRE (notes, "/omp?cmd=get_tasks");
   REQUIRE (overrides, "/omp?cmd=get_tasks");
   REQUIRE (min_cvss_base, "/omp?cmd=get_tasks");
@@ -9476,8 +9479,9 @@ get_result (credentials_t *credentials, const char *result_id,
   REQUIRE (sort_order, "/omp?cmd=get_tasks");
 
   if (apply_overrides == NULL || task_name == NULL || autofp == NULL
-      || notes == NULL || overrides == NULL || min_cvss_base == NULL
-      || result_hosts_only == NULL || sort_field == NULL || sort_order == NULL)
+      || show_closed_cves == NULL || notes == NULL || overrides == NULL
+      || min_cvss_base == NULL || result_hosts_only == NULL
+      || sort_field == NULL || sort_order == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a result. "
@@ -9514,6 +9518,7 @@ get_result (credentials_t *credentials, const char *result_id,
                           "%s"
                           "<phrase>%s</phrase>"
                           "<autofp>%s</autofp>"
+                          "<show_closed_cves>%s</show_closed_cves>"
                           "<notes>%s</notes>"
                           "<overrides>%s</overrides>"
                           "<min_cvss_base>%s</min_cvss_base>"
@@ -9536,6 +9541,7 @@ get_result (credentials_t *credentials, const char *result_id,
                           levels,
                           search_phrase,
                           autofp,
+                          show_closed_cves,
                           notes,
                           overrides,
                           min_cvss_base,
@@ -9617,6 +9623,7 @@ get_result_omp (credentials_t *credentials, params_t *params)
                      params_value (params, "levels"),
                      params_value (params, "search_phrase"),
                      params_value (params, "autofp"),
+                     params_value (params, "show_closed_cves"),
                      params_value (params, "notes"),
                      params_value (params, "overrides"),
                      params_value (params, "min_cvss_base"),
@@ -9831,14 +9838,15 @@ new_note_omp (credentials_t *credentials, params_t *params)
   const char *next;
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
-  const char *sort_order, *levels, *autofp, *notes, *overrides, *result_hosts_only;
-  const char *search_phrase, *min_cvss_base;
+  const char *sort_order, *levels, *autofp, *show_closed_cves, *notes;
+  const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
 
   next = params_value (params, "next");
   first_result = params_value (params, "first_result");
   max_results = params_value (params, "max_results");
   levels = params_value (params, "levels");
   autofp = params_value (params, "autofp");
+  show_closed_cves = params_value (params, "show_closed_cves");
   notes = params_value (params, "notes");
   report_id = params_value (params, "report_id");
   search_phrase = params_value (params, "search_phrase");
@@ -9850,7 +9858,8 @@ new_note_omp (credentials_t *credentials, params_t *params)
   min_cvss_base = params_value (params, "min_cvss_base");
 
   if (first_result == NULL || max_results == NULL
-      || levels == NULL || autofp == NULL || notes == NULL || report_id == NULL
+      || levels == NULL || autofp == NULL || show_closed_cves == NULL
+      || notes == NULL || report_id == NULL
       || search_phrase == NULL || sort_field == NULL || sort_order == NULL
       || task_name == NULL || threat == NULL || result_hosts_only == NULL
       || min_cvss_base == NULL)
@@ -9931,6 +9940,7 @@ new_note_omp (credentials_t *credentials, params_t *params)
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<autofp>%s</autofp>"
+                          "<show_closed_cves>%s</show_closed_cves>"
                           "<notes>%s</notes>"
                           "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
@@ -9951,6 +9961,7 @@ new_note_omp (credentials_t *credentials, params_t *params)
                           sort_order,
                           levels,
                           autofp,
+                          show_closed_cves,
                           notes,
                           overrides,
                           result_hosts_only,
@@ -10124,6 +10135,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                               params_value (params, "levels"),
                               search_phrase,
                               params_value (params, "autofp"),
+                              params_value (params, "show_closed_cves"),
                               params_value (params, "notes"),
                               params_value (params, "overrides"),
                               min_cvss_base,
@@ -10248,6 +10260,7 @@ delete_note_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "levels"),
                           params_value (params, "search_phrase"),
                           params_value (params, "autofp"),
+                          params_value (params, "show_closed_cves"),
                           params_value (params, "notes"),
                           params_value (params, "overrides"),
                           params_value (params, "min_cvss_base"),
@@ -10345,6 +10358,7 @@ edit_note_omp (credentials_t * credentials, params_t *params)
       REQUIRE_PARAM ("sort_order", "/omp?cmd=get_notes");
       REQUIRE_PARAM ("levels", "/omp?cmd=get_notes");
       REQUIRE_PARAM ("autofp", "/omp?cmd=get_notes");
+      REQUIRE_PARAM ("show_closed_cves", "/omp?cmd=get_notes");
       REQUIRE_PARAM ("notes", "/omp?cmd=get_notes");
       REQUIRE_PARAM ("overrides", "/omp?cmd=get_notes");
       REQUIRE_PARAM ("result_hosts_only", "/omp?cmd=get_notes");
@@ -10413,6 +10427,7 @@ edit_note_omp (credentials_t * credentials, params_t *params)
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<autofp>%s</autofp>"
+                          "<show_closed_cves>%s</show_closed_cves>"
                           "<notes>%s</notes>"
                           "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
@@ -10434,6 +10449,7 @@ edit_note_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "sort_order"),
                           params_value (params, "levels"),
                           params_value (params, "autofp"),
+                          params_value (params, "show_closed_cves"),
                           params_value (params, "notes"),
                           params_value (params, "overrides"),
                           params_value (params, "result_hosts_only"),
@@ -10485,6 +10501,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
   const char *sort_field, *sort_order, *levels, *autofp, *notes, *overrides;
   const char *result_hosts_only, *search_phrase, *min_cvss_base;
   const char *oid, *task_id, *task_name, *result_id, *active, *days;
+  const char *show_closed_cves;
 
   note_id = params_value (params, "note_id");
 
@@ -10519,6 +10536,10 @@ save_note_omp (credentials_t * credentials, params_t *params)
   autofp = params_value (params, "autofp");
   if (autofp == NULL)
     params_given (params, "autofp") || (autofp = "0");
+
+  show_closed_cves = params_value (params, "show_closed_cves");
+  if (show_closed_cves == NULL)
+    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -10609,6 +10630,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
           || sort_order == NULL
           || levels == NULL
           || autofp == NULL
+          || show_closed_cves == NULL
           || notes == NULL
           || overrides == NULL
           || result_hosts_only == NULL
@@ -10729,9 +10751,10 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
           ret = get_result (credentials, result_id, task_id,
                             task_name, overrides, modify_note, report_id,
-                            first, max, levels, search_phrase, autofp, notes,
-                            overrides, min_cvss_base, result_hosts_only,
-                            sort_field, sort_order, NULL, NULL);
+                            first, max, levels, search_phrase, autofp,
+                            show_closed_cves, notes, overrides, min_cvss_base,
+                            result_hosts_only, sort_field, sort_order, NULL,
+                            NULL);
 
           g_free (first);
           g_free (max);
@@ -10968,12 +10991,14 @@ new_override_omp (credentials_t *credentials, params_t *params)
   const char *report_id, *first_result, *max_results, *sort_field;
   const char *sort_order, *levels, *autofp, *notes, *overrides, *result_hosts_only;
   const char *search_phrase, *min_cvss_base;
+  const char *show_closed_cves;
 
   next = params_value (params, "next");
   first_result = params_value (params, "first_result");
   max_results = params_value (params, "max_results");
   levels = params_value (params, "levels");
   autofp = params_value (params, "autofp");
+  show_closed_cves = params_value (params, "show_closed_cves");
   notes = params_value (params, "notes");
   report_id = params_value (params, "report_id");
   search_phrase = params_value (params, "search_phrase");
@@ -10985,9 +11010,10 @@ new_override_omp (credentials_t *credentials, params_t *params)
   min_cvss_base = params_value (params, "min_cvss_base");
 
   if (first_result == NULL || max_results == NULL
-      || levels == NULL || autofp == NULL || notes == NULL || report_id == NULL
-      || search_phrase == NULL || sort_field == NULL || sort_order == NULL
-      || task_name == NULL || threat == NULL || result_hosts_only == NULL
+      || levels == NULL || autofp == NULL || show_closed_cves == NULL
+      || notes == NULL || report_id == NULL || search_phrase == NULL
+      || sort_field == NULL || sort_order == NULL || task_name == NULL
+      || threat == NULL || result_hosts_only == NULL
       || min_cvss_base == NULL)
     {
       GString *xml = g_string_new (GSAD_MESSAGE_INVALID_PARAM ("New Override"));
@@ -11068,6 +11094,7 @@ new_override_omp (credentials_t *credentials, params_t *params)
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<autofp>%s</autofp>"
+                          "<show_closed_cves>%s</show_closed_cves>"
                           "<notes>%s</notes>"
                           "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
@@ -11088,6 +11115,7 @@ new_override_omp (credentials_t *credentials, params_t *params)
                           sort_order,
                           levels,
                           autofp,
+                          show_closed_cves,
                           notes,
                           overrides,
                           result_hosts_only,
@@ -11270,6 +11298,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                               params_value (params, "levels"),
                               search_phrase,
                               params_value (params, "autofp"),
+                              params_value (params, "show_closed_cves"),
                               params_value (params, "notes"),
                               params_value (params, "overrides"),
                               min_cvss_base,
@@ -11402,6 +11431,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "levels"),
                           params_value (params, "search_phrase"),
                           params_value (params, "autofp"),
+                          params_value (params, "show_closed_cves"),
                           params_value (params, "notes"),
                           params_value (params, "overrides"),
                           params_value (params, "min_cvss_base"),
@@ -11499,6 +11529,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
       REQUIRE_PARAM ("sort_order", "/omp?cmd=get_overrides");
       REQUIRE_PARAM ("levels", "/omp?cmd=get_overrides");
       REQUIRE_PARAM ("autofp", "/omp?cmd=get_overrides");
+      REQUIRE_PARAM ("show_closed_cves", "/omp?cmd=get_overrides");
       REQUIRE_PARAM ("notes", "/omp?cmd=get_overrides");
       REQUIRE_PARAM ("overrides", "/omp?cmd=get_overrides");
       REQUIRE_PARAM ("result_hosts_only", "/omp?cmd=get_overrides");
@@ -11567,6 +11598,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           "<sort_order>%s</sort_order>"
                           "<levels>%s</levels>"
                           "<autofp>%s</autofp>"
+                          "<show_closed_cves>%s</show_closed_cves>"
                           "<notes>%s</notes>"
                           "<overrides>%s</overrides>"
                           "<result_hosts_only>%s</result_hosts_only>"
@@ -11588,6 +11620,7 @@ edit_override_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "sort_order"),
                           params_value (params, "levels"),
                           params_value (params, "autofp"),
+                          params_value (params, "show_closed_cves"),
                           params_value (params, "notes"),
                           params_value (params, "overrides"),
                           params_value (params, "result_hosts_only"),
@@ -11639,6 +11672,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
   const char *sort_field, *sort_order, *levels, *autofp, *notes, *overrides;
   const char *result_hosts_only, *search_phrase, *min_cvss_base;
   const char *oid, *task_id, *task_name, *result_id, *active, *days;
+  const char *show_closed_cves;
 
   override_id = params_value (params, "override_id");
 
@@ -11674,6 +11708,10 @@ save_override_omp (credentials_t * credentials, params_t *params)
   autofp = params_value (params, "autofp");
   if (autofp == NULL)
     params_given (params, "autofp") || (autofp = "0");
+
+  show_closed_cves = params_value (params, "show_closed_cves");
+  if (show_closed_cves == NULL)
+    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -11762,6 +11800,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
           || sort_order == NULL
           || levels == NULL
           || autofp == NULL
+          || show_closed_cves == NULL
           || notes == NULL
           || overrides == NULL
           || result_hosts_only == NULL
@@ -11887,9 +11926,10 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
           ret = get_result (credentials, result_id, task_id, task_name,
                             overrides, modify_override, report_id,
-                            first, max, levels, search_phrase, autofp, notes,
-                            overrides, min_cvss_base, result_hosts_only,
-                            sort_field, sort_order, NULL, NULL);
+                            first, max, levels, search_phrase, autofp,
+                            show_closed_cves, notes, overrides, min_cvss_base,
+                            result_hosts_only, sort_field, sort_order, NULL,
+                            NULL);
 
           g_free (first);
           g_free (max);

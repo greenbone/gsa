@@ -1,3 +1,15 @@
+2012-07-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl: Add a show_closed_cves param everywhere that there is
+	a autofp param.
+
+	* src/gsad_omp.c (get_result): Add autofp arg.
+	(get_result_omp): Pass show_closed_cves param to get_result.
+	(new_note_omp, create_note_omp, delete_note_omp, edit_note_omp)
+	(save_note_omp, new_override_omp, create_override_omp)
+	(delete_override_omp, edit_override_omp, save_override_omp): Add
+	show_closed_cves params alongside autofp params.
+
 2012-06-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (view_report.html): Update Back to Tasks link text.
