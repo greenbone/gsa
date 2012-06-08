@@ -1,4 +1,8 @@
-2012-07-05  Matthew Mundell <matthew.mundell@greenbone.net>
+2012-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_oap.c (xsl_transform_omp): Add capabilities.
+
+2012-06-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl: Add a show_closed_cves param everywhere that there is
 	a autofp param.

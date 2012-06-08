@@ -210,7 +210,12 @@ xsl_transform_oap (credentials_t * credentials, gchar * xml)
                                  credentials->role);
   g_string_append (string, res);
   g_free (res);
-  g_string_append_printf (string, "%s</envelope>", xml);
+  g_string_append_printf (string,
+                          "<capabilities>%s</capabilities>"
+                          "%s"
+                          "</envelope>",
+                          credentials->capabilities,
+                          xml);
 
   html = xsl_transform (string->str);
   g_string_free (string, TRUE);
