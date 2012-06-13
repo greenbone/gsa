@@ -1254,7 +1254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
-                          <xsl:when test="@id='a0b5bfb2-1f62-11e1-85db-406186ea4fc5'">
+                          <xsl:when test="name='PDF'">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -1435,7 +1435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
-                          <xsl:when test="@id='a0b5bfb2-1f62-11e1-85db-406186ea4fc5'">
+                          <xsl:when test="name='PDF'">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>
@@ -1635,7 +1635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <select name="report_format_id" title="Download Format">
                       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
                         <xsl:choose>
-                          <xsl:when test="@id='a0b5bfb2-1f62-11e1-85db-406186ea4fc5'">
+                          <xsl:when test="name='PDF'">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                           </xsl:when>
                           <xsl:otherwise>

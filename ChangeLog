@@ -1,3 +1,9 @@
+2012-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Match PDF report for Download
+	column by name instead of ID, because the ID changes.  Backport from trunk
+	r13588.
+
 2012-05-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_info_cve_lnk): Strip space from CVE, otherwise the
