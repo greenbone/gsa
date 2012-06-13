@@ -1,3 +1,8 @@
+2012-06-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Match PDF report for Download
+	column by name instead of ID, because the ID changes.
+
 2012-06-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_oap.c (xsl_transform_omp): Add capabilities.
