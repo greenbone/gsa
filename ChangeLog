@@ -1,5 +1,10 @@
 2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-target-form): If the port is empty make is
+	22.
+
+2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Add References for second result in
 	delta "changed" case.
 

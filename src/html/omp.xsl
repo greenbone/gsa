@@ -5766,8 +5766,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:for-each>
               </select>
               on port
+              <xsl:variable name="credential"
+                            select="commands_response/get_targets_response/target/ssh_lsc_credential"/>
               <xsl:choose>
-                <xsl:when test="commands_response/get_targets_response/target/ssh_lsc_credential">
+                <xsl:when test="$credential and string-length ($credential/port)">
                   <input type="text"
                          name="port"
                          value="{commands_response/get_targets_response/target/ssh_lsc_credential/port}"
