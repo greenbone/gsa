@@ -4407,7 +4407,8 @@ create_target_omp (credentials_t * credentials, params_t *params)
   CHECK (comment);
   CHECK (port_list_id);
   CHECK (target_credential);
-  CHECK (port);
+  if (strcmp (target_credential, "--"))
+    CHECK (port);
   CHECK (target_smb_credential);
 
   {

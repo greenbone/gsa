@@ -1,5 +1,10 @@
 2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Only check port when SSH credential
+	is given.
+
+2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-target-form): If the port is empty make is
 	22.
 
