@@ -1,5 +1,10 @@
 2012-06-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Only check port when SSH credential
+	is given.  Backport from trunk r13594.
+
+2012-06-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Add References for second result in
 	delta "changed" case.  Backport from trunk r13590.
 

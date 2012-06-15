@@ -4129,7 +4129,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
   else CHECK (comment);
   else CHECK (port_list_id);
   else CHECK (target_credential);
-  else CHECK (port);
+  else if (strcmp (target_credential, "--"))
+    {
+      CHECK (port);
+    }
   else CHECK (target_smb_credential);
   else
     {
