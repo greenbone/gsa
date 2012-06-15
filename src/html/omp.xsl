@@ -13408,6 +13408,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </pre>
         </div>
+        <xsl:variable name="cve_ref_2">
+          <xsl:if test="delta/result/nvt/cve != '' and delta/result/nvt/cve != 'NOCVE'">
+            <xsl:value-of select="nvt/cve/text()"/>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="bid_ref_2">
+          <xsl:if test="delta/result/nvt/bid != '' and delta/result/nvt/bid != 'NOBID'">
+            <xsl:value-of select="delta/result/nvt/bid/text()"/>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="xref_2">
+          <xsl:if test="delta/result/nvt/xref != '' and delta/result/nvt/xref != 'NOXREF'">
+            <xsl:value-of select="delta/result/nvt/xref/text()"/>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != ''">
+          <div class="issue_box_box">
+            <b>References</b><br/>
+
+            <table>
+              <xsl:call-template name="ref_cve_list">
+                <xsl:with-param name="cvelist" select="$cve_ref_2"/>
+              </xsl:call-template>
+              <xsl:call-template name="ref_bid_list">
+                <xsl:with-param name="bidlist" select="$bid_ref_2"/>
+              </xsl:call-template>
+              <xsl:call-template name="ref_xref_list">
+                <xsl:with-param name="xreflist" select="$xref_2"/>
+              </xsl:call-template>
+            </table>
+          </div>
+        </xsl:if>
         <div class="issue_box_box">
           <b>Different Lines</b>
           <p>
