@@ -1127,15 +1127,24 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "<get_configs"
                             " sort_field=\"name\""
                             " sort_order=\"ascending\"/>"
-                            "<get_alerts"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "<get_schedules"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "<get_slaves/>"
+                            "%s"
+                            "%s"
+                            "%s"
                             "</commands>",
-                            task_id)
+                            task_id,
+                            command_enabled (credentials, "GET_ALERTS")
+                             ? "<get_alerts"
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>"
+                             : "",
+                            command_enabled (credentials, "GET_SCHEDULES")
+                             ? "<get_schedules"
+                               " sort_field=\"name\""
+                               " sort_order=\"ascending\"/>"
+                             : "",
+                            command_enabled (credentials, "GET_SLAVES")
+                             ? "<get_slaves/>"
+                             : "")
       == -1)
     {
       g_string_free (xml, TRUE);

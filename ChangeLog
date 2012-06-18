@@ -1,3 +1,7 @@
+2012-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (edit_task): Check if commands are enabled before using.
+
 2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_target_omp): Only check port when SSH credential
