@@ -1,5 +1,10 @@
 2012-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Allow newlines in preference:value, because
+	the value could be a file.
+
+2012-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsa-style.css (.gbntablehead2 a): New rules.
 
 	* src/html/omp.xsl (column-name): New template.

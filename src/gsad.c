@@ -723,7 +723,7 @@ init_validator ()
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:",      "^$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
-  openvas_validator_add (validator, "preference:value", "^(.*){0,400}$");
+  openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "public_key",       "(?s)^.*$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
