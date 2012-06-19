@@ -5827,6 +5827,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-edit-target-form"/>
 </xsl:template>
 
+<xsl:template name="column-name">
+  <xsl:param name="head"/>
+  <xsl:param name="name"/>
+  <xsl:param name="term" select="normalize-space (filters/term)"/>
+  <xsl:choose>
+    <xsl:when test="starts-with ($term, concat ('asc=', $name))">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=desc={$name} {normalize-space (str:replace (filters/term, concat ('asc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    </xsl:when>
+    <xsl:when test="starts-with ($term, concat ('desc=', $name))">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (filters/term, concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    </xsl:when>
+    <xsl:when test="starts-with ($term, 'asc=')">
+      <!-- Starts with some other column ascending. -->
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=desc={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('asc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    </xsl:when>
+    <xsl:when test="starts-with ($term, 'desc=')">
+      <!-- Starts with some other column descending. -->
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (filters/term, concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="html-targets-table">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -5862,12 +5887,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Hosts</td>
-            <td>IPs</td>
-            <td>Port List</td>
-            <td>SSH Credential</td>
-            <td>SMB Credential</td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Hosts</xsl:with-param>
+                <xsl:with-param name="name">hosts</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">IPs</xsl:with-param>
+                <xsl:with-param name="name">ips</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Port List</xsl:with-param>
+                <xsl:with-param name="name">port_list</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">SSH Credential</xsl:with-param>
+                <xsl:with-param name="name">ssh_credential</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">SMB Credential</xsl:with-param>
+                <xsl:with-param name="name">smb_credential</xsl:with-param>
+              </xsl:call-template>
+            </td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="target"/>

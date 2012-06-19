@@ -1,3 +1,10 @@
+2012-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsa-style.css (.gbntablehead2 a): New rules.
+
+	* src/html/omp.xsl (column-name): New template.
+	(html-targets-table): Make column headings sorting links.
+
 2012-06-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_task): Check if commands are enabled before using.

@@ -240,6 +240,18 @@ table.gbntable {
  font-weight: bold;
 }
 
+.gbntablehead2 a {
+ color: #FFFFFF;
+ font-weight: bold;
+ text-decoration: none;
+}
+
+.gbntablehead2 a:hover, a:focus {
+ color: #FFFFFF;
+ font-weight: bold;
+ text-decoration: underline;
+}
+
 tr.odd {
  text-align:left;
  background-color: #EEEEEE;
