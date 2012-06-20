@@ -848,36 +848,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
         <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
       </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+        <li class="indent"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
+      </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_LSC_CREDENTIALS']">
-        <li><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
+        <li class="indent"><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
-        <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
-      </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
-        <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
-      </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
         <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
-      </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
-        <xsl:choose>
-          <xsl:when test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS'] or /envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-            <li><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
-          </xsl:when>
-          <xsl:otherwise>
-            <li class="last"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>
-          </xsl:otherwise>
-        </xsl:choose>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
         <li><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-        <li class="last"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
+        <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+        <li class="last"><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
       </xsl:if>
      </ul>
     </li>

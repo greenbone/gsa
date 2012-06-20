@@ -469,6 +469,16 @@ table.odd {
  height: 22px;
 }
 
+#gb_menu ul li ul .indent a {
+ background: none;
+ line-height: 22px;
+ text-align: left;
+ text-indent: 25px;
+ color: #3A3A3A;
+ width: 250px;
+ height: 22px;
+}
+
 #gb_menu ul li ul a:hover {
  background: #99CE48;
 }

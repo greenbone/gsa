@@ -1,3 +1,12 @@
+2012-06-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsa-style.css: Added menu item style that is indented.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Move Port Lists up,
+	indented Port Lists and Credentials as they are sub-elements of
+	a Target. Moved Agents to end of menu and therefore simplified
+	code regarding "last" element.
+
 2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (column-name): In both "some other column" cases sort
