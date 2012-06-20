@@ -5832,22 +5832,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="term" select="normalize-space (filters/term)"/>
   <xsl:choose>
-    <xsl:when test="starts-with ($term, concat ('asc=', $name))">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=desc={$name} {normalize-space (str:replace (filters/term, concat ('asc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="starts-with ($term, concat ('sort=', $name))">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {normalize-space (str:replace (filters/term, concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="starts-with ($term, concat ('desc=', $name))">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (filters/term, concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="starts-with ($term, concat ('sort-reverse=', $name))">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="starts-with ($term, 'asc=')">
+    <xsl:when test="starts-with ($term, 'sort=')">
       <!-- Starts with some other column ascending. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=desc={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('asc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="starts-with ($term, 'desc=')">
+    <xsl:when test="starts-with ($term, 'sort-reverse=')">
       <!-- Starts with some other column descending. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=asc={$name} {normalize-space (str:replace (filters/term, concat ('desc=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

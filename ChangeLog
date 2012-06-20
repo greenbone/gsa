@@ -1,3 +1,8 @@
+2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (column-name): Rename asc and desc in filter to sort
+	and sort-reverse.
+
 2012-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Allow newlines in preference:value, because
