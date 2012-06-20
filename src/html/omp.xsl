@@ -5926,6 +5926,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="target"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
         </table>
       </div>
     </div>

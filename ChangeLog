@@ -1,5 +1,12 @@
 2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-targets-table): Note the current filter at the
+	end of the table.
+
+	* src/html/gsa-style.css (.footnote): New class for note.
+
+2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (column-name): Rename asc and desc in filter to sort
 	and sort-reverse.
 
