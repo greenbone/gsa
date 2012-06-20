@@ -270,7 +270,13 @@ table.gbntable {
  text-decoration: none;
 }
 
-.gbntablehead2 a:hover, a:focus {
+.gbntablehead2 a:hover {
+ color: #FFFFFF;
+ font-weight: bold;
+ text-decoration: underline;
+}
+
+.gbntablehead2 a:focus {
  color: #FFFFFF;
  font-weight: bold;
  text-decoration: underline;
