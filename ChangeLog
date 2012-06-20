@@ -1,5 +1,10 @@
 2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (column-name): In both "some other column" cases sort
+	ascending.
+
+2012-06-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsa-style.css (.gbntablehead2 a:focus): Separate from a:hover
 	rule so that browser applies .gbntablehead2 to a:focus too.
 

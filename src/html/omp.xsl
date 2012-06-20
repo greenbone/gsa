@@ -5838,13 +5838,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="starts-with ($term, concat ('sort-reverse=', $name))">
       <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="starts-with ($term, 'sort=')">
+    <xsl:when test="starts-with ($term, 'sort=') or starts-with ($term, 'sort-reverse=')">
       <!-- Starts with some other column ascending. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
-    </xsl:when>
-    <xsl:when test="starts-with ($term, 'sort-reverse=')">
-      <!-- Starts with some other column descending. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
       <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
