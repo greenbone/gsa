@@ -75,13 +75,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
       <xsl:if test = "$list/@start &gt; 1">
-        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter={filters/term}&amp;first={$list/@start - $list/@max}&amp;max={$list/@max}&amp;token={/envelope/token}">&lt;&lt;</a>
+        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&lt;&lt;</a>
       </xsl:if>
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
       of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
       <xsl:if test = "$last &lt; $filtered_count">
-        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter={filters/term}&amp;first={$list/@start + $list/@max}&amp;max={$list/@max}&amp;token={/envelope/token}">&gt;&gt;</a>
+        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
@@ -108,30 +108,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_{$type}s"/>
         <div style="float: right">
-          <input type="submit" value="Apply" title="Apply"/>
+          <input type="submit" value="Update Filter" title="Update Filter"/>
         </div>
         <div style="padding: 2px;">
           Filter:
-          <input type="text" name="filter" size="50"
+          <input type="text" name="filter" size="80"
                  value="{filters/term}"
                  maxlength="1000"/>
-          First:
-          <input type="text" name="first" size="5"
-                 value="{$list/@start}"
-                 maxlength="400"/>
-          Rows:
-          <xsl:choose>
-            <xsl:when test="$list/@max = '-1'">
-              <input type="text" name="max" size="5"
-                     value=""
-                     maxlength="400"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="text" name="max" size="5"
-                     value="{$list/@max}"
-                     maxlength="400"/>
-            </xsl:otherwise>
-          </xsl:choose>
         </div>
       </form>
     </div>
@@ -5832,18 +5815,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="term" select="normalize-space (filters/term)"/>
   <xsl:choose>
-    <xsl:when test="starts-with ($term, concat ('sort=', $name))">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {normalize-space (str:replace (filters/term, concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="sort/field/text() = $name and sort/field/order = 'descending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="starts-with ($term, concat ('sort-reverse=', $name))">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
-    </xsl:when>
-    <xsl:when test="starts-with ($term, 'sort=') or starts-with ($term, 'sort-reverse=')">
-      <!-- Starts with some other column ascending. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (normalize-space (substring-after ($term, ' ')), concat ('sort=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="sort/field/text() = $name and sort/field/order = 'ascending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {normalize-space (str:replace (filters/term, concat ('sort-reverse=', $name), ''))}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <!-- Starts with some other column. -->
+      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

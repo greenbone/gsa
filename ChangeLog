@@ -1,3 +1,13 @@
+2012-06-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-pager): Move first and max params into
+	filter.
+	(filter-window-part): Rename Apply to Update Filter.  Remove First and
+	Rows fields.
+	(column): Use new TARGET/SORT to determine the current sorting.  Just put
+	the sort= on the front of the filter, instead of doing complex parsing,
+	because the manager now removes duplicates.
+
 2012-06-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-targets-table): Have "Applied Filter"
