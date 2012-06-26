@@ -857,6 +857,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <li><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Scan Configs</a></li>
       </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+        <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
+      </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
         <li><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Schedules</a></li>
       </xsl:if>
