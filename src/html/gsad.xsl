@@ -471,6 +471,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="verify_agent_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Verify Agent'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="verify_report_format_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -604,6 +612,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="edit_task/gsad_msg"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_lsc_credential/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_agents/commands_response/verify_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_agents/verify_agent_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alert/commands_response/delete_alert_response"
                              mode="response-indicator"/>

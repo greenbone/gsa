@@ -4426,9 +4426,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Comment</td>
-            <td>Trust</td>
+            <td>
+              <xsl:call-template name="column-name" select="agents">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">agent</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name" select="agents">
+                <xsl:with-param name="head">Comment</xsl:with-param>
+                <xsl:with-param name="name">comment</xsl:with-param>
+                <xsl:with-param name="type">agent</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name" select="agents">
+                <xsl:with-param name="head">Trust</xsl:with-param>
+                <xsl:with-param name="name">trust</xsl:with-param>
+                <xsl:with-param name="type">agent</xsl:with-param>
+              </xsl:call-template>
+            </td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="agent"/>
@@ -5811,19 +5829,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="column-name">
+  <xsl:param name="type">target</xsl:param>
   <xsl:param name="head"/>
   <xsl:param name="name"/>
   <xsl:param name="term" select="normalize-space (filters/term)"/>
   <xsl:choose>
     <xsl:when test="sort/field/text() = $name and sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:when test="sort/field/text() = $name and sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort-reverse={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort-reverse={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_targets&amp;filter=sort={$name} {filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

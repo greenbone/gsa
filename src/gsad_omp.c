@@ -2903,6 +2903,9 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                        "/omp?cmd=get_lsc_credentials");
 }
 
+char *
+get_agents (credentials_t *, params_t *, const char *);
+
 /**
  * @brief Create an agent, get all agents, XSL transform result.
  *
@@ -2921,6 +2924,7 @@ create_agent_omp (credentials_t * credentials, params_t *params)
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
+  char *ret;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2939,7 +2943,7 @@ create_agent_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_agents");
     }
 
-  xml = g_string_new ("<commands_response>");
+  xml = g_string_new ("");
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -3034,38 +3038,10 @@ create_agent_omp (credentials_t * credentials, params_t *params)
 
   /* Get all agents. */
 
-  if (openvas_server_send (&session,
-                           "<get_agents"
-                           " sort_field=\"name\" sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while listing agents. "
-                           "The agent has, however, been created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_agents");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while listing agents. "
-                           "The agent has, however, been created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_agents");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</commands_response>");
+  ret = get_agents (credentials, params, xml->str);
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  g_string_free (xml, TRUE);
+  return ret;
 }
 
 /**
@@ -3080,7 +3056,7 @@ char *
 delete_agent_omp (credentials_t * credentials, params_t *params)
 {
   entity_t entity;
-  char *text = NULL;
+  char *text = NULL, *ret;
   gnutls_session_t session;
   int socket;
   gchar *html;
@@ -3114,11 +3090,7 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
     }
 
   if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_agent agent_id=\"%s\"/>"
-                            "<get_agents"
-                            " sort_field=\"name\" sort_order=\"ascending\"/>"
-                            "</commands>",
+                            "<delete_agent agent_id=\"%s\"/>",
                             agent_id)
       == -1)
     {
@@ -3142,8 +3114,10 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_agents");
     }
 
+  ret = get_agents (credentials, params, text);
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  g_free (text);
+  return ret;
 }
 
 /**
@@ -3377,6 +3351,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
   int socket;
   gchar *html;
   const char *agent_id;
+  char *ret;
 
   agent_id = params_value (params, "agent_id");
   if (agent_id == NULL)
@@ -3404,12 +3379,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
     }
 
   if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<verify_agent agent_id=\"%s\" />"
-                            "<get_agents"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
+                            "<verify_agent agent_id=\"%s\" />",
                             agent_id)
       == -1)
     {
@@ -3422,7 +3392,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_agents");
     }
 
-  xml = g_string_new ("<get_agents>");
+  xml = g_string_new ("");
 
   if (read_string (&session, &xml))
     {
@@ -3436,9 +3406,10 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_agents");
     }
 
-  g_string_append (xml, "</get_agents>");
+  ret = get_agents (credentials, params, xml->str);
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  g_string_free (xml, TRUE);
+  return ret;
 }
 
 /**

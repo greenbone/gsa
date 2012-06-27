@@ -1,3 +1,17 @@
+2012-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Bring agents up to date with the GET filtering changes.
+
+	* src/gsad_omp.c (create_agent_omp, delete_agent_omp): Use the get_agents
+	function to get agents, so that the new filtering is right.
+
+	* src/html/gsad.xsl (verify_agent_response): New template.
+	(html-gsa-logo): Add missing agent responses.
+
+	* src/html/omp.xsl (html-agents-table): Generate columns with column-name.
+	(column-name): Take type as an argument so that any type can use this.
+	Remove old max and first params.
+
 2012-06-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Add back Alerts which Jan
