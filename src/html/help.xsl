@@ -313,7 +313,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Provides detailed information about the host.
        This includes all the information from the Filtered Hosts table, plus the list of
-       open ports and the list of Apps.
+       open ports and the list of applications.
       </p>
     </div>
   </div>
@@ -537,8 +537,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
         Note: According to documentation of Microsoft Domain Controller,
-        if your Login uses german umlaut, you can use "ss" for "ß", "a" for "ä" etc.
-        In other cases, Login names with german umlauts will not work.
+        if your Login uses German umlauts, you can use "ss" for "ß", "a" for "ä" etc.
+        In other cases, Login names with German umlauts will not work.
       </p>
 
       <a name="credentials"></a>
@@ -606,7 +606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will download a ".rpm" installation package.
       </p>
       <p>
-       With installing this package on a RPM-based systems (e.g. SUSE, RedHat, Fedora, Centos)
+       With installing this package on a RPM-based systems (e.g. SUSE, RedHat, Fedora, CentOS)
        a low privileged user account is created on that target system to allow
        the scan engine to access the system retrieve information about installed software
        and other product information. De-installation of the package will disable the access.
@@ -1890,7 +1890,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
       <p>
-        If per-User-LDAP Authentification is configured, an additional checkbox
+        If per-User-LDAP Authentication is configured, an additional checkbox
         ("Allow LDAP- Authentication only") is shown. When ticked, the user can only
         log in via the configured LDAP-Server.
       </p>
@@ -2031,7 +2031,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
 
       <p>
-        If per-User-LDAP Authentification is configured, an additional column
+        If per-User-LDAP Authentication is configured, an additional column
         ("LDAP Authentication") with checkboxes is shown. When the checkbox for
         a given user is ticked, the user can only log in via the configured LDAP-Server.
       </p>

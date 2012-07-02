@@ -1,3 +1,7 @@
+2012-07-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/help.xsl: Fix a few typos in the help texts.
+
 2012-06-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Bring agents up to date with the GET filtering changes.
