@@ -1,3 +1,8 @@
+2012-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Print a more useful message if both libxslt and the
+	xsltproc binary cannot be found instead of failing silently.
+
 2012-07-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/help.xsl: Fix a few typos in the help texts.
