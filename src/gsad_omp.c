@@ -4338,7 +4338,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response;
   const char *name, *hosts, *target_locator, *comment, *port_list_id;
   const char *target_credential, *port, *target_smb_credential, *target_source;
-  const char *filter, *target_id;
+  const char *target_id;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4366,7 +4366,6 @@ create_target_omp (credentials_t * credentials, params_t *params)
   target_credential = params_value (params, "lsc_credential_id");
   port = params_value (params, "port");
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
-  filter = params_value (params, "filter");
   target_id = params_value (params, "target_id");
 
   CHECK (name);

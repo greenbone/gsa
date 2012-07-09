@@ -1,5 +1,10 @@
 2012-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Remove assigned but unused
+	variable to address compiler warning.
+
+2012-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* CMakeLists.txt: Print a more useful message if both libxslt and the
 	xsltproc binary cannot be found instead of failing silently.
 
