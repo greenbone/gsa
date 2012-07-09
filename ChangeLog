@@ -1,3 +1,9 @@
+2012-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Print a more useful message if both libxslt and the
+	xsltproc binary cannot be found instead of failing silently. Backport
+	from trunk r13701.
+
 2012-06-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Allow newlines in preference:value, because
