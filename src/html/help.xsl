@@ -4954,6 +4954,7 @@ Public License instead of this License.
                   82% complete when it was paused.  The newest report might be incomplete.
                   The task will change to stopped if the scanner or manager
                   server is restarted, for example on reboot.
+                  The scan service remains stand-by active and will not release any memory.
               </td></tr>
               <tr><td valign="top">
                   <div class="progressbar_box" title="Internal Error">
@@ -5148,6 +5149,11 @@ Public License instead of this License.
       <p>
        This action is only available if the task has status "Running" or "Requested" and
        is not a scheduled task or a container task.
+      </p>
+      <p>
+       Please note that the scan service remains stand-by active and will not release
+       allocated memory or processes. Therefore, paused tasks can have significant impact
+       on the overall performance.
       </p>
 
       <h4>Schedule Details</h4>
