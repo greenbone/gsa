@@ -11737,7 +11737,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top">Summary</td>
             <td>
-              <input type="text" name="comment" size="30" maxlength="400"
+              <input type="text" name="summary" size="30" maxlength="400"
                      value="{commands_response/get_report_formats_response/report_format/summary}"/>
             </td>
           </tr>

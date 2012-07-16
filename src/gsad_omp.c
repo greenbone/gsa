@@ -12781,7 +12781,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   gchar *html;
 
-  if (params_value (params, "comment") == NULL
+  if (params_value (params, "summary") == NULL
       || params_value (params, "name") == NULL)
     return edit_report_format (credentials, params,
                                GSAD_MESSAGE_INVALID_PARAM
@@ -12892,7 +12892,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
                                    "</modify_report_format>",
                                    params_value (params, "report_format_id"),
                                    params_value (params, "name"),
-                                   params_value (params, "comment"),
+                                   params_value (params, "summary"),
                                    params_value (params, "enable"));
 
   if (strcmp (params_value (params, "next"), "get_report_formats") == 0)

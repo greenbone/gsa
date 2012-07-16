@@ -1,3 +1,15 @@
+2012-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport from trunk r13735.
+
+	* src/gsad.c (init_validator): Add summary.
+
+	* src/gsad_omp.c (save_report_format_omp): Get summary from "summary"
+	instead of "comment", to all quotations in the summary.
+
+	* src/html/omp.xsl (html-edit-report-format-form): Rename field to
+	"summary".
+
 2012-07-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Print a more useful message if both libxslt and the
