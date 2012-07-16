@@ -1,3 +1,13 @@
+2012-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add summary.
+
+	* src/gsad_omp.c (save_report_format_omp): Get summary from "summary"
+	instead of "comment", to all quotations in the summary.
+
+	* src/html/omp.xsl (html-edit-report-format-form): Rename field to
+	"summary".
+
 2012-07-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/help.xsl (tasks.html): Added hint that paused scans will have
@@ -105,7 +115,7 @@
 
 2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (html-edit-target-form): If the port is empty make is
+	* src/html/omp.xsl (html-edit-target-form): If the port is empty make it
 	22.
 
 2012-06-14  Matthew Mundell <matthew.mundell@greenbone.net>
