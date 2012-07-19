@@ -1,3 +1,8 @@
+2012-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (get_many): If the filter is empty then add "row=-2", so that
+	Rows Per Page rows are returned, because Manager now returns all rows.
+
 2012-07-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add summary.

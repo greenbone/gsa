@@ -450,6 +450,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
+  if (filter == NULL || (strcmp (filter, "") == 0))
+    filter = "rows=-2";
+
   /* Get the list. */
 
   if (openvas_server_sendf_xml (&session,
