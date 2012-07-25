@@ -900,7 +900,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *comment, *config_id, *apply_overrides, *target_id;
   const char *alert_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
-  const char *observers;
+  const char *observers, *in_assets;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -910,6 +910,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   alert_id = params_value (params, "alert_id_optional");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
+  in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
@@ -922,6 +923,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (alert_id);
   CHECK (slave_id);
   CHECK (schedule_id);
+  CHECK (in_assets);
   CHECK (max_checks);
   CHECK (max_hosts);
   CHECK (observers);
@@ -978,6 +980,10 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               "<scanner_name>max_hosts</scanner_name>"
                               "<value>%s</value>"
                               "</preference>"
+                              "<preference>"
+                              "<scanner_name>in_assets</scanner_name>"
+                              "<value>%s</value>"
+                              "</preference>"
                               "</preferences>"
                               "<observers>%s</observers>"
                               "</create_task>"
@@ -996,6 +1002,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               comment,
                               max_checks,
                               max_hosts,
+                              strcmp (in_assets, "0") ? "yes" : "no",
                               observers,
                               apply_overrides);
 
@@ -1233,7 +1240,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
   const char *comment, *name, *next, *refresh_interval, *sort_field;
-  const char *sort_order, *overrides, *alert_id, *schedule_id;
+  const char *sort_order, *overrides, *alert_id, *schedule_id, *in_assets;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int apply_overrides;
 
@@ -1253,6 +1260,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   alert_id = params_value (params, "alert_id");
+  in_assets = params_value (params, "in_assets");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
   max_checks = params_value (params, "max_checks");
@@ -1262,7 +1270,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   if (alert_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
       || task_id == NULL || max_checks == NULL || max_hosts == NULL
-      || observers == NULL)
+      || observers == NULL || in_assets == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -1285,6 +1293,10 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  "<scanner_name>max_hosts</scanner_name>"
                                  "<value>%s</value>"
                                  "</preference>"
+                                 "<preference>"
+                                 "<scanner_name>in_assets</scanner_name>"
+                                 "<value>%s</value>"
+                                 "</preference>"
                                  "</preferences>"
                                  "<observers>%s</observers>"
                                  "</modify_task>",
@@ -1296,6 +1308,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  slave_id,
                                  max_checks,
                                  max_hosts,
+                                 strcmp (in_assets, "0") ? "yes" : "no",
                                  observers);
 
   if (strcmp (next, "get_tasks") == 0)
@@ -1338,10 +1351,11 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify_task;
   const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
-  const char *overrides, *refresh_interval, *observers;
+  const char *overrides, *refresh_interval, *observers, *in_assets;
   int apply_overrides;
 
   comment = params_value (params, "comment");
+  in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   next = params_value (params, "next");
   sort_field = params_value (params, "sort_field");
@@ -1358,7 +1372,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   if (next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL)
+      || task_id == NULL || in_assets == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -1369,11 +1383,18 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
                                  "<comment>%s</comment>"
+                                 "<preferences>"
+                                 "<preference>"
+                                 "<scanner_name>in_assets</scanner_name>"
+                                 "<value>%s</value>"
+                                 "</preference>"
+                                 "</preferences>"
                                  "<observers>%s</observers>"
                                  "</modify_task>",
                                  task_id,
                                  name,
                                  comment,
+                                 strcmp (in_assets, "0") ? "yes" : "no",
                                  observers);
 
   if (strcmp (next, "get_tasks") == 0)

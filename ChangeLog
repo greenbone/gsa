@@ -1,3 +1,16 @@
+2012-07-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add the new "Add results to Asset Management" task preference.
+
+	* src/gsad.c (init_validator): Add in_assets.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp)
+	(save_container_task_omp): Add in_assets to task preferences in OMP
+	command.
+
+	* src/html/omp.xsl (html-report-table, html-edit-task-form, new_task): Add
+	in_assets fields.
+
 2012-07-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (get_many): If the filter is empty then add "row=-2", so that

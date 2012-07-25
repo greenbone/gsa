@@ -789,6 +789,7 @@ init_validator ()
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");
   openvas_validator_alias (validator, "host_levels",        "levels");
+  openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
   openvas_validator_alias (validator, "access_hosts", "hosts_opt");

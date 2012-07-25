@@ -2504,6 +2504,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:otherwise>
         </xsl:choose>
+        <tr>
+          <xsl:variable name="in_assets"
+                        select="task/preferences/preference[scanner_name='in_assets']"/>
+          <td>
+            Add to Assets:
+          </td>
+          <td>
+            <xsl:value-of select="$in_assets/value"/>
+          </td>
+        </tr>
       </table>
       <xsl:choose>
         <xsl:when test="task/target/@id=''">
@@ -3222,7 +3232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="overrides" value="{apply_overrides}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
-           <td valign="top" width="165">Name</td>
+           <td valign="top" width="185">Name</td>
            <td>
              <input type="text"
                     name="name"
@@ -3372,6 +3382,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <input type="text" name="observers" size="30" maxlength="400"
                      value="{commands_response/get_tasks_response/task/observers}"/>
+            </td>
+          </tr>
+          <tr>
+            <xsl:variable name="in_assets"
+                          select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
+            <td valign="top">
+              <xsl:value-of select="$in_assets/name"/>
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="$in_assets/value='yes'">
+                  <label>
+                    <input type="radio" name="in_assets" value="1" checked="1"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="in_assets" value="0"/>
+                    no
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="in_assets" value="1"/>
+                    yes
+                  </label>
+                  <label>
+                    <input type="radio" name="in_assets" value="0" checked="1"/>
+                    no
+                  </label>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
         </table>
@@ -15404,6 +15445,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <input type="text" name="observers" size="30" maxlength="400"
                    value=""/>
+          </td>
+        </tr>
+        <tr>
+          <td>Add results to Asset Management</td>
+          <td>
+            <label>
+              <input type="radio" name="in_assets" value="1" checked="1"/>
+              yes
+            </label>
+            <label>
+              <input type="radio" name="in_assets" value="0"/>
+              no
+            </label>
           </td>
         </tr>
       </table>
