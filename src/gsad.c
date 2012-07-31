@@ -661,8 +661,9 @@ init_validator ()
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
-  openvas_validator_add (validator, "alert_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "alert_id_optional_2", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
@@ -766,6 +767,7 @@ init_validator ()
 
   /* Beware, the rule must be defined before the alias. */
 
+  openvas_validator_alias (validator, "alert_id_2", "alert_id");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",         "name");

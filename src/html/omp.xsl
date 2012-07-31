@@ -2413,13 +2413,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Alert:</td>
+          <td>Alerts:</td>
           <td>
-            <xsl:if test="task/alert">
-              <a href="/omp?cmd=get_alert&amp;alert_id={task/alert/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="task/alert/name"/>
+            <xsl:for-each select="task/alert">
+              <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="name"/>
               </a>
-            </xsl:if>
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
           </td>
         </tr>
         <tr>
@@ -3292,12 +3293,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </td>
               </tr>
               <tr>
-                <td>Alert (optional)</td>
+                <td>Alerts (optional)</td>
                 <td>
+                  <xsl:variable name="alerts"
+                                select="commands_response/get_alerts_response/alert"/>
                   <select name="alert_id">
-                    <xsl:variable name="alert_id">
-                      <xsl:value-of select="commands_response/get_tasks_response/task/alert/@id"/>
-                    </xsl:variable>
+                    <xsl:variable name="alert_id" select="commands_response/get_tasks_response/task/alert[1]/@id"/>
                     <xsl:choose>
                       <xsl:when test="string-length ($alert_id) &gt; 0">
                         <option value="0">--</option>
@@ -3306,7 +3307,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="commands_response/get_alerts_response/alert">
+                    <xsl:for-each select="$alerts">
+                      <xsl:choose>
+                        <xsl:when test="@id = $alert_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <select name="alert_id_2">
+                    <xsl:variable name="alert_id" select="commands_response/get_tasks_response/task/alert[2]/@id"/>
+                    <xsl:choose>
+                      <xsl:when test="string-length ($alert_id) &gt; 0">
+                        <option value="0">--</option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="0" selected="1">--</option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:for-each select="$alerts">
                       <xsl:choose>
                         <xsl:when test="@id = $alert_id">
                           <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -15411,9 +15433,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td>Alert (optional)</td>
+          <td>Alerts (optional)</td>
           <td>
             <select name="alert_id_optional">
+              <option value="--">--</option>
+              <xsl:apply-templates select="get_alerts_response/alert"
+                                   mode="newtask"/>
+            </select>
+            <select name="alert_id_optional_2">
               <option value="--">--</option>
               <xsl:apply-templates select="get_alerts_response/alert"
                                    mode="newtask"/>

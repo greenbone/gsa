@@ -899,8 +899,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *schedule_element, *alert_element, *slave_element;
   gchar *html;
   const char *name, *comment, *config_id, *apply_overrides, *target_id;
-  const char *alert_id, *slave_id, *schedule_id, *max_checks, *max_hosts;
-  const char *observers, *in_assets;
+  const char *alert_id, *alert_id_2, *slave_id, *schedule_id, *max_checks;
+  const char *max_hosts, *observers, *in_assets;
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -908,6 +908,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   apply_overrides = params_value (params, "overrides");
   target_id = params_value (params, "target_id");
   alert_id = params_value (params, "alert_id_optional");
+  alert_id_2 = params_value (params, "alert_id_optional_2");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
   in_assets = params_value (params, "in_assets");
@@ -921,6 +922,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (apply_overrides);
   CHECK (target_id);
   CHECK (alert_id);
+  CHECK (alert_id_2);
   CHECK (slave_id);
   CHECK (schedule_id);
   CHECK (in_assets);
@@ -955,6 +957,11 @@ create_task_omp (credentials_t * credentials, params_t *params)
   else
     alert_element = g_strdup_printf ("<alert id=\"%s\"/>",
                                      alert_id);
+
+  if (alert_id_2 && strcmp (alert_id_2, "--"))
+    alert_element = g_strdup_printf ("%s<alert id=\"%s\"/>",
+                                     alert_element,
+                                     alert_id_2);
 
   if (slave_id == NULL || strcmp (slave_id, "--") == 0)
     slave_element = g_strdup ("");
@@ -1242,6 +1249,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   const char *comment, *name, *next, *refresh_interval, *sort_field;
   const char *sort_order, *overrides, *alert_id, *schedule_id, *in_assets;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
+  const char *alert_id_2;
   int apply_overrides;
 
   comment = params_value (params, "comment");
@@ -1260,6 +1268,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   alert_id = params_value (params, "alert_id");
+  alert_id_2 = params_value (params, "alert_id_2");
   in_assets = params_value (params, "in_assets");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
@@ -1270,7 +1279,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   if (alert_id == NULL || schedule_id == NULL || slave_id == NULL
       || next == NULL || sort_field == NULL || sort_order == NULL
       || task_id == NULL || max_checks == NULL || max_hosts == NULL
-      || observers == NULL || in_assets == NULL)
+      || observers == NULL || in_assets == NULL || alert_id_2 == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -1281,6 +1290,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
                                  "<name>%s</name>"
                                  "<comment>%s</comment>"
+                                 "<alert id=\"%s\"/>"
                                  "<alert id=\"%s\"/>"
                                  "<schedule id=\"%s\"/>"
                                  "<slave id=\"%s\"/>"
@@ -1304,6 +1314,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                  name,
                                  comment,
                                  alert_id,
+                                 alert_id_2,
                                  schedule_id,
                                  slave_id,
                                  max_checks,

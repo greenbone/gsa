@@ -1,3 +1,15 @@
+2012-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add control of second alert to tasks.
+
+	* src/gsad.c (init_validator): Add alert_id_optional_2 and alert_id_2.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Pass second alert to
+	manager.
+
+	* src/html/omp.xsl (html-report-table): Display all alerts.
+	(html-edit-task-form, new_task): Add second alert option.
+
 2012-07-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add the new "Add results to Asset Management" task preference.
