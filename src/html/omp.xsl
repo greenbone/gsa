@@ -9562,6 +9562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Actions</td>
           </tr>
           <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
+            <xsl:sort select="text()"/>
             <xsl:variable name="class">
               <xsl:choose>
                 <xsl:when test="position() mod 2 = 0">even</xsl:when>

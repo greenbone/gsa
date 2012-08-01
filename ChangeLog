@@ -1,5 +1,9 @@
 2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Sort Vulnerable Products by Name.
+
+2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Enable the user to add or edit a task with any number of alerts.
 
 	* src/gsad.c (init_validator): Remove alert_id_optional_2.  Add alerts
