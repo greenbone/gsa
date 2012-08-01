@@ -3297,48 +3297,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:variable name="alerts"
                                 select="commands_response/get_alerts_response/alert"/>
-                  <select name="alert_id">
-                    <xsl:variable name="alert_id" select="commands_response/get_tasks_response/task/alert[1]/@id"/>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($alert_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="$alerts">
+                  <xsl:for-each select="commands_response/get_tasks_response/task/alert">
+                    <select name="alert_id_optional:{position ()}">
+                      <xsl:variable name="alert_id" select="@id"/>
                       <xsl:choose>
-                        <xsl:when test="@id = $alert_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        <xsl:when test="string-length ($alert_id) &gt; 0">
+                          <option value="0">--</option>
                         </xsl:when>
                         <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                          <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  <select name="alert_id_2">
-                    <xsl:variable name="alert_id" select="commands_response/get_tasks_response/task/alert[2]/@id"/>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($alert_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="$alerts">
-                      <xsl:choose>
-                        <xsl:when test="@id = $alert_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
+                      <xsl:for-each select="$alerts">
+                        <xsl:choose>
+                          <xsl:when test="@id = $alert_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                  <xsl:variable name="count"
+                                select="count (commands_response/get_tasks_response/task/alert)"/>
+                  <xsl:call-template name="new-task-alert-select">
+                    <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
+                    <xsl:with-param name="count" select="alerts"/>
+                    <xsl:with-param name="position" select="$count + 1"/>
+                  </xsl:call-template>
+                  <a style="margin-left: 5px; font-size: 16px; font-weight: bold"
+                     href="/omp?cmd=edit_task&amp;task_id={commands_response/get_tasks_response/task/@id}&amp;next={next}&amp;refresh_interval={refresh_interval}&amp;sort_order={sort_order}&amp;sort_field={sort_field}&amp;overrides={apply_overrides}&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
                 </td>
               </tr>
               <tr>
@@ -15382,6 +15373,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NEW_TASK -->
 
+<xsl:template name="new-task-alert-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="alerts" select="get_alerts_response"/>
+  <select name="alert_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$alerts/alert"
+                         mode="newtask"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-task-alert-select">
+      <xsl:with-param name="alerts" select="$alerts"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="new_task">
   <xsl:apply-templates select="gsad_msg"/>
 
@@ -15435,16 +15445,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Alerts (optional)</td>
           <td>
-            <select name="alert_id_optional">
-              <option value="--">--</option>
-              <xsl:apply-templates select="get_alerts_response/alert"
-                                   mode="newtask"/>
-            </select>
-            <select name="alert_id_optional_2">
-              <option value="--">--</option>
-              <xsl:apply-templates select="get_alerts_response/alert"
-                                   mode="newtask"/>
-            </select>
+            <xsl:call-template name="new-task-alert-select">
+              <xsl:with-param name="count" select="alerts"/>
+            </xsl:call-template>
+            <a style="margin-left: 5px; font-size: 16px; font-weight: bold"
+               href="/omp?cmd=new_task&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
           </td>
         </tr>
         <tr>

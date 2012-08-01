@@ -1,3 +1,21 @@
+2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Enable the user to add or edit a task with any number of alerts.
+
+	* src/gsad.c (init_validator): Remove alert_id_optional_2.  Add alerts
+	and the hashtable version of alert_id_optional.
+	(params_append_mhd): Add alert_id_optional to hashtable params.
+
+	* src/gsad_omp.c (new_task, edit_task): Send number of alerts down to
+	XSL.
+	(create_task_omp, save_task_omp): Handle any number of alerts, instead
+	of just two.
+
+	* src/html/omp.xsl (html-edit-task-form): Show every alert, with link for
+	adding more.
+	(new-task-alert-select): New template.
+	(new_task): Show two alerts, and a link for adding more.
+
 2012-07-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add control of second alert to tasks.

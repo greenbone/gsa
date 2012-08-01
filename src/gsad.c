@@ -663,7 +663,6 @@ init_validator ()
   openvas_validator_add (validator, "email",      "^[^@ ]{1,150}@[^@ ]{1,150}$");
   openvas_validator_add (validator, "alert_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "alert_id_optional", "^(--|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "alert_id_optional_2", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "event_data:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "event_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "family",     "^[-_[:alnum:] :.]{1,200}$");
@@ -768,6 +767,9 @@ init_validator ()
   /* Beware, the rule must be defined before the alias. */
 
   openvas_validator_alias (validator, "alert_id_2", "alert_id");
+  openvas_validator_alias (validator, "alert_id_optional:name",  "number");
+  openvas_validator_alias (validator, "alert_id_optional:value", "alert_id_optional");
+  openvas_validator_alias (validator, "alerts",     "optional_number");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "base",         "name");
@@ -981,7 +983,9 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "select:", strlen ("select:")) == 0)
       || (strncmp (name, "trend:", strlen ("trend:")) == 0)
       || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
-      || (strncmp (name, "nvt:", strlen ("nvt:")) == 0))
+      || (strncmp (name, "nvt:", strlen ("nvt:")) == 0)
+      || (strncmp (name, "alert_id_optional:", strlen ("alert_id_optional:"))
+          == 0))
     {
       param_t *param;
       const char *colon;
