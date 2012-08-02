@@ -1,3 +1,28 @@
+gsa 3.0.2 (2012-08-02)
+
+This is the second maintenance release of the Greenbone Security Assistant (GSA)
+3.0 module for the Open Vulnerability Assessment System release 5 (OpenVAS-5).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+This release fixes a number of issues which were discovered after the last
+release of Greenbone Security Assistant 3.0. For details please refer to the
+overview on main changes.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell and Michael Wiegand.
+
+Main changes since 3.0.1:
+* Bugfix to not mix summary and comment for report format plugins.
+* Improved build system.
+* Bugfix to allow newlines in preference:value, because the value
+  could be a file.
+* Bugfix to validate SSH port only if SSH credential is given.
+* Bugfix to add references for second result in delta "changed" case.
+* Bugfix to re-enable PDF as default download.
+* Bugfix to avoid broken URLs for CVEs.
+
+
 gsa 3.0.1 (2012-04-25)
 
 This is the first maintenance release of the Greenbone Security Assistant (GSA)
