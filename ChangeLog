@@ -1,5 +1,10 @@
 2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Add a fallback to the help case for when
+	the help XSL transform fails.
+
+2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (cve-details): Sort Vulnerable Products by Name.
 
 2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
