@@ -1,3 +1,7 @@
+2012-08-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/enchantress.png: New.
+
 2012-08-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Add a fallback to the help case for when
