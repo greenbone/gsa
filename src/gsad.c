@@ -2906,6 +2906,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
               g_free (page);
               res = xsl_transform (xml);
             }
+          if (res == NULL)
+            res = gsad_message (credentials,
+                                "Invalid request", __FUNCTION__, __LINE__,
+                                "Error generating help page.",
+                                "/help/contents.html");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
         }
