@@ -8818,47 +8818,47 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         esc_min_cvss_base = "";
 
-      if (openvas_server_sendf (&session,
-                                "<get_reports"
-                                " autofp=\"%s\""
-                                " show_closed_cves=\"%i\""
-                                " notes=\"%i\""
-                                " notes_details=\"1\""
-                                " apply_overrides=\"%i\""
-                                " overrides=\"%i\""
-                                " overrides_details=\"1\""
-                                " result_hosts_only=\"%i\""
-                                " report_id=\"%s\""
-                                " first_result=\"%s\""
-                                " max_results=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " levels=\"%s\""
-                                " delta_states=\"%s\""
-                                " search_phrase=\"%s\""
-                                " min_cvss_base=\"%s\""
-                                " alert_id=\"%s\"/>",
-                                strcmp (autofp, "0") ? autofp_value : "0",
-                                strcmp (show_closed_cves, "0") ? 1 : 0,
-                                strcmp (esc_notes, "0") ? 1 : 0,
-                                strcmp (esc_overrides, "0") ? 1 : 0,
-                                strcmp (esc_overrides, "0") ? 1 : 0,
-                                strcmp (esc_result_hosts_only, "0") ? 1 : 0,
-                                report_id,
-                                esc_first_result,
-                                esc_max_results,
-                                sort_field ? sort_field : "type",
-                                sort_order
-                                 ? sort_order
-                                 : ((sort_field == NULL
-                                     || strcmp (sort_field, "type") == 0)
-                                    ? "descending"
-                                    : "ascending"),
-                                params_value (params, "esc_levels"),
-                                delta_states->str,
-                                esc_search_phrase,
-                                esc_min_cvss_base,
-                                alert_id)
+      if (openvas_server_sendf_xml (&session,
+                                    "<get_reports"
+                                    " autofp=\"%s\""
+                                    " show_closed_cves=\"%i\""
+                                    " notes=\"%i\""
+                                    " notes_details=\"1\""
+                                    " apply_overrides=\"%i\""
+                                    " overrides=\"%i\""
+                                    " overrides_details=\"1\""
+                                    " result_hosts_only=\"%i\""
+                                    " report_id=\"%s\""
+                                    " first_result=\"%s\""
+                                    " max_results=\"%s\""
+                                    " sort_field=\"%s\""
+                                    " sort_order=\"%s\""
+                                    " levels=\"%s\""
+                                    " delta_states=\"%s\""
+                                    " search_phrase=\"%s\""
+                                    " min_cvss_base=\"%s\""
+                                    " alert_id=\"%s\"/>",
+                                    strcmp (autofp, "0") ? autofp_value : "0",
+                                    strcmp (show_closed_cves, "0") ? 1 : 0,
+                                    strcmp (esc_notes, "0") ? 1 : 0,
+                                    strcmp (esc_overrides, "0") ? 1 : 0,
+                                    strcmp (esc_overrides, "0") ? 1 : 0,
+                                    strcmp (esc_result_hosts_only, "0") ? 1 : 0,
+                                    report_id,
+                                    esc_first_result,
+                                    esc_max_results,
+                                    sort_field ? sort_field : "type",
+                                    sort_order
+                                     ? sort_order
+                                     : ((sort_field == NULL
+                                         || strcmp (sort_field, "type") == 0)
+                                        ? "descending"
+                                        : "ascending"),
+                                    params_value (params, "esc_levels"),
+                                    delta_states->str,
+                                    esc_search_phrase,
+                                    esc_min_cvss_base,
+                                    alert_id)
           == -1)
         {
           openvas_server_close (socket, session);
@@ -8939,27 +8939,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
-                            "%s%s%s%s%s"
-                            " pos=\"%s\""
-                            " autofp=\"%s\""
-                            " show_closed_cves=\"%i\""
-                            " notes=\"%i\""
-                            " notes_details=\"1\""
-                            " apply_overrides=\"%i\""
-                            " overrides=\"%i\""
-                            " overrides_details=\"1\""
-                            " result_hosts_only=\"%i\""
-                            " report_id=\"%s\""
-                            " delta_report_id=\"%s\""
-                            " format_id=\"%s\""
-                            " first_result=\"%s\""
-                            " max_results=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
-                            " levels=\"%s\""
-                            " delta_states=\"%s\""
-                            " search_phrase=\"%s\""
-                            " min_cvss_base=\"%s\"/>",
+                            "%s%s%s%s%s",
                             (type && (strcmp (type, "prognostic") == 0))
                              ? " type=\"prognostic\""
                              : "",
@@ -8968,36 +8948,71 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                              : "",
                             host ? " host=\"" : "",
                             host ? host : "",
-                            host ? "\"" : "",
-                            pos ? pos : "1",
-                            strcmp (autofp, "0") ? autofp_value : "0",
-                            strcmp (show_closed_cves, "0") ? 1 : 0,
-                            strcmp (notes, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (overrides, "0") ? 1 : 0,
-                            strcmp (result_hosts_only, "0") ? 1 : 0,
-                            (type && ((strcmp (type, "assets") == 0)
-                                      || (strcmp (type, "prognostic") == 0)))
-                             ? ""
-                             : report_id,
-                            delta_report_id ? delta_report_id : "0",
-                            format_id
-                             ? format_id
-                             : "a994b278-1f62-11e1-96ac-406186ea4fc5",
-                            first_result,
-                            max_results,
-                            sort_field ? sort_field : "type",
-                            sort_order
-                             ? sort_order
-                             : ((sort_field == NULL
-                                 || strcmp (sort_field, "type") == 0)
-                                ? "descending"
-                                : "ascending"),
-                            levels->str,
-                            delta_states->str,
-                            search_phrase,
-                            min_cvss_base)
+                            host ? "\"" : "")
       == -1)
+    {
+      openvas_server_close (socket, session);
+      g_string_free (delta_states, TRUE);
+      g_string_free (commands_xml, TRUE);
+      g_string_free (levels, TRUE);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report. "
+                           "The report could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (openvas_server_sendf_xml (&session,
+                                " pos=\"%s\""
+                                " autofp=\"%s\""
+                                " show_closed_cves=\"%i\""
+                                " notes=\"%i\""
+                                " notes_details=\"1\""
+                                " apply_overrides=\"%i\""
+                                " overrides=\"%i\""
+                                " overrides_details=\"1\""
+                                " result_hosts_only=\"%i\""
+                                " report_id=\"%s\""
+                                " delta_report_id=\"%s\""
+                                " format_id=\"%s\""
+                                " first_result=\"%s\""
+                                " max_results=\"%s\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " levels=\"%s\""
+                                " delta_states=\"%s\""
+                                " search_phrase=\"%s\""
+                                " min_cvss_base=\"%s\"/>",
+                                pos ? pos : "1",
+                                strcmp (autofp, "0") ? autofp_value : "0",
+                                strcmp (show_closed_cves, "0") ? 1 : 0,
+                                strcmp (notes, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
+                                strcmp (overrides, "0") ? 1 : 0,
+                                strcmp (result_hosts_only, "0") ? 1 : 0,
+                                (type && ((strcmp (type, "assets") == 0)
+                                          || (strcmp (type, "prognostic") == 0)))
+                                 ? ""
+                                 : report_id,
+                                delta_report_id ? delta_report_id : "0",
+                                format_id
+                                 ? format_id
+                                 : "a994b278-1f62-11e1-96ac-406186ea4fc5",
+                                first_result,
+                                max_results,
+                                sort_field ? sort_field : "type",
+                                sort_order
+                                 ? sort_order
+                                 : ((sort_field == NULL
+                                     || strcmp (sort_field, "type") == 0)
+                                    ? "descending"
+                                    : "ascending"),
+                                levels->str,
+                                delta_states->str,
+                                search_phrase,
+                                min_cvss_base)
+     == -1)
     {
       openvas_server_close (socket, session);
       g_string_free (delta_states, TRUE);
