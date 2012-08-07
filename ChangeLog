@@ -1,3 +1,9 @@
+2012-08-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 2.0.2 release.
+
+	* CHANGES: Updated.
+
 2012-08-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Add a fallback to the help case for when
