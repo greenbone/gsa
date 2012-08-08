@@ -398,6 +398,29 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
   return NULL;
 }
 
+
+/**
+ * @brief Append formatted escaped XML to a string.
+ *
+ * @param[in]  xml     XML string.
+ * @param[in]  format  Format string.
+ * @param[in]  ...     Arguments for format string.
+ *
+ * @return Result of XSL transformation.
+ */
+static void
+openvas_append_xml (GString *xml, const char *format, ...)
+{
+  gchar *piece;
+  va_list args;
+
+  va_start (args, format);
+  piece = g_markup_vprintf_escaped (format, args);
+  va_end (args);
+  g_string_append (xml, piece);
+  g_free (piece);
+}
+
 
 /* Generic page handlers. */
 
@@ -9204,27 +9227,28 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
                 }
 
-              g_string_append_printf (xml,
-                                      "<host_search_phrase>"
-                                      "%s"
-                                      "</host_search_phrase>"
-                                      "<host_levels>%s</host_levels>"
-                                      "<results start=\"%s\" max=\"%s\"/>",
-                                      host_search_phrase,
-                                      host_levels,
-                                      host_first_result,
-                                      host_max_results);
+
+              openvas_append_xml (xml,
+                                  "<host_search_phrase>"
+                                  "%s"
+                                  "</host_search_phrase>"
+                                  "<host_levels>%s</host_levels>"
+                                  "<results start=\"%s\" max=\"%s\"/>",
+                                  host_search_phrase,
+                                  host_levels,
+                                  host_first_result,
+                                  host_max_results);
             }
           else
             xml = g_string_new ("<get_asset>");
-          g_string_append_printf (xml,
-                                  "<search_phrase>%s</search_phrase>"
-                                  "<levels>%s</levels>"
-                                  "<hosts start=\"%s\" max=\"%s\"/>",
-                                  search_phrase,
-                                  levels->str,
-                                  first_result,
-                                  max_results);
+          openvas_append_xml (xml,
+                              "<search_phrase>%s</search_phrase>"
+                              "<levels>%s</levels>"
+                              "<hosts start=\"%s\" max=\"%s\"/>",
+                              search_phrase,
+                              levels->str,
+                              first_result,
+                              max_results);
         }
       else
         xml = g_string_new ("<get_report>");
@@ -9560,49 +9584,49 @@ get_result (credentials_t *credentials, const char *result_id,
 
   xml = g_string_new ("<get_result>");
 
-  g_string_append_printf (xml,
-                          "<result id=\"%s\"/>"
-                          "<task id=\"%s\"><name>%s</name></task>"
-                          "<report id=\"%s\"/>"
-                          /* As a hack put the REPORT children alongside the
-                           * REPORT.  This keeps them at the same level
-                           * above the RESULT as they are in GET_REPORT. */
-                          "<results start=\"%s\" max=\"%s\"/>"
-                          "<filters>"
-                          "%s"
-                          "<phrase>%s</phrase>"
-                          "<autofp>%s</autofp>"
-                          "<show_closed_cves>%s</show_closed_cves>"
-                          "<notes>%s</notes>"
-                          "<overrides>%s</overrides>"
-                          "<min_cvss_base>%s</min_cvss_base>"
-                          /* So that the XSL shows the overrides. */
-                          "<apply_overrides>%s</apply_overrides>"
-                          "<result_hosts_only>%s</result_hosts_only>"
-                          "</filters>"
-                          "<sort>"
-                          "<field>"
-                          "%s"
-                          "<order>%s</order>"
-                          "</field>"
-                          "</sort>",
-                          result_id,
-                          task_id,
-                          task_name,
-                          report_id,
-                          first_result,
-                          max_results,
-                          levels,
-                          search_phrase,
-                          autofp,
-                          show_closed_cves,
-                          notes,
-                          overrides,
-                          min_cvss_base,
-                          apply_overrides,
-                          result_hosts_only,
-                          sort_field,
-                          sort_order);
+  openvas_append_xml (xml,
+                      "<result id=\"%s\"/>"
+                      "<task id=\"%s\"><name>%s</name></task>"
+                      "<report id=\"%s\"/>"
+                      /* As a hack put the REPORT children alongside the
+                       * REPORT.  This keeps them at the same level
+                       * above the RESULT as they are in GET_REPORT. */
+                      "<results start=\"%s\" max=\"%s\"/>"
+                      "<filters>"
+                      "%s"
+                      "<phrase>%s</phrase>"
+                      "<autofp>%s</autofp>"
+                      "<show_closed_cves>%s</show_closed_cves>"
+                      "<notes>%s</notes>"
+                      "<overrides>%s</overrides>"
+                      "<min_cvss_base>%s</min_cvss_base>"
+                      /* So that the XSL shows the overrides. */
+                      "<apply_overrides>%s</apply_overrides>"
+                      "<result_hosts_only>%s</result_hosts_only>"
+                      "</filters>"
+                      "<sort>"
+                      "<field>"
+                      "%s"
+                      "<order>%s</order>"
+                      "</field>"
+                      "</sort>",
+                      result_id,
+                      task_id,
+                      task_name,
+                      report_id,
+                      first_result,
+                      max_results,
+                      levels,
+                      search_phrase,
+                      autofp,
+                      show_closed_cves,
+                      notes,
+                      overrides,
+                      min_cvss_base,
+                      apply_overrides,
+                      result_hosts_only,
+                      sort_field,
+                      sort_order);
 
   /* Get the result. */
 
@@ -9975,52 +9999,52 @@ new_note_omp (credentials_t *credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  g_string_append_printf (xml,
-                          "<new_note>"
-                          "<nvt id=\"%s\"/>"
-                          "<hosts>%s</hosts>"
-                          "<port>%s</port>"
-                          "<threat>%s</threat>"
-                          "<task id=\"%s\">"
-                          "<name>%s</name>"
-                          "</task>"
-                          "<result id=\"%s\"/>"
-                          "<next>%s</next>"
-                          /* Passthroughs. */
-                          "<report id=\"%s\"/>"
-                          "<first_result>%s</first_result>"
-                          "<max_results>%s</max_results>"
-                          "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>"
-                          "<levels>%s</levels>"
-                          "<autofp>%s</autofp>"
-                          "<show_closed_cves>%s</show_closed_cves>"
-                          "<notes>%s</notes>"
-                          "<overrides>%s</overrides>"
-                          "<result_hosts_only>%s</result_hosts_only>"
-                          "<search_phrase>%s</search_phrase>"
-                          "<min_cvss_base>%s</min_cvss_base>",
-                          oid,
-                          hosts,
-                          port,
-                          threat,
-                          task_id,
-                          task_name,
-                          result_id,
-                          next ? next : "",
-                          report_id,
-                          first_result,
-                          max_results,
-                          sort_field,
-                          sort_order,
-                          levels,
-                          autofp,
-                          show_closed_cves,
-                          notes,
-                          overrides,
-                          result_hosts_only,
-                          search_phrase,
-                          min_cvss_base);
+  openvas_append_xml (xml,
+                      "<new_note>"
+                      "<nvt id=\"%s\"/>"
+                      "<hosts>%s</hosts>"
+                      "<port>%s</port>"
+                      "<threat>%s</threat>"
+                      "<task id=\"%s\">"
+                      "<name>%s</name>"
+                      "</task>"
+                      "<result id=\"%s\"/>"
+                      "<next>%s</next>"
+                      /* Passthroughs. */
+                      "<report id=\"%s\"/>"
+                      "<first_result>%s</first_result>"
+                      "<max_results>%s</max_results>"
+                      "<sort_field>%s</sort_field>"
+                      "<sort_order>%s</sort_order>"
+                      "<levels>%s</levels>"
+                      "<autofp>%s</autofp>"
+                      "<show_closed_cves>%s</show_closed_cves>"
+                      "<notes>%s</notes>"
+                      "<overrides>%s</overrides>"
+                      "<result_hosts_only>%s</result_hosts_only>"
+                      "<search_phrase>%s</search_phrase>"
+                      "<min_cvss_base>%s</min_cvss_base>",
+                      oid,
+                      hosts,
+                      port,
+                      threat,
+                      task_id,
+                      task_name,
+                      result_id,
+                      next ? next : "",
+                      report_id,
+                      first_result,
+                      max_results,
+                      sort_field,
+                      sort_order,
+                      levels,
+                      autofp,
+                      show_closed_cves,
+                      notes,
+                      overrides,
+                      result_hosts_only,
+                      search_phrase,
+                      min_cvss_base);
 
   if (read_string (&session, &xml))
     {
@@ -10468,54 +10492,54 @@ edit_note_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  g_string_append_printf (xml,
-                          "<edit_note>"
-                          /* Page that follows. */
-                          "<next>%s</next>"
-                          /* Parameters for get_report. */
-                          "<report id=\"%s\"/>"
-                          "<delta><report id=\"%s\"/></delta>"
-                          "<first_result>%i</first_result>"
-                          "<max_results>%i</max_results>"
-                          "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>"
-                          "<levels>%s</levels>"
-                          "<autofp>%s</autofp>"
-                          "<show_closed_cves>%s</show_closed_cves>"
-                          "<notes>%s</notes>"
-                          "<overrides>%s</overrides>"
-                          "<result_hosts_only>%s</result_hosts_only>"
-                          "<search_phrase>%s</search_phrase>"
-                          "<min_cvss_base>%s</min_cvss_base>"
-                          "<delta_states>%s</delta_states>"
-                          /* Parameters for get_nvts. */
-                          "<nvt id=\"%s\"/>"
-                          /* Parameters for get_result. */
-                          "<result id=\"%s\"/>"
-                          /* Parameters for get_tasks and get_result. */
-                          "<task id=\"%s\"><name>%s</name></task>",
-                          next,
-                          params_value (params, "report_id"),
-                          params_value (params, "delta_report_id"),
-                          first_result,
-                          max_results,
-                          params_value (params, "sort_field"),
-                          params_value (params, "sort_order"),
-                          params_value (params, "levels"),
-                          params_value (params, "autofp"),
-                          params_value (params, "show_closed_cves"),
-                          params_value (params, "notes"),
-                          params_value (params, "overrides"),
-                          params_value (params, "result_hosts_only"),
-                          params_value (params, "search_phrase"),
-                          params_value (params, "min_cvss_base"),
-                          params_value (params, "delta_states"),
-                          params_value (params, "oid"),
-                          params_value (params, "result_id"),
-                          params_value (params, "task_id"),
-                          params_value (params, "name")
-                           ? params_value (params, "name")
-                           : "");
+  openvas_append_xml (xml,
+                      "<edit_note>"
+                      /* Page that follows. */
+                      "<next>%s</next>"
+                      /* Parameters for get_report. */
+                      "<report id=\"%s\"/>"
+                      "<delta><report id=\"%s\"/></delta>"
+                      "<first_result>%i</first_result>"
+                      "<max_results>%i</max_results>"
+                      "<sort_field>%s</sort_field>"
+                      "<sort_order>%s</sort_order>"
+                      "<levels>%s</levels>"
+                      "<autofp>%s</autofp>"
+                      "<show_closed_cves>%s</show_closed_cves>"
+                      "<notes>%s</notes>"
+                      "<overrides>%s</overrides>"
+                      "<result_hosts_only>%s</result_hosts_only>"
+                      "<search_phrase>%s</search_phrase>"
+                      "<min_cvss_base>%s</min_cvss_base>"
+                      "<delta_states>%s</delta_states>"
+                      /* Parameters for get_nvts. */
+                      "<nvt id=\"%s\"/>"
+                      /* Parameters for get_result. */
+                      "<result id=\"%s\"/>"
+                      /* Parameters for get_tasks and get_result. */
+                      "<task id=\"%s\"><name>%s</name></task>",
+                      next,
+                      params_value (params, "report_id"),
+                      params_value (params, "delta_report_id"),
+                      first_result,
+                      max_results,
+                      params_value (params, "sort_field"),
+                      params_value (params, "sort_order"),
+                      params_value (params, "levels"),
+                      params_value (params, "autofp"),
+                      params_value (params, "show_closed_cves"),
+                      params_value (params, "notes"),
+                      params_value (params, "overrides"),
+                      params_value (params, "result_hosts_only"),
+                      params_value (params, "search_phrase"),
+                      params_value (params, "min_cvss_base"),
+                      params_value (params, "delta_states"),
+                      params_value (params, "oid"),
+                      params_value (params, "result_id"),
+                      params_value (params, "task_id"),
+                      params_value (params, "name")
+                       ? params_value (params, "name")
+                       : "");
 
   if (read_string (&session, &xml))
     {
@@ -11129,52 +11153,52 @@ new_override_omp (credentials_t *credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  g_string_append_printf (xml,
-                          "<new_override>"
-                          "<nvt id=\"%s\"/>"
-                          "<hosts>%s</hosts>"
-                          "<port>%s</port>"
-                          "<threat>%s</threat>"
-                          "<task id=\"%s\">"
-                          "<name>%s</name>"
-                          "</task>"
-                          "<result id=\"%s\"/>"
-                          "<next>%s</next>"
-                          /* Passthroughs. */
-                          "<report id=\"%s\"/>"
-                          "<first_result>%s</first_result>"
-                          "<max_results>%s</max_results>"
-                          "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>"
-                          "<levels>%s</levels>"
-                          "<autofp>%s</autofp>"
-                          "<show_closed_cves>%s</show_closed_cves>"
-                          "<notes>%s</notes>"
-                          "<overrides>%s</overrides>"
-                          "<result_hosts_only>%s</result_hosts_only>"
-                          "<search_phrase>%s</search_phrase>"
-                          "<min_cvss_base>%s</min_cvss_base>",
-                          oid,
-                          hosts,
-                          port,
-                          threat,
-                          task_id,
-                          task_name,
-                          result_id,
-                          next ? next : "",
-                          report_id,
-                          first_result,
-                          max_results,
-                          sort_field,
-                          sort_order,
-                          levels,
-                          autofp,
-                          show_closed_cves,
-                          notes,
-                          overrides,
-                          result_hosts_only,
-                          search_phrase,
-                          min_cvss_base);
+  openvas_append_xml (xml,
+                      "<new_override>"
+                      "<nvt id=\"%s\"/>"
+                      "<hosts>%s</hosts>"
+                      "<port>%s</port>"
+                      "<threat>%s</threat>"
+                      "<task id=\"%s\">"
+                      "<name>%s</name>"
+                      "</task>"
+                      "<result id=\"%s\"/>"
+                      "<next>%s</next>"
+                      /* Passthroughs. */
+                      "<report id=\"%s\"/>"
+                      "<first_result>%s</first_result>"
+                      "<max_results>%s</max_results>"
+                      "<sort_field>%s</sort_field>"
+                      "<sort_order>%s</sort_order>"
+                      "<levels>%s</levels>"
+                      "<autofp>%s</autofp>"
+                      "<show_closed_cves>%s</show_closed_cves>"
+                      "<notes>%s</notes>"
+                      "<overrides>%s</overrides>"
+                      "<result_hosts_only>%s</result_hosts_only>"
+                      "<search_phrase>%s</search_phrase>"
+                      "<min_cvss_base>%s</min_cvss_base>",
+                      oid,
+                      hosts,
+                      port,
+                      threat,
+                      task_id,
+                      task_name,
+                      result_id,
+                      next ? next : "",
+                      report_id,
+                      first_result,
+                      max_results,
+                      sort_field,
+                      sort_order,
+                      levels,
+                      autofp,
+                      show_closed_cves,
+                      notes,
+                      overrides,
+                      result_hosts_only,
+                      search_phrase,
+                      min_cvss_base);
 
   if (read_string (&session, &xml))
     {
@@ -11639,54 +11663,54 @@ edit_override_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  g_string_append_printf (xml,
-                          "<edit_override>"
-                          /* Page that follows. */
-                          "<next>%s</next>"
-                          /* Parameters for get_report. */
-                          "<report id=\"%s\"/>"
-                          "<delta><report id=\"%s\"/></delta>"
-                          "<first_result>%i</first_result>"
-                          "<max_results>%i</max_results>"
-                          "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>"
-                          "<levels>%s</levels>"
-                          "<autofp>%s</autofp>"
-                          "<show_closed_cves>%s</show_closed_cves>"
-                          "<notes>%s</notes>"
-                          "<overrides>%s</overrides>"
-                          "<result_hosts_only>%s</result_hosts_only>"
-                          "<search_phrase>%s</search_phrase>"
-                          "<min_cvss_base>%s</min_cvss_base>"
-                          "<delta_states>%s</delta_states>"
-                          /* Parameters for get_nvts. */
-                          "<nvt id=\"%s\"/>"
-                          /* Parameters for get_result. */
-                          "<result id=\"%s\"/>"
-                          /* Parameters for get_tasks. */
-                          "<task id=\"%s\"><name>%s</name></task>",
-                          next,
-                          params_value (params, "report_id"),
-                          params_value (params, "delta_report_id"),
-                          first_result,
-                          max_results,
-                          params_value (params, "sort_field"),
-                          params_value (params, "sort_order"),
-                          params_value (params, "levels"),
-                          params_value (params, "autofp"),
-                          params_value (params, "show_closed_cves"),
-                          params_value (params, "notes"),
-                          params_value (params, "overrides"),
-                          params_value (params, "result_hosts_only"),
-                          params_value (params, "search_phrase"),
-                          params_value (params, "min_cvss_base"),
-                          params_value (params, "delta_states"),
-                          params_value (params, "oid"),
-                          params_value (params, "result_id"),
-                          params_value (params, "task_id"),
-                          params_value (params, "name")
-                           ? params_value (params, "name")
-                           : "");
+  openvas_append_xml (xml,
+                      "<edit_override>"
+                      /* Page that follows. */
+                      "<next>%s</next>"
+                      /* Parameters for get_report. */
+                      "<report id=\"%s\"/>"
+                      "<delta><report id=\"%s\"/></delta>"
+                      "<first_result>%i</first_result>"
+                      "<max_results>%i</max_results>"
+                      "<sort_field>%s</sort_field>"
+                      "<sort_order>%s</sort_order>"
+                      "<levels>%s</levels>"
+                      "<autofp>%s</autofp>"
+                      "<show_closed_cves>%s</show_closed_cves>"
+                      "<notes>%s</notes>"
+                      "<overrides>%s</overrides>"
+                      "<result_hosts_only>%s</result_hosts_only>"
+                      "<search_phrase>%s</search_phrase>"
+                      "<min_cvss_base>%s</min_cvss_base>"
+                      "<delta_states>%s</delta_states>"
+                      /* Parameters for get_nvts. */
+                      "<nvt id=\"%s\"/>"
+                      /* Parameters for get_result. */
+                      "<result id=\"%s\"/>"
+                      /* Parameters for get_tasks. */
+                      "<task id=\"%s\"><name>%s</name></task>",
+                      next,
+                      params_value (params, "report_id"),
+                      params_value (params, "delta_report_id"),
+                      first_result,
+                      max_results,
+                      params_value (params, "sort_field"),
+                      params_value (params, "sort_order"),
+                      params_value (params, "levels"),
+                      params_value (params, "autofp"),
+                      params_value (params, "show_closed_cves"),
+                      params_value (params, "notes"),
+                      params_value (params, "overrides"),
+                      params_value (params, "result_hosts_only"),
+                      params_value (params, "search_phrase"),
+                      params_value (params, "min_cvss_base"),
+                      params_value (params, "delta_states"),
+                      params_value (params, "oid"),
+                      params_value (params, "result_id"),
+                      params_value (params, "task_id"),
+                      params_value (params, "name")
+                       ? params_value (params, "name")
+                       : "");
 
   if (read_string (&session, &xml))
     {

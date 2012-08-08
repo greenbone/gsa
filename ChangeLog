@@ -1,3 +1,9 @@
+2012-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (openvas_append_xml): New function.
+	(get_report, get_result, new_note_omp, edit_note_omp, new_override_omp)
+	(edit_override_omp): Escape XML containing search phrase before sending.
+
 2012-08-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (get_report): Send the GET_REPORTS OMP with the XML version
