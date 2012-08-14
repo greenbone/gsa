@@ -617,6 +617,7 @@ init_validator ()
                          "|(restore)"
                          "|(resume_paused_task)"
                          "|(resume_stopped_task)"
+                         "|(run_wizard)"
                          "|(test_alert)"
                          "|(save_config)"
                          "|(save_config_family)"
@@ -1530,6 +1531,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (restore)
   ELSE (resume_paused_task)
   ELSE (resume_stopped_task)
+  ELSE (run_wizard)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)

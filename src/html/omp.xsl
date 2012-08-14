@@ -630,6 +630,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:apply-templates/>
         </table>
+        <xsl:if test = "count(task) &lt; 100">  <!-- FIX 10 -->
+          <table>
+            <tr>
+              <td valign="top"><b>Welcome dear new user!</b>
+                <p>
+                  To explore this powerful application and to
+                  have a quick start for doing things first time,
+                  I am here to assist you with some hints and short-cuts.
+                </p>
+                <p>
+                  I will appear automatically in areas where you have
+                  created no or only few objects yet. And disappear after you
+                  have at least 10 objects. You can call me with this
+                  button <img src="img/wizard.png"/> any time later on.
+                </p>
+                <p>
+                  For more detailed information on functionalities,
+                  please try the integrated help system. It is always available
+                  as a context sensitive link as button <img src="img/help.png"/>.
+                </p>
+              </td>
+              <td valign="top"><img src="img/enchantress.png"/></td>
+              <td valign="top"><b>Quick start: Immediately scan an IP address</b>
+                <p>
+                  IP address or hostname:
+                  <form action="" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="cmd" value="run_wizard"/>
+                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
+                    <input type="hidden" name="name" value="quick_first_scan"/>
+                    <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+                    <input type="text" name="hosts" value="" size="30" maxlength="80"/>
+                    <input type="submit" name="submit" value="Start Scan"/>
+                  </form>
+                </p>
+                <p>
+                  For this short-cut I will do the following for you:
+                  <ol>
+                    <li>Create a new Target with default Port List</li>
+                    <li>Create a new Task using this target with default Scan Configuration</li>
+                    <li>Start this scan task right away</li>
+                    <li>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</li>
+                  </ol>
+                </p>
+                <p>
+                  In fact, you must not lean back. As soon as the scan progress is beyond 1%,
+                  you can already jump into the scan report via the details button (<img src="img/details.png"/>)
+                  and review the results collected so far.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </xsl:if>
       </div>
     </div>
   </div>
@@ -2991,6 +3044,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="delete_report_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Delete Report</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="run_wizard_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Run Wizard</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>

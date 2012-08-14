@@ -13895,6 +13895,112 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Run a wizard and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+run_wizard_omp (credentials_t *credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *hosts, *name;
+
+  name = params_value (params, "name");
+  if (name == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while trying to start a wizard. "
+                         "Diagnostics: Required parameter 'name' was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  // FIX generic from array
+  hosts = params_value (params, "hosts");
+  if (hosts == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while trying to start a wizard. "
+                         "Diagnostics: Required parameter 'hosts' was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while trying to start a wizard. "
+                             "The wizard was not executed. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<run_wizard>"
+                            "<name>%s</name>"
+                            "<params>"
+                            "<param>"
+                            "<name>hosts</name>"
+                            "<value>%s</value>"
+                            "</param>"
+                            "</params>"
+                            "</run_wizard>",
+                            name,
+                            hosts)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while trying to run a wizard. "
+                           "The wizard was not executed. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("<run_wizard>");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while executing a wizard. "
+                           "It is unclear whether the wizard executed anything or not. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  return get_tasks (credentials,
+                    NULL,
+                    params_value (params, "sort_field"),
+                    params_value (params, "sort_order"),
+                    "30",
+                    NULL,
+                    params_value (params, "overrides")
+                      ? strcmp (params_value (params, "overrides"), "0")
+                      : 0,
+                    NULL);
+
+#if 0
+  g_string_append (xml, "</run_wizard>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+#endif
+}
+
+/**
  * @brief Setup trash page XML, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

@@ -423,6 +423,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="run_wizard_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Run Wizard'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="start_task_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -782,6 +790,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_trash/empty_trashcan_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/restore_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="run_wizard/run_wizard_response"
                              mode="response-indicator"/>
 
         <!-- Administrator -->

@@ -1,3 +1,21 @@
+2012-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Immediate Scan wizard.  Based on patch by Jan-Oliver Wagner.
+
+	* CMakeLists.txt: Install enchantress.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add run_wizard.
+
+	* src/gsad_omp.c (run_wizard_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (run_wizard_response): New template.
+	(html-gsa-logo): Apply run_wizard response indicator icon.
+
+	* src/html/omp.xsl (html-task-table): Add wizard under table.
+	(run_wizard_response): New template.
+
 2012-08-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (openvas_append_xml): New function.
