@@ -1,5 +1,11 @@
 2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (run_wizard_omp): Expect params in generic form.
+
+	* src/html/omp.xsl (html-task-table): Send param in generic form.
+
+2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-task-table): Improve English slightly.
 
 2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>

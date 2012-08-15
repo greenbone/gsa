@@ -13905,9 +13905,16 @@ verify_report_format_omp (credentials_t * credentials, params_t *params)
 char *
 run_wizard_omp (credentials_t *credentials, params_t *params)
 {
-  const char *hosts, *name;
+  const char *name;
   char *ret;
-  gchar *run;
+  GString *run;
+  param_t *param;
+  gchar *param_name;
+  params_iterator_t iter;
+
+  /* The naming is a bit subtle here, because the HTTP request
+   * parameters are called "param"s and so are the OMP wizard
+   * parameters. */
 
   name = params_value (params, "name");
   if (name == NULL)
@@ -13917,38 +13924,40 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
                          "Diagnostics: Required parameter 'name' was NULL.",
                          "/omp?cmd=get_tasks");
 
-  // FIX generic from array
-  hosts = params_value (params, "hosts");
-  if (hosts == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while trying to start a wizard. "
-                         "Diagnostics: Required parameter 'hosts' was NULL.",
-                         "/omp?cmd=get_tasks");
+  run = g_string_new ("<run_wizard>");
 
-  run = g_strdup_printf ("<run_wizard>"
-                         "<name>%s</name>"
-                         "<params>"
-                         "<param>"
-                         "<name>hosts</name>"
-                         "<value>%s</value>"
-                         "</param>"
-                         "</params>"
-                         "</run_wizard>",
-                         name,
-                         hosts);
+  g_string_append_printf (run,
+                          "<name>%s</name>"
+                          "<params>",
+                          name);
+
+  params = params_values (params, "event_data:");
+  if (params)
+    {
+      params_iterator_init (&iter, params);
+      while (params_iterator_next (&iter, &param_name, &param))
+        g_string_append_printf (run,
+                                "<param>"
+                                "<name>%s</name>"
+                                "<value>%s</value>"
+                                "</param>",
+                                param_name,
+                                param->value);
+    }
+
+  g_string_append (run, "</params></run_wizard>");
 
   ret = get_tasks (credentials,
                    NULL,
                    params_value (params, "sort_field"),
                    params_value (params, "sort_order"),
                    "30",
-                   run,
+                   run->str,
                    params_value (params, "overrides")
                      ? strcmp (params_value (params, "overrides"), "0")
                      : 0,
                    NULL);
-  g_free (run);
+  g_string_free (run, TRUE);
   return ret;
 }
 
