@@ -1,5 +1,9 @@
 2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-task-table): Improve English slightly.
+
+2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (verify_report_format_omp): Let get_tasks do the
 	command so the response comes out in the XML.
 

@@ -636,17 +636,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td valign="top"><b>Welcome dear new user!</b>
                 <p>
                   To explore this powerful application and to
-                  have a quick start for doing things first time,
+                  have a quick start for doing things the first time,
                   I am here to assist you with some hints and short-cuts.
                 </p>
                 <p>
                   I will appear automatically in areas where you have
-                  created no or only few objects yet. And disappear after you
+                  created no or only a few objects. And disappear after you
                   have at least 10 objects. You can call me with this
                   button <img src="img/wizard.png"/> any time later on.
                 </p>
                 <p>
-                  For more detailed information on functionalities,
+                  For more detailed information on functionality,
                   please try the integrated help system. It is always available
                   as a context sensitive link as button <img src="img/help.png"/>.
                 </p>
