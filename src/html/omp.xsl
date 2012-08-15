@@ -3972,6 +3972,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- GET_TASKS -->
 
 <xsl:template match="get_tasks">
+  <xsl:apply-templates select="run_wizard_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
   <xsl:apply-templates select="commands_response"/>
 </xsl:template>

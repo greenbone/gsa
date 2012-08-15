@@ -1,3 +1,10 @@
+2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (verify_report_format_omp): Let get_tasks do the
+	command so the response comes out in the XML.
+
+	* src/html/omp.xsl (get_tasks): Apply run_wizard_response.
+
 2012-08-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Immediate Scan wizard.  Based on patch by Jan-Oliver Wagner.
