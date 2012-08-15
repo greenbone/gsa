@@ -1,5 +1,17 @@
 2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add force_wizard.
+
+	* src/gsad_omp.c (get_tasks): Add params arg.  Adjust all callers.  Get
+	Wizard Rows preference.  Pass force_wizard down to XML.
+	(save_my_settings): Save Wizard Rows too.
+
+	* src/html/omp.xsl (html-task-table): Add wizard icon.  Make wizard
+	visibility depend on Wizard Rows and force_wizard.
+	(get_my_settings, edit_my_settings): Add Wizard Rows.
+
+2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (run_wizard_omp): Expect params in generic form.
 
 	* src/html/omp.xsl (html-task-table): Send param in generic form.

@@ -92,7 +92,7 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
-static char *get_tasks (credentials_t *, const char *, const char *,
+static char *get_tasks (credentials_t *, params_t *, const char *, const char *,
                         const char *, const char *, const char *, int,
                         const char *);
 
@@ -822,7 +822,7 @@ create_report_omp (credentials_t * credentials, params_t *params)
                                  "</create_report>",
                                  task_id ? task_id : "0",
                                  xml_file ? xml_file : "");
-      ret = get_tasks (credentials, task_id, NULL, NULL, NULL, command,
+      ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL, command,
                        overrides && strcmp (overrides, "0"), NULL);
       g_free (command);
       return ret;
@@ -1103,7 +1103,7 @@ delete_task_omp (credentials_t * credentials, params_t *params)
                          "/omp?cmd=get_tasks");
 
   delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"), delete_task,
                    strcmp (overrides, "0"), NULL);
   g_free (delete_task);
@@ -1371,7 +1371,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
+      char *ret = get_tasks (credentials, params, NULL, sort_field, sort_order,
                              refresh_interval, modify_task, apply_overrides,
                              NULL);
       g_free (modify_task);
@@ -1380,9 +1380,9 @@ save_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, sort_field, sort_order,
-                             refresh_interval, modify_task, apply_overrides,
-                             NULL);
+      char *ret = get_tasks (credentials, params, task_id, sort_field,
+                             sort_order, refresh_interval, modify_task,
+                             apply_overrides, NULL);
       g_free (modify_task);
       return ret;
     }
@@ -1457,7 +1457,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_tasks (credentials, NULL, sort_field, sort_order,
+      char *ret = get_tasks (credentials, params, NULL, sort_field, sort_order,
                              refresh_interval, modify_task, apply_overrides,
                              NULL);
       g_free (modify_task);
@@ -1466,9 +1466,9 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, sort_field, sort_order,
-                             refresh_interval, modify_task, apply_overrides,
-                             NULL);
+      char *ret = get_tasks (credentials, params, task_id, sort_field,
+                             sort_order, refresh_interval, modify_task,
+                             apply_overrides, NULL);
       g_free (modify_task);
       return ret;
     }
@@ -1516,13 +1516,13 @@ stop_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+      char *ret = get_tasks (credentials, params, task_id, "name", "ascending",
                              NULL, stop_task, apply_overrides, NULL);
       g_free (stop_task);
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"), stop_task,
                    apply_overrides, NULL);
   g_free (stop_task);
@@ -1563,13 +1563,13 @@ pause_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+      char *ret = get_tasks (credentials, params, task_id, "name", "ascending",
                              NULL, pause_task, apply_overrides, NULL);
       g_free (pause_task);
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"), pause_task,
                    apply_overrides, NULL);
   g_free (pause_task);
@@ -1611,13 +1611,13 @@ resume_paused_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+      char *ret = get_tasks (credentials, params, task_id, "name", "ascending",
                              NULL, resume_paused_task, apply_overrides, NULL);
       g_free (resume_paused_task);
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"),
                    resume_paused_task, apply_overrides, NULL);
   g_free (resume_paused_task);
@@ -1659,13 +1659,13 @@ resume_stopped_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+      char *ret = get_tasks (credentials, params, task_id, "name", "ascending",
                              NULL, resume_stopped, apply_overrides, NULL);
       g_free (resume_stopped);
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"), resume_stopped,
                    apply_overrides, NULL);
   g_free (resume_stopped);
@@ -1706,13 +1706,13 @@ start_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, "name", "ascending",
+      char *ret = get_tasks (credentials, params, task_id, "name", "ascending",
                              NULL, start_task, apply_overrides, NULL);
       g_free (start_task);
       return ret;
     }
 
-  ret = get_tasks (credentials, NULL, "name", "ascending",
+  ret = get_tasks (credentials, params, NULL, "name", "ascending",
                    params_value (params, "refresh_interval"), start_task,
                    apply_overrides, NULL);
   g_free (start_task);
@@ -1923,6 +1923,7 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
  * @brief Get all tasks, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  params            Request parameters.
  * @param[in]  task_id           ID of task.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
@@ -1934,7 +1935,7 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks (credentials_t * credentials, const char *task_id,
+get_tasks (credentials_t *credentials, params_t *params, const char *task_id,
            const char *sort_field, const char *sort_order,
            const char *refresh_interval, const char *commands,
            int apply_overrides, const char *report_id)
@@ -2016,6 +2017,8 @@ get_tasks (credentials_t * credentials, const char *task_id,
                                 " apply_overrides=\"%i\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>"
+                                "<get_settings"
+                                " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
                                 "</commands>",
                                 commands ? commands : "",
                                 apply_overrides,
@@ -2036,8 +2039,14 @@ get_tasks (credentials_t * credentials, const char *task_id,
   xml = g_string_new ("<get_tasks>");
   g_string_append_printf (xml,
                           "<apply_overrides>%i</apply_overrides>"
+                          "<force_wizard>%i</force_wizard>"
                           "<delta>%s</delta>",
                           apply_overrides,
+                          params_value (params, "force_wizard")
+                           ? (strcmp (params_value (params, "force_wizard"),
+                                      "0")
+                               ? 1 : 0)
+                           : 0,
                           report_id ? report_id : "");
   if (read_string (&session, &xml))
     {
@@ -2074,6 +2083,7 @@ char *
 get_tasks_omp (credentials_t * credentials, params_t *params)
 {
   return get_tasks (credentials,
+                    params,
                     params_value (params, "task_id"),
                     params_value (params, "sort_field"),
                     params_value (params, "sort_order"),
@@ -8550,7 +8560,7 @@ delete_report_omp (credentials_t * credentials, params_t *params)
   delete_report = g_strdup_printf ("<delete_report report_id=\"%s\"/>",
                                    report_id);
 
-  ret = get_tasks (credentials, task_id, NULL, NULL, 0, delete_report,
+  ret = get_tasks (credentials, params, task_id, NULL, NULL, 0, delete_report,
                    overrides ? strcmp (overrides, "0") : 0, NULL);
   g_free (delete_report);
   return ret;
@@ -10308,7 +10318,7 @@ delete_note_omp (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_notes");
 
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
+      ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL, extra,
                        overrides ? strcmp (overrides, "0") : 0,
                        NULL);
 
@@ -10844,7 +10854,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
+      char *ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL,
                              modify_note,
                              overrides ? strcmp (overrides, "0") : 0,
                              NULL);
@@ -11478,7 +11488,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
 
       extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                override_id);
-      ret = get_tasks (credentials, task_id, NULL, NULL, NULL, extra,
+      ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL, extra,
                        overrides ? strcmp (overrides, "0") : 0,
                        NULL);
 
@@ -12019,7 +12029,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_tasks (credentials, task_id, NULL, NULL, NULL,
+      char *ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL,
                              modify_override,
                              overrides ? strcmp (overrides, "0") : 0,
                              NULL);
@@ -13948,6 +13958,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
   g_string_append (run, "</params></run_wizard>");
 
   ret = get_tasks (credentials,
+                   params,
                    NULL,
                    params_value (params, "sort_field"),
                    params_value (params, "sort_order"),
@@ -14736,6 +14747,45 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
+  max = params_value (params, "max_results");
+  max_64 = (max
+             ? g_base64_encode ((guchar*) max, strlen (max))
+             : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"20f3034c-e709-11e1-87e7-406186ea4fc5\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            max_64 ? max_64 : "")
+      == -1)
+    {
+      g_free (max_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+  g_free (max_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_my_settings");
     }

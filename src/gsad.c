@@ -790,6 +790,7 @@ init_validator ()
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "from_file",          "boolean");
+  openvas_validator_alias (validator, "force_wizard",       "boolean");
   openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");

@@ -456,6 +456,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-task-table">
   <xsl:variable name="apply-overrides" select="apply_overrides"/>
+  <xsl:variable name="force-wizard" select="../../force_wizard"/>
+  <xsl:variable name="wizard-rows"
+                select="../get_settings_response/setting[name='Wizard Rows']/value"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -463,6 +466,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
+      <xsl:choose>
+        <xsl:when test="$force-wizard = 1">
+          <a href="/omp?cmd=get_tasks&amp;overrides={$apply-overrides}&amp;token={/envelope/token}#wizard"
+             title="Hide Wizard">
+            <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
+        <xsl:when test="count(task) &gt; $wizard-rows">
+          <a href="/omp?cmd=get_tasks&amp;overrides={$apply-overrides}&amp;force_wizard=1&amp;token={/envelope/token}#wizard"
+             title="Show Wizard">
+            <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
            title="New Task">
@@ -630,7 +649,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:apply-templates/>
         </table>
-        <xsl:if test = "count(task) &lt; 100">  <!-- FIX 10 -->
+        <xsl:if test="(count(task) &lt;= $wizard-rows) or ($force-wizard = 1)">
+          <a name="wizard"></a>
           <table>
             <tr>
               <td valign="top"><b>Welcome dear new user!</b>
@@ -15699,6 +15719,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
             <td></td>
           </tr>
+          <tr>
+            <td>Wizard Rows</td>
+            <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
+            <td></td>
+          </tr>
         </table>
       </div>
     </div>
@@ -15752,6 +15777,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <input type="text" name="max" size="40" maxlength="800"
                        value="{get_settings_response/setting[name='Rows Per Page']/value}"/>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Wizard Rows</td>
+              <td>
+                <input type="text" name="max_results" size="40" maxlength="800"
+                       value="{get_settings_response/setting[name='Wizard Rows']/value}"/>
               </td>
               <td></td>
             </tr>
