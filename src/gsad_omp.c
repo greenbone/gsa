@@ -13946,13 +13946,13 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
     {
       params_iterator_init (&iter, params);
       while (params_iterator_next (&iter, &param_name, &param))
-        g_string_append_printf (run,
-                                "<param>"
-                                "<name>%s</name>"
-                                "<value>%s</value>"
-                                "</param>",
-                                param_name,
-                                param->value);
+        openvas_append_xml (run,
+                            "<param>"
+                            "<name>%s</name>"
+                            "<value>%s</value>"
+                            "</param>",
+                            param_name,
+                            param->value);
     }
 
   g_string_append (run, "</params></run_wizard>");

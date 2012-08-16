@@ -1,3 +1,7 @@
+2012-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (run_wizard_omp): Escape param name and value for XML.
+
 2012-08-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add force_wizard.
