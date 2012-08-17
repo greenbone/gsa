@@ -5111,6 +5111,20 @@ Public License instead of this License.
        Note that leaving this page will reset the refresh interval to manual refresh.
       </p>
 
+      <a name="wizard"></a>
+      <h3>Quick Start Wizard</h3>
+      <p>
+       When there are few tasks in the table, the Quick Start wizard is displayed
+       under the table.  This wizard creates and starts a Task given only an IP
+       address or hostname.
+      </p>
+      <p>
+       The wizard <img src="/img/wizard.png" alt="Show Wizard" title="Show Wizard"/>
+       icon provides a way to hide or show the wizard.  The user setting "Wizard Rows"
+       determines the number of rows in the table above which the wizard will be
+       hidden by default.
+      </p>
+
       <a name="overrides"></a>
       <h3>Overrides</h3>
       <p>

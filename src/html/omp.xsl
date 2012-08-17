@@ -663,12 +663,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   I will appear automatically in areas where you have
                   created no or only a few objects. And disappear after you
                   have at least 10 objects. You can call me with this
-                  button <img src="img/wizard.png"/> any time later on.
+                  icon <img src="img/wizard.png"/> any time later on.
                 </p>
                 <p>
                   For more detailed information on functionality,
                   please try the integrated help system. It is always available
-                  as a context sensitive link as button <img src="img/help.png"/>.
+                  as a context sensitive link as icon <img src="img/help.png"/>.
                 </p>
               </td>
               <td valign="top"><img src="img/enchantress.png"/></td>
@@ -696,7 +696,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </p>
                 <p>
                   In fact, you must not lean back. As soon as the scan progress is beyond 1%,
-                  you can already jump into the scan report via the details button (<img src="img/details.png"/>)
+                  you can already jump into the scan report via the details icon (<img src="img/details.png"/>)
                   and review the results collected so far.
                 </p>
               </td>

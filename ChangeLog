@@ -1,3 +1,10 @@
+2012-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-task-table): Use "icon" for buttons, because
+	that's what they're called in the help.
+
+	* src/html/help.xsl (tasks.html): Add section about wizard.
+
 2012-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-gsa-logo): Update path for run_wizard response
