@@ -1,5 +1,26 @@
 2012-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a dedicated quick start wizard page.
+
+	* CMakeLists.txt: Install wizard.xsl.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add wizard.
+
+	* src/gsad_omp.c (wizard_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl: Incluse wizard.xsl.
+
+	* src/html/omp.xsl (html-task-table): Link wizard icon to new wizard
+	page.  Replace wizard code with call to wizard template.
+
+	* src/html/wizard.xsl: New file.  For wizards.  Move quick start wizard
+	here.  Also display the actual 'Wizard Rows' value in the text instead
+	of 10.
+
+2012-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-task-table): Use "icon" for buttons, because
 	that's what they're called in the help.
 

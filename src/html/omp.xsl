@@ -466,22 +466,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
-      <xsl:choose>
-        <xsl:when test="$force-wizard = 1">
-          <a href="/omp?cmd=get_tasks&amp;overrides={$apply-overrides}&amp;token={/envelope/token}#wizard"
-             title="Hide Wizard">
-            <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-        <xsl:when test="count(task) &gt; $wizard-rows">
-          <a href="/omp?cmd=get_tasks&amp;overrides={$apply-overrides}&amp;force_wizard=1&amp;token={/envelope/token}#wizard"
-             title="Show Wizard">
-            <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
+         title="Wizard">
+        <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+      </a>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
         <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
            title="New Task">
@@ -650,58 +638,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:apply-templates/>
         </table>
         <xsl:if test="(count(task) &lt;= $wizard-rows) or ($force-wizard = 1)">
-          <a name="wizard"></a>
-          <table>
-            <tr>
-              <td valign="top"><b>Welcome dear new user!</b>
-                <p>
-                  To explore this powerful application and to
-                  have a quick start for doing things the first time,
-                  I am here to assist you with some hints and short-cuts.
-                </p>
-                <p>
-                  I will appear automatically in areas where you have
-                  created no or only a few objects. And disappear after you
-                  have at least 10 objects. You can call me with this
-                  icon <img src="img/wizard.png"/> any time later on.
-                </p>
-                <p>
-                  For more detailed information on functionality,
-                  please try the integrated help system. It is always available
-                  as a context sensitive link as icon <img src="img/help.png"/>.
-                </p>
-              </td>
-              <td valign="top"><img src="img/enchantress.png"/></td>
-              <td valign="top"><b>Quick start: Immediately scan an IP address</b>
-                <p>
-                  IP address or hostname:
-                  <form action="" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="run_wizard"/>
-                    <input type="hidden" name="caller" value="{/envelope/caller}"/>
-                    <input type="hidden" name="name" value="quick_first_scan"/>
-                    <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-                    <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
-                    <input type="submit" name="submit" value="Start Scan"/>
-                  </form>
-                </p>
-                <p>
-                  For this short-cut I will do the following for you:
-                  <ol>
-                    <li>Create a new Target with default Port List</li>
-                    <li>Create a new Task using this target with default Scan Configuration</li>
-                    <li>Start this scan task right away</li>
-                    <li>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</li>
-                  </ol>
-                </p>
-                <p>
-                  In fact, you must not lean back. As soon as the scan progress is beyond 1%,
-                  you can already jump into the scan report via the details icon (<img src="img/details.png"/>)
-                  and review the results collected so far.
-                </p>
-              </td>
-            </tr>
-          </table>
+          <xsl:call-template name="quick-first-scan-wizard">
+            <xsl:with-param name="apply-overrides" select="$apply-overrides"/>
+          </xsl:call-template>
         </xsl:if>
       </div>
     </div>

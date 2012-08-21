@@ -180,6 +180,7 @@ char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, params_t *);
 
 char * run_wizard_omp (credentials_t *, params_t *);
+char * wizard_omp (credentials_t *, params_t *);
 
 char * get_trash_omp (credentials_t *, params_t *params);
 char * restore_omp (credentials_t *, params_t *);

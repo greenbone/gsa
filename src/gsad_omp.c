@@ -15563,6 +15563,81 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
 }
 
 
+/* Wizards. */
+
+/**
+ * @brief Returns page to create a new task.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  message      If not NULL, display message.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+wizard_omp (credentials_t *credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the wizard. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml,
+                          "<wizard><%s/>",
+                          params_value (params, "name"));
+
+  /* Get the setting. */
+
+  if (openvas_server_sendf_xml (&session,
+                                "<get_settings"
+                                " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the wizard. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while the wizard. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append_printf (xml, "</wizard>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+
 /* Manager communication. */
 
 /**

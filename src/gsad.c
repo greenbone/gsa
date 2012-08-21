@@ -636,7 +636,8 @@ init_validator ()
                          "|(stop_task)"
                          "|(sync_feed)"
                          "|(verify_agent)"
-                         "|(verify_report_format)$");
+                         "|(verify_report_format)"
+                         "|(wizard)$");
 
 
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
@@ -1837,6 +1838,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_override)
   ELSE (verify_agent)
   ELSE (verify_report_format)
+  ELSE (wizard)
 
   else
     return gsad_message (credentials,
