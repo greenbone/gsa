@@ -635,7 +635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:otherwise>
               </xsl:choose>
               <p>
-                <a href="/help/feed_management.html?token={/envelope/token}#consequences" title="Help: Feed Management">Learn about the consequences of feed synchronization</a>
+                <a href="/help/feed_management.html?token={/envelope/token}#side_effects" title="Help: Feed Management">Learn about the side effects of feed synchronization</a>
               </p>
             </td>
           </tr>

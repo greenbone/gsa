@@ -1,3 +1,8 @@
+2012-08-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/oap.xsl, src/html/help.xsl: Replaced "consequences" by
+	"side effects" for the sake of a more apropriate term.
+
 2012-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a dedicated quick start wizard page.

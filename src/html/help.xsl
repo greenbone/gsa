@@ -2284,8 +2284,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        start the synchronization.
       </p>
 
-      <a name="consequences"></a>
-      <h2>Consequences of an NVT Synchronization</h2>
+      <a name="side_effects"></a>
+      <h2>Side effects of an NVT Synchronization</h2>
       <p>
        The synchronization with an NVT Feed Service will take a short amount of time,
        depending on the time of your last synchronization and the amount of changes in
