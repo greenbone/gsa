@@ -1,3 +1,32 @@
+2012-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a Task Wizard page.  Add wizard and list icons to the New Task page.
+
+	* src/gsad_base.h (params_t): Move up in file.
+	(credentials_t): Add params.
+
+	* src/gsad.c (exec_omp_post, exec_omp_get): Store request params in
+	credentials.
+
+	* src/gsad_omp.c (openvas_append_xml): Move up in file.
+	(xsl_transform_omp): Pass all valid request params to XSL in ENVELOPE.
+	(run_wizard_omp): Use separate variable for wizard params.  Get refresh
+	interval from param.
+
+	* src/html/gsad.xsl (params): New template.
+
+	* src/html/help.xsl (tasks.html): Rename wizard.  Make wizard section
+	suitable for dedicated wizard page.
+
+	* src/html/omp.xsl (html-task-table): Add missing refresh_interval arg
+	to links.  Remove apply-overrides param from template call.
+	(new_task): Add wizard and list icons.  Add missing refresh_interval arg
+	to link.
+
+	* src/html/wizard.xsl (quick-first-scan-wizard): Remove apply-overrides
+	arg as this is in ENVELOPE now.
+	(wizard/quick_first_scan): New template.  Dedicated wizard page.
+
 2012-08-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/oap.xsl, src/html/help.xsl: Replaced "consequences" by

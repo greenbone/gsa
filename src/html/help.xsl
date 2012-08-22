@@ -5112,17 +5112,19 @@ Public License instead of this License.
       </p>
 
       <a name="wizard"></a>
-      <h3>Quick Start Wizard</h3>
+      <h3>Task Wizard</h3>
       <p>
-       When there are few tasks in the table, the Quick Start wizard is displayed
-       under the table.  This wizard creates and starts a Task given only an IP
-       address or hostname.
+       The Task Wizard provides a simple way to creates and start a task given
+       only an IP address or hostname.
+      </p>
+      <p>
+       When there are few tasks in the task table, the Task Wizard is displayed
+       under the table.  The user setting "Wizard Rows" determines the number of
+       rows in the table above which the wizard will be hidden by default.
       </p>
       <p>
        The wizard <img src="/img/wizard.png" alt="Show Wizard" title="Show Wizard"/>
-       icon provides a way to hide or show the wizard.  The user setting "Wizard Rows"
-       determines the number of rows in the table above which the wizard will be
-       hidden by default.
+       icon leads to a dedicated page providing the wizard.
       </p>
 
       <a name="overrides"></a>

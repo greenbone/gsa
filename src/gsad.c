@@ -1440,6 +1440,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                ? strdup (user->capabilities)
                                : NULL;
   credentials->token = strdup (user->token);
+  credentials->params = con_info->params;
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
@@ -1656,6 +1657,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                  params_mhd_add, params);
 
       params_mhd_validate (params);
+      credentials->params = params;
     }
   else
     return gsad_message (credentials,

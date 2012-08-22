@@ -57,6 +57,8 @@
   " will lead you to the appropriate help page."                                  \
   "</gsad_msg>"
 
+#define params_t GHashTable
+
 /**
  *  @brief Structure of credential related information.
  */
@@ -69,6 +71,7 @@ typedef struct
   char *token;        ///< Session token.
   char *caller;       ///< Caller URL, for POST relogin.
   char *capabilities; ///< Capabilites of manager.
+  params_t *params;   ///< Request parameters.
 } credentials_t;
 
 /**
@@ -126,8 +129,6 @@ enum content_type
 
 
 /* Params. */
-
-#define params_t GHashTable
 
 /**
  * @brief Request parameter.

@@ -39,8 +39,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<xsl:template name="quick-first-scan-wizard" match="wizard/quick_first_scan">
-  <xsl:param name="apply-overrides" select="1"/>
+<xsl:template name="quick-first-scan-wizard">
   <a name="wizard"></a>
   <table>
     <tr>
@@ -73,7 +72,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="cmd" value="run_wizard"/>
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="hidden" name="name" value="quick_first_scan"/>
-            <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+            <input type="hidden" name="refresh_interval" value="{/envelope/params/refresh_interval}"/>
+            <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
             <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
             <input type="submit" name="submit" value="Start Scan"/>
           </form>
@@ -95,6 +95,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
     </tr>
   </table>
+</xsl:template>
+
+<xsl:template match="wizard/quick_first_scan">
+  <xsl:apply-templates select="gsad_msg"/>
+
+  <div class="gb_window_part_left"></div>
+  <div class="gb_window_part_right"></div>
+  <div class="gb_window_part_center">Task Wizard
+    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="Help: Task Wizard">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}"
+       title="New Task">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <xsl:call-template name="quick-first-scan-wizard"/>
+  </div>
 </xsl:template>
 
 </xsl:stylesheet>

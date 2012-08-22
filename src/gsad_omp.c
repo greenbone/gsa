@@ -132,6 +132,28 @@ omp_init (const gchar *address_manager, int port_manager)
 }
 
 /**
+ * @brief Append formatted escaped XML to a string.
+ *
+ * @param[in]  xml     XML string.
+ * @param[in]  format  Format string.
+ * @param[in]  ...     Arguments for format string.
+ *
+ * @return Result of XSL transformation.
+ */
+static void
+openvas_append_xml (GString *xml, const char *format, ...)
+{
+  gchar *piece;
+  va_list args;
+
+  va_start (args, format);
+  piece = g_markup_vprintf_escaped (format, args);
+  va_end (args);
+  g_string_append (xml, piece);
+  g_free (piece);
+}
+
+/**
  * @brief Wrap some XML in an envelope and XSL transform the envelope.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -143,10 +165,12 @@ static char *
 xsl_transform_omp (credentials_t * credentials, gchar * xml)
 {
   time_t now;
-  gchar *res;
+  gchar *res, *name;
   GString *string;
   char *html;
   char ctime_now[200];
+  params_iterator_t iter;
+  param_t *param;
 
   assert (credentials);
 
@@ -171,6 +195,14 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->role);
   g_string_append (string, res);
   g_free (res);
+
+  g_string_append (string, "<params>");
+  params_iterator_init (&iter, credentials->params);
+  while (params_iterator_next (&iter, &name, &param))
+    if (param->value_size && param->valid)
+      openvas_append_xml (string, "<%s>%s</%s>", name, param->value, name);
+  g_string_append (string, "</params>");
+
   g_string_append_printf (string,
                           "<capabilities>%s</capabilities>"
                           "%s"
@@ -396,29 +428,6 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
     }
 
   return NULL;
-}
-
-
-/**
- * @brief Append formatted escaped XML to a string.
- *
- * @param[in]  xml     XML string.
- * @param[in]  format  Format string.
- * @param[in]  ...     Arguments for format string.
- *
- * @return Result of XSL transformation.
- */
-static void
-openvas_append_xml (GString *xml, const char *format, ...)
-{
-  gchar *piece;
-  va_list args;
-
-  va_start (args, format);
-  piece = g_markup_vprintf_escaped (format, args);
-  va_end (args);
-  g_string_append (xml, piece);
-  g_free (piece);
 }
 
 
@@ -13921,6 +13930,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
   param_t *param;
   gchar *param_name;
   params_iterator_t iter;
+  params_t *wizard_params;
 
   /* The naming is a bit subtle here, because the HTTP request
    * parameters are called "param"s and so are the OMP wizard
@@ -13941,10 +13951,10 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
                           "<params>",
                           name);
 
-  params = params_values (params, "event_data:");
-  if (params)
+  wizard_params = params_values (params, "event_data:");
+  if (wizard_params)
     {
-      params_iterator_init (&iter, params);
+      params_iterator_init (&iter, wizard_params);
       while (params_iterator_next (&iter, &param_name, &param))
         openvas_append_xml (run,
                             "<param>"
@@ -13962,7 +13972,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
                    NULL,
                    params_value (params, "sort_field"),
                    params_value (params, "sort_order"),
-                   "30",
+                   params_value (params, "refresh_interval"),
                    run->str,
                    params_value (params, "overrides")
                      ? strcmp (params_value (params, "overrides"), "0")

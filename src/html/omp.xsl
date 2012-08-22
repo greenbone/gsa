@@ -466,12 +466,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
         <img src="/img/help.png" border="0"/>
       </a>
-      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
          title="Wizard">
         <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
       </a>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-        <a href="/omp?cmd=new_task&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
            title="New Task">
           <img src="/img/new.png" border="0" style="margin-left:3px;"/>
         </a>
@@ -554,6 +554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
+<!-- FIX apply-overrides? -->
                       <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;token={/envelope/token}"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
@@ -638,9 +639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:apply-templates/>
         </table>
         <xsl:if test="(count(task) &lt;= $wizard-rows) or ($force-wizard = 1)">
-          <xsl:call-template name="quick-first-scan-wizard">
-            <xsl:with-param name="apply-overrides" select="$apply-overrides"/>
-          </xsl:call-template>
+          <xsl:call-template name="quick-first-scan-wizard"/>
         </xsl:if>
       </div>
     </div>
@@ -15427,6 +15426,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;token={/envelope/token}"
+       title="Wizard">
+      <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
+    </a>
   </div>
   <div class="gb_window_part_content">
     <form action="/omp" method="post" enctype="multipart/form-data">
@@ -15475,7 +15482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="count" select="alerts"/>
             </xsl:call-template>
             <a style="margin-left: 5px; font-size: 16px; font-weight: bold"
-               href="/omp?cmd=new_task&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
+               href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
           </td>
         </tr>
         <tr>
@@ -15566,6 +15573,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">New Container Task
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
       <img src="/img/help.png"/>
+    </a>
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+       title="Tasks" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>
   </div>
   <div class="gb_window_part_content">
