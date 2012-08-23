@@ -1,5 +1,13 @@
 2012-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (SID_COOKIE_NAME): New define.  Rename cookie to be more
+	unique.
+	(struct gsad_connection_info): Remove quotes for name change.
+	(attach_sid, remove_side, request_handler): Get name of SID cookie from
+	define.
+
+2012-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-task-table): Add refresh_interval and
 	overrides to sorting links.
 

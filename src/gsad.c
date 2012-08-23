@@ -85,6 +85,11 @@
 #include "validator.h"
 
 /**
+ * @brief Name of the cookie used to store the SID.
+ */
+#define SID_COOKIE_NAME "GSAD_SID"
+
+/**
  * @brief Fallback GSAD port for HTTPS.
  */
 #define DEFAULT_GSAD_HTTPS_PORT 443
@@ -896,7 +901,7 @@ struct gsad_connection_info
   char *response;                          ///< HTTP response text.
   int answercode;                          ///< HTTP response code.
   params_t *params;                        ///< Request parameters.
-  char *cookie;                            ///< Value of "SID" cookie param.
+  char *cookie;                            ///< Value of SID cookie param.
 };
 
 /**
@@ -1940,7 +1945,8 @@ attach_sid (struct MHD_Response *response, const char *sid)
    * Tim Brown's suggested cookie included a domain attribute.  How would
    * we get the domain in here?  Maybe a --domain option. */
 
-  value = g_strdup_printf ("SID=%s; expires=%s; path=/; %sHTTPonly",
+  value = g_strdup_printf (SID_COOKIE_NAME
+                           "=%s; expires=%s; path=/; %sHTTPonly",
                            sid,
                            expires,
                            (use_secure_cookie ? "secure; " : ""));
@@ -1984,7 +1990,7 @@ remove_sid (struct MHD_Response *response)
    * Tim Brown's suggested cookie included a domain attribute.  How would
    * we get the domain in here?  Maybe a --domain option. */
 
-  value = g_strdup_printf ("SID=0; expires=%s; path=/; %sHTTPonly",
+  value = g_strdup_printf (SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly",
                            expires,
                            (use_secure_cookie ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
@@ -2668,7 +2674,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       cookie = MHD_lookup_connection_value (connection,
                                             MHD_COOKIE_KIND,
-                                            "SID");
+                                            SID_COOKIE_NAME);
       if (openvas_validate (validator, "token", cookie))
         cookie = NULL;
 
@@ -3059,7 +3065,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       sid = MHD_lookup_connection_value (connection,
                                          MHD_COOKIE_KIND,
-                                         "SID");
+                                         SID_COOKIE_NAME);
       if (openvas_validate (validator, "token", sid))
         con_info->cookie = NULL;
       else
