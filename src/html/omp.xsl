@@ -546,7 +546,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;token={/envelope/token}"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -554,8 +554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-<!-- FIX apply-overrides? -->
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;token={/envelope/token}"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -566,13 +565,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;token={/envelope/token}"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=ascending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;token={/envelope/token}"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=name&amp;sort_order=descending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"
@@ -590,7 +589,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <img src="/img/ascending_inactive.png"
                            border="0"
                            style="margin-left:3px;"/>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;token={/envelope/token}"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                          title="Sort Descending">
                         <img src="/img/descending.png"
                              border="0"
@@ -598,7 +597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;token={/envelope/token}"
+                      <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                          title="Sort Ascending">
                         <img src="/img/ascending.png"
                              border="0"
@@ -611,13 +610,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;token={/envelope/token}"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=ascending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                      title="Sort Ascending">
                     <img src="/img/ascending.png"
                          border="0"
                          style="margin-left:3px;"/>
                   </a>
-                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;token={/envelope/token}"
+                  <a href="/omp?cmd=get_tasks&amp;sort_field=run_status&amp;sort_order=descending&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
                      title="Sort Descending">
                     <img src="/img/descending.png"
                          border="0"

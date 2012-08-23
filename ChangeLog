@@ -1,3 +1,8 @@
+2012-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-task-table): Add refresh_interval and
+	overrides to sorting links.
+
 2012-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add a Task Wizard page.  Add wizard and list icons to the New Task page.
