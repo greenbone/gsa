@@ -969,7 +969,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             'Back' button of browser
             <xsl:choose>
               <xsl:when test="string-length ($token) &gt; 0">
-                | <a href="{$backurl}&amp;token={$token}">Assumed sane state</a>
+                <xsl:choose>
+                  <xsl:when test="contains ($backurl, '?')">
+                    | <a href="{$backurl}&amp;token={$token}">Assumed sane state</a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    | <a href="{$backurl}?token={$token}">Assumed sane state</a>
+                  </xsl:otherwise>
+                </xsl:choose>
                 | <a href="/logout?token={$token}">Logout</a>
               </xsl:when>
               <xsl:otherwise>

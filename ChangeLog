@@ -1,3 +1,8 @@
+2012-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (error_dialog): For the backurl link, check for
+	the case where the token is the only parameter.
+
 2012-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (SID_COOKIE_NAME): New define.  Rename cookie to be more
