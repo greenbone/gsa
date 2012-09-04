@@ -95,26 +95,67 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
       <div style="float: right">
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_{$type}s"/>
-            <input type="submit" value="Reset" title="Reset"/>
-          <input type="hidden" name="filter" value=""/>
-          <input type="hidden" name="first" value=""/>
-          <input type="hidden" name="max" value="-2"/>
+        <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+          <div style="display: inline; padding: 2px; vertical-align:middle;">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="create_filter"/>
+            <input type="hidden" name="caller" value="{/envelope/caller}"/>
+            <input type="hidden" name="comment" value=""/>
+            <input type="hidden" name="term" value="{filters/term}"/>
+            <input type="hidden" name="optional_resource_type" value="{$type}"/>
+            <input type="hidden" name="next" value="get_{$type}s"/>
+            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="text" name="name" value="" size="10"
+                   maxlength="80" style="vertical-align:middle"/>
+            <input type="image"
+                   name="New Filter"
+                   src="/img/new.png"
+                   alt="New Filter"
+                   style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+          </div>
+        </form>
+        <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+          <div style="display: inline; padding: 2px; vertical-align:middle;">
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="get_{$type}s"/>
+            <select style="margin-bottom: 0px;" name="filt_id">
+              <option value="">--</option>
+              <xsl:variable name="id" select="filters/@id"/>
+              <xsl:for-each select="../filters/get_filters_response/filter">
+                <xsl:choose>
+                  <xsl:when test="@id = $id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+            <input type="image"
+                   name="Switch Filter"
+                   src="/img/refresh.png"
+                   alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+            <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+               title="Filters">
+              <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                   src="/img/list.png" border="0" alt="Filters"/>
+            </a>
+          </div>
         </form>
       </div>
       <form action="" method="get">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_{$type}s"/>
-        <div style="float: right">
-          <input type="submit" value="Update Filter" title="Update Filter"/>
-        </div>
         <div style="padding: 2px;">
           Filter:
-          <input type="text" name="filter" size="80"
+          <input type="text" name="filter" size="60"
                  value="{filters/term}"
                  maxlength="1000"/>
+          <input type="image"
+                 name="Update Filter"
+                 src="/img/refresh.png"
+                 alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
         </div>
       </form>
     </div>
@@ -5416,6 +5457,535 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END ALERTS MANAGEMENT -->
 
+<!-- BEGIN GENERIC MANAGEMENT -->
+
+<xsl:template name="list-window">
+  <xsl:param name="type"/>
+  <xsl:param name="cap-type"/>
+  <xsl:param name="resources-summary"/>
+  <xsl:param name="resources"/>
+  <xsl:param name="count"/>
+  <xsl:param name="filtered-count"/>
+  <xsl:param name="headings"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center"><xsl:value-of select="$cap-type"/>s
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="$type"/>
+        <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="count" select="$count"/>
+        <xsl:with-param name="filtered_count" select="$filtered-count"/>
+      </xsl:call-template>
+      <a href="/help/{$type}s.html?token={/envelope/token}"
+         title="Help: {$cap-type}s">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;token={/envelope/token}"
+         title="New {$type}">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=export_{$type}s&amp;filter={filters/term}&amp;token={/envelope/token}"
+           title="Export {$filtered-count} filtered {$cap-type}s as XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="$type"/>
+      <xsl:with-param name="list" select="$resources-summary"/>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="str:split ($headings, ' ')">
+              <td>
+                <xsl:call-template name="column-name">
+                  <xsl:with-param name="head" select="substring-before (., '|')"/>
+                  <xsl:with-param name="name" select="substring-after (., '|')"/>
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="current" select="$current"/>
+                  <xsl:with-param name="token" select="$token"/>
+                </xsl:call-template>
+              </td>
+            </xsl:for-each>
+            <td width="100">Actions</td>
+          </tr>
+          <xsl:apply-templates select="$resources"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="7">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_${type}s&amp;filter={filters/term}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<!-- BEGIN FILTERS MANAGEMENT -->
+
+<xsl:template match="filters">
+</xsl:template>
+
+<xsl:template match="create_filter_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Filter</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_filter_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Filter</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="filter">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="term"/></td>
+    <td><xsl:value-of select="type"/></td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="writable='1'">
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'filter'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="filter" value="{../filters/term}"/>
+<!-- FIX first,max? and below -->
+              <input type="hidden" name="first" value="{../filters/@start}"/>
+              <input type="hidden" name="max" value="{../filters/@max}"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/trashcan_inactive.png"
+               border="0"
+               alt="To Trashcan"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}"
+         title="Filter Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+      <xsl:choose>
+        <xsl:when test="writable='1'">
+          <a href="/omp?cmd=edit_filter&amp;filter_id={@id}&amp;next=get_filters&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}"
+             title="Edit Filter"
+             style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="Edit"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <div style="display: inline">
+        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="cmd" value="clone"/>
+          <input type="hidden" name="resource_type" value="filter"/>
+          <input type="hidden" name="next" value="get_filters"/>
+          <input type="hidden" name="id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{../filters/term}"/>
+          <input type="hidden" name="first" value="{../filters/@start}"/>
+          <input type="hidden" name="max" value="{../filters/@max}"/>
+          <input type="image" src="/img/clone.png" alt="Clone Filter"
+                 name="Clone" value="Clone" title="Clone"/>
+        </form>
+      </div>
+      <a href="/omp?cmd=export_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
+         title="Export Filter XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="filter" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="term"/></td>
+    <td><xsl:value-of select="type"/></td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:call-template name="trash-delete-icon">
+        <xsl:with-param name="type" select="'filter'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="filter" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Filter Details
+      <a href="/help/filter_details.html?token={/envelope/token}"
+        title="Help: Filter Details">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=new_filter&amp;filter={../../filters/term}&amp;first={../../filters/@start}&amp;max={../../filters/@max}&amp;filter_id={@id}&amp;token={/envelope/token}"
+         title="New Filter">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_filters&amp;filter={../../filters/term}&amp;first={../../filters/@start}&amp;max={../../filters/@max}&amp;token={/envelope/token}"
+         title="Filters" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Filters"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <xsl:choose>
+          <xsl:when test="in_use='0'">
+            <xsl:call-template name="trashcan-icon">
+              <xsl:with-param name="type" select="'filter'"/>
+              <xsl:with-param name="id" select="@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="filter" value="{../../filters/term}"/>
+                <input type="hidden" name="first" value="{../../filters/@start}"/>
+                <input type="hidden" name="max" value="{../../filters/@max}"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <a href="/omp?cmd=edit_filter&amp;filter_id={@id}&amp;next=get_filter&amp;filter={../../filters/term}&amp;first={../../filters/@start}&amp;max={../../filters/@max}&amp;token={/envelope/token}"
+           title="Edit Filter">
+          <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+        </a>
+        <a href="/omp?cmd=export_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
+           title="Export Filter XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td>ID:</td>
+            <td><xsl:value-of select="@id"/></td>
+          </tr>
+          <tr>
+            <td>Created:</td>
+            <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
+          </tr>
+          <tr>
+            <td>Last Modified:</td>
+            <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
+          </tr>
+        </table>
+      </div>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Term:</td>
+          <td><xsl:value-of select="term"/></td>
+        </tr>
+        <tr>
+          <td>Type:</td>
+          <td><xsl:value-of select="type"/></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-filters-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Term</td>
+        <td>Type</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="filter" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-filters-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'filter'"/>
+    <xsl:with-param name="cap-type" select="'Filter'"/>
+    <xsl:with-param name="resources-summary" select="filters"/>
+    <xsl:with-param name="resources" select="filter"/>
+    <xsl:with-param name="count" select="count (filter)"/>
+    <xsl:with-param name="filtered-count" select="filter_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Term|term Type|type'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- NEW_FILTER -->
+
+<xsl:template name="html-create-filter-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Filter
+      <a href="/help/new_filter.html?token={/envelope/token}"
+         title="Help: New Filter">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Filters" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Filters"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_filter"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="filter_id" value="{/envelope/params/filter_id}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Term</td>
+            <td>
+              <input type="text" name="term" size="30" maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report_format|schedule|target|task', '|')">
+                  <option value="{.}"><xsl:value-of select="."/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Filter"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_filter">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_filter_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
+  <xsl:call-template name="html-create-filter-form"/>
+</xsl:template>
+
+<!--     EDIT_FILTER -->
+
+<xsl:template name="html-edit-filter-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Filter
+      <a href="/help/filters.html?token={/envelope/token}#edit_filter" title="Help: Edit Filter">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Filters" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Filters"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_filter&amp;filter_id={commands_response/get_filters_response/filter/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Filter Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_filter"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="filter_id"
+               value="{commands_response/get_filters_response/filter/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filter_id" value="{commands_response/get_filters_response/filter/@id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text"
+                     name="name"
+                     value="{commands_response/get_filters_response/filter/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_filters_response/filter/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Term</td>
+            <td>
+              <input type="text" name="term"
+                     value="{commands_response/get_filters_response/filter/term}"
+                     size="30"
+                     maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <xsl:variable name="type">
+                  <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
+                </xsl:variable>
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report_format|schedule|target|task', '|')">
+                  <xsl:choose>
+                    <xsl:when test=". = $type">
+                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{.}"><xsl:value-of select="."/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Filter"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_filter">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-filter-form"/>
+</xsl:template>
+
+<!--     GET_FILTER -->
+
+<xsl:template match="get_filter">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_filter_response"/>
+  <xsl:apply-templates select="get_filters_response/filter" mode="details"/>
+</xsl:template>
+
+<!--     GET_FILTERS -->
+
+<xsl:template match="get_filters">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_filter_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
+  <!-- The for-each makes the get_filters_response the current node. -->
+  <xsl:for-each select="get_filters_response | commands_response/get_filters_response">
+    <xsl:call-template name="html-filters-table"/>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END FILTERS MANAGEMENT -->
+
 <!-- BEGIN TARGET LOCATORS MANAGEMENT -->
 
 <xsl:template match="target_locator" mode="select">
@@ -5909,17 +6479,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type">target</xsl:param>
   <xsl:param name="head"/>
   <xsl:param name="name"/>
-  <xsl:param name="term" select="normalize-space (filters/term)"/>
+  <xsl:param name="current" select="."/>
+  <xsl:param name="token" select="/envelope/token"/>
   <xsl:choose>
-    <xsl:when test="sort/field/text() = $name and sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
-    <xsl:when test="sort/field/text() = $name and sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort-reverse={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+    <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort-reverse={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {filters/term}&amp;token={/envelope/token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -15243,6 +15814,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="count(get_lsc_credentials_response/lsc_credential)"/></td>
           </tr>
         </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+          <tr class="odd">
+            <td><a href="#filters">Filters</a></td>
+            <td><xsl:value-of select="count(get_filters_response/filter)"/></td>
+          </tr>
+        </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
           <tr class="even">
             <td><a href="#port_lists">Port Lists</a></td>
@@ -15305,6 +15882,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_configs_response the current node. -->
         <xsl:for-each select="get_configs_response">
           <xsl:call-template name="html-configs-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+        <a name="filters"></a>
+        <h1>Filters</h1>
+        <!-- The for-each makes the get_filters_response the current node. -->
+        <xsl:for-each select="get_filters_response">
+          <xsl:call-template name="html-filters-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 

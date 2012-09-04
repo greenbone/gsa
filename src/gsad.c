@@ -514,6 +514,7 @@ init_validator ()
                          "|(create_agent)"
                          "|(create_config)"
                          "|(create_alert)"
+                         "|(create_filter)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
@@ -528,6 +529,7 @@ init_validator ()
                          "|(delete_agent)"
                          "|(delete_config)"
                          "|(delete_alert)"
+                         "|(delete_filter)"
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
@@ -542,6 +544,7 @@ init_validator ()
                          "|(delete_trash_agent)"
                          "|(delete_trash_config)"
                          "|(delete_trash_alert)"
+                         "|(delete_trash_filter)"
                          "|(delete_trash_lsc_credential)"
                          "|(delete_trash_port_list)"
                          "|(delete_trash_report_format)"
@@ -553,6 +556,7 @@ init_validator ()
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
+                         "|(edit_filter)"
                          "|(edit_lsc_credential)"
                          "|(edit_my_settings)"
                          "|(edit_note)"
@@ -566,6 +570,7 @@ init_validator ()
                          "|(alert_report)"
                          "|(export_config)"
                          "|(export_lsc_credential)"
+                         "|(export_filter)"
                          "|(export_note)"
                          "|(export_override)"
                          "|(export_port_list)"
@@ -580,6 +585,8 @@ init_validator ()
                          "|(get_config_nvt)"
                          "|(get_configs)"
                          "|(get_feed)"
+                         "|(get_filter)"
+                         "|(get_filters)"
                          "|(get_alert)"
                          "|(get_alerts)"
                          "|(get_info)"
@@ -614,6 +621,7 @@ init_validator ()
                          "|(import_report_format)"
                          "|(login)"
                          "|(modify_auth)"
+                         "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
                          "|(new_target)"
@@ -628,6 +636,7 @@ init_validator ()
                          "|(save_config_family)"
                          "|(save_config_nvt)"
                          "|(save_container_task)"
+                         "|(save_filter)"
                          "|(save_lsc_credential)"
                          "|(save_my_settings)"
                          "|(save_note)"
@@ -741,7 +750,10 @@ init_validator ()
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "resource_type",    "^(agent|target)$");
+  openvas_validator_add (validator, "resource_type",
+                         "^(agent|alert|config|filter|port_list|report_format|schedule|target|task)$");
+  openvas_validator_add (validator, "optional_resource_type",
+                         "^(agent|alert|config|filter|port_list|report_format|schedule|target|task|)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
@@ -754,6 +766,7 @@ init_validator ()
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id_optional",  "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "term",       "^.{0,1000}");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
   openvas_validator_add (validator, "threat",     "^(High|Medium|Low|Log|False Positive|)$");
   openvas_validator_add (validator, "trend:",      "^(0|1)$");
@@ -795,6 +808,8 @@ init_validator ()
   openvas_validator_alias (validator, "esc_max_results",  "max_results");
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
+  openvas_validator_alias (validator, "filter_id",          "id");
+  openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "from_file",          "boolean");
   openvas_validator_alias (validator, "force_wizard",       "boolean");
   openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
@@ -1482,6 +1497,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (clone)
   ELSE (create_agent)
   ELSE (create_alert)
+  ELSE (create_filter)
   ELSE (create_lsc_credential)
   ELSE (create_port_list)
   ELSE (create_port_range)
@@ -1497,6 +1513,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_agent)
   ELSE (delete_task)
   ELSE (delete_alert)
+  ELSE (delete_filter)
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
@@ -1511,6 +1528,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_agent)
   ELSE (delete_trash_config)
   ELSE (delete_trash_alert)
+  ELSE (delete_trash_filter)
   ELSE (delete_trash_lsc_credential)
   ELSE (delete_trash_port_list)
   ELSE (delete_trash_report_format)
@@ -1543,6 +1561,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
+  ELSE (save_filter)
   ELSE (save_lsc_credential)
   else if (!strcmp (cmd, "save_my_settings"))
     {
@@ -1688,14 +1707,16 @@ exec_omp_get (struct MHD_Connection *connection,
 
   /* Check cmd and precondition, start respective OMP command(s). */
 
-  if (!strcmp (cmd, "new_target"))
-    return new_target_omp (credentials, params);
+  if (!strcmp (cmd, "new_filter"))
+    return new_filter_omp (credentials, params);
 
+  ELSE (new_target)
   ELSE (new_task)
   ELSE (get_tasks)
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
+  ELSE (edit_filter)
   ELSE (edit_lsc_credential)
   ELSE (edit_my_settings)
   ELSE (edit_note)
@@ -1708,6 +1729,10 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_config"))
     return export_config_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_filter"))
+    return export_filter_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_lsc_credential"))
@@ -1791,6 +1816,8 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (get_alert)
   ELSE (get_alerts)
+  ELSE (get_filter)
+  ELSE (get_filters)
   ELSE (get_info)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)

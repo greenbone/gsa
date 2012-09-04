@@ -96,10 +96,13 @@ static char *get_tasks (credentials_t *, params_t *, const char *, const char *,
                         const char *, const char *, const char *, int,
                         const char *);
 
-static char *get_trash (credentials_t *, const char *, const char *,
-                        const char *);
+static char *get_trash (credentials_t *, params_t *, const char *);
 
 static char * get_config_family (credentials_t *, params_t *, int);
+
+char *get_filter (credentials_t *, params_t *, const char *);
+
+char *get_filters (credentials_t *, params_t *, const char *);
 
 
 /* Helpers. */
@@ -434,6 +437,119 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
 /* Generic page handlers. */
 
 /**
+ * @brief Get one resource, XSL transform the result.
+ *
+ * @param[in]  type         Type of resource.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_one (const char *type, credentials_t * credentials, params_t *params,
+         const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *end, *id_name;
+  const char *id, *sort_field, *sort_order, *filter, *first, *max;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  id = params_value (params, id_name);
+  g_free (id_name);
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  if (id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a resource. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a resource. "
+                             "The resource is currently not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<get_%s>", type);
+
+  /* Pass through params for get_resources. */
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+  end = g_markup_printf_escaped ("<filters><term>%s</term></filters>"
+                                 "<%ss start=\"%s\" max=\"%s\"/>",
+                                 filter ? filter : "",
+                                 type,
+                                 first ? first : "",
+                                 max ? max : "");
+  g_string_append (xml, end);
+  g_free (end);
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  /* Get the resource. */
+
+  if (openvas_server_sendf (&session,
+                            "<get_%ss"
+                            " %s_id=\"%s\""
+                            " actions=\"g\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>",
+                            type,
+                            type,
+                            id,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting resources list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting resources list. "
+                           "The current list of resources is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_resources");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append_printf (xml, "</get_%s>", type);
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Get all of a particular type of resource, XSL transform the result.
  *
  * @param[in]  type         Resource type.
@@ -451,8 +567,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *filter, *first, *max, *sort_field, *sort_order;
+  const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
 
+  filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
@@ -489,12 +606,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf_xml (&session,
                                 "<get_%ss"
+                                " filt_id=\"%s\""
                                 " filter=\"%s\""
                                 " first=\"%s\""
                                 " max=\"%s\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
                                 type,
+                                filt_id ? filt_id : "0",
                                 filter ? filter : "",
                                 first ? first : "1",
                                 max ? max : "-2",
@@ -524,11 +643,255 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
+  /* Get the filters. */
+
+  g_string_append (xml, "<filters>");
+
+  if (openvas_server_sendf_xml (&session,
+                                "<get_filters"
+                                " filter=\"type=%s or type=\"/>",
+                                type)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the filter list. "
+                           "The current list of filters is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the filter list. "
+                           "The current list of filters is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  g_string_append (xml, "</filters>");
+
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%ss>", type);
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit XML, XSL transform the result.
+ *
+ * @param[in]  type         Type or resource to edit.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_resource (const char *type, credentials_t *credentials, params_t *params,
+               const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *id_name;
+  const char *resource_id, *next;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  resource_id = params_value (params, id_name);
+  g_free (id_name);
+  next = params_value (params, "next");
+
+  if (resource_id == NULL || next == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a resource. "
+                         "The resource remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a resource. "
+                             "The resource remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_%ss"
+                            " %s_id=\"%s\""
+                            " details=\"1\"/>"
+                            "</commands>",
+                            type,
+                            type,
+                            resource_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml, "<edit_%s>", type);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append_printf (xml, "</edit_%s>", type);
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Export a resource.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   resource_id              UUID of resource.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Resource XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_resource (const char *type, credentials_t * credentials,
+                 params_t *params, enum content_type * content_type,
+                 char **content_disposition, gsize *content_length)
+{
+  GString *xml;
+  entity_t entity;
+  entity_t resource_entity;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL;
+  gchar *html, *id_name;
+  const char *resource_id;
+
+  *content_length = 0;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a resource. "
+                             "The resource could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+
+  id_name = g_strdup_printf ("%s_id", type);
+  resource_id = params_value (params, id_name);
+  g_free (id_name);
+
+  if (resource_id == NULL)
+    {
+      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
+      openvas_server_close (socket, session);
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_%ss"
+                            " %s_id=\"%s\""
+                            " details=\"1\"/>",
+                            type,
+                            type,
+                            resource_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource. "
+                           "The resource could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &content))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource. "
+                           "The resource could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  resource_entity = entity_child (entity, type);
+  if (resource_entity == NULL)
+    {
+      free (content);
+      free_entity (entity);
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a resource. "
+                           "The resource could not be delivered. "
+                           "Diagnostics: Failure to receive resource from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  *content_disposition = g_strdup_printf ("attachment; filename=\"%s-%s.xml\"",
+                                          type,
+                                          resource_id);
+  *content_length = strlen (content);
+  free_entity (entity);
+  g_string_free (xml, TRUE);
+  openvas_server_close (socket, session);
+  return content;
 }
 
 
@@ -4725,6 +5088,12 @@ clone_omp (credentials_t *credentials, params_t *params)
       g_free (response);
       return html;
     }
+  else if (strcmp (next, "get_filters") == 0)
+    {
+      html = get_filters (credentials, params, response);
+      g_free (response);
+      return html;
+    }
 
   g_free (response);
 
@@ -4901,7 +5270,7 @@ delete_trash_agent_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -4987,7 +5356,7 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5073,7 +5442,7 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5159,7 +5528,7 @@ delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5245,7 +5614,7 @@ delete_trash_report_format_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5331,7 +5700,7 @@ delete_trash_schedule_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5417,7 +5786,7 @@ delete_trash_slave_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5503,7 +5872,7 @@ delete_trash_target_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5589,7 +5958,7 @@ delete_trash_task_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5620,7 +5989,7 @@ restore_omp (credentials_t * credentials, params_t *params)
                          "An internal error occurred while restoring a resource. "
                          "The resource was not restored. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_resources");
+                         "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -5674,7 +6043,7 @@ restore_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -5743,7 +6112,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -6764,7 +7133,7 @@ get_config (credentials_t * credentials, params_t *params, int edit)
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a config. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_resources");
+                         "/omp?cmd=get_configs");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7174,7 +7543,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit)
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting config family. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_resources");
+                         "/omp?cmd=get_configs");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7460,7 +7829,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit)
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting config family. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_resources");
+                         "/omp?cmd=get_configs");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -13986,20 +14355,22 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
  * @brief Setup trash page XML, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
+ * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_trash (credentials_t * credentials, const char * sort_field,
-           const char * sort_order, const char *extra_xml)
+get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -14161,6 +14532,40 @@ get_trash (credentials_t * credentials, const char * sort_field,
                                "The current list of alerts is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_alerts");
+        }
+    }
+
+  /* Get the filters. */
+
+  if (command_enabled (credentials, "GET_FILTERS"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_filters"
+                                " trash=\"1\""
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting filter list. "
+                               "The current list of filters is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
         }
     }
 
@@ -14397,8 +14802,7 @@ get_trash (credentials_t * credentials, const char * sort_field,
 char *
 get_trash_omp (credentials_t * credentials, params_t *params)
 {
-  return get_trash (credentials, params_value (params, "sort_field"),
-                    params_value (params, "sort_order"), NULL);
+  return get_trash (credentials, params, NULL);
 }
 
 /**
@@ -15431,7 +15835,7 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, NULL, NULL, xml->str);
+  ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -15571,6 +15975,582 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
+
+
+/* Filters. */
+
+/**
+ * @brief Get one filter, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_filter (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return get_one ("filter", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Get one filter, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_filter_omp (credentials_t * credentials, params_t *params)
+{
+  return get_filter (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_filters (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return get_many ("filter", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_filters_omp (credentials_t * credentials, params_t *params)
+{
+  return get_filters (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page to create a new filter.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_filter>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_filter>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Create Filter");                                  \
+      html = new_filter (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Create a filter, get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_filter_omp (credentials_t *credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *name, *comment, *term, *type, *filter_id, *next;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new filter. "
+                             "No new filter was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_filters");
+    }
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  term = params_value (params, "term");
+  type = params_value (params, "optional_resource_type");
+  next = params_value (params, "next");
+
+  CHECK (name);
+  CHECK (comment);
+  CHECK (term);
+  CHECK (type);
+
+  {
+    int ret;
+    const char *status;
+    entity_t entity;
+
+    /* Create the filter. */
+
+    ret = openvas_server_sendf (&session,
+                                "<create_filter>"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "<term>%s</term>"
+                                "<type>%s</type>"
+                                "</create_filter>",
+                                name,
+                                comment,
+                                term,
+                                type);
+
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new filter. "
+                             "No new filter was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new filter. "
+                             "It is unclear whether the filter has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new filter. "
+                             "It is unclear whether the filter has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    if (status[0] != '2')
+      {
+        html = new_filter (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
+
+    filter_id = params_value (params, "filter_id");
+    if (filter_id && strcmp (filter_id, "0"))
+      {
+        gchar *ret;
+        ret = get_filter (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return ret;
+      }
+
+    free_entity (entity);
+  }
+
+  // TODO switch to new filter
+  if (next && (strcmp (next, "get_targets") == 0))
+    html = get_targets (credentials, params, response);
+  else if (next && (strcmp (next, "get_agents") == 0))
+    html = get_agents (credentials, params, response);
+  else
+    html = get_filters (credentials, params, response);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
+
+/**
+ * @brief Delete a resource, get all resources, XSL transform the result.
+ *
+ * @param[in]  type         Type of resource.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  ultimate     0 move to trash, 1 remove entirely.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_resource (const char *type, credentials_t * credentials,
+                 params_t *params, int ultimate,
+                 char *get (credentials_t *, params_t *, const char *))
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response, *id_name;
+  const char *resource_id;
+  entity_t entity;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  resource_id = params_value (params, id_name);
+  g_free (id_name);
+
+  if (resource_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a resource. "
+                         "The resource was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a resource. "
+                             "The resource is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Delete the resource and get all resources. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"/>",
+                            type,
+                            type,
+                            resource_id,
+                            !!ultimate)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "The resource is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "It is unclear whether the resource has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  html = get (credentials, params, response);
+  g_free (response);
+  return html;
+}
+
+/**
+ * @brief Delete a filter, get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_filter_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("filter", credentials, params, 1, get_trash);
+}
+
+/**
+ * @brief Delete a filter, get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_filter_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("filter", credentials, params, 0, get_filters);
+}
+
+/**
+ * @brief Setup edit_filter XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_filter (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return edit_resource ("filter", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_filter XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_filter_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_filter (credentials, params, NULL);
+}
+
+/**
+ * @brief Export a filter.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   filter_id            UUID of filter.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Note XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_filter_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_resource ("filter", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Filter");                                    \
+      html = edit_filter (credentials, params, msg);                           \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Returns page to create a new filter.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_filter_omp (credentials_t *credentials, params_t *params)
+{
+  return new_filter (credentials, params, NULL);
+}
+
+/**
+ * @brief Modify a filter, get all filters, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_filter_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *filter_id, *name, *comment, *next, *term, *type;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a filter. "
+                             "The filter was not saved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_filters");
+    }
+
+  filter_id = params_value (params, "filter_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  next = params_value (params, "next");
+  term = params_value (params, "term");
+  type = params_value (params, "optional_resource_type");
+
+  CHECK (filter_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+  CHECK (term);
+  CHECK (type);
+
+  {
+    int ret;
+    const char *status;
+    entity_t entity;
+
+    /* Modify the filter. */
+
+    ret = openvas_server_sendf (&session,
+                                "<modify_filter filter_id=\"%s\">"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "<term>%s</term>"
+                                "<type>%s</type>"
+                                "</modify_filter>",
+                                filter_id,
+                                name,
+                                comment,
+                                term,
+                                type);
+
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a filter. "
+                             "The filter was not modified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a filter. "
+                             "It is unclear whether the filter has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    openvas_server_close (socket, session);
+
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a filter. "
+                             "It is unclear whether the filter has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_filters");
+      }
+
+    if (status[0] != '2')
+      {
+        html = edit_filter (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
+
+    free_entity (entity);
+  }
+
+  /* Pass response to handler of following page. */
+
+  if (strcmp (params_value (params, "next"), "get_filters") == 0)
+    {
+      html = get_filters (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  if (strcmp (params_value (params, "next"), "get_filter") == 0)
+    {
+      html = get_filter (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  g_free (response);
+
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a filter. "
+                       "The filter was, however, modified. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_filters");
+}
+
+#undef CHECK
 
 
 /* Wizards. */

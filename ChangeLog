@@ -1,3 +1,40 @@
+2012-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add first class filters.
+
+	* src/gsad.c (init_validator): Add filter commands and params.
+	(exec_omp_post, exec_omp_post): Add filter commands.
+
+	* src/gsad_omp.c (get_one, edit_resource, export_resource): New
+	functions.  Generic page handlers.
+	(get_many): Add filt_id to OMP GET.  Get the filters too.
+	(clone_omp): Add get_filters.
+	(get_config, get_config_family, get_config_nvt): Correct backurl.
+	(get_trash): Get sort field from "params" instead of dedicated args.
+	Update many callers.  Get filters too.
+	(get_filter, get_filter_omp, get_filters, get_filters_omp, new_filter)
+	(create_filter_omp, delete_resource, delete_trash_filter_omp)
+	(delete_filter_omp, edit_filter, edit_filter_omp, export_filter_omp)
+	(new_filter_omp, save_filter_omp): New functions.
+	(CHECK): New define.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/gsad.xsl (create_filter_response, delete_filter_response)
+	(modify_filter_response): New templates.
+	(html-gsa-logo): Apply indicator icons.
+	(html-gsa-navigation): Add filters.
+
+	* src/html/omp.xsl (filter-window-part): Remove Reset button.  Add create
+	field, switcher dropdown and list icon.
+	(list-window, filters, create_filter_response, modify_filter_response)
+	(filter, filter [trash], filter [details], html-filters-trash-table)
+	(html-filters-table, html-create-filter-form, new_filter)
+	(html-edit-filter-form, edit_filter, get_filter, get_filters): New
+	templates.
+	(column-name): Adjust for calling within for-each.
+	(get_trash): Add filters.
+
 2012-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (error_dialog): For the backurl link, check for

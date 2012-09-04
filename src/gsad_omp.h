@@ -172,12 +172,23 @@ char * get_system_report_omp (credentials_t *, const char *, const char *,
 
 char * get_report_format_omp (credentials_t *, params_t *);
 char * get_report_formats_omp (credentials_t *, params_t *);
+char * create_filter_omp (credentials_t *, params_t *);
 char * delete_report_format_omp (credentials_t *, params_t *);
 char * delete_trash_report_format_omp (credentials_t *, params_t *);
 char * edit_report_format_omp (credentials_t *, params_t *);
 char * import_report_format_omp (credentials_t *, params_t *);
 char * save_report_format_omp (credentials_t *, params_t *);
 char * verify_report_format_omp (credentials_t *, params_t *);
+
+char * delete_filter_omp (credentials_t *, params_t *);
+char * delete_trash_filter_omp (credentials_t *, params_t *);
+char * edit_filter_omp (credentials_t *, params_t *);
+char * export_filter_omp (credentials_t *, params_t *, enum content_type *,
+                          char **, gsize *);
+char * get_filter_omp (credentials_t *, params_t *);
+char * get_filters_omp (credentials_t *, params_t *);
+char * new_filter_omp (credentials_t *, params_t *);
+char * save_filter_omp (credentials_t *, params_t *);
 
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);
