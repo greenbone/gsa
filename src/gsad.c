@@ -751,9 +751,9 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|port_list|report_format|schedule|target|task)$");
+                         "^(agent|alert|config|filter|port_list|report|report_format|schedule|target|task)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|port_list|report_format|schedule|target|task|)$");
+                         "^(agent|alert|config|filter|port_list|report|report_format|schedule|target|task|)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");

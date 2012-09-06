@@ -8974,7 +8974,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
-  const char *show_closed_cves;
+  const char *show_closed_cves, *filt_id, *filter;
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -9374,7 +9374,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                            "/omp?cmd=get_tasks");
     }
 
+  filt_id = params_value (params, "filt_id");
+  filter = params_value (params, "filter");
+
+  if (filter == NULL)
+    filter = "";
+
   if (openvas_server_sendf_xml (&session,
+                                " filt_id=\"%s\""
+                                " filter=\"%s\""
                                 " pos=\"%s\""
                                 " autofp=\"%s\""
                                 " show_closed_cves=\"%i\""
@@ -9395,6 +9403,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " delta_states=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>",
+                                filt_id ? filt_id : "0",
+                                filter ? filter : "",
                                 pos ? pos : "1",
                                 strcmp (autofp, "0") ? autofp_value : "0",
                                 strcmp (show_closed_cves, "0") ? 1 : 0,
@@ -9841,6 +9851,42 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "Diagnostics: Failure to receive response from manager daemon.",
                                    "/omp?cmd=get_tasks");
             }
+        }
+
+      if (command_enabled (credentials, "GET_FILTERS"))
+        {
+          /* Get the filters. */
+
+          g_string_append (xml, "<filters>");
+
+          if (openvas_server_sendf_xml (&session,
+                                        "<get_filters"
+                                        " filter=\"type=report\"/>")
+              == -1)
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting the filter list. "
+                                   "The current list of filters is not available. "
+                                   "Diagnostics: Failure to send command to manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
+          if (read_string (&session, &xml))
+            {
+              g_string_free (xml, TRUE);
+              openvas_server_close (socket, session);
+              return gsad_message (credentials,
+                                   "Internal error", __FUNCTION__, __LINE__,
+                                   "An internal error occurred while getting the filter list. "
+                                   "The current list of filters is not available. "
+                                   "Diagnostics: Failure to receive response from manager daemon.",
+                                   "/omp?cmd=get_tasks");
+            }
+
+          g_string_append (xml, "</filters>");
         }
 
       g_string_append (xml, "</get_report>");
@@ -16192,6 +16238,10 @@ create_filter_omp (credentials_t *credentials, params_t *params)
         return ret;
       }
 
+    filter_id = entity_attribute (entity, "id");
+    if (filter_id && strlen (filter_id))
+      params_add (params, "filt_id", filter_id);
+
     free_entity (entity);
   }
 
@@ -16200,6 +16250,9 @@ create_filter_omp (credentials_t *credentials, params_t *params)
     html = get_targets (credentials, params, response);
   else if (next && (strcmp (next, "get_agents") == 0))
     html = get_agents (credentials, params, response);
+  else if (next && (strcmp (next, "get_report") == 0))
+    // FIX response as extra_xml
+    html = get_report (credentials, params, NULL, NULL, NULL, NULL);
   else
     html = get_filters (credentials, params, response);
   g_free (response);

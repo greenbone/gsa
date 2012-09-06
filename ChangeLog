@@ -1,3 +1,20 @@
+2012-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add new-style filtering to report page.
+
+	* src/gsad.c (init_validator): Add reports to resource types.
+
+	* src/gsad_omp.c (get_report): Add new-style filtering to GET_REPORTS
+	call.  Get filters for filter switching dropdown.
+	(create_filter_omp): Add the created filter to the params, so the next
+	page uses the new filter.  Add get_report to next options.
+
+	* src/html/omp.xsl (html-report-details): Add new-style filtering
+	controls.
+	(html-create-filter-form): Add report to resource types.
+	(html-edit-filter-form): Increase term field width.  Add report to
+	resource types.
+
 2012-09-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add first class filters.

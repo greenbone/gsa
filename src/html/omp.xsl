@@ -2223,6 +2223,106 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </form>
       </div>
+      <br/>
+      <div style="background-color: #EEEEEE;">
+        <div style="float: right">
+          <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+            <div style="display: inline; padding: 2px; vertical-align:middle;">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="create_filter"/>
+              <input type="hidden" name="caller" value="{/envelope/caller}"/>
+              <input type="hidden" name="comment" value=""/>
+              <input type="hidden" name="term" value="{report/filters/term}"/>
+              <input type="hidden" name="optional_resource_type" value="report"/>
+              <input type="hidden" name="next" value="get_report"/>
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="text" name="name" value="" size="10"
+                     maxlength="80" style="vertical-align:middle"/>
+              <input type="image"
+                     name="New Filter"
+                     src="/img/new.png"
+                     alt="New Filter"
+                     style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+            </div>
+          </form>
+          <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+            <div style="display: inline; padding: 2px; vertical-align:middle;">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="cmd" value="get_report"/>
+              <input type="hidden" name="report_id" value="{report/@id}"/>
+              <xsl:choose>
+                <xsl:when test="@type='prognostic'">
+                  <input type="hidden" name="type" value="prognostic"/>
+                  <input type="hidden" name="host" value="{report/filters/host}"/>
+                  <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+                  <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+                  <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+                  <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+                </xsl:when>
+                <xsl:when test="../../delta">
+                  <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                </xsl:otherwise>
+              </xsl:choose>
+              <select style="margin-bottom: 0px;" name="filt_id">
+                <option value="">--</option>
+                <xsl:variable name="id" select="report/filters/@id"/>
+                <xsl:for-each select="../../filters/get_filters_response/filter">
+                  <xsl:choose>
+                    <xsl:when test="@id = $id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <input type="image"
+                     name="Switch Filter"
+                     src="/img/refresh.png"
+                     alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+              <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+                 title="Filters">
+                <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                     src="/img/list.png" border="0" alt="Filters"/>
+              </a>
+            </div>
+          </form>
+        </div>
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_report"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:choose>
+            <xsl:when test="@type='prognostic'">
+              <input type="hidden" name="type" value="prognostic"/>
+              <input type="hidden" name="host" value="{report/filters/host}"/>
+              <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+              <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+              <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+              <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+            </xsl:when>
+            <xsl:when test="../../delta">
+              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+          </xsl:choose>
+          <div style="padding: 2px;">
+            Filter:
+            <input type="text" name="filter" size="60"
+                   value="{report/filters/term}"
+                   maxlength="1000"/>
+            <input type="image"
+                   name="Update Filter"
+                   src="/img/refresh.png"
+                   alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <br/>
@@ -5843,7 +5943,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report_format|schedule|target|task', '|')">
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task', '|')">
                   <option value="{.}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
@@ -5922,7 +6022,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <input type="text" name="term"
                      value="{commands_response/get_filters_response/filter/term}"
-                     size="30"
+                     size="50"
                      maxlength="1000"/>
             </td>
           </tr>
@@ -5934,7 +6034,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
                 </xsl:variable>
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report_format|schedule|target|task', '|')">
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task', '|')">
                   <xsl:choose>
                     <xsl:when test=". = $type">
                       <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
