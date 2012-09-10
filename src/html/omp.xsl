@@ -14010,6 +14010,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_report">
   <xsl:apply-templates select="create_note_response"/>
   <xsl:apply-templates select="create_override_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>

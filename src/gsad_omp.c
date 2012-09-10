@@ -8913,12 +8913,14 @@ delete_report_omp (credentials_t * credentials, params_t *params)
  * @param[out] report_len   Length of report.
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Report.
  */
 char *
 get_report (credentials_t * credentials, params_t *params, const char *commands,
-            gsize *report_len, gchar **content_type, char **content_disposition)
+            gsize *report_len, gchar **content_type, char **content_disposition,
+            const char *extra_xml)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -9611,6 +9613,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         xml = g_string_new ("<get_report>");
 
+      if (extra_xml)
+        g_string_append (xml, extra_xml);
+
       if (commands)
         g_string_append (xml, commands_xml->str);
       g_string_free (commands_xml, TRUE);
@@ -9872,7 +9877,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
                 char **content_disposition)
 {
   return get_report (credentials, params, NULL, report_len, content_type,
-                     content_disposition);
+                     content_disposition, NULL);
 }
 
 #define REQUIRE(arg, backurl)                                         \
@@ -10619,7 +10624,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
       return ret;
     }
 
-  ret = get_report (credentials, params, create_note, NULL, NULL, NULL);
+  ret = get_report (credentials, params, create_note, NULL, NULL, NULL, NULL);
   g_free (create_note);
   return ret;
 }
@@ -10646,7 +10651,8 @@ delete_note_omp (credentials_t * credentials, params_t *params)
   if (strcmp (next, "get_report") == 0)
     {
       gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL,
+                              NULL);
       g_free (extra);
       return ret;
     }
@@ -10718,7 +10724,7 @@ delete_note_omp (credentials_t * credentials, params_t *params)
       extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
 
       if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+        ret = get_report (credentials, params, extra, NULL, NULL, NULL, NULL);
       else
         ret = get_result (credentials,
                           params_value (params, "result_id"),
@@ -11213,7 +11219,8 @@ save_note_omp (credentials_t * credentials, params_t *params)
       char *ret;
 
       if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, modify_note, NULL, NULL, NULL);
+        ret = get_report (credentials, params, modify_note, NULL, NULL, NULL,
+                          NULL);
       else
         {
           gchar *first, *max;
@@ -11249,7 +11256,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
   if (strcmp (next, "get_report") == 0)
     {
       char *ret = get_report (credentials, params, modify_note, NULL, NULL,
-                              NULL);
+                              NULL, NULL);
       g_free (modify_note);
       return ret;
     }
@@ -11782,7 +11789,8 @@ create_override_omp (credentials_t *credentials, params_t *params)
       return ret;
     }
 
-  ret = get_report (credentials, params, create_override, NULL, NULL, NULL);
+  ret = get_report (credentials, params, create_override, NULL, NULL, NULL,
+                    NULL);
   g_free (create_override);
   return ret;
 }
@@ -11815,7 +11823,8 @@ delete_override_omp (credentials_t * credentials, params_t *params)
     {
       gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
                                       override_id);
-      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL,
+                              NULL);
       g_free (extra);
       return ret;
     }
@@ -11889,7 +11898,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                                override_id);
 
       if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, extra, NULL, NULL, NULL);
+        ret = get_report (credentials, params, extra, NULL, NULL, NULL, NULL);
       else
         ret = get_result (credentials,
                           params_value (params, "result_id"),
@@ -12388,7 +12397,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
 
       if (params_value (params, "delta_report_id"))
         ret = get_report (credentials, params, modify_override, NULL, NULL,
-                          NULL);
+                          NULL, NULL);
       else
         {
           gchar *first, *max;
@@ -12424,7 +12433,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
   if (strcmp (next, "get_report") == 0)
     {
       char *ret = get_report (credentials, params, modify_override, NULL, NULL,
-                              NULL);
+                              NULL, NULL);
       g_free (modify_override);
       return ret;
     }
@@ -16182,7 +16191,17 @@ create_filter_omp (credentials_t *credentials, params_t *params)
 
     if (status[0] != '2')
       {
-        html = new_filter (credentials, params, response);
+        if (next && (strcmp (next, "get_targets") == 0))
+          html = get_targets (credentials, params, response);
+        else if (next && (strcmp (next, "get_agents") == 0))
+          html = get_agents (credentials, params, response);
+        else if (next && (strcmp (next, "get_report") == 0))
+          html = get_report (credentials, params, NULL, NULL, NULL, NULL,
+                             response);
+        else if (next && (strcmp (next, "get_filters") == 0))
+          html = get_filters (credentials, params, response);
+        else
+          html = new_filter (credentials, params, response);
         g_free (response);
         free_entity (entity);
         return html;
@@ -16205,14 +16224,12 @@ create_filter_omp (credentials_t *credentials, params_t *params)
     free_entity (entity);
   }
 
-  // TODO switch to new filter
   if (next && (strcmp (next, "get_targets") == 0))
     html = get_targets (credentials, params, response);
   else if (next && (strcmp (next, "get_agents") == 0))
     html = get_agents (credentials, params, response);
   else if (next && (strcmp (next, "get_report") == 0))
-    // FIX response as extra_xml
-    html = get_report (credentials, params, NULL, NULL, NULL, NULL);
+    html = get_report (credentials, params, NULL, NULL, NULL, NULL, response);
   else
     html = get_filters (credentials, params, response);
   g_free (response);

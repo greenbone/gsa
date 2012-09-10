@@ -1,5 +1,18 @@
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Add extra_xml arg.  Update callers.
+	(create_filter_omp): If the CREATE_FILTER fails then choose the next
+	page according to the "next" param.  Remove done todo.  Pass response
+	into get_report for success indicator.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add indicator for creating a filter
+	in a report.
+
+	* src/html/omp.xsl (get_report): Apply create_filter_response for error
+	dialog.
+
+2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Use right path for MODIFY_TARGET
 	response indicator.  Add indicator for details page.
 
