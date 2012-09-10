@@ -1,3 +1,19 @@
+2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add report filtering to email alerts.
+
+	* src/gsad_omp.c (create_alert_omp, delete_alert_omp, get_alerts_omp)
+	(test_alert_omp): Call through to get_alerts instead of getting alerts
+	and more in each.
+	(get_alerts): New function.  Body from get_alerts_omp.  Get filters too.
+	(get_alert_omp): Get filters too.
+
+	* src/html/gsad.xsl (html-gsa-logo): Update delete_alert_response patch.
+
+	* src/html/omp.xsl (html-create-alert-form): Add report filter field.
+	(alert [details]): Display report filter for email alerts.
+	(get_alerts): Pass filters to html-create-alert-form.
+
 2012-09-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add new-style filtering to report page.

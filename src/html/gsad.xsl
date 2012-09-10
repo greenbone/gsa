@@ -655,7 +655,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alerts/create_alert_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_alerts/commands_response/delete_alert_response"
+        <xsl:apply-templates select="get_alerts/delete_alert_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alerts/gsad_msg"
                              mode="response-indicator"/>

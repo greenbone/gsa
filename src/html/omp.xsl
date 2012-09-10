@@ -4814,6 +4814,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-create-alert-form">
   <xsl:param name="lsc-credentials"></xsl:param>
   <xsl:param name="report-formats"></xsl:param>
+  <xsl:param name="filters"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -4993,6 +4994,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                   </option>
                                 </xsl:otherwise>
                               </xsl:choose>
+                            </xsl:for-each>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" valign="top">
+                          Report filter
+                          <select name="method_data:filt_id">
+                            <option value="">--</option>
+                            <xsl:for-each select="$filters/filter">
+                              <option value="{@id}"><xsl:value-of select="name"/></option>
                             </xsl:for-each>
                           </select>
                         </td>
@@ -5432,12 +5444,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           <xsl:variable name="id"
                                         select="method/data[name='notice_report_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:variable name="filt_id"
+                                        select="method/data[name='filt_id']/text()"/>
+                          <xsl:choose>
+                            <xsl:when test="$filt_id and ($filt_id != '0')">
+                              (filtered by
+                               <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
+                                 <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
+                               </a>)
+                            </xsl:when>
+                            <xsl:otherwise>
+                              (full report)
+                            </xsl:otherwise>
+                          </xsl:choose>
                         </xsl:when>
                         <xsl:when test="method/data[name='notice']/text() = '2'">
                           Attach report
                           <xsl:variable name="id"
                                         select="method/data[name='notice_attach_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:variable name="filt_id"
+                                        select="method/data[name='filt_id']/text()"/>
+                          <xsl:choose>
+                            <xsl:when test="$filt_id and ($filt_id != '0')">
+                              (filtered by
+                               <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
+                                 <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
+                               </a>)
+                            </xsl:when>
+                            <xsl:otherwise>
+                              (full report)
+                            </xsl:otherwise>
+                          </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                           Simple notice
@@ -5548,6 +5586,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param
       name="report-formats"
       select="get_report_formats_response | commands_response/get_report_formats_response"/>
+    <xsl:with-param
+      name="filters"
+      select="get_filters_response | commands_response/get_filters_response"/>
   </xsl:call-template>
   <!-- The for-each makes the get_alerts_response the current node. -->
   <xsl:for-each select="get_alerts_response | commands_response/get_alerts_response">
