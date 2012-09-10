@@ -1,5 +1,10 @@
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Use right path for MODIFY_TARGET
+	response indicator.  Add indicator for details page.
+
+2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add report filtering to email alerts.
 
 	* src/gsad_omp.c (create_alert_omp, delete_alert_omp, get_alerts_omp)

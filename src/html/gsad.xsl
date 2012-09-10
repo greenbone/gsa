@@ -789,7 +789,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/commands_response/modify_override_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="modify_target_response"
+        <xsl:apply-templates select="get_targets/modify_target_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_target/modify_target_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/commands_response/modify_task_response"
                              mode="response-indicator"/>
