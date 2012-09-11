@@ -4831,20 +4831,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr class="odd">
-            <td valign="top" width="125">Name</td>
+            <td valign="top" width="145">Name</td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr class="even">
-            <td valign="top" width="125">Comment (optional)</td>
+            <td valign="top" width="145">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Event</td>
+            <td valign="top" width="145">Event</td>
             <td colspan="2">
               <table border="0" width="100%">
                 <tr>
@@ -4910,7 +4910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="odd">
-            <td valign="top" width="125">Method</td>
+            <td valign="top" width="145">Method</td>
             <td colspan="2">
               <table border="0" width="100%">
                 <tr>
@@ -4994,17 +4994,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                   </option>
                                 </xsl:otherwise>
                               </xsl:choose>
-                            </xsl:for-each>
-                          </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3" valign="top">
-                          Report filter
-                          <select name="method_data:filt_id">
-                            <option value="">--</option>
-                            <xsl:for-each select="$filters/filter">
-                              <option value="{@id}"><xsl:value-of select="name"/></option>
                             </xsl:for-each>
                           </select>
                         </td>
@@ -5105,6 +5094,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
+          <tr>
+            <td valign="top" width="145">Report Filter (optional)</td>
+            <td colspan="2">
+              <select name="method_data:filt_id">
+                <option value="">--</option>
+                <xsl:for-each select="$filters/filter">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
           <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="Create Alert"/>
@@ -5134,6 +5134,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Event</td>
             <td>Condition</td>
             <td>Method</td>
+            <td>Filter</td>
             <td width="100">Actions</td>
           </tr>
           <xsl:apply-templates select="alert"/>
@@ -5244,6 +5245,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
+      <xsl:variable name="filt_id"
+                    select="method/data[name='filt_id']/text()"/>
+      <xsl:choose>
+        <xsl:when test="$filt_id and ($filt_id != '0')">
+          <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
+            <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trashcan-icon">
@@ -5320,6 +5334,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <br/>(To <xsl:value-of select="method/data[name='to_address']/text()"/>)
             </xsl:when>
           </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:variable name="filt_id"
+                    select="method/data[name='filt_id']/text()"/>
+      <xsl:choose>
+        <xsl:when test="$filt_id and ($filt_id != '0')">
+          <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
+            <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -5444,38 +5471,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           <xsl:variable name="id"
                                         select="method/data[name='notice_report_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
-                          <xsl:variable name="filt_id"
-                                        select="method/data[name='filt_id']/text()"/>
-                          <xsl:choose>
-                            <xsl:when test="$filt_id and ($filt_id != '0')">
-                              (filtered by
-                               <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
-                                 <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
-                               </a>)
-                            </xsl:when>
-                            <xsl:otherwise>
-                              (full report)
-                            </xsl:otherwise>
-                          </xsl:choose>
                         </xsl:when>
                         <xsl:when test="method/data[name='notice']/text() = '2'">
                           Attach report
                           <xsl:variable name="id"
                                         select="method/data[name='notice_attach_format']/text()"/>
                           <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
-                          <xsl:variable name="filt_id"
-                                        select="method/data[name='filt_id']/text()"/>
-                          <xsl:choose>
-                            <xsl:when test="$filt_id and ($filt_id != '0')">
-                              (filtered by
-                               <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
-                                 <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
-                               </a>)
-                            </xsl:when>
-                            <xsl:otherwise>
-                              (full report)
-                            </xsl:otherwise>
-                          </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                           Simple notice
@@ -5523,6 +5524,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
               </xsl:choose>
             </table>
+          </td>
+        </tr>
+        <tr>
+          <td>Filter:</td>
+          <td>
+            <xsl:variable name="filt_id"
+                          select="method/data[name='filt_id']/text()"/>
+            <xsl:choose>
+              <xsl:when test="$filt_id and ($filt_id != '0')">
+                <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
+                  <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </table>
@@ -15772,6 +15789,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Event</td>
         <td>Condition</td>
         <td>Method</td>
+        <td>Filter</td>
         <td width="100">Actions</td>
       </tr>
       <xsl:apply-templates select="alert" mode="trash"/>

@@ -1,5 +1,12 @@
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-alert-form, alert [details]): Make filter
+	a field of it's own, instead of a subfield of the mail case.
+	(html-alerts-table, alert, alert [trash], html-alerts-trash-table): Add
+	a filter column.
+
+2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Add extra_xml arg.  Update callers.
 	(create_filter_omp): If the CREATE_FILTER fails then choose the next
 	page according to the "next" param.  Remove done todo.  Pass response
