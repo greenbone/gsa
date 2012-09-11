@@ -1938,6 +1938,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
   if (setenv ("TZ", "GMT", 1) == -1)
     {
       g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+      g_free (tz);
       exit (EXIT_FAILURE);
     }
   tzset ();
@@ -1966,6 +1967,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
     }
   else
     unsetenv ("TZ");
+  g_free (tz);
 
   /* Add the cookie.
    *

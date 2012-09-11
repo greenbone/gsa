@@ -1,5 +1,11 @@
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (attach_sid): Free tz.
+
+	* src/gsad.c (openvas_validator_alias): Remove leaky g_strdup.
+
+2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-alert-form, alert [details]): Make filter
 	a field of it's own, instead of a subfield of the mail case.
 	(html-alerts-table, alert, alert [trash], html-alerts-trash-table): Add

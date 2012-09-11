@@ -134,7 +134,7 @@ openvas_validator_alias (validator_t validator,
       validator_rule_t *alias_rule, *rule;
       rule = (validator_rule_t*) value_rule;
       alias_rule = openvas_validator_rule_new (rule->regex
-                                                ? g_strdup (rule->regex)
+                                                ? rule->regex
                                                 : NULL);
       alias_rule->alias_for = g_strdup (name);
       g_hash_table_insert (validator,
