@@ -5097,7 +5097,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td valign="top" width="145">Report Filter (optional)</td>
             <td colspan="2">
-              <select name="method_data:filt_id">
+              <select name="filter_id">
                 <option value="">--</option>
                 <xsl:for-each select="$filters/filter">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
@@ -5245,17 +5245,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:variable name="filt_id"
-                    select="method/data[name='filt_id']/text()"/>
-      <xsl:choose>
-        <xsl:when test="$filt_id and ($filt_id != '0')">
-          <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
-            <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+        <xsl:value-of select="filter/name"/>
+      </a>
     </td>
     <td>
       <xsl:choose>
@@ -5338,22 +5330,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:variable name="filt_id"
-                    select="method/data[name='filt_id']/text()"/>
-      <xsl:choose>
-        <xsl:when test="$filt_id and ($filt_id != '0')">
-          <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
-            <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
+      <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+        <xsl:value-of select="filter/name"/>
+      </a>
     </td>
     <td>
-      <xsl:call-template name="restore-icon">
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="filter/trash = '1'">
+          <img src="/img/restore_inactive.png" border="0" alt="Restore"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="restore-icon">
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -5529,17 +5521,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Filter:</td>
           <td>
-            <xsl:variable name="filt_id"
-                          select="method/data[name='filt_id']/text()"/>
-            <xsl:choose>
-              <xsl:when test="$filt_id and ($filt_id != '0')">
-                <a href="/omp?cmd=get_filter&amp;filter_id={$filt_id}&amp;token={/envelope/token}" title="Details">
-                  <xsl:value-of select="../../get_filters_response/filter[@id=$filt_id]/name"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-              </xsl:otherwise>
-            </xsl:choose>
+            <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+              <xsl:value-of select="filter/name"/>
+            </a>
           </td>
         </tr>
       </table>
@@ -5708,6 +5692,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="delete_filter_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Delete Filter</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_filter_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Filter</xsl:with-param>
@@ -5745,7 +5741,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="type"/></td>
     <td>
       <xsl:choose>
-        <xsl:when test="writable='1'">
+        <xsl:when test="in_use='0'">
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'filter'"/>
             <xsl:with-param name="id" select="@id"/>

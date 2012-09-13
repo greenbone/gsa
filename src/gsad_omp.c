@@ -3989,7 +3989,7 @@ create_alert_omp (credentials_t * credentials, params_t *params)
   GString *xml;
   int socket;
   gchar *html;
-  const char *name, *comment, *condition, *event, *method;
+  const char *name, *comment, *condition, *event, *method, *filter_id;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -4015,9 +4015,10 @@ create_alert_omp (credentials_t * credentials, params_t *params)
   condition = params_value (params, "condition");
   event = params_value (params, "event");
   method = params_value (params, "method");
+  filter_id = params_value (params, "filter_id");
 
   if (name == NULL || comment == NULL || condition == NULL || event == NULL
-      || method == NULL)
+      || method == NULL || filter_id == NULL)
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create Alert"));
   else
     {
@@ -4040,8 +4041,10 @@ create_alert_omp (credentials_t * credentials, params_t *params)
       if (openvas_server_sendf (&session,
                                 "<create_alert>"
                                 "<name>%s</name>"
+                                "<filter id=\"%s\"/>"
                                 "%s%s%s",
                                 name,
+                                filter_id,
                                 comment ? "<comment>" : "",
                                 comment ? comment : "",
                                 comment ? "</comment>" : "")
@@ -16737,6 +16740,7 @@ authenticate_omp (const gchar * username, const gchar * password,
       if (status == NULL
           || strlen (status) == 0)
         {
+          g_free (response);
           free_entity (entity);
           return -1;
         }
@@ -16748,6 +16752,7 @@ authenticate_omp (const gchar * username, const gchar * password,
           return 0;
         }
 
+      g_free (response);
       return -1;
     }
   else

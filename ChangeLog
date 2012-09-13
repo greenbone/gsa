@@ -1,8 +1,22 @@
+2012-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Adjust for explicit Alert filters in OMP.
+
+	* src/gsad_omp.c (create_alert_omp): Add filter.
+
+	* src/html/omp.xsl (html-create-alert-form): Pass filter as explicit
+	request param.
+	(alert [trash]): Expect filter in explicit OMP element.  Make restore
+	icon depend on whether filter is in trashcan.
+	(alert [details]): Expect filter in explicit OMP element.
+	(delete_filter_response): New template.
+	(filter): Make trashcan icon depend on in_use instead of writable.
+
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (attach_sid): Free tz.
 
-	* src/gsad.c (openvas_validator_alias): Remove leaky g_strdup.
+	* src/validator.c (openvas_validator_alias): Remove leaky g_strdup.
 
 2012-09-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
