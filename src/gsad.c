@@ -2392,14 +2392,17 @@ file_content_response (credentials_t *credentials,
   /* Make sure the requested path really is a file. */
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
+      struct MHD_Response *ret;
       char *res = gsad_message (credentials,
                                 "Invalid request", __FUNCTION__, __LINE__,
                                 "The requested page does not exist.",
                                 NULL);
       g_free (path);
       fclose (file);
-      return MHD_create_response_from_data (strlen (res), (void *) res,
-                                            MHD_NO, MHD_YES);
+      ret = MHD_create_response_from_data (strlen (res), (void *) res,
+                                           MHD_NO, MHD_YES);
+      free (res);
+      return ret;
     }
 
   response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
@@ -2693,6 +2696,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                               "/omp?cmd=get_tasks");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -2717,6 +2721,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                "/omp?cmd=get_tasks");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -2774,6 +2779,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -2812,6 +2818,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           g_free (xml);
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -2912,6 +2919,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_data ((unsigned int) res_len,
                                                     res, MHD_NO, MHD_YES);
+          free (res);
         }
       else if (!strncmp (&url[0], "/dialog/",
                          strlen ("/dialog/"))) /* flawfinder: ignore,
@@ -2960,6 +2968,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
         }
       else if (!strncmp (&url[0], "/help/",
                          strlen ("/help/"))) /* flawfinder: ignore,
@@ -3013,6 +3022,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                 "/help/contents.html");
           response = MHD_create_response_from_data (strlen (res), res,
                                                     MHD_NO, MHD_YES);
+          free (res);
         }
       else
         {

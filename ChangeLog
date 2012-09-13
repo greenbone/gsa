@@ -1,5 +1,10 @@
 2012-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (file_content_response, request_handler): Free
+	MHD_create_response_from_data return.
+
+2012-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Adjust for explicit Alert filters in OMP.
 
 	* src/gsad_omp.c (create_alert_omp): Add filter.
