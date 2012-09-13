@@ -1,5 +1,13 @@
 2012-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_one): Add extra_attribs arg.
+	(get_filter): Pass alerts="1" for GET_FILTER.
+
+	* src/html/omp.xsl (filter [details]): Add list of Alerts that use the
+	filter.
+
+2012-09-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (file_content_response, request_handler): Free
 	MHD_create_response_from_data return.
 

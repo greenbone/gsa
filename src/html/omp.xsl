@@ -5918,6 +5918,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="type"/></td>
         </tr>
       </table>
+
+      <xsl:choose>
+        <xsl:when test="count(alerts/alert) = 0">
+          <h1>Alerts using this Filter: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Alerts using this Filter</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="alerts/alert">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                         border="0"
+                         alt="Details"
+                         style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>

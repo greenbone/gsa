@@ -443,12 +443,13 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  extra_attribs  Extra attributes for OMP GET command.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_one (const char *type, credentials_t * credentials, params_t *params,
-         const char *extra_xml)
+         const char *extra_xml, const char *extra_attribs)
 {
   GString *xml;
   gnutls_session_t session;
@@ -512,12 +513,14 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                             " %s_id=\"%s\""
                             " actions=\"g\""
                             " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
+                            " sort_order=\"%s\""
+                            " %s/>",
                             type,
                             type,
                             id,
                             sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
+                            sort_order ? sort_order : "ascending",
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -16010,7 +16013,7 @@ char *
 get_filter (credentials_t * credentials, params_t *params,
             const char *extra_xml)
 {
-  return get_one ("filter", credentials, params, extra_xml);
+  return get_one ("filter", credentials, params, extra_xml, "alerts=\"1\"");
 }
 
 /**
