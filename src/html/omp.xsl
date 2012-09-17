@@ -5741,7 +5741,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -5762,9 +5762,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{../filters/term}"/>
-<!-- FIX first,max? and below -->
-              <input type="hidden" name="first" value="{../filters/@start}"/>
-              <input type="hidden" name="max" value="{../filters/@max}"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:when>
@@ -5775,13 +5772,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}"
          title="Filter Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
       <xsl:choose>
         <xsl:when test="writable='1'">
-          <a href="/omp?cmd=edit_filter&amp;filter_id={@id}&amp;next=get_filters&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_filter&amp;filter_id={@id}&amp;next=get_filters&amp;filter={../filters/term}&amp;token={/envelope/token}"
              title="Edit Filter"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
