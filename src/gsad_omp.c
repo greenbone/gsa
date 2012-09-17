@@ -8986,7 +8986,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   notes = params_value (params, "notes");
   if (notes == NULL)
-    params_given (params, "notes") || (notes = "0");
+    params_given (params, "notes") || (notes = "1");
 
   overrides = params_value (params, "overrides");
   if (overrides == NULL)
@@ -8994,7 +8994,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   result_hosts_only = params_value (params, "result_hosts_only");
   if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only") || (result_hosts_only = "0");
+    params_given (params, "result_hosts_only") || (result_hosts_only = "1");
 
   if (content_type) *content_type = NULL;
   if (report_len) *report_len = 0;
@@ -9035,9 +9035,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (show_closed_cves == NULL || strlen (show_closed_cves) == 0)
     show_closed_cves = "0";
 
-  if (notes == NULL || strlen (notes) == 0) notes = "0";
+  if (notes == NULL || strlen (notes) == 0) notes = "1";
 
-  if (overrides == NULL || strlen (overrides) == 0) overrides = "0";
+  if (overrides == NULL || strlen (overrides) == 0) overrides = "1";
 
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";

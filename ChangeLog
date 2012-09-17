@@ -1,5 +1,10 @@
 2012-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Correct some defaults, so the "--" filter
+	uses the same values as the initial filtering.
+
+2012-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (filter): Remove old first and max URL params.
 
 2012-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
