@@ -1033,6 +1033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <input type="hidden" name="report_id" value="{report/@id}"/>
                 </xsl:otherwise>
               </xsl:choose>
+              <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
               <input type="hidden" name="first_result" value="{report/results/@start}"/>
               <input type="hidden" name="max_results" value="{report/results/@max}"/>
               <input type="hidden" name="levels" value="{$levels}"/>
@@ -2236,6 +2237,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="optional_resource_type" value="report"/>
               <input type="hidden" name="next" value="get_report"/>
               <input type="hidden" name="report_id" value="{report/@id}"/>
+              <input type="hidden" name="overrides" value="{$apply-overrides}"/>
               <xsl:choose>
                 <xsl:when test="@type='prognostic'">
                   <input type="hidden" name="type" value="prognostic"/>
@@ -2266,6 +2268,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_report"/>
               <input type="hidden" name="report_id" value="{report/@id}"/>
+              <input type="hidden" name="overrides" value="{$apply-overrides}"/>
               <xsl:choose>
                 <xsl:when test="@type='prognostic'">
                   <input type="hidden" name="type" value="prognostic"/>
@@ -2311,6 +2314,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="report_id" value="{report/@id}"/>
+          <input type="hidden" name="overrides" value="{$apply-overrides}"/>
           <xsl:choose>
             <xsl:when test="@type='prognostic'">
               <input type="hidden" name="type" value="prognostic"/>

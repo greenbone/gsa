@@ -1,5 +1,12 @@
 2012-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Add filt_id to Report Summary
+	refresh icon, so that the selected filter is kept.  Add overrides to new
+	filter control forms so that the current "Apply overrides" state is
+	used.
+
+2012-09-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Correct some defaults, so the "--" filter
 	uses the same values as the initial filtering.
 
