@@ -2116,6 +2116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
             <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
             <li> <a href="configure_alerts.html?token={/envelope/token}">Configure Alerts</a></li>
+            <li> <a href="filters.html?token={/envelope/token}">Filters</a></li>
             <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
@@ -2298,6 +2299,211 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="filter_details.html">
+  <div class="gb_window_part_center">Help: Filter Details
+<!--
+    <a href="/omp?cmd=get_filter&amp;filter_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
+      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+    </a>
+-->
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_FILTERS'"/>
+      </xsl:call-template>
+
+      <h1>Filter Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#filter">Filter</a>.
+        This includes the name, comment, term and type.
+      </p>
+
+      <h4>New Filter</h4>
+      <p>
+        To create a new filter click the
+        new icon <img src="/img/new.png" alt="New Filter" title="New Filter" /> which
+        goes to the <a href="new_filter.html?token={/envelope/token}">New Filter</a>
+        page.
+      </p>
+
+      <h4>Filters</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Filters" title="Filters"/>
+       will switch to the filters page.
+      </p>
+
+      <h4>Edit Filter</h4>
+      <p>
+       Pressing the "Edit Filter" icon
+       <img src="/img/edit.png" alt="Edit Filter" title="Edit Filter"/>
+       will switch to an overview of the configuration for this filter and
+       allows editing the filter's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the filter as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <h3>Alerts using this Filter</h3>
+      <p>
+        This table provides an overview of the alerts that use the filter
+        (if any).
+        Details of these alerts can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="filters.html">
+  <div class="gb_window_part_center">Help: Filters
+    <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+       title="Filters" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Filters"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_FILTERS'"/>
+      </xsl:call-template>
+
+      <h1>Filters</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#filter">Filters</a>.
+       The complete contents of the filter entries
+       are shown (name, comment, term and type).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the filter and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Term</td>
+          <td>The filter term.  This describes how filtering will take place.</td>
+        </tr>
+        <tr class="odd">
+          <td>Type</td>
+          <td>
+            The type of filter.  A filter can apply to a specific resource.  If
+            blank then the filter applies to all resources.
+          </td>
+        </tr>
+      </table>
+
+      <h3>New Filter</h3>
+      <p>
+        To create a new filter click the
+        new icon <img src="/img/new.png" alt="New Filter" title="New Filter" /> which
+        goes to the <a href="new_filter.html?token={/envelope/token}">New Filter</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of filters as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <a name="filtering"></a>
+      <h3>Filtering</h3>
+      <p>
+        The Filtering section of the window shows how the displayed list has been
+        selected.
+      </p>
+      <p>
+        Modifying any of the values in the "Filter" field and clicking
+        the refresh icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />
+        will update the displayed list.  The filter syntax is described on the
+        <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
+        page.
+      </p>
+      <p>
+        Entering a name in the second field and clicking
+        the new icon <img src="/img/new.png" alt="New" title="New" />
+        will create a new filter from the filtering currently being applied to the
+        list.
+      </p>
+      <p>
+        The current filtering can also be changed by
+        selecting a filter from the dropdown on the right and clicking the refresh
+        icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />.
+      </p>
+      <p>
+        Clicking the list icon <img src="/img/list.png" border="0" alt="Filters"/>
+        goes to the full list of filters on the
+        <a href="filters.html?token={/envelope/token}">Filters</a> page.
+      </p>
+
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Move Filter to Trashcan</h4>
+      <p>
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the item to the trashcan and update the list.
+      </p>
+      <p>
+       Note that if a filter is associated with at least one alert, it is not possible
+       to move it. In this case the button is greyed
+       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
+      </p>
+
+      <h4>Filter Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show details of the filter specification and Alerts that use this filter.
+      </p>
+
+      <h4>Edit Filter</h4>
+      <p>
+       Pressing the "Edit Filter" icon
+       <img src="/img/edit.png" alt="Edit Filter" title="Edit Filter"/>
+       will switch to an overview of the configuration for this filter and
+       allows editing the filter's properties.
+      </p>
+
+      <h4>Clone Filter</h4>
+      <p>
+       Pressing the clone icon
+       <img src="/img/edit.png" alt="Clone" title="Clone"/>
+       will create a duplicate of the filter.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the filter as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="glossary.html">
 
   <div class="gb_window_part_center">Help: Glossary</div>
@@ -2349,6 +2555,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        An alert is an action that can be triggered at certain events.
        Usually this means notification, e.g. via e-mail in case of
        new found vulnerabilities.
+      </p>
+
+      <a name="filter"></a>
+      <h2>Filter</h2>
+      <p>
+       A filter describes how to select a certain subset from a group of
+       resources.
       </p>
 
       <a name="note"></a>
@@ -2923,6 +3136,80 @@ Public License instead of this License.
         After setting the timezone, it is a good idea to check the time in the GSA
         header bar.  If the timezone was correctly specified this should show the
         current time.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_filter.html">
+  <div class="gb_window_part_center">Help: New Filter
+    <a href="/omp?cmd=new_filter&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_FILTER'"/>
+      </xsl:call-template>
+
+      <h1>New Filter</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#filter">Filter</a>
+        the dialog offers these entries.
+        Hit the button "Create Filter" to submit the new filter.
+        The Filters page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Single Targets</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>Targets with only one host</td>
+        </tr>
+        <tr class="odd">
+          <td>Term</td>
+          <td>--</td>
+          <td>200</td>
+          <td><a href="/help/powerfilter.html?token={/envelope/token}">Powerfilter</a></td>
+          <td><tt>ips=1 first=1 rows=-2</tt></td>
+        </tr>
+        <tr class="even">
+          <td>Type</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Type name</td>
+          <td>target</td>
+        </tr>
+      </table>
+
+      <h4>Filters</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Filters" title="Filters"/>
+       will switch to the <a href="filters.html?token={/envelope/token}">Filters</a>
+       page.
       </p>
     </div>
   </div>
