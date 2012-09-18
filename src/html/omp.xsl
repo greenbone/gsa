@@ -16021,43 +16021,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#filters">Filters</a></td>
             <td><xsl:value-of select="count(get_filters_response/filter)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#port_lists">Port Lists</a></td>
             <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#report_formats">Report Formats</a></td>
             <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#schedules">Schedules</a></td>
             <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#slaves">Slaves</a></td>
             <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#targets">Targets</a></td>
             <td><xsl:value-of select="count(get_targets_response/target)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#the_tasks">Tasks</a></td>
             <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
           </tr>

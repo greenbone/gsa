@@ -1,5 +1,9 @@
 2012-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_trash): Get Contents backgrounds right.
+
+2012-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsa-style.css (#list ul): Increase left margin so that sub
 	items are easier to make out.
 
