@@ -1,5 +1,15 @@
 2012-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsa-style.css (#list ul): Increase left margin so that sub
+	items are easier to make out.
+
+	* src/html/help.xsl (filtering): New template.  From filtering.html.
+	(configure_alerts.html): Add filtering section.
+	(contents.html): Add filtering subpages.
+	(filters.html): Move filtering section out to template.
+
+2012-09-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (contents.html, glossary.html): Add filters.
 	(filter_details.html, filters.html, new_filter.html): New templates.
 

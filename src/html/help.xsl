@@ -49,6 +49,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="filtering">
+  <a name="filtering"></a>
+  <h3>Filtering</h3>
+  <p>
+    The Filtering section of the window shows how the displayed list has been
+    selected.
+  </p>
+  <p>
+    Modifying any of the values in the "Filter" field and clicking
+    the refresh icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />
+    will update the displayed list.  The filter syntax is described on the
+    <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
+    page.
+  </p>
+  <p>
+    Entering a name in the second field and clicking
+    the new icon <img src="/img/new.png" alt="New" title="New" />
+    will create a new filter from the filtering currently being applied to the
+    list.
+  </p>
+  <p>
+    The current filtering can also be changed by
+    selecting a filter from the dropdown on the right and clicking the refresh
+    icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />.
+  </p>
+  <p>
+    Clicking the list icon <img src="/img/list.png" border="0" alt="Filters"/>
+    goes to the full list of filters on the
+    <a href="filters.html?token={/envelope/token}">Filters</a> page.
+  </p>
+</xsl:template>
+
 <xsl:template match="help">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -795,6 +827,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Notification method.</td>
         </tr>
       </table>
+
+      <xsl:call-template name="filtering"/>
 
       <a name="actions"></a>
       <h3>Actions</h3>
@@ -2117,6 +2151,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
             <li> <a href="configure_alerts.html?token={/envelope/token}">Configure Alerts</a></li>
             <li> <a href="filters.html?token={/envelope/token}">Filters</a></li>
+              <ul>
+                <li> <a href="new_filter.html?token={/envelope/token}">New Filter</a></li>
+                <li> <a href="filter_details.html?token={/envelope/token}">Filter Details</a></li>
+              </ul>
             <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
@@ -2427,36 +2465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <a name="filtering"></a>
-      <h3>Filtering</h3>
-      <p>
-        The Filtering section of the window shows how the displayed list has been
-        selected.
-      </p>
-      <p>
-        Modifying any of the values in the "Filter" field and clicking
-        the refresh icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />
-        will update the displayed list.  The filter syntax is described on the
-        <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
-        page.
-      </p>
-      <p>
-        Entering a name in the second field and clicking
-        the new icon <img src="/img/new.png" alt="New" title="New" />
-        will create a new filter from the filtering currently being applied to the
-        list.
-      </p>
-      <p>
-        The current filtering can also be changed by
-        selecting a filter from the dropdown on the right and clicking the refresh
-        icon <img src="/img/refresh.png" alt="Refresh" title="Refresh" />.
-      </p>
-      <p>
-        Clicking the list icon <img src="/img/list.png" border="0" alt="Filters"/>
-        goes to the full list of filters on the
-        <a href="filters.html?token={/envelope/token}">Filters</a> page.
-      </p>
-
+      <xsl:call-template name="filtering"/>
 
       <a name="actions"></a>
       <h3>Actions</h3>
