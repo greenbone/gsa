@@ -3474,6 +3474,34 @@ Public License instead of this License.
           <td>Choice</td>
           <td></td>
         </tr>
+        <tr class="even">
+          <td>Observers</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>alice bob</td>
+        </tr>
+        <tr class="odd">
+          <td>Add results to Asset Management</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Scan Intensity: Maximum concurrently executed NVTs per host</td>
+          <td>no</td>
+          <td>10</td>
+          <td>Numeric</td>
+          <td>2</td>
+        </tr>
+        <tr class="even">
+          <td>Scan Intensity: Maximum concurrently scanned hosts</td>
+          <td>no</td>
+          <td>10</td>
+          <td>Numeric</td>
+          <td>10</td>
+        </tr>
       </table>
 
       <h1>New Container Task</h1>
@@ -5155,10 +5183,53 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Task</td>
-          <td>Shows name of the task. Names are not
-              necessarily unique, so the same name
-              may appear multiply. An internal ID
-              distinguishes the tasks.</td>
+          <td>
+            Shows name of the task. Names are not
+            necessarily unique, so the same name
+            may appear multiply. An internal ID
+            distinguishes the tasks.
+            <br/>
+            If there is a comment on the task it is shown in brackets below
+            the name.
+            <div>
+              The right hand side of this column may contain a number of icons:
+              <table style="margin-left: 10px">
+                <tr>
+                  <td valign="top">
+                    <img src="/img/sensor.png"
+                         border="0"
+                         alt="Task is configured to run on slave Example Slave"
+                         title="Task is configured to run on slave Example Slave"/>
+                  </td>
+                  <td>
+                    The task is configured to run on a slave.
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top">
+                    <img src="/img/provide_view.png"
+                         border="0"
+                         alt="Task made visible for: user1 user2"
+                         title="Task made visible for: user1 user2"/>
+                  </td>
+                  <td>
+                    The task has been made visible to one or more other users.
+                  </td>
+                </tr>
+                <tr>
+                  <td valign="top">
+                    <img src="/img/view_other.png"
+                         border="0"
+                         alt="Observing task owned by user1"
+                         title="Observing task owned by user1"/>
+                  </td>
+                  <td>
+                    The task is only for observation.  It is owned another user.
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>Status</td>
