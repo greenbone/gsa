@@ -273,7 +273,7 @@ gsad_message (credentials_t *credentials, const char *title,
   gchar *xml, *resp;
 
   xml = g_strdup_printf ("<gsad_response>"
-                         "<title>%s: %s:%i</title>"
+                         "<title>%s: %s:%i (GSA %s)</title>"
                          "<message>%s</message>"
                          "<backurl>%s</backurl>"
                          "<token>%s</token>"
@@ -281,6 +281,7 @@ gsad_message (credentials_t *credentials, const char *title,
                          title,
                          function,
                          line,
+                         GSAD_VERSION,
                          msg,
                          backurl ? backurl : "/omp?cmd=get_tasks",
                          credentials ? credentials->token : "");

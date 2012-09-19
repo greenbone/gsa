@@ -1,5 +1,9 @@
 2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_base.c (gsad_message): Add GSA version to error message.
+
+2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (new_task.html): Add Observer, Asset Management and
 	Scan Intensity columns.
 	(tasks.html): Describe task comment and name column icons.
