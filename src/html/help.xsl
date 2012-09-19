@@ -2326,12 +2326,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="side_effects"></a>
       <h2>Side effects of an NVT Synchronization</h2>
       <p>
-       The synchronization with an NVT Feed Service will take a short amount of time,
-       depending on the time of your last synchronization and the amount of changes in
-       the Feed Service. While synchronizing, the interface might seem slow to react.
+       The synchronization with an NVT Feed Service will usually take a short amount of
+       time.  However, in some cases this process can take much longer.
+       This depends on the time of your last synchronization and the number of changes in
+       the Feed Service. While synchronizing, the interface might be slow to react.
+      </p>
+      <p>
        At the end of the synchronization, some components of your installation will
-       need to be reloaded to make full use of your updated NVT collection. This may
-       cause the interface to be unresponsive for a short amount of time.
+       need to be reloaded to make full use of your updated NVT collection.  This also
+       usually takes a short time, but in some cases may take much longer.  During this
+       time the interface may be unresponsive.
       </p>
     </div>
   </div>

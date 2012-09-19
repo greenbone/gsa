@@ -1,5 +1,10 @@
 2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (feed_management.html): Reword side effects to be
+	clear that sometimes it can take a while.
+
+2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_base.c (gsad_message): Add GSA version to error message.
 
 2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
