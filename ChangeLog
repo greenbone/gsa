@@ -1,3 +1,36 @@
+2012-09-26  Andre Heinecke <aheinecke@intevation.de>
+
+	Make SecInfo Management the seventh top level menu item.
+
+	* src/html/dialog.xsl (browse_infosec.html): Rename 
+	"Security Information Management" to "Lookup"
+
+	* src/html/gsa-style.css (#gb_menu ul li a): Switch to new button width
+	128px and adapt background position.
+	
+	* src/html/gsa-style.css (#gb_menu ul .first_button a)
+	(#gb_menu ul .last_button a): Set width to 130px. Add > a to overwrite
+	width only for the first link in the element.
+
+	* src/html/gsa-style.css (#gb_menu ul li ul, #gb_menu ul li ul a)
+	(#gb_menu ul li ul a): Expand submenu by 5px to avoid asymetric look with
+	the new menu width.
+
+	* src/html/gsa-style.css (#gb_menu ul li:hover a)
+	(#gb_menu ul .last_button:hover a): Adopt background position
+
+	* src/html/help.xsl (browse_infosec.html): Rename from "Security Information
+	Browser" to "Security Information Lookup"
+
+	* src/html/help.xsl (contents.html): Move SecInfo Management to the top
+	level of the contents index
+
+	* src/html/gsad.xsl (html-gsa-navigation): Move SecInfo from Extras to the
+	top level.
+
+	* style/top_menu_buttons.png:  First button and last button now
+	have a width of 130px the other buttons are 128px
+
 2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (feed_management.html): Reword side effects to be

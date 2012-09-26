@@ -57,7 +57,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="dialog" match="browse_infosec.html">
   <div class="gb_window_part_center">
-    Security Information Management
+    Lookup
     <a href="/help/browse_infosec.html?token={/envelope/token}"
         title="Help: InfoSec browser">
       <img src="/img/help.png" border="0"/>

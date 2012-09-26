@@ -2125,6 +2125,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
           </ul>
+          <li> SecInfo Management</li>
+          <ul>
+            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
+          </ul>
           <li> Asset Management</li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
@@ -2172,7 +2176,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
-            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Browser</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> <a href="javascript.html?token={/envelope/token}">JavaScript</a></li>
             <li> <a href="error_messages.html?token={/envelope/token}">Error Messages</a></li>
@@ -3734,7 +3737,7 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="browse_infosec.html">
-  <div class="gb_window_part_center">Help: SecInfo browser</div>
+  <div class="gb_window_part_center">Help: SecInfo Lookup</div>
   <div class="gb_window_part_content">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -3750,7 +3753,7 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <h1>Security Information Browser</h1>
+      <h1>Security Information Lookup</h1>
       <p>
        A page that provides access to the security information database to
        lookup details for a given element. Valid elements are CPE and CVE.

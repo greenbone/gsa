@@ -414,10 +414,10 @@ table.odd {
 
 #gb_menu ul li a {
  display: block;
- width: 150px;
+ width: 128px;
  height: 35px;
  background: url('img/style/top_menu_buttons.png');
- background-position: -150px 0px;
+ background-position: -130px 0px;
  line-height: 35px;
  font-size: 10px;
  color: #FFFFFF;
@@ -425,7 +425,8 @@ table.odd {
  font-weight: bold;
 }
 
-#gb_menu ul .first_button a {
+#gb_menu ul .first_button > a {
+ width: 130px;
  background-position: 0px 0px;
 }
 
@@ -433,20 +434,21 @@ table.odd {
  background-position: 0px -35px;
 }
 
-#gb_menu ul .last_button a {
- background-position: -300px 0px;
+#gb_menu ul .last_button > a {
+ width: 130px;
+ background-position: -258px 0px;
 }
 
 #gb_menu ul .last_button:hover a {
- background-position: -300px -35px;
+ background-position: -258px -35px;
 }
 
 #gb_menu ul li:hover a {
- background-position: -150px -35px;
+ background-position: -130px -35px;
 }
 
 #gb_menu ul li ul {
- width: 250px;
+ width: 255px;
  z-index: 6;
  list-style: none;
  position: absolute;
@@ -465,7 +467,7 @@ table.odd {
  text-align: left;
  text-indent: 12px;
  color: #3A3A3A;
- width: 250px;
+ width: 255px;
  height: 22px;
 }
 
@@ -475,7 +477,7 @@ table.odd {
  text-align: left;
  text-indent: 25px;
  color: #3A3A3A;
- width: 250px;
+ width: 255px;
  height: 22px;
 }
 

@@ -880,6 +880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-gsa-navigation">
+ <center>
   <div id="gb_menu">
    <ul>
     <li class="first_button">
@@ -897,6 +898,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
         <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+      </xsl:if>
+     </ul>
+    </li>
+    <li>
+     <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
+     <ul>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
+       <li class="pointy"></li>
+       <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">Lookup</a></li>
       </xsl:if>
      </ul>
     </li>
@@ -954,9 +964,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SYSTEM_REPORTS']">
         <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Performance</a></li>
       </xsl:if>
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
-        <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a></li>
-      </xsl:if>
      </ul>
     </li>
     <li>
@@ -980,6 +987,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <br clear="all" />
   <br />
+ </center>
 </xsl:template>
 
 <!-- DIALOGS -->
