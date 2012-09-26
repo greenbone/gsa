@@ -1,5 +1,13 @@
 2012-09-26  Andre Heinecke <aheinecke@intevation.de>
 
+	* src/html/help.xsl (contents.html): Change placement of SecInfo
+	Management to be between Asset Management and Configuration.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Change placement of SecInfo
+	Management to be between Asset Management and Configuration.
+
+2012-09-26  Andre Heinecke <aheinecke@intevation.de>
+
 	Make SecInfo Management the seventh top level menu item.
 
 	* src/html/dialog.xsl (browse_infosec.html): Rename 

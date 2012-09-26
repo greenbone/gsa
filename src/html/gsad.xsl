@@ -902,6 +902,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </ul>
     </li>
     <li>
+      <a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Asset Management</a>
+      <ul>
+       <li class="pointy"></li>
+       <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Hosts</a></li>
+      </ul>
+    </li>
+    <li>
      <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
      <ul>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
@@ -909,13 +916,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">Lookup</a></li>
       </xsl:if>
      </ul>
-    </li>
-    <li>
-      <a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Asset Management</a>
-      <ul>
-       <li class="pointy"></li>
-       <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Hosts</a></li>
-      </ul>
     </li>
     <li>
      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Configuration</a>

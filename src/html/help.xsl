@@ -2125,15 +2125,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
           </ul>
-          <li> SecInfo Management</li>
-          <ul>
-            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
-          </ul>
           <li> Asset Management</li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
             <li> <a href="cpe.html?token={/envelope/token}">CPE</a></li>
             <li> <a href="cve.html?token={/envelope/token}">CVE</a></li>
+          </ul>
+          <li> SecInfo Management</li>
+          <ul>
+            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
