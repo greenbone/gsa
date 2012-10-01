@@ -1,3 +1,19 @@
+2012-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add filtering to notes.
+
+	* src/gsad.c (init_validator): Add note to resource types.
+
+	* src/gsad_omp.c (next_page): New function.
+	(delete_resource): Move up in file.
+	(clone_omp, create_filter_omp): Let next_page decide which page is next,
+	adding get_notes to previous options.
+	(get_notes, delete_note_omp): Switch to generic function.  Adjust
+	callers.
+
+	* src/html/omp.xsl (html-notes-table): Call list-window.
+	(get_notes): Apply like the other commands.
+
 2012-09-26  Andre Heinecke <aheinecke@intevation.de>
 
 	* src/html/help.xsl (contents.html): Change placement of SecInfo
@@ -10,12 +26,12 @@
 
 	Make SecInfo Management the seventh top level menu item.
 
-	* src/html/dialog.xsl (browse_infosec.html): Rename 
+	* src/html/dialog.xsl (browse_infosec.html): Rename
 	"Security Information Management" to "Lookup"
 
 	* src/html/gsa-style.css (#gb_menu ul li a): Switch to new button width
 	128px and adapt background position.
-	
+
 	* src/html/gsa-style.css (#gb_menu ul .first_button a)
 	(#gb_menu ul .last_button a): Set width to 130px. Add > a to overwrite
 	width only for the first link in the element.

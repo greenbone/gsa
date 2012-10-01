@@ -11513,29 +11513,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-notes-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Notes
-      <a href="/help/notes.html?token={/envelope/token}"
-         title="Help: Notes">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="notes">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>NVT</td>
-            <td>Text</td>
-            <td>Active</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="note"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'note'"/>
+    <xsl:with-param name="cap-type" select="'Note'"/>
+    <xsl:with-param name="resources-summary" select="notes"/>
+    <xsl:with-param name="resources" select="note"/>
+    <xsl:with-param name="count" select="count (note)"/>
+    <xsl:with-param name="filtered-count" select="note_count/filtered"/>
+    <xsl:with-param name="headings" select="'NVT|nvt Text|text Active|active'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="get_note">
@@ -11563,29 +11549,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_notes">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_note_response"/>
-  <xsl:apply-templates select="commands_response/modify_note_response"/>
-  <xsl:choose>
-    <xsl:when test="commands_response/get_notes_response/@status = '500'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">
-          Get Notes
-        </xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="500"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="commands_response/get_notes_response/@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- The for-each makes the get_notes_response the current node. -->
-      <xsl:for-each select="commands_response/get_notes_response">
-        <xsl:call-template name="html-notes-table"/>
-      </xsl:for-each>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates select="delete_note_response"/>
+  <xsl:apply-templates select="create_note_response"/>
+  <!-- The for-each makes the get_notes_response the current node. -->
+  <xsl:for-each select="get_notes_response | commands_response/get_notes_response">
+    <xsl:call-template name="html-notes-table"/>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- END NOTES MANAGEMENT -->

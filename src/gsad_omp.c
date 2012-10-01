@@ -98,11 +98,20 @@ static char *get_tasks (credentials_t *, params_t *, const char *, const char *,
 
 static char *get_trash (credentials_t *, params_t *, const char *);
 
-static char * get_config_family (credentials_t *, params_t *, int);
+static char *get_config_family (credentials_t *, params_t *, int);
+
+char *get_agents (credentials_t *, params_t *, const char *);
 
 char *get_filter (credentials_t *, params_t *, const char *);
 
 char *get_filters (credentials_t *, params_t *, const char *);
+
+static char *get_notes (credentials_t *, params_t *, const char *);
+
+char *get_targets (credentials_t *, params_t *, const char *);
+
+char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
+                  char **, const char *);
 
 
 /* Helpers. */
@@ -435,6 +444,42 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
 
 
 /* Generic page handlers. */
+
+/**
+ * @brief Generate next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+next_page (credentials_t *credentials, params_t *params, gchar *response)
+{
+  const char *next;
+
+  next = params_value (params, "next");
+  if (next == NULL)
+    return NULL;
+
+  if (strcmp (next, "get_agents") == 0)
+    return get_agents (credentials, params, response);
+
+  if (strcmp (next, "get_filters") == 0)
+    return get_filters (credentials, params, response);
+
+  if (strcmp (next, "get_notes") == 0)
+    return get_notes (credentials, params, response);
+
+  if (strcmp (next, "get_targets") == 0)
+    return get_targets (credentials, params, response);
+
+  if (strcmp (next, "get_report") == 0)
+    return get_report (credentials, params, NULL, NULL, NULL, NULL, response);
+
+  return NULL;
+}
 
 /**
  * @brief Get one resource, XSL transform the result.
@@ -895,6 +940,97 @@ export_resource (const char *type, credentials_t * credentials,
   g_string_free (xml, TRUE);
   openvas_server_close (socket, session);
   return content;
+}
+
+/**
+ * @brief Delete a resource, get all resources, XSL transform the result.
+ *
+ * @param[in]  type         Type of resource.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  ultimate     0 move to trash, 1 remove entirely.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_resource (const char *type, credentials_t * credentials,
+                 params_t *params, int ultimate,
+                 char *get (credentials_t *, params_t *, const char *))
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response, *id_name;
+  const char *resource_id;
+  entity_t entity;
+
+  id_name = g_strdup_printf ("%s_id", type);
+  resource_id = params_value (params, id_name);
+  g_free (id_name);
+
+  if (resource_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a resource. "
+                         "The resource was not deleted. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while deleting a resource. "
+                             "The resource is not deleted. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Delete the resource and get all resources. */
+
+  if (openvas_server_sendf (&session,
+                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"/>",
+                            type,
+                            type,
+                            resource_id,
+                            !!ultimate)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "The resource is not deleted. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while deleting a resource. "
+                           "It is unclear whether the resource has been deleted or not. "
+                           "Diagnostics: Failure to read response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  html = get (credentials, params, response);
+  g_free (response);
+  return html;
 }
 
 
@@ -3370,9 +3506,6 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                        "/omp?cmd=get_lsc_credentials");
 }
 
-char *
-get_agents (credentials_t *, params_t *, const char *);
-
 /**
  * @brief Create an agent, get all agents, XSL transform result.
  *
@@ -5048,27 +5181,16 @@ clone_omp (credentials_t *credentials, params_t *params)
 
   /* Cleanup, and return transformed XML. */
 
-  if (strcmp (next, "get_targets") == 0)
-    {
-      html = get_targets (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-  else if (strcmp (next, "get_filters") == 0)
-    {
-      html = get_filters (credentials, params, response);
-      g_free (response);
-      return html;
-    }
-
+  html = next_page (credentials, params, response);
   g_free (response);
-
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while cloning a resource. "
-                       "The resource remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  if (html == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while cloning a resource. "
+                         "The resource remains the same. "
+                         "Diagnostics: Error in parameter next.",
+                         "/omp?cmd=get_tasks");
+  return html;
 }
 
 #undef CHECK
@@ -10160,74 +10282,18 @@ get_result_omp (credentials_t *credentials, params_t *params)
  * @brief Get all notes, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_notes (credentials_t *credentials, const char *commands)
+get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the notes. "
-                             "The list of notes is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_notes>");
-
-  /* Get the notes. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_notes sort_field=\"notes_nvt_name, notes.text\"/>"
-                            "</commands>",
-                            commands ? commands : "")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the notes. "
-                           "The list of notes is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the notes. "
-                           "The list of notes is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_notes>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  // FIX
+  if (params_given (params, "sort_field") == 0)
+    params_add (params, "sort_field", "notes_nvt_name, notes.text");
+  return get_many ("note", credentials, params, extra_xml);
 }
 
 /**
@@ -10240,7 +10306,7 @@ get_notes (credentials_t *credentials, const char *commands)
 char *
 get_notes_omp (credentials_t *credentials, params_t *params)
 {
-  return get_notes (credentials, NULL);
+  return get_notes (credentials, params, NULL);
 }
 
 /**
@@ -10685,124 +10751,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
 char *
 delete_note_omp (credentials_t * credentials, params_t *params)
 {
-  const char *next, *note_id;
-
-  next = params_value (params, "next");
-  note_id = params_value (params, "note_id");
-
-  REQUIRE (next, "/omp?cmd=get_notes");
-  REQUIRE (note_id, "/omp?cmd=get_notes");
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL,
-                              NULL);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_nvts") == 0)
-    {
-      gchar *extra;
-      char *ret;
-      const char *oid;
-
-      oid = params_value (params, "oid");
-
-      if (oid == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a note. "
-                             "The note remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_notes");
-
-      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_nvts (credentials, oid, extra);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_notes") == 0)
-    {
-      gchar *extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      char *ret = get_notes (credentials, extra);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      const char *task_id, *overrides;
-      gchar *extra;
-      char *ret;
-
-      task_id = params_value (params, "task_id");
-
-      overrides = params_value (params, "overrides");
-      if (overrides == NULL)
-        params_given (params, "overrides") || (overrides = "0");
-
-      if (task_id == NULL || overrides == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a note. "
-                             "The note remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_notes");
-
-      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-      ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL, extra,
-                       overrides ? strcmp (overrides, "0") : 0,
-                       NULL);
-
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      gchar *extra;
-      char *ret;
-
-      extra = g_strdup_printf ("<delete_note note_id=\"%s\"/>", note_id);
-
-      if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, extra, NULL, NULL, NULL, NULL);
-      else
-        ret = get_result (credentials,
-                          params_value (params, "result_id"),
-                          params_value (params, "task_id"),
-                          params_value (params, "name"),
-                          params_value (params, "apply_overrides"),
-                          extra,
-                          params_value (params, "report_id"),
-                          params_value (params, "first_result"),
-                          params_value (params, "max_results"),
-                          params_value (params, "levels"),
-                          params_value (params, "search_phrase"),
-                          params_value (params, "autofp"),
-                          params_value (params, "show_closed_cves"),
-                          params_value (params, "notes"),
-                          params_value (params, "overrides"),
-                          params_value (params, "min_cvss_base"),
-                          params_value (params, "result_hosts_only"),
-                          params_value (params, "sort_field"),
-                          params_value (params, "sort_order"),
-                          NULL,
-                          NULL);
-
-      g_free (extra);
-      return ret;
-    }
-
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while deleting a note. "
-                       "The note remains intact. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  return delete_resource ("filter", credentials, params, 0, get_notes);
 }
 
 /**
@@ -11254,7 +11203,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_notes") == 0)
     {
-      char *ret = get_notes (credentials, modify_note);
+      char *ret = get_notes (credentials, NULL, NULL);  // FIX
       g_free (modify_note);
       return ret;
     }
@@ -16149,7 +16098,7 @@ create_filter_omp (credentials_t *credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *comment, *term, *type, *filter_id, *next;
+  const char *name, *comment, *term, *type, *filter_id;
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -16172,7 +16121,6 @@ create_filter_omp (credentials_t *credentials, params_t *params)
   comment = params_value (params, "comment");
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
-  next = params_value (params, "next");
 
   CHECK (name);
   CHECK (comment);
@@ -16236,16 +16184,8 @@ create_filter_omp (credentials_t *credentials, params_t *params)
 
     if (status[0] != '2')
       {
-        if (next && (strcmp (next, "get_targets") == 0))
-          html = get_targets (credentials, params, response);
-        else if (next && (strcmp (next, "get_agents") == 0))
-          html = get_agents (credentials, params, response);
-        else if (next && (strcmp (next, "get_report") == 0))
-          html = get_report (credentials, params, NULL, NULL, NULL, NULL,
-                             response);
-        else if (next && (strcmp (next, "get_filters") == 0))
-          html = get_filters (credentials, params, response);
-        else
+        html = next_page (credentials, params, response);
+        if (html == NULL)
           html = new_filter (credentials, params, response);
         g_free (response);
         free_entity (entity);
@@ -16269,110 +16209,14 @@ create_filter_omp (credentials_t *credentials, params_t *params)
     free_entity (entity);
   }
 
-  if (next && (strcmp (next, "get_targets") == 0))
-    html = get_targets (credentials, params, response);
-  else if (next && (strcmp (next, "get_agents") == 0))
-    html = get_agents (credentials, params, response);
-  else if (next && (strcmp (next, "get_report") == 0))
-    html = get_report (credentials, params, NULL, NULL, NULL, NULL, response);
-  else
+  html = next_page (credentials, params, response);
+  if (html == NULL)
     html = get_filters (credentials, params, response);
   g_free (response);
   return html;
 }
 
 #undef CHECK
-
-/**
- * @brief Delete a resource, get all resources, XSL transform the result.
- *
- * @param[in]  type         Type of resource.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  ultimate     0 move to trash, 1 remove entirely.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-delete_resource (const char *type, credentials_t * credentials,
-                 params_t *params, int ultimate,
-                 char *get (credentials_t *, params_t *, const char *))
-{
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *response, *id_name;
-  const char *resource_id;
-  entity_t entity;
-
-  id_name = g_strdup_printf ("%s_id", type);
-  resource_id = params_value (params, id_name);
-  g_free (id_name);
-
-  if (resource_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a resource. "
-                         "The resource was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a resource. "
-                             "The resource is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  /* Delete the resource and get all resources. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"/>",
-                            type,
-                            type,
-                            resource_id,
-                            !!ultimate)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a resource. "
-                           "The resource is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a resource. "
-                           "It is unclear whether the resource has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-
-  /* Cleanup, and return transformed XML. */
-
-  html = get (credentials, params, response);
-  g_free (response);
-  return html;
-}
 
 /**
  * @brief Delete a filter, get all filters, XSL transform the result.
