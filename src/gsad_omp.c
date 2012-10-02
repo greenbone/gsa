@@ -943,6 +943,88 @@ export_resource (const char *type, credentials_t * credentials,
 }
 
 /**
+ * @brief Export a list of resources.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return XML on success.  HTML result of XSL transformation on error.
+ */
+static char *
+export_many (const char *type, credentials_t * credentials, params_t *params,
+             enum content_type * content_type, char **content_disposition,
+             gsize *content_length)
+{
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL;
+  gchar *html;
+  const char *filter;
+
+  *content_length = 0;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting a list. "
+                             "The list could not be delivered. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  filter = params_value (params, "filter");
+
+  if (openvas_server_sendf (&session,
+                            "<get_%ss"
+                            " filter=\"%s\"/>",
+                            type,
+                            filter ? filter : "")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a list. "
+                           "The list could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &content))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a list. "
+                           "The list could not be delivered. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  *content_disposition = g_strdup_printf ("attachment;"
+                                          " filename=\"%ss.xml\"",
+                                          type);
+  *content_length = strlen (content);
+  free_entity (entity);
+  openvas_server_close (socket, session);
+  return content;
+}
+
+/**
  * @brief Delete a resource, get all resources, XSL transform the result.
  *
  * @param[in]  type         Type of resource.
@@ -6813,7 +6895,7 @@ export_target_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Export a list of target.
+ * @brief Export a list of targets.
  *
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
@@ -6829,77 +6911,8 @@ export_targets_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length)
 {
-  entity_t entity;
-  gnutls_session_t session;
-  int socket;
-  char *content = NULL;
-  gchar *html;
-  const char *filter;
-
-  *content_length = 0;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a target. "
-                             "The target could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
-
-  filter = params_value (params, "filter");
-  if (filter == NULL)
-    {
-      GString *xml;
-      xml = g_string_new ("<get_targets>");
-      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Targets"));
-      g_string_append (xml, "</get_targets>");
-      openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<get_targets"
-                            " filter=\"%s\"/>",
-                            filter)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the targets. "
-                           "The targets could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &content))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the targets. "
-                           "The targets could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment;"
-                                          " filename=\"targets.xml\"");
-  *content_length = strlen (content);
-  free_entity (entity);
-  openvas_server_close (socket, session);
-  return content;
+  return export_many ("target", credentials, params, content_length,
+                      content_disposition, content_length);
 }
 
 /**
@@ -8542,6 +8555,27 @@ export_note_omp (credentials_t * credentials, params_t *params,
   g_string_free (xml, TRUE);
   openvas_server_close (socket, session);
   return content;
+}
+
+/**
+ * @brief Export a list of notes.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Notes XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_notes_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("note", credentials, params, content_length,
+                      content_disposition, content_length);
 }
 
 /**
@@ -10751,7 +10785,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
 char *
 delete_note_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("filter", credentials, params, 0, get_notes);
+  return delete_resource ("note", credentials, params, 0, get_notes);
 }
 
 /**
@@ -11203,9 +11237,58 @@ save_note_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_notes") == 0)
     {
-      char *ret = get_notes (credentials, NULL, NULL);  // FIX
+      gnutls_session_t session;
+      int socket, ret;
+      gchar *html, *response;
+      entity_t entity;
+
+      switch (manager_connect (credentials, &socket, &session, &html))
+        {
+          case 0:
+            break;
+          case -1:
+            if (html)
+              return html;
+            /* Fall through. */
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred while modifying a note. "
+                                 "The note was not modified. "
+                                 "Diagnostics: Failure to connect to manager daemon.",
+                                 "/omp?cmd=get_notes");
+        }
+
+      ret = openvas_server_sendf (&session, modify_note);
       g_free (modify_note);
-      return ret;
+      if (ret == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while modifying note. "
+                               "No note was modified. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_notes");
+        }
+
+      entity = NULL;
+      if (read_entity_and_text (&session, &entity, &response))
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while modifying a note. "
+                               "It is unclear whether the note has been modified or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_notes");
+        }
+
+      openvas_server_close (socket, session);
+      html = get_notes (credentials, params, response);
+      free_entity (entity);
+      g_free (response);
+      return html;
     }
 
   if (strcmp (next, "get_result") == 0)
@@ -16294,6 +16377,27 @@ export_filter_omp (credentials_t * credentials, params_t *params,
 {
   return export_resource ("filter", credentials, params, content_type,
                           content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of filters.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Filters XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_filters_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("filter", credentials, params, content_length,
+                      content_disposition, content_length);
 }
 
 /**

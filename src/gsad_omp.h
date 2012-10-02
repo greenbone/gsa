@@ -137,6 +137,8 @@ char * edit_note_omp (credentials_t *, params_t *);
 char * save_note_omp (credentials_t *, params_t *);
 char * export_note_omp (credentials_t *, params_t *, enum content_type *,
                         char **, gsize *);
+char * export_notes_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
 
 char * create_port_list_omp (credentials_t *, params_t *);
 char * create_port_range_omp (credentials_t *, params_t *);
@@ -185,6 +187,8 @@ char * delete_trash_filter_omp (credentials_t *, params_t *);
 char * edit_filter_omp (credentials_t *, params_t *);
 char * export_filter_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *);
+char * export_filters_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
 char * get_filter_omp (credentials_t *, params_t *);
 char * get_filters_omp (credentials_t *, params_t *);
 char * new_filter_omp (credentials_t *, params_t *);

@@ -571,7 +571,9 @@ init_validator ()
                          "|(export_config)"
                          "|(export_lsc_credential)"
                          "|(export_filter)"
+                         "|(export_filters)"
                          "|(export_note)"
+                         "|(export_notes)"
                          "|(export_override)"
                          "|(export_port_list)"
                          "|(export_preference_file)"
@@ -1735,6 +1737,10 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_filter_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_filters"))
+    return export_filters_omp (credentials, params, content_type,
+                               content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_lsc_credential"))
     {
       char *html;
@@ -1767,6 +1773,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_note"))
     return export_note_omp (credentials, params, content_type,
                             content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_notes"))
+    return export_notes_omp (credentials, params, content_type,
+                             content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_override"))
     return export_override_omp (credentials, params, content_type,

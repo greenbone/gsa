@@ -1,3 +1,29 @@
+2012-10-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Update the note list icons and note details page to the new style.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add export_filters and
+	export_notes.
+
+	* src/gsad_omp.c (export_many): New function.  Body from export_targets.
+	(export_targets): Call through to export_many.
+	(export_notes_omp, export_filters_omp): New functions.
+	(delete_note_omp): Correct type.
+	(save_note_omp): Get the get_notes case working.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/omp.xsl (gsa:lower-case): New function.
+	(list-window-line-icons, minor-details, details-header-icons): New
+	templates.
+	(list-window): Correct typo in Applied filter link.
+	(filter, target, note): Call list-window-line-icons instead of doing
+	them by hand.
+	(filter [details], target [details], note [details]): Call
+	details-header-icons and minor-details instead of doing them by hand.
+	(html-edit-filter-form): Correct name and value of Filter ID param.
+	(html-edit-target-form, html-edit-note-form): Add missing filter params.
+
 2012-10-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add filtering to notes.
