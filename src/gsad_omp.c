@@ -6911,7 +6911,7 @@ export_targets_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length)
 {
-  return export_many ("target", credentials, params, content_length,
+  return export_many ("target", credentials, params, content_type,
                       content_disposition, content_length);
 }
 
@@ -8574,7 +8574,7 @@ export_notes_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length)
 {
-  return export_many ("note", credentials, params, content_length,
+  return export_many ("note", credentials, params, content_type,
                       content_disposition, content_length);
 }
 
@@ -16396,7 +16396,7 @@ export_filters_omp (credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length)
 {
-  return export_many ("filter", credentials, params, content_length,
+  return export_many ("filter", credentials, params, content_type,
                       content_disposition, content_length);
 }
 

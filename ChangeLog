@@ -1,5 +1,10 @@
 2012-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (export_targets_omp, export_notes_omp)
+	(export_filters_omp): Correct type arg.
+
+2012-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (nvt): Replace note list with a link to the notes
 	page in the summary.
 
