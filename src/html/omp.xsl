@@ -10496,6 +10496,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>Risk factor:</td>
       <td><xsl:value-of select="risk_factor"/></td>
     </tr>
+    <tr>
+      <td>Notes:</td>
+      <td>
+        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="Notes on NVT {name}">
+          <xsl:value-of select="count (../../get_notes_response/note)"/>
+        </a>
+      </td>
+    </tr>
   </table>
 
   <h1>Description</h1>
@@ -10526,22 +10535,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:apply-templates
         select="commands_response/get_nvts_response/nvt"/>
-      <xsl:choose>
-        <xsl:when test="count(commands_response/get_notes_response/note) = 0">
-          <h1>Notes: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Notes</h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-            <tr class="gbntablehead2">
-              <td>Text</td>
-              <td width="100">Actions</td>
-            </tr>
-            <xsl:apply-templates select="commands_response/get_notes_response/note"
-                                 mode="nvt-details"/>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
       <xsl:choose>
         <xsl:when test="count(commands_response/get_overrides_response/override) = 0">
           <h1>Overrides: None</h1>

@@ -1,5 +1,10 @@
 2012-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Replace note list with a link to the notes
+	page in the summary.
+
+2012-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-report-table): Replace the note list with a
 	link to the notes page in the summary.
 
