@@ -2756,6 +2756,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="$in_assets/value"/>
           </td>
         </tr>
+        <tr>
+          <td>
+            Notes:
+          </td>
+          <td>
+            <a href="/omp?cmd=get_notes&amp;filter=task_id={task/@id}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Notes on Task {task/name}">
+              <xsl:value-of select="count (../get_notes_response/note)"/>
+            </a>
+          </td>
+        </tr>
       </table>
       <xsl:choose>
         <xsl:when test="task/target/@id=''">
@@ -2869,44 +2880,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="report">
               <xsl:with-param name="container" select="$container"/>
               <xsl:with-param name="observed" select="$observed"/>
-            </xsl:call-template>
-          </xsl:for-each>
-        </table>
-      </div>
-    </div>
-  </div>
-  <br/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      Notes on Results of "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html?token={/envelope/token}#notes" title="Help: Reports (Notes)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-         title="Refresh">
-        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="notes">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>NVT</td>
-            <td>Text</td>
-            <td>Active</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
-          <xsl:for-each select="../get_notes_response/note">
-            <xsl:call-template name="note">
-              <xsl:with-param name="next">get_tasks</xsl:with-param>
-              <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
-              <xsl:with-param name="params">
-                <input type="hidden" name="task_id" value="{$task_id}"/>
-                <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
