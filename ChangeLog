@@ -1,3 +1,28 @@
+2012-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add trashcan feature to notes.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add delete_trash_notes.
+
+	* src/gsad_omp.c (next_page): Add get_result case.
+	(get_report_page): New function.
+	(get_result): Add extra_xml arg.  Update callers.
+	(get_result_page): New function.  Suitable for delete_resource callback.
+	(delete_note_omp): Pick callback according to next param.
+	(delete_trash_note_omp): New function.
+	(get_trash): Get trash notes too.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-logo): Update indicator paths and add
+	missing cases.
+
+	* src/html/omp.xsl (note [trash], html-notes-trash-table): New
+	templates.
+	(note-detailed): Replace delete icon with trashcan.  Add clone icon.
+	Update icon and Report links.
+	(get_trash): Add notes.
+
 2012-10-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (export_targets_omp, export_notes_omp)

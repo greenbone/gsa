@@ -113,6 +113,8 @@ char *get_targets (credentials_t *, params_t *, const char *);
 char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
                   char **, const char *);
 
+char *get_result_page (credentials_t *, params_t *, const char *);
+
 
 /* Helpers. */
 
@@ -477,6 +479,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_report") == 0)
     return get_report (credentials, params, NULL, NULL, NULL, NULL, response);
+
+  if (strcmp (next, "get_result") == 0)
+    return get_result_page (credentials, params, response);
 
   return NULL;
 }
@@ -10062,6 +10067,22 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 }
 
 /**
+ * @brief Get the report page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Report.
+ */
+char *
+get_report_page (credentials_t *credentials, params_t *params,
+                 const char *extra_xml)
+{
+  return get_report (credentials, params, NULL, NULL, NULL, NULL, extra_xml);
+}
+
+/**
  * @brief Get a report and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -10124,6 +10145,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @param[in]  sort_order         Sort order.
  * @param[in]  delta_report_id    ID of delta report.
  * @param[in]  delta_states       Delta states.
+ * @param[in]  extra_xml          Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
@@ -10138,7 +10160,7 @@ get_result (credentials_t *credentials, const char *result_id,
             const char *overrides, const char *min_cvss_base,
             const char *result_hosts_only, const char *sort_field,
             const char *sort_order, const char *delta_report_id,
-            const char *delta_states)
+            const char *delta_states, const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -10183,6 +10205,9 @@ get_result (credentials_t *credentials, const char *result_id,
     }
 
   xml = g_string_new ("<get_result>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   openvas_append_xml (xml,
                       "<result id=\"%s\"/>"
@@ -10309,7 +10334,46 @@ get_result_omp (credentials_t *credentials, params_t *params)
                      params_value (params, "sort_field"),
                      params_value (params, "sort_order"),
                      params_value (params, "delta_report_id"),
-                     params_value (params, "delta_states"));
+                     params_value (params, "delta_states"),
+                     NULL);
+}
+
+/**
+ * @brief Get result details page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_result_page (credentials_t *credentials, params_t *params,
+                 const char *extra_xml)
+{
+  return get_result (credentials,
+                     params_value (params, "result_id"),
+                     params_value (params, "task_id"),
+                     params_value (params, "name"),
+                     params_value (params, "apply_overrides"),
+                     NULL,
+                     params_value (params, "report_id"),
+                     params_value (params, "first_result"),
+                     params_value (params, "max_results"),
+                     params_value (params, "levels"),
+                     params_value (params, "search_phrase"),
+                     params_value (params, "autofp"),
+                     params_value (params, "show_closed_cves"),
+                     params_value (params, "notes"),
+                     params_value (params, "overrides"),
+                     params_value (params, "min_cvss_base"),
+                     params_value (params, "result_hosts_only"),
+                     params_value (params, "sort_field"),
+                     params_value (params, "sort_order"),
+                     params_value (params, "delta_report_id"),
+                     params_value (params, "delta_states"),
+                     extra_xml);
+
 }
 
 /**
@@ -10764,7 +10828,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
                               params_value (params, "result_hosts_only"),
                               params_value (params, "sort_field"),
                               params_value (params, "sort_order"),
-                              NULL, NULL);
+                              NULL, NULL, NULL);
       g_free (create_note);
       return ret;
     }
@@ -10785,7 +10849,33 @@ create_note_omp (credentials_t *credentials, params_t *params)
 char *
 delete_note_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("note", credentials, params, 0, get_notes);
+  char* (*get) (credentials_t *, params_t *, const char *);
+  if (params_value (params, "next"))
+    {
+      if (strcmp (params_value (params, "next"), "get_report") == 0)
+        get = get_report_page;
+      else if (strcmp (params_value (params, "next"), "get_result") == 0)
+        get = get_result_page;
+      else
+        get = get_notes;
+    }
+  else
+    get = NULL;
+  return delete_resource ("note", credentials, params, 0, get);
+}
+
+/**
+ * @brief Delete a note, get all notes, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_note_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("note", credentials, params, 1, get_trash);
 }
 
 /**
@@ -11310,7 +11400,7 @@ save_note_omp (credentials_t * credentials, params_t *params)
                             first, max, levels, search_phrase, autofp,
                             show_closed_cves, notes, overrides, min_cvss_base,
                             result_hosts_only, sort_field, sort_order, NULL,
-                            NULL);
+                            NULL, NULL);
 
           g_free (first);
           g_free (max);
@@ -11861,7 +11951,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
                               params_value (params, "result_hosts_only"),
                               params_value (params, "sort_field"),
                               params_value (params, "sort_order"),
-                              NULL, NULL);
+                              NULL, NULL, NULL);
       g_free (create_override);
       return ret;
     }
@@ -11996,6 +12086,7 @@ delete_override_omp (credentials_t * credentials, params_t *params)
                           params_value (params, "result_hosts_only"),
                           params_value (params, "sort_field"),
                           params_value (params, "sort_order"),
+                          NULL,
                           NULL,
                           NULL);
 
@@ -12487,7 +12578,7 @@ save_override_omp (credentials_t * credentials, params_t *params)
                             first, max, levels, search_phrase, autofp,
                             show_closed_cves, notes, overrides, min_cvss_base,
                             result_hosts_only, sort_field, sort_order, NULL,
-                            NULL);
+                            NULL, NULL);
 
           g_free (first);
           g_free (max);
@@ -14658,6 +14749,42 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
                                "The current list of filters is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_tasks");
+        }
+    }
+
+  /* Get the notes. */
+
+  if (command_enabled (credentials, "GET_NOTES"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_notes"
+                                " trash=\"1\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting notes list. "
+                               "The current list of notes is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting notes list. "
+                               "The current list of notes is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_notes");
         }
     }
 

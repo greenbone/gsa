@@ -11168,6 +11168,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="note" mode="trash">
+  <xsl:param name="next">get_notes</xsl:param>
+  <xsl:param name="params"/>
+  <xsl:param name="params-get"/>
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <xsl:variable name="max" select="35"/>
+      <xsl:choose>
+        <xsl:when test="nvt/@oid = 0">
+          <abbr title="Result was an open port.">None</abbr>
+        </xsl:when>
+        <xsl:when test="string-length(nvt/name) &gt; $max">
+          <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="nvt/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
+      <xsl:choose>
+        <xsl:when test="text/@excerpt = 1">
+          <xsl:value-of select="text/text()"/>...
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:call-template name="trash-delete-icon">
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template match="note" mode="nvt-details">
   <xsl:variable name="class">
     <xsl:choose>
@@ -11388,6 +11436,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
     <xsl:with-param name="headings" select="'NVT|nvt Text|text Active|active'"/>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="html-notes-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>NVT</td>
+        <td>Text</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="note" mode="trash"/>
+    </table>
+  </div>
 </xsl:template>
 
 <xsl:template match="get_note">
@@ -14033,13 +14094,140 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right">
         <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="'note'"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="hidden" name="next" value="{$next}"/>
+              <xsl:choose>
+                <xsl:when test="$next='get_result'">
+                  <xsl:choose>
+                    <xsl:when test="$delta = 1">
+                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                      <input type="hidden" name="result_id" value="{../../@id}"/>
+                      <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                      <input type="hidden" name="name" value="{../../../../task/name}"/>
+                      <input type="hidden" name="apply_overrides" value="{../../../../filters/apply_overrides}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../."/>
+                      </xsl:call-template>
+                      <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                      <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                    </xsl:when>
+                    <xsl:when test="$delta = 2">
+                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                      <input type="hidden" name="result_id" value="{../../../@id}"/>
+                      <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                      <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                      <input type="hidden" name="apply_overrides" value="{../../../../../filters/apply_overrides}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../../."/>
+                      </xsl:call-template>
+                      <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                      <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                      <input type="hidden" name="result_id" value="{../../@id}"/>
+                      <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                      <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                      <input type="hidden" name="apply_overrides" value="{../../../../../../filters/apply_overrides}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../../../."/>
+                      </xsl:call-template>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:choose>
+                    <xsl:when test="$delta = 1">
+                      <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../."/>
+                      </xsl:call-template>
+                      <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                      <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                    </xsl:when>
+                    <xsl:when test="$delta = 2">
+                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../../."/>
+                      </xsl:call-template>
+                      <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                      <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                      <xsl:call-template name="note-detailed-delete-params">
+                        <xsl:with-param name="base" select="../../../../."/>
+                      </xsl:call-template>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:with-param>
+          </xsl:call-template>
+        </div>
+        <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
+           title="Note Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+        <xsl:choose>
+          <xsl:when test="$next='get_result' and $delta = 1">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$next='get_result' and $delta = 2">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$next='get_result'">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;first_result={../../../../../../results/@start}&amp;max_results={../../../../../../results/@max}&amp;sort_field={../../../../../../sort/field/text()}&amp;sort_order={../../../../../../sort/field/order}&amp;levels={../../../../../../filters/text()}&amp;notes={../../../../../../filters/notes}&amp;overrides={../../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../../filters/phrase}&amp;min_cvss_base={../../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;autofp={../../../../../../filters/autofp}&amp;show_closed_cves={../../../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:when test="$delta = 2">
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;show_closed_cves={../../../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+<!-- FIX remove filter args -->
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+               title="Edit Note"
+               style="margin-left:3px;">
+              <img src="/img/edit.png" border="0" alt="Edit"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+        <div style="display: inline">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
-            <input type="hidden" name="cmd" value="delete_note"/>
-            <input type="hidden" name="note_id" value="{@id}"/>
-            <input type="image" src="/img/delete.png" alt="Delete"
-                   name="Delete" value="Delete" title="Delete"/>
+            <input type="hidden" name="cmd" value="clone"/>
+            <input type="hidden" name="resource_type" value="note"/>
+            <input type="hidden" name="next" value="{$next}"/>
+            <input type="hidden" name="id" value="{@id}"/>
+            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <!-- FIX -->
+            <input type="hidden" name="first" value="{../targets/@start}"/>
+            <input type="hidden" name="max" value="{../targets/@max}"/>
+            <input type="image" src="/img/clone.png" alt="Clone Note"
+                   name="Clone" value="Clone" title="Clone"/>
+
             <xsl:choose>
               <xsl:when test="$next='get_result'">
                 <xsl:choose>
@@ -14106,50 +14294,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
-            <input type="hidden" name="next" value="{$next}"/>
           </form>
         </div>
-        <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
-           title="Note Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-        <xsl:choose>
-          <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
-               title="Edit Note"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
-               title="Edit Note"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;first_result={../../../../../../results/@start}&amp;max_results={../../../../../../results/@max}&amp;sort_field={../../../../../../sort/field/text()}&amp;sort_order={../../../../../../sort/field/order}&amp;levels={../../../../../../filters/text()}&amp;notes={../../../../../../filters/notes}&amp;overrides={../../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../../filters/phrase}&amp;min_cvss_base={../../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../../filters/min_cvss_base) &gt; 0)}&amp;autofp={../../../../../../filters/autofp}&amp;show_closed_cves={../../../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
-               title="Edit Note"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;first_result={../../../../../results/@start}&amp;max_results={../../../../../results/@max}&amp;sort_field={../../../../../sort/field/text()}&amp;sort_order={../../../../../sort/field/order}&amp;levels={../../../../../filters/text()}&amp;notes={../../../../../filters/notes}&amp;overrides={../../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../../filters/result_hosts_only}&amp;search_phrase={../../../../../filters/phrase}&amp;min_cvss_base={../../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;show_closed_cves={../../../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
-               title="Edit Note"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
-               title="Edit Note"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
-          </xsl:otherwise>
-        </xsl:choose>
         <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="Export Note"
            style="margin-left:3px;">
@@ -14420,10 +14566,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;search_phrase={../../../../filters/phrase}&amp;notes={../../../../filters/notes}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}">Report</a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}">Report</a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -14623,7 +14769,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../../report/results/@start}&amp;max_results={../../../report/results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;delta_states={../../filters/delta/text()}&amp;first_result={../../../report/results/@start}&amp;max_results={../../../report/results/@max}&amp;levels={../../filters/text()}&amp;search_phrase={../../filters/phrase}&amp;notes={../../filters/notes}&amp;overrides={../../filters/overrides}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
                title="Result Details" style="margin-left:3px;">
               <img src="/img/details.png" border="0" alt="Details"/>
             </a>
@@ -14643,7 +14789,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -15795,6 +15941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:apply-templates select="delete_alert_response"/>
   <xsl:apply-templates select="delete_lsc_credential_response"/>
+  <xsl:apply-templates select="delete_note_response"/>
   <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
@@ -15861,38 +16008,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="count(get_filters_response/filter)"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
           <tr class="odd">
+            <td><a href="#notes">Notes</a></td>
+            <td><xsl:value-of select="count(get_notes_response/note)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+          <tr class="even">
             <td><a href="#port_lists">Port Lists</a></td>
             <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#report_formats">Report Formats</a></td>
             <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#schedules">Schedules</a></td>
             <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#slaves">Slaves</a></td>
             <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#targets">Targets</a></td>
             <td><xsl:value-of select="count(get_targets_response/target)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#the_tasks">Tasks</a></td>
             <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
           </tr>
@@ -15941,6 +16094,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_lsc_credentials_response the current node. -->
         <xsl:for-each select="get_lsc_credentials_response">
           <xsl:call-template name="html-lsc-credentials-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+        <a name="notes"></a>
+        <h1>Notes</h1>
+        <!-- The for-each makes the get_notes_response the current node. -->
+        <xsl:for-each select="get_notes_response">
+          <xsl:call-template name="html-notes-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 
