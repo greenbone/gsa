@@ -1,3 +1,8 @@
+2012-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (delete_resource): Pick the next page if "get" is NULL.
+	(delete_note_omp): Let delete_resource decide on the next page.
+
 2012-10-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add trashcan feature to notes.

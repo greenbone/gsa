@@ -1115,8 +1115,26 @@ delete_resource (const char *type, credentials_t * credentials,
 
   /* Cleanup, and return transformed XML. */
 
-  html = get (credentials, params, response);
+  if (get)
+    html = get (credentials, params, response);
+  else
+    {
+      if (params_given (params, "next") == 0)
+        {
+          gchar *next;
+          next = g_strdup_printf ("get_%ss", type);
+          params_add (params, "next", next);
+          g_free (next);
+        }
+      html = next_page (credentials, params, response);
+    }
   g_free (response);
+  if (html == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while deleting a resource. "
+                         "Diagnostics: Error in parameter next.",
+                         "/omp?cmd=get_tasks");
   return html;
 }
 
@@ -10849,19 +10867,7 @@ create_note_omp (credentials_t *credentials, params_t *params)
 char *
 delete_note_omp (credentials_t * credentials, params_t *params)
 {
-  char* (*get) (credentials_t *, params_t *, const char *);
-  if (params_value (params, "next"))
-    {
-      if (strcmp (params_value (params, "next"), "get_report") == 0)
-        get = get_report_page;
-      else if (strcmp (params_value (params, "next"), "get_result") == 0)
-        get = get_result_page;
-      else
-        get = get_notes;
-    }
-  else
-    get = NULL;
-  return delete_resource ("note", credentials, params, 0, get);
+  return delete_resource ("note", credentials, params, 0, NULL);
 }
 
 /**
