@@ -1,3 +1,9 @@
+2012-10-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (host): Added MAC address to be displayed in the
+	hardware section if there was one identified.
+	Patch developed by Michael Meyer.
+
 2012-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Make the New Note page function "standalone", so it works from the New

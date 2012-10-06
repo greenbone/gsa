@@ -13889,7 +13889,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
       <xsl:choose>
-        <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0">
+        <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0  and count (detail[name = 'MAC']) = 0">
           <h1>Hardware: Information not available</h1>
         </xsl:when>
         <xsl:otherwise>
@@ -13909,6 +13909,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td>Memory</td>
                 <td><xsl:value-of select="detail[name = 'meminfo']/value"/></td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="count (detail[name = 'MAC']) > 0">
+              <tr>
+                <td>Mac</td>
+                <td><xsl:value-of select="detail[name = 'MAC']/value"/></td>
               </tr>
             </xsl:if>
             <xsl:if test="count (detail[name = 'netinfo']) > 0">
