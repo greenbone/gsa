@@ -819,6 +819,7 @@ init_validator ()
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");
   openvas_validator_alias (validator, "host_levels",        "levels");
+  openvas_validator_alias (validator, "hosts_manual",       "hosts");
   openvas_validator_alias (validator, "in_assets",          "boolean");
   openvas_validator_alias (validator, "refresh_interval", "number");
   openvas_validator_alias (validator, "event",        "condition");
@@ -841,11 +842,14 @@ init_validator ()
   openvas_validator_alias (validator, "next",         "page");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "note_task_id", "optional_task_id");
+  openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
+  openvas_validator_alias (validator, "note_result_uuid", "note_result_id");
   openvas_validator_alias (validator, "nvt:value",         "uuid");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "override_task_id", "optional_task_id");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "password:name", "preference_name");
+  openvas_validator_alias (validator, "port_manual",       "port");
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
   openvas_validator_alias (validator, "pos",               "number");

@@ -5686,7 +5686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: {$cap-type}s">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New {$type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -10578,16 +10578,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_note"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
-        <input type="hidden" name="oid" value="{nvt/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
         <xsl:choose>
-          <xsl:when test="next='get_result'">
+          <xsl:when test="/envelope/params/next='get_result'">
             <!-- get_result params. -->
-            <input type="hidden" name="next" value="{next}"/>
             <input type="hidden" name="result_id" value="{result/@id}"/>
             <input type="hidden" name="name" value="{task/name}"/>
-            <input type="hidden" name="result_task_id" value="{task/@id}"/>
+            <input type="hidden" name="task_id" value="{task/@id}"/>
             <input type="hidden" name="overrides" value="{overrides}"/>
+            <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
 
             <!-- get_report passthrough params. -->
             <input type="hidden" name="report_id" value="{report/@id}"/>
@@ -10625,6 +10627,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <xsl:choose>
+            <xsl:when test="result/@id">
+              <input type="hidden" name="oid" value="{nvt/@id}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <tr>
+                <td valign="center" width="125">
+                  NVT
+                </td>
+                <td>
+                  <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                </td>
+              </tr>
+            </xsl:otherwise>
+          </xsl:choose>
           <tr>
             <td valign="center" width="125">
               Active
@@ -10659,14 +10676,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Hosts
             </td>
             <td>
-              <label>
-                <input type="radio" name="hosts" value=""/>
-                Any
-              </label>
-              <label>
-                <input type="radio" name="hosts" value="{hosts}" checked="1"/>
-                <xsl:value-of select="hosts"/>
-              </label>
+              <xsl:choose>
+                <xsl:when test="result/@id">
+                  <label>
+                    <input type="radio" name="hosts" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="hosts" value="{hosts}" checked="1"/>
+                    <xsl:value-of select="hosts"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="hosts" value="" checked="1"/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="hosts" value="--"/>
+                  </label>
+                  <input type="text" name="hosts_manual" size="30" maxlength="80" value=""/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10674,14 +10705,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Port
             </td>
             <td>
-              <label>
-                <input type="radio" name="port" value=""/>
-                Any
-              </label>
-              <label>
-                <input type="radio" name="port" value="{port}" checked="1"/>
-                <xsl:value-of select="port"/>
-              </label>
+              <xsl:choose>
+                <xsl:when test="result/@id">
+                  <label>
+                    <input type="radio" name="port" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="port" value="{port}" checked="1"/>
+                    <xsl:value-of select="port"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="port" value="" checked="1"/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="port" value="--"/>
+                  </label>
+                  <input type="text" name="port_manual" size="30" maxlength="80" value=""/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10689,14 +10734,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Threat
             </td>
             <td>
-              <label>
-                <input type="radio" name="threat" value=""/>
-                Any
-              </label>
-              <label>
-                <input type="radio" name="threat" value="{threat}" checked="1"/>
-                <xsl:value-of select="threat"/>
-              </label>
+              <xsl:choose>
+                <xsl:when test="result/@id">
+                  <label>
+                    <input type="radio" name="threat" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="{threat}" checked="1"/>
+                    <xsl:value-of select="threat"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="threat" value="" checked="1"/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="High"/>
+                    High
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="Medium"/>
+                    Medium
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="Low"/>
+                    Low
+                  </label>
+                  <label>
+                    <input type="radio" name="threat" value="Log"/>
+                    Log
+                  </label>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10704,15 +10775,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Task
             </td>
             <td>
-              <label>
-                <input type="radio" name="note_task_id" value=""/>
-                Any
-              </label>
-              <label>
-                <input type="radio" name="note_task_id" value="{task/@id}"
-                       checked="1"/>
-                <xsl:value-of select="task/name"/>
-              </label>
+              <xsl:choose>
+                <xsl:when test="task/@id">
+                  <label>
+                    <input type="radio" name="note_task_id" value=""/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="note_task_id" value="{task/@id}"
+                           checked="1"/>
+                    <xsl:value-of select="task/name"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="note_task_id" value="" checked="1"/>
+                    Any
+                  </label>
+                  <label>
+                    <input type="radio" name="note_task_id" value="0"/>
+                  </label>
+                  <select style="margin-bottom: 0px;" name="note_task_uuid">
+                    <xsl:for-each select="get_tasks_response/task">
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:for-each>
+                  </select>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10724,10 +10813,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="radio" name="note_result_id" value="" checked="1"/>
                 Any
               </label>
-              <label>
-                <input type="radio" name="note_result_id" value="{result/@id}"/>
-                <xsl:value-of select="result/@id"/>
-              </label>
+              <xsl:choose>
+                <xsl:when test="result/@id">
+                  <label>
+                    <input type="radio" name="note_result_id" value="{result/@id}"/>
+                    <xsl:value-of select="result/@id"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="note_result_id" value="0"/>
+                    UUID
+                  </label>
+                  <input type="text" name="note_result_uuid" size="30" maxlength="80" value=""/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -10759,6 +10859,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="new_note">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_note_response"/>
   <xsl:call-template name="html-create-note-form"/>
 </xsl:template>
 
@@ -14789,25 +14890,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:when test="$result-details">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;levels={../../../../filters/text()}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_note&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;levels={../../filters/text()}&amp;sort_field={../../sort/field/text()}&amp;sort_order={../../sort/field/order}&amp;search_phrase={../../filters/phrase}&amp;min_cvss_base={../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../filters/min_cvss_base) &gt; 0)}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;notes={../../filters/notes}&amp;overrides={../../filters/apply_overrides}&amp;result_hosts_only={../../filters/result_hosts_only}&amp;autofp={../../filters/autofp}&amp;show_closed_cves={../../filters/show_closed_cves}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>

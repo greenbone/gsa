@@ -1,3 +1,29 @@
+2012-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Make the New Note page function "standalone", so it works from the New
+	Note list on the Notes page.
+
+	* src/gsad.c (init_validator): Add params for manual note field entry.
+
+	* src/gsad_omp.c (new_note): New function.  Body from new_note_omp.  Add
+	extra_xml arg.  Remove param checks because there might just the new
+	style filter params.  Add a new case for the standalone New Note page,
+	which gets the tasks.
+	(new_note_omp): Call through to new_note.
+	(omp_success, omp): New functions.
+	(create_note_omp): Add param check gaurds.  Check if note params have
+	been entered in the manual params.  Call the CREATE_NOTE directly
+	instead letting the handler for the next page do it.  Choose next page
+	more automatically.
+
+	* src/html/omp.xsl (list-window): Add missing filt_id param to link.
+	(html-create-note-form): Add new filter params to form.  Get next from
+	envelope so any caller can specify it.  Correct name of task_id param.
+	Add missing apply_overrides param.  Add cases for manual entry of
+	fields, for standalone page.
+	(new_note): Match create_note_response too.
+	(result-detailed): Add apply_overrides and next to New Note links.
+
 2012-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (delete_resource): Pick the next page if "get" is NULL.
