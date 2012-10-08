@@ -1,5 +1,20 @@
 2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_result_page): Remove attempt at sorting.  Covered
+	by Manager now.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add filter to notes link so
+	that sorting is by nvt.  This is required because the name column in
+	notes is replaced by the NVT column.  If sorting is by the default,
+	name, then clicking on NVT will "switch to" NVT, leaving the sorting
+	the same on the first click.
+
+	* src/html/omp.xsl (html-report-table, nvt): Ditto.
+
+	* src/html/help.xsl (notes.html): Ditto.
+
+2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (trashcan-icon): Add fragment arg.
 	(html-edit-note-form, note-detailed, result [details]): Add result-id
 	fragment to note icons, so that the view stays on the current result

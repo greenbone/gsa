@@ -10406,9 +10406,6 @@ get_result_page (credentials_t *credentials, params_t *params,
 static char *
 get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  // FIX
-  if (params_given (params, "sort_field") == 0)
-    params_add (params, "sort_field", "notes_nvt_name, notes.text");
   return get_many ("note", credentials, params, extra_xml);
 }
 

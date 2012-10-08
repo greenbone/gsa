@@ -902,7 +902,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
-        <li><a href="/omp?cmd=get_notes&amp;token={/envelope/token}">Notes</a></li>
+        <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt&amp;token={/envelope/token}">Notes</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
         <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
