@@ -1,5 +1,12 @@
 2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (trashcan-icon): Add fragment arg.
+	(html-edit-note-form, note-detailed, result [details]): Add result-id
+	fragment to note icons, so that the view stays on the current result
+	after the operation.
+
+2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-note-form): Bold the NVT field and make
 	the value a link, to match the edit page.  Hide the Associated Result
 	section for the standalone page.

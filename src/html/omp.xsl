@@ -367,10 +367,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="trashcan-icon">
   <xsl:param name="type"></xsl:param>
   <xsl:param name="id"></xsl:param>
+  <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
   <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
@@ -10905,7 +10906,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
+      <xsl:variable name="fragment">
+        <xsl:choose>
+          <xsl:when test="next = 'get_report'">
+            <xsl:value-of select="concat ('#result-', /envelope/params/result_id)"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <form action="{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_note"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -14230,6 +14238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="trashcan-icon">
             <xsl:with-param name="type" select="'note'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="fragment" select="concat ('#result-', ../../@id)"/>
             <xsl:with-param name="params">
               <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
@@ -14338,7 +14347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
 <!-- FIX remove filter args -->
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;first_result={../../../../results/@start}&amp;max_results={../../../../results/@max}&amp;sort_field={../../../../sort/field/text()}&amp;sort_order={../../../../sort/field/order}&amp;levels={../../../../filters/text()}&amp;notes={../../../../filters/notes}&amp;overrides={../../../../filters/apply_overrides}&amp;result_hosts_only={../../../../filters/result_hosts_only}&amp;search_phrase={../../../../filters/phrase}&amp;min_cvss_base={../../../../filters/min_cvss_base}&amp;apply_min_cvss_base={number (string-length (../../../../filters/min_cvss_base) &gt; 0)}&amp;delta_report_id={../../../../delta/report/@id}&amp;delta_states={../../../../filters/delta/text()}&amp;autofp={../../../../filters/autofp}&amp;show_closed_cves={../../../../filters/show_closed_cves}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -14346,7 +14355,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#result-{../../@id}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/caller}"/>
             <input type="hidden" name="cmd" value="clone"/>
@@ -14699,10 +14708,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{@id}">Report</a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{@id}">Report</a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
