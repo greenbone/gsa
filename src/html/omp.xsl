@@ -10630,12 +10630,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="result/@id">
               <input type="hidden" name="oid" value="{nvt/@id}"/>
+              <tr>
+                <td valign="center" width="125"><b>NVT Name</b></td>
+                <td>
+                  <xsl:variable name="nvt" select="get_results_response/results/result/nvt"/>
+                  <xsl:variable name="max" select="70"/>
+                  <xsl:choose>
+                    <xsl:when test="$nvt/@oid = 0">
+                      None.  Result was an open port.
+                    </xsl:when>
+                    <xsl:when test="string-length($nvt/name) &gt; $max">
+                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                        <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a href="?cmd=get_nvts&amp;oid={$nvt/@oid}&amp;token={/envelope/token}">
+                        <xsl:value-of select="$nvt/name"/>
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+              </tr>
             </xsl:when>
             <xsl:otherwise>
               <tr>
-                <td valign="center" width="125">
-                  NVT
-                </td>
+                <td valign="center" width="125"><b>NVT OID</b></td>
                 <td>
                   <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
                 </td>
@@ -10843,16 +10863,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </form>
-      <h3>
-        Associated Result
-      </h3>
-      <xsl:for-each select="get_results_response/results/result">
-        <xsl:call-template name="result-detailed">
-          <xsl:with-param name="details-button">0</xsl:with-param>
-          <xsl:with-param name="override-buttons">0</xsl:with-param>
-          <xsl:with-param name="note-buttons">0</xsl:with-param>
-        </xsl:call-template>
-      </xsl:for-each>
+      <xsl:choose>
+        <xsl:when test="result/@id">
+          <h3>
+            Associated Result
+          </h3>
+          <xsl:for-each select="get_results_response/results/result">
+            <xsl:call-template name="result-detailed">
+              <xsl:with-param name="details-button">0</xsl:with-param>
+              <xsl:with-param name="override-buttons">0</xsl:with-param>
+              <xsl:with-param name="note-buttons">0</xsl:with-param>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>

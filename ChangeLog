@@ -1,3 +1,9 @@
+2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-note-form): Bold the NVT field and make
+	the value a link, to match the edit page.  Hide the Associated Result
+	section for the standalone page.
+
 2012-10-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (host): Added MAC address to be displayed in the
