@@ -108,6 +108,8 @@ char *get_filters (credentials_t *, params_t *, const char *);
 
 static char *get_notes (credentials_t *, params_t *, const char *);
 
+static char *get_note (credentials_t *, params_t *, const char *, const char *);
+
 char *get_targets (credentials_t *, params_t *, const char *);
 
 char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
@@ -470,6 +472,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);
+
+  if (strcmp (next, "get_note") == 0)
+    return get_note (credentials, params, NULL, response);
 
   if (strcmp (next, "get_notes") == 0)
     return get_notes (credentials, params, response);
@@ -5208,7 +5213,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
                          "/omp?cmd=get_tasks");
 
 /**
- * @brief Clone a target, XSL transform the result.
+ * @brief Clone a resource, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -5249,7 +5254,7 @@ clone_omp (credentials_t *credentials, params_t *params)
                              "/omp?cmd=get_tasks");
     }
 
-  /* Clone the target and get all targets. */
+  /* Clone the resource. */
 
   if (openvas_server_sendf (&session,
                             "<create_%s>"
@@ -5284,7 +5289,7 @@ clone_omp (credentials_t *credentials, params_t *params)
 
   openvas_server_close (socket, session);
 
-  /* Cleanup, and return transformed XML. */
+  /* Cleanup, and return next page. */
 
   html = next_page (credentials, params, response);
   g_free (response);
@@ -10186,20 +10191,9 @@ get_result (credentials_t *credentials, const char *result_id,
   gchar *html;
 
   REQUIRE (apply_overrides, "/omp?cmd=get_tasks");
-  REQUIRE (task_name, "/omp?cmd=get_tasks");
   REQUIRE (autofp, "/omp?cmd=get_tasks");
-  REQUIRE (show_closed_cves, "/omp?cmd=get_tasks");
-  REQUIRE (notes, "/omp?cmd=get_tasks");
-  REQUIRE (overrides, "/omp?cmd=get_tasks");
-  REQUIRE (min_cvss_base, "/omp?cmd=get_tasks");
-  REQUIRE (result_hosts_only, "/omp?cmd=get_tasks");
-  REQUIRE (sort_field, "/omp?cmd=get_tasks");
-  REQUIRE (sort_order, "/omp?cmd=get_tasks");
 
-  if (apply_overrides == NULL || task_name == NULL || autofp == NULL
-      || show_closed_cves == NULL || notes == NULL || overrides == NULL
-      || min_cvss_base == NULL || result_hosts_only == NULL
-      || sort_field == NULL || sort_order == NULL)
+  if (apply_overrides == NULL || autofp == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a result. "
@@ -10228,48 +10222,11 @@ get_result (credentials_t *credentials, const char *result_id,
     g_string_append (xml, extra_xml);
 
   openvas_append_xml (xml,
-                      "<result id=\"%s\"/>"
                       "<task id=\"%s\"><name>%s</name></task>"
-                      "<report id=\"%s\"/>"
-                      /* As a hack put the REPORT children alongside the
-                       * REPORT.  This keeps them at the same level
-                       * above the RESULT as they are in GET_REPORT. */
-                      "<results start=\"%s\" max=\"%s\"/>"
-                      "<filters>"
-                      "%s"
-                      "<phrase>%s</phrase>"
-                      "<autofp>%s</autofp>"
-                      "<show_closed_cves>%s</show_closed_cves>"
-                      "<notes>%s</notes>"
-                      "<overrides>%s</overrides>"
-                      "<min_cvss_base>%s</min_cvss_base>"
-                      /* So that the XSL shows the overrides. */
-                      "<apply_overrides>%s</apply_overrides>"
-                      "<result_hosts_only>%s</result_hosts_only>"
-                      "</filters>"
-                      "<sort>"
-                      "<field>"
-                      "%s"
-                      "<order>%s</order>"
-                      "</field>"
-                      "</sort>",
-                      result_id,
+                      "<report id=\"%s\"/>",
                       task_id,
                       task_name,
-                      report_id,
-                      first_result,
-                      max_results,
-                      levels,
-                      search_phrase,
-                      autofp,
-                      show_closed_cves,
-                      notes,
-                      overrides,
-                      min_cvss_base,
-                      apply_overrides,
-                      result_hosts_only,
-                      sort_field,
-                      sort_order);
+                      report_id);
 
   /* Get the result. */
 
@@ -10428,11 +10385,13 @@ get_notes_omp (credentials_t *credentials, params_t *params)
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_note (credentials_t *credentials, params_t *params, const char *commands)
+get_note (credentials_t *credentials, params_t *params, const char *commands,
+          const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -10465,6 +10424,9 @@ get_note (credentials_t *credentials, params_t *params, const char *commands)
     }
 
   xml = g_string_new ("<get_note>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get the note. */
 
@@ -10517,7 +10479,7 @@ get_note (credentials_t *credentials, params_t *params, const char *commands)
 char *
 get_note_omp (credentials_t *credentials, params_t *params)
 {
-  return get_note (credentials, params, NULL);
+  return get_note (credentials, params, NULL, NULL);
 }
 
 /**
@@ -11016,96 +10978,20 @@ delete_trash_note_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (credentials_t * credentials, params_t *params)
+edit_note (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *note_id, *next;
-  int first_result, max_results;
+  const char *note_id;
 
   note_id = params_value (params, "note_id");
-  next = params_value (params, "next");
-  if (note_id == NULL || next == NULL)
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a note. "
-                           "The note remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_notes");
-    }
-
-  if (strcmp (next, "get_note")
-      && strcmp (next, "get_notes")
-      && strcmp (next, "get_nvts")
-      && strcmp (next, "get_report")
-      && strcmp (next, "get_result")
-      && strcmp (next, "get_tasks"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a note. "
-                         "The note remains the same. "
-                         "Diagnostics: next must name a valid page.",
-                         "/omp?cmd=get_notes");
-
-  if ((strcmp (next, "get_nvts") == 0)
-      && (params_value (params, "oid") == NULL))
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a note. "
-                           "The note remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_notes");
-    }
-
-  if ((strcmp (next, "get_tasks") == 0)
-      && (params_value (params, "overrides") == NULL)
-      && (params_value (params, "task_id") == NULL))
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a note. "
-                           "The note remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_notes");
-    }
-
-  if ((strcmp (next, "get_result") == 0)
-      || (strcmp (next, "get_report") == 0))
-    {
-      REQUIRE_PARAM ("report_id", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("first_result", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("max_results", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("sort_field", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("sort_order", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("levels", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("autofp", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("show_closed_cves", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("notes", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("overrides", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("result_hosts_only", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("search_phrase", "/omp?cmd=get_notes");
-      REQUIRE_PARAM ("min_cvss_base", "/omp?cmd=get_notes");
-
-      if (sscanf (params_value (params, "first_result"), "%u", &first_result)
-          != 1)
-        first_result = 1;
-
-      if (sscanf (params_value (params, "max_results"), "%u", &max_results) != 1)
-        max_results = RESULTS_PER_PAGE;
-    }
-  else
-    {
-      first_result = 0;
-      max_results = 0;
-    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11143,54 +11029,10 @@ edit_note_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  openvas_append_xml (xml,
-                      "<edit_note>"
-                      /* Page that follows. */
-                      "<next>%s</next>"
-                      /* Parameters for get_report. */
-                      "<report id=\"%s\"/>"
-                      "<delta><report id=\"%s\"/></delta>"
-                      "<first_result>%i</first_result>"
-                      "<max_results>%i</max_results>"
-                      "<sort_field>%s</sort_field>"
-                      "<sort_order>%s</sort_order>"
-                      "<levels>%s</levels>"
-                      "<autofp>%s</autofp>"
-                      "<show_closed_cves>%s</show_closed_cves>"
-                      "<notes>%s</notes>"
-                      "<overrides>%s</overrides>"
-                      "<result_hosts_only>%s</result_hosts_only>"
-                      "<search_phrase>%s</search_phrase>"
-                      "<min_cvss_base>%s</min_cvss_base>"
-                      "<delta_states>%s</delta_states>"
-                      /* Parameters for get_nvts. */
-                      "<nvt id=\"%s\"/>"
-                      /* Parameters for get_result. */
-                      "<result id=\"%s\"/>"
-                      /* Parameters for get_tasks and get_result. */
-                      "<task id=\"%s\"><name>%s</name></task>",
-                      next,
-                      params_value (params, "report_id"),
-                      params_value (params, "delta_report_id"),
-                      first_result,
-                      max_results,
-                      params_value (params, "sort_field"),
-                      params_value (params, "sort_order"),
-                      params_value (params, "levels"),
-                      params_value (params, "autofp"),
-                      params_value (params, "show_closed_cves"),
-                      params_value (params, "notes"),
-                      params_value (params, "overrides"),
-                      params_value (params, "result_hosts_only"),
-                      params_value (params, "search_phrase"),
-                      params_value (params, "min_cvss_base"),
-                      params_value (params, "delta_states"),
-                      params_value (params, "oid"),
-                      params_value (params, "result_id"),
-                      params_value (params, "task_id"),
-                      params_value (params, "name")
-                       ? params_value (params, "name")
-                       : "");
+  openvas_append_xml (xml, "<edit_note>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   if (read_string (&session, &xml))
     {
@@ -11212,6 +11054,20 @@ edit_note_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Edit note, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_note_omp (credentials_t *credentials, params_t *params)
+{
+  return edit_note (credentials, params, NULL);
+}
+
+/**
  * @brief Save note, get next page, XSL transform the result.
  *
  * @param[in]  credentials     Username and password for authentication.
@@ -11222,15 +11078,11 @@ edit_note_omp (credentials_t * credentials, params_t *params)
 char *
 save_note_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *modify_note;
-
+  gchar *response;
+  entity_t entity;
   const char *note_id, *text, *hosts, *port, *threat, *note_task_id;
-  const char *note_result_id, *next, *report_id;
-  unsigned int first_result, max_results;
-  const char *sort_field, *sort_order, *levels, *autofp, *notes, *overrides;
-  const char *result_hosts_only, *search_phrase, *min_cvss_base;
-  const char *oid, *task_id, *task_name, *result_id, *active, *days;
-  const char *show_closed_cves;
+  const char *note_result_id, *active, *days;
+  char *ret;
 
   note_id = params_value (params, "note_id");
 
@@ -11255,65 +11107,16 @@ save_note_omp (credentials_t * credentials, params_t *params)
   threat = params_value (params, "threat");
   note_task_id = params_value (params, "note_task_id");
   note_result_id = params_value (params, "note_result_id");
-  next = params_value (params, "next");
-  report_id = params_value (params, "report_id");
 
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-  levels = params_value (params, "levels");
-
-  autofp = params_value (params, "autofp");
-  if (autofp == NULL)
-    params_given (params, "autofp") || (autofp = "0");
-
-  show_closed_cves = params_value (params, "show_closed_cves");
-  if (show_closed_cves == NULL)
-    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
-
-  notes = params_value (params, "notes");
-  if (notes == NULL)
-    params_given (params, "notes") || (notes = "0");
-
-  overrides = params_value (params, "overrides");
-  if (overrides == NULL)
-    params_given (params, "overrides") || (overrides = "0");
-
-  result_hosts_only = params_value (params, "result_hosts_only");
-  if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only") || (result_hosts_only = "0");
-
-  search_phrase = params_value (params, "search_phrase");
-  if (search_phrase == NULL)
-    params_given (params, "search_phrase") || (search_phrase = "");
-
-  min_cvss_base = NULL;
-  oid = params_value (params, "oid");
-  task_id = params_value (params, "task_id");
-  task_name = params_value (params, "name");
-  result_id = params_value (params, "result_id");
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  if (next == NULL || note_task_id == NULL || note_result_id == NULL
-      || active == NULL)
+  if (note_task_id == NULL || note_result_id == NULL || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a note. "
                          "The note remains the same. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_notes");
-
-  if (strcmp (next, "get_note")
-      && strcmp (next, "get_notes")
-      && strcmp (next, "get_nvts")
-      && strcmp (next, "get_report")
-      && strcmp (next, "get_result")
-      && strcmp (next, "get_tasks"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a note. "
-                         "The note remains the same. "
-                         "Diagnostics: next must name a valid page.",
                          "/omp?cmd=get_notes");
 
   if (note_id == NULL
@@ -11329,245 +11132,69 @@ save_note_omp (credentials_t * credentials, params_t *params)
                          "Diagnostics: Syntax error in required parameter.",
                          "/omp?cmd=get_notes");
 
-  first_result = 0;
-  max_results = 0;
-
-  if ((strcmp (next, "get_report") == 0)
-      || (strcmp (next, "get_result") == 0))
+  response = NULL;
+  entity = NULL;
+  switch (omp (credentials,
+               &response,
+               &entity,
+               "<modify_note note_id=\"%s\">"
+               "<active>%s</active>"
+               "<hosts>%s</hosts>"
+               "<port>%s</port>"
+               "<threat>%s</threat>"
+               "<text>%s</text>"
+               "<task id=\"%s\"/>"
+               "<result id=\"%s\"/>"
+               "</modify_note>",
+               note_id,
+               strcmp (active, "1")
+                ? active
+                : (days ? days : "-1"),
+               hosts ? hosts : "",
+               port ? port : "",
+               threat ? threat : "",
+               text ? text : "",
+               note_task_id,
+               note_result_id))
     {
-      if (params_value (params, "first_result") == NULL
-          || sscanf (params_value (params, "first_result"), "%u", &first_result)
-             != 1)
-        first_result = 1;
-
-      if (params_given (params, "min_cvss_base"))
-        {
-          if (params_valid (params, "min_cvss_base"))
-            {
-              if (params_value (params, "apply_min_cvss_base")
-                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
-                min_cvss_base = params_value (params, "min_cvss_base");
-              else
-                min_cvss_base = "";
-            }
-        }
-      else
-        min_cvss_base = "";
-
-      if (report_id == NULL
-          || sort_field == NULL
-          || sort_order == NULL
-          || levels == NULL
-          || autofp == NULL
-          || show_closed_cves == NULL
-          || notes == NULL
-          || overrides == NULL
-          || result_hosts_only == NULL
-          || search_phrase == NULL
-          || min_cvss_base == NULL)
+      case 0:
+      case -1:
+        break;
+      case 1:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
                              "The note remains the same. "
-                             "Diagnostics: Syntax error in required parameter.",
+                             "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_notes");
-
-      if (strcmp (next, "get_report") == 0)
-        {
-          if (params_value (params, "max_results") == NULL
-              || sscanf (params_value (params, "max_results"), "%u", &max_results)
-                 != 1)
-            max_results = 1;
-        }
-      else
-        {
-          if (params_value (params, "max_results") == NULL
-              || sscanf (params_value (params, "max_results"), "%u", &max_results)
-                 != 1)
-            max_results = RESULTS_PER_PAGE;
-
-          if (task_id == NULL
-              || result_id == NULL
-              || task_name == NULL)
-            return
-              gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while saving a note. "
-                            "The note remains the same. "
-                            "Diagnostics: Syntax error in required parameter.",
-                            "/omp?cmd=get_notes");
-        }
-
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      if (overrides == NULL
-          || task_id == NULL)
+      case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving a note. "
-                             "The note remains the same. "
-                             "Diagnostics: Syntax error in required parameter.",
+                             "It is unclear whether the note has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_notes");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a note. "
+                             "It is unclear whether the note has been saved or not. "
+                             "Diagnostics: Internal Error.",
                              "/omp?cmd=get_notes");
     }
 
-  modify_note = g_strdup_printf ("<modify_note note_id=\"%s\">"
-                                 "<active>%s</active>"
-                                 "<hosts>%s</hosts>"
-                                 "<port>%s</port>"
-                                 "<threat>%s</threat>"
-                                 "<text>%s</text>"
-                                 "<task id=\"%s\"/>"
-                                 "<result id=\"%s\"/>"
-                                 "</modify_note>",
-                                 note_id,
-                                 strcmp (active, "1")
-                                  ? active
-                                  : (days ? days : "-1"),
-                                 hosts ? hosts : "",
-                                 port ? port : "",
-                                 threat ? threat : "",
-                                 text ? text : "",
-                                 note_task_id,
-                                 note_result_id);
-
-  if (strcmp (next, "get_nvts") == 0)
+  if (omp_success (entity))
     {
-      char *ret;
-
-      if (oid == NULL)
-        {
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving a note. "
-                               "The note remains the same. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_notes");
-        }
-
-      ret = get_nvts (credentials, oid, modify_note);
-      g_free (modify_note);
-      return ret;
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_notes (credentials, params, response);
     }
+  else
+    ret = edit_note (credentials, params, response);
 
-  if (strcmp (next, "get_note") == 0)
-    {
-      char *ret = get_note (credentials, params, modify_note);
-      g_free (modify_note);
-      return ret;
-    }
-
-  if (strcmp (next, "get_notes") == 0)
-    {
-      gnutls_session_t session;
-      int socket, ret;
-      gchar *html, *response;
-      entity_t entity;
-
-      switch (manager_connect (credentials, &socket, &session, &html))
-        {
-          case 0:
-            break;
-          case -1:
-            if (html)
-              return html;
-            /* Fall through. */
-          default:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred while modifying a note. "
-                                 "The note was not modified. "
-                                 "Diagnostics: Failure to connect to manager daemon.",
-                                 "/omp?cmd=get_notes");
-        }
-
-      ret = openvas_server_sendf (&session, modify_note);
-      g_free (modify_note);
-      if (ret == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while modifying note. "
-                               "No note was modified. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_notes");
-        }
-
-      entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while modifying a note. "
-                               "It is unclear whether the note has been modified or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_notes");
-        }
-
-      openvas_server_close (socket, session);
-      html = get_notes (credentials, params, response);
-      free_entity (entity);
-      g_free (response);
-      return html;
-    }
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      char *ret;
-
-      if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, modify_note, NULL, NULL, NULL,
-                          NULL);
-      else
-        {
-          gchar *first, *max;
-
-          first = g_strdup_printf ("%u", first_result);
-          max = g_strdup_printf ("%u", max_results);
-
-          ret = get_result (credentials, result_id, task_id,
-                            task_name, overrides, modify_note, report_id,
-                            first, max, levels, search_phrase, autofp,
-                            show_closed_cves, notes, overrides, min_cvss_base,
-                            result_hosts_only, sort_field, sort_order, NULL,
-                            NULL, NULL);
-
-          g_free (first);
-          g_free (max);
-        }
-
-      g_free (modify_note);
-      return ret;
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      char *ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL,
-                             modify_note,
-                             overrides ? strcmp (overrides, "0") : 0,
-                             NULL);
-      g_free (modify_note);
-      return ret;
-    }
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      char *ret = get_report (credentials, params, modify_note, NULL, NULL,
-                              NULL, NULL);
-      g_free (modify_note);
-      return ret;
-    }
-
-  g_free (modify_note);
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a note. "
-                       "The note remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  free_entity (entity);
+  g_free (response);
+  return ret;
 }
 
 /**

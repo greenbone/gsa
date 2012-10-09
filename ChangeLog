@@ -1,3 +1,26 @@
+2012-10-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Clear out most of old filter param handling in notes.
+
+	* src/gsad_omp.c (next_page): Add get_note.
+	(clone_omp): Improve comments slightly.
+	(get_result): Remove old filter params.
+	(get_note): Add extra_xml arg.  Update caller.
+	(edit_note): New function.  Body from edit_note_omp.  Add extra_xml arg.
+	Remove old filter params.  Remove checks of params for following pages,
+	the pages can do those checks.
+	(edit_note_omp): Call through to edit_note.
+	(save_note_omp): Remove old filter params.  Remove Task and NVT page
+	cases.  Replace per-page cases with a single case that lets next_page
+	sort out the next page.
+
+	* src/html/omp.xsl (list-window-line-icons, html-create-note-form)
+	(html-edit-note-form, note-detailed, result-details)
+	(result-detailed): Remove old filter params, ensuring that the
+	overrides and autofp flags are still passed around.  Get more params
+	from /envelope/params.
+	(note-detailed-delete-params): Remove.  Was for old filter params.
+
 2012-10-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_result_page): Remove attempt at sorting.  Covered
