@@ -1,5 +1,9 @@
 2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (host): Remove extra opening xsl:if.
+
+2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Clear out more of old filter param handling.
 
 	* src/gsad.c (init_validator): Add report_result_id.
