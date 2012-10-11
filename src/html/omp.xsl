@@ -13885,7 +13885,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
       <xsl:choose>
-        <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0  and count (detail[name = 'MAC']) = 0">
+        <xsl:when test="count (detail[name = 'cpuinfo']) = 0 and count (detail[name = 'meminfo']) = 0 and count (detail[name = 'netinfo']) = 0 and count (detail[name = 'MAC']) = 0 and count (detail[name = 'NIC']) = 0 and count (detail[name = 'MAC-Ifaces']) = 0">
           <h1>Hardware: Information not available</h1>
         </xsl:when>
         <xsl:otherwise>
@@ -13907,15 +13907,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td><xsl:value-of select="detail[name = 'meminfo']/value"/></td>
               </tr>
             </xsl:if>
+            <xsl:if test="count (detail[name = 'NIC']) > 0">
+              <tr>
+                <td>Target-Interface</td>
+                <td valign="top"><xsl:value-of select="detail[name = 'NIC']/value"/></td>
+              </tr>
+            </xsl:if>
+            <xsl:if test="count (detail[name = 'NIC_IPS']) > 0">
+              <tr>
+                <td valign="top"><xsl:if test="count (detail[name = 'NIC']) > 0"><xsl:value-of select="detail[name = 'NIC']/value"/></xsl:if> IPs</td>
+                <td><table>
+                    <xsl:for-each select="str:split(detail[name = 'NIC_IPS']/value, ';')">
+                      <tr><td><xsl:value-of select="."/></td></tr>
+                    </xsl:for-each>
+                  </table></td>
+              </tr>
+            </xsl:if>
             <xsl:if test="count (detail[name = 'MAC']) > 0">
               <tr>
-                <td>Mac</td>
+                <td><xsl:if test="count (detail[name = 'NIC']) > 0"><xsl:value-of select="detail[name = 'NIC']/value"/></xsl:if> MAC</td>
                 <td><xsl:value-of select="detail[name = 'MAC']/value"/></td>
               </tr>
             </xsl:if>
+            <xsl:if test="count (detail[name = 'MAC-Ifaces']) > 0">
+              <tr>
+                <td valign="top">Other MACs</td>
+                <td>
+                  <table>
+                    <xsl:for-each select="detail[name = 'MAC-Ifaces']/value">
+                      <tr><td><xsl:value-of select="."/></td></tr>
+                    </xsl:for-each>
+                  </table>
+                </td>
+              </tr>
+            </xsl:if>
+             <xsl:if test="count (detail[name = 'netinfo']) > 0">
             <xsl:if test="count (detail[name = 'netinfo']) > 0">
               <tr>
-                <td>Net</td>
+                <td>Netinfo dump</td>
                 <td>
                   <table>
                     <xsl:for-each select="str:split(detail[name = 'netinfo']/value, '\n')">

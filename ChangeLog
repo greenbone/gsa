@@ -1,3 +1,9 @@
+2012-10-11 Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/html/omp.xsl (host):
+	 Added MAC address, IP, Interface name of all interfaces to be
+	 displayed in the hardware section. 
+
 2012-10-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Clear out most of old filter param handling in notes.
