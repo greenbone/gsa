@@ -1,8 +1,26 @@
+2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Clear out more of old filter param handling.
+
+	* src/gsad.c (init_validator): Add report_result_id.
+
+	* src/html/gsad.xsl (html-gsa-logo): Apply missing note response
+	indicators.
+
+	* src/html/omp.xsl (html-report-details, html-create-note-form)
+	(html-edit-note-form, note-detailed, result-details)
+	(result-detailed): Remove old filter params, making sure that new params
+	and the overrides flag are always included.  Also add param
+	report_result_id for the Result Details page because in some cases the
+	result to return to on the report is different from the result being
+	viewed on the details page.
+	(get_delta_result): Apply responses from note operations.
+
 2012-10-11 Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/omp.xsl (host):
 	 Added MAC address, IP, Interface name of all interfaces to be
-	 displayed in the hardware section. 
+	 displayed in the hardware section.
 
 2012-10-09  Matthew Mundell <matthew.mundell@greenbone.net>
 

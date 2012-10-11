@@ -855,6 +855,7 @@ init_validator ()
   openvas_validator_alias (validator, "pos",               "number");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
+  openvas_validator_alias (validator, "report_result_id",  "result_id");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
