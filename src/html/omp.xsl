@@ -11216,52 +11216,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template match="note" mode="nvt-details">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
-    <td>
-      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
-      <xsl:choose>
-        <xsl:when test="text/@excerpt = 1">
-          <xsl:value-of select="text/text()"/>...
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="text/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:call-template name="delete-icon">
-        <xsl:with-param name="type" select="'note'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="next" value="get_nvts"/>
-          <input type="hidden" name="oid" value="{../../get_nvts_response/nvt/@oid}"/>
-        </xsl:with-param>
-      </xsl:call-template>
-      <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
-         title="Note Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
-         title="Edit Note"
-         style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
-      <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
-         title="Export Note"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
-      </a>
-    </td>
-  </tr>
-</xsl:template>
-
 <xsl:template match="note" mode="details">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>

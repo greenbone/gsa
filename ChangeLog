@@ -1,5 +1,10 @@
 2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (note [nvt-details]): Remove.  NVT Details just has
+	link to notes now.
+
+2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (host): Remove extra opening xsl:if.
 
 2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
