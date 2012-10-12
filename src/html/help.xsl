@@ -49,6 +49,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="list-window-line-actions">
+  <xsl:param name="type"/>
+  <xsl:param name="used_by"/>
+  <a name="actions"></a>
+  <h3>Actions</h3>
+
+  <h4>Move <xsl:value-of select="$type"/> to Trashcan</h4>
+  <p>
+   Pressing the trashcan icon
+   <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+   will move the item to the trashcan and update the list.
+  </p>
+  <xsl:choose>
+    <xsl:when test="$used_by">
+      <p>
+       Note that if a <xsl:value-of select="$type"/> is associated with at least one
+       <xsl:value-of select="$used_by"/>, it is not possible to move it. In this case
+       the button is greyed out
+       <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
+      </p>
+    </xsl:when>
+  </xsl:choose>
+
+  <h4><xsl:value-of select="$type"/> Details</h4>
+  <p>
+   Pressing the details icon
+   <img src="/img/details.png" alt="Details" title="Details" />
+   will show details of the <xsl:value-of select="$type"/> specification,
+   <xsl:choose>
+     <xsl:when test="$used_by">
+       and the <xsl:value-of select="$used_by"/>s that use this <xsl:value-of select="$type"/>.
+     </xsl:when>
+   </xsl:choose>
+  </p>
+
+  <h4>Edit <xsl:value-of select="$type"/></h4>
+  <p>
+   Pressing the "Edit <xsl:value-of select="$type"/>" icon
+   <img src="/img/edit.png" alt="Edit {$type}" title="Edit {$type}"/>
+   will switch to an overview of the configuration for this <xsl:value-of select="$type"/> and
+   allows editing the <xsl:value-of select="$type"/>'s properties.
+  </p>
+
+  <h4>Clone <xsl:value-of select="$type"/></h4>
+  <p>
+   Pressing the clone icon
+   <img src="/img/edit.png" alt="Clone" title="Clone"/>
+   will create a duplicate of the <xsl:value-of select="$type"/>.
+  </p>
+
+  <h4>Exporting</h4>
+  <p>
+    Export the <xsl:value-of select="$type"/> as XML by clicking on the
+    export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+  </p>
+</xsl:template>
+
+
 <xsl:template name="filtering">
   <a name="filtering"></a>
   <h3>Filtering</h3>
@@ -2122,7 +2180,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
             </ul>
             <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
-            <li> <a href="notes.html?token={/envelope/token}">Notes</a></li>
+            <li> <a href="notes.html?token={/envelope/token}">Notes</a> </li>
+              <ul>
+                <li> <a href="new_note.html?token={/envelope/token}">New Note</a></li>
+                <li> <a href="note_details.html?token={/envelope/token}">Note Details</a></li>
+              </ul>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
           </ul>
           <li> Asset Management</li>
@@ -2474,48 +2536,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="filtering"/>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Filter to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the item to the trashcan and update the list.
-      </p>
-      <p>
-       Note that if a filter is associated with at least one alert, it is not possible
-       to move it. In this case the button is greyed
-       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
-      </p>
-
-      <h4>Filter Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show details of the filter specification and Alerts that use this filter.
-      </p>
-
-      <h4>Edit Filter</h4>
-      <p>
-       Pressing the "Edit Filter" icon
-       <img src="/img/edit.png" alt="Edit Filter" title="Edit Filter"/>
-       will switch to an overview of the configuration for this filter and
-       allows editing the filter's properties.
-      </p>
-
-      <h4>Clone Filter</h4>
-      <p>
-       Pressing the clone icon
-       <img src="/img/edit.png" alt="Clone" title="Clone"/>
-       will create a duplicate of the filter.
-      </p>
-
-      <h4>Exporting</h4>
-      <p>
-        Export the filter as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Filter'"/>
+        <xsl:with-param name="used_by" select="'Alert'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>
@@ -3231,6 +3255,93 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="new_note.html">
+  <div class="gb_window_part_center">Help: New Note
+    <a href="/omp?cmd=new_note&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_NOTE'"/>
+      </xsl:call-template>
+
+      <h1>New Note</h1>
+      <p>
+       For creating a new note this dialog offers the following entries.
+       Below the entries are details of the result that may be associated with
+       the note.
+       Hit the button "Create Note" to submit the new note.
+       The previous page will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Hosts</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Port</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Threat</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Task</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Result</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Text</td>
+          <td>yes</td>
+          <td>600</td>
+          <td>Free form text</td>
+          <td>This issue will go away when we switch to GNU/Hurd.</td>
+        </tr>
+      </table>
+
+      <h4>Notes</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Notes" title="Notes"/>
+       will switch to the notes page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="new_target.html">
   <div class="gb_window_part_center">Help: New Target
     <a href="/omp?cmd=new_target&amp;max=-2&amp;token={/envelope/token}">
@@ -3555,11 +3666,71 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="notes.html">
-  <div class="gb_window_part_center">Help: Notes</div>
+<xsl:template mode="help" match="note_details.html">
+  <div class="gb_window_part_center">Help: Note Details
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_notes&amp;filter=sort=nvt&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_NOTES'"/>
+      </xsl:call-template>
+
+      <h1>Note Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#note">Note</a>.
+        This includes the NVT, creation time, modification time,
+        all constraints on the note and the full text of the note.
+      </p>
+      <p>
+       Clicking on the NVT name will go to the NVT Details page.
+      </p>
+
+      <h4>New Note</h4>
+      <p>
+        To create a new note click the
+        new icon <img src="/img/new.png" alt="New Note" title="New Note" /> which
+        goes to the <a href="new_note.html?token={/envelope/token}">New Note</a>
+        page.
+      </p>
+
+      <h4>Notes</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Notes" title="Notes"/>
+       will switch to the notes page.
+      </p>
+
+      <h4>Edit Note</h4>
+      <p>
+       Pressing the "Edit Note" icon
+       <img src="/img/edit.png" alt="Edit Note" title="Edit Note"/>
+       will switch to an overview of the configuration for this note and
+       allows editing the note's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the note as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="notes.html">
+  <div class="gb_window_part_center">Help: Notes
+    <a href="/omp?cmd=get_notes&amp;token={/envelope/token}"
+       title="Notes" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Notes"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3595,103 +3766,25 @@ Public License instead of this License.
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Delete Note</h4>
+      <h3>New Note</h3>
       <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
-       remove the note immediately.  The list of notes will be updated.
+        To create a new note click the
+        new icon <img src="/img/new.png" alt="New Note" title="New Note" /> which
+        goes to the <a href="new_note.html?token={/envelope/token}">New Note</a>
+        page.
       </p>
 
-      <h4>Note Details</h4>
+      <h3>Exporting</h3>
       <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show the  <a href="#notedetails">Note Details</a> page.  This page has
-       full details of the note, including the note text and all
-       constraints on the note.
+        Export the current list of notes as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <h4>Edit Note</h4>
-      <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will show the <a href="#editnote">Edit Note</a> page, which allows modification
-       of the note.
-      </p>
+      <xsl:call-template name="filtering"/>
 
-      <a name="newnote"></a>
-      <h2>New Note</h2>
-      <p>
-       For creating a new note this dialog offers the following entries.
-       Below the entries are details of the result that may be associated with
-       the note.
-       Hit the button "Create Note" to submit the new note.
-       The previous page will be updated.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Hosts</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="even">
-          <td>Port</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="odd">
-          <td>Threat</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="even">
-          <td>Task</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="odd">
-          <td>Result</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td></td>
-        </tr>
-        <tr class="odd">
-          <td>Text</td>
-          <td>yes</td>
-          <td>600</td>
-          <td>Free form text</td>
-          <td>This issue will go away when we switch to GNU/Hurd.</td>
-        </tr>
-      </table>
-
-      <a name="notedetails"></a>
-      <h2>Note Details</h2>
-      <p>
-       A page that provides detailed information about a note.
-       This includes the NVT, creation time, modification time,
-       all constraints on the note and the full text of the note.
-      </p>
-      <p>
-       Clicking on the NVT name will go to the NVT Details page.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Note'"/>
+      </xsl:call-template>
 
       <a name="editnote"></a>
       <h2>Edit Note</h2>
@@ -5117,47 +5210,12 @@ Public License instead of this License.
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <a name="filtering"></a>
-      <h3>Filtering</h3>
-      <p>
-        The Filtering section of the Targets window shows how the targets have been
-        filtered to produce the list.  Modifying any of the values and clicking
-        the "Apply" button will update the list.  The "Reset" button clears the
-        filter.  The filter syntax is described on the
-        <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
-        page.
-      </p>
+      <xsl:call-template name="filtering"/>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Target to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       Note that if a target is associated with at least one task, it is not possible
-       to move it. In this case the button is greyed
-       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
-      </p>
-
-      <h4>Target Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show details of the target specification and Tasks that use this target.
-      </p>
-
-      <h4>Edit Target</h4>
-      <p>
-       Pressing the "Edit Target" icon
-       <img src="/img/edit.png" alt="Edit Target" title="Edit Target"/>
-       will switch to an overview of the configuration for this target and
-       allows editing the target's properties.
-      </p>
-
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Target'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>

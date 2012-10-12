@@ -1,3 +1,13 @@
+2012-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (list-window-line-actions): New template.
+	(contents.html): Add Notes subpages.
+	(filters.html): Use template for filtering section.
+	(new_note.html, note_details.html): New template.
+	(notes.html): Add list icon link.  Match to new style.
+
+	* src/html/omp.xsl (html-create-note-form): Update help link.
+
 2012-10-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (note [nvt-details]): Remove.  NVT Details just has

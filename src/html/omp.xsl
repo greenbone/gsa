@@ -10464,8 +10464,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Note
-      <a href="/help/notes.html?token={/envelope/token}#newnote"
-         title="Help: Notes (New Note)">
+      <a href="/help/new_note.html?token={/envelope/token}"
+         title="Help: New Note">
         <img src="/img/help.png"/>
       </a>
     </div>
