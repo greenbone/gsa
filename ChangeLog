@@ -1,5 +1,12 @@
 2012-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-filter-form)
+	(html-create-target-form): Add filters to list icon link.
+	(html-create-note-form): Add list icon.
+	(html-targets-table): Add filter to New Target link.
+
+2012-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (list-window-line-actions): New template.
 	(contents.html): Add Notes subpages.
 	(filters.html): Use template for filtering section.

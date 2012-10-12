@@ -5913,7 +5913,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Filter">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Filters" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Filters"/>
       </a>
@@ -6132,7 +6132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Target">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Targets" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Targets"/>
       </a>
@@ -6619,7 +6619,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Targets">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
          title="New Target">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -10467,6 +10467,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/new_note.html?token={/envelope/token}"
          title="Help: New Note">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Notes" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Notes"/>
       </a>
     </div>
     <div class="gb_window_part_content">
