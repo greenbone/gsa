@@ -2583,8 +2583,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         method for checking names against a system, and a description format
         for binding text and tests to a name.
       </p>
+
       <p>
         (Source http://cpe.mitre.org).
+      </p>
+
+      <p>
+        A CPE name starts with "cpe:/", followed by up to seven colon-separated components:
+        <ul>
+          <li>part (h, o or a)</li>
+          <li>vendor</li>
+          <li>product</li>
+          <li>version</li>
+          <li>update</li>
+          <li>edition</li>
+          <li>language</li>
+        </ul>
+        e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
       </p>
 
       <a name="cve"></a>
@@ -3857,7 +3872,9 @@ Public License instead of this License.
       <h1>Security Information Lookup</h1>
       <p>
        A page that provides access to the security information database to
-       lookup details for a given element. Valid elements are CPE and CVE.
+       lookup details for CVE and NVT. This lookup page is a temporary
+       solution until the full management interface for CVE and NVT is
+       implemented like it is already for CPE.
        Identifiers must be formatted correctly.
       </p>
 
@@ -3872,21 +3889,6 @@ Public License instead of this License.
           <li>ZZZZ is the unique identifier of the CVE (on 4 digits too)</li>
         </ul>
         e.g. <code>CVE-2011-0245</code>
-      </p>
-
-      <h2>CPE</h2>
-      <p>
-        A CPE name starts with "cpe:/", followed by up to seven colon-separated components:
-        <ul>
-          <li>part (h, o or a)</li>
-          <li>vendor</li>
-          <li>product</li>
-          <li>version</li>
-          <li>update</li>
-          <li>edition</li>
-          <li>language</li>
-        </ul>
-        e.g. <code>cpe:/o:linux:kernel:2.6.0</code>
       </p>
 
       <h2>NVT</h2>

@@ -86,25 +86,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>
-            <h1>CPE Lookup</h1>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <form name="input"
-                  action="/omp"
-                  method="get">
-              <input style="width: 240px" type="text" name="info_name" value="cpe:/a:"/>
-              <input type="hidden" name="cmd" value="get_info"/>
-              <input type="hidden" name="info_type" value="CPE"/>
-              <input type="hidden" name="details" value="1"/>
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="submit" value="Search"/>
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <h1>NVT Lookup</h1>
           </td>
         </tr>
