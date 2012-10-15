@@ -726,6 +726,8 @@ init_validator ()
   openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "info_name",  "(?s)^.*$");
   openvas_validator_add (validator, "info_type",  "(?s)^.*$");
+  openvas_validator_add (validator, "info_id",  "^[0-9]+$");
+  openvas_validator_add (validator, "details", "^[0-1]$");
   /* Number is special cased in params_mhd_validate to remove the space. */
   openvas_validator_add (validator, "number",     "^ *[0-9]+ *$");
   openvas_validator_add (validator, "observers",       "^[-_ [:alnum:],]*$");
@@ -754,9 +756,9 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task)$");
+                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task|info)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task|)$");
+                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task|info|)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");

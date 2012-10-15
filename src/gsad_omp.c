@@ -614,17 +614,19 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  extra_attribs  Extra attributes for OMP GET command.
  *
  * @return Result of XSL transformation.
  */
 static char *
 get_many (const char *type, credentials_t * credentials, params_t *params,
-          const char *extra_xml)
+          const char *extra_xml, const char *extra_attribs)
 {
   GString *xml;
+  GString *type_many; /* The plural form of type */
   gnutls_session_t session;
   int socket;
-  gchar *html;
+  gchar *html, *request;
   const char *filt_id, *filter, *first, *max, *sort_field, *sort_order;
 
   filt_id = params_value (params, "filt_id");
@@ -652,7 +654,13 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     }
 
   xml = g_string_new ("");
-  g_string_append_printf (xml, "<get_%ss>", type);
+  type_many = g_string_new (type);
+
+  /* Workaround the fact that info is a non countable noun */
+  if (strcmp (type, "info") != 0)
+    g_string_append (type_many, "s");
+
+  g_string_append_printf (xml, "<get_%s>", type_many->str);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
@@ -662,24 +670,27 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get the list. */
 
-  if (openvas_server_sendf_xml (&session,
-                                "<get_%ss"
-                                " filt_id=\"%s\""
-                                " filter=\"%s\""
-                                " first=\"%s\""
-                                " max=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\"/>",
-                                type,
-                                filt_id ? filt_id : "0",
-                                filter ? filter : "",
-                                first ? first : "1",
-                                max ? max : "-2",
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending")
+  request = g_markup_printf_escaped("<get_%s"
+                                    " filt_id=\"%s\""
+                                    " filter=\"%s\""
+                                    " first=\"%s\""
+                                    " max=\"%s\""
+                                    " sort_field=\"%s\""
+                                    " sort_order=\"%s\"",
+                                    type_many->str,
+                                    filt_id ? filt_id : "0",
+                                    filter ? filter : "",
+                                    first ? first : "1",
+                                    max ? max : "-2",
+                                    sort_field ? sort_field : "name",
+                                    sort_order ? sort_order : "ascending");
+  if (openvas_server_sendf (&session, "%s %s/>", request,
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
+      g_free(request);
       g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -688,10 +699,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
-
+  g_free(request);
   if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -712,6 +724,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       == -1)
     {
       g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -724,6 +737,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (read_string (&session, &xml))
     {
       g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -736,9 +750,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   g_string_append (xml, "</filters>");
 
   /* Cleanup, and return transformed XML. */
-
-  g_string_append_printf (xml, "</get_%ss>", type);
+  g_string_append_printf (xml, "</get_%s>", type_many->str);
   openvas_server_close (socket, session);
+  g_string_free (type_many, TRUE);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
@@ -2341,78 +2355,6 @@ start_task_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Requests RAW information details, accepting extra commands.
- *
- * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  type         Type of the requested information.
- * @param[in]  name         Name or identifier of the requested information.
- * @param[in]  commands     Extra commands to run before the others.
- *
- * @return XSL transformed NVT details response or error message.
- */
-static char*
-get_info (credentials_t *credentials, const char *type, const char *name,
-          const char *commands)
-{
-  GString *xml = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting raw information. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_info"
-                            " type=\"%s\""
-                            " name=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            type,
-                            name)
-        == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting raw information. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_info>");
-  if (read_string (&session, &xml))
-    {
-      openvas_server_close (socket, session);
-      g_string_free (xml, TRUE);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting raw information. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  g_string_append (xml, "</get_info>");
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
  * @brief Requests NVT details, accepting extra commands.
  *
  * @param[in]  credentials  Credentials for the manager connection.
@@ -2501,19 +2443,44 @@ get_nvts (credentials_t *credentials, const char *oid,
 char*
 get_info_omp (credentials_t *credentials, params_t *params)
 {
-  const char *type, *name;
+  char *ret;
+  GString *extra_attribs;
 
-  type = params_value (params, "info_type");
-  name = params_value (params, "info_name");
-
-  if ((type == NULL) || (name == NULL))
+  if (params_value (params, "info_type") == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting raw information. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+                         "Diagnostics: Required parameter \"info_type\" was NULL.",
+                         "/omp?cmd=get_info");
 
-  return get_info (credentials, type, name, NULL);
+  if (params_value (params, "info_name") &&
+      params_value (params, "info_id"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting raw information. "
+                         "Diagnostics: Both ID and Name set.",
+                         "/omp?cmd=get_info");
+
+  extra_attribs = g_string_new("");
+  g_string_append_printf(extra_attribs, "type=\"%s\"",
+                         params_value (params, "info_type"));
+  if (params_value (params, "info_name"))
+    g_string_append_printf (extra_attribs,
+                            " name=\"%s\"",
+                            params_value (params, "info_name"));
+  else if (params_value (params, "info_id"))
+    g_string_append_printf (extra_attribs,
+                            " info_id=\"%s\"",
+                            params_value (params, "info_id"));
+  if (params_value (params, "details"))
+    g_string_append_printf (extra_attribs,
+                            " details=\"%s\"",
+                            params_value (params, "details"));
+  ret = get_many ("info", credentials, params, NULL, extra_attribs->str);
+
+  g_string_free(extra_attribs, TRUE);
+
+  return ret;
 }
 
 /**
@@ -4028,7 +3995,7 @@ get_agent_omp (credentials_t * credentials,
 char *
 get_agents (credentials_t * credentials, params_t *params, const char *extra_xml)
 {
-  return get_many ("agent", credentials, params, extra_xml);
+  return get_many ("agent", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -6577,7 +6544,7 @@ char *
 get_targets (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
-  return get_many ("target", credentials, params, extra_xml);
+  return get_many ("target", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -10363,7 +10330,7 @@ get_result_page (credentials_t *credentials, params_t *params,
 static char *
 get_notes (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  return get_many ("note", credentials, params, extra_xml);
+  return get_many ("note", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -16001,7 +15968,7 @@ char *
 get_filters (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
-  return get_many ("filter", credentials, params, extra_xml);
+  return get_many ("filter", credentials, params, extra_xml, NULL);
 }
 
 /**

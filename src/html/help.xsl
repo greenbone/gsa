@@ -2190,11 +2190,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Asset Management</li>
           <ul>
             <li> <a href="hosts.html?token={/envelope/token}">Hosts</a></li>
-            <li> <a href="cpe.html?token={/envelope/token}">CPE</a></li>
-            <li> <a href="cve.html?token={/envelope/token}">CVE</a></li>
           </ul>
           <li> SecInfo Management</li>
           <ul>
+            <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
@@ -2250,24 +2249,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cpe.html">
-  <div class="gb_window_part_center">Help: CPE</div>
+  <div class="gb_window_part_center">Help: CPE Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <a name="nvts"></a>
-      <h1>Common Platform Enumeration (CPE)</h1>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="cpe"></a>
+      <h1>CPE Details</h1>
       <p>
-       Currently, there is one page in the web interface
-       about <a href="glossary.html?token={/envelope/token}#cpe">CPE</a>.
+        A page that provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#cpe">CPE</a>.
+        This includes the all referencing CVEs, creation time, modification time,
+        deprecation status and the overall status.
       </p>
 
-      <a name="cpedetails"></a>
-      <h2>CPE Details</h2>
+      <h3>Reported vulnerabilities</h3>
       <p>
-       A page that provides the original detailed information about a CPE.
-       This includes the title(s), date of last modification and deprecation status if any.
+        This table provides an overview of the
+        <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
+        that are associated to the CPE (if any).
+        Details of these CVEs can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
     </div>
   </div>
@@ -5876,5 +5884,90 @@ Public License instead of this License.
     </div>
   </div>
 </xsl:template>
+
+<xsl:template mode="help" match="cpes.html">
+  <div class="gb_window_part_center">Help: CPE</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="cpe"></a>
+      <h1>CPE</h1>
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html?token={/envelope/token}#cpe">CPEs</a> and summarizes
+        the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>The formal name of the CPE. The name is broken into multiple lines and break
+            markers are added if it is too long for the column.
+          </td>
+        </tr>
+        <tr>
+          <td>Title</td>
+          <td>The official title of the CPE, this is "Not Availabe" for unoffical CPEs.</td>
+        </tr>
+        <tr>
+          <td>Modified</td>
+          <td>The date of the last official modification of the CPE,
+            this is "Not Availabe" for unoffical CPEs.
+          </td>
+        </tr>
+        <tr>
+          <td>CVEs</td>
+          <td>The number of <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
+            referencing this product.
+          </td>
+        </tr>
+        <tr>
+          <td>Max CVSS</td>
+          <td>The highest CVSS of any CVE that references this product.
+          </td>
+        </tr>
+      </table>
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>CPE Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the  <a href="#cpedetails">CPE Details</a> page.  This page has
+        full details of the CPE, including all references to this CPE and the
+        status of the CPE.
+      </p>
+
+      <a name="cpedetails"></a>
+      <h2>CPE Details</h2>
+      <p>
+        A page that provides detailed information about a CPE.
+        This includes the all referencing CVEs, creation time, modification time,
+        deprecation status and the overall status.
+      </p>
+      <p>
+        Clicking on the CPE name will go to the CPE Details page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 
 </xsl:stylesheet>

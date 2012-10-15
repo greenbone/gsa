@@ -18,7 +18,8 @@
     xmlns:cpe="http://cpe.mitre.org/dictionary/2.0"
     xsi:schemaLocation="http://scap.nist.gov/schema/configuration/0.1 http://nvd.nist.gov/schema/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.3 http://nvd.nist.gov/schema/scap-core_0.3.xsd http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"
     xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="str func date">
+    xmlns:exslt="http://exslt.org/common"
+    extension-element-prefixes="str func date exslt">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -69,6 +70,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:date">
+  <xsl:param name="datetime"></xsl:param>
+  <func:result>
+    <xsl:if test="string-length ($datetime) &gt; 0">
+      <xsl:value-of select="concat (date:day-abbreviation ($datetime), ' ', date:month-abbreviation ($datetime), ' ', date:day-in-month ($datetime), ' ', date:year($datetime))"/>
+    </xsl:if>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:type-many">
+  <xsl:param name="type"></xsl:param>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$type = 'info'">
+        <xsl:value-of select="$type"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$type"/><xsl:text>s</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <xsl:template name="filter-window-pager">
@@ -76,17 +100,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="list"/>
   <xsl:param name="count"/>
   <xsl:param name="filtered_count"/>
+  <xsl:param name="extra_params"/>
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
       <xsl:if test = "$list/@start &gt; 1">
-        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&lt;&lt;</a>
+        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&lt;&lt;</a>
       </xsl:if>
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
       of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
       <xsl:if test = "$last &lt; $filtered_count">
-        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{$type}s&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&gt;&gt;</a>
+        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&gt;&gt;</a>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
@@ -97,6 +122,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="filter-window-part">
   <xsl:param name="type"/>
   <xsl:param name="list"/>
+  <xsl:param name="extra_params"/>
   <div class="gb_window_part_content">
     <div style="background-color: #EEEEEE;">
       <div style="float: right">
@@ -108,7 +134,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="comment" value=""/>
             <input type="hidden" name="term" value="{filters/term}"/>
             <input type="hidden" name="optional_resource_type" value="{$type}"/>
-            <input type="hidden" name="next" value="get_{$type}s"/>
+            <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
             <input type="text" name="name" value="" size="10"
                    maxlength="80" style="vertical-align:middle"/>
@@ -122,7 +148,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="get_{$type}s"/>
+            <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+            <xsl:for-each select="exslt:node-set($extra_params)/param">
+              <input type="hidden" name="{name}" value="{value}"/>
+            </xsl:for-each>
             <select style="margin-bottom: 0px;" name="filt_id">
               <option value="">--</option>
               <xsl:variable name="id" select="filters/@id"/>
@@ -151,7 +180,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <form action="" method="get">
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="get_{$type}s"/>
+        <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+        <xsl:for-each select="exslt:node-set($extra_params)/param">
+          <input type="hidden" name="{name}" value="{value}"/>
+        </xsl:for-each>
         <div style="padding: 2px;">
           Filter:
           <input type="text" name="filter" size="60"
@@ -383,11 +415,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- This is called within a PRE. -->
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
+  <xsl:param name="width">90</xsl:param>
+  <xsl:param name="marker">&#8629;</xsl:param>
 
   <xsl:for-each select="str:split($string, '&#10;&#10;')">
     <xsl:for-each select="str:tokenize(text(), '&#10;')">
       <xsl:call-template name="wrap-line">
         <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
+        <xsl:with-param name="width" select="$width"/>
+        <xsl:with-param name="marker" select="$marker"/>
       </xsl:call-template>
       <xsl:text>
 </xsl:text>
@@ -406,6 +442,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- This is called within a PRE. -->
 <xsl:template name="wrap-line">
   <xsl:param name="string"></xsl:param>
+  <xsl:param name="width">90</xsl:param>
+  <xsl:param name="marker">&#8629;</xsl:param>
 
   <xsl:variable name="to-next-newline">
     <xsl:value-of select="substring-before($string, '&#10;')"/>
@@ -417,31 +455,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="(string-length($to-next-newline) = 0) and (substring($string, 1, 1) != '&#10;')">
       <!-- A single line missing a newline, output up to the edge. -->
-<xsl:value-of select="substring($string, 1, 90)"/>
-      <xsl:if test="string-length($string) &gt; 90">&#8629;
-<xsl:call-template name="wrap-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
+      <xsl:value-of select="substring($string, 1, number($width))"/>
+      <xsl:if test="string-length($string) &gt; number($width)"><xsl:value-of select="$marker" disable-output-escaping="yes"/>
+        <xsl:call-template name="wrap-line">
+          <xsl:with-param name="string"><xsl:value-of select="substring($string, number($width) + 1, string-length($string))"/></xsl:with-param>
+          <xsl:with-param name="width" select="$width"/>
+          <xsl:with-param name="marker" select="$marker"/>
+        </xsl:call-template>
       </xsl:if>
     </xsl:when>
-    <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; 90)">
+    <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; number($width))">
       <!-- There's a newline before the edge, so output the line. -->
-<xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
-<xsl:call-template name="wrap-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
+      <xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
+      <xsl:call-template name="wrap-line">
+        <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
+        <xsl:with-param name="width" select="$width"/>
+        <xsl:with-param name="marker" select="$marker"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       <!-- Any newline comes after the edge, so output up to the edge. -->
-<xsl:value-of select="substring($string, 1, 90)"/>
-      <xsl:if test="string-length($string) &gt; 90">&#8629;
-<xsl:call-template name="wrap-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
+      <xsl:value-of select="substring($string, 1, number($width))"/>
+      <xsl:if test="string-length($string) &gt; numer($width)"><xsl:value-of select="$marker" disable-output-escaping="yes"/>
+        <xsl:call-template name="wrap-line">
+          <xsl:with-param name="string"><xsl:value-of select="substring($string, number($width) + 1, string-length($string))"/></xsl:with-param>
+          <xsl:with-param name="width" select="$width"/>
+          <xsl:with-param name="marker" select="$marker"/>
+        </xsl:call-template>
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
-
 </xsl:template>
 
 <xsl:template name="highlight-diff">
@@ -5951,7 +5994,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task', '|')">
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task|info', '|')">
                   <option value="{.}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
@@ -6042,7 +6085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
                 </xsl:variable>
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task', '|')">
+                <xsl:for-each select="str:split ('agent|alert|config|filter|port_list|report|report_format|schedule|target|task|info', '|')">
                   <xsl:choose>
                     <xsl:when test=". = $type">
                       <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
@@ -6589,17 +6632,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="head"/>
   <xsl:param name="name"/>
   <xsl:param name="current" select="."/>
+  <xsl:param name="extra_params"/>
   <xsl:param name="token" select="/envelope/token"/>
   <xsl:choose>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort-reverse={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_{$type}s&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -9945,10 +9989,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="info/cpe">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_cpe_lnk">
+          <xsl:with-param name="cpe" select="../name"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="title != ''">
+          <xsl:value-of select="title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          Not Available
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../modification_time != ''">
+          <xsl:value-of select="gsa:date (../modification_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          Not Available
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="cve_refs"/>
+    </td>
+    <td>
+      <xsl:value-of select="max_cvss"/>
+    </td>
+    <td>
+      <center>
+        <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+          title="CPE Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </center>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
-  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;token={/envelope/token}"
-     title="Details"><xsl:value-of select="$cpe"/></a>
+  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+    title="Details">
+     <xsl:call-template name="wrap" disable-output-escaping="yes">
+      <xsl:with-param name="string" select="$cpe"/>
+      <xsl:with-param name="width" select="'55'"/>
+      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
+    </xsl:call-template>
+  </a>
 </xsl:template>
 
 <xsl:template name="get_info_cve_lnk">
@@ -9956,44 +10064,137 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="gsa_token"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;filter={../../filters/term}&amp;token={/envelope/token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;filter={../../filters/term}&amp;token={$gsa_token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="get_info_response">
+<xsl:template name="html-cpe-table">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <xsl:choose>
-      <xsl:when test="count (cve) > 0">
-        <xsl:call-template name="cve-details"/>
-      </xsl:when>
-      <!--
-        Display CPEs that have no details associated if they are referenced
-        by one or several CVEs.
-      -->
-      <xsl:when test="count (cpe) > 0 and (count (cpe/cpe:item/cpe:title) > 0 or count (cpe/cves/cve) > 0)">
-        <xsl:call-template name="cpe-details"/>
-      </xsl:when>
-      <xsl:when test="count (nvt) > 0">
+    <div class="gb_window_part_center">CPE
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/cpe)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+      </xsl:call-template>
+      <a href="/help/cpes.html?token={/envelope/token}"
+        title="Help: CPE">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>CPE</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="cpes">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Title</xsl:with-param>
+                <xsl:with-param name="name">title</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Modified</xsl:with-param>
+                <xsl:with-param name="name">modified</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">CVEs</xsl:with-param>
+                <xsl:with-param name="name">cves</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Max CVSS</xsl:with-param>
+                <xsl:with-param name="name">max_cvss</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/cpe"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="6">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_info_response">
+  <xsl:choose>
+    <xsl:when test="count (info/cpe) > 0 and details='1'">
+      <xsl:call-template name="cpe-details"/>
+    </xsl:when>
+    <xsl:when test="count (info/cpe) > 0">
+      <xsl:call-template name="html-cpe-table"/>
+    </xsl:when>
+    <xsl:when test="count (info/cve) > 0">
+      <xsl:call-template name="cve-details"/>
+    </xsl:when>
+    <xsl:when test="count (info/nvt) > 0">
+      <div class="gb_window">
+        <div class="gb_window_part_left"></div>
+        <div class="gb_window_part_right"></div>
         <div class="gb_window_part_center">NVT Details
           <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
-             title="Help: NVTS (NVT Details)">
+            title="Help: NVTS (NVT Details)">
             <img src="/img/help.png"/>
           </a>
         </div>
         <div class="gb_window_part_content">
-          <xsl:apply-templates/>
+          <xsl:apply-templates select="info/nvt"/>
         </div>
-      </xsl:when>
-      <xsl:otherwise>
-        <div class="gb_window_part_center">Get details</div>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="gb_window">
+        <div class="gb_window_part_left"></div>
+        <div class="gb_window_part_right"></div>
+        <div class="gb_window_part_center">Get Information</div>
         <div class="gb_window_part_content">
           <xsl:choose>
             <xsl:when test="contains (@status_text, 'cpe:/') or @status = '200'">
@@ -10039,9 +10240,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
         </div>
-      </xsl:otherwise>
-    </xsl:choose>
-  </div>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="cve-details">
@@ -10060,79 +10261,79 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td><b>ID</b></td>
         <td>
           <b>
-            <xsl:value-of select="cve/cve:entry/@id"/>
+            <xsl:value-of select="info/cve/cve:entry/@id"/>
           </b>
         </td>
       </tr>
       <tr>
         <td>Published</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:published-datetime"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:published-datetime"/></td>
       </tr>
       <tr>
         <td>Last modified</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:last-modified-datetime"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:last-modified-datetime"/></td>
       </tr>
       <tr>
         <td>Last updated</td>
-        <td><xsl:value-of select="cve/update_time"/></td>
+        <td><xsl:value-of select="info/cve/update_time"/></td>
       </tr>
       <tr>
         <td>CWE ID</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cwe/@id"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cwe/@id"/></td>
       </tr>
     </table>
 
     <h1>Description</h1>
-    <xsl:value-of select="cve/cve:entry/vuln:summary/text()"/>
+    <xsl:value-of select="info/cve/cve:entry/vuln:summary/text()"/>
 
     <h1>CVSS</h1>
     <table>
       <tr>
         <td>Base score</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
       </tr>
       <tr>
         <td>Access vector</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
       </tr>
       <tr>
         <td>Access Complexity</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
       </tr>
       <tr>
         <td>Authentication</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
       </tr>
       <tr>
         <td>Confidentiality impact</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
       </tr>
       <tr>
         <td>Integrity impact</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
       </tr>
       <tr>
         <td>Availability impact</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
       </tr>
       <tr>
         <td>Source</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
       </tr>
       <tr>
         <td>Generated</td>
-        <td><xsl:value-of select="cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
+        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
       </tr>
     </table>
 
     <xsl:choose>
-      <xsl:when test="count(cve/cve:entry/vuln:references) = 0">
+      <xsl:when test="count(info/cve/cve:entry/vuln:references) = 0">
         <h1>References: None</h1>
       </xsl:when>
       <xsl:otherwise>
         <h1>References</h1>
         <table>
-          <xsl:for-each select="cve/cve:entry/vuln:references">
+          <xsl:for-each select="info/cve/cve:entry/vuln:references">
             <tr>
               <td><xsl:value-of select="vuln:source/text()"/></td>
             </tr>
@@ -10150,7 +10351,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 
     <xsl:choose>
-      <xsl:when test="count(cve/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
+      <xsl:when test="count(info/cve/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
         <h1>Vulnerable products: None</h1>
       </xsl:when>
       <xsl:otherwise>
@@ -10160,7 +10361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Actions</td>
           </tr>
-          <xsl:for-each select="cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
+          <xsl:for-each select="info/cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
             <xsl:sort select="text()"/>
             <xsl:variable name="class">
               <xsl:choose>
@@ -10171,7 +10372,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{$class}">
               <td><xsl:value-of select="text()"/></td>
               <td width="100">
-                <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;token={/envelope/token}"
+                <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
                    title="Details">
                   <img src="/img/details.png"
                        border="0"
@@ -10186,7 +10387,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 
     <xsl:choose>
-      <xsl:when test="count(cve/nvts/nvt) = 0">
+      <xsl:when test="count(info/cve/nvts/nvt) = 0">
         <h1>NVTs addressing this CVE: None</h1>
       </xsl:when>
       <xsl:otherwise>
@@ -10196,7 +10397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Actions</td>
           </tr>
-          <xsl:for-each select="cve/nvts/nvt">
+          <xsl:for-each select="info/cve/nvts/nvt">
             <xsl:variable name="class">
               <xsl:choose>
                 <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -10222,96 +10423,133 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="cpe-details">
-  <div class="gb_window_part_center">CPE Details
-    <a href="/help/cpe.html?token={/envelope/token}#cpedetails"
-       title="Help: CPE (CPE Details)">
-      <img src="/img/help.png"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
-    <div class="float_right">
-      <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">CPE Details
+      <a href="/help/cpe.html?token={/envelope/token}#cpedetails"
+        title="Help: CPE (CPE Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={filters/term}&amp;token={/envelope/token}"
+        title="CPE" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="CPE"/>
+      </a>
     </div>
-    <table>
-      <tr>
-        <td width="100"><b>Name</b></td>
-        <td>
-          <b>
-            <xsl:value-of select="cpe/cpe:cpe-item/@name"/>
-          </b>
-        </td>
-      </tr>
-      <xsl:for-each select="cpe/cpe:cpe-item/cpe:title">
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <xsl:if test="info/@id != ''">
+            <tr>
+              <td>ID</td>
+              <td><xsl:value-of select="info/@id"/></td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="info/modification_time != ''">
+            <tr>
+              <td>Last modified</td>
+              <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
+            </tr>
+          </xsl:if>
+          <xsl:if test="info/creation_time != ''">
+            <tr>
+              <td>Created:</td>
+              <td><xsl:value-of select="gsa:long-time (info/creation_time)"/></td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+      <table>
         <tr>
-          <td>Title (<xsl:value-of select="@xml:lang"/>)</td>
-          <td><xsl:value-of select="text()"/></td>
+          <td width="100"><b>Name</b></td>
+          <td>
+            <b>
+              <xsl:value-of select="info/name"/>
+            </b>
+          </td>
         </tr>
-      </xsl:for-each>
-      <xsl:if test="count(cpe/cpe:cpe-item/meta:item-metadata) &gt; 0">
-        <tr>
-          <td>NVD ID</td>
-          <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@nvd-id"/></td>
-        </tr>
-        <tr>
-          <td>Last modified</td>
-          <td><xsl:value-of select="cpe/cpe:cpe-item/meta:item-metadata/@modification-date"/></td>
-        </tr>
-        <xsl:if test="cpe/cpe:cpe-item/@deprecated='true'">
+        <xsl:if test="info/cpe/title">
           <tr>
-            <td>Deprecated by</td>
-            <td><xsl:value-of select="cpe/cpe:cpe-item/@deprecated_by"/></td>
+            <td>Title</td>
+            <td><xsl:value-of select="info/cpe/title"/></td>
           </tr>
         </xsl:if>
-      </xsl:if>
-      <tr>
-        <td>Last updated</td>
-        <td><xsl:value-of select="cpe/update_time"/></td>
-      </tr>
-    </table>
-    <xsl:if test="count(cpe/cpe:cpe-item/cpe:title) = 0">
-      <p>
-        This CPE doesn't appear in the CPE dictionary but is referenced by one
-        or more CVE.
-      </p>
-    </xsl:if>
-    <xsl:choose>
-      <xsl:when test="count(cpe/cves/cve) = 0">
-        <h1>Reported vulnerabilites: None</h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1>Reported vulnerabilites</h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>CVSS</td>
-            <td>Actions</td>
+        <xsl:if test="info/@id != ''">
+          <tr>
+            <td>NVD ID</td>
+            <td><xsl:value-of select="info/@id"/></td>
           </tr>
-          <xsl:for-each select="cpe/cves/cve">
-            <xsl:variable name="class">
-              <xsl:choose>
-                <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                <xsl:otherwise>odd</xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <tr class="{$class}">
-              <td><xsl:value-of select="cve:entry/@id"/></td>
-              <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
-              <td width="100">
-                <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;token={/envelope/token}" title="Details">
-                  <img src="/img/details.png"
-                       border="0"
-                       alt="Details"
-                       style="margin-left:3px;"/>
-                </a>
-              </td>
+        </xsl:if>
+        <xsl:if test="info/modification_time != ''">
+          <tr>
+            <td>Last modified</td>
+            <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="info/cpe/deprecated_by">
+          <tr>
+            <td>Deprecated by</td>
+            <td><xsl:value-of select="info/cpe/deprecated_by"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="info/cpe/update_time">
+          <tr>
+            <td>Last updated</td>
+            <td><xsl:value-of select="info/cpe/update_time"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="info/cpe/status != ''">
+          <tr>
+            <td>Status</td>
+            <td><xsl:value-of select="info/cpe/status"/></td>
+          </tr>
+        </xsl:if>
+      </table>
+      <xsl:if test="count(info/cpe/title) = 0">
+        <p>
+          This CPE does not appear in the CPE dictionary but is referenced by one
+          or more CVE.
+        </p>
+      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="count(details) = 0 or details = '0'"/>
+        <xsl:when test="count(info/cpe/cves/cve) = 0">
+          <h1>Reported vulnerabilites: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Reported vulnerabilites</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>CVSS</td>
+              <td>Actions</td>
             </tr>
-          </xsl:for-each>
-        </table>
-      </xsl:otherwise>
-    </xsl:choose>
+            <xsl:for-each select="info/cpe/cves/cve">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="cve:entry/@id"/></td>
+                <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+                <td width="100">
+                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                      border="0"
+                      alt="Details"
+                      style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
   </div>
 </xsl:template>
-
 
 <!-- BEGIN NVT DETAILS -->
 

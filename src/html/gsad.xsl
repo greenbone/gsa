@@ -927,6 +927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
        <li class="pointy"></li>
+       <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">CPE</a></li>
        <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">Lookup</a></li>
       </xsl:if>
      </ul>

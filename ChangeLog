@@ -1,3 +1,43 @@
+2012-10-15  Andre Heinecke <aheinecke@intevation.de>
+
+	Add CPE Overview table with filtering
+
+	* src/gsad_omp.c (get_many): Add extra_attribs parameter. Handle non
+	countable type info. Update callers.
+	(get_info): Removed.
+	(get_info_omp): Call get_many with the appropiate extra_attribs
+
+	* src/gsad.c (init_validator): Add validators for info_id and details,
+	allow filters of type info.
+
+	* src/html/omp.xsl: Include exslt common.
+	(gsa:date): New. Convert ISO date to just the date without time.
+	(gsa:type-many): New. Get the plural form of a type.
+	(filter-window-pager): Add optional extra_params parameter to include in
+	generated links.
+	(filter-window-part): Add optional extra_params parameter to add as hidden
+	form fields. Expects a node-set.
+	(wrap, wrap-line): Add params width and marker to specifiy the width
+	and symbol used for breaking a line.
+	(column-name): Add extra_params parameter to include in generated links.
+	(info/cpe): New. Generate table rows for CPE table.
+	(get_info_cpe_lnk): Wrap the text part of the link.
+	(html-cpe-table): New. Generate an overview table for CPE.
+	(get_info_response, cve-details): Handle new response style.
+	(cpe-details): Expand with new information. Update Style.
+	(html-create-filter-form, html-edit-filter-form): Allow filters of type
+	info.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add link to CPE
+
+	* src/html/help.xsl (contents.html): Remove misplaced links to CPE and
+	CVE. Add link to cpes doc.
+	(cpe.html): Expand and update documentation of CPE Details page.
+	(cpes.html): New. Document CPE overview table.
+
+	* src/html/dialog.xsl (browse_infosec.html): Add details parameter to
+	lookup requests.
+
 2012-10-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-create-filter-form)
