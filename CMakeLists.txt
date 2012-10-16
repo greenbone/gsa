@@ -36,7 +36,9 @@ if (POLICY CMP0005)
   cmake_policy (SET CMP0005 OLD)
 endif (POLICY CMP0005)
 
+if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Debug)
+endif (NOT CMAKE_BUILD_TYPE)
 
 ## Check existence required tools
 
@@ -405,7 +407,7 @@ install (FILES ${CMAKE_BINARY_DIR}/src/gsad_log.conf
 set (HARDENING_FLAGS            "-Wformat -Wformat-security -O2 -D_FORTIFY_SOURCE=2 -fstack-protector -Wl,-z,relro -Wl,-z,now")
 
 set (CMAKE_C_FLAGS_DEBUG        "${CMAKE_C_FLAGS_DEBUG}")
-set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} ${HARDENING_FLAGS} -Wall")
+set (CMAKE_C_FLAGS              "${CMAKE_C_FLAGS} ${HARDENING_FLAGS} -Wall -Werror")
 
 add_subdirectory (src)
 
