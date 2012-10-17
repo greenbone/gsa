@@ -1,7 +1,12 @@
+2012-10-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (openvas_append_xml): Remove.  Now xml_string_append in
+	libraries.  Update all calls to new name.
+
 2012-10-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsad.xsl (html-gsa-navigation): Renamed menu item "Lookup".
- 
+
 	* src/html/dialog.xsl (browse_infosec.html): Removed entry field for CPE because this
 	is handled in the new CPE management.
 
