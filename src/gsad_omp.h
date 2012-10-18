@@ -211,5 +211,6 @@ int authenticate_omp (const gchar *, const gchar *, gchar **, gchar **,
 
 char * get_info_omp (credentials_t *, params_t *);
 char * get_nvts_omp (credentials_t *, params_t *);
+char * get_info (credentials_t *, params_t *, const char *);
 
 #endif /* not _GSAD_OMP_H */

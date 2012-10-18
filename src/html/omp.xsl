@@ -136,6 +136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="optional_resource_type" value="{$type}"/>
             <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+            <xsl:for-each select="exslt:node-set($extra_params)/param">
+              <input type="hidden" name="{name}" value="{value}"/>
+            </xsl:for-each>
             <input type="text" name="name" value="" size="10"
                    maxlength="80" style="vertical-align:middle"/>
             <input type="image"

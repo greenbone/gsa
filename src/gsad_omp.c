@@ -466,6 +466,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
 
+  if (strcmp (next, "get_info") == 0)
+    return get_info (credentials, params, response);
+
   return NULL;
 }
 
@@ -2415,11 +2418,12 @@ get_nvts (credentials_t *credentials, const char *oid,
  *
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return XSL transformed NVT details response or error message.
  */
-char*
-get_info_omp (credentials_t *credentials, params_t *params)
+char *
+get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   char *ret;
   GString *extra_attribs;
@@ -2454,11 +2458,25 @@ get_info_omp (credentials_t *credentials, params_t *params)
     g_string_append_printf (extra_attribs,
                             " details=\"%s\"",
                             params_value (params, "details"));
-  ret = get_many ("info", credentials, params, NULL, extra_attribs->str);
+  ret = get_many ("info", credentials, params, extra_xml, extra_attribs->str);
 
   g_string_free(extra_attribs, TRUE);
 
   return ret;
+}
+
+/**
+ * @brief Get info, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_info_omp (credentials_t * credentials, params_t *params)
+{
+  return get_info (credentials, params, NULL);
 }
 
 /**

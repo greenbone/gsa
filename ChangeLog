@@ -1,3 +1,13 @@
+2012-10-18  Andre Heinecke <aheinecke@intevation.de>
+
+	Do not jump to filter page after adding a filter for CPE
+
+	* src/gsad_omp.c (get_info): Renamed get_info_omp to get_info
+	(get_info_omp): New. Wrapper around get_info without extra_xml
+	(next_page): Call get_info for get_info next
+	* src/gsad_omp.h: Add header accordingly.
+	* src/html/omp.xsl (filter-window-pager): Add extra_params to new filter form
+
 2012-10-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (openvas_append_xml): Remove.  Now xml_string_append in
