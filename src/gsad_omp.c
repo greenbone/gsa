@@ -9465,12 +9465,17 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (openvas_server_sendf (&session,
                             "<get_reports"
-                            "%s%s%s%s%s",
+                            "%s%s%s%s%s%s",
                             (type && (strcmp (type, "prognostic") == 0))
                              ? " type=\"prognostic\""
                              : "",
                             (type && (strcmp (type, "assets") == 0))
                              ? " type=\"assets\""
+                             : "",
+                            (type
+                             && (strcmp (type, "assets") == 0)
+                             && host)
+                             ? " details=\"1\""
                              : "",
                             host ? " host=\"" : "",
                             host ? host : "",

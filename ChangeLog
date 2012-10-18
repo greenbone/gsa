@@ -1,3 +1,8 @@
+2012-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Pass details flag with getting the
+	"assets" report for a single host.
+
 2012-10-18  Andre Heinecke <aheinecke@intevation.de>
 
 	Do not jump to filter page after adding a filter for CPE
