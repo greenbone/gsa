@@ -419,7 +419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="wrap">
   <xsl:param name="string"></xsl:param>
   <xsl:param name="width">90</xsl:param>
-  <xsl:param name="marker">&#8629;</xsl:param>
+  <xsl:param name="marker">&#8629;&#10;</xsl:param>
 
   <xsl:for-each select="str:split($string, '&#10;&#10;')">
     <xsl:for-each select="str:tokenize(text(), '&#10;')">

@@ -1,3 +1,7 @@
+2012-10-19  Andre Heinecke <aheinecke@intevation.de>
+
+	* src/html/omp.xsl (wrap): Add linebreak to the default marker
+
 2012-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Pass details flag with getting the
