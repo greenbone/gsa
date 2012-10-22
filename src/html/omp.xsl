@@ -5105,7 +5105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top" width="145">Report Filter (optional)</td>
             <td colspan="2">
               <select name="filter_id">
-                <option value="">--</option>
+                <option value="0">--</option>
                 <xsl:for-each select="$filters/filter">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>

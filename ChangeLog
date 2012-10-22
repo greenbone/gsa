@@ -1,3 +1,8 @@
+2012-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-alert-form): Make the filter ID for "--"
+	"0" so that it validates.
+
 2012-10-19  Andre Heinecke <aheinecke@intevation.de>
 
 	* src/html/omp.xsl (wrap): Add linebreak to the default marker
