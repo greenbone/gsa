@@ -1,5 +1,10 @@
 2012-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_agents_response, get_filters, get_targets): Add
+	fail status dialog.
+
+2012-10-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/wizard.xsl (quick-first-scan-wizard): Specify UUID for
 	setting, else it just gets the first one.
 
