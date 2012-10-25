@@ -10223,7 +10223,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="count (info/cpe) > 0 and details='1'">
       <xsl:call-template name="cpe-details"/>
     </xsl:when>
-    <xsl:when test="count (info/cpe) > 0">
+    <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:call-template name="html-cpe-table"/>
     </xsl:when>
     <xsl:when test="count (info/cve) > 0">
@@ -10248,24 +10248,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window">
         <div class="gb_window_part_left"></div>
         <div class="gb_window_part_right"></div>
-        <div class="gb_window_part_center">Get Information</div>
+        <div class="gb_window_part_center">SecInfo Management</div>
         <div class="gb_window_part_content">
           <xsl:choose>
-            <xsl:when test="contains (@status_text, 'cpe:/') or @status = '200'">
-              <h1>Unknown product</h1>
-              <xsl:if test="@status != '200'">
-                <p>
-                  <xsl:value-of select="@status_text"/>
-                </p>
-              </xsl:if>
+            <xsl:when test="contains (@status_text, 'SCAP') and @status = '400'">
+              <h1>SecInfo Database not available</h1>
               <p>
-                Please ensure that your SCAP data is up to date and that you
-                entered a valid CPE with correct spelling of product. If the
-                problem persists after a sync, the product name your searched
-                for is not available. In some cases this is a temporary situation because
-                some CPE entries are initially used for CVEs and enter the official
-                CPE database only with some delay. Many older CPEs are also not yet included
-                in the CPE database.
+                Please ensure that your SCAP data is synced by either running openvas-scapdata-sync
+                or greenbone-scapdata-sync on your system.
               </p>
             </xsl:when>
             <xsl:when test="contains (@status_text, 'CVE-')">
