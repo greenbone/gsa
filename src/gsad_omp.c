@@ -1384,7 +1384,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
                           "</new_task>",
                           credentials->username,
                           apply_overrides,
-                          alerts ? alerts : "2");
+                          alerts ? alerts : "1");
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
