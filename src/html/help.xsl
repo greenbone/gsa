@@ -4115,9 +4115,14 @@ Public License instead of this License.
       <br/>
       <h1>Powerfilter</h1>
       <p>
-        A powerfilter is a line of text that describes how to reduce a list
-        of items into a smaller subset of items.  This filtering is
+        A powerfilter describes how to reduce a list
+        of items to a smaller list.  This filtering is
         similar to the search term given to a search engine.
+      </p>
+      <p>
+        The default powerfilter is usually "rows=10 first=1 sort=name", which
+        means to include at most ten items, starting at the first item and
+        sorting by column "Name".
       </p>
 
       <a name="examples"></a>
@@ -4229,6 +4234,16 @@ Public License instead of this License.
           </ul>
         </li>
       </ul>
+      <ul>
+        <li>
+          rows=20 first=1 sort=name
+          <ul>
+            <li>
+              Include the first twenty items, sorting by column "Name".
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <a name="syntax"></a>
       <h3>Syntax</h3>
@@ -4240,25 +4255,65 @@ Public License instead of this License.
         Phrases can be quoted with double quotes "like this" to include
         spaces in the keywords.
       </p>
-      <p>
-        The special keyword "<b>and</b>" requires that the
-        keywords on either side of it are both present.  The special keyword
-        "<b>or</b>" has similar behaviour, but is redundant, since terms are
-        normally OR'd.
-      </p>
-      <p>
-        The special keyword "<b>not</b>" inverts the sense of the following keyword.
-      </p>
+
+      <h4>Column Keywords</h4>
       <p>
         A keyword can also be
         prefixed with a column using one of the special characters =, ~, &lt;
-        and &gt;, like "name=Localhost".  In the case of the = relation the
+        and &gt;.  For example "name=Localhost".  In the case of the = relation the
         keyword is case sensitive; for other relations the keyword is case
         insensitive as usual.
       </p>
       <p>
         To search for one of the special characters, enclose the term in
         double quotes.
+      </p>
+      <p>
+        In general the column name is the name of the column in lowercase,
+        with spaces converted to underscores.  So port_list="OpenVAS Default"
+        filters by the column "Port List".
+      </p>
+      <p>
+        Some extra fields can be used instead of column name on most pages:
+        <ul>
+          <li>uuid -- UUID of item</li>
+          <li>comment -- the comment on the item, often displayed in the name column</li>
+          <li>modified -- date and time item was last modified</li>
+          <li>created -- date and time item was created.</li>
+        </ul>
+      </p>
+
+      <h4>Special Keywords</h4>
+      <p>
+        The keyword "<b>and</b>" requires that the
+        keywords on either side of it are both present.  The special keyword
+        "<b>or</b>" has similar behaviour, but is redundant, since terms are
+        normally OR'd.
+      </p>
+      <p>
+        The keyword "<b>not</b>" inverts the sense of the following keyword.
+      </p>
+      <p>
+        The column keyword "<b>rows</b>" determines the maximum number of rows
+        in the resulting table.  For example "rows=10" selects at most 10 rows.
+        A value of -1 selects all row, while -2 uses the
+        <a href="/help/my_settings.html?token={/envelope/token}">setting</a>
+        "Rows Per Page".
+      </p>
+      <p>
+        The column keyword "<b>first</b>" determines the first row
+        in the resulting table.  For example "first=1" start the listing from the
+        first row, while "first=5" skips the first four rows.
+      </p>
+      <p>
+        The column keyword "<b>sort</b>" determines the sort order
+        of the resulting table.  For example "sort=name" sorts by column name.
+        Usually all the columns and the special extra fields like UUID are
+        available for sorting.
+      </p>
+      <p>
+        The column keyword "<b>sort-reverse</b>" is like "sort", but sorts
+        backwards.
       </p>
     </div>
   </div>

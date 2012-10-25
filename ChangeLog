@@ -1,5 +1,15 @@
 2012-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (powerfilter.html): Simplify first sentence.
+	Describe usual default.  Add example with new special columns.  Add
+	subsection for Column Keywords, with info about possible column names.
+	Add subsection for Special Keywords, with new ones.
+
+	* src/html/omp.xml (filter-window-part, html-report-details): Add help
+	link alongside filter field.
+
+2012-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_task): Default to 1 alert instead of 2.
 
 2012-10-25  Andre Heinecke <aheinecke@intevation.de>

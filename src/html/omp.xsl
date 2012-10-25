@@ -189,13 +189,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:for-each>
         <div style="padding: 2px;">
           Filter:
-          <input type="text" name="filter" size="60"
+          <input type="text" name="filter" size="57"
                  value="{filters/term}"
                  maxlength="1000"/>
           <input type="image"
                  name="Update Filter"
                  src="/img/refresh.png"
                  alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+          <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+            <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                 src="/img/help.png" border="0"/>
+          </a>
         </div>
       </form>
     </div>
@@ -2347,13 +2351,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           <div style="padding: 2px;">
             Filter:
-            <input type="text" name="filter" size="60"
+            <input type="text" name="filter" size="57"
                    value="{report/filters/term}"
                    maxlength="1000"/>
             <input type="image"
                    name="Update Filter"
                    src="/img/refresh.png"
                    alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+            <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+              <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                   src="/img/help.png" border="0"/>
+            </a>
           </div>
         </form>
       </div>
