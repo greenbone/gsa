@@ -1,3 +1,7 @@
+2012-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* ChangeLog: End every sentence with a full stop.
+
 2012-10-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (powerfilter.html): Simplify first sentence.
@@ -34,7 +38,7 @@
 
 2012-10-19  Andre Heinecke <aheinecke@intevation.de>
 
-	* src/html/omp.xsl (wrap): Add linebreak to the default marker
+	* src/html/omp.xsl (wrap): Add linebreak to the default marker.
 
 2012-10-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
@@ -43,13 +47,14 @@
 
 2012-10-18  Andre Heinecke <aheinecke@intevation.de>
 
-	Do not jump to filter page after adding a filter for CPE
+	Do not jump to filter page after adding a filter for CPE.
 
-	* src/gsad_omp.c (get_info): Renamed get_info_omp to get_info
-	(get_info_omp): New. Wrapper around get_info without extra_xml
-	(next_page): Call get_info for get_info next
+	* src/gsad_omp.c (get_info): Renamed get_info_omp to get_info.
+	(get_info_omp): New.  Wrapper around get_info without extra_xml.
+	(next_page): Call get_info for get_info next.
 	* src/gsad_omp.h: Add header accordingly.
-	* src/html/omp.xsl (filter-window-pager): Add extra_params to new filter form
+	* src/html/omp.xsl (filter-window-pager): Add extra_params to new filter
+	form.
 
 2012-10-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
@@ -95,7 +100,7 @@
 	(html-create-filter-form, html-edit-filter-form): Allow filters of type
 	info.
 
-	* src/html/gsad.xsl (html-gsa-navigation): Add link to CPE
+	* src/html/gsad.xsl (html-gsa-navigation): Add link to CPE.
 
 	* src/html/help.xsl (contents.html): Remove misplaced links to CPE and
 	CVE. Add link to cpes doc.
@@ -338,7 +343,7 @@
 	Make SecInfo Management the seventh top level menu item.
 
 	* src/html/dialog.xsl (browse_infosec.html): Rename
-	"Security Information Management" to "Lookup"
+	"Security Information Management" to "Lookup".
 
 	* src/html/gsa-style.css (#gb_menu ul li a): Switch to new button width
 	128px and adapt background position.
@@ -352,19 +357,19 @@
 	the new menu width.
 
 	* src/html/gsa-style.css (#gb_menu ul li:hover a)
-	(#gb_menu ul .last_button:hover a): Adopt background position
+	(#gb_menu ul .last_button:hover a): Adopt background position.
 
 	* src/html/help.xsl (browse_infosec.html): Rename from "Security Information
-	Browser" to "Security Information Lookup"
+	Browser" to "Security Information Lookup".
 
 	* src/html/help.xsl (contents.html): Move SecInfo Management to the top
-	level of the contents index
+	level of the contents index.
 
 	* src/html/gsad.xsl (html-gsa-navigation): Move SecInfo from Extras to the
 	top level.
 
 	* style/top_menu_buttons.png:  First button and last button now
-	have a width of 130px the other buttons are 128px
+	have a width of 130px the other buttons are 128px.
 
 2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
