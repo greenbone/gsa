@@ -9590,12 +9590,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td>First time:</td>
+          <td>First Run:</td>
           <td><xsl:value-of select="gsa:long-time-tz (first_time)"/></td>
         </tr>
         <tr>
-          <td>Next time:</td>
-          <td><xsl:value-of select="gsa:long-time-tz (next_time)"/></td>
+          <td>Next Run:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="next_time = 'over'">
+                -
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:long-time-tz (next_time)"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
         <tr>
           <td>Timezone:</td>

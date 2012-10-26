@@ -1,5 +1,10 @@
 2012-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (schedule [details]): Match field names to Schedules
+	page columns.  If the schedule is over just put a - for Next Time.
+
+2012-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (gsa:date-tz, gsa:long-time-tz): New functions.
 	(html-report-table, schedule, schedule [details]): Append timezone to
 	schedule times.  Add timezone field to Schedule Details.
