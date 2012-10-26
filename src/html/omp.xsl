@@ -61,6 +61,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="translate($string, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
 </func:function>
 
+<func:function name="gsa:date-tz">
+  <xsl:param name="time"></xsl:param>
+  <func:result>
+    <xsl:if test="string-length ($time) &gt; 0">
+      <xsl:choose>
+        <xsl:when test="substring-after ($time, '+')">
+          <xsl:value-of select="concat ('+', substring-after ($time, '+'))"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'UTC'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:long-time-tz">
+  <xsl:param name="time"></xsl:param>
+  <func:result>
+    <xsl:if test="string-length ($time) &gt; 0">
+      <xsl:value-of select="concat (date:day-abbreviation ($time), ' ', date:month-abbreviation ($time), ' ', date:day-in-month ($time), ' ', format-number(date:hour-in-day($time), '00'), ':', format-number(date:minute-in-hour($time), '00'), ':', format-number(date:second-in-minute($time), '00'), ' ', date:year($time), ' ', gsa:date-tz($time))"/>
+    </xsl:if>
+  </func:result>
+</func:function>
+
 <func:function name="gsa:long-time">
   <xsl:param name="time"></xsl:param>
   <func:result>
@@ -2628,7 +2653,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   (Next due: over)
                 </xsl:when>
                 <xsl:otherwise>
-                  (Next due: <xsl:value-of select="gsa:long-time (task/schedule/next_time)"/>)
+                  (Next due: <xsl:value-of select="gsa:long-time-tz (task/schedule/next_time)"/>)
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>
@@ -9389,7 +9414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:long-time (first_time)"/>
+      <xsl:value-of select="gsa:long-time-tz (first_time)"/>
     </td>
     <td>
       <xsl:choose>
@@ -9566,11 +9591,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td>First time:</td>
-          <td><xsl:value-of select="gsa:long-time (first_time)"/></td>
+          <td><xsl:value-of select="gsa:long-time-tz (first_time)"/></td>
         </tr>
         <tr>
           <td>Next time:</td>
-          <td><xsl:value-of select="gsa:long-time (next_time)"/></td>
+          <td><xsl:value-of select="gsa:long-time-tz (next_time)"/></td>
+        </tr>
+        <tr>
+          <td>Timezone:</td>
+          <td><xsl:value-of select="timezone"/></td>
         </tr>
         <tr>
           <td>Period:</td>

@@ -1641,6 +1641,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Hit the button "Create Schedule" to submit the new schedule.
        The list of schedules will be updated.
       </p>
+      <p>
+       The new schedule follows the currently selected timezone.  This timezone is
+       visible in the date on the page header, and can be changed in
+       <a href="/help/my_settings.html?token={/envelope/token}">My Settings</a>.
+      </p>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -1713,6 +1718,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="even">
           <td>Duration</td>
           <td>Maximum duration of a running task.</td>
+        </tr>
+        <tr class="odd">
+          <td>Timezone</td>
+          <td>Timezone that this schedule follows.</td>
         </tr>
       </table>
 
