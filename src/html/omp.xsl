@@ -9418,10 +9418,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="next_time &gt; 0">
-          <xsl:value-of select="next_time"/>
+        <xsl:when test="next_time = 'over'">
+          -
         </xsl:when>
-        <xsl:otherwise>-</xsl:otherwise>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:long-time-tz (next_time)"/>
+        </xsl:otherwise>
       </xsl:choose>
     </td>
     <td>
