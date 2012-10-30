@@ -563,6 +563,7 @@ init_validator ()
                          "|(edit_note)"
                          "|(edit_override)"
                          "|(edit_report_format)"
+                         "|(edit_schedule)"
                          "|(edit_settings)"
                          "|(edit_target)"
                          "|(edit_task)"
@@ -645,6 +646,7 @@ init_validator ()
                          "|(save_note)"
                          "|(save_override)"
                          "|(save_report_format)"
+                         "|(save_schedule)"
                          "|(save_settings)"
                          "|(save_target)"
                          "|(save_task)"
@@ -782,6 +784,7 @@ init_validator ()
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
+  openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
@@ -1590,6 +1593,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_note)
   ELSE (save_override)
   ELSE (save_report_format)
+  ELSE (save_schedule)
   ELSE_OAP (save_settings)
   ELSE (save_target)
   ELSE (save_task)
@@ -1733,6 +1737,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_note)
   ELSE (edit_override)
   ELSE (edit_report_format)
+  ELSE (edit_schedule)
   ELSE_OAP (edit_settings)
   ELSE (edit_target)
   ELSE (edit_task)

@@ -466,6 +466,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
 
+  if (strcmp (next, "get_schedules") == 0)
+    return get_schedules_omp (credentials, params);
+
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
 
@@ -16429,6 +16432,169 @@ save_filter_omp (credentials_t * credentials, params_t *params)
 }
 
 #undef CHECK
+
+
+/* Schedules. */
+
+/**
+ * @brief Setup edit_schedule XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_schedule (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return edit_resource ("schedule", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_schedule XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_schedule_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_schedule (credentials, params, NULL);
+}
+
+/**
+ * @brief Save schedule, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials     Username and password for authentication.
+ * @param[in]  params          Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_schedule_omp (credentials_t * credentials, params_t *params)
+{
+  gchar *response;
+  entity_t entity;
+  const char *schedule_id, *name, *comment;
+  const char *hour, *minute, *day_of_month, *month, *year, *timezone;
+  const char *period, *period_unit, *duration, *duration_unit;
+  char *ret;
+
+  schedule_id = params_value (params, "schedule_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  hour = params_value (params, "hour");
+  minute = params_value (params, "minute");
+  day_of_month = params_value (params, "day_of_month");
+  duration = params_value (params, "duration");
+  duration_unit = params_value (params, "duration_unit");
+  month = params_value (params, "month");
+  period = params_value (params, "period");
+  period_unit = params_value (params, "period_unit");
+  year = params_value (params, "year");
+  timezone = params_value (params, "timezone");
+
+  if (name == NULL || hour == NULL || minute == NULL || day_of_month == NULL
+      || duration == NULL || duration_unit == NULL || month == NULL
+      || period == NULL || period_unit == NULL || year == NULL
+      || timezone == NULL)
+    return edit_schedule (credentials, params,
+                          GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"));
+
+  if (schedule_id == NULL || name == NULL || comment == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while saving a schedule. "
+                         "The schedule remains the same. "
+                         "Diagnostics: Required parameter missing.",
+                         "/omp?cmd=get_schedules");
+
+  response = NULL;
+  entity = NULL;
+  switch (omp (credentials,
+               &response,
+               &entity,
+               "<modify_schedule schedule_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<first_time>"
+               "<hour>%s</hour>"
+               "<minute>%s</minute>"
+               "<day_of_month>%s</day_of_month>"
+               "<month>%s</month>"
+               "<year>%s</year>"
+               "</first_time>"
+               "<timezone>%s</timezone>"
+               "<period>"
+               "<unit>%s</unit>"
+               "%s"
+               "</period>"
+               "<duration>"
+               "<unit>%s</unit>"
+               "%s"
+               "</duration>"
+               "</modify_schedule>",
+               schedule_id,
+               name ? name : "",
+               comment ? comment : "",
+               hour,
+               minute,
+               day_of_month,
+               month,
+               year,
+               timezone,
+               (strcmp (period_unit, "")
+                 ? period_unit
+                 : "second"),
+               period,
+               (strcmp (duration_unit, "")
+                 ? duration_unit
+                 : "second"),
+               duration))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a schedule. "
+                             "The schedule remains the same. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_schedules");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a schedule. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_schedules");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a schedule. "
+                             "It is unclear whether the schedule has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_schedules");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_schedules_omp (credentials, params);
+    }
+  else
+    ret = edit_schedule (credentials, params, response);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
 
 
 /* Wizards. */

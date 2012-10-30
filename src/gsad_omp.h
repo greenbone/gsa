@@ -90,8 +90,10 @@ char * create_schedule_omp (credentials_t *, params_t *);
 
 char * delete_schedule_omp (credentials_t *, params_t *);
 char * delete_trash_schedule_omp (credentials_t *, params_t *);
+char * edit_schedule_omp (credentials_t *, params_t *);
 char * get_schedule_omp (credentials_t *, params_t *);
 char * get_schedules_omp (credentials_t *, params_t *);
+char * save_schedule_omp (credentials_t *, params_t *);
 
 char * edit_target_omp (credentials_t *, params_t *);
 char * get_target_omp (credentials_t *, params_t *);

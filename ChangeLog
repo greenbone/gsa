@@ -1,3 +1,21 @@
+2012-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add editing of schedules.
+
+	* src/gsad.c (init_validator, exec_omp_get, exec_omp_post): Add
+	edit_schedule and save_schedule.  Add timezone validator.
+
+	* src/gsad_omp.c (next_page): Add get_schedules.
+	(edit_schedule, edit_schedule_omp, save_schedule_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/omp.xsl (html-schedule-table)
+	(html-schedules-trash-table): Remove unit.  Units are in the column.
+	(modify_schedule_response, schedule-select-options)
+	(html-edit-schedule-form, edit_schedule): New templates.
+	(schedule): Add edit icon.
+
 2012-10-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (schedule): Update next_time check and format
