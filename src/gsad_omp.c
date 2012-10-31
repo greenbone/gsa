@@ -10757,13 +10757,12 @@ create_note_omp (credentials_t *credentials, params_t *params)
 {
   char *ret;
   gchar *response;
-  const char *next, *oid, *threat, *port, *hosts;
+  const char *oid, *threat, *port, *hosts;
   const char *text, *task_id, *note_result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
-  next = params_value (params, "next");
   oid = params_value (params, "oid");
 
   if (params_valid (params, "threat"))

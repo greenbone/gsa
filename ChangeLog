@@ -1,5 +1,10 @@
 2012-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_note_omp): Remove next var as next is now done
+	via next_page.
+
+2012-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-schedule-form): Correct help link.
 
 	* src/html/help.xsl (configure_schedules.html): Add Edit Schedule
