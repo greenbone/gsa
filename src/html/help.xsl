@@ -1744,6 +1744,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <img src="/img/details.png" alt="Details" title="Details" />.
       </p>
 
+
+      <a name="edit_schedule"></a>
+      <h4>Edit Schedule</h4>
+      <p>
+       Pressing the "Edit Schedule" icon
+       <img src="/img/edit.png" alt="Edit Schedule" title="Edit Schedule"/>
+       will switch to an overview of the configuration for this Schedule and
+       allows editing the Schedule's properties.
+      </p>
+
       <a name="scheduledetails"></a>
       <h2>Schedule Details</h2>
       <p>

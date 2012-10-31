@@ -1,3 +1,10 @@
+2012-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-schedule-form): Correct help link.
+
+	* src/html/help.xsl (configure_schedules.html): Add Edit Schedule
+	action.
+
 2012-10-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add editing of schedules.

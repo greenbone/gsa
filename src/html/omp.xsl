@@ -9384,7 +9384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Schedule
-      <a href="/help/schedules.html?token={/envelope/token}#edit_schedule" title="Help: Edit Schedule">
+      <a href="/help/configure_schedules.html?token={/envelope/token}#edit_schedule" title="Help: Edit Schedule">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_schedules&amp;schedule={/envelope/params/schedule}&amp;token={/envelope/token}"
