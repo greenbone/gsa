@@ -1,5 +1,10 @@
 2012-11-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* INSTALL: Update reference system section and prerequisites, update
+	instructions to use out-of-source building, add missing target.
+
+2012-11-01  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Update targets for out-of-source builds.
 
 	* doc/CMakeLists.txt: Update commands and targets to work with
