@@ -1,3 +1,8 @@
+2012-11-01  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/omp.xsl (html-create-alert-form): Add support for creating
+	a verinice .PRO server connector alert.
+
 2012-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_note_omp): Remove next var as next is now done
