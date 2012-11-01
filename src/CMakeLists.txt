@@ -103,13 +103,13 @@ install (TARGETS gsad
 ## Static analysis
 
 add_custom_target (splint COMMENT "Running splint..."
-                   COMMAND sh -c \"splint -booltype gboolean -predboolint +unixlib +export-header `pkg-config --cflags glib-2.0` `pkg-config --cflags libopenvas` *.c\")
+                   COMMAND sh -c \"splint -booltype gboolean -predboolint +unixlib +export-header `pkg-config --cflags glib-2.0` `pkg-config --cflags libopenvas` ${CMAKE_CURRENT_SOURCE_DIR}/*.c\")
 
 add_custom_target (rats COMMENT "Running rats..."
-                   COMMAND sh -c \"rats --warning 2 *.[ch]\")
+                   COMMAND sh -c \"rats --warning 2 ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]\")
 
 add_custom_target (flawfinder COMMENT "Running flawfinder..."
-                   COMMAND sh -c \"flawfinder *.[ch]\")
+                   COMMAND sh -c \"flawfinder ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]\")
 
 add_custom_target (check COMMENT "Checking code...")
 add_dependencies (check splint rats flawfinder)
@@ -143,7 +143,7 @@ endif (PATH_TO_XSLTPROC)
 
 ## Tag files
 
-set (C_FILES "*.c")
+set (C_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
 add_custom_target (etags COMMENT "Building TAGS..."
                    COMMAND etags ${C_FILES})
 add_custom_target (ctags COMMENT "Building tags..."

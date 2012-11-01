@@ -33,20 +33,20 @@ if (NOT DOXYGEN_EXECUTABLE)
   message (STATUS "WARNING: Doxygen is required to build the HTML docs.")
 else (NOT DOXYGEN_EXECUTABLE)
   add_custom_target (doc COMMENT "Building documentation..."
-    DEPENDS Doxyfile .built-html)
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile ${CMAKE_CURRENT_BINARY_DIR}/.built-html)
 
   add_custom_command (OUTPUT .built-html
     COMMAND sh
-    ARGS -c \"cd .. && ${DOXYGEN_EXECUTABLE} doc/Doxyfile && touch doc/.built-html\;\"
-    DEPENDS Doxyfile ../README ../src/*.c ../src/*.h)
+    ARGS -c \"${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile && touch ${CMAKE_CURRENT_BINARY_DIR}/.built-html\;\"
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
   add_custom_target (doc-full COMMENT "Building documentation..."
-    DEPENDS Doxyfile_full .built-html_full)
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_full ${CMAKE_CURRENT_BINARY_DIR}/.built-html_full)
 
   add_custom_command (OUTPUT .built-html_full
     COMMAND sh
-    ARGS -c \"cd .. && ${DOXYGEN_EXECUTABLE} doc/Doxyfile_full && touch doc/.built-html_full\;\"
-    DEPENDS Doxyfile_full ../README ../src/*.c ../src/*.h)
+    ARGS -c \"${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_full && touch ${CMAKE_CURRENT_BINARY_DIR}/.built-html_full\;\"
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile_full)
 endif (NOT DOXYGEN_EXECUTABLE)
 
 ## Find xml2man
@@ -76,12 +76,12 @@ if (XMLTOMAN_EXECUTABLE)
 
   add_custom_command (OUTPUT gsad.8
     COMMAND sh
-    ARGS -c \"${XMLTOMAN_EXECUTABLE} gsad.8.xml > gsad.8\;\"
+    ARGS -c \"${XMLTOMAN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/gsad.8.xml > ${CMAKE_CURRENT_BINARY_DIR}/gsad.8\;\"
     DEPENDS gsad.8.xml)
 else (XMLTOMAN_EXECUTABLE)
   message (STATUS "WARNING: xmltoman is required to generate manpage.")
   add_custom_command (OUTPUT gsad.8
-    COMMAND echo "[Error: xmltoman required to see manpage here]" > gsad.8)
+    COMMAND echo "[Error: xmltoman required to see manpage here]" > ${CMAKE_CURRENT_BINARY_DIR}/gsad.8)
 endif (XMLTOMAN_EXECUTABLE)
 
 if (XMLMANTOHTML_EXECUTABLE)
@@ -90,7 +90,7 @@ if (XMLMANTOHTML_EXECUTABLE)
 
   add_custom_command (OUTPUT gsad.html
     COMMAND sh
-    ARGS -c \"${XMLMANTOHTML_EXECUTABLE} gsad.8.xml > gsad.html\;\"
+    ARGS -c \"${XMLMANTOHTML_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/gsad.8.xml > ${CMAKE_CURRENT_BINARY_DIR}/gsad.html\;\"
     DEPENDS gsad.8.xml)
 else (XMLMANTOHTML_EXECUTABLE)
   message (STATUS "WARNING: xmlmantohtml is required for manpage in HTML docs.")
