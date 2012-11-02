@@ -1,3 +1,8 @@
+2012-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (html-create-note-form, html-create-override-form):
+	Added a clearifying hint what is meant with the Result UUID.
+
 2012-11-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CHANGES: Prepared for the next beta release.

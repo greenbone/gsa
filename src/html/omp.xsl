@@ -11709,7 +11709,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:when test="result/@id">
                   <label>
                     <input type="radio" name="note_result_id" value="{result/@id}"/>
-                    <xsl:value-of select="result/@id"/>
+                    Only the selected one (<xsl:value-of select="result/@id"/>)
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
@@ -12613,7 +12613,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <label>
                 <input type="radio" name="note_result_id" value="{result/@id}"/>
-                <xsl:value-of select="result/@id"/>
+                Only the selected one (<xsl:value-of select="result/@id"/>)
               </label>
             </td>
           </tr>
