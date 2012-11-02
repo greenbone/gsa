@@ -5159,29 +5159,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td colspan="3" valign="top">
                     <label>
                       <input type="radio" name="method" value="verinice Connector"/>
-                      verinice Connector
+                      verinice.PRO Connector
                     </label>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="150">verinice .PRO server IP</td>
+                  <td width="150">verinice.PRO URL</td>
                   <td>
-                    <input type="text" name="method_data:verinice_server_ip"
-                           size="30" maxlength="40"/>
+                    <input type="text" name="method_data:verinice_server_url"
+                           size="30" maxlength="256"/>
                   </td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="150">Verinice .PRO server Port</td>
-                  <td>
-                    <input type="text" name="method_data:verinice_server_port"
-                           size="30" maxlength="400" value="80"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td width="150">verinice .PRO server username</td>
+                  <td width="150">verinice.PRO Username</td>
                   <td>
                     <input type="text" name="method_data:verinice_server_username"
                            size="30" maxlength="40"/>
@@ -5189,7 +5181,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td width="150">verinice .PRO server password</td>
+                  <td width="150">verinice.PRO Password</td>
                   <td>
                     <input type="password" name="method_data:verinice_server_password"
                            size="30" maxlength="40"/>

@@ -1,3 +1,8 @@
+2012-11-02  Andre Heinecke <aheinecke@intevation.de>
+
+	* src/html/omp.xsl (html-create-alert-form): Replace verinice.PRO ip /
+	port by url. Consistently use the name verinice.PRO.
+
 2012-11-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-create-note-form, html-create-override-form):
