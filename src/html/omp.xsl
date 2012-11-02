@@ -10780,7 +10780,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="title"/>
         </xsl:when>
         <xsl:otherwise>
-          Not Available
+          N/A
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -10790,7 +10790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:date (../modification_time)"/>
         </xsl:when>
         <xsl:otherwise>
-          Not Available
+          N/A
         </xsl:otherwise>
       </xsl:choose>
     </td>
