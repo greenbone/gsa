@@ -1,3 +1,26 @@
+gsa 4.0+beta4 (2012-11-XX)
+
+This is the fourth beta version of the upcoming 4.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release adds support for new features in OpenVAS Manager 4.0+beta4 like
+the automatic filtering of false positives, multiple alerts and a wizard for
+new users.
+
+Many thanks to everyone who has contributed to this release:
+Andre Heinecke, Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 4.0+beta3:
+* Support for Auto-FP feature and trusted vendor updates has been added.
+* Support for multiple alerts per task has been added.
+* Support for a wizard for new users has been added.
+* Support for filter management has been added.
+* Help texts have been improved.
+* Powerfilters are now available in more places.
+* CPE Management has been improved.
+
+
 gsa 4.0+beta3 (2012-05-04)
 
 This is the third beta version of the upcoming 4.0 release of the Greenbone
