@@ -1,3 +1,9 @@
+2012-11-05  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 4.0+beta4 release.
+
+	* CHANGES: Updated.
+
 2012-11-02  Andre Heinecke <aheinecke@intevation.de>
 
 	* src/html/omp.xsl (html-create-alert-form): Replace verinice.PRO ip /
