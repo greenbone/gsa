@@ -2744,6 +2744,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </td>
         </tr>
+        <tr>
+          <td>
+            Overrides:
+          </td>
+          <td>
+            <a href="/omp?cmd=get_overrides&amp;filter=task_id={task/@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Overrides on Task {task/name}">
+              <xsl:value-of select="count (../get_overrides_response/override)"/>
+            </a>
+          </td>
+        </tr>
       </table>
       <xsl:choose>
         <xsl:when test="task/target/@id=''">
@@ -2857,46 +2868,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="report">
               <xsl:with-param name="container" select="$container"/>
               <xsl:with-param name="observed" select="$observed"/>
-            </xsl:call-template>
-          </xsl:for-each>
-        </table>
-      </div>
-    </div>
-  </div>
-  <br/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      Overrides on Results of "<xsl:value-of select="task/name"/>"
-      <a href="/help/reports.html?token={/envelope/token}#overrides" title="Help: Reports (Overrides)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-         title="Refresh">
-        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="overrides">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>NVT</td>
-            <td>From</td>
-            <td>To</td>
-            <td>Text</td>
-            <td>Active</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:variable name="task_id"><xsl:value-of select="task/@id"/></xsl:variable>
-          <xsl:for-each select="../get_overrides_response/override">
-            <xsl:call-template name="override">
-              <xsl:with-param name="next">get_tasks</xsl:with-param>
-              <xsl:with-param name="params-get">&amp;task_id=<xsl:value-of select="$task_id"/>&amp;overrides=<xsl:value-of select="$apply-overrides"/></xsl:with-param>
-              <xsl:with-param name="params">
-                <input type="hidden" name="task_id" value="{$task_id}"/>
-                <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </table>
@@ -11387,6 +11358,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </td>
     </tr>
+    <tr>
+      <td>Overrides:</td>
+      <td>
+        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="Overrides on NVT {name}">
+          <xsl:value-of select="count (../../get_overrides_response/override)"/>
+        </a>
+      </td>
+    </tr>
   </table>
 
   <h1>Description</h1>
@@ -11417,24 +11397,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:apply-templates
         select="commands_response/get_nvts_response/nvt"/>
-      <xsl:choose>
-        <xsl:when test="count(commands_response/get_overrides_response/override) = 0">
-          <h1>Overrides: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Overrides</h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-            <tr class="gbntablehead2">
-              <td>New Threat</td>
-              <td>Text</td>
-              <td width="100">Actions</td>
-            </tr>
-            <xsl:apply-templates
-              select="commands_response/get_overrides_response/override"
-              mode="nvt-details"/>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
     </div>
   </div>
 </xsl:template>
@@ -13081,77 +13043,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:call-template name="delete-icon">
-        <xsl:with-param name="type" select="'override'"/>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Override'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="next" value="{$next}"/>
-          <xsl:copy-of select="$params"/>
-        </xsl:with-param>
+        <xsl:with-param name="params" select="$params-get"/>
+        <xsl:with-param name="next" select="$next"/>
       </xsl:call-template>
-      <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
-         title="Override Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
-         title="Edit Override"
-         style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
-      <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;next={$next}{$params-get}&amp;token={/envelope/token}"
-         title="Export Override"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
-      </a>
-    </td>
-  </tr>
-</xsl:template>
-
-<xsl:template match="override" mode="nvt-details">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
-    <td>
-      <xsl:value-of select="new_threat"/>
-    </td>
-    <td>
-      <xsl:if test="orphan = 1"><b>Orphan</b><br/></xsl:if>
-      <xsl:choose>
-        <xsl:when test="text/@excerpt = 1">
-          <xsl:value-of select="text/text()"/>...
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="text/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:call-template name="delete-icon">
-        <xsl:with-param name="type" select="'override'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="params">
-          <input type="hidden" name="next" value="get_nvts"/>
-          <input type="hidden" name="oid" value="{../../get_nvts_response/nvt/@oid}"/>
-        </xsl:with-param>
-      </xsl:call-template>
-      <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
-         title="Override Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_nvts&amp;oid={../../get_nvts_response/nvt/@oid}&amp;token={/envelope/token}"
-         title="Edit Override"
-         style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
-      <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
-         title="Export Override"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
-      </a>
     </td>
   </tr>
 </xsl:template>
@@ -13162,20 +13059,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Override Details
-      <a href="/help/overrides.html?token={/envelope/token}#overridedetails"
-        title="Help: Overrides (Override Details)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_override&amp;token={/envelope/token}"
-         title="Edit Override"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
-      </a>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Override'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>NVT Name:</b></td>
@@ -13208,14 +13097,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </td>
-        </tr>
-        <tr>
-          <td>Created:</td>
-          <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
-        </tr>
-        <tr>
-          <td>Last Modified:</td>
-          <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
         </tr>
         <tr>
           <td>Active:</td>
@@ -13343,31 +13224,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-overrides-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Overrides
-      <a href="/help/overrides.html?token={/envelope/token}"
-         title="Help: Overrides">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="overrides">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>NVT</td>
-            <td>From</td>
-            <td>To</td>
-            <td>Text</td>
-            <td>Active</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="override"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'override'"/>
+    <xsl:with-param name="cap-type" select="'Override'"/>
+    <xsl:with-param name="resources-summary" select="overrides"/>
+    <xsl:with-param name="resources" select="override"/>
+    <xsl:with-param name="count" select="count (override)"/>
+    <xsl:with-param name="filtered-count" select="override_count/filtered"/>
+    <xsl:with-param name="headings" select="'NVT|nvt From|from To|to Text|text Active|active'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="get_override">
@@ -13395,29 +13260,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_overrides">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_override_response"/>
-  <xsl:apply-templates select="commands_response/modify_override_response"/>
-  <xsl:choose>
-    <xsl:when test="commands_response/get_overrides_response/@status = '500'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">
-          Get Overrides
-        </xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="500"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="commands_response/get_overrides_response/@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- The for-each makes the get_overrides_response the current node. -->
-      <xsl:for-each select="commands_response/get_overrides_response">
-        <xsl:call-template name="html-overrides-table"/>
-      </xsl:for-each>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates select="delete_override_response"/>
+  <xsl:apply-templates select="create_override_response"/>
+  <!-- The for-each makes the get_overrides_response the current node. -->
+  <xsl:for-each select="get_overrides_response | commands_response/get_overrides_response">
+    <xsl:call-template name="html-overrides-table"/>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- END OVERRIDES MANAGEMENT -->

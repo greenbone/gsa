@@ -577,6 +577,7 @@ init_validator ()
                          "|(export_note)"
                          "|(export_notes)"
                          "|(export_override)"
+                         "|(export_overrides)"
                          "|(export_port_list)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
@@ -758,9 +759,9 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task|info)$");
+                         "^(agent|alert|config|filter|note|override|port_list|report|report_format|schedule|target|task|info)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|note|port_list|report|report_format|schedule|target|task|info|)$");
+                         "^(agent|alert|config|filter|note|override|port_list|report|report_format|schedule|target|task|info|)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
@@ -1795,6 +1796,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_override"))
     return export_override_omp (credentials, params, content_type,
                                 content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_overrides"))
+    return export_overrides_omp (credentials, params, content_type,
+                                 content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_port_list"))
     return export_port_list_omp (credentials, params, content_type,

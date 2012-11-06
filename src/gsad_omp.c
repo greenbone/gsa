@@ -110,6 +110,11 @@ static char *get_notes (credentials_t *, params_t *, const char *);
 
 static char *get_note (credentials_t *, params_t *, const char *, const char *);
 
+static char *get_overrides (credentials_t *, params_t *, const char *);
+
+static char *get_override (credentials_t *, params_t *, const char *,
+                           const char *);
+
 char *get_targets (credentials_t *, params_t *, const char *);
 
 char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
@@ -456,6 +461,12 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_notes") == 0)
     return get_notes (credentials, params, response);
+
+  if (strcmp (next, "get_override") == 0)
+    return get_override (credentials, params, NULL, response);
+
+  if (strcmp (next, "get_overrides") == 0)
+    return get_overrides (credentials, params, response);
 
   if (strcmp (next, "get_targets") == 0)
     return get_targets (credentials, params, response);
@@ -8683,6 +8694,27 @@ export_override_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Export a list of overrides.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Overrides XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_overrides_omp (credentials_t * credentials, params_t *params,
+                      enum content_type * content_type,
+                      char **content_disposition, gsize *content_length)
+{
+  return export_many ("override", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
+/**
  * @brief Export a port list.
  *
  * @param[in]   credentials          Username and password for authentication.
@@ -11171,76 +11203,15 @@ save_note_omp (credentials_t * credentials, params_t *params)
  * @brief Get all overrides, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_overrides (credentials_t *credentials, const char *commands)
+get_overrides (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the overrides. "
-                             "The list of overrides is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_overrides>");
-
-  /* Get the overrides. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_overrides"
-                            " sort_field=\"overrides_nvt_name,"
-                            " overrides.text\"/>"
-                            "</commands>",
-                            commands ? commands : "")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the overrides. "
-                           "The list of overrides is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the overrides. "
-                           "The list of overrides is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_overrides>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_many ("override", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -11253,26 +11224,36 @@ get_overrides (credentials_t *credentials, const char *commands)
 char *
 get_overrides_omp (credentials_t *credentials, params_t *params)
 {
-  return get_overrides (credentials, NULL);
+  return get_overrides (credentials, params, NULL);
 }
 
 /**
- * @brief Get an override, XSL transform the result.
+ * @brief Get a override, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  override_id  ID of override.
+ * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_override (credentials_t *credentials, const char *override_id,
-              const char *commands)
+get_override (credentials_t *credentials, params_t *params, const char *commands,
+              const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char *override_id;
+
+  override_id = params_value (params, "override_id");
+  if (override_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a override. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_overrides");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11291,6 +11272,9 @@ get_override (credentials_t *credentials, const char *override_id,
     }
 
   xml = g_string_new ("<get_override>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   /* Get the override. */
 
@@ -11336,14 +11320,14 @@ get_override (credentials_t *credentials, const char *override_id,
  * @brief Get an override, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  override_id  ID of override.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_override_omp (credentials_t *credentials, params_t *params)
 {
-  return get_override (credentials, params_value (params, "override_id"), NULL);
+  return get_override (credentials, params, NULL, NULL);
 }
 
 /**
@@ -11695,7 +11679,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
 /**
  * @brief Delete override, get next page, XSL transform the result.
  *
- * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
@@ -11703,133 +11687,7 @@ create_override_omp (credentials_t *credentials, params_t *params)
 char *
 delete_override_omp (credentials_t * credentials, params_t *params)
 {
-  const char *next, *override_id;
-
-  next = params_value (params, "next");
-  override_id = params_value (params, "override_id");
-
-  if ((next == NULL) || (override_id == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an override. "
-                         "The override remains intact. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_overrides");
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                                      override_id);
-      char *ret = get_report (credentials, params, extra, NULL, NULL, NULL,
-                              NULL);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_nvts") == 0)
-    {
-      gchar *extra;
-      char *ret;
-      const char *oid;
-
-      oid = params_value (params, "oid");
-
-      if (oid == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an override. "
-                             "The override remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_overrides");
-
-      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                               override_id);
-      ret = get_nvts (credentials, oid, extra);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_overrides") == 0)
-    {
-      gchar *extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                                      override_id);
-      char *ret = get_overrides (credentials, extra);
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      const char *task_id, *overrides;
-      gchar *extra;
-      char *ret;
-
-      task_id = params_value (params, "task_id");
-
-      overrides = params_value (params, "overrides");
-
-      if (task_id == NULL || overrides == NULL)
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an override. "
-                             "The override remains intact. "
-                             "Diagnostics: Required parameter was NULL.",
-                             "/omp?cmd=get_overrides");
-
-      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                               override_id);
-      ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL, extra,
-                       overrides ? strcmp (overrides, "0") : 0,
-                       NULL);
-
-      g_free (extra);
-      return ret;
-    }
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      gchar *extra;
-      char *ret;
-
-      extra = g_strdup_printf ("<delete_override override_id=\"%s\"/>",
-                               override_id);
-
-      if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, extra, NULL, NULL, NULL, NULL);
-      else
-        ret = get_result (credentials,
-                          params_value (params, "result_id"),
-                          params_value (params, "task_id"),
-                          params_value (params, "name"),
-                          params_value (params, "apply_overrides"),
-                          extra,
-                          params_value (params, "report_id"),
-                          params_value (params, "first_result"),
-                          params_value (params, "max_results"),
-                          params_value (params, "levels"),
-                          params_value (params, "search_phrase"),
-                          params_value (params, "autofp"),
-                          params_value (params, "show_closed_cves"),
-                          params_value (params, "notes"),
-                          params_value (params, "overrides"),
-                          params_value (params, "min_cvss_base"),
-                          params_value (params, "result_hosts_only"),
-                          params_value (params, "sort_field"),
-                          params_value (params, "sort_order"),
-                          NULL,
-                          NULL,
-                          NULL);
-
-      g_free (extra);
-      return ret;
-    }
-
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while deleting an override. "
-                       "The override remains intact. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  return delete_resource ("override", credentials, params, 0, NULL);
 }
 
 /**
@@ -11837,96 +11695,21 @@ delete_override_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (credentials_t * credentials, params_t *params)
+edit_override (credentials_t *credentials, params_t *params,
+               const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *override_id, *next;
-  int first_result, max_results;
+  const char *override_id;
 
   override_id = params_value (params, "override_id");
-  next = params_value (params, "next");
-  if (override_id == NULL || next == NULL)
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing an override. "
-                           "The override remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_overrides");
-    }
-
-  if (strcmp (next, "get_override")
-      && strcmp (next, "get_overrides")
-      && strcmp (next, "get_nvts")
-      && strcmp (next, "get_report")
-      && strcmp (next, "get_result")
-      && strcmp (next, "get_tasks"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving an override. "
-                         "The override remains the same. "
-                         "Diagnostics: next must name a valid page.",
-                         "/omp?cmd=get_overrides");
-
-  if ((strcmp (next, "get_nvts") == 0)
-      && (params_value (params, "oid") == NULL))
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing an override. "
-                           "The override remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_overrides");
-    }
-
-  if ((strcmp (next, "get_tasks") == 0)
-      && (params_value (params, "overrides") == NULL)
-      && (params_value (params, "task_id") == NULL))
-    {
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing an override. "
-                           "The override remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_overrides");
-    }
-
-  if ((strcmp (next, "get_result") == 0)
-      || (strcmp (next, "get_report") == 0))
-    {
-      REQUIRE_PARAM ("report_id", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("first_result", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("max_results", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("sort_field", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("sort_order", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("levels", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("autofp", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("show_closed_cves", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("notes", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("overrides", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("result_hosts_only", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("search_phrase", "/omp?cmd=get_overrides");
-      REQUIRE_PARAM ("min_cvss_base", "/omp?cmd=get_overrides");
-
-      if (sscanf (params_value (params, "first_result"), "%u", &first_result)
-          != 1)
-        first_result = 1;
-
-      if (sscanf (params_value (params, "max_results"), "%u", &max_results) != 1)
-        max_results = RESULTS_PER_PAGE;
-    }
-  else
-    {
-      first_result = 0;
-      max_results = 0;
-    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -11964,54 +11747,10 @@ edit_override_omp (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
 
-  xml_string_append (xml,
-                     "<edit_override>"
-                     /* Page that follows. */
-                     "<next>%s</next>"
-                     /* Parameters for get_report. */
-                     "<report id=\"%s\"/>"
-                     "<delta><report id=\"%s\"/></delta>"
-                     "<first_result>%i</first_result>"
-                     "<max_results>%i</max_results>"
-                     "<sort_field>%s</sort_field>"
-                     "<sort_order>%s</sort_order>"
-                     "<levels>%s</levels>"
-                     "<autofp>%s</autofp>"
-                     "<show_closed_cves>%s</show_closed_cves>"
-                     "<notes>%s</notes>"
-                     "<overrides>%s</overrides>"
-                     "<result_hosts_only>%s</result_hosts_only>"
-                     "<search_phrase>%s</search_phrase>"
-                     "<min_cvss_base>%s</min_cvss_base>"
-                     "<delta_states>%s</delta_states>"
-                     /* Parameters for get_nvts. */
-                     "<nvt id=\"%s\"/>"
-                     /* Parameters for get_result. */
-                     "<result id=\"%s\"/>"
-                     /* Parameters for get_tasks. */
-                     "<task id=\"%s\"><name>%s</name></task>",
-                     next,
-                     params_value (params, "report_id"),
-                     params_value (params, "delta_report_id"),
-                     first_result,
-                     max_results,
-                     params_value (params, "sort_field"),
-                     params_value (params, "sort_order"),
-                     params_value (params, "levels"),
-                     params_value (params, "autofp"),
-                     params_value (params, "show_closed_cves"),
-                     params_value (params, "notes"),
-                     params_value (params, "overrides"),
-                     params_value (params, "result_hosts_only"),
-                     params_value (params, "search_phrase"),
-                     params_value (params, "min_cvss_base"),
-                     params_value (params, "delta_states"),
-                     params_value (params, "oid"),
-                     params_value (params, "result_id"),
-                     params_value (params, "task_id"),
-                     params_value (params, "name")
-                      ? params_value (params, "name")
-                      : "");
+  xml_string_append (xml, "<edit_override>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
 
   if (read_string (&session, &xml))
     {
@@ -12033,25 +11772,35 @@ edit_override_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Edit override, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_override_omp (credentials_t *credentials, params_t *params)
+{
+  return edit_override (credentials, params, NULL);
+}
+
+/**
  * @brief Save override, get next page, XSL transform the result.
  *
  * @param[in]  credentials     Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  params          Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_override_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *modify_override;
-
+  gchar *response;
+  entity_t entity;
   const char *override_id, *text, *hosts, *port, *threat, *new_threat;
-  const char *override_task_id, *override_result_id, *next, *report_id;
-  unsigned int first_result, max_results;
-  const char *sort_field, *sort_order, *levels, *autofp, *notes, *overrides;
-  const char *result_hosts_only, *search_phrase, *min_cvss_base;
-  const char *oid, *task_id, *task_name, *result_id, *active, *days;
-  const char *show_closed_cves;
+  const char *override_task_id, *override_result_id, *active, *days;
+  char *ret;
 
   override_id = params_value (params, "override_id");
 
@@ -12077,272 +11826,97 @@ save_override_omp (credentials_t * credentials, params_t *params)
   new_threat = params_value (params, "new_threat");
   override_task_id = params_value (params, "override_task_id");
   override_result_id = params_value (params, "override_result_id");
-  next = params_value (params, "next");
-  report_id = params_value (params, "report_id");
 
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-  levels = params_value (params, "levels");
-
-  autofp = params_value (params, "autofp");
-  if (autofp == NULL)
-    params_given (params, "autofp") || (autofp = "0");
-
-  show_closed_cves = params_value (params, "show_closed_cves");
-  if (show_closed_cves == NULL)
-    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
-
-  notes = params_value (params, "notes");
-  if (notes == NULL)
-    params_given (params, "notes") || (notes = "0");
-
-  overrides = params_value (params, "overrides");
-  if (overrides == NULL)
-    params_given (params, "overrides") || (overrides = "0");
-
-  result_hosts_only = params_value (params, "result_hosts_only");
-  if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only") || (result_hosts_only = "0");
-
-  search_phrase = params_value (params, "search_phrase");
-  if (search_phrase == NULL)
-    params_given (params, "search_phrase") || (search_phrase = "");
-
-  min_cvss_base = NULL;
-  oid = params_value (params, "oid");
-  task_id = params_value (params, "task_id");
-  task_name = params_value (params, "name");
-  result_id = params_value (params, "result_id");
   active = params_value (params, "active");
+  days = params_value (params, "days");
 
-  if (next == NULL || override_task_id == NULL || override_result_id == NULL
-      || new_threat == NULL || active == NULL)
+  if (override_task_id == NULL || override_result_id == NULL || active == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving an override. "
+                         "An internal error occurred while saving a override. "
                          "The override remains the same. "
                          "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_overrides");
-
-  if (strcmp (next, "get_override")
-      && strcmp (next, "get_overrides")
-      && strcmp (next, "get_nvts")
-      && strcmp (next, "get_report")
-      && strcmp (next, "get_result")
-      && strcmp (next, "get_tasks"))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving an override. "
-                         "The override remains the same. "
-                         "Diagnostics: next must name a valid page.",
                          "/omp?cmd=get_overrides");
 
   if (override_id == NULL
       || text == NULL
       || hosts == NULL
       || port == NULL
-      || threat == NULL)
+      || threat == NULL
+      || new_threat == NULL
+      || days == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving an override. "
+                         "An internal error occurred while saving a override. "
                          "The override remains the same. "
                          "Diagnostics: Syntax error in required parameter.",
                          "/omp?cmd=get_overrides");
 
-  first_result = 0;
-  max_results = 0;
-
-  if ((strcmp (next, "get_report") == 0)
-      || (strcmp (next, "get_result") == 0))
+  response = NULL;
+  entity = NULL;
+  switch (omp (credentials,
+               &response,
+               &entity,
+               "<modify_override override_id=\"%s\">"
+               "<active>%s</active>"
+               "<hosts>%s</hosts>"
+               "<port>%s</port>"
+               "<threat>%s</threat>"
+               "<new_threat>%s</new_threat>"
+               "<text>%s</text>"
+               "<task id=\"%s\"/>"
+               "<result id=\"%s\"/>"
+               "</modify_override>",
+               override_id,
+               strcmp (active, "1")
+                ? active
+                : (days ? days : "-1"),
+               hosts ? hosts : "",
+               port ? port : "",
+               threat ? threat : "",
+               new_threat,
+               text ? text : "",
+               override_task_id,
+               override_result_id))
     {
-      if (params_value (params, "first_result") == NULL
-          || sscanf (params_value (params, "first_result"), "%u", &first_result)
-             != 1)
-        first_result = 1;
-
-      if (params_given (params, "min_cvss_base"))
-        {
-          if (params_valid (params, "min_cvss_base"))
-            {
-              if (params_value (params, "apply_min_cvss_base")
-                  && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
-                min_cvss_base = params_value (params, "min_cvss_base");
-              else
-                min_cvss_base = "";
-            }
-        }
-      else
-        min_cvss_base = "";
-
-      if (report_id == NULL
-          || sort_field == NULL
-          || sort_order == NULL
-          || levels == NULL
-          || autofp == NULL
-          || show_closed_cves == NULL
-          || notes == NULL
-          || overrides == NULL
-          || result_hosts_only == NULL
-          || search_phrase == NULL
-          || min_cvss_base == NULL)
+      case 0:
+      case -1:
+        break;
+      case 1:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving an override. "
+                             "An internal error occurred while saving a override. "
                              "The override remains the same. "
-                             "Diagnostics: Syntax error in required parameter.",
+                             "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_overrides");
-
-      if (strcmp (next, "get_report") == 0)
-        {
-          if (params_value (params, "max_results") == NULL
-              || sscanf (params_value (params, "max_results"), "%u", &max_results)
-                 != 1)
-            max_results = 1;
-        }
-      else
-        {
-          if (params_value (params, "max_results") == NULL
-              || sscanf (params_value (params, "max_results"), "%u", &max_results)
-                 != 1)
-            max_results = RESULTS_PER_PAGE;
-
-          if (task_id == NULL
-              || result_id == NULL
-              || task_name == NULL)
-            return
-              gsad_message (credentials,
-                            "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while saving an override. "
-                            "The override remains the same. "
-                            "Diagnostics: Syntax error in required parameter.",
-                            "/omp?cmd=get_overrides");
-        }
-
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      if (overrides == NULL
-          || task_id == NULL)
+      case 2:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving an override. "
-                             "The override remains the same. "
-                             "Diagnostics: Syntax error in required parameter.",
+                             "An internal error occurred while saving a override. "
+                             "It is unclear whether the override has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_overrides");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a override. "
+                             "It is unclear whether the override has been saved or not. "
+                             "Diagnostics: Internal Error.",
                              "/omp?cmd=get_overrides");
     }
 
-  days = params_value (params, "days");
-
-  modify_override = g_strdup_printf ("<modify_override override_id=\"%s\">"
-                                     "<active>%s</active>"
-                                     "<hosts>%s</hosts>"
-                                     "<port>%s</port>"
-                                     "<threat>%s</threat>"
-                                     "<new_threat>%s</new_threat>"
-                                     "<text>%s</text>"
-                                     "<task id=\"%s\"/>"
-                                     "<result id=\"%s\"/>"
-                                     "</modify_override>",
-                                     override_id,
-                                     strcmp (active, "1")
-                                      ? active
-                                      : (days ? days : "-1"),
-                                     hosts ? hosts : "",
-                                     port ? port : "",
-                                     threat ? threat : "",
-                                     new_threat,
-                                     text ? text : "",
-                                     override_task_id,
-                                     override_result_id);
-
-  if (strcmp (next, "get_nvts") == 0)
+  if (omp_success (entity))
     {
-      char *ret;
-
-      if (oid == NULL)
-        {
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while saving an override. "
-                               "The override remains the same. "
-                               "Diagnostics: Required parameter was NULL.",
-                               "/omp?cmd=get_overrides");
-        }
-
-      ret = get_nvts (credentials, oid, modify_override);
-      g_free (modify_override);
-      return ret;
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_overrides (credentials, params, response);
     }
+  else
+    ret = edit_override (credentials, params, response);
 
-  if (strcmp (next, "get_override") == 0)
-    {
-      char *ret = get_override (credentials, override_id, modify_override);
-      g_free (modify_override);
-      return ret;
-    }
-
-  if (strcmp (next, "get_overrides") == 0)
-    {
-      char *ret = get_overrides (credentials, modify_override);
-      g_free (modify_override);
-      return ret;
-    }
-
-  if (strcmp (next, "get_result") == 0)
-    {
-      char *ret;
-
-      if (params_value (params, "delta_report_id"))
-        ret = get_report (credentials, params, modify_override, NULL, NULL,
-                          NULL, NULL);
-      else
-        {
-          gchar *first, *max;
-
-          first = g_strdup_printf ("%u", first_result);
-          max = g_strdup_printf ("%u", max_results);
-
-          ret = get_result (credentials, result_id, task_id, task_name,
-                            overrides, modify_override, report_id,
-                            first, max, levels, search_phrase, autofp,
-                            show_closed_cves, notes, overrides, min_cvss_base,
-                            result_hosts_only, sort_field, sort_order, NULL,
-                            NULL, NULL);
-
-          g_free (first);
-          g_free (max);
-        }
-
-      g_free (modify_override);
-      return ret;
-    }
-
-  if (strcmp (next, "get_tasks") == 0)
-    {
-      char *ret = get_tasks (credentials, params, task_id, NULL, NULL, NULL,
-                             modify_override,
-                             overrides ? strcmp (overrides, "0") : 0,
-                             NULL);
-      g_free (modify_override);
-      return ret;
-    }
-
-  if (strcmp (next, "get_report") == 0)
-    {
-      char *ret = get_report (credentials, params, modify_override, NULL, NULL,
-                              NULL, NULL);
-      g_free (modify_override);
-      return ret;
-    }
-
-  g_free (modify_override);
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving an override. "
-                       "The override remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  free_entity (entity);
+  g_free (response);
+  return ret;
 }
 
 /**

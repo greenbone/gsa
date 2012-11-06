@@ -1,3 +1,30 @@
+2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add filtering to overrides.
+
+	* src/gsad.c (init_validator): Add override to resource types.
+	Add export_overrides.
+	(exec_omp_get): Add export_overrides.
+
+	* src/gsad_omp.c (next_page): Add overrides commands.
+	(export_overrides_omp): New function.
+	(get_overrides, delete_override_omp, edit_override_omp): Switch to
+	generic function.  Adjust callers.
+	(get_override): Add extra_xml arg and override_id check.  Adjust
+	callers.
+	(edit_override): New function.
+	(save_override_omp): Use omp and next_page conveniences.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (html-report-table, nvt): Replace overrides section
+	with link to overrides.
+	(override): Use list-window-line-icons.
+	(override [nvt-details]): Remove.
+	(override [details]): Use details-header-icons and minor-details.
+	(html-overrides-table): Call list-window.
+	(get_overrides): Apply like the other commands.
+
 2012-11-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump to 4.0+beta5.
@@ -30,7 +57,7 @@
 
 	* src/html/omp.xsl (info/cpe): Change String for NULL from
 	"Not Available" to the shorter "N/A".
- 
+
 2012-11-01  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* INSTALL: Update reference system section and prerequisites, update
