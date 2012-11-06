@@ -12732,42 +12732,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
+      <xsl:variable name="fragment">
+        <xsl:choose>
+          <xsl:when test="/envelope/params/next = 'get_report'">
+            <xsl:value-of select="concat ('#result-', /envelope/params/report_result_id)"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <form action="{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_override"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
         <input type="hidden" name="override_id"
                value="{get_overrides_response/override/@id}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
-        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
 
         <!-- get_report params. -->
-        <input type="hidden" name="report_id" value="{report/@id}"/>
-        <input type="hidden" name="first_result" value="{first_result}"/>
-        <input type="hidden" name="max_results" value="{max_results}"/>
-        <input type="hidden" name="sort_field" value="{sort_field}"/>
-        <input type="hidden" name="sort_order" value="{sort_order}"/>
-        <input type="hidden" name="levels" value="{levels}"/>
-        <input type="hidden" name="notes" value="{notes}"/>
-        <input type="hidden" name="overrides" value="{overrides}"/>
-        <input type="hidden" name="result_hosts_only" value="{result_hosts_only}"/>
-        <input type="hidden" name="search_phrase" value="{search_phrase}"/>
-        <input type="hidden" name="min_cvss_base" value="{min_cvss_base}"/>
-        <input type="hidden" name="apply_min_cvss_base" value="{number (string-length (min_cvss_base) &gt; 0)}"/>
-        <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
-        <input type="hidden" name="delta_states" value="{delta_states}"/>
-        <input type="hidden" name="autofp" value="{autofp}"/>
-        <input type="hidden" name="show_closed_cves" value="{show_closed_cves}"/>
+        <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
+        <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
+        <input type="hidden" name="delta_report_id" value="{/envelope/params/delta_report_id}"/>
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
 
         <!-- get_nvts param. -->
-        <input type="hidden" name="oid" value="{nvt/@id}"/>
+        <input type="hidden" name="oid" value="{/envelope/params/oid}"/>
 
         <!-- get_tasks param. -->
-        <input type="hidden" name="task_id" value="{task/@id}"/>
+        <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
 
         <!-- get_result params. -->
-        <input type="hidden" name="name" value="{task/name}"/>
-        <input type="hidden" name="result_id" value="{result/@id}"/>
+        <input type="hidden" name="name" value="{/envelope/params/name}"/>
+        <input type="hidden" name="result_id" value="{/envelope/params/result_id}"/>
+        <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+        <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
 
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>

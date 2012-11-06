@@ -1,5 +1,12 @@
 2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-override-form): Add fragment to
+	save_override form action so that position stays on result.  Add
+	filter params.  Reduce the number of pass-through params, getting them
+	from the envelope instead of the current context.
+
+2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add Overrides subpages.
 	(new_override.html, override_details.html): New templates.
 	(overrides.html): Add list icon link.  Match to new style.
