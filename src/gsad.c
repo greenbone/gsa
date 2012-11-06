@@ -547,6 +547,7 @@ init_validator ()
                          "|(delete_trash_filter)"
                          "|(delete_trash_lsc_credential)"
                          "|(delete_trash_note)"
+                         "|(delete_trash_override)"
                          "|(delete_trash_port_list)"
                          "|(delete_trash_report_format)"
                          "|(delete_trash_schedule)"
@@ -1545,6 +1546,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_filter)
   ELSE (delete_trash_lsc_credential)
   ELSE (delete_trash_note)
+  ELSE (delete_trash_override)
   ELSE (delete_trash_port_list)
   ELSE (delete_trash_report_format)
   ELSE (delete_trash_schedule)

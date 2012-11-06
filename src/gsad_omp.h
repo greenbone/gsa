@@ -159,6 +159,7 @@ char * get_override_omp (credentials_t *, params_t *);
 char * new_override_omp (credentials_t *, params_t *);
 char * create_override_omp (credentials_t *, params_t *);
 char * delete_override_omp (credentials_t *, params_t *);
+char * delete_trash_override_omp (credentials_t *, params_t *);
 char * edit_override_omp (credentials_t *, params_t *);
 char * save_override_omp (credentials_t *, params_t *);
 char * export_override_omp (credentials_t *, params_t *, enum content_type *,

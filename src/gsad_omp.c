@@ -11691,6 +11691,20 @@ delete_override_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Delete a override, get all overrides, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_override_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("override", credentials, params, 1, get_trash);
+}
+
+/**
  * @brief Edit override, get next page, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -14089,6 +14103,42 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
                                "The current list of notes is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_notes");
+        }
+    }
+
+  /* Get the overrides. */
+
+  if (command_enabled (credentials, "GET_OVERRIDES"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_overrides"
+                                " trash=\"1\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting overrides list. "
+                               "The current list of overrides is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting overrides list. "
+                               "The current list of overrides is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_overrides");
         }
     }
 

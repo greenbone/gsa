@@ -701,11 +701,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_nvts/gsad_msg"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_override/commands_response/modify_override_response"
+        <xsl:apply-templates select="get_override/modify_override_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_overrides/commands_response/delete_override_response"
+        <xsl:apply-templates select="get_overrides/delete_override_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_overrides/commands_response/modify_note_response"
+        <xsl:apply-templates select="get_overrides/modify_note_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_overrides/modify_override_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_override/commands_response/modify_override_response"
                              mode="response-indicator"/>
@@ -733,6 +735,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/modify_note_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_report/modify_override_response"
+                             mode="response-indicator"/>
 <!--
         <xsl:apply-templates select="get_report/get_reports_response"
                              mode="response-indicator"/>
@@ -759,7 +763,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/delete_note_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_result/commands_response/delete_override_response"
+        <xsl:apply-templates select="get_result/commands_response/create_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_result/create_override_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_result/delete_override_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_result/commands_response/modify_note_response"
                              mode="response-indicator"/>

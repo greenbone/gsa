@@ -1,5 +1,30 @@
 2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add trashcan feature to overrides.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add delete_trash_override.
+
+	* src/gsad_omp.c (next_page): Add get_result case.
+	(get_report_page): New function.
+	(get_result): Add extra_xml arg.  Update callers.
+	(get_result_page): New function.  Suitable for delete_resource callback.
+	(delete_override_omp): Pick callback according to next param.
+	(delete_trash_override_omp): New function.
+	(get_trash): Get trash overrides too.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-logo): Update indicator paths and add
+	missing cases.
+
+	* src/html/omp.xsl (override [trash], html-overrides-trash-table): New
+	templates.
+	(override-detailed): Replace delete icon with trashcan.  Add clone icon.
+	Update icon and Report links.
+	(get_trash): Add overrides.
+
+2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add filtering to overrides.
 
 	* src/gsad.c (init_validator): Add override to resource types.
