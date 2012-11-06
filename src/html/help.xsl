@@ -2205,6 +2205,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="note_details.html?token={/envelope/token}">Note Details</a></li>
               </ul>
             <li> <a href="overrides.html?token={/envelope/token}">Overrides</a></li>
+              <ul>
+                <li> <a href="new_override.html?token={/envelope/token}">New Override</a></li>
+                <li> <a href="override_details.html?token={/envelope/token}">Override Details</a></li>
+              </ul>
           </ul>
           <li> Asset Management</li>
           <ul>
@@ -3384,6 +3388,100 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="new_override.html">
+  <div class="gb_window_part_center">Help: New Override
+    <a href="/omp?cmd=new_override&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_OVERRIDE'"/>
+      </xsl:call-template>
+
+      <h1>New Override</h1>
+      <p>
+       For creating a new override this dialog offers the following entries.
+       Below the entries are details of the result that may be associated with
+       the override.
+       Hit the button "Create Override" to submit the new override.
+       The previous page will be updated.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Hosts</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Port</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Threat</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>New Threat</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Task</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="odd">
+          <td>Result</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>Radio button</td>
+          <td></td>
+        </tr>
+        <tr class="even">
+          <td>Text</td>
+          <td>yes</td>
+          <td>600</td>
+          <td>Free form text</td>
+          <td>This issue will go away when we switch to GNU/Hurd.</td>
+        </tr>
+      </table>
+
+      <h4>Overrides</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Overrides" title="Overrides"/>
+       will switch to the overrides page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="new_target.html">
   <div class="gb_window_part_center">Help: New Target
     <a href="/omp?cmd=new_target&amp;max=-2&amp;token={/envelope/token}">
@@ -3956,11 +4054,71 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="overrides.html">
-  <div class="gb_window_part_center">Help: Overrides</div>
+<xsl:template mode="help" match="override_details.html">
+  <div class="gb_window_part_center">Help: Override Details
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_OVERRIDES'"/>
+      </xsl:call-template>
+
+      <h1>Override Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#override">Override</a>.
+        This includes the NVT, creation time, modification time,
+        all constraints on the override and the full text of the override.
+      </p>
+      <p>
+       Clicking on the NVT name will go to the NVT Details page.
+      </p>
+
+      <h4>New Override</h4>
+      <p>
+        To create a new override click the
+        new icon <img src="/img/new.png" alt="New Override" title="New Override" /> which
+        goes to the <a href="new_override.html?token={/envelope/token}">New Override</a>
+        page.
+      </p>
+
+      <h4>Overrides</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Overrides" title="Overrides"/>
+       will switch to the overrides page.
+      </p>
+
+      <h4>Edit Override</h4>
+      <p>
+       Pressing the "Edit Override" icon
+       <img src="/img/edit.png" alt="Edit Override" title="Edit Override"/>
+       will switch to an overview of the configuration for this override and
+       allows editing the override's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the override as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="overrides.html">
+  <div class="gb_window_part_center">Help: Overrides
+    <a href="/omp?cmd=get_overrides&amp;token={/envelope/token}"
+       title="Overrides" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Overrides"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4005,117 +4163,31 @@ Public License instead of this License.
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Delete Override</h4>
+      <h3>New Override</h3>
       <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete" /> will
-       remove the override immediately.  The list of overrides will be updated.
+        To create a new override click the
+        new icon <img src="/img/new.png" alt="New Override" title="New Override" /> which
+        goes to the <a href="new_override.html?token={/envelope/token}">New Override</a>
+        page.
       </p>
 
-      <h4>Override Details</h4>
+      <h3>Exporting</h3>
       <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show the  <a href="#overridedetails">Override Details</a> page.
-       This page has full details of the override.
+        Export the current list of overrides as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <h4>Edit Override</h4>
-      <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will show the <a href="#editnote">Edit Override</a> page, which allows modification
-       of the override.
-      </p>
+      <xsl:call-template name="filtering"/>
 
-      <a name="newoverride"></a>
-      <h2>New Override</h2>
-      <p>
-       For creating a new override this dialog offers the following entries.
-       Below the entries are details of the result that may be associated with
-       the override.
-       Hit the button "Create Override" to submit the new override.
-       The previous page will be updated.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Hosts</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td>Any, host1</td>
-        </tr>
-        <tr class="even">
-          <td>Port</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td>Any, http (80/tcp)</td>
-        </tr>
-        <tr class="odd">
-          <td>Threat</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td>Any, Low</td>
-        </tr>
-        <tr class="even">
-          <td>New Threat</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Choice</td>
-          <td>False Positive, Medium</td>
-        </tr>
-        <tr class="odd">
-          <td>Task</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td>Any, Building A</td>
-        </tr>
-        <tr class="odd">
-          <td>Result</td>
-          <td>yes</td>
-          <td>--</td>
-          <td>Radio button</td>
-          <td>Any, UUID</td>
-        </tr>
-        <tr class="odd">
-          <td>Text</td>
-          <td>yes</td>
-          <td>600</td>
-          <td>Free form text</td>
-          <td>This specific version is needed and patched. In intranet: Patched System 1-42.</td>
-        </tr>
-      </table>
-
-      <a name="overridedetails"></a>
-      <h2>Override Details</h2>
-      <p>
-       A page that provides detailed information about an override.
-       This includes the NVT, creation time, modification time,
-       all application rules of the override, the full text of the override and
-       a preview of the appearance of the Override within a report.
-      </p>
-      <p>
-       Clicking on the NVT name will go to the NVT Details page.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Override'"/>
+      </xsl:call-template>
 
       <a name="editoverride"></a>
       <h2>Edit Override</h2>
       <p>
        A page for modifying a override.  The fields are like those on the
        <a href="#newoverride">New Override</a> page.
-       Note that the change of a field to "Any" cannot be reverted.
       </p>
       <p>
        Hit the button "Save Override" to submit the modification.

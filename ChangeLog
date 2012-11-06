@@ -1,5 +1,11 @@
 2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (contents.html): Add Overrides subpages.
+	(new_override.html, override_details.html): New templates.
+	(overrides.html): Add list icon link.  Match to new style.
+
+2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make the New Override page function "standalone", so it works from the
 	New Override icon on the Overrides page.
 
