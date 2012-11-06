@@ -1,15 +1,36 @@
 2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make the New Override page function "standalone", so it works from the
+	New Override icon on the Overrides page.
+
+	* src/gsad.c (init_validator): Add params for manual override field
+	entry.
+
+	* src/gsad_omp.c (new_override): New function.  Body from
+	new_override_omp.  Add extra_xml arg.  Remove param checks because there
+	might just the new style filter params.  Add a new case for the
+	standalone New Override page, which gets the tasks.
+	(new_override_omp): Call through to new_override.
+	(create_override_omp): Add param check gaurds.  Check if override params
+	have been entered in the manual params.  Call the CREATE_OVERRIDE
+	directly instead letting the handler for the next page do it.  Choose
+	next page more automatically.
+
+	* src/html/omp.xsl (html-create-override-form): Add new filter params to
+	form.  Get next from envelope so any caller can specify it.  Correct
+	name of task_id param.  Add missing apply_overrides param.  Add cases
+	for manual entry of fields, for standalone page.  Make Associated Result
+	sectional conditional.  Add list icon.  Update help link.
+	(new_override): Match create_override_response too.
+	(result-detailed): Add apply_overrides and next to New Override links.
+
+2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add trashcan feature to overrides.
 
 	* src/gsad.c (init_validator, exec_omp_post): Add delete_trash_override.
 
-	* src/gsad_omp.c (next_page): Add get_result case.
-	(get_report_page): New function.
-	(get_result): Add extra_xml arg.  Update callers.
-	(get_result_page): New function.  Suitable for delete_resource callback.
-	(delete_override_omp): Pick callback according to next param.
-	(delete_trash_override_omp): New function.
+	* src/gsad_omp.c (delete_trash_override_omp): New function.
 	(get_trash): Get trash overrides too.
 
 	* src/gsad_omp.h: Add header accordingly.
@@ -19,6 +40,7 @@
 
 	* src/html/omp.xsl (override [trash], html-overrides-trash-table): New
 	templates.
+	(override-detailed-delete-params): Remove.
 	(override-detailed): Replace delete icon with trashcan.  Add clone icon.
 	Update icon and Report links.
 	(get_trash): Add overrides.
