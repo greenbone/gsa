@@ -591,6 +591,7 @@ init_validator ()
                          "|(get_config_nvt)"
                          "|(get_configs)"
                          "|(get_feed)"
+                         "|(get_scap)"
                          "|(get_filter)"
                          "|(get_filters)"
                          "|(get_alert)"
@@ -656,6 +657,7 @@ init_validator ()
                          "|(start_task)"
                          "|(stop_task)"
                          "|(sync_feed)"
+                         "|(sync_scap)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(wizard)$");
@@ -1607,6 +1609,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (start_task)
   ELSE (stop_task)
   ELSE_OAP (sync_feed)
+  ELSE_OAP (sync_scap)
   ELSE (test_alert)
   else
     {
@@ -1895,6 +1898,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE_OAP (get_user)
   ELSE_OAP (get_users)
   ELSE_OAP (get_feed)
+  ELSE_OAP (get_scap)
   ELSE (get_config)
   ELSE (get_configs)
   ELSE (get_config_family)
