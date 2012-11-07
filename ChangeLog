@@ -1,16 +1,24 @@
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
 
+	* ChangeLog: Fixed formatting issues from last updates.
+
+2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/oap.xsl: Added describe_scap_response, html-scap-response and
 	sync_scap_response templates.
+
 	* src/html/help.xsl: Added scap_management.html template.
+
 	* src/html/gsad.xsl: Added SCAP Feed submenu.
 
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c (init_validator): Added entries for get_scap and sync_scap.
-	* src/gsad.c (exec_omp_post): Added entry for sync_scap.
-	* src/gsad.c (exec_omp_get): Added entry for get_scap.
+	(exec_omp_post): Added entry for sync_scap.
+	(exec_omp_get): Added entry for get_scap.
+
 	* src/gsad_oap.h: Added get_scap_oap and sync_scap_oap.
+
 	* src/gsad_oap.c: Added get_scap_oap and sync_scap_oap.
 
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
