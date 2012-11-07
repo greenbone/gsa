@@ -1,3 +1,8 @@
+2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/gsad.c (token_user): Fixed return value when a bad token is
+	provided.
+
 2012-11-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-override-form): Add fragment to

@@ -472,7 +472,7 @@ token_user (const gchar *token, user_t **user_return)
         }
     }
   else
-    ret = 2;
+    ret = 1;
   g_mutex_unlock (mutex);
   return ret;
 }
