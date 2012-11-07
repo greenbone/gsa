@@ -882,7 +882,7 @@ init_validator ()
  * @brief Set a content type from a format string.
  *
  * For example set the content type to GSAD_CONTENT_TYPE_APP_DEB when given
- * when given format "deb".
+ * format "deb".
  *
  * @param[out]  content_type  Return location for the newly set content type,
  *                            defaults to GSAD_CONTENT_TYPE_APP_HTML.
