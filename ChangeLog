@@ -1,5 +1,10 @@
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (content_type_from_format_string): Small documentation fix
+	in r14449.
+
+2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad.c (token_user): Fixed return value when a bad token is
 	provided.
 
