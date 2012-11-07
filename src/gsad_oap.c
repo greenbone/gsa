@@ -920,6 +920,76 @@ get_feed_oap (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Get descriptions of the scap feed(s) connected to the administrator.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_scap_oap(credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_scap_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the SCAP feed list. "
+                             "The current list of SCAP feeds is not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List SCAP Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_scap/>"
+                            "</commands>")
+      == -1)
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the SCAP feed list. "
+                           "The current list of SCAP feeds is not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting SCAP the feed. "
+                           "The current list of SCAP feeds is not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_scap_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
  * @brief Synchronize with an NVT feed and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
@@ -986,6 +1056,77 @@ sync_feed_oap (credentials_t * credentials, params_t *params)
 
   openvas_server_close (socket, session);
   tracef ("sync_feed_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
+ * @brief Synchronize with a SCAP feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_scap_oap (credentials_t * credentials, params_t *params)
+{
+  tracef ("In sync_scap_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the SCAP feed. "
+                             "SCAP Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize SCAP Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_scap/>"
+                            "<describe_scap/>"
+                            "</commands>")
+      == -1)
+    {
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the SCAP feed. "
+                           "SCAP Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the SCAP feed. "
+                           "SCAP Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("sync_scap_oap: got text: %s", text);
   fflush (stderr);
   return xsl_transform_oap (credentials, text);
 }

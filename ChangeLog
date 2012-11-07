@@ -1,5 +1,13 @@
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (init_validator): Added entries for get_scap and sync_scap.
+	* src/gsad.c (exec_omp_post): Added entry for sync_scap.
+	* src/gsad.c (exec_omp_get): Added entry for get_scap.
+	* src/gsad_oap.h: Added get_scap_oap and sync_scap_oap.
+	* src/gsad_oap.c: Added get_scap_oap and sync_scap_oap.
+
+2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad.c (content_type_from_format_string): Small documentation fix
 	in r14449.
 
