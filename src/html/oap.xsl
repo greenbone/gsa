@@ -661,6 +661,134 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END FEED MANAGEMENT -->
 
+<!-- BEGIN SCAP FEED MANAGEMENT -->
+
+<!-- DESCRIBE SCAP FEED RESPONSE    -->
+
+<xsl:template match="describe_scap_response">
+  <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">Describe SCAP Feed</xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-scap-form"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="html-scap-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">SCAP Feed Management
+      <a href="/help/scap_management.html?token={/envelope/token}"
+         title="Help: SCAP Feed Management">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/oap" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="sync_scap"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">Name</td>
+            <td>
+              <b><xsl:value-of select="scap/name"/></b><br/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125">Feed Version</td>
+            <td>
+              <xsl:value-of select="scap/version"/>
+            </td>
+          </tr>
+          <xsl:choose>
+            <xsl:when test="scap/currently_syncing">
+              <tr>
+                <td valign="top" width="125"></td>
+                <td>
+                  Synchronization
+                  <b>in progress</b>.  Started
+                  <b>
+                    <xsl:value-of select="scap/currently_syncing/timestamp"/>
+                  </b>
+                  by
+                  <b><xsl:value-of select="scap/currently_syncing/user"/></b>.
+                </td>
+              </tr>
+            </xsl:when>
+          </xsl:choose>
+          <tr>
+            <td valign="top" width="125">Description</td>
+            <td>
+              <xsl:value-of select="scap/description"/>
+            </td>
+          </tr>
+          <xsl:choose>
+            <xsl:when test="scap/sync_not_available">
+              <tr>
+                <td valign="top" width="125"></td>
+                <td>
+                  <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
+                  <xsl:choose>
+                    <xsl:when test="scap/sync_not_available/error/text()">
+                      The synchronization script returned the following error message: <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
+                    </xsl:when>
+                  </xsl:choose>
+                </td>
+              </tr>
+            </xsl:when>
+          </xsl:choose>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="scap/currently_syncing">
+                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now" disabled="disabled"/>
+                </xsl:when>
+                <xsl:when test="scap/sync_not_available">
+                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now" disabled="disabled"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="Synchronize with SCAP Feed now"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <p>
+                <a style="background-color: #ff6;" href="/help/scap_management.html?token={/envelope/token}#side_effects" title="Help: SCAP Feed Management">Learn about the side effects of SCAP Feed synchronization!</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<!--   SYNC_SCAP_RESPONSE -->
+
+<xsl:template match="sync_scap_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Synchronization with SCAP Feed</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- END SCAP MANAGEMENT -->
+
 <!-- BEGIN SETTINGS MANAGEMENT -->
 
 <xsl:template name="html-settings-table">

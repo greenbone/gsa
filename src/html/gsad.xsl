@@ -995,6 +995,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li class="pointy"></li>
       <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
       <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
+      <li><a href="/oap?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
       <li class="last"><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
      </ul>
     </li>

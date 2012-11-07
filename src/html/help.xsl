@@ -2252,6 +2252,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li> <a href="configure_users.html?token={/envelope/token}">Configure Users</a></li>
             <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
+            <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
             <li> <a href="settings.html?token={/envelope/token}">Settings</a></li>
           </ul>
           <li> Miscellaneous</li>
@@ -2430,6 +2431,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        At the end of the synchronization, some components of your installation will
        need to be reloaded to make full use of your updated NVT collection.  This also
+       usually takes a short time, but in some cases may take much longer.  During this
+       time the interface may be unresponsive.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="scap_management.html">
+  <div class="gb_window_part_center">Help: SCAP Feed Management</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <h1>SCAP Feed Management</h1>
+      <p>
+       The management of SCAP feeds is only accessible for users that own
+       the "Administrator" role.
+      </p>
+
+      <a name="scap_synchronization"></a>
+      <h2>Synchronization with a SCAP Feed</h2>
+      <p>
+       This dialog allows you synchronize your SCAP collection with a SCAP feed. It
+       shows the name of the SCAP Feed Service your installation is configured to use
+       and a short description of the tool which will be used to synchronize your SCAP
+       collection with the Feed Service. Hit the "Synchronize with Feed now" button to
+       start the synchronization.
+      </p>
+
+      <a name="side_effects"></a>
+      <h2>Side effects of an SCAP Synchronization</h2>
+      <p>
+       The synchronization with a SCAP Feed Service will usually take a short amount of
+       time.  However, in some cases this process can take much longer.
+       This depends on the time of your last synchronization and the number of changes in
+       the Feed Service. While synchronizing, the interface might be slow to react.
+      </p>
+      <p>
+       At the end of the synchronization, some components of your installation will
+       need to be reloaded to make full use of your updated SCAP collection.  This also
        usually takes a short time, but in some cases may take much longer.  During this
        time the interface may be unresponsive.
       </p>
