@@ -2797,6 +2797,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="next" value="get_task"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
           <input type="hidden" name="overrides" value="{apply_overrides}"/>
           <input type="file" name="xml_file" size="30"/>
@@ -3664,6 +3665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_report"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="next" value="{next}"/>
           <input type="hidden" name="task_id" value="{task/@id}"/>
           <input type="hidden" name="overrides" value="{apply_overrides}"/>
           <input type="file" name="xml_file" size="30"/>
@@ -4083,6 +4085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_tasks">
   <xsl:apply-templates select="run_wizard_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
+  <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="commands_response"/>
 </xsl:template>
 
@@ -17366,6 +17369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_report"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="next" value="get_tasks"/>
       <input type="hidden" name="overrides" value="{apply_overrides}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>

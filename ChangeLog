@@ -1,3 +1,25 @@
+2012-11-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use the next_page facility when importing reports.  In the process this
+	ensures that the observers are included in the Tasks page following the
+	import; thanks to Felix Wolfsteller for spotting this.
+
+	* src/html/omp.xsl (html-report-table, html-edit-task-form)
+	(new_task): Add next arg to create_report form.
+	(get_tasks): Match create_report_response.
+
+	* src/html/gsad.xsl (html-gsa-logo): Adjust create_report indicator
+	path.
+
+	* src/gsad_omp.c (next_page): Add get_tasks.
+	(create_report_omp): For the second case, let next_page handle the next
+	page, instead of doing the GET_TASKS OMP by hand.
+	(get_tasks_args): New function.  Body from get_tasks.  Adjust all
+	get_tasks callers to call this instead.
+	(get_tasks): Reduce params to match similar functions.  Call through to
+	get_tasks_args.
+	(get_tasks_omp): Just call get_tasks.
+
 2012-11-07  Hani Benhabiles <kroosec@gmail.com>
 
 	* ChangeLog: Fixed formatting issues from last updates.
