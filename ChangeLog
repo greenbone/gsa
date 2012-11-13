@@ -1,5 +1,10 @@
 2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (powerfilter.html): Add empty and N/A example and
+	syntax.
+
+2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (powerfilter.html): Add Date Format section.
 
 2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>

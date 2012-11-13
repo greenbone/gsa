@@ -4392,6 +4392,18 @@ Public License instead of this License.
           </ul>
         </li>
       </ul>
+      <ul>
+        <li>
+          title=
+          <ul>
+            <li>
+              Include any item where the column "Title" is empty or not
+              available.  When a value is not available the column contains
+              "N/A".
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <a name="syntax"></a>
       <h3>Syntax</h3>
@@ -4429,6 +4441,11 @@ Public License instead of this License.
           <li>modified -- date and time item was last modified</li>
           <li>created -- date and time item was created.</li>
         </ul>
+      </p>
+      <p>
+        The value of a column keyword may be empty, like "name=".  This matches
+        empty and not available entries.  When a value is not available the
+        column contains "N/A".
       </p>
 
       <h4>Special Keywords</h4>
