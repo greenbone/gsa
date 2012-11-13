@@ -1,5 +1,10 @@
 2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (powerfilter.html): Add example for exact term.
+	Clarify what the substring term example will match.
+
+2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (powerfilter.html): Add empty and N/A example and
 	syntax.
 

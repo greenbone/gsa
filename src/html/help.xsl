@@ -4271,7 +4271,8 @@ Public License instead of this License.
           <ul>
             <li>
               Include any item that has "127.0.0.1" anywhere in the text of
-              any column.
+              any column.  This matches 127.0.0.1 and 127.0.0.13, for
+              example.
             </li>
           </ul>
         </li>
@@ -4400,6 +4401,18 @@ Public License instead of this License.
               Include any item where the column "Title" is empty or not
               available.  When a value is not available the column contains
               "N/A".
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          =127.0.0.1
+          <ul>
+            <li>
+              Include any item that has "127.0.0.1" as the exact text of
+              any column.  This matches 127.0.0.1 but not 127.0.0.13, for
+              example.
             </li>
           </ul>
         </li>
