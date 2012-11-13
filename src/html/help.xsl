@@ -2217,6 +2217,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> SecInfo Management</li>
           <ul>
             <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
+            <li> <a href="cves.html?token={/envelope/token}">CVE</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
@@ -2306,27 +2307,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="cve.html">
-  <div class="gb_window_part_center">Help: CVE</div>
+  <div class="gb_window_part_center">Help: CVE Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
-      <a name="nvts"></a>
-      <h1>Common Vulnerabilities and Exposures (CVE)</h1>
-      <p>
-       Currently, there is one page in the web interface
-       about <a href="glossary.html?token={/envelope/token}#cve">CVE</a>.
-      </p>
-
-      <a name="cvedetails"></a>
+      <a name="cve"></a>
       <h2>CVE Details</h2>
       <p>
        A page that provides the original detailed information about an CVE.
        This includes the dates of publication and last modification, the
        description, CVSS information, list of vulnerable products and
        references.
-      </p>
+     </p>
     </div>
   </div>
 </xsl:template>
@@ -2676,6 +2670,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         (Source: http://cve.mitre.org).
+      </p>
+
+      <a name="cvss"></a>
+      <h2>CVSS</h2>
+      <p>
+        The Common Vulnerability Scoring System (CVSS) is an open framework to
+        characterize vulnerabilities.
+      </p>
+      <p>
+        (Source: http://www.first.org/cvss/cvss-guide).
       </p>
 
       <a name="alert"></a>
@@ -6160,5 +6164,126 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="cves.html">
+  <div class="gb_window_part_center">Help: CVE</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="cpe"></a>
+      <h1>CVE</h1>
+
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html?token={/envelope/token}#cve">CVEs</a> and summarizes
+        the essential aspects of each.
+      </p>
+      <br/>
+      <p>
+        <b>Note:</b> Most characteristics of a vulnerability (Vector, Complexity, Authentication,
+        Confidentiality Impact, Integrity Impact, Availability Impact) are extracted
+        from the CVE's
+        <a href="glossary.html?token={/envelope/token}#cvss">CVSS</a> Value.
+        If the CVSS is not available those fields are set to "N/A".
+      </p>
+
+      <p>
+        For a detailed description of the values in the CVSS based fields please
+        refer to the CVSS Guide http://www.first.org/cvss/cvss-guide
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>The CVE identifier.</td>
+        </tr>
+        <tr class="odd">
+          <td>Vector</td>
+          <td>The Access Vector. This metric reflects how the vulnerability is exploited.</td>
+        </tr>
+        <tr>
+          <td>Complexity</td>
+          <td>The Access Complexity. This metric measures the complexity of the attack required
+            to exploit the vulnerability once an attacker has gained access to the target system.</td>
+        </tr>
+        <tr class="odd">
+          <td>Authentication</td>
+          <td>This metric measures the number of times an attacker must authenticate
+            to a target in order to exploit a vulnerability.</td>
+        </tr>
+        <tr>
+          <td>Confidentiality Impact</td>
+          <td>This metric measures the impact on confidentiality
+            of a successfully exploited vulnerability.</td>
+        </tr>
+        <tr class="odd">
+          <td>Integrity Impact</td>
+          <td>This metric measures the impact to integrity
+            of a successfully exploited vulnerability.</td>
+        </tr>
+        <tr>
+          <td>Availability Impact</td>
+          <td>This metric measures the impact to availability
+            of a successfully exploited vulnerability.</td>
+        </tr>
+        <tr class="odd">
+          <td>Published</td>
+          <td>The date when this CVE was first published.</td>
+        </tr>
+        <tr>
+          <td>CVSS</td>
+          <td>The combined score calculated from the metrics of the vulnerability.
+            Ranging from 0 to 10. </td>
+        </tr>
+      </table>
+
+      <p>
+        <b>Tip:</b> Additionaly to the mentioned columns you can also use the
+        <a href="/help/powerfilter.html?token={/envelope/token}">Powerfilter</a>
+        to filter CVEs that affect specific products (CPE). The keyword for the filter is
+        "products".
+      </p>
+
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>CVE Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the  <a href="#cpedetails">CVE Details</a> page.  This page has
+        full details of the CVE, including all NVTs known to be addressing this CVE.
+      </p>
+
+      <a name="cvedetails"></a>
+      <h2>CVE Details</h2>
+      <p>
+        A page that provides the original detailed information about an CVE.
+       This includes the dates of publication and last modification, the
+       description, CVSS information, list of vulnerable products and
+       references.
+      </p>
+      <p>
+        Clicking on the CPE name will go to the CPE Details page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
 
 </xsl:stylesheet>

@@ -10777,6 +10777,111 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="info/cve">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_cve_lnk">
+          <xsl:with-param name="cve" select="../name"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="vector != ''">
+          <xsl:value-of select="vector"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="complexity != ''">
+          <xsl:value-of select="complexity"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="authentication != ''">
+          <xsl:value-of select="authentication"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="confidentiality_impact != ''">
+          <xsl:value-of select="confidentiality_impact"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="integrity_impact != ''">
+          <xsl:value-of select="integrity_impact"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="availability_impact != ''">
+          <xsl:value-of select="availability_impact"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../creation_time != ''">
+          <xsl:value-of select="gsa:date (../creation_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="cvss"/>
+    </td>
+    <td>
+      <center>
+        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+          title="CVE Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </center>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
@@ -10794,11 +10899,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="gsa_token"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;filter={../../filters/term}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;token={$gsa_token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:otherwise>
   </xsl:choose>
@@ -10894,16 +10999,141 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-cve-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">CVE
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/cve)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+      </xsl:call-template>
+      <a href="/help/cves.html?token={/envelope/token}"
+        title="Help: CVE">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>CVE</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="cpes">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Vector</xsl:with-param>
+                <xsl:with-param name="name">vector</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Complexity</xsl:with-param>
+                <xsl:with-param name="name">complexity</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Authentication</xsl:with-param>
+                <xsl:with-param name="name">authentication</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Confidentiality Impact</xsl:with-param>
+                <xsl:with-param name="name">confidentiality_impact</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Integrity Impact</xsl:with-param>
+                <xsl:with-param name="name">integrity_impact</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Availability Impact</xsl:with-param>
+                <xsl:with-param name="name">availability_impact</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Published</xsl:with-param>
+                <xsl:with-param name="name">published</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">CVSS</xsl:with-param>
+                <xsl:with-param name="name">cvss</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/cve"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="6">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="get_info_response">
   <xsl:choose>
     <xsl:when test="count (info/cpe) > 0 and details='1'">
       <xsl:call-template name="cpe-details"/>
     </xsl:when>
+    <xsl:when test="count (info/cve) > 0 and details='1'">
+      <xsl:call-template name="cve-details"/>
+    </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:call-template name="html-cpe-table"/>
     </xsl:when>
-    <xsl:when test="count (info/cve) > 0">
-      <xsl:call-template name="cve-details"/>
+    <xsl:when test="/envelope/params/info_type = 'CVE' or /envelope/params/info_type = 'cve'">
+      <xsl:call-template name="html-cve-table"/>
     </xsl:when>
     <xsl:when test="count (info/nvt) > 0">
       <div class="gb_window">
@@ -10974,86 +11204,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="gb_window_part_content">
     <div class="float_right">
-      <a href="/dialog/browse_infosec.html?token={/envelope/token}">SecInfo Management</a>
+      <table>
+        <tr>
+          <td><b>ID</b></td>
+          <td>
+            <b>
+              <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+            </b>
+          </td>
+        </tr>
+        <tr>
+          <td>Published</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
+        </tr>
+        <tr>
+          <td>Last modified</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
+        </tr>
+        <tr>
+          <td>Last updated</td>
+          <td><xsl:value-of select="info/update_time"/></td>
+        </tr>
+        <tr>
+          <td>CWE ID</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+        </tr>
+      </table>
     </div>
-    <table>
-      <tr>
-        <td><b>ID</b></td>
-        <td>
-          <b>
-            <xsl:value-of select="info/cve/cve:entry/@id"/>
-          </b>
-        </td>
-      </tr>
-      <tr>
-        <td>Published</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:published-datetime"/></td>
-      </tr>
-      <tr>
-        <td>Last modified</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:last-modified-datetime"/></td>
-      </tr>
-      <tr>
-        <td>Last updated</td>
-        <td><xsl:value-of select="info/cve/update_time"/></td>
-      </tr>
-      <tr>
-        <td>CWE ID</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cwe/@id"/></td>
-      </tr>
-    </table>
 
     <h1>Description</h1>
-    <xsl:value-of select="info/cve/cve:entry/vuln:summary/text()"/>
+    <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
 
     <h1>CVSS</h1>
     <table>
       <tr>
         <td>Base score</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
       </tr>
       <tr>
         <td>Access vector</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
       </tr>
       <tr>
         <td>Access Complexity</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
       </tr>
       <tr>
         <td>Authentication</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
       </tr>
       <tr>
         <td>Confidentiality impact</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
       </tr>
       <tr>
         <td>Integrity impact</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
       </tr>
       <tr>
         <td>Availability impact</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
       </tr>
       <tr>
         <td>Source</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
       </tr>
       <tr>
         <td>Generated</td>
-        <td><xsl:value-of select="info/cve/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
+        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
       </tr>
     </table>
 
     <xsl:choose>
-      <xsl:when test="count(info/cve/cve:entry/vuln:references) = 0">
+      <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
         <h1>References: None</h1>
       </xsl:when>
       <xsl:otherwise>
         <h1>References</h1>
         <table>
-          <xsl:for-each select="info/cve/cve:entry/vuln:references">
+          <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
             <tr>
               <td><xsl:value-of select="vuln:source/text()"/></td>
             </tr>
@@ -11071,7 +11300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 
     <xsl:choose>
-      <xsl:when test="count(info/cve/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
+      <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
         <h1>Vulnerable products: None</h1>
       </xsl:when>
       <xsl:otherwise>
@@ -11081,7 +11310,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Name</td>
             <td>Actions</td>
           </tr>
-          <xsl:for-each select="info/cve/cve:entry/vuln:vulnerable-software-list/vuln:product">
+          <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
             <xsl:sort select="text()"/>
             <xsl:variable name="class">
               <xsl:choose>
@@ -11177,6 +11406,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td><xsl:value-of select="gsa:long-time (info/creation_time)"/></td>
             </tr>
           </xsl:if>
+          <tr>
+            <td>Last updated</td>
+            <td><xsl:value-of select="info/update_time"/></td>
+          </tr>
         </table>
       </div>
       <table>

@@ -68,24 +68,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table>
         <tr>
           <td>
-            <h1>CVE Lookup</h1>
-          </td>
-        </tr>
-        <tr>
-          <td width="350">
-            <form name="input"
-                  action="/omp"
-                  method="get">
-              <input style="width: 240px" type="text" name="info_name" value="CVE-"/>
-              <input type="hidden" name="cmd" value="get_info"/>
-              <input type="hidden" name="info_type" value="CVE"/>
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="submit" value="Search"/>
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <td>
             <h1>NVT Lookup</h1>
           </td>
         </tr>

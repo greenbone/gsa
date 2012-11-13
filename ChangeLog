@@ -1,3 +1,22 @@
+2012-11-13  Andre Heinecke <andre.heinecke@greenbone.net>
+
+	Add CVE Browse mode
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add CVE entry in SecInfo Menu.
+
+	* src/html/help.xsl (contents.html): Add link to cves.html help page
+	(cves.html): New. Help Page for CVE browser
+	(cve.html): Updated to reflect that cve is no longer obtained by lookup
+	(glossary.html): Add short entry about CVSS
+
+	* src/html/omp.xsl (info/cve): New. Table contents of CVE Table
+	(get_info_cve_lnk): Add details parameter
+	(html-cve-table): New. The main CVE browse table.
+	(get_info_response): Use the new templates for CVE.
+	(cve-details): Updated to work with new get_info structure.
+
+	* src/html/dialog.xsl (browse_infosec.html): Remove CVE Lookup
+
 2012-11-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Use the next_page facility when importing reports.  In the process this
