@@ -4382,6 +4382,16 @@ Public License instead of this License.
           </ul>
         </li>
       </ul>
+      <ul>
+        <li>
+          created&gt;-7d
+          <ul>
+            <li>
+              Include any item that was created within the past seven days.
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <a name="syntax"></a>
       <h3>Syntax</h3>
@@ -4452,6 +4462,28 @@ Public License instead of this License.
       <p>
         The column keyword "<b>sort-reverse</b>" is like "sort", but sorts
         backwards.
+      </p>
+
+      <h4>Date format</h4>
+      <p>
+        Dates can be expressed in absolute or relative terms.
+      </p>
+      <p>
+        Absolute dates take the form "2012-05-03T13h00", as in the search term
+        "modified&gt;2012-05-03T13h00".  The time is optional, so the form
+        "2012-05-03" is also accepted, which means 0h00 on that day.
+      </p>
+      <p>
+        Relative dates are dates expressed a number of units relative to the
+        current time.  For example "-7d" means 7 days ago, while "3m" means
+        3 minutes in the future.  So the search term "created&gt;-2w" includes
+        all resources created in the last two weeks.
+      </p>
+      <p>
+        The modifier letters for relative dates are <b>s</b>econd,
+        <b>m</b>inute, <b>h</b>our, <b>d</b>ay, <b>w</b>eek, <b>M</b>onth and
+        <b>y</b>ear.  For simplicity, month means the last 30 days, and year
+        means the past 365 days.
       </p>
     </div>
   </div>
