@@ -4407,12 +4407,12 @@ Public License instead of this License.
         double quotes.
       </p>
       <p>
-        In general the column name is the name of the column in lowercase,
+        In general the column prefix is the name of the column in lowercase,
         with spaces converted to underscores.  So port_list="OpenVAS Default"
         filters by the column "Port List".
       </p>
       <p>
-        Some extra fields can be used instead of column name on most pages:
+        Some extra fields can be used instead of a column name on most pages:
         <ul>
           <li>uuid -- UUID of item</li>
           <li>comment -- the comment on the item, often displayed in the name column</li>
@@ -4440,7 +4440,7 @@ Public License instead of this License.
       </p>
       <p>
         The column keyword "<b>first</b>" determines the first row
-        in the resulting table.  For example "first=1" start the listing from the
+        in the resulting table.  For example "first=1" starts the listing from the
         first row, while "first=5" skips the first four rows.
       </p>
       <p>
