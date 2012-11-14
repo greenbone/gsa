@@ -14891,7 +14891,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="start/text() != ''">
-                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;notes=1&amp;overrides={$apply-overrides}&amp;result_hosts_only=1&amp;search_phrase={ip}&amp;token={/envelope/token}">
+                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}">
                   <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
                 </a>
               </xsl:when>
