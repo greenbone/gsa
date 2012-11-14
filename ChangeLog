@@ -1,3 +1,10 @@
+2012-11-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (report [assets]): Use a filter instead of multiple
+	parameters in the Last Report link.  Within the filter use the new
+	exact term syntax for the IP, so that the filter matches only that
+	single IP.
+
 2012-11-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/help.xsl (powerfilter.html): Add example for exact term.
