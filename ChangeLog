@@ -1,3 +1,8 @@
+2012-11-15  Andre Heinecke <aheinecke@intevation.de>
+
+	* src/html/omp.xsl (cve-details): Add gb_window classes. Add list icon.
+	Change style of the upper right information to be in line with the rest.
+
 2012-11-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (host): Use a filter instead of multiple

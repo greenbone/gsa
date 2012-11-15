@@ -11196,178 +11196,186 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="cve-details">
-  <div class="gb_window_part_center">CVE Details
-    <a href="/help/cve.html?token={/envelope/token}#cvedetails"
-       title="Help: CVE (CVE Details)">
-      <img src="/img/help.png"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
-    <div class="float_right">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">CVE Details
+      <a href="/help/cve.html?token={/envelope/token}#cvedetails"
+        title="Help: CVE (CVE Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={filters/term}&amp;token={/envelope/token}"
+        title="CVE" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="CVE"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td><b>ID</b></td>
+            <td>
+              <b>
+                <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+              </b>
+            </td>
+          </tr>
+          <tr>
+            <td>Published</td>
+            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
+          </tr>
+          <tr>
+            <td>Last modified</td>
+            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
+          </tr>
+          <tr>
+            <td>Last updated</td>
+            <td><xsl:value-of select="info/update_time"/></td>
+          </tr>
+          <tr>
+            <td>CWE ID</td>
+            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+          </tr>
+        </table>
+      </div>
+
+      <h1>Description</h1>
+      <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
+
+      <h1>CVSS</h1>
       <table>
         <tr>
-          <td><b>ID</b></td>
-          <td>
-            <b>
-              <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
-            </b>
-          </td>
+          <td>Base score</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
         </tr>
         <tr>
-          <td>Published</td>
-          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
+          <td>Access vector</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
         </tr>
         <tr>
-          <td>Last modified</td>
-          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
+          <td>Access Complexity</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
         </tr>
         <tr>
-          <td>Last updated</td>
-          <td><xsl:value-of select="info/update_time"/></td>
+          <td>Authentication</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
         </tr>
         <tr>
-          <td>CWE ID</td>
-          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+          <td>Confidentiality impact</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
+        </tr>
+        <tr>
+          <td>Integrity impact</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
+        </tr>
+        <tr>
+          <td>Availability impact</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
+        </tr>
+        <tr>
+          <td>Source</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
+        </tr>
+        <tr>
+          <td>Generated</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
         </tr>
       </table>
+
+      <xsl:choose>
+        <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
+          <h1>References: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>References</h1>
+          <table>
+            <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
+              <tr>
+                <td><xsl:value-of select="vuln:source/text()"/></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><xsl:value-of select="vuln:reference/text()"/></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td><xsl:value-of select="vuln:reference/@href"/></td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
+          <h1>Vulnerable products: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>Vulnerable products</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
+              <xsl:sort select="text()"/>
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="text()"/></td>
+                <td width="100">
+                  <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
+                    title="Details">
+                    <img src="/img/details.png"
+                      border="0"
+                      alt="Details"
+                      style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(info/cve/nvts/nvt) = 0">
+          <h1>NVTs addressing this CVE: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>NVTs addressing this CVE</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="info/cve/nvts/nvt">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td width="100">
+                  <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="Details">
+                    <img src="/img/details.png"
+                      border="0"
+                      alt="Details"
+                      style="margin-left:3px;"/>
+                  </a>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
-
-    <h1>Description</h1>
-    <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:summary/text()"/>
-
-    <h1>CVSS</h1>
-    <table>
-      <tr>
-        <td>Base score</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
-      </tr>
-      <tr>
-        <td>Access vector</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector"/></td>
-      </tr>
-      <tr>
-        <td>Access Complexity</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity"/></td>
-      </tr>
-      <tr>
-        <td>Authentication</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication"/></td>
-      </tr>
-      <tr>
-        <td>Confidentiality impact</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact"/></td>
-      </tr>
-      <tr>
-        <td>Integrity impact</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact"/></td>
-      </tr>
-      <tr>
-        <td>Availability impact</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact"/></td>
-      </tr>
-      <tr>
-        <td>Source</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:source"/></td>
-      </tr>
-      <tr>
-        <td>Generated</td>
-        <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:generated-on-datetime"/></td>
-      </tr>
-    </table>
-
-    <xsl:choose>
-      <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:references) = 0">
-        <h1>References: None</h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1>References</h1>
-        <table>
-          <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:references">
-            <tr>
-              <td><xsl:value-of select="vuln:source/text()"/></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><xsl:value-of select="vuln:reference/text()"/></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><xsl:value-of select="vuln:reference/@href"/></td>
-            </tr>
-          </xsl:for-each>
-        </table>
-      </xsl:otherwise>
-    </xsl:choose>
-
-    <xsl:choose>
-      <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
-        <h1>Vulnerable products: None</h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1>Vulnerable products</h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Actions</td>
-          </tr>
-          <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
-            <xsl:sort select="text()"/>
-            <xsl:variable name="class">
-              <xsl:choose>
-                <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                <xsl:otherwise>odd</xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <tr class="{$class}">
-              <td><xsl:value-of select="text()"/></td>
-              <td width="100">
-                <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
-                   title="Details">
-                  <img src="/img/details.png"
-                       border="0"
-                       alt="Details"
-                       style="margin-left:3px;"/>
-                </a>
-              </td>
-            </tr>
-          </xsl:for-each>
-        </table>
-      </xsl:otherwise>
-    </xsl:choose>
-
-    <xsl:choose>
-      <xsl:when test="count(info/cve/nvts/nvt) = 0">
-        <h1>NVTs addressing this CVE: None</h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1>NVTs addressing this CVE</h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Actions</td>
-          </tr>
-          <xsl:for-each select="info/cve/nvts/nvt">
-            <xsl:variable name="class">
-              <xsl:choose>
-                <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                <xsl:otherwise>odd</xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <tr class="{$class}">
-              <td><xsl:value-of select="name"/></td>
-              <td width="100">
-                <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="Details">
-                  <img src="/img/details.png"
-                       border="0"
-                       alt="Details"
-                       style="margin-left:3px;"/>
-                </a>
-              </td>
-            </tr>
-          </xsl:for-each>
-        </table>
-      </xsl:otherwise>
-    </xsl:choose>
   </div>
 </xsl:template>
 
