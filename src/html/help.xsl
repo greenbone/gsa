@@ -95,7 +95,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <h4>Clone <xsl:value-of select="$type"/></h4>
   <p>
    Pressing the clone icon
-   <img src="/img/edit.png" alt="Clone" title="Clone"/>
+   <img src="/img/clone.png" alt="Clone" title="Clone"/>
    will create a duplicate of the <xsl:value-of select="$type"/>.
   </p>
 
