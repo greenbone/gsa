@@ -2474,6 +2474,14 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "Diagnostics: Both ID and Name set.",
                          "/omp?cmd=get_info");
 
+  if (params_value (params, "filter") == NULL &&
+      params_value (params, "filter_id") == NULL)
+    {
+      /* Set up default Filters */
+      if (g_ascii_strcasecmp (params_value (params, "info_type"), "cve") == 0)
+        params_add (params, "filter", "rows=10 first=1 sort-reverse=name");
+    }
+
   extra_attribs = g_string_new("");
   g_string_append_printf(extra_attribs, "type=\"%s\"",
                          params_value (params, "info_type"));
