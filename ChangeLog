@@ -1,3 +1,8 @@
+2012-11-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/wizard.xsl (quick-first-scan-wizard): Set refresh_interval to
+	30.
+
 2012-11-15  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/html/help.xsl (list-window-line-actions): Fixed icone for Clone
@@ -22,7 +27,7 @@
 	parameters in the Last Report link.  Within the filter use the new
 	exact term syntax for the IP, so that the filter matches only that
 	single IP.
- 
+
 2012-11-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (report [assets]): Use a filter instead of multiple
