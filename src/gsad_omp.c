@@ -2466,16 +2466,16 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "Diagnostics: Required parameter \"info_type\" was NULL.",
                          "/omp?cmd=get_info");
 
-  if (params_value (params, "info_name") &&
-      params_value (params, "info_id"))
+  if (params_value (params, "info_name")
+      && params_value (params, "info_id"))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting raw information. "
                          "Diagnostics: Both ID and Name set.",
                          "/omp?cmd=get_info");
 
-  if (params_value (params, "filter") == NULL &&
-      params_value (params, "filter_id") == NULL)
+  if (params_value (params, "filter") == NULL
+      && params_value (params, "filter_id") == NULL)
     {
       /* Set up default Filters */
       if (g_ascii_strcasecmp (params_value (params, "info_type"), "cve") == 0)
