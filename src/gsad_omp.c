@@ -6480,7 +6480,7 @@ char *
 get_target (credentials_t * credentials, params_t *params,
             const char *extra_xml)
 {
-  return get_one ("target", credentials, params, extra_xml, "alerts=\"1\"");
+  return get_one ("target", credentials, params, extra_xml, "tasks=\"1\"");
 }
 
 /**

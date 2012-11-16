@@ -1,3 +1,8 @@
+2012-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_target): Request tasks, so that "Tasks using this
+	Target" show up.
+
 2012-11-15  Benhabiles Hani <kroosec@gmail.com>
 
 	* src/gsad_omp.c (get_target): Removed old code. Now uses get_one().
