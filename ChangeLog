@@ -1,3 +1,7 @@
+2012-11-15  Benhabiles Hani <kroosec@gmail.com>
+
+	* src/gsad_omp.c (get_target): Removed old code. Now uses get_one().
+
 2012-11-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/wizard.xsl (quick-first-scan-wizard): Set refresh_interval to
