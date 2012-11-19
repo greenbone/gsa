@@ -1,3 +1,10 @@
+2012-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_task_omp): Get the tasks with get_tasks instead
+	of by hand.
+
+	* src/html/gsad.xsl (html-gsa-logo): Adjust indicator path accordingly.
+
 2012-11-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_target): Request tasks, so that "Tasks using this

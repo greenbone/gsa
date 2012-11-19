@@ -1639,7 +1639,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
 
   ret = openvas_server_sendf (&session,
-                              "<commands>"
                               "<create_task>"
                               "<config id=\"%s\"/>"
                               "%s"
@@ -1663,13 +1662,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               "</preference>"
                               "</preferences>"
                               "<observers>%s</observers>"
-                              "</create_task>"
-                              "<get_tasks"
-                              " actions=\"g\""
-                              " sort_field=\"name\""
-                              " sort_order=\"ascending\""
-                              " apply_overrides=\"%s\"/>"
-                              "</commands>",
+                              "</create_task>",
                               config_id,
                               schedule_element,
                               alert_element->str,
@@ -1680,8 +1673,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               max_checks,
                               max_hosts,
                               strcmp (in_assets, "0") ? "yes" : "no",
-                              observers,
-                              apply_overrides);
+                              observers);
 
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
@@ -1712,7 +1704,9 @@ create_task_omp (credentials_t * credentials, params_t *params)
   free_entity (entity);
 
   openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  html = get_tasks (credentials, params, text);
+  g_free (text);
+  return html;
 }
 
 #undef CHECK
