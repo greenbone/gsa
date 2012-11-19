@@ -51,8 +51,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </p>
         <p>
           I will appear automatically in areas where you have
-          created no or only a few objects. And disappear after you
-          have at least
+          created no or only a few objects. And disappear when you
+          have more than
           <xsl:value-of select="../get_settings_response/setting[@id='20f3034c-e709-11e1-87e7-406186ea4fc5']/value"/>
           objects. You can call me with this
           icon <img src="img/wizard.png"/> any time later on.

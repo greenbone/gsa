@@ -1,5 +1,10 @@
 2012-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (quick-first-scan-wizard): Correct text about when
+	the wizard appears.
+
+2012-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_task_omp): Get the tasks with get_tasks instead
 	of by hand.
 
