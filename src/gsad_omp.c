@@ -4129,10 +4129,10 @@ create_target_omp (credentials_t * credentials, params_t *params)
   else CHECK (comment);
   else CHECK (port_list_id);
   else CHECK (target_credential);
-  else if (strcmp (target_credential, "--"))
-    {
-      CHECK (port);
-    }
+  else if (strcmp (target_credential, "--") && port == NULL)
+    g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
+                            "Given port was invalid",
+                            "Create Target");
   else CHECK (target_smb_credential);
   else
     {

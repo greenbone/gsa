@@ -1,3 +1,9 @@
+2012-09-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_target_omp): Check the port in the same if as
+	the other checks, otherwise the create is skipped when the credential is
+	--.
+
 2012-08-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (error_dialog): For the backurl link, check for
