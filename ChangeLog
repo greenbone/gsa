@@ -1,3 +1,10 @@
+2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add pretty names to types.
+
+	* src/html/omp.xsl (html-create-filter-form)
+	(html-edit-filter-form): Expect pretty type names.
+
 2012-11-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/gsad.xsl (quick-first-scan-wizard): Correct text about when
