@@ -619,6 +619,7 @@ init_validator ()
                          "|(get_system_reports)"
                          "|(get_target)"
                          "|(get_targets)"
+                         "|(get_task)"
                          "|(get_tasks)"
                          "|(get_trash)"
                          "|(get_user)"
@@ -1571,7 +1572,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                            &content_type_omp,
                                            &content_disposition);
     }
-  ELSE (get_tasks)
   ELSE (import_config)
   ELSE (import_port_list)
   ELSE (import_report_format)
@@ -1737,6 +1737,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (new_target)
   ELSE (new_task)
+  ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_config)
   ELSE (edit_config_family)

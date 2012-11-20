@@ -1,5 +1,44 @@
 2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Separate get_task handling from get_tasks, and simplify some of the
+	tasks page handlers.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add get_task.
+	(exec_omp_post): Remove get_tasks, which is in exec_omp_get.
+
+	* src/gsad_omp.c (omp_success, omp): Move up in file.
+	(next_page): Add get_task.
+	(resource_action): New function.
+	(create_report_omp): Combine cases.  Use next_page instead of get_task
+	function.
+	(delete_task_omp, delete_report_omp): Switch to delete_resource.
+	(CHECK): New macro.
+	(save_task_omp): Use omp and next_page.
+	(save_container_task_omp): Add get_task calls temporarily.
+	(stop_task_omp, pause_task_omp, resume_paused_task_omp)
+	(resume_stopped_task_omp, start_task_omp): Switch to resource_action.
+	(get_info): Adjust formatting.
+	(get_tasks_args): Remove task_id arg and case.
+	(get_task): New function.  Like get_tasks_args task_id case.
+	(get_task_omp): New function.
+	(run_wizard_omp): Adjust get_tasks_arg call.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/gsad.xsl (html-gsa-logo): Adjust indicator paths accordingly.
+
+	* src/html/omp.xsl: Replace all get_tasks links that have task_ids with
+	get_task links.
+	(html-report-table): Remove, now task.
+	(task [details]): New template.  Was html-report-table.  Adjust paths
+	to be like other details templates.
+	(report): Add next to delete icon.
+	(get_tasks_response): Remove single task case.
+	(get_task): New template.
+	(get_tasks): Match delete_task_response.
+
+2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_my_settings): Make Wizard Rows odd.
 
 2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>

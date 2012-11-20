@@ -55,6 +55,7 @@ char * resume_stopped_task_omp (credentials_t *, params_t *);
 char * start_task_omp (credentials_t *, params_t *);
 char * stop_task_omp (credentials_t *, params_t *);
 
+char * get_task_omp (credentials_t *, params_t *);
 char * get_tasks_omp (credentials_t *, params_t *);
 
 char * delete_report_omp (credentials_t *, params_t *);

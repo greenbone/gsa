@@ -1210,7 +1210,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right">
-            <a href="?cmd=get_tasks&amp;task_id={report/task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Task</a>
+            <a href="?cmd=get_task&amp;task_id={report/task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Task</a>
           </div>
         </xsl:otherwise>
       </xsl:choose>
@@ -2465,9 +2465,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="html-report-table">
-  <xsl:variable name="apply-overrides" select="../../apply_overrides"/>
-  <xsl:variable name="observed" select="task/owner/name!=/envelope/login/text()"/>
+<xsl:template match="task" mode="details">
+  <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
+  <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -2476,37 +2476,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Reports (Task Summary)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_tasks&amp;task_id={task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}" title="Refresh">
+      <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}" title="Refresh">
         <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <xsl:choose>
-          <xsl:when test="$observed or task/target/@id=''">
+          <xsl:when test="$observed or target/@id=''">
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
           </xsl:when>
-          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
-            <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}&amp;token={/envelope/token}"
+          <xsl:when test="string-length(schedule/@id) &gt; 0">
+            <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
                title="Schedule Details">
               <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
             </a>
           </xsl:when>
-          <xsl:when test="task/status='Running'">
+          <xsl:when test="status='Running'">
             <xsl:call-template name="pause-icon">
               <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_task"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:when test="task/status='Stop Requested' or task/status='Delete Requested' or task/status='Pause Requested' or task/status = 'Paused' or task/status='Resume Requested' or task/status='Requested'">
+          <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="start-icon">
               <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_task"/>
@@ -2515,30 +2515,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
-          <xsl:when test="$observed or task/target/@id=''">
+          <xsl:when test="$observed or target/@id=''">
             <img src="/img/resume_inactive.png" border="0" alt="Resume"
                  style="margin-left:3px;"/>
           </xsl:when>
-          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
+          <xsl:when test="string-length(schedule/@id) &gt; 0">
             <img src="/img/resume_inactive.png" border="0" alt="Resume"
                  style="margin-left:3px;"/>
           </xsl:when>
-          <xsl:when test="task/status='Stopped'">
+          <xsl:when test="status='Stopped'">
             <xsl:call-template name="resume-icon">
               <xsl:with-param name="type">task</xsl:with-param>
               <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_task"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:when test="task/status='Paused'">
+          <xsl:when test="status='Paused'">
             <xsl:call-template name="resume-icon">
               <xsl:with-param name="type">task</xsl:with-param>
               <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_task"/>
@@ -2551,16 +2551,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
-          <xsl:when test="$observed or task/target/@id=''">
+          <xsl:when test="$observed or target/@id=''">
             <img src="/img/stop_inactive.png" border="0" alt="Stop"
                  style="margin-left:3px;"/>
           </xsl:when>
-          <xsl:when test="string-length(task/schedule/@id) &gt; 0">
+          <xsl:when test="string-length(schedule/@id) &gt; 0">
             <img src="/img/stop_inactive.png" border="0"
                  alt="Stop"
                  style="margin-left:3px;"/>
           </xsl:when>
-          <xsl:when test="task/status='New' or task/status='Requested' or task/status='Done' or task/status='Stopped' or task/status='Internal Error' or task/status='Pause Requested' or task/status='Stop Requested' or task/status='Resume Requested'">
+          <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
             <img src="/img/stop_inactive.png" border="0"
                  alt="Stop"
                  style="margin-left:3px;"/>
@@ -2568,7 +2568,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <xsl:call-template name="stop-icon">
               <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_task"/>
@@ -2577,7 +2577,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
-          <xsl:when test="$observed or task/status='Running' or task/status='Requested' or task/status='Pause Requested' or task/status='Stop Requested' or task/status='Resume Requested'">
+          <xsl:when test="$observed or status='Running' or status='Requested' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
             <img src="/img/trashcan_inactive.png"
                  border="0"
                  alt="To Trashcan"
@@ -2586,7 +2586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <xsl:call-template name="trashcan-icon">
               <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="task/@id"/>
+              <xsl:with-param name="id" select="@id"/>
               <xsl:with-param name="params">
                 <input type="hidden" name="overrides" value="{apply_overrides}"/>
                 <input type="hidden" name="next" value="get_tasks"/>
@@ -2600,7 +2600,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_task&amp;task_id={task/@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={sort/field/order}&amp;sort_field={sort/field/text()}&amp;overrides={apply_overrides}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}"
                title="Edit Task"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -2610,30 +2610,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}">Tasks</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>
-          <td><b><xsl:value-of select="task/name"/></b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
         </tr>
         <tr>
           <td>Comment:</td>
-          <td><xsl:value-of select="task/comment"/></td>
+          <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
           <td>Scan Config:</td>
           <td>
-            <a href="/omp?cmd=get_config&amp;config_id={task/config/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="task/config/name"/>
+            <a href="/omp?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="config/name"/>
             </a>
           </td>
         </tr>
         <tr>
           <td>Alerts:</td>
           <td>
-            <xsl:for-each select="task/alert">
+            <xsl:for-each select="alert">
               <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}">
                 <xsl:value-of select="name"/>
               </a>
@@ -2644,16 +2642,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Schedule:</td>
           <td>
-            <xsl:if test="task/schedule">
-              <a href="/omp?cmd=get_schedule&amp;schedule_id={task/schedule/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="task/schedule/name"/>
+            <xsl:if test="schedule">
+              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="schedule/name"/>
               </a>
               <xsl:choose>
-                <xsl:when test="task/schedule/next_time = 'over'">
+                <xsl:when test="schedule/next_time = 'over'">
                   (Next due: over)
                 </xsl:when>
                 <xsl:otherwise>
-                  (Next due: <xsl:value-of select="gsa:long-time-tz (task/schedule/next_time)"/>)
+                  (Next due: <xsl:value-of select="gsa:long-time-tz (schedule/next_time)"/>)
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:if>
@@ -2662,16 +2660,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Target:</td>
           <td>
-            <a href="/omp?cmd=get_target&amp;target_id={task/target/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="task/target/name"/>
+            <a href="/omp?cmd=get_target&amp;target_id={target/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="target/name"/>
             </a>
           </td>
         </tr>
         <tr>
           <td>Slave:</td>
           <td>
-            <a href="/omp?cmd=get_slave&amp;slave_id={task/slave/@id}&amp;token={/envelope/token}">
-              <xsl:value-of select="task/slave/name"/>
+            <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
+              <xsl:value-of select="slave/name"/>
             </a>
           </td>
         </tr>
@@ -2681,19 +2679,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="status_bar">
               <xsl:with-param name="status">
                 <xsl:choose>
-                  <xsl:when test="task/target/@id='' and task/status='Running'">
+                  <xsl:when test="target/@id='' and status='Running'">
                     <xsl:text>Uploading</xsl:text>
                   </xsl:when>
-                  <xsl:when test="task/target/@id=''">
+                  <xsl:when test="target/@id=''">
                     <xsl:text>Container</xsl:text>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="task/status"/>
+                    <xsl:value-of select="status"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:with-param>
               <xsl:with-param name="progress">
-                <xsl:value-of select="task/progress/text()"/>
+                <xsl:value-of select="progress/text()"/>
               </xsl:with-param>
             </xsl:call-template>
           </td>
@@ -2701,8 +2699,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Reports:</td>
           <td>
-            <xsl:value-of select="task/report_count/text()"/>
-            (Finished: <xsl:value-of select="task/report_count/finished"/>)
+            <xsl:value-of select="report_count/text()"/>
+            (Finished: <xsl:value-of select="report_count/finished"/>)
           </td>
         </tr>
         <xsl:choose>
@@ -2710,7 +2708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td><b>Owner:</b></td>
               <td>
-                <b><xsl:value-of select="task/owner/name"/></b>
+                <b><xsl:value-of select="owner/name"/></b>
               </td>
             </tr>
           </xsl:when>
@@ -2718,14 +2716,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>Observers:</td>
               <td>
-                <xsl:value-of select="task/observers"/>
+                <xsl:value-of select="observers"/>
               </td>
             </tr>
           </xsl:otherwise>
         </xsl:choose>
         <tr>
           <xsl:variable name="in_assets"
-                        select="task/preferences/preference[scanner_name='in_assets']"/>
+                        select="preferences/preference[scanner_name='in_assets']"/>
           <td>
             Add to Assets:
           </td>
@@ -2738,9 +2736,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Notes:
           </td>
           <td>
-            <a href="/omp?cmd=get_notes&amp;filter=task_id={task/@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="Notes on Task {task/name}">
-              <xsl:value-of select="count (../get_notes_response/note)"/>
+            <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Notes on Task {name}">
+              <xsl:value-of select="count (../../get_notes_response/note)"/>
             </a>
           </td>
         </tr>
@@ -2749,29 +2747,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             Overrides:
           </td>
           <td>
-            <a href="/omp?cmd=get_overrides&amp;filter=task_id={task/@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               title="Overrides on Task {task/name}">
-              <xsl:value-of select="count (../get_overrides_response/override)"/>
+            <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Overrides on Task {name}">
+              <xsl:value-of select="count (../../get_overrides_response/override)"/>
             </a>
           </td>
         </tr>
       </table>
       <xsl:choose>
-        <xsl:when test="task/target/@id=''">
+        <xsl:when test="target/@id=''">
         </xsl:when>
         <xsl:otherwise>
           <h4>Scan Intensity</h4>
           <table>
             <tr>
-              <td><xsl:value-of select="task/preferences/preference[scanner_name='max_checks']/name"/>:</td>
+              <td><xsl:value-of select="preferences/preference[scanner_name='max_checks']/name"/>:</td>
               <td>
-                <xsl:value-of select="task/preferences/preference[scanner_name='max_checks']/value"/>
+                <xsl:value-of select="preferences/preference[scanner_name='max_checks']/value"/>
               </td>
             </tr>
             <tr>
-              <td><xsl:value-of select="task/preferences/preference[scanner_name='max_hosts']/name"/>:</td>
+              <td><xsl:value-of select="preferences/preference[scanner_name='max_hosts']/name"/>:</td>
               <td>
-                <xsl:value-of select="task/preferences/preference[scanner_name='max_hosts']/value"/>
+                <xsl:value-of select="preferences/preference[scanner_name='max_hosts']/value"/>
               </td>
             </tr>
           </table>
@@ -2779,7 +2777,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
-  <xsl:if test="task/target/@id=''">
+  <xsl:if test="target/@id=''">
     <br/>
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
@@ -2798,7 +2796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="create_report"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="next" value="get_task"/>
-          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <input type="hidden" name="task_id" value="{@id}"/>
           <input type="hidden" name="overrides" value="{apply_overrides}"/>
           <input type="file" name="xml_file" size="30"/>
         </form>
@@ -2810,15 +2808,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Reports for "<xsl:value-of select="task/name"/>"
+      Reports for "<xsl:value-of select="name"/>"
       <a href="/help/reports.html?token={/envelope/token}#reports" title="Help: Reports (Reports)">
         <img src="/img/help.png"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_tasks"/>
-          <input type="hidden" name="task_id" value="{task/@id}"/>
+          <input type="hidden" name="cmd" value="get_task"/>
+          <input type="hidden" name="task_id" value="{@id}"/>
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
@@ -2864,8 +2862,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
             </td>
           </tr>
-          <xsl:variable name="container" select="task/target/@id='' and task/status='Running'"/>
-          <xsl:for-each select="task/reports/report">
+          <xsl:variable name="container" select="target/@id='' and status='Running'"/>
+          <xsl:for-each select="reports/report">
             <xsl:call-template name="report">
               <xsl:with-param name="container" select="$container"/>
               <xsl:with-param name="observed" select="$observed"/>
@@ -3319,7 +3317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=get_tasks&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={../../../task/@id}&amp;report_id={@id}&amp;overrides={../../../../../apply_overrides}&amp;token={/envelope/token}"
              title="Compare"
              style="margin-left:3px;">
             <img src="/img/delta.png" border="0" alt="Compare"/>
@@ -3344,7 +3342,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="params">
               <input type="hidden" name="task_id" value="{../../@id}"/>
-              <input type="hidden" name="overrides" value="{../../../../../apply_overrides}"/>
+              <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+              <input type="hidden" name="next" value="get_task"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -3779,7 +3778,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -3944,7 +3943,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-          <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
              title="Details">
             <img src="/img/details.png"
                  border="0"
@@ -4071,13 +4070,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="task/reports">
-      <xsl:call-template name="html-report-table"/>
-    </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="html-task-table"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- GET_TASK -->
+
+<xsl:template match="get_task">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_task_response"/>
+  <xsl:apply-templates select="commands_response/get_tasks_response/task"
+                       mode="details"/>
 </xsl:template>
 
 <!-- GET_TASKS -->
@@ -4085,6 +4090,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_tasks">
   <xsl:apply-templates select="run_wizard_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
+  <xsl:apply-templates select="delete_task_response"/>
   <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="commands_response"/>
 </xsl:template>
@@ -5619,7 +5625,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -7078,7 +7084,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -8477,7 +8483,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr class="{$class}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
-                <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                   <img src="/img/details.png"
                        border="0"
                        alt="Details"
@@ -10303,7 +10309,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -10616,7 +10622,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr class="{$class}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                          border="0"
                          alt="Details"
@@ -12528,7 +12534,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="task/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
                   </xsl:when>
                   <xsl:otherwise>
-                    <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
+                    <a href="?cmd=get_task&amp;task_id={task/@id}&amp;token={/envelope/token}">
                       <xsl:value-of select="task/name"/>
                     </a>
                   </xsl:otherwise>
@@ -13581,7 +13587,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:value-of select="task/name"/> (in <a href="/omp?cmd=get_trash&amp;token={/envelope/token}">trashcan</a>)
                   </xsl:when>
                   <xsl:otherwise>
-                    <a href="?cmd=get_tasks&amp;task_id={task/@id}&amp;token={/envelope/token}">
+                    <a href="?cmd=get_task&amp;task_id={task/@id}&amp;token={/envelope/token}">
                       <xsl:value-of select="task/name"/>
                     </a>
                   </xsl:otherwise>
@@ -15817,7 +15823,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Task:</td>
           <td>
-            <a href="?cmd=get_tasks&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}">
+            <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}">
               <xsl:value-of select="$task_name"/>
             </a>
           </td>

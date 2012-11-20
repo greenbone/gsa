@@ -92,7 +92,9 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
-static char *get_tasks_args (credentials_t *, params_t *, const char *, const char *,
+static char *get_task (credentials_t *, params_t *, const char *);
+
+static char *get_tasks_args (credentials_t *, params_t *, const char *,
                              const char *, const char *, const char *, int,
                              const char *, const char *);
 
@@ -431,6 +433,88 @@ check_modify_report_format (credentials_t *credentials, gnutls_session_t *sessio
   return NULL;
 }
 
+/**
+ * @brief Check whether an OMP command failed.
+ *
+ * @param[in] entity  Response entity.
+ *
+ * @return 1 success, 0 fail, -1 error.
+ */
+static int
+omp_success (entity_t entity)
+{
+  const char *status;
+
+  status = entity_attribute (entity, "status");
+  if ((status == NULL)
+      || (strlen (status) == 0))
+    return -1;
+
+  return status[0] == '2';
+}
+
+/**
+ * @brief Run a single OMP command.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[out] response       Response.
+ * @param[out] entity_return  Response entity.
+ * @param[in]  format         Command.
+ * @param[in]  ...            Arguments for format string.
+ *
+ * @return -1 failed to connect (response set), 1 send error, 2 read error.
+ */
+static int
+omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
+     const char *format, ...)
+{
+  gnutls_session_t session;
+  int socket, ret;
+  gchar *command;
+  va_list args;
+  entity_t entity;
+
+  switch (manager_connect (credentials, &socket, &session, response))
+    {
+      case 0:
+        break;
+      case -1:
+        return -1;
+      default:
+        if (response)
+          *response = gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred. "
+                                    "Diagnostics: Failure to connect to manager daemon.",
+                                    "/omp?cmd=get_tasks");
+        return -1;
+    }
+
+  va_start (args, format);
+  command = g_markup_vprintf_escaped (format, args);
+  va_end (args);
+
+  ret = openvas_server_send (&session, command);
+  g_free (command);
+  if (ret == -1)
+    {
+      openvas_server_close (socket, session);
+      return 1;
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, response))
+    {
+      openvas_server_close (socket, session);
+      return 2;
+    }
+  if (entity_return)
+    *entity_return = entity;
+  else
+    free_entity (entity);
+  return 0;
+}
+
 
 /* Generic page handlers. */
 
@@ -472,6 +556,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_targets") == 0)
     return get_targets (credentials, params, response);
+
+  if (strcmp (next, "get_task") == 0)
+    return get_task (credentials, params, response);
 
   if (strcmp (next, "get_tasks") == 0)
     return get_tasks (credentials, params, response);
@@ -1157,6 +1244,94 @@ delete_resource (const char *type, credentials_t * credentials,
   return html;
 }
 
+/**
+ * @brief Perform action on resource, get next page, XSL transform result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  type         Type of resource.
+ * @param[in]  action       Action to perform.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+resource_action (credentials_t *credentials, params_t *params, const char *type,
+                 const char *action)
+{
+  gchar *html, *response;
+  const char *task_id;
+  int ret;
+  entity_t entity;
+
+  task_id = params_value (params, "task_id");
+
+  if (task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while performing an action. "
+                         "The resource remains the same. "
+                         "Diagnostics: Required parameter "
+                         G_STRINGIFY (name)
+                         " was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity,
+             "<%s_%s %s_id=\"%s\"/>",
+             action,
+             type,
+             type,
+             task_id);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while performing an action. "
+                             "The resource remains the same. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while performing an action. "
+                             "It is unclear whether the resource has been affected. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while performing an action. "
+                             "It is unclear whether the resource has been affected. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    {
+      free_entity (entity);
+      g_free (response);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           omp_success (entity)
+                            ? "An internal error occurred while performing an action. "
+                              "The action, however, succeeded. "
+                              "Diagnostics: Error in parameter next."
+                            : "An internal error occurred while performing an action. "
+                              "The action, furthermore, failed. "
+                              "Diagnostics: Error in parameter next.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
 
 /* Page handlers. */
 
@@ -1438,37 +1613,15 @@ create_report_omp (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket, ret;
   gchar *html, *response;
-  const char *task_id, *overrides, *name, *comment, *xml_file;
+  const char *task_id, *name, *comment, *xml_file;
 
   task_id = params_value (params, "task_id");
-  overrides = params_value (params, "overrides");
-
   xml_file = params_value (params, "xml_file");
-
-  if (task_id)
-    {
-      char *ret;
-      gchar *command;
-
-      command = g_strdup_printf ("<create_report>"
-                                 "<task id=\"%s\"/>"
-                                 "%s"
-                                 "</create_report>",
-                                 task_id ? task_id : "0",
-                                 xml_file ? xml_file : "");
-      ret = get_tasks_args (credentials, params, task_id, NULL, NULL, NULL,
-                            command, overrides && strcmp (overrides, "0"),
-                            NULL, NULL);
-      g_free (command);
-      return ret;
-    }
-
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  if ((name == NULL)
-      || (comment == NULL)
-      || (overrides == NULL)
+  if (((task_id == NULL) && (name == NULL))
+      || ((task_id == NULL) && (comment == NULL))
       || (xml_file == NULL))
     return new_task (credentials, "Invalid parameter", params);
 
@@ -1483,33 +1636,49 @@ create_report_omp (credentials_t * credentials, params_t *params)
       default:
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new task. "
-                             "The task is not created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
+                             task_id
+                              ? "An internal error occurred while creating a new task. "
+                                "The task is not created. "
+                                "Diagnostics: Failure to connect to manager daemon."
+                              : "An internal error occurred while creating a new task. "
+                                "The task is not created. "
+                                "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks");
     }
 
-  ret = openvas_server_sendf (&session,
-                              "<create_report>"
-                              "<task>"
-                              "<name>%s</name>"
-                              "<comment>%s</comment>"
-                              "</task>"
-                              "%s"
-                              "</create_report>",
-                              name,
-                              comment,
-                              xml_file,
-                              overrides);
+  if (task_id)
+    ret = openvas_server_sendf (&session,
+                                "<create_report>"
+                                "<task id=\"%s\"/>"
+                                "%s"
+                                "</create_report>",
+                                task_id ? task_id : "0",
+                                xml_file ? xml_file : "");
+  else
+    ret = openvas_server_sendf (&session,
+                                "<create_report>"
+                                "<task>"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "</task>"
+                                "%s"
+                                "</create_report>",
+                                name,
+                                comment,
+                                xml_file);
 
   if (ret == -1)
     {
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new task. "
-                           "The task is not created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
+                           task_id
+                            ? "An internal error occurred while creating a report. "
+                              "The report is not created. "
+                              "Diagnostics: Failure to connect to manager daemon."
+                            : "An internal error occurred while creating a new task. "
+                              "The task is not created. "
+                              "Diagnostics: Failure to connect to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
 
@@ -1519,9 +1688,13 @@ create_report_omp (credentials_t * credentials, params_t *params)
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new task. "
-                           "It is unclear whether the task has been created or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
+                           task_id
+                            ? "An internal error occurred while creating a report. "
+                              "The report is not created. "
+                              "Diagnostics: Failure to connect to manager daemon."
+                            : "An internal error occurred while creating a new task. "
+                              "The task is not created. "
+                              "Diagnostics: Failure to connect to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
   free_entity (entity);
@@ -1535,9 +1708,13 @@ create_report_omp (credentials_t * credentials, params_t *params)
   if (html == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new task. "
-                         "It is unclear whether the task has been created or not. "
-                         "Diagnostics: Error in parameter next.",
+                         task_id
+                          ? "An internal error occurred while creating a report. "
+                            "The report is not created. "
+                            "Diagnostics: Failure to connect to manager daemon."
+                          : "An internal error occurred while creating a new task. "
+                            "The task is not created. "
+                            "Diagnostics: Failure to connect to manager daemon.",
                          "/omp?cmd=get_tasks");
   return html;
 }
@@ -1722,27 +1899,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
 char *
 delete_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *delete_task;
-  const char *task_id, *overrides;
-
-  task_id = params_value (params, "task_id");
-  overrides = params_value (params, "overrides");
-
-  if (task_id == NULL || overrides == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a task. "
-                         "The task was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  delete_task = g_strdup_printf ("<delete_task task_id=\"%s\" />", task_id);
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"), delete_task,
-                        strcmp (overrides, "0"), NULL, NULL);
-  g_free (delete_task);
-  return ret;
+  return delete_resource ("task", credentials, params, 0, NULL);
 }
 
 /**
@@ -1901,6 +2058,17 @@ edit_task_omp (credentials_t * credentials, params_t *params)
   return edit_task (credentials, params, NULL);
 }
 
+#define CHECK(name)                                                         \
+  if (name == NULL)                                                         \
+    return gsad_message (credentials,                                       \
+                         "Internal error", __FUNCTION__, __LINE__,          \
+                         "An internal error occurred while saving a task. " \
+                         "The task remains the same. "                      \
+                         "Diagnostics: Required parameter "                 \
+                         G_STRINGIFY (name)                                 \
+                         " was NULL.",                                      \
+                         "/omp?cmd=get_tasks")
+
 /**
  * @brief Save task, get next page, XSL transform the result.
  *
@@ -1912,13 +2080,14 @@ edit_task_omp (credentials_t * credentials, params_t *params)
 char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *modify_task;
+  gchar *html, *response;
   const char *comment, *name, *next, *refresh_interval, *sort_field;
   const char *sort_order, *overrides, *schedule_id, *in_assets;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
-  int apply_overrides;
+  int apply_overrides, ret;
   params_t *alerts;
   GString *alert_element;
+  entity_t entity;
 
   comment = params_value (params, "comment");
   name = params_value (params, "name");
@@ -1942,16 +2111,16 @@ save_task_omp (credentials_t * credentials, params_t *params)
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
 
-  if (schedule_id == NULL || slave_id == NULL
-      || next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL || max_checks == NULL || max_hosts == NULL
-      || observers == NULL || in_assets == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a task. "
-                         "The task remains the same. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+  CHECK (schedule_id);
+  CHECK (slave_id);
+  CHECK (next);
+  CHECK (sort_field);
+  CHECK (sort_order);
+  CHECK (task_id);
+  CHECK (max_checks);
+  CHECK (max_hosts);
+  CHECK (observers);
+  CHECK (in_assets);
 
   alert_element = g_string_new ("");
   alerts = params_values (params, "alert_id_optional:");
@@ -1969,68 +2138,97 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                   param->value ? param->value : "");
     }
 
-  modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
-                                 "<name>%s</name>"
-                                 "<comment>%s</comment>"
-                                 "%s"
-                                 "<schedule id=\"%s\"/>"
-                                 "<slave id=\"%s\"/>"
-                                 "<preferences>"
-                                 "<preference>"
-                                 "<scanner_name>max_checks</scanner_name>"
-                                 "<value>%s</value>"
-                                 "</preference>"
-                                 "<preference>"
-                                 "<scanner_name>max_hosts</scanner_name>"
-                                 "<value>%s</value>"
-                                 "</preference>"
-                                 "<preference>"
-                                 "<scanner_name>in_assets</scanner_name>"
-                                 "<value>%s</value>"
-                                 "</preference>"
-                                 "</preferences>"
-                                 "<observers>%s</observers>"
-                                 "</modify_task>",
-                                 task_id,
-                                 name,
-                                 comment,
-                                 alert_element->str,
-                                 schedule_id,
-                                 slave_id,
-                                 max_checks,
-                                 max_hosts,
-                                 strcmp (in_assets, "0") ? "yes" : "no",
-                                 observers);
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_task task_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "%s"
+             "<schedule id=\"%s\"/>"
+             "<slave id=\"%s\"/>"
+             "<preferences>"
+             "<preference>"
+             "<scanner_name>max_checks</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "<preference>"
+             "<scanner_name>max_hosts</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "<preference>"
+             "<scanner_name>in_assets</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "</preferences>"
+             "<observers>%s</observers>"
+             "</modify_task>",
+             task_id,
+             name,
+             comment,
+             alert_element->str,
+             schedule_id,
+             slave_id,
+             max_checks,
+             max_hosts,
+             strcmp (in_assets, "0") ? "yes" : "no",
+             observers);
 
   g_string_free (alert_element, TRUE);
 
-  if (strcmp (next, "get_tasks") == 0)
+  switch (ret)
     {
-      char *ret;
-      ret = get_tasks_args (credentials, params, NULL, sort_field, sort_order,
-                            refresh_interval, modify_task, apply_overrides,
-                            NULL, NULL);
-      g_free (modify_task);
-      return ret;
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "The task was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
     }
 
-  if (strcmp (next, "get_task") == 0)
+  if (omp_success (entity))
     {
-      char *ret = get_tasks_args (credentials, params, task_id, sort_field,
-                                  sort_order, refresh_interval, modify_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (modify_task);
-      return ret;
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a task. "
+                               "The task was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_tasks");
+        }
     }
-
-  g_free (modify_task);
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a task. "
-                       "The task remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  else
+    html = edit_task (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
+
+#undef CHECK
 
 /**
  * @brief Save container task, get next page, XSL transform the result.
@@ -2091,9 +2289,11 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
                                  strcmp (in_assets, "0") ? "yes" : "no",
                                  observers);
 
+  // FIX do here, use next_page
+
   if (strcmp (next, "get_tasks") == 0)
     {
-      char *ret = get_tasks_args (credentials, params, NULL, sort_field,
+      char *ret = get_tasks_args (credentials, params, sort_field,
                                   sort_order, refresh_interval, modify_task,
                                   apply_overrides, NULL, NULL);
       g_free (modify_task);
@@ -2102,9 +2302,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (next, "get_task") == 0)
     {
-      char *ret = get_tasks_args (credentials, params, task_id, sort_field,
-                                  sort_order, refresh_interval, modify_task,
-                                  apply_overrides, NULL, NULL);
+      char *ret = get_task (credentials, params, NULL);
       g_free (modify_task);
       return ret;
     }
@@ -2129,41 +2327,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 char *
 stop_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *stop_task;
-  const char *task_id, *next, *overrides;
-  int apply_overrides;
-
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if ((task_id == NULL) || (next == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while stopping a task. "
-                         "The task was not stopped. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_task");
-
-  stop_task = g_strdup_printf ("<stop_task task_id=\"%s\" />", task_id);
-
-  if (strcmp (next, "get_task") == 0)
-    {
-      char *ret = get_tasks_args (credentials, params, task_id, "name",
-                                  "ascending", NULL, stop_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (stop_task);
-      return ret;
-    }
-
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"), stop_task,
-                        apply_overrides, NULL, NULL);
-  g_free (stop_task);
-  return ret;
+  return resource_action (credentials, params, "task", "stop");
 }
 
 /**
@@ -2177,41 +2341,7 @@ stop_task_omp (credentials_t * credentials, params_t *params)
 char *
 pause_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *pause_task;
-  const char *task_id, *next, *overrides;
-  int apply_overrides;
-
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if ((task_id == NULL) || (next == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while pausing a task. "
-                         "The task was not paused. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_task");
-
-  pause_task = g_strdup_printf ("<pause_task task_id=\"%s\" />", task_id);
-
-  if (strcmp (next, "get_task") == 0)
-    {
-      char *ret = get_tasks_args (credentials, params, task_id, "name",
-                                  "ascending", NULL, pause_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (pause_task);
-      return ret;
-    }
-
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"), pause_task,
-                        apply_overrides, NULL, NULL);
-  g_free (pause_task);
-  return ret;
+  return resource_action (credentials, params, "task", "pause");
 }
 
 /**
@@ -2225,42 +2355,7 @@ pause_task_omp (credentials_t * credentials, params_t *params)
 char *
 resume_paused_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *resume_paused_task;
-  const char *task_id, *next, *overrides;
-  int apply_overrides;
-
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if ((task_id == NULL) || (next == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while resuming a task. "
-                         "The task was not resumed. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_task");
-
-  resume_paused_task = g_strdup_printf ("<resume_paused_task task_id=\"%s\" />",
-                                        task_id);
-
-  if (strcmp (next, "get_task") == 0)
-    {
-      char *ret = get_tasks_args (credentials, params, task_id, "name",
-                                  "ascending", NULL, resume_paused_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (resume_paused_task);
-      return ret;
-    }
-
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"),
-                        resume_paused_task, apply_overrides, NULL, NULL);
-  g_free (resume_paused_task);
-  return ret;
+  return resource_action (credentials, params, "task", "resume_paused");
 }
 
 /**
@@ -2274,42 +2369,7 @@ resume_paused_task_omp (credentials_t * credentials, params_t *params)
 char *
 resume_stopped_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *resume_stopped;
-  const char *task_id, *next, *overrides;
-  int apply_overrides;
-
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if ((task_id == NULL) || (next == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while resuming a task. "
-                         "The task was not resumed. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_task");
-
-  resume_stopped = g_strdup_printf ("<resume_stopped_task task_id=\"%s\" />",
-                                    task_id);
-
-  if (strcmp (next, "get_task") == 0)
-    {
-      char *ret = get_tasks_args (credentials, params, task_id, "name",
-                                  "ascending", NULL, resume_stopped,
-                                  apply_overrides, NULL, NULL);
-      g_free (resume_stopped);
-      return ret;
-    }
-
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"),
-                        resume_stopped, apply_overrides, NULL, NULL);
-  g_free (resume_stopped);
-  return ret;
+  return resource_action (credentials, params, "task", "resume_stopped");
 }
 
 /**
@@ -2323,41 +2383,7 @@ resume_stopped_task_omp (credentials_t * credentials, params_t *params)
 char *
 start_task_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *start_task;
-  const char *task_id, *next, *overrides;
-  int apply_overrides;
-
-  task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if ((task_id == NULL) || (next == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while starting a task. "
-                         "The task was not starting. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_task");
-
-  start_task = g_strdup_printf ("<start_task task_id=\"%s\" />", task_id);
-
-  if (strcmp (next, "get_task") == 0)
-    {
-      char *ret = get_tasks_args (credentials, params, task_id, "name",
-                                  "ascending", NULL, start_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (start_task);
-      return ret;
-    }
-
-  ret = get_tasks_args (credentials, params, NULL, "name", "ascending",
-                        params_value (params, "refresh_interval"), start_task,
-                        apply_overrides, NULL, NULL);
-  g_free (start_task);
-  return ret;
+  return resource_action (credentials, params, "task", "start");
 }
 
 /**
@@ -2493,7 +2519,7 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
                             params_value (params, "details"));
   ret = get_many ("info", credentials, params, extra_xml, extra_attribs->str);
 
-  g_string_free(extra_attribs, TRUE);
+  g_string_free (extra_attribs, TRUE);
 
   return ret;
 }
@@ -2541,7 +2567,6 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
- * @param[in]  task_id           ID of task.
  * @param[in]  sort_field        Field to sort on, or NULL.
  * @param[in]  sort_order        "ascending", "descending", or NULL.
  * @param[in]  refresh_interval  Refresh interval (parsed to int).
@@ -2554,7 +2579,7 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
  */
 static char *
 get_tasks_args (credentials_t *credentials, params_t *params,
-                const char *task_id, const char *sort_field,
+                const char *sort_field,
                 const char *sort_order, const char *refresh_interval,
                 const char *commands, int apply_overrides,
                 const char *report_id, const char *extra_xml)
@@ -2581,78 +2606,30 @@ get_tasks_args (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks");
     }
 
-  if (task_id)
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "%s"
+                            "<get_tasks"
+                            " actions=\"g\""
+                            " apply_overrides=\"%i\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\"/>"
+                            "<get_settings"
+                            " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            apply_overrides,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending")
+      == -1)
     {
-      int notes, overrides;
-      notes = command_enabled (credentials, "GET_NOTES");
-      overrides = command_enabled (credentials, "GET_OVERRIDES");
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "%s"
-                                "<get_tasks"
-                                " task_id=\"%s\""
-                                " actions=\"g\""
-                                " apply_overrides=\"%i\""
-                                " details=\"1\" />"
-                                "%s%s%s"
-                                "%s%s%s"
-                                "</commands>",
-                                commands ? commands : "",
-                                task_id,
-                                apply_overrides,
-                                notes
-                                 ? "<get_notes"
-                                   " sort_field=\"notes_nvt_name, notes.text\""
-                                   " task_id=\""
-                                 : "",
-                                notes ? task_id : "",
-                                notes ? "\"/>" : "",
-                                overrides
-                                 ? "<get_overrides"
-                                   " sort_field=\"overrides_nvt_name, overrides.text\""
-                                   " task_id=\""
-                                 : "",
-                                overrides ? task_id : "",
-                                overrides ? "\"/>" : "",
-                                task_id)
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the status. "
-                               "No update on the requested task can be retrieved. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
-    }
-  else
-    {
-      if (openvas_server_sendf (&session,
-                                "<commands>"
-                                "%s"
-                                "<get_tasks"
-                                " actions=\"g\""
-                                " apply_overrides=\"%i\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\"/>"
-                                "<get_settings"
-                                " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
-                                "</commands>",
-                                commands ? commands : "",
-                                apply_overrides,
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending")
-          == -1)
-        {
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the status. "
-                               "No update of the list of tasks can be retrieved. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks");
-        }
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the status. "
+                           "No update of the list of tasks can be retrieved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
     }
 
   xml = g_string_new ("<get_tasks>");
@@ -2708,7 +2685,6 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   return get_tasks_args (credentials,
                          params,
-                         params_value (params, "task_id"),
                          params_value (params, "sort_field"),
                          params_value (params, "sort_order"),
                          params_value (params, "refresh_interval"),
@@ -2732,6 +2708,144 @@ char *
 get_tasks_omp (credentials_t * credentials, params_t *params)
 {
   return get_tasks (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all tasks, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  params            Request parameters.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml = NULL;
+  gnutls_session_t session;
+  int socket, notes, overrides, apply_overrides;
+  gchar *html;
+  const char *task_id;
+
+  task_id = params_value (params, "task_id");
+  if (task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a task. "
+                         "Diagnostics: Required parameter task_id was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  apply_overrides = params_value (params, "overrides")
+                     ? strcmp (params_value (params, "overrides"), "0")
+                     : 0;
+
+  if (task_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a task. "
+                         "Diagnostics: Required parameter task_id was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the status. "
+                             "No update on status can be retrieved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  notes = command_enabled (credentials, "GET_NOTES");
+  overrides = command_enabled (credentials, "GET_OVERRIDES");
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_tasks"
+                            " task_id=\"%s\""
+                            " actions=\"g\""
+                            " apply_overrides=\"%i\""
+                            " details=\"1\" />"
+                            "%s%s%s"
+                            "%s%s%s"
+                            "</commands>",
+                            task_id,
+                            apply_overrides,
+                            notes
+                             ? "<get_notes"
+                               " sort_field=\"notes_nvt_name, notes.text\""
+                               " task_id=\""
+                             : "",
+                            notes ? task_id : "",
+                            notes ? "\"/>" : "",
+                            overrides
+                             ? "<get_overrides"
+                               " sort_field=\"overrides_nvt_name, overrides.text\""
+                               " task_id=\""
+                             : "",
+                            overrides ? task_id : "",
+                            overrides ? "\"/>" : "",
+                            task_id)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the status. "
+                           "No update on the requested task can be retrieved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("<get_task>");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  g_string_append_printf (xml,
+                          "<apply_overrides>%i</apply_overrides>"
+                          "<delta>%s</delta>",
+                          apply_overrides,
+                          params_value (params, "report_id")
+                           ? params_value (params, "report_id")
+                           : "");
+  if (read_string (&session, &xml))
+    {
+      openvas_server_close (socket, session);
+      g_string_free (xml, TRUE);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the status. "
+                           "No update of the status can be retrieved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  g_string_append (xml, "</get_task>");
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get a task, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_task_omp (credentials_t * credentials, params_t *params)
+{
+  return get_task (credentials, params, NULL);
 }
 
 /**
@@ -9017,30 +9131,7 @@ export_report_format_omp (credentials_t * credentials, params_t *params,
 char *
 delete_report_omp (credentials_t * credentials, params_t *params)
 {
-  char *ret;
-  gchar *delete_report;
-  const char *report_id, *task_id, *overrides;
-
-  report_id = params_value (params, "report_id");
-  task_id = params_value (params, "task_id");
-  overrides = params_value (params, "overrides");
-
-  if ((report_id == NULL) || (task_id == NULL))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a report. "
-                         "The report is not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  delete_report = g_strdup_printf ("<delete_report report_id=\"%s\"/>",
-                                   report_id);
-
-  ret = get_tasks_args (credentials, params, task_id, NULL, NULL, 0,
-                        delete_report, overrides ? strcmp (overrides, "0") : 0,
-                        NULL, NULL);
-  g_free (delete_report);
-  return ret;
+  return delete_resource ("report", credentials, params, 0, NULL);
 }
 
 /**
@@ -10643,88 +10734,6 @@ char *
 new_note_omp (credentials_t *credentials, params_t *params)
 {
   return new_note (credentials, params, NULL);
-}
-
-/**
- * @brief Check whether an OMP command failed.
- *
- * @param[in] entity  Response entity.
- *
- * @return 1 success, 0 fail, -1 error.
- */
-static int
-omp_success (entity_t entity)
-{
-  const char *status;
-
-  status = entity_attribute (entity, "status");
-  if ((status == NULL)
-      || (strlen (status) == 0))
-    return -1;
-
-  return status[0] == '2';
-}
-
-/**
- * @brief Run a single OMP command.
- *
- * @param[in]  credentials    Username and password for authentication.
- * @param[out] response       Response.
- * @param[out] entity_return  Response entity.
- * @param[in]  format         Command.
- * @param[in]  ...            Arguments for format string.
- *
- * @return -1 failed to connect (response set), 1 send error, 2 read error.
- */
-static int
-omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
-     const char *format, ...)
-{
-  gnutls_session_t session;
-  int socket, ret;
-  gchar *command;
-  va_list args;
-  entity_t entity;
-
-  switch (manager_connect (credentials, &socket, &session, response))
-    {
-      case 0:
-        break;
-      case -1:
-        return -1;
-      default:
-        if (response)
-          *response = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred. "
-                                    "Diagnostics: Failure to connect to manager daemon.",
-                                    "/omp?cmd=get_tasks");
-        return -1;
-    }
-
-  va_start (args, format);
-  command = g_markup_vprintf_escaped (format, args);
-  va_end (args);
-
-  ret = openvas_server_send (&session, command);
-  g_free (command);
-  if (ret == -1)
-    {
-      openvas_server_close (socket, session);
-      return 1;
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, response))
-    {
-      openvas_server_close (socket, session);
-      return 2;
-    }
-  if (entity_return)
-    *entity_return = entity;
-  else
-    free_entity (entity);
-  return 0;
 }
 
 /**
@@ -13835,7 +13844,6 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
 
   ret = get_tasks_args (credentials,
                         params,
-                        NULL,
                         params_value (params, "sort_field"),
                         params_value (params, "sort_order"),
                         params_value (params, "refresh_interval"),
