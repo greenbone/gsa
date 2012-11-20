@@ -17696,7 +17696,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
             <td></td>
           </tr>
-          <tr>
+          <tr class="odd">
             <td>Wizard Rows</td>
             <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
             <td></td>
