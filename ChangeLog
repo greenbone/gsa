@@ -1,5 +1,9 @@
 2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add missing separators to last commit.
+
+2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Add pretty names to types.
 
 	* src/html/omp.xsl (html-create-filter-form)
