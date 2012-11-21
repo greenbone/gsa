@@ -13820,12 +13820,13 @@ char *
 run_wizard_omp (credentials_t *credentials, params_t *params)
 {
   const char *name;
-  char *ret;
+  int ret;
   GString *run;
   param_t *param;
-  gchar *param_name;
+  gchar *param_name, *html, *response;
   params_iterator_t iter;
   params_t *wizard_params;
+  entity_t entity;
 
   /* The naming is a bit subtle here, because the HTTP request
    * parameters are called "param"s and so are the OMP wizard
@@ -13862,19 +13863,49 @@ run_wizard_omp (credentials_t *credentials, params_t *params)
 
   g_string_append (run, "</params></run_wizard>");
 
-  ret = get_tasks_args (credentials,
-                        params,
-                        params_value (params, "sort_field"),
-                        params_value (params, "sort_order"),
-                        params_value (params, "refresh_interval"),
-                        run->str,
-                        params_value (params, "overrides")
-                          ? strcmp (params_value (params, "overrides"), "0")
-                          : 0,
-                        NULL,
-                        NULL);
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, run->str);
   g_string_free (run, TRUE);
-  return ret;
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while running a wizard. "
+                             "The wizard did not start. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while running a wizard. "
+                             "It is unclear whether the wizard started or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new note. "
+                             "It is unclear whether the wizard started or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response);
+    }
+  else
+    html = get_tasks (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**

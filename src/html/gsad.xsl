@@ -853,7 +853,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_trash/restore_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_tasks/commands_response/run_wizard_response"
+        <xsl:apply-templates select="get_tasks/run_wizard_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_filter/create_filter_response"
                              mode="response-indicator"/>

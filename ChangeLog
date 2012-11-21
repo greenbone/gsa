@@ -1,5 +1,12 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (run_wizard_omp): Run the OMP directly, and use
+	next_page.
+
+	* src/html/gsad.xsl (html-gsa-logo): Adjust indicator path accordingly.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (save_container_task_omp): Run the OMP directly, and
 	use next_page.
 
