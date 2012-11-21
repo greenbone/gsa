@@ -2194,10 +2194,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Scan Management</li>
           <ul>
             <li> <a href="tasks.html?token={/envelope/token}">Tasks</a></li>
-            <ul>
-              <li> <a href="reports.html?token={/envelope/token}">Reports</a></li>
-              <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
-            </ul>
+              <ul>
+                <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
+                <li> <a href="task_details.html?token={/envelope/token}">Task Details and Reports</a></li>
+                <li> <a href="view_report.html?token={/envelope/token}">View Report</a></li>
+              </ul>
             <li> <a href="new_task.html?token={/envelope/token}">New Task</a></li>
             <li> <a href="notes.html?token={/envelope/token}">Notes</a> </li>
               <ul>
@@ -4519,11 +4520,11 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="reports.html">
-  <div class="gb_window_part_center">Help: Reports</div>
+<xsl:template mode="help" match="task_details.html">
+  <div class="gb_window_part_center">Help: Task Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_tasks&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
+    <div class="float_right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4533,7 +4534,7 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="tasksummary"></a>
-      <h1>Task Summary</h1>
+      <h1>Task Details</h1>
       <p>
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.

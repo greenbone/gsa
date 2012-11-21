@@ -1,5 +1,13 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (contents.html): Add New Task.  Rename Reports to
+	Task Details and Reports.
+	(reports.html): Remove.  Now task_details.html.
+	(task_details.html): New template.  Was reports.html.  Update jump
+	link.  Rename header.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator, exec_omp_get): Add export_task and
 	export_tasks.
 
