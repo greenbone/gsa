@@ -2241,10 +2241,11 @@ save_task_omp (credentials_t * credentials, params_t *params)
 char *
 save_container_task_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *modify_task;
+  gchar *response, *html;
   const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
   const char *overrides, *refresh_interval, *observers, *in_assets;
-  int apply_overrides;
+  int apply_overrides, ret;
+  entity_t entity;
 
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
@@ -2272,48 +2273,67 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
-  modify_task = g_strdup_printf ("<modify_task task_id=\"%s\">"
-                                 "<name>%s</name>"
-                                 "<comment>%s</comment>"
-                                 "<preferences>"
-                                 "<preference>"
-                                 "<scanner_name>in_assets</scanner_name>"
-                                 "<value>%s</value>"
-                                 "</preference>"
-                                 "</preferences>"
-                                 "<observers>%s</observers>"
-                                 "</modify_task>",
-                                 task_id,
-                                 name,
-                                 comment,
-                                 strcmp (in_assets, "0") ? "yes" : "no",
-                                 observers);
 
-  // FIX do here, use next_page
-
-  if (strcmp (next, "get_tasks") == 0)
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_task task_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "<preferences>"
+             "<preference>"
+             "<scanner_name>in_assets</scanner_name>"
+             "<value>%s</value>"
+             "</preference>"
+             "</preferences>"
+             "<observers>%s</observers>"
+             "</modify_task>",
+             task_id,
+             name,
+             comment,
+             strcmp (in_assets, "0") ? "yes" : "no",
+             observers);
+  switch (ret)
     {
-      char *ret = get_tasks_args (credentials, params, sort_field,
-                                  sort_order, refresh_interval, modify_task,
-                                  apply_overrides, NULL, NULL);
-      g_free (modify_task);
-      return ret;
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "No new task was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tasks");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a task. "
+                             "It is unclear whether the task has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tasks");
     }
 
-  if (strcmp (next, "get_task") == 0)
+  if (omp_success (entity))
     {
-      char *ret = get_task (credentials, params, NULL);
-      g_free (modify_task);
-      return ret;
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_tasks (credentials, params, response);
     }
-
-  g_free (modify_task);
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a task. "
-                       "The task remains the same. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_tasks");
+  else
+    html = edit_task (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**

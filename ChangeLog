@@ -1,3 +1,8 @@
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_container_task_omp): Run the OMP directly, and
+	use next_page.
+
 2012-11-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Separate get_task handling from get_tasks, and simplify some of the
