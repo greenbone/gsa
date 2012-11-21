@@ -813,7 +813,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="3">Reports</td>
             <td width="1" rowspan="2">Threat</td>
             <td width="1" rowspan="2">Trend</td>
-            <td width="115" rowspan="2">Actions</td>
+            <td width="155" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
             <td width="1" style="font-size:10px;">Total</td>
@@ -3791,12 +3791,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
           <xsl:choose>
             <xsl:when test="$observed or target/@id=''">
-              <img src="/img/start_inactive.png" border="0" alt="Start"/>
+              <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:when test="string-length(schedule/@id) &gt; 0">
               <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
                  title="Schedule Details">
-                <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
+                <img style="margin-left: 3px" src="/img/scheduled.png" border="0" alt="Schedule Details"/>
               </a>
             </xsl:when>
             <xsl:when test="status='Running'">
@@ -3811,7 +3811,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </xsl:when>
             <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
-              <img src="/img/start_inactive.png" border="0" alt="Start"/>
+              <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="start-icon">
@@ -3890,45 +3890,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="$observed or status='Running' or status='Requested' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
-              <img src="/img/trashcan_inactive.png"
-                   border="0"
-                   alt="To Trashcan"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="trashcan-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-          <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
-             title="Details">
-            <img src="/img/details.png"
-                 border="0"
-                 alt="Details"
-                 style="margin-left:3px;"/>
-          </a>
-          <xsl:choose>
-            <xsl:when test="$observed">
-              <img src="/img/edit_inactive.png" border="0" alt="Edit"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_tasks&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}"
-                 title="Edit Task"
-                 style="margin-left:3px;">
-                <img src="/img/edit.png" border="0" alt="Edit"/>
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="list-window-line-icons">
+            <xsl:with-param name="type" select="'Task'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
         </td>
       </tr>
     </xsl:otherwise>

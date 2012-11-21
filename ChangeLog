@@ -1,5 +1,10 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-task-table): Widen actions column.
+	(task): Make start icon margins consistent.  Introduce standard icons.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (contents.html): Add New Task.  Rename Reports to
 	Task Details and Reports.
 	(reports.html): Remove.  Now task_details.html.
