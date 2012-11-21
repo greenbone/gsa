@@ -584,6 +584,8 @@ init_validator ()
                          "|(export_report_format)"
                          "|(export_target)"
                          "|(export_targets)"
+                         "|(export_task)"
+                         "|(export_tasks)"
                          "|(get_agent)"
                          "|(get_agents)"
                          "|(get_config)"
@@ -1829,6 +1831,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_targets"))
     return export_targets_omp (credentials, params, content_type,
+                               content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_task"))
+    return export_task_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_tasks"))
+    return export_tasks_omp (credentials, params, content_type,
                                content_disposition, response_size);
 
   ELSE (get_agents)

@@ -1,5 +1,14 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator, exec_omp_get): Add export_task and
+	export_tasks.
+
+	* src/gsad_omp.c (export_task, export_tasks): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): Rename Task Summary to Task
 	Details.  Introduce new style icons.
 

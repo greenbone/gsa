@@ -57,6 +57,10 @@ char * stop_task_omp (credentials_t *, params_t *);
 
 char * get_task_omp (credentials_t *, params_t *);
 char * get_tasks_omp (credentials_t *, params_t *);
+char * export_task_omp (credentials_t *, params_t *, enum content_type *,
+                        char **, gsize *);
+char * export_tasks_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
 
 char * delete_report_omp (credentials_t *, params_t *);
 char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
