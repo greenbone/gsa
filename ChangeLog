@@ -1,5 +1,11 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_tasks_args): Remove.  Merged into only caller.
+	(get_tasks): Add get_task_args body.  Remove commands arg.  Callers all
+	now do this themselves.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (run_wizard_omp): Run the OMP directly, and use
 	next_page.
 

@@ -94,10 +94,6 @@ int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
 static char *get_task (credentials_t *, params_t *, const char *);
 
-static char *get_tasks_args (credentials_t *, params_t *, const char *,
-                             const char *, const char *, const char *, int,
-                             const char *, const char *);
-
 static char *get_tasks (credentials_t *, params_t *, const char *);
 
 static char *get_trash (credentials_t *, params_t *, const char *);
@@ -2587,27 +2583,26 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
  *
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  refresh_interval  Refresh interval (parsed to int).
- * @param[in]  commands          Extra commands to run before the others.
- * @param[in]  apply_overrides   Whether to apply overrides.
- * @param[in]  report_id         ID of delta candidate, or NULL.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks_args (credentials_t *credentials, params_t *params,
-                const char *sort_field,
-                const char *sort_order, const char *refresh_interval,
-                const char *commands, int apply_overrides,
-                const char *report_id, const char *extra_xml)
+get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml = NULL;
   gnutls_session_t session;
-  int socket;
+  int socket, apply_overrides;
   gchar *html;
+  const char *sort_field, *sort_order, *refresh_interval, *report_id;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+  refresh_interval = params_value (params, "refresh_interval");
+  apply_overrides = params_value (params, "overrides")
+                     ? strcmp (params_value (params, "overrides"), "0")
+                     : 0;
+  report_id = params_value (params, "report_id");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2628,7 +2623,6 @@ get_tasks_args (credentials_t *credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "%s"
                             "<get_tasks"
                             " actions=\"g\""
                             " apply_overrides=\"%i\""
@@ -2637,7 +2631,6 @@ get_tasks_args (credentials_t *credentials, params_t *params,
                             "<get_settings"
                             " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
                             "</commands>",
-                            commands ? commands : "",
                             apply_overrides,
                             sort_field ? sort_field : "name",
                             sort_order ? sort_order : "ascending")
@@ -2689,31 +2682,6 @@ get_tasks_args (credentials_t *credentials, params_t *params,
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Get all tasks, XSL transform the result.
- *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- *
- * @return Result of XSL transformation.
- */
-static char *
-get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
-{
-  return get_tasks_args (credentials,
-                         params,
-                         params_value (params, "sort_field"),
-                         params_value (params, "sort_order"),
-                         params_value (params, "refresh_interval"),
-                         NULL,
-                         params_value (params, "overrides")
-                           ? strcmp (params_value (params, "overrides"), "0")
-                           : 0,
-                         params_value (params, "report_id"),
-                         extra_xml);
 }
 
 /**
