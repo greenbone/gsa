@@ -1,5 +1,10 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task [details]): Rename Task Summary to Task
+	Details.  Introduce new style icons.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_tasks_args): Remove.  Merged into only caller.
 	(get_tasks): Add get_task_args body.  Remove commands arg.  Callers all
 	now do this themselves.

@@ -2471,15 +2471,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Task Summary
-      <a href="/help/reports.html?token={/envelope/token}#tasksummary"
-         title="Help: Reports (Task Summary)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}" title="Refresh">
-        <img src="/img/refresh.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+    <div class="gb_window_part_center">
+      Task Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Task'"/>
+      </xsl:call-template>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:choose>
           <xsl:when test="$observed or target/@id=''">
             <img src="/img/start_inactive.png" border="0" alt="Start"/>
@@ -2574,37 +2571,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="next" value="get_task"/>
               </xsl:with-param>
             </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="$observed or status='Running' or status='Requested' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
-            <img src="/img/trashcan_inactive.png"
-                 border="0"
-                 alt="To Trashcan"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="trashcan-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_tasks"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="$observed">
-            <img src="/img/edit_inactive.png" border="0" alt="Edit"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=edit_task&amp;task_id={@id}&amp;next=get_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;sort_order={../sort/field/order}&amp;sort_field={../sort/field/text()}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}"
-               title="Edit Task"
-               style="margin-left:3px;">
-              <img src="/img/edit.png" border="0" alt="Edit"/>
-            </a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
