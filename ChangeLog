@@ -1,5 +1,9 @@
 2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_tasks): Match create_task_response, for cloning.
+
+2012-11-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-task-table): Widen actions column.
 	(task): Make start icon margins consistent.  Introduce standard icons.
 
