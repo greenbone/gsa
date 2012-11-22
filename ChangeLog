@@ -1,6 +1,6 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
-	* src/gsad.c (new_note): Code cleaned.
+	* src/gsad_omp.c (new_note): Code cleaned.
 
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
