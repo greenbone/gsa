@@ -12196,85 +12196,45 @@ get_slaves_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_schedule (credentials_t * credentials, params_t *params,
+              const char *extra_xml)
+{
+  return get_one ("schedule", credentials, params, extra_xml, "tasks=\"1\"");
+}
+
+/**
+ * @brief Get one schedule, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
  */
 char *
 get_schedule_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *schedule_id, *sort_field, *sort_order;
+  return get_schedule (credentials, params, NULL);
+}
 
-  schedule_id = params_value (params, "schedule_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (schedule_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a schedule. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_schedules");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a schedule. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_schedules");
-    }
-
-  xml = g_string_new ("<get_schedule>");
-
-  /* Get the schedule. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_schedules"
-                            " details=\"1\""
-                            " schedule_id=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            schedule_id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a schedule. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_schedules");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a schedule. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_schedules");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_schedule>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+/**
+ * @brief Get all schedules, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_schedules (credentials_t *credentials, params_t *params,
+               const char *extra_xml)
+{
+  return get_many ("schedule", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -12288,91 +12248,41 @@ get_schedule_omp (credentials_t * credentials, params_t *params)
 char *
 get_schedules_omp (credentials_t * credentials, params_t *params)
 {
+  return get_schedules (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page to create a new schedule.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_schedule (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
   GString *xml;
-  gnutls_session_t session;
-  int socket;
-  time_t now;
-  struct tm *now_broken;
-  gchar *html;
-  const char *sort_field, *sort_order;
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the schedule list. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_schedules>");
-
-  now = time (NULL);
-  now_broken = localtime (&now);
-  g_string_append_printf (xml,
-                          "<time>"
-                          "<minute>%s%i</minute>"
-                          "<hour>%s%i</hour>"
-                          "<day_of_month>%s%i</day_of_month>"
-                          "<month>%s%i</month>"
-                          "<year>%i</year>"
-                          "</time>",
-                          (now_broken->tm_min > 9 ? "" : "0"),
-                          now_broken->tm_min,
-                          (now_broken->tm_hour > 9 ? "" : "0"),
-                          now_broken->tm_hour,
-                          (now_broken->tm_mday > 9 ? "" : "0"),
-                          now_broken->tm_mday,
-                          ((now_broken->tm_mon + 1) > 9 ? "" : "0"),
-                          (now_broken->tm_mon + 1),
-                          (now_broken->tm_year + 1900));
-
-  /* Get the schedules. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_schedules"
-                            " details=\"1\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the schedule list. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the schedule list. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_schedules>");
-  openvas_server_close (socket, session);
+  xml = g_string_new ("<new_schedule>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_schedule>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new schedule page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_schedule_omp (credentials_t *credentials, params_t *params)
+{
+  return new_schedule (credentials, params, NULL);
 }
 
 /**
@@ -15976,6 +15886,46 @@ char *
 edit_schedule_omp (credentials_t * credentials, params_t *params)
 {
   return edit_schedule (credentials, params, NULL);
+}
+
+/**
+ * @brief Export a schedule.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   schedule_id          UUID of the schedule.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Schedule XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_schedule_omp (credentials_t * credentials, params_t *params,
+                     enum content_type * content_type,
+                     char **content_disposition, gsize *content_length)
+{
+  return export_resource ("schedule", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of schedules.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Schedules XML on success. HTML result of XSL transformation on error.
+ */
+char *
+export_schedules_omp (credentials_t * credentials, params_t *params,
+                      enum content_type * content_type,
+                      char **content_disposition, gsize *content_length)
+{
+  return export_many ("schedule", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 /**

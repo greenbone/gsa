@@ -92,13 +92,17 @@ char * delete_trash_agent_omp (credentials_t *, params_t *);
 char * verify_agent_omp (credentials_t *, params_t *);
 
 char * create_schedule_omp (credentials_t *, params_t *);
-
+char * new_schedule_omp (credentials_t *, params_t *);
 char * delete_schedule_omp (credentials_t *, params_t *);
 char * delete_trash_schedule_omp (credentials_t *, params_t *);
 char * edit_schedule_omp (credentials_t *, params_t *);
 char * get_schedule_omp (credentials_t *, params_t *);
 char * get_schedules_omp (credentials_t *, params_t *);
 char * save_schedule_omp (credentials_t *, params_t *);
+char * export_schedule_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
+char * export_schedules_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
 
 char * edit_target_omp (credentials_t *, params_t *);
 char * get_target_omp (credentials_t *, params_t *);

@@ -1,5 +1,15 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c, src/gsad_omp.h (new_schedule_omp, export_schedule_omp)
+	export_schedules_omp): New functions.
+
+	* src/gsad_omp.c (get_schedules, get_schedule, new_schedule): New
+	functions.
+	(get_schedule_omp): Now calls get_schedule.
+	(get_schedules_omp): Now calls get_schedules.
+
+2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (new_note): Code cleaned.
 
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
