@@ -577,6 +577,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="sync_scap_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Synchronization with SCAP Feed'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
@@ -868,6 +876,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="commands_response/modify_settings_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_feed_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/sync_scap_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_settings/get_settings_response"
                              mode="response-indicator"/>
