@@ -1,5 +1,15 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/gsad.xsl (new_schedule): New template.
+	(html-schedules-table): Cleaned code. Now calls list-window.
+	(schedule): Each schedule now links to its details page. Now calls
+	list-window-line-icons.
+	(schedule [details]): Refactored code to use details-header-icons and
+	minor-details.
+	(get_schedules): Code cleanup and refactoring.
+
+2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c, src/gsad_omp.h (new_schedule_omp, export_schedule_omp)
 	export_schedules_omp): New functions.
 
