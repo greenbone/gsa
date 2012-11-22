@@ -1631,16 +1631,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>.
         This includes the Name, creation time, modification time,
-	comment, date of the first run and next run, timezone, period
-	and duration.
+        comment, date of the first run and next run, timezone, period
+        and duration.
       </p>
 
       <h4>New Schedule </h4>
       <p>
-	To create a new schedule click the new icon 
-	<img src="/img/new.png" alt="New Schedule" title="New Schedule"/>
-	which goes to the <a href="new_schedule.html?token={/envelope/token}">
-	New Schedule</a> page.
+      To create a new schedule click the new icon 
+      <img src="/img/new.png" alt="New Schedule" title="New Schedule"/>
+      which goes to the <a href="new_schedule.html?token={/envelope/token}">
+      New Schedule</a> page.
       </p>
 
       <h4>Schedules</h4>
@@ -1665,8 +1665,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <h3>Tasks using this Schedule</h3>
       <p>
-	This table provides an overview of the tasks that are associated to the
-	schedule (if any).
+        This table provides an overview of the tasks that are associated to the
+        schedule (if any).
         Details of these tasks can be seen after a click on the Details
         <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
@@ -1712,26 +1712,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="even">
           <td>First Run</td>
-	  <td>
-	      Date and time for the first run of the task.
-	  </td>
+          <td>
+              Date and time for the first run of the task.
+          </td>
         </tr>
         <tr class="odd">
           <td>Next Run</td>
           <td>
-	      Date and time for the next run of the task.
+            Date and time for the next run of the task.
           </td>
         </tr>
         <tr class="even">
           <td>Period</td>
-	  <td>
-	      Period after which the task should run again.
-	  </td>
+          <td>
+              Period after which the task should run again.
+          </td>
         </tr>
         <tr class="odd">
           <td>Duration</td>
           <td>
-	      Maximum duration of a task.
+              Maximum duration of a task.
           </td>
         </tr>
       </table>
