@@ -1,5 +1,11 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/help.xsl (schedule_details.html, schedules.html)
+	(new_schedule.html, contents.html): Updated to reflect the new Schedules
+	object management.
+
+2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/gsad.xsl (new_schedule): New template.
 	(html-schedules-table): Cleaned code. Now calls list-window.
 	(schedule): Each schedule now links to its details page. Now calls

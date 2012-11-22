@@ -1613,11 +1613,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_schedules.html">
-  <div class="gb_window_part_center">Help: Configure Schedule</div>
+<xsl:template mode="help" match="schedule_details.html">
+  <div class="gb_window_part_center">Help: Schedule Details
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_schedules&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1626,25 +1626,163 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SCHEDULES'"/>
       </xsl:call-template>
 
-      <h1>Configure Schedules</h1>
+      <h1>Schedule Details</h1>
       <p>
-        Schedules can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
-        They can be used to start a task at a pre-defined time, to repeat a task
-        after a certain interval or to limit the maximum duration of a task.
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>.
+        This includes the Name, creation time, modification time,
+	comment, date of the first run and next run, timezone, period
+	and duration.
       </p>
 
-      <a name="newschedule"></a>
-      <h2>New Schedule</h2>
-
+      <h4>New Schedule </h4>
       <p>
-       To create a schedule the dialog offers these entries.
-       Hit the button "Create Schedule" to submit the new schedule.
-       The list of schedules will be updated.
+	To create a new schedule click the new icon 
+	<img src="/img/new.png" alt="New Schedule" title="New Schedule"/>
+	which goes to the <a href="new_schedule.html?token={/envelope/token}">
+	New Schedule</a> page.
       </p>
+
+      <h4>Schedules</h4>
       <p>
-       The new schedule follows the currently selected timezone.  This timezone is
-       visible in the date on the page header, and can be changed in
-       <a href="/help/my_settings.html?token={/envelope/token}">My Settings</a>.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Schedules" title="Schedules"/>
+       will switch to the schedules page.
+      </p>
+
+      <h4>Edit Schedule</h4>
+      <p>
+       Pressing the "Edit Schedule" icon
+       <img src="/img/edit.png" alt="Edit Schedule" title="Edit Schedule"/>
+       will switch to an overview of the configuration for this schedule and
+       allows editing the schedule's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the schedule as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+      <h3>Tasks using this Schedule</h3>
+      <p>
+	This table provides an overview of the tasks that are associated to the
+	schedule (if any).
+        Details of these tasks can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="schedules.html">
+  <div class="gb_window_part_center">Help: Schedules
+    <a href="/omp?cmd=get_schedules&amp;token={/envelope/token}"
+       title="Schedules" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Schedules"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SCHEDULES'"/>
+      </xsl:call-template>
+
+      <h1>Schedules</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#schedule">Schedules</a>.
+       The complete contents of the schedule entries
+       are shown (name, first run, next run, period and duration).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the schedule and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>First Run</td>
+	  <td>
+	      Date and time for the first run of the task.
+	  </td>
+        </tr>
+        <tr class="odd">
+          <td>Next Run</td>
+          <td>
+	      Date and time for the next run of the task.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Period</td>
+	  <td>
+	      Period after which the task should run again.
+	  </td>
+        </tr>
+        <tr class="odd">
+          <td>Duration</td>
+          <td>
+	      Maximum duration of a task.
+          </td>
+        </tr>
+      </table>
+
+      <h3>New Schedule</h3>
+      <p>
+        To create a new schedule click the
+        new icon <img src="/img/new.png" alt="New Schedule" title="New Schedule" /> which
+        goes to the <a href="new_schedule.html?token={/envelope/token}">New Schedule</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of schedules as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Schedule'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_schedule.html">
+  <div class="gb_window_part_center">Help: New Schedule 
+    <a href="/omp?cmd=new_schedule&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_SCHEDULE'"/>
+      </xsl:call-template>
+
+      <h1>New Schedule</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>
+        the dialog offers these entries.
+        Hit the button "Create Schedule" to submit the new schedule.
+        The Schedule page will be shown.
       </p>
 
       <table class="gbntable">
@@ -1660,112 +1798,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>yes</td>
           <td>80</td>
           <td>Alphanumeric</td>
-          <td>Weekly Scan</td>
+          <td>Single Targets</td>
         </tr>
         <tr class="even">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
           <td>Alphanumeric</td>
-          <td></td>
+          <td>Targets with only one host</td>
         </tr>
         <tr class="odd">
-          <td>First Time</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>Date and time</td>
-          <td>10h00, 01 May 2010</td>
-        </tr>
-        <tr class="even">
-          <td>Period</td>
-          <td>no</td>
-          <td>--</td>
-          <td>Interval</td>
-          <td>1 week</td>
-        </tr>
-        <tr class="odd">
-          <td>Duration</td>
-          <td>no</td>
-          <td>--</td>
-          <td>Interval</td>
-          <td>12 hours</td>
-        </tr>
-      </table>
-
-      <a name="schedules"></a>
-      <h2>Schedules</h2>
-      <p>
-       This table provides an overview of all created schedules.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>User-given name of the schedule.</td>
-        </tr>
-        <tr class="even">
           <td>First Run</td>
-          <td>Date and time for the first run of the task.</td>
-        </tr>
-        <tr class="odd">
-          <td>Period</td>
-          <td>Period after which the task should run again.</td>
+          <td>Yes</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>05:30 10 Jan 2013</td>
         </tr>
         <tr class="even">
-          <td>Duration</td>
-          <td>Maximum duration of a running task.</td>
+          <td>Period</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>5 Days</td>
         </tr>
         <tr class="odd">
-          <td>Timezone</td>
-          <td>Timezone that this schedule follows.</td>
+          <td>Duration</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td>3 Hours</td>
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Schedule to Trashcan</h4>
+      <h4>Schedules</h4>
       <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       It is not possible to remove an schedule that is in use by a task.
-      </p>
-
-      <h4>Schedule Details</h4>
-      <p>
-       Details of an schedule can be seen by clicking on the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />.
-      </p>
-
-
-      <a name="edit_schedule"></a>
-      <h4>Edit Schedule</h4>
-      <p>
-       Pressing the "Edit Schedule" icon
-       <img src="/img/edit.png" alt="Edit Schedule" title="Edit Schedule"/>
-       will switch to an overview of the configuration for this Schedule and
-       allows editing the Schedule's properties.
-      </p>
-
-      <a name="scheduledetails"></a>
-      <h2>Schedule Details</h2>
-      <p>
-       Provides information about a schedule like the name, comment, the first
-       and next time the schedule will be executed, the period and the duration.
-      </p>
-
-      <h3>Tasks using this Schedules</h3>
-      <p>
-       This table provides an overview of the tasks associated with this schedule.
-       Details of these tasks can be seen after a click on the Details
-       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Schedules" title="Schedules"/>
+       will switch to the <a href="schedules.html?token={/envelope/token}">Schedules</a>
+       page.
       </p>
     </div>
   </div>
@@ -2245,7 +2315,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_filter.html?token={/envelope/token}">New Filter</a></li>
                 <li> <a href="filter_details.html?token={/envelope/token}">Filter Details</a></li>
               </ul>
-            <li> <a href="configure_schedules.html?token={/envelope/token}">Configure Schedules</a></li>
+            <li> <a href="schedules.html?token={/envelope/token}">Schedules</a></li>
+              <ul>
+                <li> <a href="new_schedule.html?token={/envelope/token}">New Schedule</a></li>
+                <li> <a href="schedule_details.html?token={/envelope/token}">Schedule Details</a></li>
+              </ul>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
             <li> <a href="configure_slaves.html?token={/envelope/token}">Configure Slaves</a></li>
