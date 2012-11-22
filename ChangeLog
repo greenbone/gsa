@@ -1,5 +1,9 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (new_note): Code cleaned.
+
+2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+
 	New schedule object management implementation.
 
 	* src/gsad.c (exec_omp_get): new commands: export_schedule and
