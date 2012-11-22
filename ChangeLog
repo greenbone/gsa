@@ -1,5 +1,13 @@
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
+	New schedule object management implementation.
+
+	* src/gsad.c (exec_omp_get): new commands: export_schedule and
+	export_schedules. Also checks for new_schedule command now.
+	(init_validator): Added export_schedule and export_schedules commands.
+
+2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/gsad.xsl (sync_scap_response): Added SCAP Synchronization
 	template for response indicator.
 

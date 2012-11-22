@@ -582,6 +582,8 @@ init_validator ()
                          "|(export_port_list)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
+                         "|(export_schedule)"
+                         "|(export_schedules)"
                          "|(export_target)"
                          "|(export_targets)"
                          "|(export_task)"
@@ -634,6 +636,7 @@ init_validator ()
                          "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_schedule)"
                          "|(new_target)"
                          "|(new_task)"
                          "|(pause_task)"
@@ -1825,6 +1828,14 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_report_format_omp (credentials, params, content_type,
                                      content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_schedule"))
+    return export_schedule_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_schedules"))
+    return export_schedules_omp (credentials, params, content_type,
+                               content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_target"))
     return export_target_omp (credentials, params, content_type,
                               content_disposition, response_size);
@@ -1919,6 +1930,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_nvts)
   ELSE_OAP (get_settings)
   ELSE (new_note)
+  ELSE (new_schedule)
   ELSE (new_override)
   ELSE (verify_agent)
   ELSE (verify_report_format)
