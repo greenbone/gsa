@@ -1,5 +1,10 @@
 2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-task-table): Conver $wizard-rows to number
+	before doing comparison with task count.
+
+2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-filter-form, html-edit-filter-form): Add
 	Note and Override to types.
 

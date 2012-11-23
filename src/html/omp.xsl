@@ -822,7 +822,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:apply-templates/>
         </table>
-        <xsl:if test="(count(task) &lt;= $wizard-rows) or ($force-wizard = 1)">
+        <xsl:if test="(count(task) &lt;= number ($wizard-rows)) or ($force-wizard = 1)">
+          yes
           <xsl:call-template name="quick-first-scan-wizard"/>
         </xsl:if>
       </div>
