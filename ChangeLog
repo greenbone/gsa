@@ -1,3 +1,8 @@
+2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-filter-form, html-edit-filter-form): Add
+	Note and Override to types.
+
 2012-11-21  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/html/help.xsl (schedule_details.html, schedules.html)

@@ -5998,7 +5998,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Filter|Port List|Report|Report Format|Schedule|Target|Task|SecInfo', '|')">
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Filter|Note|Override|Port List|Report|Report Format|Schedule|Target|Task|SecInfo', '|')">
                   <option value="{.}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
@@ -6089,7 +6089,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
                 </xsl:variable>
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Filter|Port List|Report|Report Format|Schedule|Target|Task|SecInfo', '|')">
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Filter|Note|Override|Port List|Report|Report Format|Schedule|Target|Task|SecInfo', '|')">
                   <xsl:choose>
                     <xsl:when test=". = $type">
                       <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
