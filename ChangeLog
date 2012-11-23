@@ -1,6 +1,10 @@
 2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/omp.xsl (html-task-table): Conver $wizard-rows to number
+	* src/html/omp.xsl (html-task-table): Remove tracing from last commit.
+
+2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-task-table): Convert $wizard-rows to number
 	before doing comparison with task count.
 
 2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
