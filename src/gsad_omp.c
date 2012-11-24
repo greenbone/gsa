@@ -508,6 +508,7 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
     *entity_return = entity;
   else
     free_entity (entity);
+  openvas_server_close (socket, session);
   return 0;
 }
 

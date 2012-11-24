@@ -1,3 +1,7 @@
+2012-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (omp): Close connection afterwards.
+
 2012-11-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-task-table): Remove tracing from last commit.
