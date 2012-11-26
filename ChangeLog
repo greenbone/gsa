@@ -1,5 +1,10 @@
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/gsad.xsl (login_page): Added autofocus on username field to
+	automatically select it at page load and improve user experience.
+
+2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (new_schedule): Added delete_schedule_response
 	commands_response.
 
