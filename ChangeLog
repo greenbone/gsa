@@ -1,5 +1,9 @@
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (exec_omp_get, init_validator): Added new_slave command.
+
+2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c, src/gsad_omp.h (new_slave, new_slave_omp): New
 	functions.
 

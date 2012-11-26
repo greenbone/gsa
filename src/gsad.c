@@ -636,6 +636,7 @@ init_validator ()
                          "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_slave)"
                          "|(new_schedule)"
                          "|(new_target)"
                          "|(new_task)"
@@ -1930,6 +1931,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_nvts)
   ELSE_OAP (get_settings)
   ELSE (new_note)
+  ELSE (new_slave)
   ELSE (new_schedule)
   ELSE (new_override)
   ELSE (verify_agent)
