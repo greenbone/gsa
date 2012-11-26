@@ -1208,7 +1208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <table>
               <tr>
                 <td>Username</td>
-                <td><input type="text" autocomplete="off" name="login" value="" autofocus/></td>
+                <td><input type="text" autocomplete="off" name="login" value="" autofocus="autofocus"/></td>
               </tr>
               <tr>
                 <td>Password</td>
