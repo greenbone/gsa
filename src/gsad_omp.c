@@ -15261,7 +15261,7 @@ edit_filter_omp (credentials_t * credentials, params_t *params)
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
  *
- * @return Note XML on success.  HTML result of XSL transformation on error.
+ * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_filter_omp (credentials_t * credentials, params_t *params,

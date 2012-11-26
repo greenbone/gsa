@@ -1,5 +1,9 @@
 2012-11-26  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c (export_filter_omp): Fixed documentation.
+
+2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (edit_slave, edit_slave_omp, export_slave_omp)
 	(export_slaves_omp): New functions.
 
