@@ -1,3 +1,8 @@
+2012-11-26  Henri Doreau <henri.doreau@greenbone.net>
+
+	* src/gsad_omp.c (save_task_omp, save_container_task_omp): Removed
+	set-but-unused variables to get rid of the corresponding GCC warning.
+
 2012-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_lsc_credential_omp, delete_alert_omp)

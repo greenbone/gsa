@@ -2078,10 +2078,10 @@ char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response;
-  const char *comment, *name, *next, *refresh_interval, *sort_field;
-  const char *sort_order, *overrides, *schedule_id, *in_assets;
+  const char *comment, *name, *next, *sort_field;
+  const char *sort_order, *schedule_id, *in_assets;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
-  int apply_overrides, ret;
+  int ret;
   params_t *alerts;
   GString *alert_element;
   entity_t entity;
@@ -2090,12 +2090,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-  refresh_interval = params_value (params, "refresh_interval");
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
-  overrides = params_value (params, "overrides");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (comment == NULL || name == NULL)
     return edit_task (credentials, params,
@@ -2240,8 +2236,8 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *response, *html;
   const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
-  const char *overrides, *refresh_interval, *observers, *in_assets;
-  int apply_overrides, ret;
+  const char *observers, *in_assets;
+  int ret;
   entity_t entity;
 
   comment = params_value (params, "comment");
@@ -2251,11 +2247,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
   task_id = params_value (params, "task_id");
-  overrides = params_value (params, "overrides");
-  refresh_interval = params_value (params, "refresh_interval");
   observers = params_value (params, "observers");
-
-  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (comment == NULL || name == NULL || observers == NULL)
     return edit_task (credentials, params,
