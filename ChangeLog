@@ -1,5 +1,14 @@
 2012-11-26  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/omp.xsl (html-slaves-table): Refactored code to use
+	list-window.
+	(create_slave_response): Added links to each slave details page in the
+	list.
+	(slave): Refactored code to use list-window-line-icons.
+	(get_slaves): Added code to test for 4xx and 5xx status responses.
+
+2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (export_filter_omp): Fixed documentation.
 
 2012-11-26  Hani Benhabiles <kroosec@gmail.com>

@@ -10356,30 +10356,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-slaves-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Slaves
-      <a href="/help/configure_slaves.html?token={/envelope/token}#slaves"
-         title="Help: Configure Slaves (Slaves)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Host</td>
-            <td>Port</td>
-            <td>Login</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="slave"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'slave'"/>
+    <xsl:with-param name="cap-type" select="'Slave'"/>
+    <xsl:with-param name="resources-summary" select="slaves"/>
+    <xsl:with-param name="resources" select="slave"/>
+    <xsl:with-param name="count" select="count (slave)"/>
+    <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Host|host Port|port Login|login'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_SLAVE_RESPONSE -->
@@ -10423,7 +10408,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -10435,24 +10424,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="login"/></td>
     <td>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'slave'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png"
-               border="0"
-               alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-         title="Slave Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Slave'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -10586,12 +10561,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_slaves">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_slave_response"/>
+  <xsl:apply-templates select="delete_slave_response"/>
   <xsl:apply-templates select="create_slave_response"/>
-  <xsl:call-template name="html-create-slave-form"/>
   <!-- The for-each makes the get_slaves_response the current node. -->
   <xsl:for-each select="get_slaves_response | commands_response/get_slaves_response">
-    <xsl:call-template name="html-slaves-table"/>
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Slaves 
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-slaves-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
 </xsl:template>
 
