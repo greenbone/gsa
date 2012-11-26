@@ -2,7 +2,7 @@
 
 	* src/gsad_omp.c (delete_schedule_omp, delete_trash_schedule_omp)
 	(delete_target_omp, delete_trash_target_omp): Refactored to use
-	delete_resource accordingly
+	delete_resource accordingly.
 
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
