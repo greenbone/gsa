@@ -8756,6 +8756,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Configure Schedules (New Schedule)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_schedules&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Schedules" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Schedules"/>
+      </a>
     </div>
     <div class="gb_window_part_content">
       <form action="/omp" method="post" enctype="multipart/form-data">

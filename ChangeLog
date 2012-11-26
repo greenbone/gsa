@@ -1,3 +1,8 @@
+2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/html/omp.xsl (html-create-schedule-form): Added button to show
+	list of schedules
+
 2012-11-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (omp): Close connection afterwards.
