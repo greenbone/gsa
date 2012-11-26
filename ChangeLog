@@ -1,3 +1,8 @@
+2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/gsad_omp.c (edit_slave, edit_slave_omp, export_slave_omp)
+	(export_slaves_omp): New functions.
+
 2012-11-26  Henri Doreau <henri.doreau@greenbone.net>
 
 	* src/gsad_omp.c (save_task_omp, save_container_task_omp): Removed

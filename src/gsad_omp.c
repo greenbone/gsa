@@ -11822,6 +11822,77 @@ new_slave_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_slave XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_slave (credentials_t * credentials, params_t *params,
+             const char *extra_xml)
+{
+  return edit_resource ("slave", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_slave XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_slave_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_slave (credentials, params, NULL);
+}
+
+/**
+ * @brief Export a slave.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   slave_id             UUID of slave.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Slave XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_slave_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_resource ("slave", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of slaves.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Slaves XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_slaves_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("slave", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
+/**
  * @brief Get one schedule, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

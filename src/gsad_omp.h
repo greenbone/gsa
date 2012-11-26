@@ -182,6 +182,11 @@ char * create_slave_omp (credentials_t *, params_t *);
 char * new_slave_omp (credentials_t *, params_t *);
 char * delete_slave_omp (credentials_t *, params_t *);
 char * delete_trash_slave_omp (credentials_t *, params_t *);
+char * edit_slave_omp (credentials_t *, params_t *);
+char * export_slave_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
+char * export_slaves_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
 
 char * get_system_reports_omp (credentials_t *, params_t *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,
