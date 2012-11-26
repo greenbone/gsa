@@ -1,3 +1,14 @@
+2012-11-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_lsc_credential_omp, delete_alert_omp)
+	(test_alert_omp, new_target_omp, create_target_omp, get_targets_omp)
+	(save_target_omp, get_my_settings, edit_my_settings, save_my_settings)
+	(new_filter, create_filter_omp): Close connection after use.
+
+	* src/gsad_oap.c (edit_user_oap, get_user_oap, get_users_oap)
+	(get_feed_oap, get_scan_oap, sync_feed_oap, sync_scap_oap)
+	(get_settings_oap): Close connection after use.
+
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad_omp.c (delete_schedule_omp, delete_trash_schedule_omp)

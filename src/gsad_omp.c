@@ -3667,9 +3667,7 @@ char *
 save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
   gchar *modify;
-  int socket, change_login, change_password;
-  gnutls_session_t session;
-  gchar *html;
+  int change_login, change_password;
 
   change_login = params_given (params, "credential_login");
   change_password = (params_value (params, "enable") ? 1 : 0);
@@ -3691,23 +3689,6 @@ save_lsc_credential_omp (credentials_t * credentials, params_t *params)
                          "The credential remains the same. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_lsc_credentials");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a credential. "
-                             "The credential remains the same. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials");
-    }
 
   if (change_login && change_password)
     modify = g_markup_printf_escaped ("<modify_lsc_credential"
@@ -4574,6 +4555,7 @@ delete_alert_omp (credentials_t * credentials, params_t *params)
 
   /* Cleanup, and return transformed XML. */
 
+  openvas_server_close (socket, session);
   html = get_alerts (credentials, params, response);
   g_free (response);
   return html;
@@ -4952,6 +4934,7 @@ test_alert_omp (credentials_t * credentials, params_t *params)
 
   /* Cleanup, and return transformed XML. */
 
+  openvas_server_close (socket, session);
   html = get_alerts (credentials, params, response);
   g_free (response);
   return html;
@@ -5143,6 +5126,7 @@ new_target_omp (credentials_t *credentials, params_t *params)
   if (name == NULL)                                                            \
     {                                                                          \
       gchar *msg;                                                              \
+      openvas_server_close (socket, session);                                  \
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                             "Given " G_STRINGIFY (name) " was invalid",        \
                             "Create Target");                                  \
@@ -5214,6 +5198,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_locator was invalid",
                             "Create Target");
+      openvas_server_close (socket, session);
       html = new_target (credentials, params, msg);
       g_free (msg);
       return html;
@@ -5334,6 +5319,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
 
     if (status[0] != '2')
       {
+        openvas_server_close (socket, session);
         html = new_target (credentials, params, response);
         g_free (response);
         free_entity (entity);
@@ -5343,6 +5329,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
     if (target_id && strcmp (target_id, "0"))
       {
         gchar *ret;
+        openvas_server_close (socket, session);
         ret = get_target (credentials, params, response);
         g_free (response);
         free_entity (entity);
@@ -5352,6 +5339,7 @@ create_target_omp (credentials_t * credentials, params_t *params)
     free_entity (entity);
   }
 
+  openvas_server_close (socket, session);
   html = get_targets (credentials, params, response);
   g_free (response);
   return html;
@@ -6462,6 +6450,7 @@ get_targets_omp (credentials_t * credentials, params_t *params)
   if (name == NULL)                                                            \
     {                                                                          \
       gchar *msg;                                                              \
+      openvas_server_close (socket, session);                                  \
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                             "Given " G_STRINGIFY (name) " was invalid",        \
                             "Modify Target");                                  \
@@ -6522,11 +6511,15 @@ save_target_omp (credentials_t * credentials, params_t *params)
   CHECK (next);
   CHECK (target_source);
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    return new_target (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Modify Target"));
+    {
+      openvas_server_close (socket, session);
+      return new_target (credentials, params,
+                         GSAD_MESSAGE_INVALID_PARAM ("Modify Target"));
+    }
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       gchar *msg;
+      openvas_server_close (socket, session);
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_locator was invalid",
                             "Modify Target");
@@ -13796,6 +13789,7 @@ get_my_settings (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</get_my_settings>");
+  openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
@@ -13883,6 +13877,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</edit_my_settings>");
+  openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
@@ -14043,6 +14038,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       if (setenv ("TZ", credentials->timezone, 1) == -1)
         {
+          openvas_server_close (socket, session);
           g_critical ("%s: failed to set TZ\n", __FUNCTION__);
           exit (EXIT_FAILURE);
         }
@@ -14988,6 +14984,7 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml)
   if (name == NULL)                                                            \
     {                                                                          \
       gchar *msg;                                                              \
+      openvas_server_close (socket, session);                                  \
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                             "Given " G_STRINGIFY (name) " was invalid",        \
                             "Create Filter");                                  \
@@ -15096,6 +15093,7 @@ create_filter_omp (credentials_t *credentials, params_t *params)
 
     if (status[0] != '2')
       {
+        openvas_server_close (socket, session);
         html = next_page (credentials, params, response);
         if (html == NULL)
           html = new_filter (credentials, params, response);
@@ -15108,6 +15106,7 @@ create_filter_omp (credentials_t *credentials, params_t *params)
     if (filter_id && strcmp (filter_id, "0"))
       {
         gchar *ret;
+        openvas_server_close (socket, session);
         ret = get_filter (credentials, params, response);
         g_free (response);
         free_entity (entity);
@@ -15120,6 +15119,8 @@ create_filter_omp (credentials_t *credentials, params_t *params)
 
     free_entity (entity);
   }
+
+  openvas_server_close (socket, session);
 
   html = next_page (credentials, params, response);
   if (html == NULL)
@@ -15367,6 +15368,7 @@ save_filter_omp (credentials_t * credentials, params_t *params)
 
     if (status[0] != '2')
       {
+        openvas_server_close (socket, session);
         html = edit_filter (credentials, params, response);
         g_free (response);
         free_entity (entity);
@@ -15375,6 +15377,8 @@ save_filter_omp (credentials_t * credentials, params_t *params)
 
     free_entity (entity);
   }
+
+  openvas_server_close (socket, session);
 
   /* Pass response to handler of following page. */
 

@@ -669,6 +669,7 @@ edit_user_oap (credentials_t * credentials, params_t * params)
                             params_value (params, "login"))
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user. "
@@ -746,6 +747,7 @@ get_user_oap (credentials_t * credentials, params_t *params)
                             name)
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user. "
@@ -824,6 +826,7 @@ get_users_oap (credentials_t * credentials, params_t *params)
                             sort_order ? sort_order : "ascending")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
@@ -894,6 +897,7 @@ get_feed_oap (credentials_t * credentials, params_t *params)
                             "</commands>")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the feed list. "
@@ -964,6 +968,7 @@ get_scap_oap(credentials_t * credentials, params_t *params)
                             "</commands>")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the SCAP feed list. "
@@ -1035,6 +1040,7 @@ sync_feed_oap (credentials_t * credentials, params_t *params)
                             "</commands>")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the NVT feed. "
@@ -1106,6 +1112,7 @@ sync_scap_oap (credentials_t * credentials, params_t *params)
                             "</commands>")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while synchronizing with the SCAP feed. "
@@ -1178,6 +1185,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
                             "</commands>")
       == -1)
     {
+      openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting the user list. "
