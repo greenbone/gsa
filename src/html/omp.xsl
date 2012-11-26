@@ -8752,8 +8752,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Schedule
-      <a href="/help/configure_schedules.html?token={/envelope/token}#newschedule"
-         title="Help: Configure Schedules (New Schedule)">
+      <a href="/help/new_schedule.html?token={/envelope/token}"
+         title="Help: New Schedule">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_schedules&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
