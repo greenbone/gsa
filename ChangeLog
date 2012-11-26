@@ -1,5 +1,10 @@
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/omp.xsl (new_schedule): Added delete_schedule_response
+	commands_response.
+
+2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (html-create-schedule-form): Added button to show
 	list of schedules
 

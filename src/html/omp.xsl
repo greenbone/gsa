@@ -9238,6 +9238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="new_schedule">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_schedule_response"/>
+  <xsl:apply-templates select="commands_response/delete_schedule_response"/>
   <xsl:call-template name="html-create-schedule-form"/>
 </xsl:template>
 
