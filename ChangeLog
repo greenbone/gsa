@@ -1,5 +1,12 @@
 2012-11-24  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c (get_slave, get_slaves): New functions.
+	(delete_slave_omp): Now uses delete_resource.
+	(get_slave_omp): Now uses get_slave.
+	(get_slaves_omp): Now uses get_slaves.
+
+2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (html-create-slave-form): Added link to slaves list.
 	Updated to link to new style help documentation.
 
