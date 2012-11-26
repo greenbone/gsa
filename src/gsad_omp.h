@@ -179,6 +179,7 @@ char * export_overrides_omp (credentials_t *, params_t *, enum content_type *,
 char * get_slave_omp (credentials_t *, params_t *);
 char * get_slaves_omp (credentials_t *, params_t *);
 char * create_slave_omp (credentials_t *, params_t *);
+char * new_slave_omp (credentials_t *, params_t *);
 char * delete_slave_omp (credentials_t *, params_t *);
 char * delete_trash_slave_omp (credentials_t *, params_t *);
 
