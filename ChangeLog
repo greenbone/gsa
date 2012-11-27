@@ -14,7 +14,7 @@
 	(edit_slave): New templates.
 	(html-edit-schedule-form): Fixed help link.
 
-2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+2012-11-27  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c (init_validator): Added export_slave and export_slaves
 	values. Added slave to possible values of resource_type and
