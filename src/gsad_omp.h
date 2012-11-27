@@ -180,6 +180,7 @@ char * get_slave_omp (credentials_t *, params_t *);
 char * get_slaves_omp (credentials_t *, params_t *);
 char * create_slave_omp (credentials_t *, params_t *);
 char * new_slave_omp (credentials_t *, params_t *);
+char * save_slave_omp (credentials_t *, params_t *);
 char * delete_slave_omp (credentials_t *, params_t *);
 char * delete_trash_slave_omp (credentials_t *, params_t *);
 char * edit_slave_omp (credentials_t *, params_t *);

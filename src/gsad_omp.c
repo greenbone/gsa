@@ -11855,6 +11855,178 @@ edit_slave_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Slave");                                     \
+      html = edit_slave (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a slave, get all slaves, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_slave_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *slave_id, *name, *comment, *next, *host, *port, *login, *password;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a slave. "
+                             "The slave was not saved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_slaves");
+    }
+
+  slave_id = params_value (params, "slave_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  next = params_value (params, "next");
+  host = params_value (params, "host");
+  port = params_value (params, "port");
+  login = params_value (params, "login");
+  password = params_value (params, "password");
+
+  CHECK (slave_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+  CHECK (host);
+  CHECK (port);
+  CHECK (login);
+  CHECK (password);
+
+  {
+    int ret;
+    const char *status;
+    entity_t entity;
+
+    /* Modify the slave. */
+
+    ret = openvas_server_sendf (&session,
+                                "<modify_slave slave_id=\"%s\">"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "<host>%s</host>"
+                                "<port>%s</port>"
+                                "<login>%s</login>"
+                                "<password>%s</password>"
+                                "</modify_slave>",
+                                slave_id,
+                                name,
+                                comment,
+                                host,
+                                port,
+                                login,
+                                password);
+
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a slave. "
+                             "The slave was not modified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_slaves");
+      }
+
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a slave. "
+                             "It is unclear whether the slave has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_slaves");
+      }
+
+    openvas_server_close (socket, session);
+
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a slave. "
+                             "It is unclear whether the slave has been modified or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_slaves");
+      }
+
+    if (status[0] != '2')
+      {
+        openvas_server_close (socket, session);
+        html = edit_slave (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
+
+    free_entity (entity);
+  }
+
+  openvas_server_close (socket, session);
+
+  /* Pass response to handler of following page. */
+
+  if (strcmp (params_value (params, "next"), "get_slaves") == 0)
+    {
+      html = get_slaves (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  if (strcmp (params_value (params, "next"), "get_slave") == 0)
+    {
+      html = get_slave (credentials, params, response);
+      g_free (response);
+      return html;
+    }
+
+  g_free (response);
+
+  return gsad_message (credentials,
+                       "Internal error", __FUNCTION__, __LINE__,
+                       "An internal error occurred while saving a slave. "
+                       "The slave was, however, modified. "
+                       "Diagnostics: Error in parameter next.",
+                       "/omp?cmd=get_slaves");
+}
+
+#undef CHECK
+
+/**
  * @brief Export a slave.
  *
  * @param[in]   credentials          Username and password for authentication.

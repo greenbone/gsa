@@ -9330,7 +9330,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Schedule
-      <a href="/help/configure_schedules.html?token={/envelope/token}#edit_schedule" title="Help: Edit Schedule">
+      <a href="/help/schedules.html?token={/envelope/token}#edit_schedule" title="Help: Edit Schedule">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_schedules&amp;schedule={/envelope/params/schedule}&amp;token={/envelope/token}"
@@ -10396,6 +10396,115 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
+
+<!--     MODIFY_SLAVE_RESPONSE -->
+
+<xsl:template match="modify_slave_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Slave</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     EDIT_SLAVE -->
+
+<xsl:template name="html-edit-slave-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Slave
+      <a href="/help/slave.html?token={/envelope/token}#edit_slave" title="Help: Edit Slave">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_slaves&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Slaves" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Slaves"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_slave&amp;slave_id={commands_response/get_slaves_response/slave/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Slave Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_slave"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="slave_id"
+               value="{commands_response/get_slaves_response/slave/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="slave" value="{/envelope/params/slave}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text" name="name" size="30" maxlength="80"
+                     value="{commands_response/get_slaves_response/slave/name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_slaves_response/slave/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Host</td>
+            <td>
+              <input type="text" name="host"
+                     value="{commands_response/get_slaves_response/slave/host}"
+                     size="30"
+                     maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Port</td>
+            <td>
+              <input type="text" name="port" size="30" maxlength="1000"
+                     value="{commands_response/get_slaves_response/slave/port}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Login</td>
+            <td>
+              <input type="text" name="login" size="30" maxlength="1000"
+                     value="{commands_response/get_slaves_response/slave/login}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Password</td>
+            <td>
+              <input type="password" autocomplete="off" name="password"
+                     size="30" maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Slave"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_slave">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-slave-form"/>
+</xsl:template>
+
 
 <!--     SLAVE -->
 

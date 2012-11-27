@@ -566,6 +566,7 @@ init_validator ()
                          "|(edit_report_format)"
                          "|(edit_schedule)"
                          "|(edit_settings)"
+                         "|(edit_slave)"
                          "|(edit_target)"
                          "|(edit_task)"
                          "|(edit_user)"
@@ -660,6 +661,7 @@ init_validator ()
                          "|(save_report_format)"
                          "|(save_schedule)"
                          "|(save_settings)"
+                         "|(save_slave)"
                          "|(save_target)"
                          "|(save_task)"
                          "|(save_user)"
@@ -1612,6 +1614,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_report_format)
   ELSE (save_schedule)
   ELSE_OAP (save_settings)
+  ELSE (save_slave)
   ELSE (save_target)
   ELSE (save_task)
   ELSE (save_container_task)
@@ -1757,6 +1760,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_override)
   ELSE (edit_report_format)
   ELSE (edit_schedule)
+  ELSE (edit_slave)
   ELSE_OAP (edit_settings)
   ELSE (edit_target)
   ELSE (edit_task)
