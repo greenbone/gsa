@@ -1,3 +1,8 @@
+2012-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Split default report check
+	per report type, to make it easier to patch for custom report formats.
+
 2012-11-27  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad_omp.h, src/gsad_omp.c (save_slave_omp): New function.
