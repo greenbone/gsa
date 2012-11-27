@@ -1,8 +1,13 @@
 2012-11-27  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad_omp.h, src/gsad_omp.c (save_slave_omp): New function.
+
 	* src/gsad.c (init_validator, exec_omp_post): Added edit_slave and
 	save_slave values.
+
+	* src/html/omp.xsl (modify_slave_response, html-edit-slave-form)
+	(edit_slave): New templates.
+	(html-edit-schedule-form): Fixed help link.
 
 2012-11-26  Hani Benhabiles <kroosec@gmail.com>
 
