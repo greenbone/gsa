@@ -1,3 +1,8 @@
+2012-11-27  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/html/omp.xsl (slave [details]): Refactored code to use shared
+	templates details-header-icons and minor-details.
+
 2012-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-report-details): Split default report check

@@ -10607,15 +10607,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Slave Details
-       <a href="/help/configure_slaves.html?token={/envelope/token}#slavedetails"
-         title="Help: Configure Slaves (Slave Details)">
-         <img src="/img/help.png"/>
-       </a>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Slave'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>
