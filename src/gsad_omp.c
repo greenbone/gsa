@@ -569,6 +569,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_schedules") == 0)
     return get_schedules_omp (credentials, params);
 
+  if (strcmp (next, "get_slaves") == 0)
+    return get_slaves_omp (credentials, params);
+
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
 

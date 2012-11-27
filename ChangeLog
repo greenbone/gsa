@@ -1,5 +1,15 @@
 2012-11-26  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (init_validator): Added export_slave and export_slaves
+	values. Added slave to possible values of resource_type and
+	optional_resource_type.
+	(export_omp_get): Added handlers for export_slave and export_slaves
+	commands.
+
+	* src/gsad_omp.c (next_page): Added handler for get_slaves value.
+
+2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (html-slaves-table): Refactored code to use
 	list-window.
 	(create_slave_response): Added links to each slave details page in the
