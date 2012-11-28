@@ -1782,7 +1782,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a>
         the dialog offers these entries.
         Hit the button "Create Schedule" to submit the new schedule.
-        The Schedule page will be shown.
+        The Schedules page will be shown.
       </p>
 
       <table class="gbntable">
