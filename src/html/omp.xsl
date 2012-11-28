@@ -9141,14 +9141,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
               <select name="year">
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2010'"/>
-                  <xsl:with-param name="select-value" select="time/year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2011'"/>
-                  <xsl:with-param name="select-value" select="time/year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2012'"/>
                   <xsl:with-param name="select-value" select="time/year"/>
                 </xsl:call-template>
@@ -9164,39 +9156,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="value" select="'2015'"/>
                   <xsl:with-param name="select-value" select="time/year"/>
                 </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2016'"/>
+                  <xsl:with-param name="select-value" select="time/year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2017'"/>
+                  <xsl:with-param name="select-value" select="time/year"/>
+                </xsl:call-template>
               </select>
             </td>
           </tr>
           <tr class="even">
             <td valign="top" width="125">Period (optional)</td>
             <td>
-              <select name="period">
-                <option value="00" selected="1">00</option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-              </select>
+              <input type="text"
+                     name="period"
+                     value="0"
+                     size="3"
+                     maxlength="80"/>
               <select name="period_unit">
                 <option value="hour" selected="1">hour(s)</option>
                 <option value="day">day(s)</option>
@@ -9208,33 +9186,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="odd">
             <td valign="top" width="125">Duration (optional)</td>
             <td>
-              <select name="duration">
-                <option value="00" selected="1">00</option>
-                <option value="01">01</option>
-                <option value="02">02</option>
-                <option value="03">03</option>
-                <option value="04">04</option>
-                <option value="05">05</option>
-                <option value="06">06</option>
-                <option value="07">07</option>
-                <option value="08">08</option>
-                <option value="09">09</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-              </select>
+              <input type="text"
+                     name="duration"
+                     value="0"
+                     size="3"
+                     maxlength="80"/>
               <select name="duration_unit">
                 <option value="hour" selected="1">hour(s)</option>
                 <option value="day">day(s)</option>
@@ -9744,14 +9700,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="year"
                               select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2010'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2011'"/>
-                  <xsl:with-param name="select-value" select="$year"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2012'"/>
                   <xsl:with-param name="select-value" select="$year"/>
                 </xsl:call-template>
@@ -9765,6 +9713,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:call-template>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2015'"/>
+                  <xsl:with-param name="select-value" select="$year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2016'"/>
+                  <xsl:with-param name="select-value" select="$year"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2017'"/>
                   <xsl:with-param name="select-value" select="$year"/>
                 </xsl:call-template>
               </select>
@@ -9803,11 +9759,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   months
                 </xsl:when>
                 <xsl:otherwise>
-                  <select name="period">
-                    <xsl:call-template name="schedule-select-options">
-                      <xsl:with-param name="selected" select="commands_response/get_schedules_response/schedule/simple_period/text()"/>
-                    </xsl:call-template>
-                  </select>
+                  <input type="text"
+                         name="period"
+                         value="{commands_response/get_schedules_response/schedule/simple_period/text()}"
+                         size="4"
+                         maxlength="80"/>
                   <select name="period_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'hour'">
@@ -9860,11 +9816,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   seconds
                 </xsl:when>
                 <xsl:otherwise>
-                  <select name="duration">
-                    <xsl:call-template name="schedule-select-options">
-                      <xsl:with-param name="selected" select="commands_response/get_schedules_response/schedule/simple_duration/text()"/>
-                    </xsl:call-template>
-                  </select>
+                  <input type="text"
+                         name="duration"
+                         value="{commands_response/get_schedules_response/schedule/simple_duration/text()}"
+                         size="4"
+                         maxlength="80"/>
                   <select name="duration_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/unit = 'hour'">
