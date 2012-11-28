@@ -1,3 +1,11 @@
+2012-11-28  Hani Benhabiles <kroosec@gmail.com>
+
+	Updated Slaves management documentation to reflect the new object
+	management style and features.
+
+	* src/html/help.xsl (configure_slaves.html): Template removed.
+	(slave_details.html, slaves.html, new_slave.html): New templates.
+
 2012-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Separate token missing and token bad

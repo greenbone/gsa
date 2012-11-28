@@ -1841,11 +1841,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_slaves.html">
-  <div class="gb_window_part_center">Help: Configure Slave</div>
+<xsl:template mode="help" match="slave_details.html">
+  <div class="gb_window_part_center">Help: Slave Details
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1854,19 +1854,157 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_SLAVES'"/>
       </xsl:call-template>
 
-      <h1>Configure Slaves</h1>
+      <h1>Slaves Details</h1>
       <p>
-        <a href="glossary.html?token={/envelope/token}#task">Tasks</a> can be configured to run on slave
-        manager servers.
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
+        This includes the Name, creation time, modification time,
+        comment, date of the first run and next run, timezone, period
+        and duration.
       </p>
 
-      <a name="newslave"></a>
-      <h2>New Slave</h2>
-
+      <h4>New Slave </h4>
       <p>
-       To create a slave the dialog offers these entries.
-       Hit the button "Create Slave" to submit the new slave.
-       The list of slaves will be updated.
+        To create a new slave click the new icon 
+        <img src="/img/new.png" alt="New Slave" title="New Slave"/>
+        which goes to the <a href="new_slave.html?token={/envelope/token}">
+        New Slave</a> page.
+      </p>
+
+      <h4>Slaves</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Slaves" title="Slaves"/>
+        will switch to the slaves page.
+      </p>
+
+      <h4>Edit Slave</h4>
+      <p>
+        Pressing the "Edit Slave" icon
+        <img src="/img/edit.png" alt="Edit Slave" title="Edit Slave"/>
+        will switch to an overview of the configuration for this slave and
+        allows editing the slave's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the slave as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+      <h3>Tasks using this Slave</h3>
+      <p>
+        This table provides an overview of the tasks that are associated to the
+        slave (if any).
+        Details of these tasks can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="slaves.html">
+  <div class="gb_window_part_center">Help: Slaves 
+    <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
+       title="Slaves" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Slaves"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_SLAVES'"/>
+      </xsl:call-template>
+
+      <h1>Slaves</h1>
+      <p>
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#slave">Slaves</a>.
+        The complete contents of the slave entries
+        are shown (name, host, port and login).
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the slave and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Host</td>
+          <td>
+              Host of the slave.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Port</td>
+          <td>
+            Network port on the host of the slave.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>
+              Username on the host of the slave
+          </td>
+        </tr>
+      </table>
+
+      <h3>New Slave</h3>
+      <p>
+        To create a new slave click the
+        new icon <img src="/img/new.png" alt="New Slave" title="New Slave" /> which
+        goes to the <a href="new_slave.html?token={/envelope/token}">New Slave</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of slaves as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Slave'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_slave.html">
+  <div class="gb_window_part_center">Help: New Slave 
+    <a href="/omp?cmd=new_slave&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_SLAVE'"/>
+      </xsl:call-template>
+
+      <h1>New Slave</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#slave">Slave</a>
+        the dialog offers these entries.
+        Hit the button "Create Slave" to submit the new slave.
+        The Slaves page will be shown.
       </p>
 
       <table class="gbntable">
@@ -1893,95 +2031,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>Host</td>
-          <td>yes</td>
+          <td>Yes</td>
           <td>80</td>
           <td>Alphanumeric</td>
-          <td>192.0.32.10</td>
+          <td>192.168.3.200</td>
         </tr>
         <tr class="even">
           <td>Port</td>
-          <td>yes</td>
+          <td>Yes</td>
           <td>80</td>
           <td>Integer</td>
           <td>9390</td>
         </tr>
         <tr class="odd">
           <td>Login</td>
-          <td>yes</td>
+          <td>Yes</td>
           <td>80</td>
           <td>Alphanumeric</td>
           <td>sally</td>
-          <td></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Password</td>
-          <td>yes</td>
+          <td>Yes</td>
           <td>40</td>
+          <td>Alphanumeric</td>
           <td>Free form text</td>
-          <td></td>
         </tr>
       </table>
 
-      <a name="slaves"></a>
-      <h2>Slaves</h2>
+      <h4>Slaves</h4>
       <p>
-       This table provides an overview of all created slaves.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>User-given name of the slave.</td>
-        </tr>
-        <tr class="even">
-          <td>Host</td>
-          <td>The host address of the slave manager.</td>
-        </tr>
-        <tr class="odd">
-          <td>Port</td>
-          <td>Port on which the slave manager is running.</td>
-        </tr>
-        <tr class="even">
-          <td>Login</td>
-          <td>Login name on the slave manager.</td>
-        </tr>
-      </table>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Slave to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       It is not possible to remove a slave that is associated with a task.
-      </p>
-
-      <h4>Slave Details</h4>
-      <p>
-       Details of a slave can be seen by clicking on the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />.
-      </p>
-
-      <a name="slavedetails"></a>
-      <h2>Slave Details</h2>
-      <p>
-       Provides information about a slave like the name, comment, host,
-       login and password.
-      </p>
-
-      <h3>Tasks using this Slaves</h3>
-      <p>
-       This table provides an overview of the tasks associated with this slave.
-       Details of these tasks can be seen after a click on the Details
-       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Slaves" title="Slaves"/>
+       will switch to the <a href="slaves.html?token={/envelope/token}">Slaves</a>
+       page.
       </p>
     </div>
   </div>
@@ -2322,7 +2405,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </ul>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
             <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
-            <li> <a href="configure_slaves.html?token={/envelope/token}">Configure Slaves</a></li>
+            <li> <a href="slaves.html?token={/envelope/token}">Slaves</a></li>
+              <ul>
+                <li> <a href="new_slave.html?token={/envelope/token}">New Slave</a></li>
+                <li> <a href="slave_details.html?token={/envelope/token}">Slave Details</a></li>
+              </ul>
           </ul>
           <li> Administration</li>
           <ul>
