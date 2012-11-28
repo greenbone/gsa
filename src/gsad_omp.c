@@ -2081,8 +2081,7 @@ char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response;
-  const char *comment, *name, *next, *sort_field;
-  const char *sort_order, *schedule_id, *in_assets;
+  const char *comment, *name, *next, *schedule_id, *in_assets;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int ret;
   params_t *alerts;
@@ -2093,8 +2092,6 @@ save_task_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
 
   if (comment == NULL || name == NULL)
     return edit_task (credentials, params,
@@ -2110,8 +2107,6 @@ save_task_omp (credentials_t * credentials, params_t *params)
   CHECK (schedule_id);
   CHECK (slave_id);
   CHECK (next);
-  CHECK (sort_field);
-  CHECK (sort_order);
   CHECK (task_id);
   CHECK (max_checks);
   CHECK (max_hosts);

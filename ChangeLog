@@ -1,5 +1,9 @@
 2012-11-28  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c (save_task_omp): Removed sort_field and sort_order.
+
+2012-11-28  Hani Benhabiles <kroosec@gmail.com>
+
 	Updated Slaves management documentation to reflect the new object
 	management style and features.
 
