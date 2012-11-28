@@ -1,3 +1,8 @@
+2012-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Separate token missing and token bad
+	messages.
+
 2012-11-27  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/html/omp.xsl (slave [details]): Refactored code to use shared

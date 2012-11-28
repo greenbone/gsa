@@ -1391,12 +1391,20 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (params_value (con_info->params, "token") == NULL)
     {
-      con_info->response
-       = gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occured inside GSA daemon. "
-                       "Diagnostics: Token missing or bad.",
-                       "/omp?cmd=get_tasks");
+      if (params_given (con_info->params, "token") == 0)
+        con_info->response
+         = gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occured inside GSA daemon. "
+                         "Diagnostics: Token missing.",
+                         "/omp?cmd=get_tasks");
+      else
+        con_info->response
+         = gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occured inside GSA daemon. "
+                         "Diagnostics: Token bad.",
+                         "/omp?cmd=get_tasks");
       con_info->answercode = MHD_HTTP_OK;
       return 3;
     }
