@@ -4669,7 +4669,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="installer/trust/text()"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
-          <br/>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
+          (<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -4697,6 +4697,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Agent"/>
+      </a>
+      <a href="/omp?cmd=export_agent&amp;agent_id={@id}&amp;next=get_agents&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Export Agent"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
       </a>
     </td>
   </tr>
@@ -4738,6 +4743,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template match="agent" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+       Agent Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Agent'"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Trust:</td>
+          <td>
+            <xsl:value-of select="installer/trust/text()"/>
+            <xsl:choose>
+              <xsl:when test="installer/trust/time != ''">
+                (<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
+              </xsl:when>
+              <xsl:otherwise></xsl:otherwise>
+            </xsl:choose>
+        </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<!--     GET_AGENT -->
+
+<xsl:template match="get_agent">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_agent_response"/>
+  <xsl:apply-templates select="get_agents_response/agent" mode="details"/>
 </xsl:template>
 
 <!--     GET_AGENTS_RESPONSE -->
