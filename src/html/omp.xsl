@@ -4536,9 +4536,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       New Agent
-      <a href="/help/configure_agents.html?token={/envelope/token}#new_agent"
-         title="Help: Configure Agents (New Agent)">
+      <a href="/help/new_agent.html?token={/envelope/token}"
+         title="Help: New Agent">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_agents&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Agents" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Agents"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -4589,59 +4593,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="new_agent">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_agent_response"/>
+  <xsl:apply-templates select="commands_response/delete_agent_response"/>
+  <xsl:call-template name="html-create-agent-form"/>
+</xsl:template>
+
 <xsl:template name="html-agents-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      Agents
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'agent'"/>
-        <xsl:with-param name="list" select="agents"/>
-        <xsl:with-param name="count" select="count(agent)"/>
-        <xsl:with-param name="filtered_count" select="agent_count/filtered"/>
-      </xsl:call-template>
-      <a href="/help/configure_agents.html?token={/envelope/token}#agents"
-         title="Help: Configure Agents (Agents)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="'agent'"/>
-      <xsl:with-param name="list" select="agents"/>
-    </xsl:call-template>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name" select="agents">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-                <xsl:with-param name="type">agent</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name" select="agents">
-                <xsl:with-param name="head">Comment</xsl:with-param>
-                <xsl:with-param name="name">comment</xsl:with-param>
-                <xsl:with-param name="type">agent</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name" select="agents">
-                <xsl:with-param name="head">Trust</xsl:with-param>
-                <xsl:with-param name="name">trust</xsl:with-param>
-                <xsl:with-param name="type">agent</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="agent"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'agent'"/>
+    <xsl:with-param name="cap-type" select="'Agent'"/>
+    <xsl:with-param name="resources-summary" select="agents"/>
+    <xsl:with-param name="resources" select="agent"/>
+    <xsl:with-param name="count" select="count (agent)"/>
+    <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Trust|trust'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_AGENT_RESPONSE -->
@@ -4685,10 +4653,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
-    </td>
-    <td>
-      <xsl:value-of select="comment"/>
+      <b>
+        <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="installer/trust/text()"/>
@@ -4714,7 +4689,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
+      <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
@@ -4737,9 +4712,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b><xsl:value-of select="name"/></b>
-    </td>
-    <td>
-      <xsl:value-of select="comment"/>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="installer/trust/text()"/>
@@ -4765,7 +4743,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_AGENTS_RESPONSE -->
 
 <xsl:template match="get_agents_response">
-  <xsl:call-template name="html-create-agent-form"/>
   <xsl:choose>
     <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
@@ -17017,7 +16994,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td>Name</td>
-        <td>Comment</td>
         <td>Trust</td>
         <td width="100">Actions</td>
       </tr>
