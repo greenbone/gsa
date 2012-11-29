@@ -9699,6 +9699,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <select name="year">
                 <xsl:variable name="year"
                               select="date:year (commands_response/get_schedules_response/schedule/first_time)"/>
+                <xsl:if test="$year &lt; 2012 or $year &gt; 2017">
+                  <option value="{$year}"><xsl:value-of select="$year"/></option>
+                </xsl:if>
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'2012'"/>
                   <xsl:with-param name="select-value" select="$year"/>
