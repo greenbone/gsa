@@ -1,7 +1,7 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
-	* src/gsad_omp.h, src/gsad_omp.c (export_agents_omp, export_agent_omp,
-	get_agent, get_agent_omp): New functions.
+	* src/gsad_omp.h, src/gsad_omp.c (export_agents_omp, export_agent_omp)
+	(get_agent, get_agent_omp): New functions.
 	(export_many): Sends details attribute with a value of One.
 
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
