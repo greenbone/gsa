@@ -84,12 +84,18 @@ char * delete_trash_lsc_credential_omp (credentials_t *, params_t *);
 char * edit_lsc_credential_omp (credentials_t *, params_t *);
 char * save_lsc_credential_omp (credentials_t *, params_t *);
 
+char * get_agent_omp (credentials_t *, params_t *);
 char * get_agents_omp (credentials_t *, params_t *);
 int download_agent_omp (credentials_t *, params_t *, gsize *, char **, char **);
 char * create_agent_omp (credentials_t *, params_t *);
 char * delete_agent_omp (credentials_t *, params_t *);
 char * delete_trash_agent_omp (credentials_t *, params_t *);
 char * verify_agent_omp (credentials_t *, params_t *);
+char * export_agent_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
+char * export_agents_omp (credentials_t *, params_t *, enum content_type *,
+                            char **, gsize *);
+
 
 char * create_schedule_omp (credentials_t *, params_t *);
 char * new_schedule_omp (credentials_t *, params_t *);

@@ -573,6 +573,8 @@ init_validator ()
                          "|(edit_user)"
                          "|(empty_trashcan)"
                          "|(alert_report)"
+                         "|(export_agent)"
+                         "|(export_agents)"
                          "|(export_config)"
                          "|(export_lsc_credential)"
                          "|(export_filter)"
@@ -592,6 +594,7 @@ init_validator ()
                          "|(export_targets)"
                          "|(export_task)"
                          "|(export_tasks)"
+                         "|(get_agent)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -1774,6 +1777,14 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_task)
   ELSE_OAP (edit_user)
 
+  else if (!strcmp (cmd, "export_agent"))
+    return export_agent_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_agents"))
+    return export_agents_omp (credentials, params, content_type,
+                               content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_config"))
     return export_config_omp (credentials, params, content_type,
                               content_disposition, response_size);
@@ -1875,6 +1886,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_tasks_omp (credentials, params, content_type,
                                content_disposition, response_size);
 
+  ELSE (get_agent)
   ELSE (get_agents)
 
   else if (!strcmp (cmd, "download_agent"))

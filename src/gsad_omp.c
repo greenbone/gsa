@@ -1099,6 +1099,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_%ss"
+                            " details=\"1\""
                             " filter=\"%s\"/>",
                             type,
                             filter ? filter : "")
@@ -4150,6 +4151,36 @@ download_agent_omp (credentials_t * credentials,
 }
 
 /**
+ * @brief Get one agent, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_agent (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return get_one ("agent", credentials, params, extra_xml, "details=\"1\"");
+}
+
+/**
+ * @brief Get one agent, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_agent_omp (credentials_t * credentials, params_t *params)
+{
+  return get_agent (credentials, params, NULL);
+}
+
+/**
  * @brief Get all agents, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -4253,6 +4284,47 @@ verify_agent_omp (credentials_t * credentials, params_t *params)
   openvas_server_close (socket, session);
   g_string_free (xml, TRUE);
   return ret;
+}
+
+/**
+ * @brief Export a agent.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   agent_id             UUID of agent.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Agent XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_agent_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_resource ("agent", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of agents.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Agents XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_agents_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("agent", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 char *
