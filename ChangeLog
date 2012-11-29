@@ -1,7 +1,8 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h (get_agent_omp): Renamed to
-	download_agent_omp.
+	download_agent_omp. Adequated GSA command renamed from get_agent to
+	download_agent.
 
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
