@@ -555,6 +555,7 @@ init_validator ()
                          "|(delete_trash_target)"
                          "|(delete_trash_task)"
                          "|(delete_user)"
+                         "|(download_agent)"
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
@@ -591,7 +592,6 @@ init_validator ()
                          "|(export_targets)"
                          "|(export_task)"
                          "|(export_tasks)"
-                         "|(get_agent)"
                          "|(get_agents)"
                          "|(get_config)"
                          "|(get_config_family)"
@@ -1877,15 +1877,15 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (get_agents)
 
-  else if (!strcmp (cmd, "get_agent"))
+  else if (!strcmp (cmd, "download_agent"))
     {
       char *html, *filename;
 
-      if (get_agent_omp (credentials,
-                         params,
-                         response_size,
-                         &html,
-                         &filename))
+      if (download_agent_omp (credentials,
+                              params,
+                              response_size,
+                              &html,
+                              &filename))
         return html;
 
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;

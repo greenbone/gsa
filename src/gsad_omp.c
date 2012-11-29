@@ -3977,7 +3977,7 @@ delete_agent_omp (credentials_t * credentials, params_t *params)
  * @return 0 success, 1 failure.
  */
 int
-get_agent_omp (credentials_t * credentials,
+download_agent_omp (credentials_t * credentials,
                params_t *params,
                gsize *result_len,
                char ** html,
@@ -3996,8 +3996,8 @@ get_agent_omp (credentials_t * credentials,
     {
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
-                            "An internal error occurred while deleting an agent. "
-                            "The agent was not deleted. "
+                            "An internal error occurred while downloading "
+                            "an agent. "
                             "Diagnostics: Required parameter was NULL.",
                             "/omp?cmd=get_agents");
       return 1;
