@@ -10447,8 +10447,75 @@ char *
 new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml;
+  const char *oid, *hosts, *port, *threat, *task_id, *task_name, *result_id;
+  /* Passthroughs. */
+  const char *report_id, *first_result, *max_results;
+  const char *levels, *autofp, *show_closed_cves, *notes;
+  const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
+
+  result_id = params_value (params, "result_id");
+  task_id = params_value (params, "task_id");
+  first_result = params_value (params, "first_result");
+  max_results = params_value (params, "max_results");
+  levels = params_value (params, "levels");
+  show_closed_cves = params_value (params, "show_closed_cves");
+  notes = params_value (params, "notes");
+  search_phrase = params_value (params, "search_phrase");
+  task_name = params_value (params, "name");
+  result_hosts_only = params_value (params, "result_hosts_only");
+  min_cvss_base = params_value (params, "min_cvss_base");
+  autofp = params_value (params, "autofp");
+  hosts = params_value (params, "hosts");
+  oid = params_value (params, "oid");
+  threat = params_value (params, "threat");
+  report_id = params_value (params, "report_id");
+  port = params_value (params, "port");
+  overrides = params_value (params, "overrides");
+
   xml = g_string_new ("<new_note>");
   g_string_append (xml, extra_xml);
+  g_string_append (xml, extra_xml);
+
+  xml_string_append (xml,
+                     "<nvt id=\"%s\"/>"
+                     "<hosts>%s</hosts>"
+                     "<port>%s</port>"
+                     "<threat>%s</threat>"
+                     "<task id=\"%s\">"
+                     "<name>%s</name>"
+                     "</task>"
+                     "<result id=\"%s\"/>"
+                     /* Passthroughs. */
+                     "<report id=\"%s\"/>"
+                     "<first_result>%s</first_result>"
+                     "<max_results>%s</max_results>"
+                     "<levels>%s</levels>"
+                     "<autofp>%s</autofp>"
+                     "<show_closed_cves>%s</show_closed_cves>"
+                     "<notes>%s</notes>"
+                     "<overrides>%s</overrides>"
+                     "<result_hosts_only>%s</result_hosts_only>"
+                     "<search_phrase>%s</search_phrase>"
+                     "<min_cvss_base>%s</min_cvss_base>",
+                     oid,
+                     hosts,
+                     port,
+                     threat,
+                     task_id,
+                     task_name,
+                     result_id,
+                     report_id,
+                     first_result,
+                     max_results,
+                     levels,
+                     autofp,
+                     show_closed_cves,
+                     notes,
+                     overrides,
+                     result_hosts_only,
+                     search_phrase,
+                     min_cvss_base);
+
   g_string_append (xml, "</new_note>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
