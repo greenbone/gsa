@@ -1,5 +1,17 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
+	Updated help documentation for Agents object.
+
+	* src/html/help.xsl (list-window-line-actions): Output the resource type
+	for export header.
+	(configure_agents.html): Removed template.
+	(agent_details.html, agents.html, new_agent.html [help]): New templates.
+	Using the same style of documentation as other resources using the new
+	GET style object management.
+	(contents.html, glossary.html): Updated with new links and information.
+
+2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (save_slave_omp): Refactored code to use omp function.
 
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>

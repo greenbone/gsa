@@ -99,7 +99,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    will create a duplicate of the <xsl:value-of select="$type"/>.
   </p>
 
-  <h4>Exporting</h4>
+  <h4>Export <xsl:value-of select="$type"/></h4>
   <p>
     Export the <xsl:value-of select="$type"/> as XML by clicking on the
     export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
@@ -409,33 +409,185 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_agents.html">
-  <div class="gb_window_part_center">Help: Configure Agents</div>
+<xsl:template mode="help" match="agent_details.html">
+  <div class="gb_window_part_center">Help: Agent Details
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
+
       <br/>
 
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_AGENTS'"/>
       </xsl:call-template>
 
-      <h1>Configure Agents</h1>
+      <h1>Agents Details</h1>
       <p>
-       This feature allows to store agent tools.
-       Basically it is a store with integrated signature verification.
-       Agents can be downloaded from here for manual installation on
-       target systems. This agents feature is unrelated to other
-       elements of the user interface.
+        Provides detailed information about an
+        <a href="glossary.html?token={/envelope/token}#agent">Agent</a>.
+        This includes the Name, creation time, modification time,
+        comment and installer package trust state and time.
       </p>
 
-      <a name="new_agent"></a>
-      <h2>New Agent</h2>
+      <h4>New Agent </h4>
       <p>
-       For creating an agent the dialog offers these entries.
-       Hit the button "Create Agent" to submit the new agent.
-       The list of agents will be updated.
+        To create a new agent click the new icon
+        <img src="/img/new.png" alt="New Agent" title="New Agent"/>
+        which goes to the <a href="new_agent.html?token={/envelope/token}">
+        New Agent</a> page.
+      </p>
+
+      <h4>Agents</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Agents" title="Agents"/>
+        will switch to the agents page.
+      </p>
+
+      <h4>Edit Agent</h4>
+      <p>
+        Pressing the "Edit Agent" icon
+        <img src="/img/edit.png" alt="Edit Agent" title="Edit Agent"/>
+        will switch to an overview of the configuration for this agent and
+        allows editing the agent's properties.
+      </p>
+
+      <h4>Export Agent</h4>
+      <p>
+        Export the agent as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="agents.html">
+  <div class="gb_window_part_center">Help: Agents
+    <a href="/omp?cmd=get_agents&amp;token={/envelope/token}"
+       title="Agents" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Agents"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_AGENTS'"/>
+      </xsl:call-template>
+
+      <h1>Agents</h1>
+      <p>
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#agent">Agents</a>.
+        and summarizes the essential aspects of it.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the agent and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Trust</td>
+          <td>
+            <b>yes</b>: the signature file that was uploaded or that was present
+            in the Feed proofs that the agent was not compromised at upload
+            time.
+            <br/>
+            <b>no</b>: Signature and agent do not match or signature key is not
+            trusted.
+            <br/>
+            <b>unknown</b>: Any case where trust could not be tested adequately.
+          </td>
+        </tr>
+      </table>
+
+      <h3>New Agent</h3>
+      <p>
+        To create a new agent click the
+        new icon <img src="/img/new.png" alt="New Agent" title="New Agent" /> which
+        goes to the <a href="new_agent.html?token={/envelope/token}">New Agent</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of agents as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+      <xsl:call-template name="filtering"/>
+
+      <h4>Move Agent to Trashcan</h4>
+      <p>
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the agent to the trashcan and update the list.
+      </p>
+
+      <h4>Agent Details</h4>
+      <p>
+       Pressing the details icon
+       <img src="/img/details.png" alt="Details" title="Details" />
+       will show details of the Agent specification.
+      </p>
+
+      <h4>Verify Agent</h4>
+      <p>
+       Pressing the "Verify Agent" icon
+       <img src="/img/edit.png" alt="Verify Agent" title="Verify Agent"/>
+       will verify the trust on the agent installer package.
+      </p>
+
+      <h4>Download Installer Package</h4>
+      <p>
+       Pressing the "Download Installer Package" icon
+       <img src="/img/agent.png" alt="Download Installer Package"
+            title="Download Installer Package"/>
+       will download an installation of the agent package.
+      </p>
+
+      <h4>Export Agent</h4>
+      <p>
+        Export the Agent as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_agent.html">
+  <div class="gb_window_part_center">Help: New Agent
+    <a href="/omp?cmd=new_agent&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+          <xsl:with-param name="command" select="'CREATE_AGENT'"/>
+      </xsl:call-template>
+
+      <h1>New Agent</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#agent">Agent</a>
+        the dialog offers these entries.
+        Hit the button "Create Agent" to submit the new agent.
+        The Agents page will be shown.
       </p>
 
       <table class="gbntable">
@@ -474,67 +626,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>File (armored GnuPG detached signature)</td>
           <td>/tmp/WinSLAD-Base-1.0.exe</td>
         </tr>
-      <!-- TODO: howto_install, howto_us -->
       </table>
-
       <p>
-      In case a signature file is provided, the agent file will be
-      verified using this signature at upload time to determine the trust.
+        When a signature file is provided, the agent file will be verified using
+        this signature at upload time to determine the trust.
+      </p>
+      <p>
+        When no signature file is provided, a suitable signature is searched for
+        in the NVT Feed. If found, the trust is determined based on this
+        signature file.
       </p>
 
+      <h4>Agents</h4>
       <p>
-      In case, no signature file is provided, a suitable signature is
-      searched for in the NVT Feed. If found, the trust is determined based
-      on this signature file.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Agents" title="Agents"/>
+       will switch to the <a href="agents.html?token={/envelope/token}">Agents</a>
+       page.
       </p>
-
-      <a name="agents"></a>
-      <h2>Agents</h2>
-      <p>
-       This table provides an overview of all stored
-       agents.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the agent.</td>
-        </tr>
-        <tr class="even">
-         <td>Comment</td>
-         <td>Shows the comment that was provided for this agent.</td>
-        </tr>
-        <tr class="odd">
-         <td>Trust</td>
-         <td><b>yes</b>: the signature file that was uploaded or that was present
-             in the Feed proofs that the agent was not compromised at upload time<br/>
-             <b>no</b>: Signature and agent do not match or signature key is not trusted.<br/>
-             <b>unknown</b>: Any case where trust could not be tested adequately.<br/>
-         </td>
-        </tr>
-      </table>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Agent to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-
-      <h4>Download Installer Package</h4>
-      <p>
-       Pressing the download icon
-       <img src="/img/agent.png" alt="Download Installer Package" title="Download Installer Package" />
-       will download a installation package for this agent.
-      </p>
-      <!-- TODO: Description for howto's. -->
     </div>
   </div>
 </xsl:template>
@@ -1637,7 +1746,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>New Schedule </h4>
       <p>
-      To create a new schedule click the new icon 
+      To create a new schedule click the new icon
       <img src="/img/new.png" alt="New Schedule" title="New Schedule"/>
       which goes to the <a href="new_schedule.html?token={/envelope/token}">
       New Schedule</a> page.
@@ -1761,7 +1870,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_schedule.html">
-  <div class="gb_window_part_center">Help: New Schedule 
+  <div class="gb_window_part_center">Help: New Schedule
     <a href="/omp?cmd=new_schedule&amp;max=-2&amp;token={/envelope/token}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
@@ -1865,7 +1974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>New Slave </h4>
       <p>
-        To create a new slave click the new icon 
+        To create a new slave click the new icon
         <img src="/img/new.png" alt="New Slave" title="New Slave"/>
         which goes to the <a href="new_slave.html?token={/envelope/token}">
         New Slave</a> page.
@@ -1903,7 +2012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="slaves.html">
-  <div class="gb_window_part_center">Help: Slaves 
+  <div class="gb_window_part_center">Help: Slaves
     <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
        title="Slaves" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Slaves"/>
@@ -1983,7 +2092,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_slave.html">
-  <div class="gb_window_part_center">Help: New Slave 
+  <div class="gb_window_part_center">Help: New Slave
     <a href="/omp?cmd=new_slave&amp;max=-2&amp;token={/envelope/token}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
@@ -2391,7 +2500,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
             <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
-            <li> <a href="configure_agents.html?token={/envelope/token}">Configure Agents</a></li>
+            <li> <a href="agents.html?token={/envelope/token}">Agents</a></li>
+              <ul>
+                <li> <a href="new_agent.html?token={/envelope/token}">New Agent</a></li>
+                <li> <a href="agent_details.html?token={/envelope/token}">Agent Details</a></li>
+              </ul>
             <li> <a href="configure_alerts.html?token={/envelope/token}">Configure Alerts</a></li>
             <li> <a href="filters.html?token={/envelope/token}">Filters</a></li>
               <ul>
@@ -2842,6 +2955,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         (Source: http://www.first.org/cvss/cvss-guide).
+      </p>
+
+      <a name="agent"></a>
+      <h2>Agent</h2>
+      <p>
+        An agent allows to store agent tools. Basically it is a store with
+        integrated signature verification. Agents can be downloaded from here
+        for manual installation on target systems. This agent feature is
+        unrelated to other elements of the user interface.
       </p>
 
       <a name="alert"></a>
