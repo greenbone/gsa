@@ -1,5 +1,9 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c (save_slave_omp): Refactored code to use omp function.
+
+2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad.c (init_validator, exec_omp_get): Added new_agent command.
 
 	* src/gsad_omp.c (new_agent_omp, new_agent): New functions.
