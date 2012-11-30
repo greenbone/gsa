@@ -84,6 +84,7 @@ char * delete_trash_lsc_credential_omp (credentials_t *, params_t *);
 char * edit_lsc_credential_omp (credentials_t *, params_t *);
 char * save_lsc_credential_omp (credentials_t *, params_t *);
 
+char * new_agent_omp (credentials_t *, params_t *);
 char * get_agent_omp (credentials_t *, params_t *);
 char * get_agents_omp (credentials_t *, params_t *);
 int download_agent_omp (credentials_t *, params_t *, gsize *, char **, char **);
