@@ -639,6 +639,7 @@ init_validator ()
                          "|(import_report_format)"
                          "|(login)"
                          "|(modify_auth)"
+                         "|(new_agent)"
                          "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
@@ -1964,6 +1965,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE_OAP (get_settings)
+  ELSE (new_agent)
   ELSE (new_note)
   ELSE (new_slave)
   ELSE (new_schedule)
