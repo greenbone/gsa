@@ -1,3 +1,9 @@
+2012-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-target-form): Add missing filt_id arg to
+	header icons and remove old max and first args.
+	(html-edit-note-form, html-edit-override-form): Add list icon in header.
+
 2012-12-03  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c (delete_agent_omp, delete_trash_agent_omp)
@@ -9,7 +15,7 @@
 
 	* src/gsad.c (init_validator, exec_omp_get): Added new_report_format
 	command.
-	
+
 	* src/gsad_omp.c, src/gsad_omp.h (get_report_format)
 	(get_report_format_omp, get_report_formats, get_report_formats_omp):
 	Refactored to leverage get_one and get_many functions.

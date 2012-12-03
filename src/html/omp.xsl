@@ -6433,12 +6433,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/targets.html?token={/envelope/token}#edit_target" title="Help: Edit Target">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Targets" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Targets"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_target&amp;target_id={commands_response/get_targets_response/target/@id}&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_target&amp;target_id={commands_response/get_targets_response/target/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="Target Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
@@ -12015,11 +12015,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Notes (Edit Note)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}&amp;token={/envelope/token}"
-         title="Note Details"
-         style="margin-left:3px;">
-        <img src="/img/details.png"/>
+      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Notes" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Notes"/>
       </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}&amp;token={/envelope/token}"
+           title="Note Details"
+           style="margin-left:3px;">
+          <img src="/img/details.png"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="fragment">
@@ -13016,11 +13022,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Overrides (Edit Override)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}&amp;token={/envelope/token}"
-         title="Override Details"
-         style="margin-left:3px;">
-        <img src="/img/details.png"/>
+      <a href="/omp?cmd=get_overrides&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Overrides" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Overrides"/>
       </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}&amp;token={/envelope/token}"
+           title="Override Details"
+           style="margin-left:3px;">
+          <img src="/img/details.png"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="fragment">
