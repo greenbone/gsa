@@ -643,6 +643,7 @@ init_validator ()
                          "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
+                         "|(new_report_format)"
                          "|(new_slave)"
                          "|(new_schedule)"
                          "|(new_target)"
@@ -1967,9 +1968,10 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE_OAP (get_settings)
   ELSE (new_agent)
   ELSE (new_note)
+  ELSE (new_override)
+  ELSE (new_report_format)
   ELSE (new_slave)
   ELSE (new_schedule)
-  ELSE (new_override)
   ELSE (verify_agent)
   ELSE (verify_report_format)
   ELSE (wizard)
