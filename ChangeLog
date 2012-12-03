@@ -1,5 +1,18 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
+	Update Report formats management.
+	* src/html/omp.xsl (html-report-formats-table): Use list-window.
+	(html-import-report-format-form): Renamed to
+	html-create-report-format-form.
+	(html-import-report-format-form, html-edit-report-format-form): Updated
+	title and links to follow the new style.
+	(report_format [details]): Use details-header-icons and minor-details.
+	Update various links.
+	(new_report_format): New template.
+	(get_report_formats): Update to match new style.
+
+2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+
 	Updated help documentation for Agents object.
 
 	* src/html/help.xsl (list-window-line-actions): Output the resource type

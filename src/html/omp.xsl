@@ -10514,7 +10514,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="html-edit-slave-form"/>
 </xsl:template>
 
-
 <!--     SLAVE -->
 
 <xsl:template match="slave">
@@ -10684,7 +10683,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
         <xsl:call-template name="command_result_dialog">
           <xsl:with-param name="operation">
-            Get Slaves 
+            Get Slaves
           </xsl:with-param>
           <xsl:with-param name="status">
             <xsl:value-of select="@status"/>
@@ -14247,42 +14246,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN REPORT FORMATS MANAGEMENT -->
 
 <xsl:template name="html-report-formats-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Report Formats
-      <a href="/help/configure_report_formats.html?token={/envelope/token}#report_formats"
-         title="Help: Configure Report Formats (Report Formats)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Extension</td>
-            <td>Content Type</td>
-            <td>Trust (last verified)</td>
-            <td>Active</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="report_format"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'report_format'"/>
+    <xsl:with-param name="cap-type" select="'Report Format'"/>
+    <xsl:with-param name="resources-summary" select="report_formats"/>
+    <xsl:with-param name="resources" select="report_format"/>
+    <xsl:with-param name="count" select="count (report_format)"/>
+    <xsl:with-param name="filtered-count" select="report_format_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Extension|extension Content&#xa0;Type|content_type Trust&#xa0;(Last&#xa0;Verified)|trust Active|active'"/>
+  </xsl:call-template>
 </xsl:template>
 
-<xsl:template name="html-import-report-format-form">
+<xsl:template name="html-create-report-format-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Import Report Format
-      <a href="/help/configure_report_formats.html?token={/envelope/token}#import_report_format"
-         title="Help: Configure Report Formats (Import Report Formats)">
+      New Report Format
+      <a href="/help/new_report_format.html?token={/envelope/token}"
+         title="Help: New Report Format">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_report_formats&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Report Formats" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Report Formats"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -14307,6 +14294,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </form>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="new_report_format">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_report_format_response"/>
+  <xsl:apply-templates select="commands_response/delete_report_format_response"/>
+  <xsl:call-template name="html-create-report-format-form"/>
 </xsl:template>
 
 <xsl:template match="get_report_formats_response">
@@ -14349,10 +14343,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Report Format
-      <a href="/help/configure_report_formats.html?token={/envelope/token}#edit_report_format"
-         title="Help: Edit Report Format">
+      <a href="/help/report_format.html?token={/envelope/token}#edit_report_format" title="Help: Edit Report Format">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_report_formats&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Report Formats" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Report Formats"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={commands_response/get_report_formats_response/report_format/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Report Format Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
@@ -14362,9 +14365,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="report_format_id"
                value="{commands_response/get_report_formats_response/report_format/@id}"/>
-        <input type="hidden" name="next" value="{next}"/>
-        <input type="hidden" name="sort_field" value="{sort_field}"/>
-        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="report_format" value="{/envelope/params/report_format}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
            <td valign="top" width="165">Name</td>
@@ -14465,7 +14468,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="summary != ''">
           <br/>(<xsl:value-of select="summary"/>)
@@ -14730,20 +14737,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Report Format Details
-       <a href="/help/configure_report_formats.html?token={/envelope/token}#report_format_details"
-         title="Help: Configure Report Formats (Report Format Details)">
-         <img src="/img/help.png"/>
-       </a>
-      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_format&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
-         title="Edit Report Format"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
-      </a>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Report Format'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_report_formats&amp;token={/envelope/token}">Report Formats</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>
@@ -14800,12 +14799,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
   <xsl:apply-templates select="commands_response/modify_report_format_response"/>
-  <xsl:apply-templates select="modify_report_format_response"/>
   <xsl:apply-templates select="commands_response/get_report_formats_response/report_format"
                        mode="details"/>
 </xsl:template>
-
-<!--     GET_REPORT_FORMATS -->
 
 <xsl:template match="verify_report_format_response">
   <xsl:call-template name="command_result_dialog">
@@ -14819,21 +14815,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     GET_REPORT_FORMATS -->
+
 <xsl:template match="get_report_formats">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_report_format_response"/>
+  <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="create_report_format_response"/>
-  <xsl:apply-templates select="commands_response/modify_report_format_response"/>
-  <xsl:apply-templates select="modify_report_format_response"/>
-  <xsl:apply-templates select="verify_report_format_response"/>
-  <xsl:apply-templates select="commands_response/verify_report_format_response"/>
-<!--
-  <xsl:call-template name="html-create-report-format-form"/>
--->
   <!-- The for-each makes the get_report_formats_response the current node. -->
   <xsl:for-each select="get_report_formats_response | commands_response/get_report_formats_response">
-    <xsl:call-template name="html-import-report-format-form"/>
-    <xsl:call-template name="html-report-formats-table"/>
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Rerpot Formats 
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-report-formats-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:for-each>
 </xsl:template>
 
