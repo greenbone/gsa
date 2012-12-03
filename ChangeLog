@@ -1,5 +1,17 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (init_validator, exec_omp_get): Added new_report_format
+	command.
+	
+	* src/gsad_omp.c, src/gsad_omp.h (get_report_format)
+	(get_report_format_omp, get_report_formats, get_report_formats_omp):
+	Refactored to leverage get_one and get_many functions.
+	(new_report_format, new_report_format_omp): New functions.
+	(save_report_format_omp): Adapt for get_report_format and
+	get_report_formats.
+
+2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+
 	Update Report formats management.
 
 	* src/html/omp.xsl (html-report-formats-table): Use list-window.
