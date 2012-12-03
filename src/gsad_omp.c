@@ -12692,87 +12692,17 @@ get_system_report_omp (credentials_t *credentials, const char *url,
 /**
  * @brief Get one report format, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  report_format_id  UUID of report format.
- * @param[in]  sort_field        Field to sort on, or NULL.
- * @param[in]  sort_order        "ascending", "descending", or NULL.
- * @param[in]  commands          Extra commands to run before the others.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
-static char *
-get_report_format (credentials_t * credentials,
-                   const char * report_format_id, const char * sort_field,
-                   const char * sort_order, const char * commands)
+char *
+get_report_format (credentials_t * credentials, params_t *params,
+                   const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report formats. "
-                             "The current list of report formats is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_report_formats");
-    }
-
-  xml = g_string_new ("<get_report_format>");
-
-  /* Get the report format. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_report_formats"
-                            " report_format_id=\"%s\""
-                            " params=\"1\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            report_format_id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report formats. "
-                           "The current list of report_formats is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report formats. "
-                           "The current list of report_formats is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_report_format>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_one ("report_format", credentials, params, extra_xml, "params=\"1\"");
 }
 
 /**
@@ -12786,104 +12716,27 @@ get_report_format (credentials_t * credentials,
 char *
 get_report_format_omp (credentials_t * credentials, params_t *params)
 {
-  const char *report_format_id;
-  report_format_id = params_value (params, "report_format_id");
-  if (report_format_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a report format. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_report_formats");
-  return get_report_format (credentials,
-                            report_format_id,
-                            params_value (params, "sort_field"),
-                            params_value (params, "sort_order"),
-                            NULL);
+  return get_report_format (credentials, params, NULL);
 }
 
 /**
- * @brief Get all report formats, XSL transform the result.
+ * @brief Get all Report Formats, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  sort_field   Field to sort on, or NULL.
- * @param[in]  sort_order   "ascending", "descending", or NULL.
- * @param[in]  commands     Extra commands to run before the others.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
  * @return Result of XSL transformation.
  */
-static char *
-get_report_formats (credentials_t * credentials, const char * sort_field,
-                    const char * sort_order, const char * commands)
+char *
+get_report_formats (credentials_t * credentials, params_t *params,
+                    const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the report formats. "
-                             "The current list of report formats is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_report_formats");
-    }
-
-  xml = g_string_new ("<get_report_formats>");
-
-  /* Get the report formats. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_report_formats"
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report formats. "
-                           "The current list of report formats is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the report formatss. "
-                           "The current list of report formats is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_report_formats");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_report_formats>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_many ("report_format", credentials, params, extra_xml, NULL);
 }
 
 /**
- * @brief Get all report formats, XSL transform the result.
+ * @brief Get all Report Formats, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -12893,10 +12746,41 @@ get_report_formats (credentials_t * credentials, const char * sort_field,
 char *
 get_report_formats_omp (credentials_t * credentials, params_t *params)
 {
-  return get_report_formats (credentials,
-                             params_value (params, "sort_field"),
-                             params_value (params, "sort_order"),
-                             NULL);
+  return get_report_formats (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page to create a new report format.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_report_format (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_report_format>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_report_format>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new report format page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_report_format_omp (credentials_t *credentials, params_t *params)
+{
+  return new_report_format (credentials, params, NULL);
 }
 
 /**
@@ -13236,8 +13120,6 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
                                 ("Save Report Format"));
 
   if (params_value (params, "next") == NULL
-      || params_value (params, "sort_field") == NULL
-      || params_value (params, "sort_order") == NULL
       || params_value (params, "report_format_id") == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
@@ -13345,21 +13227,14 @@ save_report_format_omp (credentials_t * credentials, params_t *params)
 
   if (strcmp (params_value (params, "next"), "get_report_formats") == 0)
     {
-      char *ret = get_report_formats (credentials,
-                                      params_value (params, "sort_field"),
-                                      params_value (params, "sort_order"),
-                                      modify_format);
+      char *ret = get_report_formats (credentials, params, NULL);
       g_free (modify_format);
       return ret;
     }
 
   if (strcmp (params_value (params, "next"), "get_report_format") == 0)
     {
-      char *ret = get_report_format (credentials,
-                                     params_value (params, "report_format_id"),
-                                     params_value (params, "sort_field"),
-                                     params_value (params, "sort_order"),
-                                     modify_format);
+      char *ret = get_report_format (credentials, params, NULL);
       g_free (modify_format);
       return ret;
     }
