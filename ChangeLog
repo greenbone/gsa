@@ -1,6 +1,7 @@
 2012-11-29  Hani Benhabiles <kroosec@gmail.com>
 
 	Update Report formats management.
+
 	* src/html/omp.xsl (html-report-formats-table): Use list-window.
 	(html-import-report-format-form): Renamed to
 	html-create-report-format-form.
