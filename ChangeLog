@@ -1,4 +1,11 @@
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-12-03  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/gsad.c (delete_agent_omp, delete_trash_agent_omp)
+	(delete_trash_report_format_omp, delete_trash_slave_omp)
+	(delete_report_format_omp, edit_report_format): Code refactoring to
+	leverage delete_resource and edit_resource.
+
+2012-12-03  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c (init_validator, exec_omp_get): Added new_report_format
 	command.
@@ -10,7 +17,7 @@
 	(save_report_format_omp): Adapt for get_report_format and
 	get_report_formats.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-12-03  Hani Benhabiles <kroosec@gmail.com>
 
 	Update Report formats management.
 
