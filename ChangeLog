@@ -1,3 +1,11 @@
+2012-12-04  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/gsad_omp.c (next_page): Add handlers for get_report_format and
+	get_report_formats.
+	(check_modify_report_format): Remove unused function.
+	(save_report_format_omp): Refactor to leverage omp, next_page and
+	omp_success functions.
+
 2012-12-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-target-form): Add missing filt_id arg to
