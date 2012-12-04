@@ -11923,7 +11923,29 @@ new_schedule (credentials_t *credentials, params_t *params,
               const char *extra_xml)
 {
   GString *xml;
+  time_t now;
+  struct tm *now_broken;
   xml = g_string_new ("<new_schedule>");
+  now = time (NULL);
+  now_broken = localtime (&now);
+  g_string_append_printf (xml,
+                          "<time>"
+                          "<minute>%s%i</minute>"
+                          "<hour>%s%i</hour>"
+                          "<day_of_month>%s%i</day_of_month>"
+                          "<month>%s%i</month>"
+                          "<year>%i</year>"
+                          "</time>",
+                          (now_broken->tm_min > 9 ? "" : "0"),
+                          now_broken->tm_min,
+                          (now_broken->tm_hour > 9 ? "" : "0"),
+                          now_broken->tm_hour,
+                          (now_broken->tm_mday > 9 ? "" : "0"),
+                          now_broken->tm_mday,
+                          ((now_broken->tm_mon + 1) > 9 ? "" : "0"),
+                          (now_broken->tm_mon + 1),
+                          (now_broken->tm_year + 1900));
+
   g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
