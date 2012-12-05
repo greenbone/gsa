@@ -586,6 +586,7 @@ init_validator ()
                          "|(export_port_list)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
+                         "|(export_report_formats)"
                          "|(export_schedule)"
                          "|(export_schedules)"
                          "|(export_slave)"
@@ -1781,11 +1782,11 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_agent"))
     return export_agent_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                             content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_agents"))
     return export_agents_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                              content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_config"))
     return export_config_omp (credentials, params, content_type,
@@ -1856,21 +1857,24 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_report_format_omp (credentials, params, content_type,
                                      content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_report_formats"))
+    return export_report_formats_omp (credentials, params, content_type,
+                                      content_disposition, response_size);
   else if (!strcmp (cmd, "export_schedule"))
     return export_schedule_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                                content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_schedules"))
     return export_schedules_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                                 content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_slave"))
     return export_slave_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                             content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_slaves"))
     return export_slaves_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                              content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_target"))
     return export_target_omp (credentials, params, content_type,
@@ -1882,11 +1886,11 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_task"))
     return export_task_omp (credentials, params, content_type,
-                              content_disposition, response_size);
+                            content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_tasks"))
     return export_tasks_omp (credentials, params, content_type,
-                               content_disposition, response_size);
+                             content_disposition, response_size);
 
   ELSE (get_agent)
   ELSE (get_agents)

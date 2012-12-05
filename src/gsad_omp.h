@@ -145,6 +145,8 @@ char * export_preference_file_omp (credentials_t *, params_t *,
                                    enum content_type *, char **, gsize *);
 char * export_report_format_omp (credentials_t *, params_t *,
                                  enum content_type *, char **, gsize *);
+char * export_report_formats_omp (credentials_t *, params_t *, 
+                                  enum content_type *, char **, gsize *);
 
 char * get_notes_omp (credentials_t *, params_t *);
 char * get_note_omp (credentials_t *, params_t *);
