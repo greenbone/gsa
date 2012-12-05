@@ -5770,7 +5770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
-      <xsl:when test="in_use='0'">
+      <xsl:when test="writable!='0' and in_use='0'">
         <xsl:call-template name="trashcan-icon">
           <xsl:with-param name="type" select="$type-lower"/>
           <xsl:with-param name="id" select="@id"/>
@@ -5785,10 +5785,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:3px;"/>
       </xsl:otherwise>
     </xsl:choose>
-    <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next=get_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Edit {$type}">
-      <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-    </a>
+    <xsl:choose>
+      <xsl:when test="writable='0'">
+        <img src="/img/edit_inactive.png" border="0" alt="Edit"
+             style="margin-left:3px;"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next=get_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="Edit {$type}">
+          <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
     <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Export {$type} XML"
        style="margin-left:3px;">
@@ -14810,9 +14818,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_report_format">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_report_format_response"/>
-  <xsl:apply-templates select="commands_response/modify_report_format_response"/>
-  <xsl:apply-templates select="commands_response/get_report_formats_response/report_format"
-                       mode="details"/>
+  <xsl:apply-templates select="get_report_formats_response/report_format" mode="details"/>
 </xsl:template>
 
 <xsl:template match="verify_report_format_response">
