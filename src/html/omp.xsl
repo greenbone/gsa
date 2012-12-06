@@ -130,13 +130,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
       <xsl:if test = "$list/@start &gt; 1">
-        <a style="vertical-align: top; margin-right: 5px" class="gb_window_part_center" href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&lt;&lt;</a>
+        <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
       </xsl:if>
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
       of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
       <xsl:if test = "$last &lt; $filtered_count">
-        <a style="vertical-align: top; margin-left: 0px; margin-right: 5px; text-align: right" class="gb_window_part_center" href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}">&gt;&gt;</a>
+        <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>

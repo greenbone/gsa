@@ -1,3 +1,12 @@
+2012-12-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/next.png, src/html/img/previous.png: New.
+
+	* CMakeLists.txt: Install the new icons.
+
+	* src/html/omp.xsl (filter-window-pager): Use new Icons for
+	Next/Previous as a replacement for "<<" and ">>".
+
 2012-12-06  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/html/omp.xsl (details-header-icons, list-window-line-icons):
