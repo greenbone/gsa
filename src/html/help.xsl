@@ -1342,11 +1342,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_report_formats.html">
-  <div class="gb_window_part_center">Help: Configure Report Formats</div>
+<xsl:template mode="help" match="report_formats.html">
+  <div class="gb_window_part_center">Help: Report Formats
+    <a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}"
+       title="Report Formats" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Report Formats"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1355,16 +1359,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_REPORT_FORMATS'"/>
       </xsl:call-template>
 
-      <h1>Configure Report Formats</h1>
+      <h1>Report Formats</h1>
       <p>
-       <a href="glossary.html?token={/envelope/token}#report">Reports</a> can be downloaded in a number
-       of formats.
-       The configured <a href="glossary.html?token={/envelope/token}#report_format">report formats</a>
-       will appear for selection in the dialogs for downloading reports.
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#report_format">
+            Report Formats
+        </a>
+        and summarizes the essential aspects of them.
       </p>
 
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the Report Format and,
+              if specified, the summary in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Extension</td>
+          <td>
+              Extension of the resulting Report Format.
+          </td>
+        </tr>
+        <tr class="odd">
+          <td>Content Type</td>
+          <td>
+            Content Type of the resulting Report Format.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Trust</td>
+          <td>
+            <b>yes</b>: the signature embedded in report format or that was
+            present in the Feed proves that the Report Format was not
+            compromised at upload time<br/>
+            <b>no</b>: Signature and Report Format do not match or signature key
+            is not trusted.<br/>
+            <b>unknown</b>: Any case where trust could not be tested
+            adequately.<br/>
+            Last verification date is also shown between brackets.
+          </td>
+        </tr>
+      </table>
+
       <a name="predefined_report_formats"></a>
-      <h2>Predefined Report Formats</h2>
+      <h3>Predefined Report Formats</h3>
       <p>
         The predefined formats include:
       </p>
@@ -1385,7 +1428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             A single HTML file is created from the report details.
             This is similar to the page created via action "Details"
-            but is an self-contained document that could be viewed
+            but is a self-contained document that could be viewed
             independent of GSA.
           </td>
         </tr>
@@ -1434,108 +1477,141 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <a name="import_report_format"></a>
-      <h2>Import Report Format</h2>
+      <h3>New Report Format</h3>
       <p>
-       To import a report format, select the import file and hit the
-       "Import Report Format" button to submit the report format.
-       The list of report formats will be updated.
-       Note that the import will fail with an error message if the report format
-       already exists on your system, or if an existing report format has the
-       same name.
-      </p>
-      <p>
-       To create a file that can be imported in another installation, refer to the
-       <a href="#export">export action</a>.
+        To create a new Report Format click the new icon
+        <img src="/img/new.png" alt="New Report Format"
+             title="New Report Format" />
+        which goes to the <a href="new_report_format.html?token={/envelope/token}">New
+        Report Format</a> page.
       </p>
 
-      <a name="report_formats"></a>
-      <h2>Report Formats</h2>
+      <h3>Exporting</h3>
       <p>
-       This table provides an overview of all configured report formats.
+        Export the current list of report_formats as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Report Format'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_report_format.html">
+  <div class="gb_window_part_center">Help: New Report Format
+    <a href="/omp?cmd=new_report_format&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+          <xsl:with-param name="command" select="'CREATE_REPORT_FORMAT'"/>
+      </xsl:call-template>
+
+      <h1>New Report Format</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#report_format">Report Format</a>
+        the dialog offers these entries.
+        Hit the button "Import Report Format" to submit the new Report Format.
+        The Report Formats page will be shown.
+        Note that the import will fail with an error message if the report
+        format already exists on your system, or if an existing Report Format
+        has the same name.
       </p>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
         </tr>
         <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the report format and,
-              if specified, the summary in brackets below
-              the name.</td>
-        </tr>
-        <tr class="even">
-          <td>Extension</td>
-          <td>The file extension of the resulting report.</td>
-        </tr>
-        <tr class="odd">
-          <td>Content Type</td>
-          <td>The content type of the resulting report.</td>
-        </tr>
-        <tr class="even">
-         <td>Trust</td>
-         <td><b>yes</b>: the signature embedded in report format or that was present
-             in the Feed proves that the agent was not compromised at upload time<br/>
-             <b>no</b>: Signature and report format do not match or signature key is not trusted.<br/>
-             <b>unknown</b>: Any case where trust could not be tested adequately.<br/>
-         </td>
+          <td>Import XML Report Format</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/tmp/custom_reporter.xml</td>
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
+      <h4>Report Formats</h4>
       <p>
-       For Report Formats the following actions are available.
+        Pressing the list icon
+        <img src="/img/list.png" alt="Report Formats" title="Report Formats"/>
+        will switch to the
+        <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
+        page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="report_format_details.html">
+  <div class="gb_window_part_center">Help: Report Format Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_REPORT_FORMATS'"/>
+      </xsl:call-template>
+
+      <h1>Report Format Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#report_format">
+        Report Format</a>.
+        This includes the name, creation time, modification time, extension,
+        content type, trust, activity, summary, description and parameters.
       </p>
 
-      <h4>Move Report Format to Trashcan</h4>
+      <h4>New Report Format </h4>
       <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
+        To create a new Report Format click the new icon
+        <img src="/img/new.png" alt="New Report Format" title="New Report Format"/>
+        which goes to the <a href="new_report_format.html?token={/envelope/token}">
+        New Report Format</a> page.
       </p>
 
-      <h4>Report Format Details</h4>
+      <h4>Report Formats</h4>
       <p>
-       Activating the details icon
-       <img src="/img/details.png" alt="Report Format Details" title="Report Format Details" />
-       will open the <a href="#target_details">Report Format Details</a>
-       dialog to provide details of the report format.
+        Pressing the list icon
+        <img src="/img/list.png" alt="Report Formats" title="Report Formats"/>
+        will switch to the Report Formats page.
       </p>
 
-      <a name="edit_report_format"></a>
       <h4>Edit Report Format</h4>
       <p>
-       Pressing the "Edit Report Format" icon
-       <img src="/img/edit.png" alt="Edit Report Format" title="Edit Report Format" />
-       will switch to an overview of the configuration for this report format and allows
-       editing of the report format properties and parameters.
+        Pressing the "Edit Report Format" icon
+        <img src="/img/edit.png" alt="Edit Report Format" title="Edit Report Format"/>
+        will switch to an overview of the configuration for this Report Formats and
+        allows editing the Report Format's properties.
       </p>
 
-      <a name="export"></a>
-      <h4>Export Report Format XML</h4>
+      <h4>Export Report Format</h4>
       <p>
-       A Report Format can be saved to file, e.g. for sharing or backup.
-       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
-       will let you download a file describing this report format.
+        Export the Report Format as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
-      <p>
-       The file can later be imported by choosing to
-       <a href="#import_report_format">Import a Report Format</a>.
-      </p>
-
-      <a name="report_format_details"></a>
-      <h2>Report Format Details</h2>
-      <p>
-       Provides detailed information about the report format.
-      </p>
-
       <h3>Parameters</h3>
       <p>
-       This table provides a list of the parameters that control the creation
-       of reports that have this format.
+        This table provides a list of the parameters that control the
+        creation of reports that have this format.
       </p>
     </div>
   </div>
@@ -2517,7 +2593,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="schedule_details.html?token={/envelope/token}">Schedule Details</a></li>
               </ul>
             <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
-            <li> <a href="configure_report_formats.html?token={/envelope/token}">Configure Report Formats</a></li>
+            <li> <a href="report_formats.html?token={/envelope/token}">Report Formats</a></li>
+              <ul>
+                <li> <a href="new_report_format.html?token={/envelope/token}">New Report Format</a></li>
+                <li> <a href="report_format_details.html?token={/envelope/token}">Report Format Details</a></li>
+              </ul>
             <li> <a href="slaves.html?token={/envelope/token}">Slaves</a></li>
               <ul>
                 <li> <a href="new_slave.html?token={/envelope/token}">New Slave</a></li>
