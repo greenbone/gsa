@@ -52,6 +52,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="list-window-line-actions">
   <xsl:param name="type"/>
   <xsl:param name="used_by"/>
+  <xsl:param name="noclone"/>
+  <xsl:param name="noedit"/>
   <a name="actions"></a>
   <h3>Actions</h3>
 
@@ -84,20 +86,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    </xsl:choose>
   </p>
 
-  <h4>Edit <xsl:value-of select="$type"/></h4>
-  <p>
-   Pressing the "Edit <xsl:value-of select="$type"/>" icon
-   <img src="/img/edit.png" alt="Edit {$type}" title="Edit {$type}"/>
-   will switch to an overview of the configuration for this <xsl:value-of select="$type"/> and
-   allows editing the <xsl:value-of select="$type"/>'s properties.
-  </p>
+  <xsl:choose>
+    <xsl:when test="$noedit">
+    </xsl:when>
+    <xsl:otherwise>
+      <h4>Edit <xsl:value-of select="$type"/></h4>
+      <p>
+       Pressing the "Edit <xsl:value-of select="$type"/>" icon
+       <img src="/img/edit.png" alt="Edit {$type}" title="Edit {$type}"/>
+       will switch to an overview of the configuration for this <xsl:value-of select="$type"/> and
+       allows editing the <xsl:value-of select="$type"/>'s properties.
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
 
-  <h4>Clone <xsl:value-of select="$type"/></h4>
-  <p>
-   Pressing the clone icon
-   <img src="/img/clone.png" alt="Clone" title="Clone"/>
-   will create a duplicate of the <xsl:value-of select="$type"/>.
-  </p>
+  <xsl:choose>
+    <xsl:when test="$noclone">
+    </xsl:when>
+    <xsl:otherwise>
+      <h4>Clone <xsl:value-of select="$type"/></h4>
+      <p>
+       Pressing the clone icon
+       <img src="/img/clone.png" alt="Clone" title="Clone"/>
+       will create a duplicate of the <xsl:value-of select="$type"/>.
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <h4>Export <xsl:value-of select="$type"/></h4>
   <p>
@@ -527,19 +541,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <xsl:call-template name="filtering"/>
 
-      <h4>Move Agent to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the agent to the trashcan and update the list.
-      </p>
-
-      <h4>Agent Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show details of the Agent specification.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Agent'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
 
       <h4>Verify Agent</h4>
       <p>
@@ -556,11 +562,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        will download an installation of the agent package.
       </p>
 
-      <h4>Export Agent</h4>
-      <p>
-        Export the Agent as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
-      </p>
     </div>
   </div>
 </xsl:template>
@@ -1496,7 +1497,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Report Format'"/>
+        <xsl:with-param name="noclone" select="1"/>
       </xsl:call-template>
+
+      <h4>Verify Report Format</h4>
+      <p>
+       Pressing the Verify icon
+       <img src="/img/new.png" alt="Verify" title="Verify"/>
+       will verify the trust on the Report Format file.
+      </p>
     </div>
   </div>
 </xsl:template>
