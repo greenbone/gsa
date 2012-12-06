@@ -1,3 +1,10 @@
+2012-12-06  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/html/omp.xsl (details-header-icons, list-window-line-icons):
+	Replace space by underscore for type-lower variable in order to allow
+	the use of multiple words types such as Report Formats without breaking
+	links.
+
 2012-12-05  Hani Benhabiles <kroosec@gmail.com>
 
 	Add Export Report Formats.

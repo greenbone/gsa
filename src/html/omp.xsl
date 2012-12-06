@@ -233,7 +233,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
-  <xsl:param name="type-lower" select="gsa:lower-case ($type)"/>
+  <xsl:param name="type-lower" select="gsa:lower-case (translate 
+                                                        ($type, ' ', '_'))"/>
   <xsl:param name="id"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type-lower, 's')"/>
@@ -5754,7 +5755,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="details-header-icons">
   <xsl:param name="type"/>
-  <xsl:param name="type-lower" select="gsa:lower-case ($type)"/>
+  <xsl:param name="type-lower" select="gsa:lower-case (translate 
+                                                        ($type, ' ', '_'))"/>
 
   <a href="/help/{$type-lower}_details.html?token={/envelope/token}"
     title="Help: {$type} Details">
