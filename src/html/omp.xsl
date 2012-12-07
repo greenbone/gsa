@@ -641,6 +641,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-tasks-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'task'"/>
+    <xsl:with-param name="cap-type" select="'Task'"/>
+    <xsl:with-param name="resources-summary" select="tasks"/>
+    <xsl:with-param name="resources" select="task"/>
+    <xsl:with-param name="count" select="count (task)"/>
+    <xsl:with-param name="tasked-count" select="task_count/tasked"/>
+    <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Threat|threat Trend|trend'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="old-html-tasks-table">
   <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <xsl:variable name="force-wizard" select="../../force_wizard"/>
   <xsl:variable name="wizard-rows"
@@ -5720,17 +5732,64 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:variable name="current" select="."/>
             <xsl:variable name="token" select="/envelope/token"/>
             <xsl:for-each select="str:split ($headings, ' ')">
-              <td>
-                <xsl:call-template name="column-name">
-                  <xsl:with-param name="head" select="substring-before (., '|')"/>
-                  <xsl:with-param name="name" select="substring-after (., '|')"/>
-                  <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="current" select="$current"/>
-                  <xsl:with-param name="token" select="$token"/>
-                </xsl:call-template>
-              </td>
+              <xsl:variable name="parts" select="str:split (., '~')"/>
+              <xsl:choose>
+                <xsl:when test="count ($parts) = 1">
+                  <td rowspan="2">
+                    <xsl:call-template name="column-name">
+                      <xsl:with-param name="head" select="substring-before ($parts[1], '|')"/>
+                      <xsl:with-param name="name" select="substring-after ($parts[1], '|')"/>
+                      <xsl:with-param name="type" select="$type"/>
+                      <xsl:with-param name="current" select="$current"/>
+                      <xsl:with-param name="token" select="$token"/>
+                    </xsl:call-template>
+                  </td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <td colspan="{count ($parts) - 1}">
+                    <xsl:call-template name="column-name">
+                      <xsl:with-param name="head" select="$parts[1]"/>
+                      <xsl:with-param name="name" select="$parts[1]"/>
+                      <xsl:with-param name="type" select="$type"/>
+                      <xsl:with-param name="current" select="$current"/>
+                      <xsl:with-param name="token" select="$token"/>
+                    </xsl:call-template>
+                  </td>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:for-each>
-            <td width="100">Actions</td>
+            <xsl:choose>
+              <xsl:when test="contains ($headings, '~')">
+                <td width="160" rowspan="2">Actions</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td width="160">Actions</td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+          <tr class="gbntablehead2">
+            <xsl:variable name="current" select="."/>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="str:split ($headings, ' ')">
+              <xsl:variable name="parts" select="str:split (., '~')"/>
+              <xsl:choose>
+                <xsl:when test="count ($parts) = 1">
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:for-each select="$parts[1]/following-sibling::*">
+                    <td style="font-size:10px;">
+                      <xsl:call-template name="column-name">
+                        <xsl:with-param name="head" select="substring-before (., '|')"/>
+                        <xsl:with-param name="name" select="substring-after (., '|')"/>
+                        <xsl:with-param name="type" select="$type"/>
+                        <xsl:with-param name="current" select="$current"/>
+                        <xsl:with-param name="token" select="$token"/>
+                      </xsl:call-template>
+                    </td>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
           </tr>
           <xsl:apply-templates select="$resources"/>
           <xsl:if test="string-length (filters/term) &gt; 0">
