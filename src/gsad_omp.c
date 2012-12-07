@@ -198,7 +198,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   g_string_append (string, "<params>");
   params_iterator_init (&iter, credentials->params);
   while (params_iterator_next (&iter, &name, &param))
-    if (param->value_size && param->valid)
+    if (param->value_size && param->valid && param->valid_utf8)
       xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
   g_string_append (string, "</params>");
 

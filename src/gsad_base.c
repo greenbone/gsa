@@ -480,6 +480,7 @@ params_add (params_t *params, const char *name, const char *value)
   param_t *param;
   param = g_malloc0 (sizeof (param_t));
   param->valid = 0;
+  param->valid_utf8 = 0;
   param->value = g_strdup (value);
   param->value_size = strlen (value);
   g_hash_table_insert (params, g_strdup (name), param);

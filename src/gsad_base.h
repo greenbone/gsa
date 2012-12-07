@@ -136,6 +136,7 @@ enum content_type
 struct param
 {
   int valid;             /* Validation flag. */
+  int valid_utf8;        /* UTF8 validation flag. */
   gchar *value;          /* Value. */
   gchar *original_value; /* Original value, before validation. */
   gchar *filename;       /* Filename. */

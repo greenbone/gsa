@@ -1169,6 +1169,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->value = NULL;
                 param->value_size = 0;
                 param->valid = 0;
+                param->valid_utf8 = 0;
               }
             /* General value validator like "method_data:value". */
             else if (openvas_validate (validator, value_name, param->value))
@@ -1177,12 +1178,14 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 param->value = NULL;
                 param->value_size = 0;
                 param->valid = 0;
+                param->valid_utf8 = 0;
               }
             else
               {
                 const gchar *alias_for;
 
                 param->valid = 1;
+                param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
 
                 alias_for = openvas_validator_alias_for (validator, name);
                 if ((param->value && (strcmp ((gchar*) name, "number") == 0))
@@ -1198,6 +1201,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
               param->value = NULL;
               param->value_size = 0;
               param->valid = 0;
+              param->valid_utf8 = 0;
             }
         }
 
@@ -1230,12 +1234,14 @@ params_mhd_validate (void *params)
           param->original_value = param->value;
           param->value = NULL;
           param->valid = 0;
+          param->valid_utf8 = 0;
         }
       else
         {
           const gchar *alias_for;
 
           param->valid = 1;
+          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
 
           alias_for = openvas_validator_alias_for (validator, name);
           if ((param->value && (strcmp ((gchar*) name, "number") == 0))
