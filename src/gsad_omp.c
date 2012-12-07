@@ -774,6 +774,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</filters>");
 
+#if 0
+                            "<get_settings"
+                            " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
+#endif
+
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
   openvas_server_close (socket, session);
@@ -2561,98 +2566,7 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
 static char *
 get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
-  GString *xml = NULL;
-  gnutls_session_t session;
-  int socket, apply_overrides;
-  gchar *html;
-  const char *sort_field, *sort_order, *refresh_interval, *report_id;
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-  refresh_interval = params_value (params, "refresh_interval");
-  apply_overrides = params_value (params, "overrides")
-                     ? strcmp (params_value (params, "overrides"), "0")
-                     : 0;
-  report_id = params_value (params, "report_id");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the status. "
-                             "No update on status can be retrieved. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_tasks"
-                            " actions=\"g\""
-                            " apply_overrides=\"%i\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>"
-                            "<get_settings"
-                            " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
-                            "</commands>",
-                            apply_overrides,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the status. "
-                           "No update of the list of tasks can be retrieved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_tasks>");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  g_string_append_printf (xml,
-                          "<apply_overrides>%i</apply_overrides>"
-                          "<force_wizard>%i</force_wizard>"
-                          "<delta>%s</delta>",
-                          apply_overrides,
-                          params_value (params, "force_wizard")
-                           ? (strcmp (params_value (params, "force_wizard"),
-                                      "0")
-                               ? 1 : 0)
-                           : 0,
-                          report_id ? report_id : "");
-  if (read_string (&session, &xml))
-    {
-      openvas_server_close (socket, session);
-      g_string_free (xml, TRUE);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the status. "
-                           "No update of the status can be retrieved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  g_string_append (xml, "</get_tasks>");
-  if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
-    g_string_append_printf (xml, "<autorefresh interval=\"0\" />");
-  else
-    g_string_append_printf (xml, "<autorefresh interval=\"%s\" />",
-                            refresh_interval);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_many ("task", credentials, params, extra_xml, NULL);
 }
 
 /**

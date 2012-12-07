@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
-  <xsl:param name="type-lower" select="gsa:lower-case (translate 
+  <xsl:param name="type-lower" select="gsa:lower-case (translate
                                                         ($type, ' ', '_'))"/>
   <xsl:param name="id"/>
   <xsl:param name="params" select="''"/>
@@ -640,7 +640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="apply_overrides">
 </xsl:template>
 
-<xsl:template name="html-task-table">
+<xsl:template name="html-tasks-table">
   <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <xsl:variable name="force-wizard" select="../../force_wizard"/>
   <xsl:variable name="wizard-rows"
@@ -649,9 +649,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Tasks
-      <a href="/help/tasks.html?token={/envelope/token}" title="Help: Tasks">
-        <img src="/img/help.png" border="0"/>
-      </a>
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'task'"/>
+        <xsl:with-param name="list" select="tasks"/>
+        <xsl:with-param name="count" select="count(task)"/>
+        <xsl:with-param name="filtered_count" select="task_count/filtered"/>
+      </xsl:call-template>
+      <a href="/help/tasks.html?token={/envelope/token}"
+         title="Help: Tasks">
+        <img src="/img/help.png"/>
+       </a>
       <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
          title="Wizard">
         <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
@@ -719,6 +726,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </div>
     </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'task'"/>
+      <xsl:with-param name="list" select="tasks"/>
+    </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -3732,7 +3743,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </div>
-          <b><xsl:value-of select="name"/></b>
+          <b>
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+              <xsl:value-of select="name"/>
+            </a>
+          </b>
           <xsl:choose>
             <xsl:when test="comment != ''">
               <br/>(<xsl:value-of select="comment"/>)
@@ -4021,7 +4036,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="html-task-table"/>
+      <xsl:call-template name="html-tasks-table"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -5755,7 +5770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="details-header-icons">
   <xsl:param name="type"/>
-  <xsl:param name="type-lower" select="gsa:lower-case (translate 
+  <xsl:param name="type-lower" select="gsa:lower-case (translate
                                                         ($type, ' ', '_'))"/>
 
   <a href="/help/{$type-lower}_details.html?token={/envelope/token}"
