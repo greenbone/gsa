@@ -647,7 +647,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources-summary" select="tasks"/>
     <xsl:with-param name="resources" select="task"/>
     <xsl:with-param name="count" select="count (task)"/>
-    <xsl:with-param name="tasked-count" select="task_count/tasked"/>
+    <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Threat|threat Trend|trend'"/>
   </xsl:call-template>
 </xsl:template>

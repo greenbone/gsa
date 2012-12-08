@@ -1,5 +1,9 @@
 2012-12-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-tasks-table): Correct replace typo.
+
+2012-12-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window): Remove anchor from top row of
 	multi-row heading.
 
