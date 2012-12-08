@@ -5747,13 +5747,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:when>
                 <xsl:otherwise>
                   <td colspan="{count ($parts) - 1}">
-                    <xsl:call-template name="column-name">
-                      <xsl:with-param name="head" select="$parts[1]"/>
-                      <xsl:with-param name="name" select="$parts[1]"/>
-                      <xsl:with-param name="type" select="$type"/>
-                      <xsl:with-param name="current" select="$current"/>
-                      <xsl:with-param name="token" select="$token"/>
-                    </xsl:call-template>
+                    <xsl:value-of select="$parts[1]"/>
                   </td>
                 </xsl:otherwise>
               </xsl:choose>

@@ -1,3 +1,8 @@
+2012-12-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (list-window): Remove anchor from top row of
+	multi-row heading.
+
 2012-12-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-tasks-table): Call through to list-window.
