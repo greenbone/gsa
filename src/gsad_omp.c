@@ -14176,88 +14176,9 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
  */
 char *
 get_port_list (credentials_t * credentials, params_t *params,
-               const char * commands)
+               const char * extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *port_list_id, *sort_field, *sort_order;
-
-  port_list_id = params_value (params, "port_list_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (port_list_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a port list. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_port_lists");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a port list. "
-                             "The port lists is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists");
-    }
-
-  xml = g_string_new ("<get_port_list>");
-
-  /* Get the port_list. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_port_lists"
-                            " port_list_id=\"%s\""
-                            " details=\"1\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            port_list_id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_port_list>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_one ("port_list", credentials, params, extra_xml, "details=\"1\"");
 }
 
 /**
@@ -14275,6 +14196,22 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Get all Port Lists, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_port_lists (credentials_t * credentials, params_t *params,
+                const char *extra_xml)
+{
+  return get_many ("port_list", credentials, params, extra_xml, NULL);
+}
+
+/**
  * @brief Get all port_lists, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -14285,71 +14222,7 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
 char *
 get_port_lists_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *sort_field, *sort_order;
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting port_lists list. "
-                             "The current list of port_lists is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists");
-    }
-
-  xml = g_string_new ("<get_port_lists>");
-
-  /* Get the port_lists. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting port_lists list. "
-                           "The current list of port_lists is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting port_lists list. "
-                           "The current list of port_lists is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_port_lists>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_port_lists (credentials, params, NULL);
 }
 
 /**
@@ -14397,80 +14270,7 @@ new_port_list_omp (credentials_t *credentials, params_t *params)
 char *
 delete_port_list_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *port_list_id;
-
-  port_list_id = params_value (params, "port_list_id");
-
-  if (port_list_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a port list. "
-                         "The port list was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_port_lists");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a port list. "
-                             "The port_list was not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists");
-    }
-
-  xml = g_string_new ("<get_port_lists>");
-
-  /* Delete the port_list and get all port_lists. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_port_list port_list_id=\"%s\"/>"
-                            "<get_port_lists"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
-                            port_list_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a port list. "
-                           "The port list is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a port list. "
-                           "It is unclear whether the port list has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_port_lists>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return delete_resource ("port_list", credentials, params, 0, get_port_lists);
 }
 
 /**
@@ -14484,79 +14284,7 @@ delete_port_list_omp (credentials_t * credentials, params_t *params)
 char *
 delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gchar *ret;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *port_list_id;
-
-  port_list_id = params_value (params, "port_list_id");
-
-  if (port_list_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a port list. "
-                         "The port list was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_port_lists");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a port_list. "
-                             "The port_list is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash");
-    }
-
-  xml = g_string_new ("");
-
-  /* Delete the port_list. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_port_list"
-                            " port_list_id=\"%s\""
-                            " ultimate=\"1\"/>",
-                            port_list_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a port list. "
-                           "The port list is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a port list. "
-                           "It is unclear whether the port list has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
-  g_string_free (xml, FALSE);
-  return ret;
+  return delete_resource ("port_list", credentials, params, 1, get_trash);
 }
 
 /**
@@ -14570,26 +14298,7 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
 char *
 delete_port_range_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *html, *delete;
-  const char *port_range_id, *port_list_id;
-
-  port_range_id = params_value (params, "port_range_id");
-  port_list_id = params_value (params, "port_list_id");
-
-  if (port_range_id == NULL || port_list_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a port range. "
-                         "The port range was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_port_ranges");
-
-  delete = g_strdup_printf ("<delete_port_range port_range_id=\"%s\"/>",
-                            port_range_id);
-
-  html = get_port_list (credentials, params, delete);
-  g_free (delete);
-  return html;
+  return delete_resource ("port_range", credentials, params, 1, get_port_list);
 }
 
 /**

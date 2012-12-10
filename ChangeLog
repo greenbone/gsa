@@ -1,5 +1,14 @@
 2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
 
+	* src/gsad_omp.c (get_port_list): Use get_one function. Rename commands
+	parameter to extra_xml for consistency.
+	(get_port_lists): New function.
+	(get_port_lists_omp): Use get_port_lists function.
+	(delete_port_list_omp, delete_trash_port_list_omp)
+	(delete_port_range_omp): Use delete_resource adequately.
+
+2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+
 	* src/html/omp.xsl (port_list [details]): Use details-header-icon and
 	minor-details templates.
 
