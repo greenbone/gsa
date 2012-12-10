@@ -584,6 +584,7 @@ init_validator ()
                          "|(export_override)"
                          "|(export_overrides)"
                          "|(export_port_list)"
+                         "|(export_port_lists)"
                          "|(export_preference_file)"
                          "|(export_report_format)"
                          "|(export_report_formats)"
@@ -1855,6 +1856,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_port_list"))
     return export_port_list_omp (credentials, params, content_type,
                                  content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_port_lists"))
+    return export_port_lists_omp (credentials, params, content_type,
+                                  content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_preference_file"))
     return export_preference_file_omp (credentials, params, content_type,

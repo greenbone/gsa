@@ -1,5 +1,17 @@
 2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
 
+	Add Port Lists exporting.
+
+	* src/gsad_omp.c (export_port_lists_omp): New function.
+	(export_port_list_omp): Use export_resource.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add export_port_lists
+	command.
+
+2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+
 	Add New Port List page.
 
 	* src/gsad_omp.c (new_port_list, new_port_list_omp): New functions.

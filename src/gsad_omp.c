@@ -8260,113 +8260,45 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Export a port list.
+ * @brief Export a Port List.
  *
  * @param[in]   credentials          Username and password for authentication.
- * @param[in]   port_list_id         UUID of port list.
+ * @param[in]   port_list_id         UUID of Port List.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
  *
- * @return Port List XML on success.  HTML result of XSL transformation on error.
+ * @return Port List XML on success.  HTML result of XSL transformation on
+ *         error.
  */
 char *
 export_port_list_omp (credentials_t * credentials, params_t *params,
-                      enum content_type * content_type,
+                      enum content_type * content_type, 
                       char **content_disposition, gsize *content_length)
 {
-  GString *xml;
-  entity_t entity;
-  entity_t port_list_entity;
-  gnutls_session_t session;
-  int socket;
-  char *content = NULL;
-  gchar *html;
-  const char *port_list_id;
+  return export_resource ("port_list", credentials, params, content_type,
+                          content_disposition, content_length);
+}
 
-  *content_length = 0;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a port list. "
-                             "The port list could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists");
-    }
-
-  xml = g_string_new ("");
-
-  port_list_id = params_value (params, "port_list_id");
-
-  if (port_list_id == NULL)
-    {
-      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Port List"));
-      openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " port_list_id=\"%s\""
-                            " details=\"1\"/>",
-                            port_list_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list could not be delivered. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &content))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list could not be delivered. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  port_list_entity = entity_child (entity, "port_list");
-  if (port_list_entity == NULL)
-    {
-      free (content);
-      free_entity (entity);
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list could not be delivered. "
-                           "Diagnostics: Failure to receive port list from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment; filename=\"port-list-%s.xml\"",
-                                          port_list_id);
-  *content_length = strlen (content);
-  free_entity (entity);
-  g_string_free (xml, TRUE);
-  openvas_server_close (socket, session);
-  return content;
+/**
+ * @brief Export a list of Port Lists.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Port Lists XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_port_lists_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("port_list", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 /**
