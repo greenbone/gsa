@@ -13840,7 +13840,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN PORT_LISTS MANAGEMENT -->
 
-<xsl:template name="html-create-port_list-form">
+<xsl:template name="html-create-port-list-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -14341,12 +14341,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
   <xsl:apply-templates select="create_port_list_response"/>
-  <xsl:call-template name="html-create-port_list-form"/>
-  <xsl:call-template name="html-import-port-list-form"/>
   <!-- The for-each makes the get_port_lists_response the current node. -->
   <xsl:for-each select="get_port_lists_response | commands_response/get_port_lists_response">
     <xsl:call-template name="html-port-lists-table"/>
   </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="new_port_list">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_port_list_response"/>
+  <xsl:apply-templates select="commands_response/delete_port_list_response"/>
+  <xsl:call-template name="html-create-port-list-form"/>
+  <xsl:call-template name="html-import-port-list-form"/>
 </xsl:template>
 
 <!-- END PORT_LISTS MANAGEMENT -->

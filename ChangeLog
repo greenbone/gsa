@@ -1,5 +1,20 @@
 2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
 
+	Add New Port List page.
+
+	* src/gsad_omp.c (new_port_list, new_port_list_omp): New functions.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add new_port command.
+
+	* src/html/omp.xsl (html-create-port_list-table): Rename to
+	html-create-port-list-table to follow the same naming style.
+	(get_port_lists): Remove port list create and import template calls.
+	(new_port_list): New template.
+
+2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+
 	* src/html/omp.xsl (list-window-line-icons): Add support for noclone and
 	noedit parameters to disable edit and clone icons.
 	(html-port-lists-table): Use filter-window-pager and

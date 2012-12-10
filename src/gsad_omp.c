@@ -14421,6 +14421,40 @@ get_port_lists_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Returns page to create a new Port List.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_port_list (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_port_list>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_port_list>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new Port List page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_port_list_omp (credentials_t *credentials, params_t *params)
+{
+  return new_port_list (credentials, params, NULL);
+}
+
+/**
  * @brief Delete a port list, get all port lists, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
