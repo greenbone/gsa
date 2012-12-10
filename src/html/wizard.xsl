@@ -39,6 +39,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
+<xsl:template name="wizard-icon">
+  <xsl:choose>
+    <xsl:when test="count(task)">
+      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;token={/envelope/token}"
+         title="Wizard">
+        <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+      </a>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="wizard">
+  <xsl:param name="force-wizard" select="/envelope/params/force_wizard"/>
+  <xsl:param name="wizard-rows"
+             select="../get_settings_response/setting[name='Wizard Rows']/value"/>
+  <xsl:choose>
+    <xsl:when test="(count(task) &lt;= number ($wizard-rows)) or ($force-wizard = 1)">
+      <xsl:call-template name="quick-first-scan-wizard"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="quick-first-scan-wizard">
   <a name="wizard"></a>
   <table>

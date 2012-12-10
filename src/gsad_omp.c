@@ -774,10 +774,38 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</filters>");
 
-#if 0
-                            "<get_settings"
-                            " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>"
-#endif
+  /* Get the Wizard Rows setting. */
+
+  if (openvas_server_sendf_xml
+       (&session,
+        "<get_settings"
+        " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
+        type)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the filter list. "
+                           "The current list of filters is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      g_string_free (type_many, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the filter list. "
+                           "The current list of filters is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
 
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
@@ -8294,8 +8322,8 @@ export_port_list_omp (credentials_t * credentials, params_t *params,
  */
 char *
 export_port_lists_omp (credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                       enum content_type * content_type, char **content_disposition,
+                       gsize *content_length)
 {
   return export_many ("port_list", credentials, params, content_type,
                       content_disposition, content_length);

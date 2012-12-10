@@ -5723,6 +5723,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: {$cap-type}s">
         <img src="/img/help.png"/>
       </a>
+      <xsl:call-template name="wizard-icon"/>
       <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New {$type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
@@ -5811,6 +5812,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:if>
         </table>
+        <xsl:call-template name="wizard"/>
       </div>
     </div>
   </div>
