@@ -8273,7 +8273,7 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
  */
 char *
 export_port_list_omp (credentials_t * credentials, params_t *params,
-                      enum content_type * content_type, 
+                      enum content_type * content_type,
                       char **content_disposition, gsize *content_length)
 {
   return export_resource ("port_list", credentials, params, content_type,

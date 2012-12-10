@@ -14077,16 +14077,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-       Port List Details
-       <a href="/help/configure_port_lists.html?token={/envelope/token}#port_list_details"
-         title="Help: Configure Port Lists (Port List Details)">
-         <img src="/img/help.png"/>
-       </a>
+      Port List Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Report Format'"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>

@@ -1,5 +1,12 @@
 2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
 
+	* src/html/omp.xsl (port_list [details]): Use details-header-icon and
+	minor-details templates.
+
+	* src/gsad_omp.c (export_port_list_omp): Remove trailing whitespace.
+
+2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+
 	Add Port Lists exporting.
 
 	* src/gsad_omp.c (export_port_lists_omp): New function.
