@@ -1,3 +1,10 @@
+2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+
+	* src/html/omp.xsl (list-window-line-icons): Add support for noclone and
+	noedit parameters to disable edit and clone icons.
+	(html-port-lists-table): Use filter-window-pager and
+	list-window-line-icons template. Add various links.
+
 2012-12-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-tasks-table): Correct replace typo.

@@ -236,6 +236,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="type-lower" select="gsa:lower-case (translate
                                                         ($type, ' ', '_'))"/>
   <xsl:param name="id"/>
+  <xsl:param name="noedit"/>
+  <xsl:param name="noclone"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type-lower, 's')"/>
 
@@ -262,32 +264,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <img src="/img/details.png" border="0" alt="Details"/>
   </a>
   <xsl:choose>
-    <xsl:when test="writable='0'">
-      <img src="/img/edit_inactive.png" border="0" alt="Edit"
-           style="margin-left:3px;"/>
+    <xsl:when test="$noedit">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Edit {$type}"
-         style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="writable='0'">
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Edit {$type}"
+             style="margin-left:3px;">
+            <img src="/img/edit.png" border="0" alt="Edit"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="caller" value="{/envelope/caller}"/>
-      <input type="hidden" name="cmd" value="clone"/>
-      <input type="hidden" name="resource_type" value="{$type-lower}"/>
-      <input type="hidden" name="next" value="{$next}"/>
-      <input type="hidden" name="id" value="{@id}"/>
-      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <input type="image" src="/img/clone.png" alt="Clone {$type}"
-             name="Clone" value="Clone" title="Clone"/>
-    </form>
-  </div>
+  <xsl:choose>
+    <xsl:when test="$noclone">
+    </xsl:when>
+    <xsl:otherwise>
+      <div style="display: inline">
+        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="cmd" value="clone"/>
+          <input type="hidden" name="resource_type" value="{$type-lower}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+          <input type="hidden" name="id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="image" src="/img/clone.png" alt="Clone {$type}"
+                 name="Clone" value="Clone" title="Clone"/>
+        </form>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
   <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="Export {$type}"
      style="margin-left:3px;">
@@ -13888,10 +13902,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Port Lists
-      <a href="/help/configure_port_lists.html?token={/envelope/token}#port_lists"
-         title="Help: Configure Port Lists (Port Lists)">
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="port_list"/>
+        <xsl:with-param name="list" select="port_lists"/>
+        <xsl:with-param name="count" select="count (port_list)"/>
+        <xsl:with-param name="filtered_count" select="port_list_count/filtered"/>
+      </xsl:call-template>
+      <a href="/help/port_lists.html?token={/envelope/token}"
+         title="Help: Port Lists">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=new_port_list&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="New Port List">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=export_port_lists&amp;filter={filters/term}&amp;token={/envelope/token}"
+           title="Export port_list_count/filtered filtered Port Lists as XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -13970,7 +14001,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -13988,29 +14023,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="port_count/udp"/>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="writable='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'port_list'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png"
-               border="0"
-               alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;token={/envelope/token}"
-         title="Port List Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=export_port_list&amp;port_list_id={@id}&amp;token={/envelope/token}"
-         title="Export Port List"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Port List'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
