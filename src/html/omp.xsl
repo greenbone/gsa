@@ -5839,6 +5839,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="details-header-icons">
   <xsl:param name="type"/>
+  <xsl:param name="noedit"/>
   <xsl:param name="type-lower" select="gsa:lower-case (translate
                                                         ($type, ' ', '_'))"/>
 
@@ -5871,18 +5872,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              style="margin-left:3px;"/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="writable='0'">
-        <img src="/img/edit_inactive.png" border="0" alt="Edit"
-             style="margin-left:3px;"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next=get_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Edit {$type}">
-          <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
-        </a>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noedit">
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="writable='0'">
+          <img src="/img/edit_inactive.png" border="0" alt="Edit"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next=get_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Edit {$type}">
+            <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
     <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Export {$type} XML"
        style="margin-left:3px;">
@@ -14081,7 +14088,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Port List Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Report Format'"/>
+        <xsl:with-param name="type" select="'Port List'"/>
+        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
