@@ -1,5 +1,15 @@
 2012-12-11  Hani Benhabiles  <kroosec@gmail.com>
 
+	Update help documentation for Port Lists.
+
+	* src/html/help.xsl (port_lists.html, new_port_list.html)
+	(port_list_details.html): New templates. Use various templates and
+	content from configure_port_lists.html.
+	(configure_port_lists.html): Removed.
+	(report_formats.html): Fix typo.
+
+2012-12-11  Hani Benhabiles  <kroosec@gmail.com>
+
 	* src/gsd_omp.c (get_port_list): Send targets and ranges attributes
 	instead of details.
 

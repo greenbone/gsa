@@ -1042,11 +1042,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_port_lists.html">
-  <div class="gb_window_part_center">Help: Configure Port Lists</div>
+<xsl:template mode="help" match="port_lists.html">
+  <div class="gb_window_part_center">Help: Port Lists
+    <a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}"
+       title="Port Lists" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Port Lists"/>
+    </a>
+  </div>
+
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1055,84 +1060,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_PORT_LISTS'"/>
       </xsl:call-template>
 
-      <h1>Configure Port Lists</h1>
+      <h1>Port Lists</h1>
       <p>
-       <a href="glossary.html?token={/envelope/token}#port_list">Port lists</a>
-       indicate which ports must be scanned for a
-       <a href="glossary.html?token={/envelope/token}#target">target</a>.
-       There are some predefined port lists, for convenience.
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#port_list">
+            Port Lists
+        </a>
+        and summarizes the essential aspects of them.
       </p>
 
-      <a name="newport_list"></a>
-      <h2>New Port List</h2>
-      <p>
-       For creating a new port list the dialog offers these entries.
-       Hit the button "Create Port List" to submit the new port list.
-       The list of port lists will be updated.
-      </p>
-
-      <p>
-        <table class="gbntable">
-          <tr class="gbntablehead2">
-            <td></td>
-            <td>Mandatory</td>
-            <td>Max Length</td>
-            <td>Syntax</td>
-            <td>Example</td>
-          </tr>
-          <tr class="odd">
-            <td>Name</td>
-            <td>yes</td>
-            <td>80</td>
-            <td>Alphanumeric</td>
-            <td>All privileged UDP</td>
-          </tr>
-          <tr class="odd">
-            <td>Comment</td>
-            <td>no</td>
-            <td>400</td>
-            <td>Alphanumeric</td>
-            <td>Every privileged UDP port.</td>
-          </tr>
-          <tr class="odd">
-            <td>Port Ranges</td>
-            <td>yes</td>
-            <td>400</td>
-            <td>Comma separated list of port ranges, either directly or from a file</td>
-            <td>U:1-1023</td>
-          </tr>
-        </table>
-
-        Note on <b>Port Ranges</b>:
-        <ul>
-          <li>
-            The port ranges parameter is a comma-separated list of values.  The
-            list can be input directly or uploaded in a file.  In the file both
-            newlines and commas can separate values.  Each value in the list
-            can be
-            <ul>
-              <li>a single port (e.g. <tt>7</tt>)</li>
-              <li>a range (e.g. <tt>9-11</tt>)</li>
-            </ul>
-            These options can be mixed (e.g. <tt>1-3,7,9-11</tt>).
-          </li>
-          <li>
-            A value in the list can be preceded by a protocol specifier.  Either
-            "T:" or "U:".  This has the effect of setting the protocol for all
-            following ranges.  For example <tt>T:1-3,U:7,9-11</tt> defines the TCP
-            ports 1, 2 and 3, and the UDP ports 7, 9, 10 and 11.
-          </li>
-          <li>
-            Multiple protocol specifiers toggle the protocol.  For example
-            <tt>T:1-3,U:7,T:9-11</tt> defines the TCP ports 1, 2, 3, 9, 10 and 11,
-            and the UDP port 7.
-          </li>
-          <li>
-            Initially the protocol is TCP.  So for example <tt>1-3,U:7</tt>
-            defines the TCP ports 1, 2, and 3, and the UDP port 7.
-          </li>
-        </ul>
-      </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the Port List and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts Total</td>
+         <td>
+           The total number of ports in the port list.
+         </td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts TCP</td>
+         <td>
+           The total number of TCP ports in the port list.
+         </td>
+        </tr>
+        <tr class="even">
+         <td>Port Counts UDP</td>
+         <td>
+           The total number of UDP ports in the port list.
+         </td>
+        </tr>
+      </table>
 
       <a name="predefined_port_lists"></a>
       <h2>Predefined Port Lists</h2>
@@ -1202,104 +1168,207 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <a name="import_port_list"></a>
-      <h2>Import Port List</h2>
+      <h3>New Port List</h3>
       <p>
-       To import a port list, select the import file and hit the
-       "Import Port List" button to submit the port list.
-       The list of port lists will be updated.
-       Note that the import will fail with an error message if the port list
-       already exists on your system, or if an existing port list has the
-       same name.
-      </p>
-      <p>
-       To create a file that can be imported in another installation, refer to the
-       <a href="#export">export action</a>.
+        To create a new Port List click the new icon
+        <img src="/img/new.png" alt="New Port List"
+             title="New Port List" />
+        which goes to the <a href="new_port_list.html?token={/envelope/token}">New
+        Port List</a> page.
       </p>
 
-      <a name="port_list"></a>
-      <h2>Port Lists</h2>
+      <h3>Exporting</h3>
       <p>
-       This table provides an overview of all configured port lists.
+        Export the current list of Port Lists as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Port List'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_port_list.html">
+  <div class="gb_window_part_center">Help: New Port List
+    <a href="/omp?cmd=new_port_list&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+          <xsl:with-param name="command" select="'CREATE_PORT_LIST'"/>
+      </xsl:call-template>
+
+      <h1>New Port List</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#port_list">Port List</a>
+        the dialog offers these entries.
+        Hit the button "Create Port List" to submit the new Port List.
+        Hit the button "Import Port List" to import a new Port List.
+        The Port Lists page will be shown.
       </p>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
         </tr>
         <tr class="odd">
           <td>Name</td>
-          <td>
-            Shows name of the port list and,
-            if specified, the comment in brackets below
-            the name.
-          </td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>All privileged UDP</td>
         </tr>
-        <tr class="even">
-         <td>Port Counts Total</td>
-         <td>
-           The total number of ports in the port list.
-         </td>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>Every privileged UDP port.</td>
         </tr>
-        <tr class="even">
-         <td>Port Counts TCP</td>
-         <td>
-           The total number of TCP ports in the port list.
-         </td>
-        </tr>
-        <tr class="even">
-         <td>Port Counts UDP</td>
-         <td>
-           The total number of UDP ports in the port list.
-         </td>
+        <tr class="odd">
+          <td>Port Ranges</td>
+          <td>yes</td>
+          <td>400</td>
+          <td>Comma separated list of port ranges, either directly or from a file</td>
+          <td>U:1-1023</td>
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
+      Note on <b>Port Ranges</b>:
+      <ul>
+        <li>
+          The port ranges parameter is a comma-separated list of values.  The
+          list can be input directly or uploaded in a file.  In the file both
+          newlines and commas can separate values.  Each value in the list
+          can be
+          <ul>
+            <li>a single port (e.g. <tt>7</tt>)</li>
+            <li>a range (e.g. <tt>9-11</tt>)</li>
+          </ul>
+          These options can be mixed (e.g. <tt>1-3,7,9-11</tt>).
+        </li>
+        <li>
+          A value in the list can be preceded by a protocol specifier.  Either
+          "T:" or "U:".  This has the effect of setting the protocol for all
+          following ranges.  For example <tt>T:1-3,U:7,9-11</tt> defines the TCP
+          ports 1, 2 and 3, and the UDP ports 7, 9, 10 and 11.
+        </li>
+        <li>
+          Multiple protocol specifiers toggle the protocol.  For example
+          <tt>T:1-3,U:7,T:9-11</tt> defines the TCP ports 1, 2, 3, 9, 10 and 11,
+          and the UDP port 7.
+        </li>
+        <li>
+          Initially the protocol is TCP.  So for example <tt>1-3,U:7</tt>
+          defines the TCP ports 1, 2, and 3, and the UDP port 7.
+        </li>
+      </ul>
+
+      <a name="import_port_list"></a>
+      <h1>Import Port List</h1>
       <p>
-       For Port Lists the following actions are available.
+        To import a port list, select the import file and hit the
+        "Import Port List" button to submit the Port List.
+        The list of port lists will be updated.
+        Note that the import will fail with an error message if the port list
+        already exists on your system, or if an existing port list has the
+        same name.
       </p>
 
-      <h4>Move Port List to Trashcan</h4>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Import Port List</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>File</td>
+          <td>/tmp/port_list.xml</td>
+        </tr>
+      </table>
+
+      <h4>Port Lists</h4>
       <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
+        Pressing the list icon
+        <img src="/img/list.png" alt="Port Lists" title="Port Lists"/>
+        will switch to the
+        <a href="port_lists.html?token={/envelope/token}">Port Lists</a>
+        page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="port_list_details.html">
+  <div class="gb_window_part_center">Help: Port List Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_PORT_LISTS'"/>
+      </xsl:call-template>
+
+      <h1>Port List Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#port_list">
+        Port List</a>.
+        This includes the name, creation time, modification time, extension,
+        content type, trust, activity, summary, description and parameters.
       </p>
 
-      <h4>Port List Details</h4>
+      <h4>New Port List </h4>
       <p>
-       Activating the details icon
-       <img src="/img/details.png" alt="Port List Details" title="Port List Details" />
-       will open the <a href="#target_details">Port List Details</a>
-       dialog to provide details of the port list.
+        To create a new Port List click the new icon
+        <img src="/img/new.png" alt="New Port List" title="New Port List"/>
+        which goes to the <a href="new_port_list.html?token={/envelope/token}">
+        New Port List</a> page.
       </p>
 
-      <a name="export"></a>
-      <h4>Export Port List XML</h4>
+      <h4>Port Lists</h4>
       <p>
-       A Port List can be saved to file, e.g. for sharing or backup.
-       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
-       will let you download a file describing this port list.
-      </p>
-      <p>
-       The file can later be imported by choosing to
-       <a href="#import_port_list">Import a Port List</a>.
+        Pressing the list icon
+        <img src="/img/list.png" alt="Port Lists" title="Port Lists"/>
+        will switch to the Port Lists page.
       </p>
 
-      <a name="port_list_details"></a>
-      <h2>Port List Details</h2>
+      <h4>Export Port List</h4>
       <p>
-       Provides detailed information about the port list.
+        Export the Port List as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
       <h3>New Port Range</h3>
       <p>
-       For adding a new port range to a port list the dialog offers these
-       entries.  Hit the button "Create Port Range" to submit the new port
-       list.  The port list details will be updated.
+        For adding a new port range to a port list the dialog offers these
+        entries.  Hit the button "Create Port Range" to submit the new port
+        list.  The port list details will be updated.
       </p>
 
       <p>
@@ -1337,8 +1406,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h3>Port Ranges</h3>
       <p>
-       This table lists all the port ranges in the port list.
+        This table lists all the port ranges in the port list.
       </p>
+
     </div>
   </div>
 </xsl:template>
@@ -1489,7 +1559,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h3>Exporting</h3>
       <p>
-        Export the current list of report_formats as XML by clicking on the
+        Export the current list of Report Format as XML by clicking on the
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
@@ -2601,7 +2671,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_schedule.html?token={/envelope/token}">New Schedule</a></li>
                 <li> <a href="schedule_details.html?token={/envelope/token}">Schedule Details</a></li>
               </ul>
-            <li> <a href="configure_port_lists.html?token={/envelope/token}">Configure Port Lists</a></li>
+            <li> <a href="port_lists.html?token={/envelope/token}">Port Lists</a></li>
+              <ul>
+                <li> <a href="new_port_list.html?token={/envelope/token}">New Port List</a></li>
+                <li> <a href="port_list_details.html?token={/envelope/token}">Port List Details</a></li>
+              </ul>
             <li> <a href="report_formats.html?token={/envelope/token}">Report Formats</a></li>
               <ul>
                 <li> <a href="new_report_format.html?token={/envelope/token}">New Report Format</a></li>
