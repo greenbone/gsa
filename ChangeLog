@@ -1,5 +1,10 @@
 2012-12-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/wizard.xsl (wizard-icon, wizard): Let page element determine
+	visibility.
+
+2012-12-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_base.c (params_add): Ensure that name and value are always
 	strings.
 
