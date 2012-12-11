@@ -5847,7 +5847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     title="Help: {$type} Details">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=new_{$type-lower}&amp;filter={/envelope/params/filter}&amp;&amp;{$type-lower}_id={@id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=new_{$type-lower}&amp;filter={/envelope/params/filter}&amp;{$type-lower}_id={@id}&amp;token={/envelope/token}"
      title="New {$type}">
     <img src="/img/new.png" border="0" style="margin-left:3px;"/>
   </a>

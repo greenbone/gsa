@@ -478,6 +478,12 @@ param_t *
 params_add (params_t *params, const char *name, const char *value)
 {
   param_t *param;
+
+  if (name == NULL)
+    name = "";
+  if (value == NULL)
+    value = "";
+
   param = g_malloc0 (sizeof (param_t));
   param->valid = 0;
   param->valid_utf8 = 0;
