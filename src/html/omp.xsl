@@ -240,6 +240,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="noclone"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type-lower, 's')"/>
+  <xsl:param name="extra-params-details"/>
 
   <xsl:choose>
     <xsl:when test="writable='0' or in_use!='0'">
@@ -259,7 +260,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
      title="{$type} Details" style="margin-left:3px;">
     <img src="/img/details.png" border="0" alt="Details"/>
   </a>
@@ -3953,6 +3954,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:call-template name="list-window-line-icons">
             <xsl:with-param name="type" select="'Task'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="extra-params-details" select="concat ('&amp;overrides=', ../apply_overrides)"/>
           </xsl:call-template>
         </td>
       </tr>
@@ -5693,6 +5695,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="count"/>
   <xsl:param name="filtered-count"/>
   <xsl:param name="headings"/>
+  <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -5759,20 +5762,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </select>
-<!--
-          <select style="margin-bottom: 0px;" name="overrides" size="1">
-            <xsl:choose>
-              <xsl:when test="$apply-overrides = 0">
-                <option value="0" selected="1">&#8730;No overrides</option>
-                <option value="1" >Apply overrides</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">No overrides</option>
-                <option value="1" selected="1">&#8730;Apply overrides</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
--->
+          <xsl:if test="$type = 'task'">
+            <select style="margin-bottom: 0px;" name="overrides" size="1">
+              <xsl:choose>
+                <xsl:when test="$apply-overrides = 0">
+                  <option value="0" selected="1">&#8730;No overrides</option>
+                  <option value="1" >Apply overrides</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="0">No overrides</option>
+                  <option value="1" selected="1">&#8730;Apply overrides</option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </select>
+          </xsl:if>
           <input type="image"
                  name="Update"
                  src="/img/refresh.png"

@@ -1,3 +1,12 @@
+2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_tasks): Prepend apply_overrides to the filter
+	according to the overrides request param.
+
+	* src/html/omp.xsl (list-window-line-icons): Add extra-params-details.
+	(task): Pass overrides in extra-params-details.
+	(list-window): Enable overrides control for Tasks page.
+
 2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
 
 	* src/html/omp.xsl (html-create-alert-form): Update help link. Add

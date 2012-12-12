@@ -2602,6 +2602,28 @@ get_nvts_omp (credentials_t *credentials, params_t *params)
 static char *
 get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
+  const char *overrides;
+
+  overrides = params_value (params, "overrides");
+  if (overrides)
+    {
+      param_t *filt_id, *filter;
+      filt_id = params_get (params, "filt_id");
+      if (filt_id)
+        filt_id->value = NULL;
+
+      filter = params_get (params, "filter");
+      if (filter && filter->value)
+        {
+          gchar *old;
+          old = filter->value;
+          filter->value = g_strdup_printf ("apply_overrides=%s %s",
+                                           overrides,
+                                           old);
+          g_free (old);
+        }
+    }
+
   return get_many ("task", credentials, params, extra_xml, NULL);
 }
 
