@@ -4496,6 +4496,20 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
 }
 
 /**
+ * @brief Returns page to create a new alert.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_alert_omp (credentials_t *credentials, params_t *params)
+{
+  return new_alert (credentials, params, NULL);
+}
+
+/**
  * @brief Test an alert, get all alerts XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
