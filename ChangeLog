@@ -1,5 +1,17 @@
 2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-task-form, task): Add filter params to and
+	remove overrides params from task icons.
+	(gsa:alert-in-trash): New function.
+	(task [trash]): Use gsa:alert-in-trash for restore check, because there
+	are multiple alerts now.
+	(list-window): For the refresh in the header, get the filter from
+	FILTERS/TERM and remove the filt_id param.  This keeps the existing
+	filtering but drops the actual named filter, otherwise the new
+	apply_override could conflict with the filter.
+
+2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_tasks): Prepend apply_overrides to the filter
 	according to the overrides request param.
 

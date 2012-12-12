@@ -3428,6 +3428,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="sort_field" value="{sort_field}"/>
         <input type="hidden" name="sort_order" value="{sort_order}"/>
         <input type="hidden" name="overrides" value="{apply_overrides}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
            <td valign="top" width="185">Name</td>
@@ -3865,8 +3867,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
               </xsl:call-template>
@@ -3879,8 +3882,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
               </xsl:call-template>
@@ -3901,8 +3905,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
               </xsl:call-template>
@@ -3913,8 +3918,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
               </xsl:call-template>
@@ -3944,8 +3950,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">task</xsl:with-param>
                 <xsl:with-param name="id" select="@id"/>
                 <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="overrides" value="{../apply_overrides}"/>
                   <input type="hidden" name="next" value="get_tasks"/>
                 </xsl:with-param>
               </xsl:call-template>
@@ -3961,6 +3968,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<func:function name="gsa:alert-in-trash">
+  <xsl:for-each select="alert">
+    <xsl:if test="trash/text() != '0'">
+      <func:result>1</func:result>
+    </xsl:if>
+  </xsl:for-each>
+  <func:result>0</func:result>
+</func:function>
 
 <xsl:template match="task" mode="trash">
   <xsl:variable name="class">
@@ -4030,7 +4046,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0')  and (alert/trash = '0')">
+        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0') and (gsa:alert-in-trash () = 0)">
           <xsl:call-template name="restore-icon">
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
@@ -5726,8 +5742,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form method="get" action="">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{$type}s"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="filter" value="{filters/term}"/>
           <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
             <xsl:choose>
               <xsl:when test="/envelope/autorefresh/@interval='0'">
