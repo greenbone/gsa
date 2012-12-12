@@ -4880,9 +4880,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New Alert
-      <a href="/help/configure_alerts.html?token={/envelope/token}#newalert"
-         title="Help: Configure Alerts (New Alert)">
+      <a href="/help/new_alert.html?token={/envelope/token}"
+         title="Help: New Alert">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_alerts&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Alerts" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Alerts"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -5216,32 +5220,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="new_alert">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_alert_response"/>
+  <xsl:apply-templates select="commands_response/delete_alert_response"/>
+  <xsl:call-template name="html-create-alert-form">
+    <xsl:with-param
+      name="lsc-credentials"
+      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
+    <xsl:with-param
+      name="report-formats"
+      select="get_report_formats_response | commands_response/get_report_formats_response"/>
+    <xsl:with-param
+      name="filters"
+      select="get_filters_response | commands_response/get_filters_response"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-alerts-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Alerts
-      <a href="/help/configure_alerts.html?token={/envelope/token}#alerts"
-         title="Help: Configure Alerts (Alerts)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Event</td>
-            <td>Condition</td>
-            <td>Method</td>
-            <td>Filter</td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="alert"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'alert'"/>
+    <xsl:with-param name="cap-type" select="'Alert'"/>
+    <xsl:with-param name="resources-summary" select="alerts"/>
+    <xsl:with-param name="resources" select="alert"/>
+    <xsl:with-param name="count" select="count (alert)"/>
+    <xsl:with-param name="filtered-count" select="alert_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Event|event Condition|condition Method|method Filter|filter'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="get_alerts_response">
@@ -5302,7 +5307,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -5350,24 +5359,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'alert'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png"
-               border="0"
-               alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}"
-         title="Alert Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Alert'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
       <xsl:call-template name="start-icon">
         <xsl:with-param name="type">alert</xsl:with-param>
         <xsl:with-param name="id" select="@id"/>
@@ -5470,15 +5467,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Alert Details
-      <a href="/help/configure_alerts.html?token={/envelope/token}#alertdetails"
-         title="Help: Configure Alerts (Alert Details)">
-        <img src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'Alert'"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>
@@ -5680,17 +5675,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="test_alert_response"/>
-  <xsl:call-template name="html-create-alert-form">
-    <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
-    <xsl:with-param
-      name="report-formats"
-      select="get_report_formats_response | commands_response/get_report_formats_response"/>
-    <xsl:with-param
-      name="filters"
-      select="get_filters_response | commands_response/get_filters_response"/>
-  </xsl:call-template>
   <!-- The for-each makes the get_alerts_response the current node. -->
   <xsl:for-each select="get_alerts_response | commands_response/get_alerts_response">
     <xsl:call-template name="html-alerts-table"/>
