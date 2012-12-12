@@ -61,7 +61,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- Add meta refresh info if autorefresh element present -->
 <xsl:template match="autorefresh" mode="html-header-meta">
   <xsl:if test="@interval &gt; 0">
-    <meta http-equiv="refresh" content="{@interval};/omp?cmd=get_tasks&amp;refresh_interval={@interval}&amp;overrides={../get_tasks/apply_overrides}&amp;token={/envelope/token}" />
+    <meta http-equiv="refresh" content="{@interval};{/envelope/caller}&amp;token={/envelope/token}" />
   </xsl:if>
 </xsl:template>
 

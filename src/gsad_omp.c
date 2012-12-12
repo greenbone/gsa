@@ -170,6 +170,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
+  const char *refresh_interval;
 
   assert (credentials);
 
@@ -194,6 +195,13 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  credentials->role);
   g_string_append (string, res);
   g_free (res);
+
+  refresh_interval = params_value (credentials->params, "refresh_interval");
+  if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
+    g_string_append_printf (string, "<autorefresh interval=\"0\" />");
+  else
+    g_string_append_printf (string, "<autorefresh interval=\"%s\" />",
+                            refresh_interval);
 
   g_string_append (string, "<params>");
   params_iterator_init (&iter, credentials->params);

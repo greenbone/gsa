@@ -1,3 +1,15 @@
+2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add the refresh input to the headers of the new-style get pages.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add AUTOREFRESH to ENVELOPE.
+
+	* src/html/gsad.xsl (autorefresh): Get the URL from the ENVELOPE instead
+	of always using get_tasks.
+
+	* src/html/omp.xsl (list-window): Add the refresh input that was
+	previously on the tasks page.
+
 2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
 
 	* src/gsad_omp.c (export_report_format_omp): Use export_resource.
