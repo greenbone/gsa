@@ -4413,74 +4413,23 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 char *
 delete_alert_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *response;
-  const char *alert_id;
-  entity_t entity;
+  return delete_resource ("alert", credentials, params, 0, get_targets);
+}
 
-  alert_id = params_value (params, "alert_id");
-
-  if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting an alert. "
-                         "The alert was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_alerts");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a alert. "
-                             "The alert is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_alerts");
-    }
-
-  /* Delete alert. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_alert alert_id=\"%s\"/>",
-                            alert_id)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an alert. "
-                           "The alert was not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an alert. "
-                           "It is unclear whether the alert has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-  free_entity (entity);
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  html = get_alerts (credentials, params, response);
-  g_free (response);
-  return html;
+/**
+ * @brief Get one alert, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_alert (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return get_one ("alert", credentials, params, extra_xml, "tasks=\"1\"");
 }
 
 /**
@@ -4494,171 +4443,7 @@ delete_alert_omp (credentials_t * credentials, params_t *params)
 char *
 get_alert_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *alert_id, *sort_field, *sort_order;
-
-  alert_id = params_value (params, "alert_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting an alert. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_alerts");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting an alert. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_alerts");
-    }
-
-  xml = g_string_new ("<get_alert>");
-
-  /* Get the alert. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_alerts"
-                            " alert_id=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            alert_id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  /* Get the report formats. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_report_formats/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  /* Get the filters. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_filters type=\"report\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting an alert. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_alert>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-}
-
-/**
- * @brief Get all alerts, reading the result into a string.
- *
- * @param[in]   credentials  User authentication information.
- * @param[in]   session      GNUTLS session.
- * @param[out]  xml          String.
- * @param[in]   sort_field   Field to sort on, or NULL.
- * @param[in]   sort_order   "ascending", "descending", or NULL.
- *
- * @return Result of XSL transformation on error, NULL on success.
- */
-char *
-get_alerts_xml (credentials_t *credentials, gnutls_session_t *session,
-                    GString *xml, const char *sort_field,
-                    const char *sort_order)
-{
-  if (openvas_server_sendf (session,
-                            "<get_alerts"
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting alerts list. "
-                         "The current list of alerts is not available. "
-                         "Diagnostics: Failure to send command to manager daemon.",
-                         "/omp?cmd=get_tasks");
-
-  if (read_string (session, &xml))
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting alerts list. "
-                         "The current list of alerts is not available. "
-                         "Diagnostics: Failure to receive response from manager daemon.",
-                         "/omp?cmd=get_tasks");
-
-  return NULL;
+  return get_alert (credentials, params, NULL);
 }
 
 /**
@@ -4674,101 +4459,7 @@ char *
 get_alerts (credentials_t * credentials, params_t *params,
             const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  char *ret;
-  gchar *html;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting alert list. "
-                             "The current list of alerts is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
-
-  xml = g_string_new ("<get_alerts>");
-
-  g_string_append (xml, extra_xml);
-
-  ret = get_alerts_xml (credentials, &session, xml,
-                            params_value (params, "sort_field"),
-                            params_value (params, "sort_order"));
-  if (ret)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return ret;
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<get_report_formats"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the alert list. "
-                           "The current list of alerts is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the alert list. "
-                           "The current list of alerts is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  /* Get filters. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_filters"
-                            " filter=\"type=report\"/>")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the alert list. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the alert list. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_alerts");
-    }
-
-  g_string_append (xml, "</get_alerts>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_many ("alert", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -5502,79 +5193,7 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params)
 char *
 delete_trash_alert_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gchar *ret;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *alert_id;
-
-  alert_id = params_value (params, "alert_id");
-
-  if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a alert. "
-                         "The alert was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_alerts");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a alert. "
-                             "The alert is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash");
-    }
-
-  xml = g_string_new ("");
-
-  /* Delete the alert. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_alert"
-                            " alert_id=\"%s\""
-                            " ultimate=\"1\"/>",
-                            alert_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a alert. "
-                           "The alert is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a alert. "
-                           "It is unclear whether the alert has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
-  g_string_free (xml, FALSE);
-  return ret;
+  return delete_resource ("alert", credentials, params, 1, get_trash);
 }
 
 /**

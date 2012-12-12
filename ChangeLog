@@ -1,5 +1,14 @@
 2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
 
+	* src/gsad_omp.c (delete_alert_omp, delete_trash_alert_omp): Use
+	delete_resource.
+	(get_alert): New function. Use get_one.
+	(get_alert_omp): Use get_alert.
+	(get_alerts_omp): Use get_many.
+	(get_alerts_xml): Remove unused function.
+
+2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+
 	* src/gsad_omp.c (export_target_omp, export_note_omp)
 	(export_override_omp): Use export_resource.
 
