@@ -67,12 +67,17 @@ char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
 
 char * get_result_omp (credentials_t *, params_t *);
 
+char * new_alert_omp (credentials_t *, params_t *);
 char * create_alert_omp (credentials_t *, params_t *);
 char * delete_alert_omp (credentials_t *, params_t *);
 char * delete_trash_alert_omp (credentials_t *, params_t *);
 char * test_alert_omp (credentials_t *, params_t *);
 char * get_alert_omp (credentials_t *, params_t *);
 char * get_alerts_omp (credentials_t *, params_t *);
+char * export_alert_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
+char * export_alerts_omp (credentials_t *, params_t *, enum content_type *,
+                          char **, gsize *);
 
 int export_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
                                char **);

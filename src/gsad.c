@@ -575,6 +575,8 @@ init_validator ()
                          "|(alert_report)"
                          "|(export_agent)"
                          "|(export_agents)"
+                         "|(export_alert)"
+                         "|(export_alerts)"
                          "|(export_config)"
                          "|(export_lsc_credential)"
                          "|(export_filter)"
@@ -642,6 +644,7 @@ init_validator ()
                          "|(login)"
                          "|(modify_auth)"
                          "|(new_agent)"
+                         "|(new_alert)"
                          "|(new_filter)"
                          "|(new_note)"
                          "|(new_override)"
@@ -1770,6 +1773,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (new_target)
   ELSE (new_task)
+  ELSE (new_alert)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_config)
@@ -1794,6 +1798,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_agents"))
     return export_agents_omp (credentials, params, content_type,
+                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_alert"))
+    return export_alert_omp (credentials, params, content_type,
+                             content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_alerts"))
+    return export_alerts_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_config"))

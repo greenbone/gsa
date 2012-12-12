@@ -4477,6 +4477,25 @@ get_alerts_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Returns page to create a new alert.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_alert (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_alert>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_alert>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
  * @brief Test an alert, get all alerts XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -4551,6 +4570,47 @@ test_alert_omp (credentials_t * credentials, params_t *params)
   html = get_alerts (credentials, params, response);
   g_free (response);
   return html;
+}
+
+/**
+ * @brief Export a alert.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   alert_id            UUID of alert.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Alert XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_alert_omp (credentials_t * credentials, params_t *params,
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
+{
+  return export_resource ("alert", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of alerts.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Alerts XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_alerts_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_many ("alert", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 /**
