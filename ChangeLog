@@ -1,3 +1,13 @@
+2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+
+	Add alerts information in Report Formats details page.
+
+	* src/gsad_omp.c (get_report_format): Add alerts attribute in get_one
+	request.
+
+	* src/html/omp.xsl (report_format [details]): Add Alerts using this
+	Report Format table.
+
 2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add the refresh input to the headers of the new-style get pages.

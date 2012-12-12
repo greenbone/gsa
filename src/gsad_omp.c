@@ -12302,7 +12302,8 @@ char *
 get_report_format (credentials_t * credentials, params_t *params,
                    const char *extra_xml)
 {
-  return get_one ("report_format", credentials, params, extra_xml, "params=\"1\"");
+  return get_one ("report_format", credentials, params, extra_xml,
+                  "alerts =\"1\" params=\"1\"");
 }
 
 /**
