@@ -1,5 +1,9 @@
 2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Add actions to OMP GET for task observers.
+
+2012-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-task-form, task): Add filter params to and
 	remove overrides params from task icons.
 	(gsa:alert-in-trash): New function.

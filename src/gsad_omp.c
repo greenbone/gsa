@@ -704,6 +704,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   /* Get the list. */
 
   request = g_markup_printf_escaped("<get_%s"
+                                    " actions=\"g\""
                                     " filt_id=\"%s\""
                                     " filter=\"%s\""
                                     " first=\"%s\""
