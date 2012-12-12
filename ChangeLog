@@ -1,5 +1,10 @@
 2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
 
+	* src/gsad_omp.c (export_target_omp, export_note_omp)
+	(export_override_omp): Use export_resource.
+
+2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+
 	Add alerts information in Report Formats details page.
 
 	* src/gsad_omp.c (get_report_format): Add alerts attribute in get_one
