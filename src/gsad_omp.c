@@ -1731,7 +1731,20 @@ create_task_omp (credentials_t * credentials, params_t *params)
 
   submit = params_value (params, "submit");
   if (submit && (strcmp (submit, "+") == 0))
-    return new_task_omp (credentials, params);
+    {
+      param_t *count;
+      count = params_get (params, "alerts");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "alerts", "2");
+      return new_task_omp (credentials, params);
+    }
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");

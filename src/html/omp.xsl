@@ -17778,6 +17778,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="new-task-alert-select">
               <xsl:with-param name="count" select="alerts"/>
             </xsl:call-template>
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/alerts)">
+                <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="alerts" value="{1}"/>
+              </xsl:otherwise>
+            </xsl:choose>
             <input type="submit" name="submit" value="+"/>
           </td>
         </tr>

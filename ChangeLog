@@ -1,5 +1,14 @@
 2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Make the New Task + submit actually add an alert.
+
+	* src/gsad_omp.c (create_task_omp): Increment the alerts parameter for
+	the + submit.
+
+	* src/html/omp.xsl (new_task): Add alerts param for + submit.
+
+2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch to submit button for adding alerts on the New Task page.  This
 	still loses the user's input, but is done via the form instead of a
 	second link.
