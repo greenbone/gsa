@@ -17778,8 +17778,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="new-task-alert-select">
               <xsl:with-param name="count" select="alerts"/>
             </xsl:call-template>
-            <a style="margin-left: 5px; font-size: 16px; font-weight: bold"
-               href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
+            <input type="submit" name="submit" value="+"/>
           </td>
         </tr>
         <tr>

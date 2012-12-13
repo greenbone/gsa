@@ -810,6 +810,7 @@ init_validator ()
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,20}$");
   openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "submit",     "^\\+$");
   openvas_validator_add (validator, "target_locator", "^[[:alnum:] -_/]{1,80}$");
   openvas_validator_add (validator, "target_source", "^(file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");

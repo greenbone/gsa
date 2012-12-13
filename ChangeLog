@@ -1,5 +1,18 @@
 2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Switch to submit button for adding alerts on the New Task page.  This
+	still loses the user's input, but is done via the form instead of a
+	second link.
+
+	* src/gsad.c (init_validator): Add submit.
+
+	* src/gsad_omp.c (create_task_omp): If submit is + then serve New Task
+	page.
+
+	* src/html/omp.xsl (new_task): Replace + link with submit button.
+
+2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-task-form): Skip the overrides param if
 	there is a filt_id, because the overrides param changes the filter on
 	the get_tasks page.

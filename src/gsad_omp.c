@@ -1725,9 +1725,13 @@ create_task_omp (credentials_t * credentials, params_t *params)
   gchar *html;
   const char *name, *comment, *config_id, *apply_overrides, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
-  const char *in_assets;
+  const char *in_assets, *submit;
   params_t *alerts;
   GString *alert_element;
+
+  submit = params_value (params, "submit");
+  if (submit && (strcmp (submit, "+") == 0))
+    return new_task_omp (credentials, params);
 
   name = params_value (params, "name");
   comment = params_value (params, "comment");
