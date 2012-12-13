@@ -7339,9 +7339,11 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
                     {
                       param_t *password;
                       gchar *password_name;
+                      params_iterator_t password_params;
 
-                      params_iterator_init (&iter, passwords);
-                      while (params_iterator_next (&iter, &password_name,
+                      params_iterator_init (&password_params, passwords);
+                      while (params_iterator_next (&password_params,
+                                                   &password_name,
                                                    &password))
                         if (strcmp (password_name, preference_name) == 0)
                           {
@@ -7366,10 +7368,11 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
                     {
                       param_t *file;
                       gchar *file_name;
-                      params_iterator_t iter;
+                      params_iterator_t file_params;
 
-                      params_iterator_init (&iter, files);
-                      while (params_iterator_next (&iter, &file_name,
+                      params_iterator_init (&file_params, files);
+                      while (params_iterator_next (&file_params,
+                                                   &file_name,
                                                    &file))
                         if (strcmp (file_name, preference_name) == 0)
                           {

@@ -1,3 +1,10 @@
+2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (save_config_nvt_omp): Declare the password iterator
+	locally otherwise it messes up the outer param iterator.  Rename this
+	password iterator and the file iterator, instead of shadowing the outer
+	one.
+
 2012-12-13  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad_omp.c (delete_alert_omp): Correct passed get function.
