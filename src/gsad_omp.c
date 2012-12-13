@@ -4436,7 +4436,7 @@ create_alert_omp (credentials_t * credentials, params_t *params)
 char *
 delete_alert_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("alert", credentials, params, 0, get_targets);
+  return delete_resource ("alert", credentials, params, 0, get_alerts);
 }
 
 /**
