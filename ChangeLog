@@ -1,5 +1,13 @@
 2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Carry text fields with the New Task + submit.
+
+	* src/html/omp.xsl (gsa:html-attribute-quote, gsa:param-or): New
+	functions.
+	(new_task): Wrap text field values in param-or calls.
+
+2012-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Make the New Task + submit actually add an alert.
 
 	* src/gsad_omp.c (create_task_omp): Increment the alerts parameter for

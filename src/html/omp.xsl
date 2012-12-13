@@ -118,6 +118,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:html-attribute-quote">
+  <xsl:param name="text"/>
+  <func:result>
+    <xsl:value-of select="translate ($text, '&quot;', '&amp;quot;')"/>
+  </func:result>
+</func:function>
+
+<!-- This is only safe for HTML attributes. -->
+<func:function name="gsa:param-or">
+  <xsl:param name="name"/>
+  <xsl:param name="alternative"/>
+  <xsl:choose>
+    <xsl:when test="string-length (/envelope/params/node()[name()=$name]) &gt; 0">
+      <func:result>
+        <xsl:value-of select="gsa:html-attribute-quote (/envelope/params/node()[name()=$name])"/>
+      </func:result>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result>
+        <xsl:value-of select="$alternative"/>
+      </func:result>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <xsl:template name="filter-window-pager">
@@ -17742,14 +17767,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
          <td valign="top" width="135">Name</td>
          <td>
-           <input type="text" name="name" value="unnamed" size="30"
+           <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
                   maxlength="80"/>
          </td>
         </tr>
         <tr>
           <td valign="top">Comment (optional)</td>
           <td>
-            <input type="text" name="comment" size="30" maxlength="400"/>
+            <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
           </td>
         </tr>
         <tr>
@@ -17813,7 +17838,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Observers (optional)</td>
           <td>
             <input type="text" name="observers" size="30" maxlength="400"
-                   value=""/>
+                   value="{gsa:param-or ('observers', '')}"/>
           </td>
         </tr>
         <tr>
@@ -17843,7 +17868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <input type="text"
                        name="max_checks"
-                       value="4"
+                       value="{gsa:param-or ('max_checks', '4')}"
                        size="10"
                        maxlength="10"/>
               </td>
@@ -17855,7 +17880,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <input type="text"
                        name="max_hosts"
-                       value="20"
+                       value="{gsa:param-or ('max_hosts', '20')}"
                        size="10"
                        maxlength="10"/>
               </td>
