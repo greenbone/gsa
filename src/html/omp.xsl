@@ -17867,7 +17867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="alerts" value="{1}"/>
               </xsl:otherwise>
             </xsl:choose>
-            <input type="submit" name="submit" value="+"/>
+            <input type="submit" name="submit_plus" value="+"/>
           </td>
         </tr>
         <tr>

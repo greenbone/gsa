@@ -1748,7 +1748,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   params_t *alerts;
   GString *alert_element;
 
-  submit = params_value (params, "submit");
+  submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
     {
       param_t *count;

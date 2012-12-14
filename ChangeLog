@@ -1,5 +1,17 @@
 2012-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Rename the "+" on New Task from "submit" to "submit_plus".  This is
+	because IE apparently sends only one submit parameter when there are
+	two submit inputs with the same name.
+
+	* src/gsad.c (init_validator): Rename submit to submit_plus.
+
+	* src/gsad_omp.c (create_task_omp): Expect + in submit_plus param.
+
+	* src/html/omp.xsl (new_task): Rename + submit button to submit_plus.
+
+2012-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (xsl_transform_omp): Add the collection parameters like
 	"alert_id_optional:0" to ENVELOPE/PARAMS too.
 
