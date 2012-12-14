@@ -206,8 +206,27 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   g_string_append (string, "<params>");
   params_iterator_init (&iter, credentials->params);
   while (params_iterator_next (&iter, &name, &param))
-    if (param->value_size && param->valid && param->valid_utf8)
-      xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
+    {
+      if (name && (name[strlen (name) - 1] == ':') && param->values)
+        {
+          gchar *child_name;
+          params_iterator_t children_iter;
+          param_t *child_param;
+
+          params_iterator_init (&children_iter, param->values);
+          while (params_iterator_next (&children_iter, &child_name,
+                                       &child_param))
+            if (child_param->value_size
+                && child_param->valid
+                && child_param->valid_utf8)
+              xml_string_append (string, "<%s%s>%s</%s%s>",
+                                 name, child_name, child_param->value,
+                                 name, child_name);
+        }
+
+      if (param->value_size && param->valid && param->valid_utf8)
+        xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
+    }
   g_string_append (string, "</params>");
 
   g_string_append_printf (string,
