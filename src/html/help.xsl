@@ -868,20 +868,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_alerts.html">
-  <div class="gb_window_part_center">Help: Configure Alert</div>
+<xsl:template mode="help" match="new_alert.html">
+  <div class="gb_window_part_center">Help: New Alert
+    <a href="/omp?cmd=new_alert&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
 
       <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_ALERTS'"/>
+        <xsl:with-param name="command" select="'CREATE_ALERT'"/>
       </xsl:call-template>
 
-      <h1>Configure Alerts</h1>
+      <a name="newalert"></a>
+      <h1>New Alert</h1>
+
       <p>
        Alerts can be added to <a href="glossary.html?token={/envelope/token}#task">tasks</a>.
        Alerts are hooked into the system. Whenever a configured event happens
@@ -891,13 +896,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        specified address).
       </p>
 
-      <a name="newalert"></a>
-      <h2>New Alert</h2>
-
       <p>
-       To create an alert the dialog offers these entries.
-       Hit the button "Create Alert" to submit the new alert.
-       The list of alerts will be updated.
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>
+        the dialog offers these entries.
+        Hit the button "Create Alert" to submit the new alert.
+        The Alerts page will be shown.
       </p>
 
       <table class="gbntable">
@@ -943,11 +947,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Choice</td>
           <td>Email</td>
         </tr>
+        <tr class="even">
+          <td>Report Filter</td>
+          <td>no</td>
+          <td>--</td>
+          <td>Choice</td>
+          <td></td>
+        </tr>
       </table>
 
-      <h3>Alert Methods</h3>
+      <h2>Alert Methods</h2>
 
-      <h4>HTTP Get</h4>
+      <h3>HTTP Get</h3>
 
       <p>
       The URL will be issued as HTTP GET.
@@ -967,10 +978,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li> $c: condition description </li>
       </ul>
 
-      <a name="alerts"></a>
-      <h2>Alerts</h2>
+      <h4>Alerts</h4>
       <p>
-       This table provides an overview of all created alerts.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Alerts" title="Alerts"/>
+       will switch to the <a href="alerts.html?token={/envelope/token}">Alerts</a>
+       page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="alerts.html">
+  <div class="gb_window_part_center">Help: Alerts
+    <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
+       title="Alerts" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Alerts"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ALERTS'"/>
+      </xsl:call-template>
+
+      <a name="alerts"></a>
+      <h1>Alerts</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#alert">Alerts</a>.
+       The complete contents of the alert entries
+       are shown (name, first run, next run, period and duration).
       </p>
 
       <table class="gbntable">
@@ -980,7 +1022,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>Name</td>
-          <td>User-given name of the alert.</td>
+          <td>Shows name of the alert and,
+              if specified, the comment in brackets below
+              the name.</td>
         </tr>
         <tr class="even">
           <td>Event</td>
@@ -994,28 +1038,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Method</td>
           <td>Notification method.</td>
         </tr>
+        <tr class="even">
+          <td>Filter</td>
+          <td>Report filter.</td>
+        </tr>
       </table>
+
+      <h3>New Alert</h3>
+      <p>
+        To create a new alert click the
+        new icon <img src="/img/new.png" alt="New Alert" title="New Alert" /> which
+        goes to the <a href="new_alert.html?token={/envelope/token}">New Alert</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of alerts as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
 
       <xsl:call-template name="filtering"/>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move Alert to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       It is not possible to remove an alert that is in use by a task.
-      </p>
-
-      <h4>Alert Details</h4>
-      <p>
-       Details of an alert can be seen by clicking on the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Alert'"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+        <xsl:with-param name="noedit" select="1"/>
+        <xsl:with-param name="noclone" select="1"/>
+      </xsl:call-template>
 
       <h4>Test Alert</h4>
       <p>
@@ -1024,19 +1074,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        the corresponding alert is immediately executed with some
        dummy data.
       </p>
+    </div>
+  </div>
+</xsl:template>
 
-      <a name="alertdetails"></a>
-      <h2>Alert Details</h2>
+<xsl:template mode="help" match="alert_details.html">
+  <div class="gb_window_part_center">Help: Alert Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_ALERTS'"/>
+      </xsl:call-template>
+
+      <h1>Alert Details</h1>
       <p>
-       Provides information about an alert like the name, comment, condition and
-       notification method.
+        Provides detailed information about an
+        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>.
+        This includes the Name, comment, creation time, modification time,
+        condition, event, method and filter.
       </p>
 
-      <h3>Tasks using this Alerts</h3>
+      <h4>New Alert </h4>
       <p>
-       This table provides an overview of the tasks associated with this alert.
-       Details of these tasks can be seen after a click on the Details
-       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+      To create a new alert click the new icon
+      <img src="/img/new.png" alt="New Alert" title="New Alert"/>
+      which goes to the <a href="new_alert.html?token={/envelope/token}">
+      New Alert</a> page.
+      </p>
+
+      <h4>Alerts</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Alerts" title="Alerts"/>
+       will switch to the alerts page.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the alert as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+      <h3>Tasks using this Alert</h3>
+      <p>
+        This table provides an overview of the tasks that are associated to the
+        alert (if any).
+        Details of these tasks can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
     </div>
   </div>
