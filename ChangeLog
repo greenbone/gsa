@@ -1,5 +1,9 @@
 2012-12-14  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/help.xsl (contents.html): Update alerts documentation links.
+
+2012-12-14  Hani Benhabiles <kroosec@gmail.com>
+
 	Update Alerts help documentation to reflect latest changes.
 
 	* src/html/help.xsl (new_alerts.html, alerts.html)
