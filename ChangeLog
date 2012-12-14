@@ -1,5 +1,16 @@
 2012-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Carry fields over with the Edit Task "+" submit.
+
+	* src/gsad_omp.c (save_task_omp): Go to Edit Task page if "+" button is
+	pressed.
+
+	* src/html/omp.xsl (html-edit-task-form): If there a values for the
+	fields in the ENVELOPE from the "+" then use those instead of the task
+	values.
+
+2012-12-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Rename the "+" on New Task from "submit" to "submit_plus".  This is
 	because IE apparently sends only one submit parameter when there are
 	two submit inputs with the same name.

@@ -2098,12 +2098,29 @@ char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *html, *response;
-  const char *comment, *name, *next, *schedule_id, *in_assets;
+  const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int ret;
   params_t *alerts;
   GString *alert_element;
   entity_t entity;
+
+  submit = params_value (params, "submit_plus");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "alerts");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "alerts", "2");
+      return edit_task_omp (credentials, params);
+    }
 
   comment = params_value (params, "comment");
   name = params_value (params, "name");

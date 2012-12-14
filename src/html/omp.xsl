@@ -3463,7 +3463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            <td>
              <input type="text"
                     name="name"
-                    value="{commands_response/get_tasks_response/task/name}"
+                    value="{gsa:param-or ('name', commands_response/get_tasks_response/task/name)}"
                     size="30"
                     maxlength="80"/>
            </td>
@@ -3472,7 +3472,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_tasks_response/task/comment}"/>
+                     value="{gsa:param-or ('comment', commands_response/get_tasks_response/task/comment)}"/>
             </td>
           </tr>
           <xsl:choose>
@@ -3523,39 +3523,89 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:variable name="alerts"
                                 select="commands_response/get_alerts_response/alert"/>
-                  <xsl:for-each select="commands_response/get_tasks_response/task/alert">
-                    <select name="alert_id_optional:{position ()}">
-                      <xsl:variable name="alert_id" select="@id"/>
-                      <xsl:choose>
-                        <xsl:when test="string-length ($alert_id) &gt; 0">
-                          <option value="0">--</option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="0" selected="1">--</option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:for-each select="$alerts">
-                        <xsl:choose>
-                          <xsl:when test="@id = $alert_id">
-                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:otherwise>
-                        </xsl:choose>
+                  <xsl:choose>
+                    <xsl:when test="count (/envelope/params/node ()[substring-before (name (), ':') = 'alert_id_optional'][text () != '--']) &gt; 0">
+                      <xsl:for-each select="/envelope/params/node ()[substring-before (name (), ':') = 'alert_id_optional'][text () != '--']">
+                        <select name="alert_id_optional:{position ()}">
+                          <xsl:variable name="alert_id" select="text ()"/>
+                          <xsl:choose>
+                            <xsl:when test="string-length ($alert_id) &gt; 0">
+                              <option value="0">--</option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="0" selected="1">--</option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                          <xsl:for-each select="$alerts">
+                            <xsl:choose>
+                              <xsl:when test="@id = $alert_id">
+                                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <option value="{@id}"><xsl:value-of select="name"/></option>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:for-each>
+                        </select>
+                        <br/>
                       </xsl:for-each>
-                    </select>
-                    <br/>
-                  </xsl:for-each>
-                  <xsl:variable name="count"
-                                select="count (commands_response/get_tasks_response/task/alert)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:for-each select="commands_response/get_tasks_response/task/alert">
+                        <select name="alert_id_optional:{position ()}">
+                          <xsl:variable name="alert_id" select="@id"/>
+                          <xsl:choose>
+                            <xsl:when test="string-length ($alert_id) &gt; 0">
+                              <option value="0">--</option>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <option value="0" selected="1">--</option>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                          <xsl:for-each select="$alerts">
+                            <xsl:choose>
+                              <xsl:when test="@id = $alert_id">
+                                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <option value="{@id}"><xsl:value-of select="name"/></option>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:for-each>
+                        </select>
+                        <br/>
+                      </xsl:for-each>
+                    </xsl:otherwise>
+                  </xsl:choose>
+
+                  <xsl:variable name="count">
+                    <xsl:variable name="params"
+                                  select="count (/envelope/params/node ()[substring-before (name (), ':') = 'alert_id_optional'][text () != '--'])"/>
+                    <xsl:choose>
+                      <xsl:when test="$params &gt; 0">
+                        <xsl:value-of select="$params"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="count (commands_response/get_tasks_response/task/alert)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
                   <xsl:call-template name="new-task-alert-select">
                     <xsl:with-param name="alerts" select="commands_response/get_alerts_response"/>
-                    <xsl:with-param name="count" select="alerts"/>
+                    <xsl:with-param name="count" select="alerts - $count"/>
                     <xsl:with-param name="position" select="$count + 1"/>
                   </xsl:call-template>
-                  <a style="margin-left: 5px; font-size: 16px; font-weight: bold"
-                     href="/omp?cmd=edit_task&amp;task_id={commands_response/get_tasks_response/task/@id}&amp;next={next}&amp;refresh_interval={refresh_interval}&amp;sort_order={sort_order}&amp;sort_field={sort_field}&amp;overrides={apply_overrides}&amp;alerts={alerts + 1}&amp;token={/envelope/token}">+</a>
+
+                  <input type="submit" name="submit_plus" value="+"/>
+
+                  <xsl:choose>
+                    <xsl:when test="string-length (/envelope/params/alerts)">
+                      <input type="hidden" name="alerts" value="{/envelope/params/alerts}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="hidden" name="alerts" value="{$count + 1}"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </td>
               </tr>
               <tr>
@@ -3563,7 +3613,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <select name="schedule_id">
                     <xsl:variable name="schedule_id">
-                      <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length (/envelope/params/schedule_id) &gt; 0">
+                          <xsl:value-of select="/envelope/params/schedule_id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="commands_response/get_tasks_response/task/schedule/@id"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:variable>
                     <xsl:choose>
                       <xsl:when test="string-length ($schedule_id) &gt; 0">
@@ -3591,7 +3648,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <select name="slave_id">
                     <xsl:variable name="slave_id">
-                      <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
+                          <xsl:value-of select="/envelope/params/slave_id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:variable>
                     <xsl:choose>
                       <xsl:when test="string-length ($slave_id) &gt; 0">
@@ -3620,7 +3684,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Observers (optional)</td>
             <td>
               <input type="text" name="observers" size="30" maxlength="400"
-                     value="{commands_response/get_tasks_response/task/observers}"/>
+                     value="{gsa:param-or ('observers', commands_response/get_tasks_response/task/observers)}"/>
             </td>
           </tr>
           <tr>
@@ -3630,8 +3694,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="$in_assets/name"/>
             </td>
             <td>
+              <xsl:variable name="param_yes" select="/envelope/params/in_assets"/>
               <xsl:choose>
-                <xsl:when test="$in_assets/value='yes'">
+                <xsl:when test="string-length ($param_yes) &gt; 0">
+                  <xsl:choose>
+                    <xsl:when test="$param_yes = '1'">
+                      <label>
+                        <input type="radio" name="in_assets" value="1" checked="1"/>
+                        yes
+                      </label>
+                      <label>
+                        <input type="radio" name="in_assets" value="0"/>
+                        no
+                      </label>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <label>
+                        <input type="radio" name="in_assets" value="1"/>
+                        yes
+                      </label>
+                      <label>
+                        <input type="radio" name="in_assets" value="0" checked="1"/>
+                        no
+                      </label>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:when test="((string-length ($param_yes) &gt; 0) and ($param_yes = '1')) or $in_assets/value='yes'">
                   <label>
                     <input type="radio" name="in_assets" value="1" checked="1"/>
                     yes
@@ -3669,7 +3758,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <input type="text"
                          name="max_checks"
-                         value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/value}"
+                         value="{gsa:param-or ('max_checks', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_checks']/value)}"
                          size="10"
                          maxlength="10"/>
                 </td>
@@ -3681,7 +3770,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <input type="text"
                          name="max_hosts"
-                         value="{commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/value}"
+                         value="{gsa:param-or ('max_hosts', commands_response/get_tasks_response/task/preferences/preference[scanner_name='max_hosts']/value)}"
                          size="10"
                          maxlength="10"/>
                 </td>
