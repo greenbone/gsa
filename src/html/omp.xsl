@@ -14022,6 +14022,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'port_list'"/>
+      <xsl:with-param name="list" select="port_lists"/>
+    </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
