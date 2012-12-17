@@ -1,5 +1,12 @@
 2012-12-17  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/omp.xsl (auto-refresh): New template.
+	(old-html-tasks-table, list-window, html-port-lists-table): Use
+	auto-refresh.
+	(html-targets-table): Use list-window.
+
+2012-12-17  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (html-port-lists-table): Use column-name template
 	to make Name column sortable.
 

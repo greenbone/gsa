@@ -256,6 +256,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="auto-refresh">
+  <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='0'">
+        <option value="0" selected="1">&#8730;No auto-refresh</option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="0">No auto-refresh</option>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='10'">
+        <option value="10" selected="1">&#8730;Refresh every 10 Sec.</option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="10">Refresh every 10 Sec.</option>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='30'">
+        <option value="30" selected="1">&#8730;Refresh every 30 Sec.</option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="30">Refresh every 30 Sec.</option>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="/envelope/autorefresh/@interval='60'">
+        <option value="60" selected="1">&#8730;Refresh every 60 Sec.</option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="60">Refresh every 60 Sec.</option>
+      </xsl:otherwise>
+    </xsl:choose>
+  </select>
+</xsl:template>
+
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
   <xsl:param name="type-lower" select="gsa:lower-case (translate
@@ -725,40 +762,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <form method="get" action="">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_tasks"/>
-          <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='0'">
-                <option value="0" selected="1">&#8730;No auto-refresh</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">No auto-refresh</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='10'">
-                <option value="10" selected="1">&#8730;Refresh every 10 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="10">Refresh every 10 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='30'">
-                <option value="30" selected="1">&#8730;Refresh every 30 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="30">Refresh every 30 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='60'">
-                <option value="60" selected="1">&#8730;Refresh every 60 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="60">Refresh every 60 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
+          <xsl:call-template name="auto-refresh"/>
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
@@ -5859,40 +5863,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_{$type}s"/>
           <input type="hidden" name="filter" value="{filters/term}"/>
-          <select style="margin-bottom: 0px;" name="refresh_interval" size="1">
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='0'">
-                <option value="0" selected="1">&#8730;No auto-refresh</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">No auto-refresh</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='10'">
-                <option value="10" selected="1">&#8730;Refresh every 10 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="10">Refresh every 10 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='30'">
-                <option value="30" selected="1">&#8730;Refresh every 30 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="30">Refresh every 30 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:choose>
-              <xsl:when test="/envelope/autorefresh/@interval='60'">
-                <option value="60" selected="1">&#8730;Refresh every 60 Sec.</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="60">Refresh every 60 Sec.</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
+          <xsl:call-template name="auto-refresh"/>
           <xsl:if test="$type = 'task'">
             <select style="margin-bottom: 0px;" name="overrides" size="1">
               <xsl:choose>
@@ -6999,93 +6970,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-targets-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Targets
-      <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="'target'"/>
-        <xsl:with-param name="list" select="targets"/>
-        <xsl:with-param name="count" select="count(target)"/>
-        <xsl:with-param name="filtered_count" select="target_count/filtered"/>
-      </xsl:call-template>
-      <a href="/help/targets.html?token={/envelope/token}"
-         title="Help: Targets">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=new_target&amp;filter={filters/term}&amp;filt_id={filters/@id}&amp;token={/envelope/token}"
-         title="New Target">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}"
-           title="Export {target_count/filtered} filtered Targets as XML"
-           style="margin-left:3px;">
-          <img src="/img/download.png" border="0" alt="Export XML"/>
-        </a>
-      </div>
-    </div>
-    <xsl:call-template name="filter-window-part">
-      <xsl:with-param name="type" select="'target'"/>
-      <xsl:with-param name="list" select="targets"/>
-    </xsl:call-template>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Name</xsl:with-param>
-                <xsl:with-param name="name">name</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Hosts</xsl:with-param>
-                <xsl:with-param name="name">hosts</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">IPs</xsl:with-param>
-                <xsl:with-param name="name">ips</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Port List</xsl:with-param>
-                <xsl:with-param name="name">port_list</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">SSH Credential</xsl:with-param>
-                <xsl:with-param name="name">ssh_credential</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td>
-              <xsl:call-template name="column-name">
-                <xsl:with-param name="head">SMB Credential</xsl:with-param>
-                <xsl:with-param name="name">smb_credential</xsl:with-param>
-              </xsl:call-template>
-            </td>
-            <td width="100">Actions</td>
-          </tr>
-          <xsl:apply-templates select="target"/>
-          <xsl:if test="string-length (filters/term) &gt; 0">
-            <tr>
-              <td class="footnote" colspan="7">
-                (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_targets&amp;filter={filters/term}&amp;first={targets/@start}&amp;max={targets/@max}&amp;token={/envelope/token}">
-                  <xsl:value-of select="filters/term"/>
-                </a>)
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'target'"/>
+    <xsl:with-param name="cap-type" select="'Target'"/>
+    <xsl:with-param name="resources-summary" select="targets"/>
+    <xsl:with-param name="resources" select="target"/>
+    <xsl:with-param name="count" select="count (target)"/>
+    <xsl:with-param name="filtered-count" select="target_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Hosts|hosts IPs|ips Port&#xa0;List|port_list SSH&#xa0;Credential|ssh_credential SMB&#xa0;Credential|smb_credential'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_TARGET_RESPONSE -->
@@ -14109,6 +14002,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export XML"/>
         </a>
+      </div>
+      <div id="small_inline_form" style="margin-left:40px; display: inline">
+        <form method="get" action="">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_port_lists"/>
+          <input type="hidden" name="filter" value="{filters/term}"/>
+          <xsl:call-template name="auto-refresh"/>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
       </div>
     </div>
     <xsl:call-template name="filter-window-part">
