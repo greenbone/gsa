@@ -14119,7 +14119,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td rowspan="2">Name</td>
+            <td rowspan="2">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">port_list</xsl:with-param>
+              </xsl:call-template>
+            </td>
             <td colspan="3">Port Counts</td>
             <td width="115" rowspan="2">Actions</td>
           </tr>
