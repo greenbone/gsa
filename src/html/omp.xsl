@@ -4227,6 +4227,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
 
+<xsl:template match="new_lsc_credential">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_lsc_credential_response"/>
+  <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
+  <xsl:call-template name="html-create-lsc-credential-form"/>
+</xsl:template>
+
 <xsl:template name="html-create-lsc-credential-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -4341,30 +4348,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-lsc-credentials-table">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      Credentials for Local Security Checks
-      <a href="/help/configure_credentials.html?token={/envelope/token}#credentials"
-         title="Help: Configure Credentials (Credentials)">
-        <img src="/img/help.png"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div id="tasks">
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Login</td>
-            <td>Comment</td>
-            <td width="135">Actions</td>
-          </tr>
-          <xsl:apply-templates select="lsc_credential"/>
-        </table>
-      </div>
-    </div>
-  </div>
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'lsc_credential'"/>
+    <xsl:with-param name="cap-type" select="'LSC Credential'"/>
+    <xsl:with-param name="resources-summary" select="lsc_credentials"/>
+    <xsl:with-param name="resources" select="lsc_credential"/>
+    <xsl:with-param name="count" select="count (lsc_credential)"/>
+    <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
+    <xsl:with-param name="headings" select="'Name|name Login|login'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!--     CREATE_LSC_CREDENTIAL_RESPONSE -->
@@ -4404,10 +4396,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Credential
-      <a href="/help/configure_credentials.html?token={/envelope/token}#edit"
-         title="Help: Edit Credential">
+      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential" title="Help: Edit LSC Credential">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
+         title="LSC Credential" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="LSC Credential"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={commands_response/get_lsc_credentials_response/lsc_credential/@id}&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
+           title="LSC Credential Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
@@ -4520,35 +4521,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
     </td>
     <td>
       <xsl:value-of select="login"/>
     </td>
     <td>
-      <xsl:value-of select="comment"/>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'lsc_credential'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;token={/envelope/token}"
-         title="Credential Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credentials&amp;token={/envelope/token}"
-         title="Edit Credential" style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noclone" select="1"/>
+      </xsl:call-template>
       <xsl:if test="type='gen'">
         <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
            title="Download RPM package" style="margin-left:3px;">
@@ -4855,24 +4842,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type">agent</xsl:with-param>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png"
-               border="0"
-               alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Agent Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Agent'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noedit" select="1"/>
+      </xsl:call-template>
       <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
@@ -4881,11 +4856,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Agent"/>
-      </a>
-      <a href="/omp?cmd=export_agent&amp;agent_id={@id}&amp;next=get_agents&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Export Agent"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export"/>
       </a>
     </td>
   </tr>
