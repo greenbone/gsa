@@ -5717,6 +5717,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </td>
                   </tr>
                 </xsl:when>
+                <xsl:when test="method/text()='verinice Connector'">
+                  <tr>
+                    <td width="45"></td>
+                    <td>URL:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='verinice_server_url']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='verinice_server_url']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>Username:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='verinice_server_username']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='verinice_server_username']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
               </xsl:choose>
             </table>
           </td>
