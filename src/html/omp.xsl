@@ -1180,7 +1180,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png" border="0"/>
       </a>
       <xsl:choose>
-        <xsl:when test="count (report/host)=0">
+        <xsl:when test="count (report/host) = 0 or report/@scap_loaded = 0">
           <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
                style="margin-left:3px;"/>
         </xsl:when>

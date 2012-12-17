@@ -1,5 +1,10 @@
 2012-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (assets): Make the overall prognosis icon available
+	only when SCAP data is available.
+
+2012-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (alert [details]): Add Verinice details.
 
 2012-12-17  Hani Benhabiles <kroosec@gmail.com>
