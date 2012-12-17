@@ -1,5 +1,15 @@
 2012-12-17  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/html/omp.xsl (new_lsc_credential): New template.
+	(html-lsc-credentials-table): Use list-window table.
+	(html-edit-lsc-credential-form): Add icons for list page, details page
+	and change help page link.
+	(lsc_credential): Add link to details page on credentials names. Use
+	list-window-line-icons template.
+	(agent): Use list-window-line-icons template.
+
+2012-12-17  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/html/omp.xsl (auto-refresh): New template.
 	(old-html-tasks-table, list-window, html-port-lists-table): Use
 	auto-refresh.
