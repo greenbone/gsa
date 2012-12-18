@@ -1,5 +1,13 @@
 2012-12-18  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad_omp.c (get_alert_omp): Get Report Formats to use for
+	displaying Report Format name.
+
+	* src/html/omp.xsl (html-create-alert-form, new_alert): Remove
+	lsc-credentials parameter.
+
+2012-12-18  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (new_alert_omp): Get Report Formats and Filter Reports.
 
 2012-12-17  Matthew Mundell <matthew.mundell@greenbone.net>

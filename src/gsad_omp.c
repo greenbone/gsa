@@ -4519,7 +4519,45 @@ get_alert (credentials_t * credentials, params_t *params,
 char *
 get_alert_omp (credentials_t * credentials, params_t *params)
 {
-  return get_alert (credentials, params, NULL);
+  int ret;
+  entity_t entity;
+  gchar *response;
+
+  /* Get Report Formats. */
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, "<get_report_formats/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+  free_entity (entity);
+
+  return get_alert (credentials, params, response);
 }
 
 /**

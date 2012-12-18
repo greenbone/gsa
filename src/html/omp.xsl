@@ -4981,7 +4981,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN ALERTS MANAGEMENT -->
 
 <xsl:template name="html-create-alert-form">
-  <xsl:param name="lsc-credentials"></xsl:param>
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
   <div class="gb_window">
@@ -5333,9 +5332,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:call-template name="html-create-alert-form">
-    <xsl:with-param
-      name="lsc-credentials"
-      select="get_lsc_credentials_response | commands_response/get_lsc_credentials_response"/>
     <xsl:with-param
       name="report-formats"
       select="get_report_formats_response | commands_response/get_report_formats_response"/>
