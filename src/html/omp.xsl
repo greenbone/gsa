@@ -300,6 +300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"/>
   <xsl:param name="noedit"/>
   <xsl:param name="noclone"/>
+  <xsl:param name="noexport"/>
   <xsl:param name="params" select="''"/>
   <xsl:param name="next" select="concat ('get_', $type-lower, 's')"/>
   <xsl:param name="extra-params-details"/>
@@ -365,11 +366,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-     title="Export {$type}"
-     style="margin-left:3px;">
-    <img src="/img/download.png" border="0" alt="Export"/>
-  </a>
+  <xsl:choose>
+    <xsl:when test="$noexport">
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Export {$type}"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="trash-delete-icon">
@@ -4512,6 +4519,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!--     LSC_CREDENTIAL -->
 
+<xsl:template name="lsc-credential-download-icons">
+  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
+     title="Download RPM package" style="margin-left:3px;">
+    <img src="/img/rpm.png" border="0" alt="Download RPM"/>
+  </a>
+  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
+     title="Download Debian package" style="margin-left:3px;">
+    <img src="/img/deb.png" border="0" alt="Download Deb"/>
+  </a>
+  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
+     title="Download Exe package" style="margin-left:3px;">
+    <img src="/img/exe.png" border="0" alt="Download Exe"/>
+  </a>
+  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
+     title="Download Public Key" style="margin-left:3px;">
+    <img src="/img/key.png" border="0" alt="Download Public Key"/>
+  </a>
+</xsl:template>
+
 <xsl:template match="lsc_credential">
   <xsl:variable name="class">
     <xsl:choose>
@@ -4535,24 +4561,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'LSC Credential'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noexport" select="1"/>
       </xsl:call-template>
       <xsl:if test="type='gen'">
-        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
-           title="Download RPM package" style="margin-left:3px;">
-          <img src="/img/rpm.png" border="0" alt="Download RPM"/>
-        </a>
-        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
-           title="Download Debian package" style="margin-left:3px;">
-          <img src="/img/deb.png" border="0" alt="Download Deb"/>
-        </a>
-        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
-           title="Download Exe package" style="margin-left:3px;">
-          <img src="/img/exe.png" border="0" alt="Download Exe"/>
-        </a>
-        <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
-           title="Download Public Key" style="margin-left:3px;">
-          <img src="/img/key.png" border="0" alt="Download Public Key"/>
-        </a>
+        <xsl:call-template name="lsc-credential-download-icons"/>
       </xsl:if>
     </td>
   </tr>
@@ -4601,20 +4613,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Credential Details
-      <a href="/help/configure_credentials.html?token={/envelope/token}#credentialdetails"
-         title="Help: Configure Agents (Credential Details)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=edit_lsc_credential&amp;lsc_credential_id={@id}&amp;next=get_lsc_credential&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
-         title="Edit Credential"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
-      </a>
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="noexport" select="1"/>
+      </xsl:call-template>
+      <xsl:if test="type='gen'">
+        <xsl:call-template name="lsc-credential-download-icons"/>
+      </xsl:if>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_lsc_credentials&amp;token={/envelope/token}">Credentials</a>
-      </div>
+      <xsl:call-template name="minor-details"/>
       <table>
         <tr>
           <td><b>Name:</b></td>
@@ -4681,7 +4689,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     GET_LSC_CREDENTIALS_RESPONSE -->
 
 <xsl:template match="get_lsc_credentials_response">
-  <xsl:call-template name="html-create-lsc-credential-form"/>
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_lsc_credentials_response"/>
   <xsl:call-template name="html-lsc-credentials-table"/>
 </xsl:template>
 
@@ -5979,6 +5988,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="details-header-icons">
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
+  <xsl:param name="noexport"/>
   <xsl:param name="type-lower" select="gsa:lower-case (translate
                                                         ($type, ' ', '_'))"/>
 
@@ -6029,11 +6039,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-    <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Export {$type} XML"
-       style="margin-left:3px;">
-      <img src="/img/download.png" border="0" alt="Export XML"/>
-    </a>
+  <xsl:choose>
+    <xsl:when test="$noexport">
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Export {$type} XML"
+         style="margin-left:3px;">
+        <img src="/img/download.png" border="0" alt="Export XML"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
   </div>
 </xsl:template>
 

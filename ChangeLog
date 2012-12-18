@@ -1,5 +1,29 @@
 2012-12-18  Hani Benhabiles <kroosec@gmail.com>
 
+	* src/gsad.c (init_validator): Add export_lsc_credentials and
+	new_lsc_credential commands.
+
+	* src/gsad_omp.c (export_lsc_credentials_omp, new_lsc_credential)
+	(new_lsc_credential_omp): New functions.
+
+	* src/gsad_omp.h: Add header accrodingly.
+
+	* src/html/omp.xsl (list-window-line-icons): Add noexport parameter to
+	disable adding export icon.
+	(lsc-credential-download-icons): New template.
+	(lsc_credentials, lsc_credentials [details]): Use
+	lsc-credential-download-icons
+	(lsc_credentials [details]): Use details-header-icons and minor-details
+	(lsc_credential): Set noexport parameter for list-window-line-icons
+	template call.
+	(get_lsc_credential_response): Remove
+	html-create-lsc-credential-form template call. Add gsad_msg and
+	delete_lsc_credentials_response template calls.
+	(details-header-icons): Add noexport parameter to disable adding export
+	icon.
+
+2012-12-18  Hani Benhabiles <kroosec@gmail.com>
+
 	* src/gsad_omp.c (get_alert_omp): Get Report Formats to use for
 	displaying Report Format name.
 
