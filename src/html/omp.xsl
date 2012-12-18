@@ -953,6 +953,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 select="report/filters/text()"/>
   <xsl:variable name="apply-overrides"
                 select="report/filters/apply_overrides"/>
+  <xsl:if test="report/@scap_loaded = 0">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.  Prognostic reporting disabled.
+        <a href="/help/hosts.html?token={/envelope/token}#scap_missing"
+           title="Help: SCAP database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -11135,6 +11148,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-cpe-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.
+        <a href="/help/cpes.html?token={/envelope/token}#scap_missing"
+           title="Help: SCAP database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -11225,6 +11251,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-cve-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.
+        <a href="/help/cves.html?token={/envelope/token}#scap_missing"
+           title="Help: SCAP database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -15132,6 +15171,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="host">
   <xsl:variable name="apply-overrides" select="../filters/apply_overrides"/>
+  <xsl:if test="../@scap_loaded = 0">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.  Prognostic reporting disabled.
+        <a href="/help/hosts.html?token={/envelope/token}#scap_missing"
+           title="Help: SCAP database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -15141,10 +15193,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Hosts (Host Details)">
          <img src="/img/help.png"/>
        </a>
-       <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos={detail[name/text() = 'report/pos']/value}&amp;host_search_phrase={../../../../search_phrase}&amp;host_levels={../../../../levels}&amp;host_first_result={../../../../hosts/@start}&amp;host_max_results={../../../../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
-          title="Prognostic Report" style="margin-left:3px;">
-         <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
-       </a>
+      <xsl:choose>
+        <xsl:when test="../@scap_loaded = 0">
+          <img src="/img/prognosis_inactive.png" border="0" alt="Prognostic Report"
+               style="margin-left:3px;"/>
+        </xsl:when>
+        <xsl:otherwise>
+           <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos={detail[name/text() = 'report/pos']/value}&amp;host_search_phrase={../../../../search_phrase}&amp;host_levels={../../../../levels}&amp;host_first_result={../../../../hosts/@start}&amp;host_max_results={../../../../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+              title="Prognostic Report" style="margin-left:3px;">
+             <img src="/img/prognosis.png" border="0" alt="Prognostic Report"/>
+           </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get">
           <input type="hidden" name="token" value="{/envelope/token}"/>

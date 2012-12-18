@@ -1025,6 +1025,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- DIALOGS -->
 
+<xsl:template name="error_window">
+  <xsl:param name="heading">Error Message</xsl:param>
+  <xsl:param name="message">(Missing message)</xsl:param>
+  <xsl:param name="token"></xsl:param>
+  <div class="gb_window">
+    <div class="gb_window_part_left_error"></div>
+    <div class="gb_window_part_right_error"></div>
+    <div class="gb_window_part_center_error">
+      <xsl:value-of select="$heading"/>
+    </div>
+    <div class="gb_window_part_content_error">
+<!--
+      <div class="float_right">
+        <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
+          <img src="/img/help.png"/>
+        </a>
+      </div>
+      <span>
+        <img src="/img/alert_sign.png" alt="" title="{$heading}"
+             style="margin-left:10px; margin-top:10px; text-align:left;"/>
+      </span>
+-->
+      <center>
+        <div style="width:500px;">
+          <xsl:copy-of select="$message"/>
+        </div>
+      </center>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template name="error_dialog">
   <xsl:param name="title">(Missing title)</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>

@@ -419,6 +419,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        This includes all the information from the Filtered Hosts table, plus the list of
        open ports and the list of applications.
       </p>
+
+      <a name="scap_missing"></a>
+      <h2>Warning: SCAP Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database is missing on the OMP server.
+      </p>
+      <p>
+        The prognostic reporting requires the SCAP data.  As a result all prognostic
+        report icons
+        <img src="/img/prognosis.png" alt="Prognostic Report" title="Prognostic Report" />
+        will be greyed out
+        <img src="/img/prognosis_inactive.png" alt="Prognostic Report" title="Prognostic Report" />
+        when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -6761,6 +6781,21 @@ Public License instead of this License.
       <p>
         Clicking on the CPE name will go to the CPE Details page.
       </p>
+
+      <a name="scap_missing"></a>
+      <h2>Warning: SCAP Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database is missing on the OMP server.
+      </p>
+      <p>
+        The CPE table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -6882,6 +6917,21 @@ Public License instead of this License.
       </p>
       <p>
         Clicking on the CPE name will go to the CPE Details page.
+      </p>
+
+      <a name="scap_missing"></a>
+      <h2>Warning: SCAP Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database is missing on the OMP server.
+      </p>
+      <p>
+        The CVE table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
       </p>
     </div>
   </div>

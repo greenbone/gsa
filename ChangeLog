@@ -1,3 +1,14 @@
+2012-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (error_window): New template.
+
+	* src/html/help.xsl (hosts.html, cpes.html, cves.html): Add section for
+	SCAP warning.
+
+	* src/html/omp.xsl (assets, html-cpe-table, html-cve-table): Show
+	warning when SCAP db is missing.
+	(host): Show warning and grey prognostic icon when SCAP db is missing.
+
 2012-12-18  Hani Benhabiles <kroosec@gmail.com>
 
 	* src/gsad.c (init_validator): Add export_lsc_credentials and
