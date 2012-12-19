@@ -1320,7 +1320,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
   if (html == NULL)
     {
       int success;
-      success = omp_success (entity)
+      success = omp_success (entity);
       free_entity (entity);
       g_free (response);
       return gsad_message (credentials,
