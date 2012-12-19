@@ -4153,11 +4153,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_tasks">
   <xsl:apply-templates select="run_wizard_response"/>
-  <xsl:apply-templates select="get_tasks_response"/>
   <xsl:apply-templates select="delete_task_response"/>
   <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="create_task_response"/>
   <xsl:apply-templates select="commands_response"/>
+  <xsl:apply-templates select="get_tasks_response"/>
 </xsl:template>
 
 <!-- BEGIN LSC_CREDENTIALS MANAGEMENT -->
@@ -17997,7 +17997,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>
@@ -18008,7 +18008,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="cmd" value="create_report"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="next" value="get_tasks"/>
-      <input type="hidden" name="overrides" value="{apply_overrides}"/>
+      <xsl:if test="string-length (/envelope/params/filt_id) = 0">
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+      </xsl:if>
+      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <table border="0" cellspacing="0" cellpadding="3" width="100%">
         <tr>
          <td valign="top" width="125">Name</td>
