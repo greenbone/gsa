@@ -3620,6 +3620,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="position" select="$count + 1"/>
                   </xsl:call-template>
 
+                  <!-- Force the Create Task button to be the default. -->
+                  <input style="position: absolute; left: -100%"
+                         type="submit" name="submit" value="Create Task"/>
                   <input type="submit" name="submit_plus" value="+"/>
 
                   <xsl:choose>
@@ -17933,6 +17936,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input type="hidden" name="alerts" value="{1}"/>
               </xsl:otherwise>
             </xsl:choose>
+            <!-- Force the Create Task button to be the default. -->
+            <input style="position: absolute; left: -100%"
+                   type="submit" name="submit" value="Create Task"/>
             <input type="submit" name="submit_plus" value="+"/>
           </td>
         </tr>
