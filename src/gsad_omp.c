@@ -718,7 +718,12 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     g_string_append (xml, extra_xml);
 
   if (filter == NULL || (strcmp (filter, "") == 0))
-    filter = "rows=-2";
+    {
+      if (strcmp (type, "task"))
+        filter = "rows=-2";
+      else
+        filter = "apply_overrides=0 rows=-2";
+    }
 
   /* Get the list. */
 
