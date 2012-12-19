@@ -2571,6 +2571,117 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="task-icons">
+  <xsl:param name="next" select="'get_tasks'"/>
+  <xsl:param name="observed" select="owner/name!=/envelope/login/text()"/>
+  <xsl:choose>
+    <xsl:when test="$observed or target/@id=''">
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
+    </xsl:when>
+    <xsl:when test="string-length(schedule/@id) &gt; 0">
+      <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
+         title="Schedule Details">
+        <img style="margin-left: 3px" src="/img/scheduled.png" border="0" alt="Schedule Details"/>
+      </a>
+    </xsl:when>
+    <xsl:when test="status='Running'">
+      <xsl:call-template name="pause-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
+      <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="start-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$observed or target/@id=''">
+      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+         style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="string-length(schedule/@id) &gt; 0">
+      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+           style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="status='Stopped'">
+      <xsl:call-template name="resume-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="status='Paused'">
+      <xsl:call-template name="resume-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <img src="/img/resume_inactive.png" border="0" alt="Resume"
+           style="margin-left:3px;"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$observed or target/@id=''">
+      <img src="/img/stop_inactive.png" border="0" alt="Stop"
+         style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="string-length(schedule/@id) &gt; 0">
+      <img src="/img/stop_inactive.png" border="0"
+           alt="Stop"
+           style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
+      <img src="/img/stop_inactive.png" border="0"
+           alt="Stop"
+           style="margin-left:3px;"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="stop-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="task" mode="details">
   <xsl:variable name="apply-overrides" select="/envelope/params/overrides"/>
   <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
@@ -2583,102 +2694,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Task'"/>
       </xsl:call-template>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <xsl:choose>
-          <xsl:when test="$observed or target/@id=''">
-            <img src="/img/start_inactive.png" border="0" alt="Start"/>
-          </xsl:when>
-          <xsl:when test="string-length(schedule/@id) &gt; 0">
-            <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
-               title="Schedule Details">
-              <img src="/img/scheduled.png" border="0" alt="Schedule Details"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="status='Running'">
-            <xsl:call-template name="pause-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_task"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
-            <img src="/img/start_inactive.png" border="0" alt="Start"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="start-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_task"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="$observed or target/@id=''">
-            <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:when test="string-length(schedule/@id) &gt; 0">
-            <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:when test="status='Stopped'">
-            <xsl:call-template name="resume-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_task"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="status='Paused'">
-            <xsl:call-template name="resume-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_task"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                 style="margin-left:3px;"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-          <xsl:when test="$observed or target/@id=''">
-            <img src="/img/stop_inactive.png" border="0" alt="Stop"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:when test="string-length(schedule/@id) &gt; 0">
-            <img src="/img/stop_inactive.png" border="0"
-                 alt="Stop"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
-            <img src="/img/stop_inactive.png" border="0"
-                 alt="Stop"
-                 style="margin-left:3px;"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="stop-icon">
-              <xsl:with-param name="type">task</xsl:with-param>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="overrides" value="{apply_overrides}"/>
-                <input type="hidden" name="next" value="get_task"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="task-icons">
+          <xsl:with-param name="next" select="'get_task'"/>
+        </xsl:call-template>
       </div>
     </div>
     <div class="gb_window_part_content">
@@ -3994,113 +4012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <xsl:variable name="observed" select="owner/name!=/envelope/login/text()"/>
-          <xsl:choose>
-            <xsl:when test="$observed or target/@id=''">
-              <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
-            </xsl:when>
-            <xsl:when test="string-length(schedule/@id) &gt; 0">
-              <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
-                 title="Schedule Details">
-                <img style="margin-left: 3px" src="/img/scheduled.png" border="0" alt="Schedule Details"/>
-              </a>
-            </xsl:when>
-            <xsl:when test="status='Running'">
-              <xsl:call-template name="pause-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
-              <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="start-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="$observed or target/@id=''">
-              <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                 style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:when test="string-length(schedule/@id) &gt; 0">
-              <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:when test="status='Stopped'">
-              <xsl:call-template name="resume-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="cmd">resume_stopped_task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="status='Paused'">
-              <xsl:call-template name="resume-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="cmd">resume_paused_task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <img src="/img/resume_inactive.png" border="0" alt="Resume"
-                   style="margin-left:3px;"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:choose>
-            <xsl:when test="$observed or target/@id=''">
-              <img src="/img/stop_inactive.png" border="0" alt="Stop"
-                 style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:when test="string-length(schedule/@id) &gt; 0">
-              <img src="/img/stop_inactive.png" border="0"
-                   alt="Stop"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
-              <img src="/img/stop_inactive.png" border="0"
-                   alt="Stop"
-                   style="margin-left:3px;"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="stop-icon">
-                <xsl:with-param name="type">task</xsl:with-param>
-                <xsl:with-param name="id" select="@id"/>
-                <xsl:with-param name="params">
-                  <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
-                  <input type="hidden" name="next" value="get_tasks"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="task-icons"/>
           <xsl:call-template name="list-window-line-icons">
             <xsl:with-param name="type" select="'Task'"/>
             <xsl:with-param name="id" select="@id"/>
