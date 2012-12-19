@@ -1,5 +1,10 @@
 2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (details-header-icon): Add missing filt_id param to
+	New icon.
+
+2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task-icons): New template.
 	(task [details], task): Use task-icons in both cases.  This brings
 	missing filter params to the details case.
