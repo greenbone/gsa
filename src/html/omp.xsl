@@ -17733,11 +17733,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Wizard">
       <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={apply_overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>
@@ -17748,7 +17748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="cmd" value="create_task"/>
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <xsl:if test="string-length (/envelope/params/filt_id) = 0">
-        <input type="hidden" name="overrides" value="{apply_overrides}"/>
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
       </xsl:if>
       <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>

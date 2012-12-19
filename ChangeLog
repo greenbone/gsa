@@ -1,5 +1,13 @@
 2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (new_task): Update Wizard and New icons to new style.
+	Get overrides value from envelope.
+
+	* src/html/wizard.xsl (wizard-icon): Add filter params.
+	(quick_first_scan): Add filter params.  Remove overrides param.
+
+2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_task_omp): Remove apply_overrides variable
 	which is handled by get_tasks now.
 

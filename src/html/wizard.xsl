@@ -42,7 +42,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="wizard-icon">
   <xsl:choose>
     <xsl:when test="name (..) = 'get_tasks'">
-      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Wizard">
         <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -128,11 +128,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="Help: Task Wizard">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="New Task">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={filters/term}&amp;first={tasks/@start}&amp;max={tasks/@max}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>
