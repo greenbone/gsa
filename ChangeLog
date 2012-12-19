@@ -1,5 +1,9 @@
 2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (resource_action): Get success before freeing entity.
+
+2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-edit-task-form, new_task): Add extra hidden
 	Create Task button before "+" button to force Create Task to be the
 	default.

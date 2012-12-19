@@ -1319,11 +1319,13 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
   html = next_page (credentials, params, response);
   if (html == NULL)
     {
+      int success;
+      success = omp_success (entity)
       free_entity (entity);
       g_free (response);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           omp_success (entity)
+                           success
                             ? "An internal error occurred while performing an action. "
                               "The action, however, succeeded. "
                               "Diagnostics: Error in parameter next."
