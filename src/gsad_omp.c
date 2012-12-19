@@ -1749,7 +1749,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
   int socket, ret;
   gchar *schedule_element, *slave_element;
   gchar *html;
-  const char *name, *comment, *config_id, *apply_overrides, *target_id;
+  const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
   const char *in_assets, *submit;
   params_t *alerts;
@@ -1775,7 +1775,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   config_id = params_value (params, "config_id");
-  apply_overrides = params_value (params, "overrides");
   target_id = params_value (params, "target_id");
   slave_id = params_value (params, "slave_id_optional");
   schedule_id = params_value (params, "schedule_id_optional");
@@ -1787,7 +1786,6 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (name);
   CHECK (comment);
   CHECK (config_id);
-  CHECK (apply_overrides);
   CHECK (target_id);
   CHECK (slave_id);
   CHECK (schedule_id);

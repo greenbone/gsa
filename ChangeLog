@@ -1,5 +1,14 @@
 2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_task_omp): Remove apply_overrides variable
+	which is handled by get_tasks now.
+
+	* src/html/omp.xsl (new_task): Add filter params.  Skip the overrides
+	param if there is a filt_id, because the overrides param changes the
+	filter on the get_tasks page.
+
+2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (details-header-icon): Add missing filt_id param to
 	New icon.
 
