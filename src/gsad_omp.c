@@ -3018,86 +3018,6 @@ create_lsc_credential_omp (credentials_t * credentials, params_t *params)
 #undef CHECK
 
 /**
- * @brief Delete LSC credential, get all credentials, XSL transform result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
-{
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *lsc_credential_id;
-
-  lsc_credential_id = params_value (params, "lsc_credential_id");
-
-  if (lsc_credential_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a credential. "
-                         "The credential was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_lsc_credentials");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an credential. "
-                             "The credential was not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_lsc_credential lsc_credential_id=\"%s\"/>"
-                            "<get_lsc_credentials"
-                            " sort_field=\"name\" sort_order=\"ascending\"/>"
-                            "</commands>",
-                            lsc_credential_id)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an credential. "
-                           "The credential was not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an credential. "
-                           "It is unclear whether the credential has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
-}
-
-/**
  * @brief Get one LSC credential, XSL transform the result.
  *
  * @param[in]   credentials        Username and password for authentication.
@@ -3108,79 +3028,10 @@ delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
  */
 static char *
 get_lsc_credential (credentials_t * credentials, params_t *params,
-                    const char *commands)
+                    const char *extra_xml)
 {
-  GString *xml = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *sort_field, *sort_order;
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a credential. "
-                             "The credential is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials");
-    }
-
-  /* Get the LSC credential. */
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_lsc_credentials"
-                            " lsc_credential_id=\"%s\""
-                            " actions=\"g\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            params_value (params, "lsc_credential_id"),
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a credential. "
-                           "The credential is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  xml = g_string_new ("<get_lsc_credential>");
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a credential. "
-                           "The credential is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_lsc_credential>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_one ("lsc_credential", credentials, params, extra_xml,
+                  "targets=\"1\"");
 }
 
 /**
@@ -3435,74 +3286,9 @@ export_lsc_credentials_omp (credentials_t * credentials, params_t *params,
  */
 static char *
 get_lsc_credentials (credentials_t * credentials, params_t *params,
-                     const char *commands)
+                     const char *extra_xml)
 {
-  entity_t entity;
-  gnutls_session_t session;
-  int socket;
-  gchar *connect_html;
-  char *text = NULL;
-  const char *sort_order, *sort_field;
-
-  switch (manager_connect (credentials, &socket, &session, &connect_html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (connect_html)
-          return (connect_html);
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the credential list. "
-                             "The current list of credentials is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets");
-    }
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  /* Send the request. */
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_lsc_credentials"
-                            " sort_field=\"%s\" sort_order=\"%s\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting credential list. "
-                           "The current list of credentials is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-
-  /* Read and handle the response. */
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting credential list. "
-                           "The current list of credentials is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_targets");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return get_many ("lsc_credential", credentials, params, extra_xml, NULL);
 }
 
 /**
@@ -3517,6 +3303,21 @@ char *
 get_lsc_credentials_omp (credentials_t * credentials, params_t *params)
 {
   return get_lsc_credentials (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete LSC credential, get all credentials, XSL transform result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_lsc_credential_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("lsc_credential", credentials, params, 0,
+                          get_lsc_credentials);
 }
 
 /**

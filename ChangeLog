@@ -1,3 +1,14 @@
+2012-12-20  Hani Benhabiles <kroosec@gmail.com>
+
+	* src/html/omp.xsl (html-lsc-credentials-table): Use correct argument
+	for filtered-count.
+
+	* src/gsad_omp.c (delete_lsc_credential_omp): Use delete_resource
+	function.
+	(get_lsc_credential): Use get_one function.
+	(get_lsc_credentials): Use get_many function. Change commands argument
+	name to extra_xml.
+
 2012-12-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_tasks): Move the get_tasks_response to follow

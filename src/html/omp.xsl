@@ -4289,7 +4289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources-summary" select="lsc_credentials"/>
     <xsl:with-param name="resources" select="lsc_credential"/>
     <xsl:with-param name="count" select="count (lsc_credential)"/>
-    <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
+    <xsl:with-param name="filtered-count" select="lsc_credential_count/filtered"/>
     <xsl:with-param name="headings" select="'Name|name Login|login'"/>
   </xsl:call-template>
 </xsl:template>
