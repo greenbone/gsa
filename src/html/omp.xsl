@@ -150,6 +150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="list"/>
   <xsl:param name="count"/>
   <xsl:param name="filtered_count"/>
+  <xsl:param name="full_count"/>
   <xsl:param name="extra_params"/>
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
@@ -160,11 +161,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="$list/@start"/> -
       <xsl:value-of select="$last"/>
       of <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
+      <xsl:if test="$full_count">
+        (total: <xsl:value-of select="$full_count"/>)
+      </xsl:if>
       <xsl:if test = "$last &lt; $filtered_count">
         <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
+      <xsl:if test="$full_count">
+        (total: <xsl:value-of select="$full_count"/>)
+      </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -732,6 +739,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="task"/>
     <xsl:with-param name="count" select="count (task)"/>
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
+    <xsl:with-param name="full-count" select="task_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Status|status Total|total Reports~First|first~Last|last~Threat|threat Trend|trend'"/>
   </xsl:call-template>
 </xsl:template>
@@ -5761,6 +5769,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resources"/>
   <xsl:param name="count"/>
   <xsl:param name="filtered-count"/>
+  <xsl:param name="full-count"/>
   <xsl:param name="headings"/>
   <xsl:variable name="apply-overrides" select="apply_overrides"/>
   <div class="gb_window">
@@ -5772,6 +5781,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="$resources-summary"/>
         <xsl:with-param name="count" select="$count"/>
         <xsl:with-param name="filtered_count" select="$filtered-count"/>
+        <xsl:with-param name="full_count" select="$full-count"/>
       </xsl:call-template>
       <a href="/help/{$type}s.html?token={/envelope/token}"
          title="Help: {$cap-type}s">
