@@ -1,5 +1,24 @@
 2012-12-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Update help documentation.
+	New templates for LSC Credentials. Fix outdated links.
+
+	* src/html/help.xsl (list-window-line-actions): Add noexport argument to
+	disable outputing help documentation for export button.
+	(lsc_credentials.html, new_lsc_credential.html)
+	(lsc_credential_details.html): New templates.
+	(configure_credentials.html): Remove template.
+	(contents.html): Add links to new help pages.
+	(new_target.html): Update documentation links for LSC
+	Credentials and Port Lists.
+	(view_report.html): Update documentation link for Report Formats.
+
+	* src/html/omp.xsl (html-create-lsc-credential-form)
+	(html-create-port-list-form, html-import-port-list-form): Update header
+	icons links.
+
+2012-12-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (get_lsc_credential): Update template call for
 	get_lsc_credentials_response.
 

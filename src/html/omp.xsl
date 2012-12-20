@@ -4174,10 +4174,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New Credential for Local Security Checks
-      <a href="/help/configure_credentials.html?token={/envelope/token}#new_lsc_credential"
-         title="Help: Configure Credentials (New Credential)">
+      New LSC Credential
+      <a href="/help/new_lsc_credential.html?token={/envelope/token}"
+         title="Help: New LSC Credential">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_lsc_credential&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="LSC Credentials" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="LSC Credentials"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -13884,10 +13888,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">New Port List
-      <a href="/help/configure_port_lists.html?token={/envelope/token}#new_port_list"
-         title="Help: Configure Port Lists (New Port List)">
+    <div class="gb_window_part_center">
+      New Port List
+      <a href="/help/new_port_list.html?token={/envelope/token}"
+         title="Help: New Port List">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_port_lists&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Port Lists" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Port Lists"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -14354,9 +14363,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Import Port List
-      <a href="/help/configure_port_lists.html?token={/envelope/token}#import_port_list"
-         title="Help: Configure Port Lists (Import Port Lists)">
+      <a href="/help/new_port_list.html?token={/envelope/token}#import_port_list"
+         title="Help: New Port List">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_port_lists&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Port Lists" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Port Lists"/>
       </a>
     </div>
     <div class="gb_window_part_content">

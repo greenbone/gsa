@@ -54,6 +54,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="used_by"/>
   <xsl:param name="noclone"/>
   <xsl:param name="noedit"/>
+  <xsl:param name="noexport"/>
   <a name="actions"></a>
   <h3>Actions</h3>
 
@@ -113,11 +114,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
 
-  <h4>Export <xsl:value-of select="$type"/></h4>
-  <p>
-    Export the <xsl:value-of select="$type"/> as XML by clicking on the
-    export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
-  </p>
+  <xsl:choose>
+    <xsl:when test="$noexport">
+    </xsl:when>
+    <xsl:otherwise>
+      <h4>Export <xsl:value-of select="$type"/></h4>
+      <p>
+        Export the <xsl:value-of select="$type"/> as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
@@ -669,11 +676,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_credentials.html">
-  <div class="gb_window_part_center">Help: Configure Credentials</div>
+<xsl:template mode="help" match="lsc_credentials.html">
+  <div class="gb_window_part_center">Help: LSC Credentials
+    <a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}"
+       title="LSC Credentials" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="LSC Credentials"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -682,142 +693,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
       </xsl:call-template>
 
-      <h1>Configure Credentials for Local Security Checks</h1>
-
+      <h1>LSC Credentials</h1>
       <p>
-       Credentials for local security checks are required to allow
-       <a href="glossary.html?token={/envelope/token}#nvt">NVTs</a> to log into target systems
-       for the purpose of locally check there e.g. for the presence
-       of all vendor security patches.
-      </p>
-      <p>
-       The dialog to create a new credential pair allows to either specify a password
-       or to generate a secure password.
-       Note that if the latter option was chosen, users are not able or allowed to
-       access either passwords nor so-called private keys.
-       Instead, installer packages are created that can be installed on target
-       systems. Internals of these installers are explained in the
-       <a href="#actions">Actions</a> section of this help page.
-       These actions are not available if the password was specified manually.
-      </p>
-      <p>
-       <b>Please note</b> that you will need to associate one or more
-       <a href="glossary.html?token={/envelope/token}#target">targets</a> with the credential you installed
-       on them.
-       Only this finally allows the scan engine to apply the suitable credentials.
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credentials</a>.
+        and summarizes the essential aspects of it.
       </p>
 
-      <a name="new_lsc_credential"></a>
-      <h2>New Credential for Local Security Checks</h2>
+      <h3>New LSC Credential</h3>
       <p>
-       For creating a credential the dialog offers these entries.
-       Hit the button "Create Credential" to submit the new credential.
-       The list of credentials will be updated.
+        To create a new lsc_credential click the
+        new icon <img src="/img/new.png"
+                      alt="New LSC Credential" title="New LSC Credential" />
+        which goes to the
+        <a href="new_lsc_credential.html?token={/envelope/token}">New LSC Credential</a>
+        page.
       </p>
 
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>Security Scan Account</td>
-        </tr>
-        <tr class="even">
-          <td>Login</td>
-          <td>no</td>
-          <td>80</td>
-          <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
-          <td>jsmith<br/>
-              myDomain\jsmith<br/>
-              jsmith@myDomain</td>
-        </tr>
-        <tr class="odd">
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td>For the Windows systems</td>
-        </tr>
-        <tr class="even">
-          <td>[password option]</td>
-          <td>yes</td>
-          <td>"Autogenerate Credential" or a provided password (40)</td>
-          <td>Free form text</td>
-          <td>"Autogenerate Credential", hx7ZgI2n</td>
-        </tr>
-      </table>
-
+      <h3>Exporting</h3>
       <p>
-        Note: According to documentation of Microsoft Domain Controller,
-        if your Login uses German umlauts, you can use "ss" for "ß", "a" for "ä" etc.
-        In other cases, Login names with German umlauts will not work.
+        Export the current list of lsc_credentials as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
+      <xsl:call-template name="filtering"/>
 
-      <a name="credentials"></a>
-      <h2>Credentials for Local Security Checks</h2>
-      <p>
-       This table provides an overview of all configured
-       credentials.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Shows name of the credential.</td>
-        </tr>
-        <tr class="even">
-          <td>Login</td>
-          <td>Shows the login name that was provided for this credential.</td>
-        </tr>
-        <tr class="odd">
-          <td>Comment</td>
-          <td>Shows the comment that was provided for this credential.</td>
-        </tr>
-      </table>
-
-      <a name="actions"></a>
-      <h3>Actions</h3>
-      <p>
-       Note that depending on the method that was chosen to specify a password
-       (manually or autogenerated), some actions might not be available.
-       Specifically, when the password was supplied manually, just the Delete and
-       Details actions are available.
-      </p>
-
-      <h4>Move Credential to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-
-      <h4>Credential Details</h4>
-      <p>
-       Pressing the details icon
-       <img src="/img/details.png" alt="Details" title="Details" />
-       will show details about the credential.
-      </p>
-
-      <a name="edit"></a>
-      <h4>Edit Credential</h4>
-      <p>
-       Pressing the Edit icon <img src="/img/edit.png" alt="Edit Credential"
-         title="Edit Credential" /> will
-       switch to an overview of the credential and allows
-       editing of some of the properties.
-      </p>
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="noexport" select="1"/>
+      </xsl:call-template>
 
       <h4>Download RPM Package</h4>
       <p>
@@ -872,17 +776,177 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        packages).
       </p>
 
-      <a name="credentialdetails"></a>
-      <h2>Credential Details</h2>
       <p>
-       Provides information about credentials like the login and comment.
+       Note that depending on the method that was chosen to specify a password
+       (manually or autogenerated), some actions might not be available.
+       Specifically, when the password was supplied manually, just the Delete and
+       Details actions are available.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_lsc_credential.html">
+  <div class="gb_window_part_center">Help: New LSC Credential
+    <a href="/omp?cmd=new_lsc_credential&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+          <xsl:with-param name="command" select="'CREATE_LSC_CREDENTIAL'"/>
+      </xsl:call-template>
+
+      <p>
+        Credentials for local security checks are required to allow
+        <a href="glossary.html?token={/envelope/token}#nvt">NVTs</a> to log into target systems
+        for the purpose of locally check there e.g. for the presence
+        of all vendor security patches.
+      </p>
+      <h1>New LSC Credential</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credential</a>
+        the dialog offers these entries.
+        Hit the button "Create LSC Credential" to submit the new lsc_credential.
+        The LSC Credentials page will be shown.
       </p>
 
-      <h3>Targets using this Credential</h3>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Security Scan Account</td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>no</td>
+          <td>80</td>
+          <td>Alphanumeric<br/>If not autogenerate also "\@_.-"</td>
+          <td>jsmith<br/>
+              myDomain\jsmith<br/>
+              jsmith@myDomain</td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>For the Windows systems</td>
+        </tr>
+        <tr class="even">
+          <td>[password option]</td>
+          <td>yes</td>
+          <td>"Autogenerate Credential" or a provided password (40)</td>
+          <td>Free form text</td>
+          <td>"Autogenerate Credential", hx7ZgI2n</td>
+        </tr>
+      </table>
+
       <p>
-       This table provides an overview of the targets associated with this credential.
-       Details of these targets can be seen after a click on the Details
-       <img src="/img/details.png" alt="Details" title="Details" /> icon.
+        The dialog to create a new credential pair allows to either specify a password
+        or to generate a secure password.
+        Note that if the latter option was chosen, users are not able or allowed to
+        access either passwords nor so-called private keys.
+        Instead, installer packages are created that can be installed on target
+        systems. Internals of these installers are explained in the
+        <a href="#actions">Actions</a> section of this help page.
+        These actions are not available if the password was specified manually.
+      </p>
+      <p>
+        <b>Please note</b> that you will need to associate one or more
+        <a href="glossary.html?token={/envelope/token}#target">targets</a> with the credential you installed
+        on them.
+        Only this finally allows the scan engine to apply the suitable credentials.
+      </p>
+
+      <p>
+        Note: According to documentation of Microsoft Domain Controller,
+        if your Login uses German umlauts, you can use "ss" for "ß", "a" for "ä" etc.
+        In other cases, Login names with German umlauts will not work.
+      </p>
+
+      <h4>LSC Credentials</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="LSC Credentials" title="LSC Credentials"/>
+       will switch to the
+       <a href="lsc_credentials.html?token={/envelope/token}"> LSC Credentials
+       </a> page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="lsc_credential_details.html">
+  <div class="gb_window_part_center">Help: LSC Credential Details
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
+      </xsl:call-template>
+
+      <h1>LSC Credentials Details</h1>
+      <p>
+        Provides detailed information about an
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credential</a>.
+        This includes name, comment, login, ID, creation time and modification
+        time.
+      </p>
+
+      <h4>New LSC Credential </h4>
+      <p>
+        To create a new lsc credential click the new icon
+        <img src="/img/new.png" alt="New LSC Credential" title="New LSC Credential"/>
+        which goes to the <a href="new_lsc_credential.html?token={/envelope/token}">
+        New LSC Credential</a> page.
+      </p>
+
+      <h4>LSC Credentials</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="LSC Credentials" title="LSC Credentials"/>
+        will switch to the lsc credentials page.
+      </p>
+
+      <h4>Edit LSC Credential</h4>
+      <p>
+        Pressing the "Edit LSC Credential" icon
+        <img src="/img/edit.png" alt="Edit LSC Credential" title="Edit LSC Credential"/>
+        will switch to an overview of the configuration for this lsc_credential and
+        allows editing the LSC Credential's properties.
+      </p>
+
+      <h4>Export LSC Credential</h4>
+      <p>
+        Export the LSC Credential as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <h3>Targets using this LSC Credential</h3>
+      <p>
+        This table provides an overview of the targets associated with this LSC Credential.
+        Details of these targets can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
     </div>
   </div>
@@ -2762,7 +2826,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
-            <li> <a href="configure_credentials.html?token={/envelope/token}">Configure Credentials</a></li>
+            <li> <a href="lsc_credentials.html?token={/envelope/token}">LSC Credentials</a></li>
+              <ul>
+                <li> <a href="new_lsc_credential.html?token={/envelope/token}">New LSC Credential</a></li>
+                <li> <a href="lsc_credential_details.html?token={/envelope/token}">LSC Credential Details</a></li>
+              </ul>
             <li> <a href="agents.html?token={/envelope/token}">Agents</a></li>
               <ul>
                 <li> <a href="new_agent.html?token={/envelope/token}">New Agent</a></li>
@@ -4186,14 +4254,14 @@ Public License instead of this License.
           <td>Port List</td>
           <td>yes</td>
           <td>--</td>
-          <td>Any of the <a href="configure_port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
+          <td>Any of the <a href="port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
           <td>All privileged TCP</td>
         </tr>
         <tr class="even">
           <td>SSH Credential</td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SSH</td>
         </tr>
         <tr class="even">
@@ -4207,7 +4275,7 @@ Public License instead of this License.
           <td>SMB Credential</td>
           <td>no</td>
           <td>--</td>
-          <td>Any of the <a href="configure_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
+          <td>Any of the <a href="lsc_credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
       </table>
@@ -6577,7 +6645,7 @@ Public License instead of this License.
         The download will start shortly after a click on the download
         <img src="/img/download.png" alt="Download" title="Download" />
         icon.  Report formats can be configured on the
-        <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
+        <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
         page.
       </p>
 
@@ -6612,7 +6680,7 @@ Public License instead of this License.
        The download will start shortly after a click on the download
        <img src="/img/download.png" alt="Download" title="Download" />
        icon.  Report formats can be configured on the
-       <a href="configure_report_formats.html?token={/envelope/token}">Report Formats</a>
+       <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
        page.
       </p>
 
