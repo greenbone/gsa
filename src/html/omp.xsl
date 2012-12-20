@@ -4302,6 +4302,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="lsc_credential"/>
     <xsl:with-param name="count" select="count (lsc_credential)"/>
     <xsl:with-param name="filtered-count" select="lsc_credential_count/filtered"/>
+    <xsl:with-param name="full-count" select="lsc_credential_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Login|login'"/>
   </xsl:call-template>
 </xsl:template>
@@ -4724,6 +4725,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="agent"/>
     <xsl:with-param name="count" select="count (agent)"/>
     <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
+    <xsl:with-param name="full-count" select="agent_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Trust|trust'"/>
   </xsl:call-template>
 </xsl:template>
@@ -5298,6 +5300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="alert"/>
     <xsl:with-param name="count" select="count (alert)"/>
     <xsl:with-param name="filtered-count" select="alert_count/filtered"/>
+    <xsl:with-param name="full-count" select="alert_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Event|event Condition|condition Method|method Filter|filter'"/>
   </xsl:call-template>
 </xsl:template>
@@ -6193,6 +6196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="filter"/>
     <xsl:with-param name="count" select="count (filter)"/>
     <xsl:with-param name="filtered-count" select="filter_count/filtered"/>
+    <xsl:with-param name="full-count" select="filter_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Term|term Type|type'"/>
   </xsl:call-template>
 </xsl:template>
@@ -6925,6 +6929,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="target"/>
     <xsl:with-param name="count" select="count (target)"/>
     <xsl:with-param name="filtered-count" select="target_count/filtered"/>
+    <xsl:with-param name="full-count" select="target_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Hosts|hosts IPs|ips Port&#xa0;List|port_list SSH&#xa0;Credential|ssh_credential SMB&#xa0;Credential|smb_credential'"/>
   </xsl:call-template>
 </xsl:template>
@@ -9376,6 +9381,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="schedule"/>
     <xsl:with-param name="count" select="count (schedule)"/>
     <xsl:with-param name="filtered-count" select="schedule_count/filtered"/>
+    <xsl:with-param name="full-count" select="schedule_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name First&#xa0;Run|first_run Next&#xa0;Run|next_run Period|period Duration|duration'"/>
   </xsl:call-template>
 </xsl:template>
@@ -10492,6 +10498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="slave"/>
     <xsl:with-param name="count" select="count (slave)"/>
     <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
+    <xsl:with-param name="full-count" select="slave_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Host|host Port|port Login|login'"/>
   </xsl:call-template>
 </xsl:template>
@@ -12781,6 +12788,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="note"/>
     <xsl:with-param name="count" select="count (note)"/>
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
+    <xsl:with-param name="full-count" select="note_count/text ()"/>
     <xsl:with-param name="headings" select="'NVT|nvt Text|text Active|active'"/>
   </xsl:call-template>
 </xsl:template>
@@ -13840,6 +13848,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="override"/>
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
+    <xsl:with-param name="full-count" select="override_count/text ()"/>
     <xsl:with-param name="headings" select="'NVT|nvt From|from To|to Text|text Active|active'"/>
   </xsl:call-template>
 </xsl:template>
@@ -13966,6 +13975,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="port_lists"/>
         <xsl:with-param name="count" select="count (port_list)"/>
         <xsl:with-param name="filtered_count" select="port_list_count/filtered"/>
+        <xsl:with-param name="full_count" select="port_list_count/text ()"/>
       </xsl:call-template>
       <a href="/help/port_lists.html?token={/envelope/token}"
          title="Help: Port Lists">
@@ -14450,6 +14460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="resources" select="report_format"/>
     <xsl:with-param name="count" select="count (report_format)"/>
     <xsl:with-param name="filtered-count" select="report_format_count/filtered"/>
+    <xsl:with-param name="full-count" select="report_format_count/text ()"/>
     <xsl:with-param name="headings" select="'Name|name Extension|extension Content&#xa0;Type|content_type Trust&#xa0;(Last&#xa0;Verified)|trust Active|active'"/>
   </xsl:call-template>
 </xsl:template>

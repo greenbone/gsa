@@ -1,5 +1,9 @@
 2012-12-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl: Add full-count to all list-window calls.
+
+2012-12-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (filter-window-pager): Add full_count param.  Display
 	as total in pager.
 	(html-tasks-table): Pass full count to list-window.
