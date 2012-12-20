@@ -700,6 +700,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and summarizes the essential aspects of it.
       </p>
 
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the credential.</td>
+        </tr>
+        <tr class="even">
+          <td>Login</td>
+          <td>Shows the login name that was provided for this credential.</td>
+        </tr>
+      </table>
+
       <h3>New LSC Credential</h3>
       <p>
         To create a new lsc_credential click the
