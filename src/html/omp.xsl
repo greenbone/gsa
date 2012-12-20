@@ -11106,6 +11106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="info"/>
         <xsl:with-param name="count" select="count(info/cpe)"/>
         <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
         <xsl:with-param name="extra_params" select="'&amp;info_type=CPE'"/>
       </xsl:call-template>
       <a href="/help/cpes.html?token={/envelope/token}"
@@ -11209,6 +11210,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="info"/>
         <xsl:with-param name="count" select="count(info/cve)"/>
         <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
         <xsl:with-param name="extra_params" select="'&amp;info_type=CVE'"/>
       </xsl:call-template>
       <a href="/help/cves.html?token={/envelope/token}"
@@ -13975,6 +13977,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="port_lists"/>
         <xsl:with-param name="count" select="count (port_list)"/>
         <xsl:with-param name="filtered_count" select="port_list_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
         <xsl:with-param name="full_count" select="port_list_count/text ()"/>
       </xsl:call-template>
       <a href="/help/port_lists.html?token={/envelope/token}"
