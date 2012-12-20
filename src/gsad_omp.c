@@ -219,9 +219,11 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
             if (child_param->value_size
                 && child_param->valid
                 && child_param->valid_utf8)
-              xml_string_append (string, "<%s%s>%s</%s%s>",
-                                 name, child_name, child_param->value,
-                                 name, child_name);
+              xml_string_append (string,
+                                 "<_param>"
+                                 "<name>%s%s</name><value>%s</value>"
+                                 "</_param>",
+                                 name, child_name, child_param->value);
         }
 
       if (param->value_size && param->valid && param->valid_utf8)

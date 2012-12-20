@@ -1,5 +1,15 @@
 2012-12-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (xsl_transform_omp): Add children params in a fixed
+	named entity instead of using the name of the child param.  This is
+	safer because child param names can have names with weird characters
+	like colons and brackets.
+
+	* src/html/omp.xsl (gsa:param-or, html-edit-task-form, new_task): Expect
+	child params entities to have fixed names.
+
+2012-12-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-cpe-table, html-cve-table)
 	(html-port-lists-table): Add full count to pager.
 
