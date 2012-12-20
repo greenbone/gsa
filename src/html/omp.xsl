@@ -4610,7 +4610,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_lsc_credential_response"/>
   <xsl:apply-templates select="commands_response/modify_lsc_credential_response"/>
-  <xsl:apply-templates select="commands_response/get_lsc_credentials_response/lsc_credential"
+  <xsl:apply-templates select="get_lsc_credentials_response/lsc_credential"
                        mode="details"/>
 </xsl:template>
 
