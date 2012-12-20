@@ -22,7 +22,7 @@
 	* src/html/omp.xsl (get_lsc_credential): Update template call for
 	get_lsc_credentials_response.
 
-2012-12-20  Hani Benhabiles <kroosec@gmail.com>
+2012-12-20  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-lsc-credentials-table): Use correct argument
 	for filtered-count.
@@ -97,7 +97,7 @@
 	warning when SCAP db is missing.
 	(host): Show warning and grey prognostic icon when SCAP db is missing.
 
-2012-12-18  Hani Benhabiles <kroosec@gmail.com>
+2012-12-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add export_lsc_credentials and
 	new_lsc_credential commands.
@@ -121,7 +121,7 @@
 	(details-header-icons): Add noexport parameter to disable adding export
 	icon.
 
-2012-12-18  Hani Benhabiles <kroosec@gmail.com>
+2012-12-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_alert_omp): Get Report Formats to use for
 	displaying Report Format name.
@@ -129,7 +129,7 @@
 	* src/html/omp.xsl (html-create-alert-form, new_alert): Remove
 	lsc-credentials parameter.
 
-2012-12-18  Hani Benhabiles <kroosec@gmail.com>
+2012-12-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_alert_omp): Get Report Formats and Filter Reports.
 
@@ -142,7 +142,7 @@
 
 	* src/html/omp.xsl (alert [details]): Add Verinice details.
 
-2012-12-17  Hani Benhabiles <kroosec@gmail.com>
+2012-12-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (new_lsc_credential): New template.
 	(html-lsc-credentials-table): Use list-window table.
@@ -152,14 +152,14 @@
 	list-window-line-icons template.
 	(agent): Use list-window-line-icons template.
 
-2012-12-17  Hani Benhabiles <kroosec@gmail.com>
+2012-12-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (auto-refresh): New template.
 	(old-html-tasks-table, list-window, html-port-lists-table): Use
 	auto-refresh.
 	(html-targets-table): Use list-window.
 
-2012-12-17  Hani Benhabiles <kroosec@gmail.com>
+2012-12-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-port-lists-table): Use column-name template
 	to make Name column sortable.
@@ -168,11 +168,11 @@
 
 	* src/html/help.xsl (contents.html): Add missing closing ul tag.
 
-2012-12-14  Hani Benhabiles <kroosec@gmail.com>
+2012-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (contents.html): Update alerts documentation links.
 
-2012-12-14  Hani Benhabiles <kroosec@gmail.com>
+2012-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Update Alerts help documentation to reflect latest changes.
 
@@ -211,7 +211,7 @@
 	* src/html/omp.xsl (new_task): Carry all fields with the New Task "+"
 	submit.
 
-2012-12-14  Hani Benhabiles <kroosec@gmail.com>
+2012-12-14  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-port-lists-table): Add filter-window-pager
 	template.
@@ -259,7 +259,7 @@
 	password iterator and the file iterator, instead of shadowing the outer
 	one.
 
-2012-12-13  Hani Benhabiles <kroosec@gmail.com>
+2012-12-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (delete_alert_omp): Correct passed get function.
 
@@ -288,7 +288,7 @@
 	(task): Pass overrides in extra-params-details.
 	(list-window): Enable overrides control for Tasks page.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-alert-form): Update help link. Add
 	Alerts list link.
@@ -298,12 +298,12 @@
 	list-window-line-icons, detail-headers-icons and minor-details templates.
 	(get_alerts): Remove html-create-alert-form call.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_alert_omp): New function. Correct typo in
 	changelog.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_alert, export_alert_omp, export_alerts_omp):
 	New functions.
@@ -313,7 +313,7 @@
 	* src/gsad.c (init_validator, exec_omp_get): Add new_alert, export_alert
 	and export_alerts command.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (delete_alert_omp, delete_trash_alert_omp): Use
 	delete_resource.
@@ -322,12 +322,12 @@
 	(get_alerts_omp): Use get_many.
 	(get_alerts_xml): Remove unused function.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (export_target_omp, export_note_omp)
 	(export_override_omp): Use export_resource.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	Add alerts information in Report Formats details page.
 
@@ -349,11 +349,11 @@
 	* src/html/omp.xsl (list-window): Add the refresh input that was
 	previously on the tasks page.
 
-2012-12-12  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-12  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (export_report_format_omp): Use export_resource.
 
-2012-12-11  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-11  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	Update help documentation for Port Lists.
 
@@ -363,7 +363,7 @@
 	(configure_port_lists.html): Removed.
 	(report_formats.html): Fix typo.
 
-2012-12-11  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-11  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsd_omp.c (get_port_list): Send targets and ranges attributes
 	instead of details.
@@ -381,7 +381,7 @@
 	* src/html/omp.xsl (details-header-icon): Remove extra ampersand from
 	New link.
 
-2012-12-11  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-11  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (details-header-icons): Add noedit parameter.
 	(port_list [details]): Fix type parameter and use noedit parameter
@@ -395,7 +395,7 @@
 
 	* src/html/wizard.xsl (wizard-icon, wizard): New templates.
 
-2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-10  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_port_list): Use get_one function. Rename commands
 	parameter to extra_xml for consistency.
@@ -404,14 +404,14 @@
 	(delete_port_list_omp, delete_trash_port_list_omp)
 	(delete_port_range_omp): Use delete_resource adequately.
 
-2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-10  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (port_list [details]): Use details-header-icon and
 	minor-details templates.
 
 	* src/gsad_omp.c (export_port_list_omp): Remove trailing whitespace.
 
-2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-10  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	Add Port Lists exporting.
 
@@ -423,7 +423,7 @@
 	* src/gsad.c (init_validator, exec_omp_get): Add export_port_lists
 	command.
 
-2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-10  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	Add New Port List page.
 
@@ -438,7 +438,7 @@
 	(get_port_lists): Remove port list create and import template calls.
 	(new_port_list): New template.
 
-2012-12-10  Hani Benhabiles  <kroosec@gmail.com>
+2012-12-10  Hani Benhabiles  <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (list-window-line-icons): Add support for noclone and
 	noedit parameters to disable edit and clone icons.
@@ -489,7 +489,7 @@
 	* src/gsad_omp.c (get_many): Add marker for get_settings.
 	(get_tasks): Call get_many.
 
-2012-12-06  Hani Benhabiles <kroosec@gmail.com>
+2012-12-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (list-window-line-actions): Add noclone and noedit
 	parameters to be able to omit clone and edit information.
@@ -506,7 +506,7 @@
 	* src/html/omp.xsl (filter-window-pager): Use new Icons for
 	Next/Previous as a replacement for "<<" and ">>".
 
-2012-12-06  Hani Benhabiles <kroosec@gmail.com>
+2012-12-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Update Report Formats help documentation.
 
@@ -515,14 +515,14 @@
 	(new_report_format, report_format_details): New templates.
 	(contents.html): Updated links to Report Formats help documentation.
 
-2012-12-06  Hani Benhabiles <kroosec@gmail.com>
+2012-12-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (details-header-icons, list-window-line-icons):
 	Replace space by underscore for type-lower variable in order to allow
 	the use of multiple words types such as Report Formats without breaking
 	links.
 
-2012-12-05  Hani Benhabiles <kroosec@gmail.com>
+2012-12-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Add Export Report Formats.
 
@@ -538,23 +538,23 @@
 	* src/html/omp.xsl (get_report_formats): Correct typo.  Flush trailing
 	space.
 
-2012-12-05  Hani Benhabiles <kroosec@gmail.com>
+2012-12-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (details-header-icons): Check writable value when
 	displaying edit and delete icons.
 	(get_report_format): Call report_format template in details mode.
 
-2012-12-05  Hani Benhabiles <kroosec@gmail.com>
+2012-12-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_note): Revert previous change to take into
 	account task_id and result_id values.
 
-2012-12-04  Hani Benhabiles <kroosec@gmail.com>
+2012-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_schedule): Default First Time fields to current
 	time.
 
-2012-12-04  Hani Benhabiles <kroosec@gmail.com>
+2012-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (next_page): Add handlers for get_report_format and
 	get_report_formats.
@@ -568,14 +568,14 @@
 	header icons and remove old max and first args.
 	(html-edit-note-form, html-edit-override-form): Add list icon in header.
 
-2012-12-03  Hani Benhabiles <kroosec@gmail.com>
+2012-12-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (delete_agent_omp, delete_trash_agent_omp)
 	(delete_trash_report_format_omp, delete_trash_slave_omp)
 	(delete_report_format_omp, edit_report_format): Code refactoring to
 	leverage delete_resource and edit_resource.
 
-2012-12-03  Hani Benhabiles <kroosec@gmail.com>
+2012-12-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator, exec_omp_get): Added new_report_format
 	command.
@@ -587,7 +587,7 @@
 	(save_report_format_omp): Adapt for get_report_format and
 	get_report_formats.
 
-2012-12-03  Hani Benhabiles <kroosec@gmail.com>
+2012-12-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Update Report formats management.
 
@@ -601,7 +601,7 @@
 	(new_report_format): New template.
 	(get_report_formats): Update to match new style.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Updated help documentation for Agents object.
 
@@ -613,11 +613,11 @@
 	GET style object management.
 	(contents.html, glossary.html): Updated with new links and information.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_slave_omp): Refactored code to use omp function.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator, exec_omp_get): Added new_agent command.
 
@@ -625,31 +625,31 @@
 
 	* src/html/omp.xsl (agent): Added get agent details action.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (agent): Added action entry for agent exporting.
 	(agent [details], get_agent): New templates.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.h, src/gsad_omp.c (export_agents_omp, export_agent_omp)
 	(get_agent, get_agent_omp): New functions.
 	(export_many): Sends details attribute with a value of One.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-agent-form, agent, get_agents_response):
 	Adapted for new GET style.
 	(new_agent): New template.
 	(html-agents-table): Refactored to use list-window template.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h (get_agent_omp): Renamed to
 	download_agent_omp. Adequated GSA command renamed from get_agent to
 	download_agent.
 
-2012-11-29  Hani Benhabiles <kroosec@gmail.com>
+2012-11-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-schedule-form): Add a dropdown option
 	containing the first time's year when it is out of the range 2012-2017.
@@ -661,15 +661,15 @@
 	period with text input fields.  Update "first time" year range to
 	2012-2017.
 
-2012-11-28  Hani Benhabiles <kroosec@gmail.com>
+2012-11-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_task_omp): Removed sort_field and sort_order.
 
-2012-11-28  Hani Benhabiles <kroosec@gmail.com>
+2012-11-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (save_task_omp): Removed sort_field and sort_order.
 
-2012-11-28  Hani Benhabiles <kroosec@gmail.com>
+2012-11-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Updated Slaves management documentation to reflect the new object
 	management style and features.
@@ -682,7 +682,7 @@
 	* src/gsad.c (exec_omp_post): Separate token missing and token bad
 	messages.
 
-2012-11-27  Hani Benhabiles <kroosec@gmail.com>
+2012-11-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (slave [details]): Refactored code to use shared
 	templates details-header-icons and minor-details.
@@ -692,7 +692,7 @@
 	* src/html/omp.xsl (html-report-details): Split default report check
 	per report type, to make it easier to patch for custom report formats.
 
-2012-11-27  Hani Benhabiles <kroosec@gmail.com>
+2012-11-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.h, src/gsad_omp.c (save_slave_omp): New function.
 
@@ -703,7 +703,7 @@
 	(edit_slave): New templates.
 	(html-edit-schedule-form): Fixed help link.
 
-2012-11-27  Hani Benhabiles <kroosec@gmail.com>
+2012-11-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Added export_slave and export_slaves
 	values. Added slave to possible values of resource_type and
@@ -713,7 +713,7 @@
 
 	* src/gsad_omp.c (next_page): Added handler for get_slaves value.
 
-2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+2012-11-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-slaves-table): Refactored code to use
 	list-window.
@@ -722,11 +722,11 @@
 	(slave): Refactored code to use list-window-line-icons.
 	(get_slaves): Added code to test for 4xx and 5xx status responses.
 
-2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+2012-11-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (export_filter_omp): Fixed documentation.
 
-2012-11-26  Hani Benhabiles <kroosec@gmail.com>
+2012-11-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (edit_slave, edit_slave_omp, export_slave_omp)
 	(export_slaves_omp): New functions.
@@ -747,53 +747,53 @@
 	(get_feed_oap, get_scan_oap, sync_feed_oap, sync_scap_oap)
 	(get_settings_oap): Close connection after use.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (delete_schedule_omp, delete_trash_schedule_omp)
 	(delete_target_omp, delete_trash_target_omp): Refactored to use
 	delete_resource accordingly.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_slave, get_slaves): New functions.
 	(delete_slave_omp): Now uses delete_resource.
 	(get_slave_omp): Now uses get_slave.
 	(get_slaves_omp): Now uses get_slaves.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-slave-form): Added link to slaves list.
 	Updated to link to new style help documentation.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (new_slave): New template.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (exec_omp_get, init_validator): Added new_slave command.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c, src/gsad_omp.h (new_slave, new_slave_omp): New
 	functions.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (new_schedule): Updated link to new schedule help
 	page.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/gsad.xsl (login_page): Added autofocus on username field to
 	automatically select it at page load and improve user experience.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (new_schedule): Added delete_schedule_response
 	commands_response.
 
-2012-11-24  Hani Benhabiles <kroosec@gmail.com>
+2012-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-schedule-form): Added button to show
 	list of schedules
@@ -816,13 +816,13 @@
 	* src/html/omp.xsl (html-create-filter-form, html-edit-filter-form): Add
 	Note and Override to types.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (schedule_details.html, schedules.html)
 	(new_schedule.html, contents.html): Updated to reflect the new Schedules
 	object management.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/gsad.xsl (new_schedule): New template.
 	(html-schedules-table): Cleaned code. Now calls list-window.
@@ -832,7 +832,7 @@
 	minor-details.
 	(get_schedules): Code cleanup and refactoring.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c, src/gsad_omp.h (new_schedule_omp, export_schedule_omp)
 	(export_schedules_omp): New functions.
@@ -842,11 +842,11 @@
 	(get_schedule_omp): Now calls get_schedule.
 	(get_schedules_omp): Now calls get_schedules.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (new_note): Code cleaned.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	New schedule object management implementation.
 
@@ -854,7 +854,7 @@
 	export_schedules. Also checks for new_schedule command now.
 	(init_validator): Added export_schedule and export_schedules commands.
 
-2012-11-21  Hani Benhabiles <kroosec@gmail.com>
+2012-11-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/gsad.xsl (sync_scap_response): Added SCAP Synchronization
 	template for response indicator.
@@ -979,7 +979,7 @@
 	* src/gsad_omp.c (get_target): Request tasks, so that "Tasks using this
 	Target" show up.
 
-2012-11-15  Benhabiles Hani <kroosec@gmail.com>
+2012-11-15  Benhabiles Hani <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_target): Removed old code. Now uses get_one().
 
@@ -988,7 +988,7 @@
 	* src/html/wizard.xsl (quick-first-scan-wizard): Set refresh_interval to
 	30.
 
-2012-11-15  Hani Benhabiles <kroosec@gmail.com>
+2012-11-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (list-window-line-actions): Fixed icone for Clone
 	action.
@@ -1084,11 +1084,11 @@
 	get_tasks_args.
 	(get_tasks_omp): Just call get_tasks.
 
-2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+2012-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* ChangeLog: Fixed formatting issues from last updates.
 
-2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+2012-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/oap.xsl: Added describe_scap_response, html-scap-response and
 	sync_scap_response templates.
@@ -1097,7 +1097,7 @@
 
 	* src/html/gsad.xsl: Added SCAP Feed submenu.
 
-2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+2012-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Added entries for get_scap and sync_scap.
 	(exec_omp_post): Added entry for sync_scap.
@@ -1107,12 +1107,12 @@
 
 	* src/gsad_oap.c: Added get_scap_oap and sync_scap_oap.
 
-2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+2012-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (content_type_from_format_string): Small documentation fix
 	in r14449.
 
-2012-11-07  Hani Benhabiles <kroosec@gmail.com>
+2012-11-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (token_user): Fixed return value when a bad token is
 	provided.
