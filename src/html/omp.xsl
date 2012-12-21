@@ -14079,21 +14079,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td width="1" style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">count_all</xsl:with-param>
+                <xsl:with-param name="name">total</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
               </xsl:call-template>
             </td>
             <td style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">TCP</xsl:with-param>
-                <xsl:with-param name="name">count_tcp</xsl:with-param>
+                <xsl:with-param name="name">tcp</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
               </xsl:call-template>
             </td>
             <td style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">UDP</xsl:with-param>
-                <xsl:with-param name="name">count_udp</xsl:with-param>
+                <xsl:with-param name="name">udp</xsl:with-param>
                 <xsl:with-param name="type">port_list</xsl:with-param>
               </xsl:call-template>
             </td>

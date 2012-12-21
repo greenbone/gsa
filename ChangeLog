@@ -1,3 +1,9 @@
+2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (html-port-lists-table): Replace count_all, count_tcp
+	and count_udp by total, tcp and udp as arguments for column-name
+	template.
+
 2012-12-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/wizard.xsl (wizard): Make visibility depend on full count
