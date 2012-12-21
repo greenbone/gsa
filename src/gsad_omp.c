@@ -6345,6 +6345,40 @@ get_config_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Returns page to create a new scan config.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_config (credentials_t *credentials, params_t *params,
+              const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_config>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_config>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Return the new scan config page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_config_omp (credentials_t *credentials, params_t *params)
+{
+  return new_config (credentials, params, NULL);
+}
+
+/**
  * @brief Get a config, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -7387,6 +7421,27 @@ export_config_omp (credentials_t * credentials, params_t *params,
   g_string_append (xml, "</get_configs_response>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Export a list of scan configs.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Scan configs XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_configs_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type, char **content_disposition,
+                    gsize *content_length)
+{
+  return export_many ("config", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 /**
@@ -10915,8 +10970,8 @@ save_slave_omp (credentials_t * credentials, params_t *params)
  */
 char *
 export_slave_omp (credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length)
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
 {
   return export_resource ("slave", credentials, params, content_type,
                           content_disposition, content_length);
@@ -10936,8 +10991,8 @@ export_slave_omp (credentials_t * credentials, params_t *params,
  */
 char *
 export_slaves_omp (credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length)
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
 {
   return export_many ("slave", credentials, params, content_type,
                       content_disposition, content_length);

@@ -578,6 +578,7 @@ init_validator ()
                          "|(export_alert)"
                          "|(export_alerts)"
                          "|(export_config)"
+                         "|(export_configs)"
                          "|(export_lsc_credential)"
                          "|(export_lsc_credentials)"
                          "|(export_filter)"
@@ -646,6 +647,7 @@ init_validator ()
                          "|(modify_auth)"
                          "|(new_agent)"
                          "|(new_alert)"
+                         "|(new_config)"
                          "|(new_filter)"
                          "|(new_lsc_credential)"
                          "|(new_note)"
@@ -1815,6 +1817,10 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_config_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_configs"))
+    return export_configs_omp (credentials, params, content_type,
+                               content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_filter"))
     return export_filter_omp (credentials, params, content_type,
                               content_disposition, response_size);
@@ -2002,6 +2008,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_nvts)
   ELSE_OAP (get_settings)
   ELSE (new_agent)
+  ELSE (new_config)
   ELSE (new_lsc_credential)
   ELSE (new_note)
   ELSE (new_override)

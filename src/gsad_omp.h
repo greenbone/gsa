@@ -135,6 +135,7 @@ char * save_target_omp (credentials_t *, params_t *);
 char * edit_config_omp (credentials_t *, params_t *);
 char * get_config_omp (credentials_t *, params_t *);
 char * get_configs_omp (credentials_t *, params_t *);
+char * new_config_omp (credentials_t *, params_t *);
 char * save_config_omp (credentials_t *, params_t *);
 char * edit_config_family_omp (credentials_t *, params_t *);
 char * get_config_family_omp (credentials_t *, params_t *);
@@ -148,12 +149,14 @@ char * delete_config_omp (credentials_t *, params_t *);
 char * delete_trash_config_omp (credentials_t *, params_t *);
 char * export_config_omp (credentials_t *, params_t *, enum content_type*,
                           char **, gsize *);
+char * export_configs_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
 
 char * export_preference_file_omp (credentials_t *, params_t *,
                                    enum content_type *, char **, gsize *);
 char * export_report_format_omp (credentials_t *, params_t *,
                                  enum content_type *, char **, gsize *);
-char * export_report_formats_omp (credentials_t *, params_t *, 
+char * export_report_formats_omp (credentials_t *, params_t *,
                                   enum content_type *, char **, gsize *);
 
 char * get_notes_omp (credentials_t *, params_t *);
@@ -205,9 +208,9 @@ char * delete_slave_omp (credentials_t *, params_t *);
 char * delete_trash_slave_omp (credentials_t *, params_t *);
 char * edit_slave_omp (credentials_t *, params_t *);
 char * export_slave_omp (credentials_t *, params_t *, enum content_type *,
-                            char **, gsize *);
+                         char **, gsize *);
 char * export_slaves_omp (credentials_t *, params_t *, enum content_type *,
-                            char **, gsize *);
+                          char **, gsize *);
 
 char * get_system_reports_omp (credentials_t *, params_t *);
 char * get_system_report_omp (credentials_t *, const char *, const char *,
