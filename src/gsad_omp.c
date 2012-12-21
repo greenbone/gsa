@@ -1004,6 +1004,7 @@ export_resource (const char *type, credentials_t * credentials,
   if (openvas_server_sendf (&session,
                             "<get_%ss"
                             " %s_id=\"%s\""
+                            " export=\"1\""
                             " details=\"1\"/>",
                             type,
                             type,
@@ -1105,6 +1106,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<get_%ss"
+                            " export=\"1\""
                             " details=\"1\""
                             " filter=\"%s\"/>",
                             type,
