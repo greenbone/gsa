@@ -1,5 +1,9 @@
 2012-12-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (agents.html): Clean up sentence slightly.
+
+2012-12-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (glossary.html): Flesh out agent description.  Text
 	from Jan.
 

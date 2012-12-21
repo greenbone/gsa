@@ -523,8 +523,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h1>Agents</h1>
       <p>
         This table provides an overview of all configured
-        <a href="glossary.html?token={/envelope/token}#agent">Agents</a>.
-        and summarizes the essential aspects of it.
+        <a href="glossary.html?token={/envelope/token}#agent">Agents</a>,
+        and summarizes the essential aspects of each.
       </p>
 
       <table class="gbntable">
