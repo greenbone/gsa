@@ -5235,79 +5235,7 @@ delete_trash_agent_omp (credentials_t * credentials, params_t *params)
 char *
 delete_trash_config_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gchar *ret;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *config_id;
-
-  config_id = params_value (params, "config_id");
-
-  if (config_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a config. "
-                         "The config was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a config. "
-                             "The config is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash");
-    }
-
-  xml = g_string_new ("");
-
-  /* Delete the config. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_config"
-                            " config_id=\"%s\""
-                            " ultimate=\"1\"/>",
-                            config_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a config. "
-                           "The config is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a config. "
-                           "It is unclear whether the config has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
-  g_string_free (xml, FALSE);
-  return ret;
+  return delete_resource ("config", credentials, params, 1, get_trash);
 }
 
 /**
@@ -5335,79 +5263,7 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params)
 char *
 delete_trash_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gchar *ret;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *lsc_credential_id;
-
-  lsc_credential_id = params_value (params, "lsc_credential_id");
-
-  if (lsc_credential_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a credential. "
-                         "The credential was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_lsc_credentials");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an LSC credential. "
-                             "The LSC credential is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash");
-    }
-
-  xml = g_string_new ("");
-
-  /* Delete the lsc_credential. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_lsc_credential"
-                            " lsc_credential_id=\"%s\""
-                            " ultimate=\"1\"/>",
-                            lsc_credential_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an LSC credential. "
-                           "The LSC credential is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an LSC credential. "
-                           "It is unclear whether the LSC credential has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
-  g_string_free (xml, FALSE);
-  return ret;
+  return delete_resource ("lsc_credential", credentials, params, 1, get_trash);
 }
 
 /**
@@ -5477,79 +5333,7 @@ delete_trash_target_omp (credentials_t * credentials, params_t *params)
 char *
 delete_trash_task_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gchar *ret;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *task_id;
-
-  task_id = params_value (params, "task_id");
-
-  if (task_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a task. "
-                         "The task was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a task. "
-                             "The task is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash");
-    }
-
-  xml = g_string_new ("");
-
-  /* Delete the task. */
-
-  if (openvas_server_sendf (&session,
-                            "<delete_task"
-                            " task_id=\"%s\""
-                            " ultimate=\"1\"/>",
-                            task_id)
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a task. "
-                           "The task is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a task. "
-                           "It is unclear whether the task has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_trash");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str);
-  g_string_free (xml, FALSE);
-  return ret;
+  return delete_resource ("task", credentials, params, 1, get_trash);
 }
 
 /**
@@ -6402,7 +6186,23 @@ import_config_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Get one or all configs, XSL transform the result.
+ * @brief Get all scan configs, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_configs (credentials_t *credentials, params_t *params,
+             const char *extra_xml)
+{
+  return get_many ("config", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all scan configs, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -6412,66 +6212,7 @@ import_config_omp (credentials_t * credentials, params_t *params)
 char *
 get_configs_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *sort_field, *sort_order;
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting list of configs. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_configs"
-                            " sort_field=\"%s\" sort_order=\"%s\"/>"
-                            "</commands>",
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting list of configs. "
-                           "The current list of configs is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting list of configs. "
-                           "The current list of configs is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return get_configs (credentials, params, NULL);
 }
 
 /**
@@ -7525,74 +7266,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
 char *
 delete_config_omp (credentials_t * credentials, params_t *params)
 {
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *config_id;
-
-  config_id = params_value (params, "config_id");
-
-  if (config_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while deleting a config. "
-                         "The config was not deleted. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_configs");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a config. "
-                             "The config is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<delete_config config_id=\"%s\"/>"
-                            "<get_configs"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
-                            "</commands>",
-                            config_id)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a config. "
-                           "The config is not deleted. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-
-  entity = NULL;
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a config. "
-                           "It is unclear whether the config has been deleted or not. "
-                           "Diagnostics: Failure to read response from manager daemon.",
-                           "/omp?cmd=get_configs");
-    }
-  free_entity (entity);
-
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, text);
+  return delete_resource ("config", credentials, params, 0, get_configs);
 }
 
 /**

@@ -1,3 +1,11 @@
+2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (delete_trash_config_omp, delete_config_omp)
+	(delete_trash_task_omp, delete_trash_lsc_credentials_omp): Use
+	delete_resource function.
+	(get_configs): New function.
+	(get_configs_omp): Use get_configs function.
+
 2012-12-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp): Add children params in a fixed
