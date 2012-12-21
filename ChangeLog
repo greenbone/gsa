@@ -1,5 +1,15 @@
 2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-create-config-form): Adapt header icons to new
+	style.
+	(new_config): New template.
+	(html-configs-table): Add filter window, header icons and table sorting
+	links.
+	(get_configs_response): Remove config creation and importing tables.
+	(get_lsc_credentials_response): Fix typo.
+
+2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (new_config, new_config_omp, export_configs_omp): New
 	functions.
 	(export_slave_omp, export_slaves_omp): Style fix.

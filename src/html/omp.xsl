@@ -4631,7 +4631,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_lsc_credentials_response">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_lsc_credentials_response"/>
+  <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:call-template name="html-lsc-credentials-table"/>
 </xsl:template>
 
@@ -7254,9 +7254,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       New Scan Config
-      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#newconfig"
-         title="Help: Configure Scan Configs (New Scan Config)">
+      <a href="/help/new_config.html?token={/envelope/token}"
+         title="Help: New Scan Config">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Scan Config" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Scan Config"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -7349,6 +7353,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </form>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="new_config">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_config_response"/>
+  <xsl:apply-templates select="commands_response/delete_config_response"/>
+  <xsl:call-template name="html-create-config-form"/>
+  <xsl:call-template name="html-import-config-form"/>
 </xsl:template>
 
 <xsl:template match="risk_factor">
@@ -8611,26 +8623,90 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Scan Configs
-      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#scanconfigs"
-         title="Help: Configure Scan Configs (Scan Configs)">
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="config"/>
+        <xsl:with-param name="list" select="configs"/>
+        <xsl:with-param name="count" select="count (config)"/>
+        <xsl:with-param name="filtered_count" select="config_count/filtered"/>
+        <xsl:with-param name="full_count" select="config_count/text ()"/>
+      </xsl:call-template>
+      <a href="/help/configs.html?token={/envelope/token}"
+         title="Help: Scan Configs">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=new_config&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="New Scan Config">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=export_configs&amp;filter={filters/term}&amp;token={/envelope/token}"
+           title="Export config_count/filtered filtered Scan Configs as XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
+      <div id="small_inline_form" style="margin-left:40px; display: inline">
+        <form method="get" action="">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="get_configs"/>
+          <input type="hidden" name="filter" value="{filters/term}"/>
+          <xsl:call-template name="auto-refresh"/>
+          <input type="image"
+                 name="Update"
+                 src="/img/refresh.png"
+                 alt="Update" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+      </div>
     </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'config'"/>
+      <xsl:with-param name="list" select="configs"/>
+    </xsl:call-template>
 
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
-            <td rowspan="2">Name</td>
+            <td rowspan="2">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">config</xsl:with-param>
+              </xsl:call-template>
+            </td>
             <td colspan="2">Families</td>
             <td colspan="2">NVTs</td>
             <td width="100" rowspan="2">Actions</td>
           </tr>
           <tr class="gbntablehead2">
-            <td width="1" style="font-size:10px;">Total</td>
-            <td width="1" style="font-size:10px;">Trend</td>
-            <td width="1" style="font-size:10px;">Total</td>
-            <td width="1" style="font-size:10px;">Trend</td>
+            <td width="1" style="font-size:10px;">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Total</xsl:with-param>
+                <xsl:with-param name="name">family_count</xsl:with-param>
+                <xsl:with-param name="type">config</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td width="1" style="font-size:10px;">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Trend</xsl:with-param>
+                <xsl:with-param name="name">family_growing</xsl:with-param>
+                <xsl:with-param name="type">config</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td width="1" style="font-size:10px;">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Total</xsl:with-param>
+                <xsl:with-param name="name">nvt_count</xsl:with-param>
+                <xsl:with-param name="type">config</xsl:with-param>
+              </xsl:call-template>
+            </td>
+            <td width="1" style="font-size:10px;">
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Trend</xsl:with-param>
+                <xsl:with-param name="name">nvt_growing</xsl:with-param>
+                <xsl:with-param name="type">config</xsl:with-param>
+              </xsl:call-template>
+            </td>
           </tr>
           <xsl:apply-templates select="config"/>
         </table>
@@ -8881,8 +8957,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- GET_CONFIGS_RESPONSE -->
 
 <xsl:template match="get_configs_response">
-  <xsl:call-template name="html-create-config-form"/>
-  <xsl:call-template name="html-import-config-form"/>
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_config_response"/>
   <xsl:call-template name="html-configs-table"/>
 </xsl:template>
 
