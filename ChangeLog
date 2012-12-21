@@ -5,6 +5,10 @@
 
 2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (export_config_omp): Use export_resource.
+
+2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-port-lists-table): Fix filter-window-pager
 	call.
 
