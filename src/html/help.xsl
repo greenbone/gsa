@@ -385,7 +385,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Prognostic Report</h4>
       <p>
-       Pressing the prognostic report icon
+       Pressing the
+       <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic report</a>
+       icon
        <img src="/img/prognosis.png" alt="Prognostic Report" title="Prognostic Report" />
        will switch to a prognostic report on this host.
       </p>
@@ -3408,6 +3410,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        A port list is a list of ports.  Each <a href="#target">Target</a> is
        associated with a Port List.  This determines which ports are scanned
        during a scan of the Target.
+      </p>
+
+      <a name="prognostic_report"></a>
+      <h2>Prognostic Report</h2>
+      <p>
+        Prognostic scans allow an upfront analysis about potential
+        vulnerabilities of hosts. This happens without accessing these
+        systems via the network and therefore the scan duration is
+        virtually zero.
+      </p>
+      <p>
+        Prognostic scans use product detections from previous scans and
+        compare this inventory data with the most current security
+        information (CVE) to match which products (meanwhile) are known to
+        be vulnerable.
       </p>
 
       <a name="report"></a>
@@ -6670,6 +6687,10 @@ Public License instead of this License.
        The exception is the "Tasks" link that refers to the
        <a href="/help/glossary.html?token={/envelope/token}#task">task</a>'s
        <a href="/help/reports.html?token={/envelope/token}">list of reports</a>.
+      </p>
+      <p>
+        The View Report page is also used to display
+       <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic reports</a>.
       </p>
 
       <a name="overrides"></a>
