@@ -14023,11 +14023,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Port Lists
       <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="port_list"/>
+        <xsl:with-param name="type" select="'port_list'"/>
         <xsl:with-param name="list" select="port_lists"/>
         <xsl:with-param name="count" select="count (port_list)"/>
         <xsl:with-param name="filtered_count" select="port_list_count/filtered"/>
-        <xsl:with-param name="full_count" select="info_count/text ()"/>
         <xsl:with-param name="full_count" select="port_list_count/text ()"/>
       </xsl:call-template>
       <a href="/help/port_lists.html?token={/envelope/token}"
