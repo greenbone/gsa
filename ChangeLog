@@ -1,3 +1,8 @@
+2012-12-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (glossary.html): Flesh out agent description.  Text
+	from Jan.
+
 2012-12-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-port-lists-table): Replace count_all, count_tcp

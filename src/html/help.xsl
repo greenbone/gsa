@@ -3318,10 +3318,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="agent"></a>
       <h2>Agent</h2>
       <p>
-        An agent allows to store agent tools. Basically it is a store with
-        integrated signature verification. Agents can be downloaded from here
-        for manual installation on target systems. This agent feature is
-        unrelated to other elements of the user interface.
+        The agent facility provides storage for agent tools. Basically it
+        is a store with integrated signature verification. Agents can be
+        downloaded from here for manual installation on target systems.
+        This agent feature is unrelated to the other elements of the user
+        interface.
+      </p>
+      <p>
+        Agents are tools installed and running on a target system.
+        They collect or analyse information on the target system
+        that might help to judge about vulnerabilities.
+      </p>
+      <p>
+        During a vulnerability scan the agent is queried and
+        status or results are retrieved. This is not the default
+        behaviour. Special NVTs need to be configured to
+        use an agent.
+      </p>
+      <p>
+        Agents may work asynchronously regarding the scan: A first
+        scan enables a function on the agent (for example search
+        for weak passwords which may take a very long time)
+        and a second scan retrieves whatever was identified since
+        the last contact.
+      </p>
+      <p>
+        In practice agents are used only for very specific cases
+        and special circumstances. Today, most functionality is
+        available either via methods of authenticated scans or
+        via standard tools (for example: End-Point-Security)
+        on the target systems.
       </p>
 
       <a name="alert"></a>
