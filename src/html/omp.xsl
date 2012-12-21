@@ -8759,7 +8759,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
           <br/>(<xsl:value-of select="comment"/>)
@@ -8823,41 +8827,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'config'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;token={/envelope/token}"
-         title="Scan Config Details"
-         style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <xsl:choose>
-        <xsl:when test="writable='0'">
-          <img src="/img/edit_inactive.png" border="0" alt="Edit"
-               style="margin-left:3px;"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=edit_config&amp;config_id={@id}&amp;token={/envelope/token}"
-             title="Edit Scan Config"
-             style="margin-left:3px;">
-            <img src="/img/edit.png" border="0" alt="Edit"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=export_config&amp;config_id={@id}&amp;token={/envelope/token}"
-         title="Export Scan Config XML"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export XML"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="type" select="'Config'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noclone" select="1"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
