@@ -4187,7 +4187,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New LSC Credential">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_lsc_credential&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_lsc_credentials&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="LSC Credentials" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="LSC Credentials"/>
       </a>
