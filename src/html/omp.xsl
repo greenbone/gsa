@@ -8624,7 +8624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Scan Configs
       <xsl:call-template name="filter-window-pager">
-        <xsl:with-param name="type" select="config"/>
+        <xsl:with-param name="type" select="'config'"/>
         <xsl:with-param name="list" select="configs"/>
         <xsl:with-param name="count" select="count (config)"/>
         <xsl:with-param name="filtered_count" select="config_count/filtered"/>
