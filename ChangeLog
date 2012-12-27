@@ -1,5 +1,10 @@
 2012-12-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (list-window): Use cap-type parameter instead of type
+	parameter for new resource link title.
+
+2012-12-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-create-lsc-credential-form): Fix credentials
 	list link.
 

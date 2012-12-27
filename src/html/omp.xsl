@@ -5792,7 +5792,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <xsl:call-template name="wizard-icon"/>
       <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="New {$type}">
+         title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
