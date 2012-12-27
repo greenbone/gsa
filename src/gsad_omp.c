@@ -6271,6 +6271,7 @@ get_config (credentials_t * credentials, params_t *params, int edit)
                             " config_id=\"%s\""
                             " actions=\"%s\""
                             " families=\"1\""
+                            " tasks=\"1\""
                             " preferences=\"1\"/>",
                             config_id,
                             edit ? "" : "g")
