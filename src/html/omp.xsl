@@ -8682,28 +8682,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td width="1" style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">family_count</xsl:with-param>
+                <xsl:with-param name="name">families_total</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
               </xsl:call-template>
             </td>
             <td width="1" style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Trend</xsl:with-param>
-                <xsl:with-param name="name">family_growing</xsl:with-param>
+                <xsl:with-param name="name">families_trend</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
               </xsl:call-template>
             </td>
             <td width="1" style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Total</xsl:with-param>
-                <xsl:with-param name="name">nvt_count</xsl:with-param>
+                <xsl:with-param name="name">nvts_total</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
               </xsl:call-template>
             </td>
             <td width="1" style="font-size:10px;">
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Trend</xsl:with-param>
-                <xsl:with-param name="name">nvt_growing</xsl:with-param>
+                <xsl:with-param name="name">nvts_trend</xsl:with-param>
                 <xsl:with-param name="type">config</xsl:with-param>
               </xsl:call-template>
             </td>
