@@ -303,14 +303,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
-  <xsl:param name="type-lower" select="gsa:lower-case (translate
-                                                        ($type, ' ', '_'))"/>
+  <xsl:param name="cap-type"/>
+
   <xsl:param name="id"/>
   <xsl:param name="noedit"/>
   <xsl:param name="noclone"/>
   <xsl:param name="noexport"/>
   <xsl:param name="params" select="''"/>
-  <xsl:param name="next" select="concat ('get_', $type-lower, 's')"/>
+  <xsl:param name="next" select="concat ('get_', $type, 's')"/>
   <xsl:param name="extra-params-details"/>
 
   <xsl:choose>
@@ -322,7 +322,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="trashcan-icon">
-        <xsl:with-param name="type" select="$type-lower"/>
+        <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params">
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -331,8 +331,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
-     title="{$type} Details" style="margin-left:3px;">
+  <a href="/omp?cmd=get_{$type}&amp;{$type}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
+     title="{$cap-type} Details" style="margin-left:3px;">
     <img src="/img/details.png" border="0" alt="Details"/>
   </a>
   <xsl:choose>
@@ -345,8 +345,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Edit {$type}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Edit {$cap-type}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
           </a>
@@ -363,12 +363,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="cmd" value="clone"/>
-          <input type="hidden" name="resource_type" value="{$type-lower}"/>
+          <input type="hidden" name="resource_type" value="{$type}"/>
           <input type="hidden" name="next" value="{$next}"/>
           <input type="hidden" name="id" value="{@id}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="image" src="/img/clone.png" alt="Clone {$type}"
+          <input type="image" src="/img/clone.png" alt="Clone {$cap-type}"
                  name="Clone" value="Clone" title="Clone"/>
         </form>
       </div>
@@ -378,8 +378,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Export {$type}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Export {$cap-type}"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export"/>
       </a>
@@ -4023,7 +4023,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:call-template name="task-icons"/>
           <xsl:call-template name="list-window-line-icons">
-            <xsl:with-param name="type" select="'Task'"/>
+            <xsl:with-param name="cap-type" select="'Task'"/>
+            <xsl:with-param name="type" select="'task'"/>
             <xsl:with-param name="id" select="@id"/>
             <xsl:with-param name="extra-params-details" select="concat ('&amp;overrides=', ../apply_overrides)"/>
           </xsl:call-template>
@@ -4500,7 +4501,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="cap-type" select="'Credential'"/>
+        <xsl:with-param name="type" select="'lsc_credential'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noexport" select="1"/>
@@ -4795,7 +4797,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Agent'"/>
+        <xsl:with-param name="cap-type" select="'Agent'"/>
+        <xsl:with-param name="type" select="'agent'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noedit" select="1"/>
@@ -5417,7 +5420,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Alert'"/>
+        <xsl:with-param name="cap-type" select="'Alert'"/>
+        <xsl:with-param name="type" select="'alert'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noedit" select="1"/>
@@ -6065,7 +6069,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="type"/></td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Filter'"/>
+        <xsl:with-param name="cap-type" select="'Filter'"/>
+        <xsl:with-param name="type" select="'filter'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
     </td>
@@ -7017,7 +7022,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Target'"/>
+        <xsl:with-param name="cap-type" select="'Target'"/>
+        <xsl:with-param name="type" select="'target'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
     </td>
@@ -8833,7 +8839,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Config'"/>
+        <xsl:with-param name="cap-type" select="'Config'"/>
+        <xsl:with-param name="type" select="'config'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
       </xsl:call-template>
@@ -10212,7 +10219,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Schedule'"/>
+        <xsl:with-param name="cap-type" select="'Schedule'"/>
+        <xsl:with-param name="type" select="'schedule'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
     </td>
@@ -10724,7 +10732,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="login"/></td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Slave'"/>
+        <xsl:with-param name="cap-type" select="'Slave'"/>
+        <xsl:with-param name="type" select="'slave'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
     </td>
@@ -12865,7 +12874,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Note'"/>
+        <xsl:with-param name="cap-type" select="'Note'"/>
+        <xsl:with-param name="type" select="'note'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params" select="$params-get"/>
         <xsl:with-param name="next" select="$next"/>
@@ -13919,7 +13929,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Override'"/>
+        <xsl:with-param name="cap-type" select="'Override'"/>
+        <xsl:with-param name="type" select="'override'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="params" select="$params-get"/>
         <xsl:with-param name="next" select="$next"/>
@@ -14439,7 +14450,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="type" select="'Port List'"/>
+        <xsl:with-param name="cap-type" select="'Port List'"/>
+        <xsl:with-param name="type" select="'port_list'"/>
         <xsl:with-param name="id" select="@id"/>
         <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noedit" select="1"/>
