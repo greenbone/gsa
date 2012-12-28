@@ -2700,7 +2700,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Task Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Task'"/>
+        <xsl:with-param name="cap-type" select="'Task'"/>
+        <xsl:with-param name="type" select="'task'"/>
       </xsl:call-template>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <xsl:call-template name="task-icons">
@@ -4558,7 +4559,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Credential Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="cap-type" select="'Credential'"/>
+        <xsl:with-param name="type" select="'lsc_credential'"/>
         <xsl:with-param name="noexport" select="1"/>
       </xsl:call-template>
       <xsl:if test="type='gen'">
@@ -4861,7 +4863,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
        Agent Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Agent'"/>
+        <xsl:with-param name="cap-type" select="'Agent'"/>
+        <xsl:with-param name="type" select="'agent'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -5529,7 +5532,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Alert Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Alert'"/>
+        <xsl:with-param name="cap-type" select="'Alert'"/>
+        <xsl:with-param name="type" select="'alert'"/>
         <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
@@ -5936,29 +5940,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="details-header-icons">
+  <xsl:param name="cap-type"/>
   <xsl:param name="type"/>
   <xsl:param name="noedit"/>
   <xsl:param name="noexport"/>
-  <xsl:param name="type-lower" select="gsa:lower-case (translate
-                                                        ($type, ' ', '_'))"/>
 
-  <a href="/help/{$type-lower}_details.html?token={/envelope/token}"
-    title="Help: {$type} Details">
+  <a href="/help/{$type}_details.html?token={/envelope/token}"
+    title="Help: {$cap-type} Details">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=new_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;{$type-lower}_id={@id}&amp;token={/envelope/token}"
-     title="New {$type}">
+  <a href="/omp?cmd=new_{$type}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+     title="New {$cap-type}">
     <img src="/img/new.png" border="0" style="margin-left:3px;"/>
   </a>
-  <a href="/omp?cmd=get_{$type-lower}s&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-     title="{$type}s" style="margin-left:3px;">
-    <img src="/img/list.png" border="0" alt="{$type}s"/>
+  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+     title="{$cap-type}s" style="margin-left:3px;">
+    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
     <xsl:choose>
       <xsl:when test="writable!='0' and in_use='0'">
         <xsl:call-template name="trashcan-icon">
-          <xsl:with-param name="type" select="$type-lower"/>
+          <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="id" select="@id"/>
           <xsl:with-param name="params">
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
@@ -5981,8 +5984,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type-lower}&amp;{$type-lower}_id={@id}&amp;next=get_{$type-lower}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="Edit {$type}">
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="Edit {$cap-type}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
         </xsl:otherwise>
@@ -5993,8 +5996,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type-lower}&amp;{$type-lower}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Export {$type} XML"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Export {$cap-type} XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
       </a>
@@ -6119,7 +6122,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Filter Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Filter'"/>
+        <xsl:with-param name="cap-type" select="'Filter'"/>
+        <xsl:with-param name="type" select="'filter'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -7125,7 +7129,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Target Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Target'"/>
+        <xsl:with-param name="cap-type" select="'Target'"/>
+        <xsl:with-param name="type" select="'target'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -10318,7 +10323,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
        Schedule Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Schedule'"/>
+        <xsl:with-param name="cap-type" select="'Schedule'"/>
+        <xsl:with-param name="type" select="'schedule'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -10789,7 +10795,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
        Slave Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Slave'"/>
+        <xsl:with-param name="cap-type" select="'Slave'"/>
+        <xsl:with-param name="type" select="'slave'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -12939,7 +12946,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Note Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Note'"/>
+        <xsl:with-param name="cap-type" select="'Note'"/>
+        <xsl:with-param name="type" select="'note'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -13994,7 +14002,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Override Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Override'"/>
+        <xsl:with-param name="cap-type" select="'Override'"/>
+        <xsl:with-param name="type" select="'override'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -14506,7 +14515,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Port List Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Port List'"/>
+        <xsl:with-param name="cap-type" select="'Port List'"/>
+        <xsl:with-param name="type" select="'port_list'"/>
         <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
@@ -15282,7 +15292,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
        Report Format Details
       <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="type" select="'Report Format'"/>
+        <xsl:with-param name="cap-type" select="'Report Format'"/>
+        <xsl:with-param name="type" select="'report_format'"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">

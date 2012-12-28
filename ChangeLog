@@ -18,6 +18,15 @@
 
 2012-12-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (details-header-icons): Add cap-type parameter.
+	(task [details], lsc_credential [details], agent [details])
+	(alert [details], filter [details], target [details], config [details])
+	(schedule [details]) (slave [details], note [details])
+	(override [details], port_list [details]): Add cap-type value to
+	list-window-line-icons template call.
+
+2012-12-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (list-window-line-icons): Add cap-type parameter.
 	(task, lsc_credential, agent, alert, filter, target, config, schedule)
 	(slave, note, override, port_list): Add cap-type value to
