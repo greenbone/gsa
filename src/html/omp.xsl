@@ -7326,9 +7326,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Import Scan Config
-      <a href="/help/configure_scanconfigs.html?token={/envelope/token}#importconfig"
-         title="Help: Configure Scan Configs (Import Scan Config)">
+      <a href="/help/new_config.html?token={/envelope/token}#importconfig"
+         title="Help: Import Scan Config">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Scan Config" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Scan Config"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -7379,14 +7383,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         Edit Scan Config Family Details
-        <a href="/help/scanconfig_editor_nvt_families.html?token={/envelope/token}"
+        <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config Family Details
-        <a href="/help/scanconfig_family_details.html?token={/envelope/token}"
+        <a href="/help/config_family_details.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
@@ -8034,14 +8038,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="edit">
         Edit Scan Config NVT Details
-        <a href="/help/scanconfig_editor_nvt.html?token={/envelope/token}"
+        <a href="/help/config_editor_nvt.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Edit Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config NVT Details
-        <a href="/help/scanconfig_nvt_details.html?token={/envelope/token}"
+        <a href="/help/config_nvt_details.html?token={/envelope/token}"
            title="Help: Configure Scan Configs (Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
@@ -8459,14 +8463,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="edit">
       Edit Scan Config Details
-      <a href="/help/scanconfig_editor.html?token={/envelope/token}"
+      <a href="/help/config_editor.html?token={/envelope/token}"
          title="Help: Edit Scan Configs Details (Scan Configs)">
         <img src="/img/help.png"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       Scan Config Details
-      <a href="/help/scanconfig_details.html?token={/envelope/token}"
+      <a href="/help/config_details.html?token={/envelope/token}"
          title="Help: Scan Configs Details (Scan Configs)">
         <img src="/img/help.png"/>
       </a>

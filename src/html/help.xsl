@@ -1885,11 +1885,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_scanconfigs.html">
-  <div class="gb_window_part_center">Help: Configure Scan Configs</div>
+<xsl:template mode="help" match="configs.html">
+  <div class="gb_window_part_center">Help: Scan Configs
+    <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+       title="Scan Configs" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Scan Configs"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_configs&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1898,73 +1902,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_CONFIGS'"/>
       </xsl:call-template>
 
-      <h1>Configure Scan Configs</h1>
+      <h1>Scan Configs</h1>
       <p>
-       Any <a href="glossary.html?token={/envelope/token}#task">task</a> is associated with
-       a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
-       The configured Scan Configs will appear as selection
-       in the dialog for creating a <a href="new_task.html?token={/envelope/token}">new task</a>.
-      </p>
-
-      <a name="newconfig"></a>
-      <h2>New Scan Config</h2>
-      <p>
-       For creating a new scan configuration the dialog offers these entries.
-       Hit the button "Create Scan Config" to submit the new scan configuration.
-       The list of scan configurations will be updated.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>Full and deep scan</td>
-        </tr>
-        <tr>
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td>All-inclusive scan which might consume quite some time.</td>
-        </tr>
-        <tr class="odd">
-          <td>Base</td>
-          <td>yes</td>
-          <td>---</td>
-          <td>A predefined base scan configuration</td>
-          <td>Empty, static and fast<br/>
-              Full and Fast</td>
-        </tr>
-      </table>
-
-      <a name="importconfig"></a>
-      <h2>Import Scan Config</h2>
-      <p>
-       To import a scan configuration, select the configuration file and hit the
-       "Import Scan Config" to submit the scan configuration.
-       The list of scan configurations will be updated.
-       Note that if the name of the scan configuration already exists in your system,
-       a numeric suffix will be added to the name of the imported scan configuration.
-      </p>
-      <p>
-       To create a file that can be imported (e.g. if you have multiple GSA running
-       on different machines), refer to the <a href="#export">export action</a>.
-      </p>
-
-      <a name="scanconfigs"></a>
-      <h2>Scan Configs</h2>
-      <p>
-       This table provides on overview on all configured
-       scan configurations.
+        This table provides an overview of all configured
+        <a href="glossary.html?token={/envelope/token}#config">Scan Configs</a>.
+        A summary of the scan config entries is shown.
       </p>
 
       <table class="gbntable">
@@ -2012,55 +1954,113 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
+      <h3>New Scan Config</h3>
       <p>
-       For Scan Configurations the following actions are available.
-      </p>
-
-      <h4>Move Scan Config to Trashcan</h4>
-      <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       Note that if a scan config is associated with at least one task,
-       it is not possible to move it. In this case the button is greyed
-       out <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan" />.
-      </p>
-
-      <h4>Scan Config Details</h4>
-      <p>
-       Issuing the details icon
-       <img src="/img/details.png" alt="Scan Config Details" title="Scan Config Details" />
-       will open the <a href="scanconfig_details.html?token={/envelope/token}">Scan Config Details</a>
-       dialog to provide details on the configuration
-       such as the selected NVTs and applied settings.
-      </p>
-
-      <h4>Edit Scan Config</h4>
-      <p>
-       A Scan Config can be modified if it is not currently in use by a task,
-       including tasks in the trashcan.
-       A click on the edit icon
-       <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will open the <a href="scanconfig_editor.html?token={/envelope/token}">Scan Config Editor</a> dialog
-       with details on the configuration
-       such as the selected NVTs and applied settings and allow modifications of it.
-       If the Scan Config is currently in use by a task, the icon will appear greyed
-       out <img src="/img/edit_inactive.png" alt="Editing not possible" title="Editing not possible" />.
+        To create a new scan config click the
+        new icon <img src="/img/new.png" alt="New Scan Config" title="New Scan config" /> which
+        goes to the <a href="new_config.html?token={/envelope/token}">New Scan Config</a>
+        page.
       </p>
 
       <a name="export"></a>
-      <h4>Export Scan Config XML</h4>
+      <h3>Exporting</h3>
       <p>
-       A Scan Config can be saved to file, e.g. for sharing or backup.
-       A click on the download icon <img src="/img/download.png" alt="Download" title="Download" />
-       will let you download a file describing this scan config.
+        Export the current list of scan configs as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Scan Config'"/>
+        <xsl:with-param name="noclone" select="1"/>
+        <xsl:with-param name="used_by" select="'Task'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_config.html">
+  <div class="gb_window_part_center">Help: New Scan Config
+    <a href="/omp?cmd=new_config&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+          <xsl:with-param name="command" select="'CREATE_CONFIG'"/>
+      </xsl:call-template>
+
+      <a name="new_config"></a>
+      <h1>New Scan Config</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>
+        the dialog offers these entries.
+        Hit the button "Create Scan Config" to submit the new Scan Config.
+        Hit the button "Import Scan Config" to import a new Scan Config.
+        The Scan Configs page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Full and deep scan</td>
+        </tr>
+        <tr>
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>All-inclusive scan which might consume quite some time.</td>
+        </tr>
+        <tr class="odd">
+          <td>Base</td>
+          <td>yes</td>
+          <td>---</td>
+          <td>A predefined base scan configuration</td>
+          <td>Empty, static and fast<br/>
+              Full and Fast</td>
+        </tr>
+      </table>
+
+      <a name="import_config"></a>
+      <h1>Import Scan Config</h1>
+      <p>
+        To import a scan configuration, select the configuration file and hit the
+        "Import Scan Config" to submit the scan configuration.
+        The list of scan configurations will be updated.
+        Note that if the name of the scan configuration already exists in your system,
+        a numeric suffix will be added to the name of the imported scan configuration.
       </p>
       <p>
-       The file can later be imported by choosing to <a href="#importconfig">Import a Scan Config</a>.
+        To create a file that can be imported (e.g. if you have multiple GSA running
+        on different machines), refer to the
+        <a href="configs.html?token={/envelope/token}#export">export action</a>.
+      </p>
+
+      <h4>Scan Configs</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Scan Configs" title="Scan Configs"/>
+        will switch to the
+        <a href="configs.html?token={/envelope/token}">Scan Configs</a>
+        page.
       </p>
     </div>
   </div>
@@ -2829,14 +2829,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
           <li> Configuration</li>
           <ul>
-            <li> <a href="configure_scanconfigs.html?token={/envelope/token}">Configure Scan Configs</a></li>
+            <li> <a href="configs.html?token={/envelope/token}">Scan Configs</a></li>
             <ul>
-              <li> <a href="scanconfig_details.html?token={/envelope/token}">Scan Config Details</a></li>
-              <li> <a href="scanconfig_family_details.html?token={/envelope/token}">Scan Config Family Details</a></li>
-              <li> <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a></li>
-              <li> <a href="scanconfig_editor.html?token={/envelope/token}">Scan Config Editor</a></li>
-              <li> <a href="scanconfig_editor_nvt_families.html?token={/envelope/token}">Scan Config Family Editor</a></li>
-              <li> <a href="scanconfig_editor_nvt.html?token={/envelope/token}">Scan Config NVT Editor</a></li>
+                <li> <a href="new_config.html?token={/envelope/token}">New Scan Config</a></li>
+              <li> <a href="config_details.html?token={/envelope/token}">Scan Config Details</a></li>
+              <li> <a href="config_family_details.html?token={/envelope/token}">Scan Config Family Details</a></li>
+              <li> <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a></li>
+              <li> <a href="config_editor.html?token={/envelope/token}">Scan Config Editor</a></li>
+              <li> <a href="config_editor_nvt_families.html?token={/envelope/token}">Scan Config Family Editor</a></li>
+              <li> <a href="config_editor_nvt.html?token={/envelope/token}">Scan Config NVT Editor</a></li>
             </ul>
             <li> <a href="targets.html?token={/envelope/token}">Targets</a></li>
               <ul>
@@ -3388,7 +3389,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        NVTs are grouped into families of similar
        tests. The selection of families and/or
        single NVTs is part of a
-       <a href="#scanconfig">Scan Configuration</a>.
+       <a href="#config">Scan Configuration</a>.
       </p>
 
       <a name="override"></a>
@@ -3437,7 +3438,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        A report is always associated with a
        <a href="#task">task</a>. The
-       <a href="#scanconfig">Scan Configuration</a> that
+       <a href="#config">Scan Configuration</a> that
        determines the extend of the report is part of the
        associated task and can not be modified. Therefore,
        for any report it is ensured that its execution
@@ -3468,7 +3469,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        total number of tests to be executed. The
        duration of a scan is determined by the number
        <a href="#target">targets</a> and the complexity
-       of the <a href="#scanconfig">Scan Configuration</a>
+       of the <a href="#config">Scan Configuration</a>
        and ranges from 1 minute to many hours or even days.
       </p>
       <p>
@@ -3476,7 +3477,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        The resulting report will then be incomplete.
       </p>
 
-      <a name="scanconfig"></a>
+      <a name="config"></a>
       <h2>Scan Configuration</h2>
       <p>
        A scan configuration covers the selection
@@ -3511,7 +3512,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>Task</h2>
       <p>
        A task is initially formed by a <a href="#target">target</a>
-       and a <a href="#scanconfig">scan configuration</a>.
+       and a <a href="#config">scan configuration</a>.
        Executing a task means to create a <a href="#scan">scan</a>.
        As a result, a task collects a series
        of <a href="#report">reports</a>.
@@ -5222,7 +5223,7 @@ Public License instead of this License.
       <p>
        This information dialog lists name, status and number of reports for
        the task for which the report list is shown below.
-       It also lists the <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Config</a>,
+       It also lists the <a href="glossary.html?token={/envelope/token}#config">Scan Config</a>,
        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>,
        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
        <a href="glossary.html?token={/envelope/token}#target">Target</a> for the shown report, if
@@ -5384,11 +5385,10 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_details.html">
+<xsl:template mode="help" match="config_details.html">
   <div class="gb_window_part_center">Help: Scan Config Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_config&amp;config_id=daba56c8-73ec-11df-a475-002264764cea&amp;token={/envelope/token}">Jump to example dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5399,9 +5399,30 @@ Public License instead of this License.
 
       <h1>Scan Config Details</h1>
       <p>
-       This dialog shows the name and comment of a given
-       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a> together with the
-       associated configuration parameters itself.
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> together with the
+        associated configuration parameters.
+      </p>
+
+      <h4>New Scan Config </h4>
+      <p>
+        To create a new Scan Config click the new icon
+        <img src="/img/new.png" alt="New Scan Config" title="New Scan Config"/>
+        which goes to the <a href="new_config.html?token={/envelope/token}">
+        New Scan Config</a> page.
+      </p>
+
+      <h4>Scan Config</h4>
+      <p>
+        Pressing the list icon
+        <img src="/img/list.png" alt="Scan Configs" title="Scan Configs"/>
+        will switch to the Scan Configs page.
+      </p>
+
+      <h4>Export Scan Config</h4>
+      <p>
+        Export the Scan Config as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
       <h2>Network Vulnerability Test Families</h2>
@@ -5439,7 +5460,7 @@ Public License instead of this License.
       <h4>Scan Config Family Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will show an intermediate detailed <a href="scanconfig_family_details.html?token={/envelope/token}">list of NVTs</a> and its preferences.
+       will show an intermediate detailed <a href="config_family_details.html?token={/envelope/token}">list of NVTs</a> and its preferences.
       </p>
 
       <h2>Scanner Preferences</h2>
@@ -5494,7 +5515,7 @@ Public License instead of this License.
       <p>
        A click on the details icon
        <img src="/img/details.png" alt="Details" title="Details" /> will open the
-       <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
+       <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog with detailed information about a certain NVT
        and all its preferences.
       </p>
 
@@ -5508,7 +5529,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_editor.html">
+<xsl:template mode="help" match="config_editor.html">
   <div class="gb_window_part_center">Help: Scan Config Editor</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5526,7 +5547,7 @@ Public License instead of this License.
       <h1>Scan Config Editor</h1>
       <p>
        The Scan Config Editor allows modification of all parameters of a
-       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
        These include a selection of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s and the
        specifications how the selection should automatically updated, NVT Preferences
        and Timeouts and advanced Scanner Preferences.
@@ -5539,7 +5560,7 @@ Public License instead of this License.
       <h1>Edit Scan Config Details</h1>
       <p>
        This dialog shows the name and comment of a given
-       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a> together with the
+       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a> together with the
        associated configuration parameters itself.
        It allows to adjust all parameters of the Scan Configuration.
       </p>
@@ -5593,7 +5614,7 @@ Public License instead of this License.
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
        will save the modifications and show the
-       <a href="scanconfig_editor_nvt_families.html?token={/envelope/token}">Edit Scan Config Family Details</a>
+       <a href="config_editor_nvt_families.html?token={/envelope/token}">Edit Scan Config Family Details</a>
        page which shows details about NVTs within the family and allows to select or
        deselect individual NVTs.
       </p>
@@ -5652,7 +5673,7 @@ Public License instead of this License.
       <p>
        A click on the details icon
        <img src="/img/details.png" alt="Details" title="Details" /> will open the
-       <a href="scanconfig_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog
+       <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a> dialog
        with detailed information about a certain NVT and all its preferences.
       </p>
 
@@ -5660,7 +5681,7 @@ Public License instead of this License.
 
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />
-       will open the <a href="scanconfig_editor_nvt.html?token={/envelope/token}">Edit Scan Config NVT Details</a>
+       will open the <a href="config_editor_nvt.html?token={/envelope/token}">Edit Scan Config NVT Details</a>
        dialog with detailed information about a certain NVT and all its preferences.
        This page will provide an overview over all preferences and the currently set
        Timeout for this NVT and allow modifications.
@@ -5676,7 +5697,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_editor_nvt_families.html">
+<xsl:template mode="help" match="config_editor_nvt_families.html">
   <div class="gb_window_part_center">Help: Scan Config Editor NVT Families</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5691,11 +5712,11 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'MODIFY_CONFIG'"/>
       </xsl:call-template>
 
-      <a name="editscanconfigfamilydetails"></a>
+      <a name="editconfigfamilydetails"></a>
       <h1>Edit Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
-       family in a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
       </p>
 
       <h2>Edit Network Vulnerability Tests</h2>
@@ -5746,20 +5767,20 @@ Public License instead of this License.
       <h4>NVT Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will lead to the page listing <a href="scanconfig_nvt_details.html?token={/envelope/token}">NVT details</a>.
+       will lead to the page listing <a href="config_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
 
       <h4>Select and Edit NVT Details</h4>
       <p>
        A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" />will add the NVT to the selection
-       and lead to a page that lists <a href="scanconfig_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
+       and lead to a page that lists <a href="config_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
        the timeout.
       </p>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_editor_nvt.html">
+<xsl:template mode="help" match="config_editor_nvt.html">
   <div class="gb_window_part_center">Help: Scan Config editor NVT</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5778,7 +5799,7 @@ Public License instead of this License.
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-        <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+        <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
       </p>
 
       <h2>Edit Network Vulnerability Test</h2>
@@ -5825,7 +5846,7 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_family_details.html">
+<xsl:template mode="help" match="config_family_details.html">
   <div class="gb_window_part_center">Help: Scan Config Family Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5837,11 +5858,11 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_CONFIGS'"/>
       </xsl:call-template>
 
-      <a name="scanconfigfamilydetails"></a>
+      <a name="configfamilydetails"></a>
       <h1>Scan Config Family Details</h1>
       <p>
        This page gives an overview of <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s of one
-       family in a <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+       family in a <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
       </p>
 
       <h2>Network Vulnerability Tests</h2>
@@ -5886,13 +5907,13 @@ Public License instead of this License.
       <h4>NVT Details</h4>
       <p>
        A click on the details icon <img src="/img/details.png" alt="Details" title="Details" />
-       will lead to the page listing <a href="scanconfig_nvt_details.html?token={/envelope/token}">NVT details</a>.
+       will lead to the page listing <a href="config_nvt_details.html?token={/envelope/token}">NVT details</a>.
       </p>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="scanconfig_nvt_details.html">
+<xsl:template mode="help" match="config_nvt_details.html">
   <div class="gb_window_part_center">Help: Scan Config NVT Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -5908,7 +5929,7 @@ Public License instead of this License.
       <p>
        This dialog shows information of a single <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>
        and its preference settings within a
-       <a href="glossary.html?token={/envelope/token}#scanconfig">Scan Configuration</a>.
+       <a href="glossary.html?token={/envelope/token}#config">Scan Configuration</a>.
       </p>
 
       <h2>Network Vulnerability Test</h2>
