@@ -35,6 +35,7 @@ Authors:
 Matthew Mundell <matthew.mundell@greenbone.net>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@greenbone.net>
+Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
 Copyright (C) 2009-2012 Greenbone Networks GmbH
@@ -11110,6 +11111,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="info/ovaldef">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_ovaldef_lnk">
+          <xsl:with-param name="ovaldef" select="../name"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="version != ''">
+          <xsl:value-of select="version"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="deprecated = '0'">
+          No
+        </xsl:when>
+        <xsl:when test="deprecated = '1'">
+          Yes
+        </xsl:when>
+        <xsl:when test="deprecated = ''">
+          N/A
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="version"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="def_class != ''">
+          <xsl:value-of select="def_class"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="title != ''">
+          <xsl:value-of select="title"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <center>
+        <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+          title="OVAL def Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </center>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
@@ -11135,6 +11214,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="get_info_ovaldef_lnk">
+  <xsl:param name="ovaldef"/>
+  <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={$ovaldef}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+    title="Details">
+     <xsl:call-template name="wrap" disable-output-escaping="yes">
+      <xsl:with-param name="string" select="$ovaldef"/>
+      <xsl:with-param name="width" select="'55'"/>
+      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
+    </xsl:call-template>
+  </a>
 </xsl:template>
 
 <xsl:template name="html-cpe-table">
@@ -11229,7 +11320,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="6">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -11365,7 +11456,111 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="6">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-ovaldef-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.
+        <a href="/help/cves.html?token={/envelope/token}#scap_missing"
+           title="Help: SCAP database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">OVALDEF
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/ovaldef)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+      </xsl:call-template>
+      <a href="/help/ovaldefs.html?token={/envelope/token}"
+        title="Help: OVAL definitions">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>OVALDEF</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="ovaldefs">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Version</xsl:with-param>
+                <xsl:with-param name="name">version</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Deprecated</xsl:with-param>
+                <xsl:with-param name="name">deprecated</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Definition class</xsl:with-param>
+                <xsl:with-param name="name">def_class</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Title</xsl:with-param>
+                <xsl:with-param name="name">title</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/ovaldef"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="2">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -11385,11 +11580,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="count (info/cve) > 0 and details='1'">
       <xsl:call-template name="cve-details"/>
     </xsl:when>
+    <xsl:when test="count (info/ovaldef) > 0 and details='1'">
+      <xsl:call-template name="ovaldef-details"/>
+    </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:call-template name="html-cpe-table"/>
     </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CVE' or /envelope/params/info_type = 'cve'">
       <xsl:call-template name="html-cve-table"/>
+    </xsl:when>
+    <xsl:when test="/envelope/params/info_type = 'OVALDEF' or /envelope/params/info_type = 'ovaldef'">
+      <xsl:call-template name="html-ovaldef-table"/>
     </xsl:when>
     <xsl:when test="count (info/nvt) > 0">
       <div class="gb_window">
@@ -11764,6 +11965,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
         </xsl:otherwise>
       </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="ovaldef-details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">OVAL Details
+      <a href="/help/ovaldef.html?token={/envelope/token}#ovaldetails"
+        title="Help: OVAL (OVAL Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={filters/term}&amp;token={/envelope/token}"
+        title="OVAL definitions" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="OVAL"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td><b>OVAL identifier</b></td>
+            <td>
+              <b><xsl:value-of select="info/name"/></b>
+            </td>
+          </tr>
+          <tr>
+            <td>Version</td>
+            <td><xsl:value-of select="info/ovaldef/version"/></td>
+          </tr>
+          <tr>
+            <td>Created</td>
+            <td><xsl:value-of select="info/creation_time"/></td>
+          </tr>
+          <tr>
+            <td>Last modified</td>
+            <td><xsl:value-of select="info/modification_time"/></td>
+          </tr>
+        </table>
+      </div>
+
+      <h1>Descriptive data</h1>
+      <h2>Title</h2>
+      <xsl:value-of select="info/ovaldef/title"/>
+      <h2>Definition class</h2>
+      <xsl:value-of select="info/ovaldef/def_class"/>
+      <h2>Description</h2>
+      <xsl:value-of select="info/ovaldef/description"/>
     </div>
   </div>
 </xsl:template>

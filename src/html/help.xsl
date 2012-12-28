@@ -2825,6 +2825,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
             <li> <a href="cves.html?token={/envelope/token}">CVE</a></li>
+            <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL defintions</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
@@ -2957,6 +2958,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        description, CVSS information, list of vulnerable products and
        references.
      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="ovaldef.html">
+  <div class="gb_window_part_center">Help: OVALDEF Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="ovaldef"></a>
+      <h1>OVALDEF Details</h1>
+      <p>
+        A page that provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL definition</a>.
+        This includes the creation time, modification time, version number,
+        title, definition class and detailed description.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -3316,6 +3341,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         (Source: http://www.first.org/cvss/cvss-guide).
+      </p>
+
+      <a name="ovaldef"></a>
+      <h2>OVAL defintion (OVALDEF)</h2>
+      <p>
+        A definition as specified by the OVAL (Open Vulnerability and Assessment
+        Language), version 5.10.1.
+      </p>
+      <p>
+        (Source: http://oval.mitre.org).
       </p>
 
       <a name="agent"></a>
@@ -7068,6 +7103,88 @@ Public License instead of this License.
       </p>
       <p>
         Clicking on the CPE name will go to the CPE Details page.
+      </p>
+
+      <a name="scap_missing"></a>
+      <h2>Warning: SCAP Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database is missing on the OMP server.
+      </p>
+      <p>
+        The CVE table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="ovaldefs.html">
+  <div class="gb_window_part_center">Help: OVAL definitions</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="ovaldefs"></a>
+      <h1>OVAL definitions</h1>
+
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL definitions</a> and summarizes
+        the essential aspects of each.
+      </p>
+      <br/>
+      <p>
+        For a detailed description see the OVAL Language Specification at:
+        http://oval.mitre.org/language/version5.10.1/
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>The OVAL identifier of the definitions.</td>
+        </tr>
+        <tr class="odd">
+          <td>Version</td>
+          <td>The Version number of the OVAL defintions.</td>
+        </tr>
+        <tr>
+          <td>Deprecated</td>
+          <td>Whether the definition is deprecated.</td>
+        </tr>
+        <tr class="odd">
+          <td>Title</td>
+          <td>The title or short description of the definition.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>OVALDEF Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the <a href="/help/ovaldefs.html?token={/envelope/token}">OVALDEF Details</a> page.  This page has full details of the OVAL defintion.
       </p>
 
       <a name="scap_missing"></a>
