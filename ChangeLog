@@ -1,15 +1,15 @@
 2012-12-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
-	Added OVAL defintion tables, details and help and small fixes 
-	for links in table footnotes (info_type was missing).	
-	
+	Added OVAL defintion tables, details and help and small fixes
+	for links in table footnotes (info_type was missing).
+
 	* src/html/gsad.xsl: Add OVAL definitions item to SecInfo menu
-	
+
 	* src/html/help.xsl: Add help for OVAL definitions:
 	Add OVAL definitions entries to contents.html and glossary.html
 	New templates: ovaldef.html (OVALDEF details),
 	ovaldefs.html (OVALDEF table)
-	
+
 	* src/html/omp.xsl: New templates for OVAL definitions:
 	info/ovaldef get_info_ovaldef_lnk html-ovaldef-table ovaldef-details
 	Change template get_info_response to recognize OVAL definitions
