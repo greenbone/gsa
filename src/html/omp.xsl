@@ -4183,14 +4183,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      New LSC Credential
+      New Credential
       <a href="/help/new_lsc_credential.html?token={/envelope/token}"
-         title="Help: New LSC Credential">
+         title="Help: New Credential">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_lsc_credentials&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="LSC Credentials" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="LSC Credentials"/>
+         title="Credentials" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Credentials"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -4298,7 +4298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-lsc-credentials-table">
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'lsc_credential'"/>
-    <xsl:with-param name="cap-type" select="'LSC Credential'"/>
+    <xsl:with-param name="cap-type" select="'Credential'"/>
     <xsl:with-param name="resources-summary" select="lsc_credentials"/>
     <xsl:with-param name="resources" select="lsc_credential"/>
     <xsl:with-param name="count" select="count (lsc_credential)"/>
@@ -4345,16 +4345,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Credential
-      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential" title="Help: Edit LSC Credential">
+      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential" title="Help: Edit Credential">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
-         title="LSC Credential" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="LSC Credential"/>
+         title="Credential" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Credential"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={commands_response/get_lsc_credentials_response/lsc_credential/@id}&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
-           title="LSC Credential Details" style="margin-left:3px;">
+           title="Credential Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
       </div>

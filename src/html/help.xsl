@@ -679,10 +679,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="lsc_credentials.html">
-  <div class="gb_window_part_center">Help: LSC Credentials
+  <div class="gb_window_part_center">Help: Credentials
     <a href="/omp?cmd=get_lsc_credentials&amp;token={/envelope/token}"
-       title="LSC Credentials" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="LSC Credentials"/>
+       title="Credentials" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Credentials"/>
     </a>
   </div>
   <div class="gb_window_part_content">
@@ -695,10 +695,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
       </xsl:call-template>
 
-      <h1>LSC Credentials</h1>
+      <h1>Credentials</h1>
       <p>
         This table provides an overview of all configured
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credentials</a>.
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credentials</a>.
         and summarizes the essential aspects of it.
       </p>
 
@@ -717,13 +717,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h3>New LSC Credential</h3>
+      <h3>New Credential</h3>
       <p>
         To create a new lsc_credential click the
         new icon <img src="/img/new.png"
-                      alt="New LSC Credential" title="New LSC Credential" />
+                      alt="New Credential" title="New Credential" />
         which goes to the
-        <a href="new_lsc_credential.html?token={/envelope/token}">New LSC Credential</a>
+        <a href="new_lsc_credential.html?token={/envelope/token}">New Credential</a>
         page.
       </p>
 
@@ -735,7 +735,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="filtering"/>
 
       <xsl:call-template name="list-window-line-actions">
-        <xsl:with-param name="type" select="'LSC Credential'"/>
+        <xsl:with-param name="type" select="'Credential'"/>
         <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noexport" select="1"/>
       </xsl:call-template>
@@ -804,7 +804,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="new_lsc_credential.html">
-  <div class="gb_window_part_center">Help: New LSC Credential
+  <div class="gb_window_part_center">Help: New Credential
     <a href="/omp?cmd=new_lsc_credential&amp;max=-2&amp;token={/envelope/token}">
       <img src="/img/new.png" border="0" style="margin-left:3px;"/>
     </a>
@@ -825,13 +825,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         for the purpose of locally check there e.g. for the presence
         of all vendor security patches.
       </p>
-      <h1>New LSC Credential</h1>
+      <h1>New Credential</h1>
       <p>
         For creating a new
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credential</a>
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credential</a>
         the dialog offers these entries.
-        Hit the button "Create LSC Credential" to submit the new lsc_credential.
-        The LSC Credentials page will be shown.
+        Hit the button "Create Credential" to submit the new lsc_credential.
+        The Credentials page will be shown.
       </p>
 
       <table class="gbntable">
@@ -897,12 +897,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         In other cases, Login names with German umlauts will not work.
       </p>
 
-      <h4>LSC Credentials</h4>
+      <h4>Credentials</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="LSC Credentials" title="LSC Credentials"/>
+       <img src="/img/list.png" alt="Credentials" title="Credentials"/>
        will switch to the
-       <a href="lsc_credentials.html?token={/envelope/token}"> LSC Credentials
+       <a href="lsc_credentials.html?token={/envelope/token}"> Credentials
        </a> page.
       </p>
     </div>
@@ -910,7 +910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="lsc_credential_details.html">
-  <div class="gb_window_part_center">Help: LSC Credential Details
+  <div class="gb_window_part_center">Help: Credential Details
   </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -922,46 +922,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_LSC_CREDENTIALS'"/>
       </xsl:call-template>
 
-      <h1>LSC Credentials Details</h1>
+      <h1>Credentials Details</h1>
       <p>
         Provides detailed information about an
-        <a href="glossary.html?token={/envelope/token}#lsc_credential">LSC Credential</a>.
+        <a href="glossary.html?token={/envelope/token}#lsc_credential">Credential</a>.
         This includes name, comment, login, ID, creation time and modification
         time.
       </p>
 
-      <h4>New LSC Credential </h4>
+      <h4>New Credential </h4>
       <p>
         To create a new lsc credential click the new icon
-        <img src="/img/new.png" alt="New LSC Credential" title="New LSC Credential"/>
+        <img src="/img/new.png" alt="New Credential" title="New Credential"/>
         which goes to the <a href="new_lsc_credential.html?token={/envelope/token}">
-        New LSC Credential</a> page.
+        New Credential</a> page.
       </p>
 
-      <h4>LSC Credentials</h4>
+      <h4>Credentials</h4>
       <p>
         Pressing the list icon
-        <img src="/img/list.png" alt="LSC Credentials" title="LSC Credentials"/>
+        <img src="/img/list.png" alt="Credentials" title="Credentials"/>
         will switch to the lsc credentials page.
       </p>
 
-      <h4>Edit LSC Credential</h4>
+      <h4>Edit Credential</h4>
       <p>
-        Pressing the "Edit LSC Credential" icon
-        <img src="/img/edit.png" alt="Edit LSC Credential" title="Edit LSC Credential"/>
+        Pressing the "Edit Credential" icon
+        <img src="/img/edit.png" alt="Edit Credential" title="Edit Credential"/>
         will switch to an overview of the configuration for this lsc_credential and
-        allows editing the LSC Credential's properties.
+        allows editing the Credential's properties.
       </p>
 
-      <h4>Export LSC Credential</h4>
+      <h4>Export Credential</h4>
       <p>
-        Export the LSC Credential as XML by clicking on the
+        Export the Credential as XML by clicking on the
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <h3>Targets using this LSC Credential</h3>
+      <h3>Targets using this Credential</h3>
       <p>
-        This table provides an overview of the targets associated with this LSC Credential.
+        This table provides an overview of the targets associated with this Credential.
         Details of these targets can be seen after a click on the Details
         <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
@@ -2845,10 +2845,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
-            <li> <a href="lsc_credentials.html?token={/envelope/token}">LSC Credentials</a></li>
+            <li> <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a></li>
               <ul>
-                <li> <a href="new_lsc_credential.html?token={/envelope/token}">New LSC Credential</a></li>
-                <li> <a href="lsc_credential_details.html?token={/envelope/token}">LSC Credential Details</a></li>
+                <li> <a href="new_lsc_credential.html?token={/envelope/token}">New Credential</a></li>
+                <li> <a href="lsc_credential_details.html?token={/envelope/token}">Credential Details</a></li>
               </ul>
             <li> <a href="agents.html?token={/envelope/token}">Agents</a></li>
               <ul>
