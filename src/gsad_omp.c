@@ -106,6 +106,8 @@ char *get_filter (credentials_t *, params_t *, const char *);
 
 char *get_filters (credentials_t *, params_t *, const char *);
 
+static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
+
 static char *get_notes (credentials_t *, params_t *, const char *);
 
 static char *get_note (credentials_t *, params_t *, const char *, const char *);
@@ -499,6 +501,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);
+
+  if (strcmp (next, "get_lsc_credentials") == 0)
+    return get_lsc_credentials (credentials, params, response);
 
   if (strcmp (next, "get_note") == 0)
     return get_note (credentials, params, NULL, response);

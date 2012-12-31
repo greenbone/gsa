@@ -788,11 +788,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
+                         "^(agent|alert|config|filter|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
+                         "^(agent|alert|config|filter|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
   openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
