@@ -1,5 +1,10 @@
 2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (alert [details]): Output None when the alert has no
+	filter attached.
+
+2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c: Add get_alerts static header.
 	(next_page): Add get_alerts handler.
 

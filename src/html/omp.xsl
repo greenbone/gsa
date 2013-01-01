@@ -5702,9 +5702,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Filter:</td>
           <td>
-            <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
-              <xsl:value-of select="filter/name"/>
-            </a>
+            <xsl:choose>
+              <xsl:when test="string-length(filter/name) &gt; 0">
+                  <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}"
+                     title="Details">
+                  <xsl:value-of select="filter/name"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                None.
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </table>
