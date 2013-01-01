@@ -102,6 +102,8 @@ static char *get_config_family (credentials_t *, params_t *, int);
 
 char *get_agents (credentials_t *, params_t *, const char *);
 
+static char *get_configs (credentials_t *, params_t *, const char *);
+
 char *get_filter (credentials_t *, params_t *, const char *);
 
 char *get_filters (credentials_t *, params_t *, const char *);
@@ -498,6 +500,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_agents") == 0)
     return get_agents (credentials, params, response);
+
+  if (strcmp (next, "get_configs") == 0)
+    return get_configs (credentials, params, response);
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);

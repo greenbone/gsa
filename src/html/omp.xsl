@@ -7394,14 +7394,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="edit">
         Edit Scan Config Family Details
         <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
-           title="Help: Configure Scan Configs (Edit Scan Config Family Details)">
+           title="Help: Scan Configs (Edit Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config Family Details
         <a href="/help/config_family_details.html?token={/envelope/token}"
-           title="Help: Configure Scan Configs (Scan Config Family Details)">
+           title="Help: Scan Configs (Scan Config Family Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:otherwise>
@@ -8049,14 +8049,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="edit">
         Edit Scan Config NVT Details
         <a href="/help/config_editor_nvt.html?token={/envelope/token}"
-           title="Help: Configure Scan Configs (Edit Scan Config NVT Details)">
+           title="Help: Scan Configs (Edit Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         Scan Config NVT Details
         <a href="/help/config_nvt_details.html?token={/envelope/token}"
-           title="Help: Configure Scan Configs (Scan Config NVT Details)">
+           title="Help: Scan Configs (Scan Config NVT Details)">
           <img src="/img/help.png"/>
         </a>
       </xsl:otherwise>
@@ -8842,10 +8842,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:call-template name="list-window-line-icons">
-        <xsl:with-param name="cap-type" select="'Config'"/>
+        <xsl:with-param name="cap-type" select="'Scan Config'"/>
         <xsl:with-param name="type" select="'config'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noclone" select="1"/>
       </xsl:call-template>
     </td>
   </tr>

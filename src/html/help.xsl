@@ -1971,7 +1971,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Scan Config'"/>
-        <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
     </div>

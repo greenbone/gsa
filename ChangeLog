@@ -1,4 +1,17 @@
-2012-12-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2012-12-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/help.xsl (configs.html): Remove noclone parameter
+	from list-window-line-icons call.
+
+	* src/html/omp.xsl (html-config-family-table, html-config-nvt-table):
+	Update help documentation icon's title.
+	(config): Remove noclone parameter from list-window-line-icons
+	call. Change cap-type parameter value to Scan Config.
+
+	* src/gsad_omp.c: Add get_configs static header.
+	(next_page): Add get_configs case handler.
+
+2012-12-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (openvas_validator_add): Add lsc_credential and Credential
 	as valid resource_type and optional_resource_type.
