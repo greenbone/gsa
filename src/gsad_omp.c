@@ -92,6 +92,8 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
+static char *get_alerts (credentials_t *, params_t *, const char *);
+
 static char *get_task (credentials_t *, params_t *, const char *);
 
 static char *get_tasks (credentials_t *, params_t *, const char *);
@@ -497,6 +499,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   next = params_value (params, "next");
   if (next == NULL)
     return NULL;
+
+  if (strcmp (next, "get_alerts") == 0)
+    return get_alerts (credentials, params, response);
 
   if (strcmp (next, "get_agents") == 0)
     return get_agents (credentials, params, response);

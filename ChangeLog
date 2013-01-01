@@ -1,5 +1,10 @@
 2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c: Add get_alerts static header.
+	(next_page): Add get_alerts handler.
+
+2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/help.xsl (alerts.html): Remove noclone parameter
 	from list-window-line-icons call.
 
