@@ -5424,7 +5424,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Alert'"/>
         <xsl:with-param name="type" select="'alert'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
       <xsl:call-template name="start-icon">
