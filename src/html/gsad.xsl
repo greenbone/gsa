@@ -945,7 +945,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <li class="pointy"></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">CPE</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">CVE</a></li>
-       <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">OVAL definitions</a></li>
+       <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">OVAL Definitions</a></li>
        <li class="last"><a href="/dialog/browse_infosec.html?token={/envelope/token}">Lookup NVT</a></li>
       </xsl:if>
      </ul>

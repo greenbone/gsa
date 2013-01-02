@@ -1,3 +1,17 @@
+2012-12-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Changed labels of OVAL Definitions to be more consistent and 
+	understandable.
+	
+	* src/html/gsad.xsl: Change menu to spell "OVAL Definitions"
+	with capital "D".
+
+	* src/html/help.xsl: Change various instances of "OVALDEF" etc. to 
+	"OVAL Definition".
+
+	* src/html/omp.xsl: Change various instances of "OVALDEF" etc. to 
+	"OVAL Definition".
+
 2013-01-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c: Add get_port_lists static header.

@@ -11201,7 +11201,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <center>
         <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="OVAL def Details" style="margin-left:3px;">
+          title="OVAL Definition Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
       </center>
@@ -11505,7 +11505,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">OVALDEF
+    <div class="gb_window_part_center">OVAL Definition
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="'info'"/>
         <xsl:with-param name="list" select="info"/>
@@ -11515,7 +11515,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
       </xsl:call-template>
       <a href="/help/ovaldefs.html?token={/envelope/token}"
-        title="Help: OVAL definitions">
+        title="Help: OVAL Definitions">
         <img src="/img/help.png"/>
       </a>
     </div>
@@ -11993,9 +11993,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">OVAL Details
+    <div class="gb_window_part_center">OVAL Definition Details
       <a href="/help/ovaldef.html?token={/envelope/token}#ovaldetails"
-        title="Help: OVAL (OVAL Details)">
+        title="Help: OVALDEF (OVAL Definition Details)">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={filters/term}&amp;token={/envelope/token}"

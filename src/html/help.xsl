@@ -2820,7 +2820,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
             <li> <a href="cves.html?token={/envelope/token}">CVE</a></li>
-            <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL defintions</a></li>
+            <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Defintions</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
@@ -2958,7 +2958,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="ovaldef.html">
-  <div class="gb_window_part_center">Help: OVALDEF Details</div>
+  <div class="gb_window_part_center">Help: OVAL Definition Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
@@ -2970,10 +2970,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="ovaldef"></a>
-      <h1>OVALDEF Details</h1>
+      <h1>OVAL Definition Details</h1>
       <p>
         A page that provides detailed information about a
-        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL definition</a>.
+        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definition</a>.
         This includes the creation time, modification time, version number,
         title, definition class and detailed description.
       </p>
@@ -3339,10 +3339,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <a name="ovaldef"></a>
-      <h2>OVAL defintion (OVALDEF)</h2>
+      <h2>OVAL Defintion (OVALDEF)</h2>
       <p>
         A definition as specified by the OVAL (Open Vulnerability and Assessment
-        Language), version 5.10.1.
+        Language), version 5.10.1. It can be used for different classes of 
+        security data like vulnerabilities, patches or compliance policies.
       </p>
       <p>
         (Source: http://oval.mitre.org).
@@ -7119,7 +7120,7 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="ovaldefs.html">
-  <div class="gb_window_part_center">Help: OVAL definitions</div>
+  <div class="gb_window_part_center">Help: OVAL Definitions</div>
   <div class="gb_window_part_content">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -7136,11 +7137,10 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="ovaldefs"></a>
-      <h1>OVAL definitions</h1>
-
+      <h1>OVAL Definitions</h1>
       <p>
         This table provides an overview of all
-        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL definitions</a> and summarizes
+        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definitions</a> and summarizes
         the essential aspects of each.
       </p>
       <br/>
@@ -7175,11 +7175,11 @@ Public License instead of this License.
       <a name="actions"></a>
       <h3>Actions</h3>
 
-      <h4>OVALDEF Details</h4>
+      <h4>OVAL Definition Details</h4>
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the <a href="/help/ovaldefs.html?token={/envelope/token}">OVALDEF Details</a> page.  This page has full details of the OVAL defintion.
+        will show the <a href="/help/ovaldefs.html?token={/envelope/token}">OVAL Definition Details</a> page. This page has full details of the OVAL Defintion.
       </p>
 
       <a name="scap_missing"></a>
