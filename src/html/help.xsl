@@ -1373,7 +1373,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Port List'"/>
-        <xsl:with-param name="noclone" select="1"/>
         <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>

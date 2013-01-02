@@ -1,3 +1,14 @@
+2013-01-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c: Add get_port_lists static header.
+	(next_page): Add get_port_lists handler.
+
+	* src/html/help.xsl (port_lists.html): Remove noclone parameter
+	from list-window-line-icons call.
+
+	* src/html/omp.xsl (port_list): Remove noclone parameter from
+	list-window-line-icons call.
+
 2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (alert [details]): Output None when the alert has no

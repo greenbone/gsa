@@ -121,6 +121,8 @@ static char *get_overrides (credentials_t *, params_t *, const char *);
 static char *get_override (credentials_t *, params_t *, const char *,
                            const char *);
 
+static char *get_port_lists (credentials_t *, params_t *, const char *);
+
 char *get_targets (credentials_t *, params_t *, const char *);
 
 char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
@@ -526,6 +528,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_overrides") == 0)
     return get_overrides (credentials, params, response);
+
+  if (strcmp (next, "get_port_lists") == 0)
+    return get_port_lists (credentials, params, response);
 
   if (strcmp (next, "get_targets") == 0)
     return get_targets (credentials, params, response);
