@@ -15081,6 +15081,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Edit Report Format" style="margin-left:3px;">
         <img src="/img/edit.png" border="0" alt="Edit"/>
       </a>
+      <div style="display: inline">
+        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="cmd" value="clone"/>
+          <input type="hidden" name="resource_type" value="report_format"/>
+          <input type="hidden" name="next" value="get_report_formats"/>
+          <input type="hidden" name="id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="image" src="/img/clone.png" alt="Clone Report Format"
+                 name="Clone" value="Clone" title="Clone"/>
+        </form>
+      </div>
       <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
          title="Export Report Format XML"
          style="margin-left:3px;">
