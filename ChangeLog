@@ -1,3 +1,12 @@
+2013-01-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* ChangeLog: Remove trailing whitespaces in last entry.
+
+	* src/html/omp.xsl (ovaldef-details): Add display of source file.
+	Change details view, which uses raw data from xml file now.
+	Add list of affected systems.
+	(): Add declaration of OVAL namespaces.
+
 2013-01-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report_format): Clone Report Format action.
@@ -10,14 +19,14 @@
 
 	Changed labels of OVAL Definitions to be more consistent and 
 	understandable.
-	
+
 	* src/html/gsad.xsl: Change menu to spell "OVAL Definitions"
 	with capital "D".
 
-	* src/html/help.xsl: Change various instances of "OVALDEF" etc. to 
+	* src/html/help.xsl: Change various instances of "OVALDEF" etc. to
 	"OVAL Definition".
 
-	* src/html/omp.xsl: Change various instances of "OVALDEF" etc. to 
+	* src/html/omp.xsl: Change various instances of "OVALDEF" etc. to
 	"OVAL Definition".
 
 2013-01-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
