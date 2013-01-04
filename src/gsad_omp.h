@@ -96,6 +96,8 @@ char * new_agent_omp (credentials_t *, params_t *);
 char * get_agent_omp (credentials_t *, params_t *);
 char * get_agents_omp (credentials_t *, params_t *);
 int download_agent_omp (credentials_t *, params_t *, gsize *, char **, char **);
+char * edit_agent_omp (credentials_t *, params_t *);
+char * save_agent_omp (credentials_t *, params_t *);
 char * create_agent_omp (credentials_t *, params_t *);
 char * delete_agent_omp (credentials_t *, params_t *);
 char * delete_trash_agent_omp (credentials_t *, params_t *);

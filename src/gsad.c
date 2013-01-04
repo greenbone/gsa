@@ -556,6 +556,7 @@ init_validator ()
                          "|(delete_trash_task)"
                          "|(delete_user)"
                          "|(download_agent)"
+                         "|(edit_agent)"
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
@@ -664,6 +665,7 @@ init_validator ()
                          "|(resume_stopped_task)"
                          "|(run_wizard)"
                          "|(test_alert)"
+                         "|(save_agent)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -1621,6 +1623,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (resume_paused_task)
   ELSE (resume_stopped_task)
   ELSE (run_wizard)
+  ELSE (save_agent)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
@@ -1781,6 +1784,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_alert)
   ELSE (get_task)
   ELSE (get_tasks)
+  ELSE (edit_agent)
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)

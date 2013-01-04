@@ -4736,6 +4736,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     EDIT_AGENT -->
+
+<xsl:template name="html-edit-agent-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Agent
+      <a href="/help/agent.html?token={/envelope/token}#edit_agent" title="Help: Edit Agent">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_agents&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Agents" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Agents"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_agent&amp;agent_id={commands_response/get_agents_response/agent/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Agent Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_agent"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="agent_id"
+               value="{commands_response/get_agents_response/agent/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="agent" value="{/envelope/params/agent}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text" name="name" size="30" maxlength="80"
+                     value="{commands_response/get_agents_response/agent/name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_agents_response/agent/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Agent"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_agent">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-agent-form"/>
+</xsl:template>
+
 <!--     CREATE_AGENT_RESPONSE -->
 
 <xsl:template match="create_agent_response">
@@ -4803,7 +4867,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Agent'"/>
         <xsl:with-param name="type" select="'agent'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
       <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
          title="Download installer package" style="margin-left:3px;">

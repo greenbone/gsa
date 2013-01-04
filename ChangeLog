@@ -1,3 +1,22 @@
+2013-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add edit agent feature.
+
+	* src/gsad_omp.c (edit_agent, save_agent): New functions.
+
+	* src/gsad_omp.h: Add edit_agent and save_agent headers.
+
+	* src/gsad.c (init_validator): Add edit_agent and
+	save_agent validators.
+	(exec_omp_post): Handle save_agent request.
+	(exec_omp_get): Handle save_agent request.
+
+	* src/html/omp.xsl (html-edit-agent-form, edit_agent): New templates.
+	(agent): Remove noedit from list-window-line-icons template call.
+
+	* src/html/help.xsl (agents.html): Remove noedit parameter from
+	list-window-line-actions template call.
+
 2013-01-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* ChangeLog: Remove trailing whitespaces in last entry.
@@ -35,7 +54,7 @@
 	(next_page): Add get_port_lists handler.
 
 	* src/html/help.xsl (port_lists.html): Remove noclone parameter
-	from list-window-line-icons call.
+	from list-window-line-actions call.
 
 	* src/html/omp.xsl (port_list): Remove noclone parameter from
 	list-window-line-icons call.
@@ -53,7 +72,7 @@
 2013-01-01  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (alerts.html): Remove noclone parameter
-	from list-window-line-icons call.
+	from list-window-line-actions call.
 
 	* src/html/omp.xsl (alert): Remove noclone parameter from
 	list-window-line-icons call.
@@ -61,7 +80,7 @@
 2012-12-31  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (configs.html): Remove noclone parameter
-	from list-window-line-icons call.
+	from list-window-line-actions call.
 
 	* src/html/omp.xsl (html-config-family-table, html-config-nvt-table):
 	Update help documentation icon's title.
@@ -83,7 +102,7 @@
 	list-window-line-icons call.
 
 	* src/html/help.xsl (lsc_credentials.html): Remove noclone parameter
-	from list-window-line-icons call.
+	from list-window-line-actions call.
 
 2012-12-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
@@ -91,7 +110,7 @@
 	list-window-line-icons call.
 
 	* src/html/help.xsl (agents.html): Remove noclone parameter from
-	list-window-line-icons call.
+	list-window-line-actions call.
 
 2012-12-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 

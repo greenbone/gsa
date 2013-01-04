@@ -3972,6 +3972,146 @@ new_agent_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_agent XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_agent (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return edit_resource ("agent", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_agent XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_agent_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_agent (credentials, params, NULL);
+}
+
+/**
+ * @brief Check an agent editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Agent");                                     \
+      html = edit_agent (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a agent, get all agents, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_agent_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *agent_id, *name, *comment, *next;
+  entity_t entity;
+
+  agent_id = params_value (params, "agent_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  next = params_value (params, "next");
+
+  CHECK (agent_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+
+  /* Modify the agent. */
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_agent agent_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "</modify_agent>",
+             agent_id,
+             name,
+             comment);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a agent. "
+                             "The agent was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_agents");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a agent. "
+                             "It is unclear whether the agent has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_agents");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a agent. "
+                             "It is unclear whether the agent has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_agents");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a agent. "
+                               "The agent was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_agents");
+        }
+    }
+  else
+    html = edit_agent (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
+
+/**
  * @brief Get one agent, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -10735,7 +10875,7 @@ new_slave_omp (credentials_t *credentials, params_t *params)
  */
 char *
 edit_slave (credentials_t * credentials, params_t *params,
-             const char *extra_xml)
+            const char *extra_xml)
 {
   return edit_resource ("slave", credentials, params, extra_xml);
 }
