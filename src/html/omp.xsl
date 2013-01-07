@@ -14658,96 +14658,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <h2>New port range</h2>
-
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="create_port_range"/>
-        <input type="hidden" name="caller" value="{/envelope/caller}"/>
-        <input type="hidden" name="port_list_id" value="{@id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-            <td valign="top">Start</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="in_use = 0">
-                  <input type="text" name="port_range_start" value=""
-                         size="30" maxlength="400"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port_range_start" value=""
-                         size="30" maxlength="400" disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">End</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="in_use = 0">
-                  <input type="text" name="port_range_end" value=""
-                         size="30" maxlength="400"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port_range_end" value=""
-                         size="30" maxlength="400" disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top">Protocol</td>
-            <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="in_use = 0">
-                    <input type="radio" name="port_type" value="tcp" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="port_type" value="tcp" checked="1"
-                           disabled="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                TCP
-              </label>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="in_use = 0">
-                    <input type="radio" name="port_type" value="udp"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="port_type" value="udp"
-                           disabled="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                UDP
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" style="text-align:right;">
-              <xsl:choose>
-                <xsl:when test="in_use = 0">
-                  <input type="submit" name="submit" value="Create port range"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="submit" name="submit" value="Create port range"
-                         disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </table>
-      </form>
-
       <h1>Port Ranges</h1>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td>Start</td>
           <td>End</td>
           <td>Protocol</td>
-          <td>Actions</td>
         </tr>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="in_use" select="in_use"/>
@@ -14762,25 +14678,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="start"/></td>
             <td><xsl:value-of select="end"/></td>
             <td><xsl:value-of select="type"/></td>
-            <td width="100">
-              <xsl:choose>
-                <xsl:when test="$in_use = 0">
-                  <xsl:call-template name="delete-icon">
-                    <xsl:with-param name="type">port_range</xsl:with-param>
-                    <xsl:with-param name="id" select="@id"/>
-                    <xsl:with-param name="params">
-                      <input type="hidden" name="port_list_id" value="{$id}"/>
-                    </xsl:with-param>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/delete_inactive.png"
-                       border="0"
-                       alt="Delete"
-                       style="margin-left:3px;"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
           </tr>
         </xsl:for-each>
       </table>

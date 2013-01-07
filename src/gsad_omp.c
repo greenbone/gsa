@@ -13405,7 +13405,7 @@ get_port_list (credentials_t * credentials, params_t *params,
                const char * extra_xml)
 {
   return get_one ("port_list", credentials, params, extra_xml,
-                  "targets=\"1\" ranges=\"1\"");
+                  "targets=\"1\" details=\"1\"");
 }
 
 /**

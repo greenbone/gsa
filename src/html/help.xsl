@@ -1522,8 +1522,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#port_list">
         Port List</a>.
-        This includes the name, creation time, modification time, extension,
-        content type, trust, activity, summary, description and parameters.
+        This includes the name, creation time, modification time, port
+        count, tcp ports count, udp ports count, port ranges and targets using
+        this port list.
       </p>
 
       <h4>New Port List </h4>
@@ -1547,49 +1548,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
 
-      <h3>New Port Range</h3>
-      <p>
-        For adding a new port range to a port list the dialog offers these
-        entries.  Hit the button "Create Port Range" to submit the new port
-        list.  The port list details will be updated.
-      </p>
-
-      <p>
-        <table class="gbntable">
-          <tr class="gbntablehead2">
-            <td></td>
-            <td>Mandatory</td>
-            <td>Max Length</td>
-            <td>Syntax</td>
-            <td>Example</td>
-          </tr>
-          <tr class="odd">
-            <td>Start</td>
-            <td>yes</td>
-            <td>80</td>
-            <td>Numeric 1-65535</td>
-            <td>5</td>
-          </tr>
-          <tr class="odd">
-            <td>End</td>
-            <td>yes</td>
-            <td>80</td>
-            <td>Numeric 1-65535</td>
-            <td>7</td>
-          </tr>
-          <tr class="odd">
-            <td>Protocol</td>
-            <td>yes</td>
-            <td>--</td>
-            <td>Radio button</td>
-            <td></td>
-          </tr>
-        </table>
-      </p>
-
       <h3>Port Ranges</h3>
       <p>
         This table lists all the port ranges in the port list.
+      </p>
+
+      <h3>Targets using this Port List</h3>
+      <p>
+        This table provides an overview of the targets associated with this Port List.
+        Details of these targets can be seen after a click on the Details
+        <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
 
     </div>

@@ -1,5 +1,16 @@
 2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_port_list): Set details attribute instead of
+	ranges attribute for get_one call.
+
+	* src/html/help.xsl (port_list_details.html): Update port list details
+	help documentation.
+
+	* src/html/omp.xsl (port_list [details]): Match style of other resource
+	details and remove duplicate functionality with edit page.
+
+2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add Edit Port List functionality.
 
 	* src/gsad_omp.c (edit_port_list, edit_port_list_omp)
