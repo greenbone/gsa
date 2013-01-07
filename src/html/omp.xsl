@@ -11801,7 +11801,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table>
         <tr>
           <td>Base score</td>
-          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+          <td>
+            <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+            (AV:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'ADJACENT_NETWORK'">A</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>/AC:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'LOW'">L</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'MEDIUM'">M</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-complexity = 'HIGH'">H</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>/Au:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'NONE'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'MULTIPLE_INSTANCES'">M</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:authentication = 'SINGLE_INSTANCE'">C</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>/C:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'NONE'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'PARTIAL'">P</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:confidentiality-impact = 'COMPLETE'">C</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>/I:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'NONE'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'PARTIAL'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:integrity-impact = 'COMPLETE'">N</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>/A:<xsl:choose>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'NONE'">N</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'PARTIAL'">P</xsl:when>
+              <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:availability-impact = 'COMPLETE'">C</xsl:when>
+              <xsl:otherwise>ERROR</xsl:otherwise>
+            </xsl:choose>)
+          </td>
         </tr>
         <tr>
           <td>Access vector</td>
