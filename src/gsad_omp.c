@@ -4715,7 +4715,7 @@ new_alert_omp (credentials_t *credentials, params_t *params)
 
   /* Get Report Filters. */
   ret = omp (credentials, &response, &entity,
-             "<get_filters type=\"report\"/>");
+             "<get_filters filter=\"type=report\"/>");
 
   switch (ret)
     {
