@@ -5551,9 +5551,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
-        <xsl:value-of select="filter/name"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="filter/trash = '1'">
+          <xsl:value-of select="filter/name"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="/omp?cmd=get_filter&amp;filter_id={filter/@id}&amp;token={/envelope/token}" title="Details">
+            <xsl:value-of select="filter/name"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:choose>
@@ -6158,9 +6165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;first={../filters/@start}&amp;max={../filters/@max}&amp;token={/envelope/token}">
-          <xsl:value-of select="name"/>
-        </a>
+        <xsl:value-of select="name"/>
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
