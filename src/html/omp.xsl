@@ -4466,19 +4466,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     LSC_CREDENTIAL -->
 
 <xsl:template name="lsc-credential-download-icons">
-  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
      title="Download RPM package" style="margin-left:3px;">
     <img src="/img/rpm.png" border="0" alt="Download RPM"/>
   </a>
-  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
      title="Download Debian package" style="margin-left:3px;">
     <img src="/img/deb.png" border="0" alt="Download Deb"/>
   </a>
-  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
      title="Download Exe package" style="margin-left:3px;">
     <img src="/img/exe.png" border="0" alt="Download Exe"/>
   </a>
-  <a href="/omp?cmd=export_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
+  <a href="/omp?cmd=download_lsc_credential&amp;lsc_credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
      title="Download Public Key" style="margin-left:3px;">
     <img src="/img/key.png" border="0" alt="Download Public Key"/>
   </a>
@@ -4507,7 +4507,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Credential'"/>
         <xsl:with-param name="type" select="'lsc_credential'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noexport" select="1"/>
       </xsl:call-template>
       <xsl:if test="type='gen'">
         <xsl:call-template name="lsc-credential-download-icons"/>
@@ -4562,7 +4561,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Credential'"/>
         <xsl:with-param name="type" select="'lsc_credential'"/>
-        <xsl:with-param name="noexport" select="1"/>
       </xsl:call-template>
       <xsl:if test="type='gen'">
         <xsl:call-template name="lsc-credential-download-icons"/>

@@ -1,5 +1,25 @@
 2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Add export credential.
+
+	* src/gsad_omp.c: Rename export_lsc_credential_omp function into
+	download_lsc_credential for consistency. Add export_lsc_credential_omp
+	function.
+
+	* src/gsad_omp.h: Modify export_lsc_credential_omp. Add
+	download_lsc_credential_omp headers.
+
+	* src/gsad.c (init_validator): Add download_lsc_credential validator.
+	(exec_omp_get): Add export_lsc_credential handler. Rename old one into
+	download_lsc_credential.
+
+	* src/html/omp.xsl (lsc-credential-download-icons): Update for
+	credential download actions.
+	(lsc_credential, lsc_credential [details]): Remove noexport from
+	action template calls.
+
+2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (param-details [details]): Remove empty and unused
 	Actions column.
 	(html-edit-port-list-form): Set adequate next parameter.

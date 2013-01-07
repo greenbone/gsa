@@ -3079,7 +3079,7 @@ get_lsc_credential_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Get one or all LSC credentials, XSL transform the result.
+ * @brief Export a LSC Credential in a defined format.
  *
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
@@ -3091,11 +3091,11 @@ get_lsc_credential_omp (credentials_t * credentials, params_t *params)
  * @return 0 success, 1 failure.
  */
 int
-export_lsc_credential_omp (credentials_t * credentials,
-                           params_t *params,
-                           gsize *result_len,
-                           char ** html,
-                           char ** login)
+download_lsc_credential_omp (credentials_t * credentials,
+                             params_t *params,
+                             gsize *result_len,
+                             char ** html,
+                             char ** login)
 {
   entity_t entity;
   gnutls_session_t session;
@@ -3281,6 +3281,27 @@ export_lsc_credential_omp (credentials_t * credentials,
       free_entity (entity);
       return 1;
     }
+}
+
+/**
+ * @brief Export a LSC Credential.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return LSC Credential XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_lsc_credential_omp (credentials_t * credentials, params_t *params,
+                           enum content_type * content_type,
+                           char **content_disposition, gsize *content_length)
+{
+  return export_resource ("lsc_credential", credentials, params, content_type,
+                          content_disposition, content_length);
 }
 
 /**

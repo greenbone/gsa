@@ -556,6 +556,7 @@ init_validator ()
                          "|(delete_trash_task)"
                          "|(delete_user)"
                          "|(download_agent)"
+                         "|(download_lsc_credential)"
                          "|(edit_agent)"
                          "|(edit_config)"
                          "|(edit_config_family)"
@@ -1837,7 +1838,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_filters_omp (credentials, params, content_type,
                                content_disposition, response_size);
 
-  else if (!strcmp (cmd, "export_lsc_credential"))
+  else if (!strcmp (cmd, "download_lsc_credential"))
     {
       char *html;
       gchar *lsc_credential_login;
@@ -1845,11 +1846,11 @@ exec_omp_get (struct MHD_Connection *connection,
 
       package_format = params_value (params, "package_format");
 
-      if (export_lsc_credential_omp (credentials,
-                                     params,
-                                     response_size,
-                                     &html,
-                                     &lsc_credential_login))
+      if (download_lsc_credential_omp (credentials,
+                                       params,
+                                       response_size,
+                                       &html,
+                                       &lsc_credential_login))
         return html;
 
       /* Returned above if package_format was NULL. */
@@ -1865,6 +1866,10 @@ exec_omp_get (struct MHD_Connection *connection,
 
       return html;
     }
+
+  else if (!strcmp (cmd, "export_lsc_credential"))
+    return export_lsc_credential_omp (credentials, params, content_type,
+                                      content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_lsc_credentials"))
     return export_lsc_credentials_omp (credentials, params, content_type,

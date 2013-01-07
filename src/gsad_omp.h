@@ -79,8 +79,11 @@ char * export_alert_omp (credentials_t *, params_t *, enum content_type *,
 char * export_alerts_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *);
 
-int export_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
-                               char **);
+int download_lsc_credential_omp (credentials_t *, params_t *, gsize *, char **,
+                                 char **);
+
+char * export_lsc_credential_omp (credentials_t *, params_t *,
+                                  enum content_type *, char **, gsize *);
 char * export_lsc_credentials_omp (credentials_t *, params_t *,
                                    enum content_type *, char **, gsize *);
 char * get_lsc_credential_omp (credentials_t *, params_t *);
