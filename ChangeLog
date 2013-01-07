@@ -1,5 +1,13 @@
 2013-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): For the report page case, when the
+	filt_id and filter params are both missing, then add a filter param
+	that matches the filter in the get_reports_response.  This ensures that
+	the filter is always available as a param for things like the note
+	icons, even after the "Result Filtering" Apply button.
+
+2013-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (alert [trash]): Drop the link to the filter details
 	when the filter is in the trashcan.
 	(filter [trash]): Remove link to details from name.

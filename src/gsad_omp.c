@@ -8576,6 +8576,26 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks");
         }
 
+      if ((filt_id == NULL) && (params_value (params, "filter") == NULL))
+        {
+          entity_t term;
+
+          /* Add the filter from the report as a param, because it's easier to
+           * get from the envelope for things like the New Note icon. */
+
+          term = entity_child (entity, "report");
+          if (term
+              && ((term = entity_child (term, "report")))
+              && ((term = entity_child (term, "filters")))
+              && ((term = entity_child (term, "term"))))
+            {
+              param_t *param;
+              param = params_add (params, "filter", entity_text (term));
+              param->valid = 1;
+              param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+            }
+        }
+
       if ((type && (strcmp (type, "prognostic") == 0))
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
