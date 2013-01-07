@@ -123,6 +123,8 @@ static char *get_override (credentials_t *, params_t *, const char *,
 
 static char *get_port_lists (credentials_t *, params_t *, const char *);
 
+static char *edit_port_list (credentials_t *, params_t *, const char *);
+
 char *get_targets (credentials_t *, params_t *, const char *);
 
 char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
@@ -504,6 +506,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_alerts") == 0)
     return get_alerts (credentials, params, response);
+
+  if (strcmp (next, "edit_port_list") == 0)
+    return edit_port_list (credentials, params, response);
 
   if (strcmp (next, "get_agents") == 0)
     return get_agents (credentials, params, response);
@@ -1169,8 +1174,9 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
  *
  * @param[in]  type         Type of resource.
  * @param[in]  credentials  Username and password for authentication.
- * @param[in]  ultimate     0 move to trash, 1 remove entirely.
  * @param[in]  params       Request parameters.
+ * @param[in]  ultimate     0 move to trash, 1 remove entirely.
+ * @param[in]  get          Next page get function.
  *
  * @return Result of XSL transformation.
  */
@@ -13273,6 +13279,23 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 #undef CHECK
 
 /**
+ * @brief Check a port range creation param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Create Port Range");                              \
+      html = edit_port_list (credentials, params, msg);                        \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
  * @brief Add a range to a port list, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -13283,124 +13306,90 @@ create_port_list_omp (credentials_t * credentials, params_t *params)
 char *
 create_port_range_omp (credentials_t * credentials, params_t *params)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *port_list_id, *sort_field, *sort_order, *start, *end, *type;
+  int ret;
+  gchar *html, *response;
+  const char *port_list_id, *start, *end, *type;
+  entity_t entity;
 
   port_list_id = params_value (params, "port_list_id");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
   start = params_value (params, "port_range_start");
   end = params_value (params, "port_range_end");
   type = params_value (params, "port_type");
 
-  if (port_list_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a port range. "
-                         "No new port range was created. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_port_lists");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a port list. "
-                             "The port lists is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_port_lists");
-    }
-
-  xml = g_string_new ("<get_port_list>");
+  CHECK (port_list_id);
+  CHECK (start);
+  CHECK (end);
+  CHECK (type);
 
   /* Create the port range. */
 
-  if (openvas_server_sendf (&session,
-                            "<create_port_range>"
-                            "<port_list id=\"%s\"/>"
-                            "<start>%s</start>"
-                            "<end>%s</end>"
-                            "<type>%s</type>"
-                            "</create_port_range>",
-                            port_list_id,
-                            start,
-                            end,
-                            type)
-      == -1)
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<create_port_range>"
+             "<port_list id=\"%s\"/>"
+             "<start>%s</start>"
+             "<end>%s</end>"
+             "<type>%s</type>"
+             "</create_port_range>",
+             port_list_id,
+             start,
+             end,
+             type);
+
+  switch (ret)
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a Port Range. "
+                             "The Port Range was not created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a Port Range. "
+                             "It is unclear whether the Port Range has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a Port Range. "
+                             "It is unclear whether the Port Range has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_port_lists");
     }
 
-  if (read_string (&session, &xml))
+  if (omp_success (entity))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a Port Range. "
+                               "The Port Range was, however, created. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_port_lists");
+        }
     }
-
-  /* Get the port list. */
-
-  if (openvas_server_sendf (&session,
-                            "<get_port_lists"
-                            " port_list_id=\"%s\""
-                            " details=\"1\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\"/>",
-                            port_list_id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a port list. "
-                           "The port list is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_port_lists");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</get_port_list>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  else
+    html = edit_port_list (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
+
+#undef CHECK
 
 /**
  * @brief Get one port_list, XSL transform the result.
@@ -13498,6 +13487,145 @@ new_port_list_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_port_list XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_port_list (credentials_t * credentials, params_t *params,
+                const char *extra_xml)
+{
+  return edit_resource ("port_list", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_port_list XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_port_list_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_port_list (credentials, params, NULL);
+}
+
+/**
+ * @brief Check a port list editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Port List");                                 \
+      html = edit_port_list (credentials, params, msg);                        \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a port list, get all port list, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_port_list_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *port_list_id, *name, *comment, *next;
+  entity_t entity;
+
+  port_list_id = params_value (params, "port_list_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  next = params_value (params, "next");
+
+  CHECK (port_list_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+
+  /* Modify the Port List. */
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_port_list port_list_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "</modify_port_list>",
+             port_list_id,
+             name,
+             comment);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Port List. "
+                             "The Port List was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Port List. "
+                             "It is unclear whether the Port List has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_port_lists");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Port List. "
+                             "It is unclear whether the Port List has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_port_lists");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a Port List. "
+                               "The Port List was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_port_lists");
+        }
+    }
+  else
+    html = edit_port_list (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
+/**
  * @brief Delete a port list, get all port lists, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -13536,7 +13664,7 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params)
 char *
 delete_port_range_omp (credentials_t * credentials, params_t *params)
 {
-  return delete_resource ("port_range", credentials, params, 1, get_port_list);
+  return delete_resource ("port_range", credentials, params, 1, edit_port_list);
 }
 
 /**

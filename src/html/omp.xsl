@@ -14578,7 +14578,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Port List'"/>
         <xsl:with-param name="type" select="'port_list'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </td>
   </tr>
@@ -14632,7 +14631,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Port List'"/>
         <xsl:with-param name="type" select="'port_list'"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -14822,6 +14820,199 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
+</xsl:template>
+
+<!--     EDIT_PORT_LIST -->
+
+<xsl:template name="html-edit-port-list-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Port List
+      <a href="/help/port_list.html?token={/envelope/token}#edit_port_list" title="Help: Edit Port List">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_port_lists&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Port Lists" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Port Lists"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_port_list&amp;port_list_id={commands_response/get_port_lists_response/port_list/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Port List Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_port_list"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="port_list_id"
+               value="{commands_response/get_port_lists_response/port_list/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="port_list" value="{/envelope/params/port_list}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text" name="name" size="30" maxlength="80"
+                     value="{commands_response/get_port_lists_response/port_list/name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_port_lists_response/port_list/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Port List"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+
+      <h2>New port range</h2>
+
+      <xsl:variable name="id" select="commands_response/get_port_lists_response/port_list/@id"/>
+      <xsl:variable name="in_use" select="commands_response/get_port_lists_response/port_list/in_use"/>
+
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_port_range"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="port_list_id" value="{$id}"/>
+        <input type="hidden" name="next" value="edit_port_list"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top">Start</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="$in_use = 0">
+                  <input type="text" name="port_range_start" value=""
+                         size="30" maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="port_range_start" value=""
+                         size="30" maxlength="400" disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">End</td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="$in_use = 0">
+                  <input type="text" name="port_range_end" value=""
+                         size="30" maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="port_range_end" value=""
+                         size="30" maxlength="400" disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">Protocol</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$in_use = 0">
+                    <input type="radio" name="port_type" value="tcp" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="port_type" value="tcp" checked="1"
+                           disabled="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                TCP
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$in_use = 0">
+                    <input type="radio" name="port_type" value="udp"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="port_type" value="udp"
+                           disabled="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                UDP
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="text-align:right;">
+              <xsl:choose>
+                <xsl:when test="$in_use = 0">
+                  <input type="submit" name="submit" value="Create port range"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="submit" name="submit" value="Create port range"
+                         disabled="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <h1>Port Ranges</h1>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Start</td>
+          <td>End</td>
+          <td>Protocol</td>
+          <td>Actions</td>
+        </tr>
+        <xsl:for-each select="commands_response/get_port_lists_response/port_list/port_ranges/port_range">
+          <xsl:variable name="class">
+            <xsl:choose>
+              <xsl:when test="position() mod 2 = 0">even</xsl:when>
+              <xsl:otherwise>odd</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <tr class="{$class}">
+            <td><xsl:value-of select="start"/></td>
+            <td><xsl:value-of select="end"/></td>
+            <td><xsl:value-of select="type"/></td>
+            <td width="100">
+              <xsl:choose>
+                <xsl:when test="../../in_use = 0">
+                  <xsl:call-template name="delete-icon">
+                    <xsl:with-param name="type">port_range</xsl:with-param>
+                    <xsl:with-param name="id" select="@id"/>
+                    <xsl:with-param name="params">
+                      <input type="hidden" name="port_list_id" value="{../../@id}"/>
+                      <input type="hidden" name="next" value="next"/>
+                    </xsl:with-param>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <img src="/img/delete_inactive.png"
+                       border="0"
+                       alt="Delete"
+                       style="margin-left:3px;"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_port_list">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-port-list-form"/>
 </xsl:template>
 
 <xsl:template match="create_port_range_response">

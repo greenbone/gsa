@@ -565,6 +565,7 @@ init_validator ()
                          "|(edit_my_settings)"
                          "|(edit_note)"
                          "|(edit_override)"
+                         "|(edit_port_list)"
                          "|(edit_report_format)"
                          "|(edit_schedule)"
                          "|(edit_settings)"
@@ -675,6 +676,7 @@ init_validator ()
                          "|(save_my_settings)"
                          "|(save_note)"
                          "|(save_override)"
+                         "|(save_port_list)"
                          "|(save_report_format)"
                          "|(save_schedule)"
                          "|(save_settings)"
@@ -1644,6 +1646,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   ELSE (save_note)
   ELSE (save_override)
+  ELSE (save_port_list)
   ELSE (save_report_format)
   ELSE (save_schedule)
   ELSE_OAP (save_settings)
@@ -1793,6 +1796,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_my_settings)
   ELSE (edit_note)
   ELSE (edit_override)
+  ELSE (edit_port_list)
   ELSE (edit_report_format)
   ELSE (edit_schedule)
   ELSE (edit_slave)

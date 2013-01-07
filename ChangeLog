@@ -1,3 +1,28 @@
+2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add Edit Port List functionality.
+
+	* src/gsad_omp.c (edit_port_list, edit_port_list_omp)
+	(save_port_list_omp): New functions.
+	(next_page): Handle edit_port_list next parameter.
+	(create_port_range_omp): Update to use omp and next_page functions.
+	(delete_port_range_omp): Use edit_port_list as next page.
+	(delete_resource): Update documentation.
+
+	* src/gsad_omp.h: Add edit_port_list and save_port_list headers.
+
+	* src/gsad.c (init_validator): Add edit_port_list and save_port_list
+	validators.
+	(exec_omp_post): Add save_port_list handler.
+	(exec_omp_get): Add edit_port_list handler.
+
+	* src/html/help.xsl (port_lists.html): Remove noedit parameter from
+	list-window-line-actions template call.
+
+	* src/html/omp.xsl (port_list): Remove noedit parameter from
+	list-window-line-icons and details-header-icons template calls.
+	(html-edit-port-list-form, edit_port_list): New templates.
+
 2013-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_agent): Remove details attribute.
@@ -40,7 +65,7 @@
 
 2012-12-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
-	Changed labels of OVAL Definitions to be more consistent and 
+	Changed labels of OVAL Definitions to be more consistent and
 	understandable.
 
 	* src/html/gsad.xsl: Change menu to spell "OVAL Definitions"

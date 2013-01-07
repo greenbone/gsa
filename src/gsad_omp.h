@@ -178,6 +178,8 @@ char * create_port_list_omp (credentials_t *, params_t *);
 char * create_port_range_omp (credentials_t *, params_t *);
 char * new_port_list_omp (credentials_t *, params_t *);
 char * get_port_list_omp (credentials_t *, params_t *);
+char * edit_port_list_omp (credentials_t *, params_t *);
+char * save_port_list_omp (credentials_t *, params_t *);
 char * get_port_lists_omp (credentials_t *, params_t *);
 char * delete_port_list_omp (credentials_t *, params_t *);
 char * delete_trash_port_list_omp (credentials_t *, params_t *);
