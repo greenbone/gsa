@@ -12080,31 +12080,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td><b>OVAL identifier</b></td>
+            <td><b>ID:</b></td>
             <td>
               <b><xsl:value-of select="info/name"/></b>
             </td>
           </tr>
           <tr>
-            <td>Version</td>
-            <td><xsl:value-of select="info/ovaldef/version"/></td>
-          </tr>
-          <tr>
-            <td>Created</td>
+            <td>Created:</td>
             <td><xsl:value-of select="info/creation_time"/></td>
           </tr>
           <tr>
-            <td>Last modified</td>
+            <td>Last modified:</td>
             <td><xsl:value-of select="info/modification_time"/></td>
-          </tr>
-          <tr>
-            <td>Source file</td>
-            <td><xsl:value-of select="info/ovaldef/xml_file"/></td>
           </tr>
         </table>
       </div>
 
-      <h2>Basic data</h2>
+      <h2><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></h2>
       <table>
         <tr>
           <th>OVAL identifier:</th>
@@ -12119,43 +12111,144 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td> 
         </tr>
         <tr>
-          <th>Title:</th>
-          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></td> 
-        </tr>
-        <tr>
+          <xsl:choose>
+          <xsl:when test="info/ovaldef/raw_data/oval_definitions:definition/@deprecated != ''">
           <th>Deprecated:</th>
-          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@deprecated"/></td> 
+          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@deprecated"/></td>
+          </xsl:when>
+          <xsl:otherwise />
+          </xsl:choose>
         </tr>
       </table>
 
-      <h2>Description</h2>
+      <h2>Description:</h2>
       <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:description"/>
 
-      <h2>Affected systems:</h2>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
-      <tr class="gbntablehead2">
-        <td>Type</td>
-        <td>Name</td>
-      </tr>
-      <tr class="even">
-        <td>family</td>
-        <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected/@family"/></td>
-      </tr>
-      <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected/*">
-      <xsl:variable name="class">
-        <xsl:choose>
-          <xsl:when test="position() mod 2 = 0">even</xsl:when>
-          <xsl:otherwise>odd</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <tr class="{$class}">
-        <td><xsl:value-of select="name()"/></td>
-        <td><xsl:value-of select="text()"/></td>
-      </tr>
+      <xsl:if test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected) > 0">
+      <h2>Affected:</h2>
+      <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:affected">
+        <h3>
+        <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if>Family: <xsl:value-of select="./@family"/>
+        </h3>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Type</td>
+          <td>Name</td>
+        </tr>
+        <xsl:for-each select="./*">
+        <xsl:variable name="class">
+          <xsl:choose>
+            <xsl:when test="position() mod 2 = 0">even</xsl:when>
+            <xsl:otherwise>odd</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <tr class="{$class}">
+          <td><xsl:value-of select="name()"/></td>
+          <td><xsl:value-of select="text()"/></td>
+        </tr>
+        </xsl:for-each>
+        </table>
       </xsl:for-each>
+      </xsl:if>
+
+      <h2>Criteria:</h2>
+      <ul>
+      <xsl:apply-templates select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:criteria"/>
+      </ul>
+
+      <xsl:if test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference) > 0">
+      <h2>References:</h2>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Source</td>
+          <td>Ref.ID</td>
+          <td>URL</td>
+        </tr>
+        <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference">
+          <xsl:variable name="class">
+            <xsl:choose>
+              <xsl:when test="position() mod 2 = 0">even</xsl:when>
+              <xsl:otherwise>odd</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <tr class="{$class}">
+          <td><xsl:value-of select="./@source"/></td>
+          <td>
+          <xsl:choose>
+            <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cve'">
+              <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={./@ref_id}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@ref_id"/></a>
+            </xsl:when>
+            <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cpe'">
+              <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={./@ref_id}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@ref_id"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="./@ref_id"/>
+            </xsl:otherwise>
+          </xsl:choose></td>
+          <td><a href="{./@ref_url}"><xsl:value-of select="./@ref_url"/></a></td>
+          </tr>
+        </xsl:for-each>
       </table>
+      </xsl:if>
+
+      <xsl:if test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository) > 0">
+      <h2>Repository history:</h2>
+      <p><b>Status: </b>
+        <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:status"/>
+      </p>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Status</td>
+          <td>Date</td>
+          <td>Contributors</td>
+        </tr>
+        <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:dates/*">
+        <xsl:variable name="class">
+          <xsl:choose>
+            <xsl:when test="position() mod 2 = 0">even</xsl:when>
+            <xsl:otherwise>odd</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <tr class="{$class}">
+          <td><xsl:value-of select="name()"/>
+            <xsl:if test="name() = 'status_change'">
+              <i> (<xsl:value-of select="text()"/>)</i>
+            </xsl:if>
+          </td>
+          <td><xsl:value-of select="./@date"/></td>
+          <td>
+            <xsl:for-each select="./oval_definitions:contributor">
+            <xsl:value-of select="./text()"/>
+            <i> (<xsl:value-of select="./@organization"/>)</i><br />
+            </xsl:for-each>
+          </td>
+        </tr>
+        </xsl:for-each>
+      </table>
+      </xsl:if>
     </div>
   </div>
+</xsl:template>
+
+<xsl:template match="oval_definitions:criteria">
+  <li>
+    <b><xsl:if test="translate(./@negate,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'">NOT </xsl:if><xsl:value-of select="./@operator"/></b> <xsl:if test="./@comment != ''"><i> (<xsl:value-of select="./@comment"/>)</i></xsl:if><xsl:if test="translate(./@applicability_check,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b> [Applicability check]</b></xsl:if>
+    <ul>
+      <xsl:apply-templates select="./oval_definitions:criteria | ./oval_definitions:criterion | ./oval_definitions:extend_definition"/>
+    </ul>
+  </li>
+</xsl:template>
+
+<xsl:template match="oval_definitions:criterion">
+  <li>
+    <xsl:if test="translate(./@negate,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b>NOT </b></xsl:if><xsl:value-of select="./@comment"/> <i> (<xsl:value-of select="./@test_ref"/>)</i><xsl:if test="translate(./@applicability_check,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b> [Applicability check]</b></xsl:if>
+  </li>
+</xsl:template>
+
+<xsl:template match="oval_definitions:extend_definition">
+  <li>
+    <xsl:if test="translate(./@negate,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b>NOT </b></xsl:if><xsl:value-of select="./@comment"/><i> (<a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={./@definition_ref}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@definition_ref"/></a>)</i><xsl:if test="translate(./@applicability_check,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b> [Applicability check]</b></xsl:if>
+  </li>
 </xsl:template>
 
 <!-- BEGIN NVT DETAILS -->

@@ -1,3 +1,13 @@
+2013-01-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (ovaldef-details): Change various labels.
+	Remove version and source file from right float div.
+	Replace "Basic data" with title of OVAL definition.
+	Change "Deprecated" item to only be visible when value exists.
+	Change "Affected" to support mulitple "affected" tags and only appear
+	when tags exist.
+	Add views for criteria, references and history.
+
 2013-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (filter [trash]): Grey delete icon when filter is in
