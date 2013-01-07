@@ -4124,7 +4124,7 @@ char *
 get_agent (credentials_t * credentials, params_t *params,
             const char *extra_xml)
 {
-  return get_one ("agent", credentials, params, extra_xml, "details=\"1\"");
+  return get_one ("agent", credentials, params, extra_xml, NULL);
 }
 
 /**

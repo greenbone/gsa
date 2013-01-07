@@ -1,5 +1,9 @@
 2013-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_agent): Remove details attribute.
+
+2013-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add edit agent feature.
 
 	* src/gsad_omp.c (edit_agent, save_agent): New functions.
