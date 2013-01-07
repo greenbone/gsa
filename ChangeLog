@@ -1,5 +1,10 @@
 2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (column-name): Reset to first page when sorting by
+	column.
+
+2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add export credential.
 
 	* src/gsad_omp.c: Rename export_lsc_credential_omp function into

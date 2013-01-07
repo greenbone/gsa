@@ -6987,14 +6987,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="token" select="/envelope/token"/>
   <xsl:choose>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'descending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:when test="$current/sort/field/text() = $name and $current/sort/field/order = 'ascending'">
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort-reverse={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:when>
     <xsl:otherwise>
       <!-- Starts with some other column. -->
-      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
+      <a class="gbntablehead2" href="/omp?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=sort={$name} first=1 {$current/filters/term}&amp;token={$token}"><xsl:value-of select="$head"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
