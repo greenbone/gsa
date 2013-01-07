@@ -1,5 +1,11 @@
 2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (param-details [details]): Remove empty and unused
+	Actions column.
+	(html-edit-port-list-form): Set adequate next parameter.
+
+2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_port_list): Set details attribute instead of
 	ranges attribute for get_one call.
 

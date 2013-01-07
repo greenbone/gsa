@@ -14748,7 +14748,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="port_list_id"
                value="{commands_response/get_port_lists_response/port_list/@id}"/>
-        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="next" value="get_port_lists"/>
         <input type="hidden" name="port_list" value="{/envelope/params/port_list}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -14888,7 +14888,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="id" select="@id"/>
                     <xsl:with-param name="params">
                       <input type="hidden" name="port_list_id" value="{../../@id}"/>
-                      <input type="hidden" name="next" value="next"/>
+                      <input type="hidden" name="next" value="edit_port_list"/>
                     </xsl:with-param>
                   </xsl:call-template>
                 </xsl:when>
@@ -15457,7 +15457,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <tr class="gbntablehead2">
         <td>Name</td>
         <td>Value</td>
-        <td>Actions</td>
       </tr>
       <xsl:for-each select="param">
         <xsl:variable name="class">
@@ -15495,7 +15494,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </td>
-          <td></td>
         </tr>
       </xsl:for-each>
     </table>
