@@ -1,5 +1,11 @@
 2013-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (filter [trash]): Grey delete icon when filter is in
+	use.
+	(get_trash): Match delete_filter_response in case of error.
+
+2013-01-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_alert_omp): Restrict filter type via filter param.
 
 2013-01-07  Hani Benhabiles <hani.benhabiles@greenbone.net>

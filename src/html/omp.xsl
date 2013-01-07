@@ -6175,10 +6175,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <xsl:call-template name="trash-delete-icon">
-        <xsl:with-param name="type" select="'filter'"/>
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'filter'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
   </tr>
 </xsl:template>
@@ -18037,6 +18047,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_agent_response"/>
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:apply-templates select="delete_alert_response"/>
+  <xsl:apply-templates select="delete_filter_response"/>
   <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:apply-templates select="delete_note_response"/>
   <xsl:apply-templates select="delete_override_response"/>
