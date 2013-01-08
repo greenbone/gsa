@@ -1,5 +1,13 @@
 2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (next_page): Handle get_alert, get_agent,
+	get_lsc_credential, get_port_list, get_schedule and get_slave cases.
+	(get_alert): Style fix.
+	(html-edit-lsc-credential-form, html-edit-port-list-form): Use next
+	parameter from enevelope instead of presetting one.
+
+2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Add save_alert validator.
 	(exec_omp_get): Add save_alert handler.
 

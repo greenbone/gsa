@@ -4371,7 +4371,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="lsc_credential_id"
                value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
-        <input type="hidden" name="next" value="get_lsc_credentials"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="165">Name</td>
@@ -15018,7 +15018,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="port_list_id"
                value="{commands_response/get_port_lists_response/port_list/@id}"/>
-        <input type="hidden" name="next" value="get_port_lists"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="port_list" value="{/envelope/params/port_list}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">

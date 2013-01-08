@@ -507,17 +507,26 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_alerts") == 0)
     return get_alerts (credentials, params, response);
 
+  if (strcmp (next, "get_alert") == 0)
+    return get_alert_omp (credentials, params);
+
   if (strcmp (next, "edit_port_list") == 0)
     return edit_port_list (credentials, params, response);
 
   if (strcmp (next, "get_agents") == 0)
     return get_agents (credentials, params, response);
 
+  if (strcmp (next, "get_agent") == 0)
+    return get_agent_omp (credentials, params);
+
   if (strcmp (next, "get_configs") == 0)
     return get_configs (credentials, params, response);
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);
+
+  if (strcmp (next, "get_lsc_credential") == 0)
+    return get_lsc_credential_omp (credentials, params);
 
   if (strcmp (next, "get_lsc_credentials") == 0)
     return get_lsc_credentials (credentials, params, response);
@@ -533,6 +542,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_overrides") == 0)
     return get_overrides (credentials, params, response);
+
+  if (strcmp (next, "get_port_list") == 0)
+    return get_port_list_omp (credentials, params);
 
   if (strcmp (next, "get_port_lists") == 0)
     return get_port_lists (credentials, params, response);
@@ -558,11 +570,17 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
 
+  if (strcmp (next, "get_schedule") == 0)
+    return get_schedule_omp (credentials, params);
+
   if (strcmp (next, "get_schedules") == 0)
     return get_schedules_omp (credentials, params);
 
   if (strcmp (next, "get_slaves") == 0)
     return get_slaves_omp (credentials, params);
+
+  if (strcmp (next, "get_slave") == 0)
+    return get_slave_omp (credentials, params);
 
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
@@ -4523,7 +4541,7 @@ delete_alert_omp (credentials_t * credentials, params_t *params)
  */
 char *
 get_alert (credentials_t * credentials, params_t *params,
-            const char *extra_xml)
+           const char *extra_xml)
 {
   return get_one ("alert", credentials, params, extra_xml, "tasks=\"1\"");
 }
