@@ -4371,9 +4371,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden"
                name="lsc_credential_id"
                value="{commands_response/get_lsc_credentials_response/lsc_credential/@id}"/>
-        <input type="hidden" name="next" value="{next}"/>
-        <input type="hidden" name="sort_field" value="{sort_field}"/>
-        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="next" value="get_lsc_credentials"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
             <td valign="top" width="165">Name</td>

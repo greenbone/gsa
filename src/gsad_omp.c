@@ -3418,94 +3418,7 @@ static char *
 edit_lsc_credential (credentials_t * credentials, params_t *params,
                      const char *extra_xml)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *sort_order, *sort_field;
-
-  if (params_value (params, "lsc_credential_id") == NULL
-      || params_value (params, "next") == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a credential. "
-                         "The credential remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_lsc_credentials");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a credential. "
-                             "The credential remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_lsc_credentials");
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_lsc_credentials"
-                            " lsc_credential_id=\"%s\""
-                            " params=\"1\""
-                            " details=\"1\" />"
-                            "</commands>",
-                            params_value (params, "lsc_credential_id"))
-      == -1)
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting credential info. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  xml = g_string_new ("");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  g_string_append_printf (xml,
-                          "<edit_lsc_credential>"
-                          "<lsc_credential id=\"%s\"/>"
-                          /* Page that follows. */
-                          "<next>%s</next>"
-                          /* Passthroughs. */
-                          "<sort_field>%s</sort_field>"
-                          "<sort_order>%s</sort_order>",
-                          params_value (params, "lsc_credential_id"),
-                          params_value (params, "next"),
-                          sort_field ? sort_field : "",
-                          sort_order ? sort_order : "");
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting credential info. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_lsc_credentials");
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</edit_lsc_credential>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return edit_resource ("lsc_credential", credentials, params, extra_xml);
 }
 
 /**
@@ -3523,6 +3436,23 @@ edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Check a credential editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Credential");                                \
+      html = edit_lsc_credential (credentials, params, msg);                   \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
  * @brief Save lsc_credential, get next page, XSL transform the result.
  *
  * @param[in]  credentials       Username and password for authentication.
@@ -3533,98 +3463,136 @@ edit_lsc_credential_omp (credentials_t * credentials, params_t *params)
 char *
 save_lsc_credential_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *modify;
-  int change_login, change_password;
+  int ret, change_password;
+  gchar *html, *response;
+  const char *lsc_credential_id, *name, *comment, *login, *next, *password;
+  entity_t entity;
 
-  change_login = params_given (params, "credential_login");
+  lsc_credential_id = params_value (params, "lsc_credential_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  login = params_value (params, "credential_login");
+  password = params_value (params, "password");
+  next = params_value (params, "next");
+
+  CHECK (lsc_credential_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
   change_password = (params_value (params, "enable") ? 1 : 0);
+  if (change_password)
+    CHECK (password);
 
-  if (params_value (params, "comment") == NULL
-      || params_value (params, "name") == NULL
-      || (change_password && params_value (params, "password") == NULL)
-      || (change_login && params_value (params, "credential_login") == NULL))
-    return edit_lsc_credential (credentials,
-                                params,
-                                GSAD_MESSAGE_INVALID_PARAM
-                                 ("Save Credential"));
+  /* Modify the credential. */
+  response = NULL;
+  entity = NULL;
+  if (login && change_password)
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<modify_lsc_credential lsc_credential_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<login>%s</login>"
+               "<password>%s</password>"
+               "</modify_lsc_credential>",
+               lsc_credential_id,
+               name,
+               comment,
+               login,
+               password);
 
-  if (params_value (params, "next") == NULL
-      || params_value (params, "lsc_credential_id") == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while saving a credential. "
-                         "The credential remains the same. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_lsc_credentials");
+  else if (login)
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<modify_lsc_credential lsc_credential_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<login>%s</login>"
+               "</modify_lsc_credential>",
+               lsc_credential_id,
+               name,
+               comment,
+               login);
 
-  if (change_login && change_password)
-    modify = g_markup_printf_escaped ("<modify_lsc_credential"
-                                      " lsc_credential_id=\"%s\">"
-                                      "<name>%s</name>"
-                                      "<comment>%s</comment>"
-                                      "<login>%s</login>"
-                                      "<password>%s</password>"
-                                      "</modify_lsc_credential>",
-                                      params_value (params, "lsc_credential_id"),
-                                      params_value (params, "name"),
-                                      params_value (params, "comment"),
-                                      params_value (params, "credential_login"),
-                                      params_value (params, "password"));
-  else if (change_login)
-    modify = g_strdup_printf ("<modify_lsc_credential"
-                              " lsc_credential_id=\"%s\">"
-                              "<name>%s</name>"
-                              "<comment>%s</comment>"
-                              "<login>%s</login>"
-                              "</modify_lsc_credential>",
-                              params_value (params, "lsc_credential_id"),
-                              params_value (params, "name"),
-                              params_value (params, "comment"),
-                              params_value (params, "credential_login"));
   else if (change_password)
-    modify = g_strdup_printf ("<modify_lsc_credential"
-                              " lsc_credential_id=\"%s\">"
-                              "<name>%s</name>"
-                              "<comment>%s</comment>"
-                              "<password>%s</password>"
-                              "</modify_lsc_credential>",
-                              params_value (params, "lsc_credential_id"),
-                              params_value (params, "name"),
-                              params_value (params, "comment"),
-                              params_value (params, "password"));
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<modify_lsc_credential lsc_credential_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<password>%s</password>"
+               "</modify_lsc_credential>",
+               lsc_credential_id,
+               name,
+               comment,
+               password);
+
   else
-    modify = g_strdup_printf ("<modify_lsc_credential"
-                              " lsc_credential_id=\"%s\">"
-                              "<name>%s</name>"
-                              "<comment>%s</comment>"
-                              "</modify_lsc_credential>",
-                              params_value (params, "lsc_credential_id"),
-                              params_value (params, "name"),
-                              params_value (params, "comment"));
+    ret = omp (credentials,
+               &response,
+               &entity,
+               "<modify_lsc_credential lsc_credential_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "</modify_lsc_credential>",
+               lsc_credential_id,
+               name,
+               comment);
 
-  if (strcmp (params_value (params, "next"), "get_lsc_credentials") == 0)
+  switch (ret)
     {
-      char *ret;
-      ret = get_lsc_credentials (credentials, params, modify);
-      g_free (modify);
-      return ret;
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Credential. "
+                             "The Credential was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_credentials");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Credential. "
+                             "It is unclear whether the Credential has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_credentials");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a Credential. "
+                             "It is unclear whether the Credential has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_credentials");
     }
 
-  if (strcmp (params_value (params, "next"), "get_lsc_credential") == 0)
+  if (omp_success (entity))
     {
-      char *ret = get_lsc_credential (credentials, params, modify);
-      g_free (modify);
-      return ret;
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a Credential. "
+                               "The Credential was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_credentials");
+        }
     }
-
-  g_free (modify);
-  return gsad_message (credentials,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred while saving a credential. "
-                       "It is unclear whether the entire credential has been saved. "
-                       "Diagnostics: Error in parameter next.",
-                       "/omp?cmd=get_lsc_credentials");
+  else
+    html = edit_lsc_credential (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
+
+#undef CHECK
 
 /**
  * @brief Create an agent, get all agents, XSL transform result.

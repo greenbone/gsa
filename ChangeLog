@@ -1,5 +1,14 @@
 2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (edit_lsc_credential): Use edit_resource.
+	(save_lsc_credential_omp): Refactor to use omp wrapper.
+
+	* src/html/omp.xsl (html-edit-lsc-credential-form): Set next parameter
+	to get_lsc_credentials. Remove unneeded sort_order and sort_field
+	form parameters.
+
+2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-configs-table): Use filtered variable for
 	exported scan configs icon count.
 	(html-config-table): Add details and edit header icons. Add meta config
