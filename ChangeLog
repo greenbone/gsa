@@ -1,5 +1,14 @@
 2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Add save_alert validator.
+	(exec_omp_get): Add save_alert handler.
+
+	* src/gsad_omp.c (save_alert_omp): New function.
+
+	* src/gsad_omp.h: Add save_alert_omp header.
+
+2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Add edit_alert validator.
 	(exec_omp_get): Add edit_alert handler.
 

@@ -74,6 +74,7 @@ char * delete_trash_alert_omp (credentials_t *, params_t *);
 char * test_alert_omp (credentials_t *, params_t *);
 char * get_alert_omp (credentials_t *, params_t *);
 char * edit_alert_omp (credentials_t *, params_t *);
+char * save_alert_omp (credentials_t *, params_t *);
 char * get_alerts_omp (credentials_t *, params_t *);
 char * export_alert_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *);

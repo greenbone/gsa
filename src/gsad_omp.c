@@ -4751,6 +4751,116 @@ edit_alert_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Check an alert editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Alert");                                     \
+      html = edit_agent (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a alert, get all alerts, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_alert_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *alert_id, *name, *comment, *next;
+  entity_t entity;
+
+  alert_id = params_value (params, "alert_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  next = params_value (params, "next");
+
+  CHECK (alert_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+
+  /* Modify the alert. */
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_alert alert_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "</modify_alert>",
+             alert_id,
+             name,
+             comment);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an Alert. "
+                             "The Alert was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an alert. "
+                             "It is unclear whether the Alert has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving an Alert. "
+                             "It is unclear whether the Alert has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving an Alert. "
+                               "The alert was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_alerts");
+        }
+    }
+  else
+    html = edit_alert (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
+
+/**
  * @brief Test an alert, get all alerts XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

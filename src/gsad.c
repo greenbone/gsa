@@ -669,6 +669,7 @@ init_validator ()
                          "|(run_wizard)"
                          "|(test_alert)"
                          "|(save_agent)"
+                         "|(save_alert)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -1628,6 +1629,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (resume_stopped_task)
   ELSE (run_wizard)
   ELSE (save_agent)
+  ELSE (save_alert)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
