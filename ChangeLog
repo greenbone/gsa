@@ -1,5 +1,20 @@
 2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Add edit_alert validator.
+	(exec_omp_get): Add edit_alert handler.
+
+	* src/gsad_omp.c (edit_alert, edit_alert_omp): New functions.
+
+	* src/gsad_omp.h: Add edit_alert_omp header.
+
+	* src/html/omp.xsl (html-edit-alert-form, edit_alert): New templates.
+	(alert): Show edit icon in alert actions.
+	(alert [details]): Show edit icon in alert details header.
+
+	* src/html/help.xsl (alerts.html): Show Alert edit help documentation.
+
+2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (lsc_credential): Output comment between brackets if
 	available.
 

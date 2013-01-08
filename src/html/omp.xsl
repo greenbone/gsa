@@ -5377,6 +5377,68 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="html-edit-alert-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Alert
+      <a href="/help/alert.html?token={/envelope/token}#edit_alert" title="Help: Edit Alert">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_alerts&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Alerts" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Alerts"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_alert&amp;alert_id={commands_response/get_alerts_response/alert/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Alert Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_alert"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="alert_id"
+               value="{commands_response/get_alerts_response/alert/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="alert" value="{/envelope/params/alert}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text" name="name" size="30" maxlength="80"
+                     value="{commands_response/get_alerts_response/alert/name}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="165">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_alerts_response/alert/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Alert"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_alert">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-alert-form"/>
+</xsl:template>
+
 <xsl:template match="get_alerts_response">
 </xsl:template>
 
@@ -5491,7 +5553,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Alert'"/>
         <xsl:with-param name="type" select="'alert'"/>
         <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
       <xsl:call-template name="start-icon">
         <xsl:with-param name="type">alert</xsl:with-param>
@@ -5605,7 +5666,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="details-header-icons">
         <xsl:with-param name="cap-type" select="'Alert'"/>
         <xsl:with-param name="type" select="'alert'"/>
-        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">

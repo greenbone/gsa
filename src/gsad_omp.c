@@ -4721,6 +4721,36 @@ new_alert_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
+ * @brief Setup edit_alert XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_alert (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return edit_resource ("alert", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_alert XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_alert_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_alert (credentials, params, NULL);
+}
+
+/**
  * @brief Test an alert, get all alerts XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

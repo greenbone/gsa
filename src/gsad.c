@@ -558,6 +558,7 @@ init_validator ()
                          "|(download_agent)"
                          "|(download_lsc_credential)"
                          "|(edit_agent)"
+                         "|(edit_alert)"
                          "|(edit_config)"
                          "|(edit_config_family)"
                          "|(edit_config_nvt)"
@@ -1789,6 +1790,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_agent)
+  ELSE (edit_alert)
   ELSE (edit_config)
   ELSE (edit_config_family)
   ELSE (edit_config_nvt)
