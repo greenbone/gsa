@@ -12354,7 +12354,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="./@ref_id"/>
             </xsl:otherwise>
           </xsl:choose></td>
-          <td><a href="{./@ref_url}"><xsl:value-of select="./@ref_url"/></a></td>
+          <td><xsl:value-of select="./@ref_url"/></td>
           </tr>
         </xsl:for-each>
       </table>
