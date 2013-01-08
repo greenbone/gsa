@@ -4496,6 +4496,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="name"/>
         </a>
       </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="login"/>

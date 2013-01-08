@@ -1,5 +1,10 @@
 2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (lsc_credential): Output comment between brackets if
+	available.
+
+2013-01-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (edit_lsc_credential): Use edit_resource.
 	(save_lsc_credential_omp): Refactor to use omp wrapper.
 
