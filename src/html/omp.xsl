@@ -8551,33 +8551,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     CONFIG OVERVIEW -->
 
 <xsl:template name="html-config-table">
+ <xsl:variable name="config" select="get_configs_response/config"/>
  <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">
   <xsl:choose>
     <xsl:when test="edit">
-      Edit Scan Config Details
-      <a href="/help/config_editor.html?token={/envelope/token}"
-         title="Help: Edit Scan Configs Details (Scan Configs)">
+      Edit Scan Config
+
+      <a href="/help/config_editor.html?token={/envelope/token}#edit_config" title="Help: Edit Scan Config">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_configs&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="Scan Configs" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Scan Configs"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=get_config&amp;config_id={$config/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+           title="Scan Config Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </div>
     </xsl:when>
     <xsl:otherwise>
       Scan Config Details
       <a href="/help/config_details.html?token={/envelope/token}"
-         title="Help: Scan Configs Details (Scan Configs)">
+         title="Help: Scan Config Details">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=new_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
+         title="New Scan Config">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_configs&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Scan Configs" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Scan Configs"/>
+      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <xsl:choose>
+          <xsl:when test="$config/writable!='0' and $config/in_use='0'">
+            <xsl:call-template name="trashcan-icon">
+              <xsl:with-param name="type" select="'config'"/>
+              <xsl:with-param name="id" select="$config/@id"/>
+              <xsl:with-param name="params">
+                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/trashcan_inactive.png" border="0" alt="To Trashcan"
+                 style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="$config/writable='0'">
+            <img src="/img/edit_inactive.png" border="0" alt="Edit"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               title="Edit Scan Config">
+              <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="Export Scan Config XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
     </xsl:otherwise>
   </xsl:choose>
   </div>
   <div class="gb_window_part_content">
-    <xsl:variable name="config" select="get_configs_response/config"/>
-    <div class="float_right">
-      <a href="?cmd=get_configs&amp;token={/envelope/token}">Configs</a>
-    </div>
-    <br/>
 
     <xsl:choose>
       <xsl:when test="edit">
@@ -8645,6 +8694,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </xsl:when>
       <xsl:otherwise>
+        <div class="float_right" style="font-size: 10px;">
+          <table style="font-size: 10px;">
+            <tr>
+              <td>ID:</td>
+              <td><xsl:value-of select="$config/@id"/></td>
+            </tr>
+            <tr>
+              <td>Created:</td>
+              <td><xsl:value-of select="gsa:long-time ($config/creation_time)"/></td>
+            </tr>
+            <tr>
+              <td>Last Modified:</td>
+              <td><xsl:value-of select="gsa:long-time ($config/modification_time)"/></td>
+            </tr>
+          </table>
+        </div>
         <table>
           <tr>
             <td><b>Name:</b></td>
@@ -8654,6 +8719,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Comment:</td><td><xsl:value-of select="$config/comment"/></td>
           </tr>
         </table>
+
+        <br/>
 
         <h1>Network Vulnerability Test Families</h1>
 
@@ -8739,7 +8806,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_configs&amp;filter={filters/term}&amp;token={/envelope/token}"
-           title="Export config_count/filtered filtered Scan Configs as XML"
+           title="Export {config_count/filtered} filtered Scan Configs as XML"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export XML"/>
         </a>
