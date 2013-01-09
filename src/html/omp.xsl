@@ -303,6 +303,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </select>
 </xsl:template>
 
+<xsl:template name="edit-header-icons">
+  <xsl:param name="type"/>
+  <xsl:param name="cap-type"/>
+  <xsl:param name="id"/>
+
+  <a href="/help/{$type}s.html?token={/envelope/token}#edit{$type}" title="Help: Edit {$cap-type}">
+    <img src="/img/help.png"/>
+  </a>
+  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+     title="{$cap-type}s" style="margin-left:3px;">
+    <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
+  </a>
+  <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+         title="{$cap-type} Details" style="margin-left:3px;">
+      <img src="/img/details.png" border="0" alt="Details"/>
+    </a>
+  </div>
+</xsl:template>
+
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
   <xsl:param name="cap-type"/>
@@ -3489,9 +3509,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Task
-      <a href="/help/tasks.html?token={/envelope/token}#edit_task" title="Help: Edit Task">
-        <img src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Task'"/>
+        <xsl:with-param name="type" select="'task'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_tasks_response/task/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -4349,19 +4372,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Credential
-      <a href="/help/lsc_credentials.html?token={/envelope/token}#edit_lsc_credential" title="Help: Edit Credential">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_lsc_credentials&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
-         title="Credential" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Credential"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={commands_response/get_lsc_credentials_response/lsc_credential/@id}&amp;lsc_credential={/envelope/params/lsc_credential}&amp;token={/envelope/token}"
-           title="Credential Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Credential'"/>
+        <xsl:with-param name="type" select="'lsc_credential'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_lsc_credentials_response/lsc_credential/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
@@ -4745,19 +4761,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Agent
-      <a href="/help/agent.html?token={/envelope/token}#edit_agent" title="Help: Edit Agent">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_agents&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Agents" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Agents"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_agent&amp;agent_id={commands_response/get_agents_response/agent/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Agent Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Agent'"/>
+        <xsl:with-param name="type" select="'agent'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_agents_response/agent/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -5382,19 +5391,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Alert
-      <a href="/help/alert.html?token={/envelope/token}#edit_alert" title="Help: Edit Alert">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_alerts&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Alerts" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Alerts"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_alert&amp;alert_id={commands_response/get_alerts_response/alert/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Alert Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Alert'"/>
+        <xsl:with-param name="type" select="'alert'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_alerts_response/alert/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -6438,19 +6440,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Filter
-      <a href="/help/filters.html?token={/envelope/token}#edit_filter" title="Help: Edit Filter">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Filters" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Filters"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_filter&amp;filter_id={commands_response/get_filters_response/filter/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Filter Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Filter'"/>
+        <xsl:with-param name="type" select="'filter'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_filters_response/filter/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -6789,19 +6784,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Target
-      <a href="/help/targets.html?token={/envelope/token}#edit_target" title="Help: Edit Target">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_targets&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Targets" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Targets"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_target&amp;target_id={commands_response/get_targets_response/target/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           title="Target Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Target'"/>
+        <xsl:with-param name="type" select="'target'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_targets_response/target/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -8624,19 +8612,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="edit">
       Edit Scan Config
 
-      <a href="/help/config_editor.html?token={/envelope/token}#edit_config" title="Help: Edit Scan Config">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_configs&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Scan Configs" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Scan Configs"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_config&amp;config_id={$config/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Scan Config Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Config'"/>
+        <xsl:with-param name="type" select="'config'"/>
+        <xsl:with-param name="id"
+                        select="$config/@id"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       Scan Config Details
@@ -9742,19 +9723,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Schedule
-      <a href="/help/schedules.html?token={/envelope/token}#edit_schedule" title="Help: Edit Schedule">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_schedules&amp;schedule={/envelope/params/schedule}&amp;token={/envelope/token}"
-         title="Schedules" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Schedules"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_schedule&amp;schedule_id={commands_response/get_schedules_response/schedule/@id}&amp;schedule={/envelope/params/schedule}&amp;token={/envelope/token}"
-           title="Schedule Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Schedule'"/>
+        <xsl:with-param name="type" select="'schedule'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_schedules_response/schedule/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -10836,19 +10810,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Slave
-      <a href="/help/slave.html?token={/envelope/token}#edit_slave" title="Help: Edit Slave">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_slaves&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Slaves" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Slaves"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_slave&amp;slave_id={commands_response/get_slaves_response/slave/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Slave Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Slave'"/>
+        <xsl:with-param name="type" select="'slave'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_slaves_response/slave/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -12872,21 +12839,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Note
-      <a href="/help/notes.html?token={/envelope/token}#editnote"
-         title="Help: Notes (Edit Note)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Notes" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Notes"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_note&amp;note_id={get_notes_response/note/@id}&amp;token={/envelope/token}"
-           title="Note Details"
-           style="margin-left:3px;">
-          <img src="/img/details.png"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Note'"/>
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="id"
+                        select="get_notes_response/note/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="fragment">
@@ -13882,21 +13840,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Override
-      <a href="/help/overrides.html?token={/envelope/token}#editoverride"
-         title="Help: Overrides (Edit Override)">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_overrides&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Overrides" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Overrides"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_override&amp;override_id={get_overrides_response/override/@id}&amp;token={/envelope/token}"
-           title="Override Details"
-           style="margin-left:3px;">
-          <img src="/img/details.png"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Override'"/>
+        <xsl:with-param name="type" select="'override'"/>
+        <xsl:with-param name="id"
+                        select="get_overrides_response/override/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <xsl:variable name="fragment">
@@ -14996,19 +14945,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Port List
-      <a href="/help/port_list.html?token={/envelope/token}#edit_port_list" title="Help: Edit Port List">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Port Lists" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Port Lists"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_port_list&amp;port_list_id={commands_response/get_port_lists_response/port_list/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Port List Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Port List'"/>
+        <xsl:with-param name="type" select="'port_list'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_port_lists_response/port_list/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
@@ -15370,19 +15312,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Edit Report Format
-      <a href="/help/report_format.html?token={/envelope/token}#edit_report_format" title="Help: Edit Report Format">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_report_formats&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-         title="Report Formats" style="margin-left:3px;">
-        <img src="/img/list.png" border="0" alt="Report Formats"/>
-      </a>
-      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=get_report_format&amp;report_format_id={commands_response/get_report_formats_response/report_format/@id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
-           title="Report Format Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </div>
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Report Format'"/>
+        <xsl:with-param name="type" select="'report_format'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_report_formats_response/report_format/@id"/>
+      </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
       <form action="" method="post">
@@ -18985,6 +18920,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/my_settings.html?token={/envelope/token}#edit"
          title="Help: My Settings (Edit)">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
+         title="My Settings" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="My Settings"/>
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">

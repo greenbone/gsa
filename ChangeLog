@@ -1,5 +1,15 @@
 2013-01-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (edit-header-icons): New template.
+	(html-edit-lsc-credential-form, html-edit-agent-form)
+	(html-edit-alert-form, html-edit-filter-form, html-edit-target-form)
+	(html-config-table, html-edit-schedule-form, html-edit-slave-form)
+	(html-edit-note-form, html-edit-override-form)
+	(html-edit-report-format-form): Use edit-header-icons template.
+	(edit_my_settings): Add header button to my settings.
+
+2013-01-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Check alert data for matching event/condition/method before sending it
 	which reduces bloat in DB.
 
