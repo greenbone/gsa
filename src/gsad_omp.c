@@ -4305,7 +4305,7 @@ char *
 get_alerts (credentials_t *, params_t *, const char *);
 
 /**
- * @brief Send data for an alert.
+ * @brief Send event data for an alert.
  *
  * @param[in]   session  GNUTLS session.
  * @param[out]  data     Data.
@@ -4313,7 +4313,8 @@ get_alerts (credentials_t *, params_t *, const char *);
  * @return 0 on success, -1 on error.
  */
 static int
-send_alert_data (gnutls_session_t *session, params_t *data)
+send_alert_event_data (gnutls_session_t *session, params_t *data,
+                       const char *event)
 {
   if (data)
     {
@@ -4323,10 +4324,46 @@ send_alert_data (gnutls_session_t *session, params_t *data)
 
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
-        if (openvas_server_sendf_xml (session,
-                                      "<data><name>%s</name>%s</data>",
-                                      name,
-                                      param->value ? param->value : ""))
+        if (((strcmp (event, "Task run status changed") == 0
+              && strcmp (name, "status") == 0))
+            && openvas_server_sendf_xml (session,
+                                         "<data><name>%s</name>%s</data>",
+                                         name,
+                                         param->value ? param->value : ""))
+          return -1;
+    }
+
+  return 0;
+}
+
+/**
+ * @brief Send condition data for an alert.
+ *
+ * @param[in]   session  GNUTLS session.
+ * @param[out]  data     Data.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static int
+send_alert_condition_data (gnutls_session_t *session, params_t *data,
+                           const char * condition)
+{
+  if (data)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, data);
+      while (params_iterator_next (&iter, &name, &param))
+        if (((strcmp (condition, "Threat level at least") == 0
+              && strcmp (name, "level") == 0)
+             || (strcmp (condition, "Threat level changed") == 0
+              && strcmp (name, "direction") == 0))
+            && openvas_server_sendf_xml (session,
+                                         "<data><name>%s</name>%s</data>",
+                                         name,
+                                         param->value ? param->value : ""))
           return -1;
     }
 
@@ -4344,7 +4381,7 @@ send_alert_data (gnutls_session_t *session, params_t *data)
  */
 static int
 send_alert_method_data (gnutls_session_t *session, params_t *data,
-                            const char *method)
+                        const char *method)
 {
   if (data)
     {
@@ -4356,11 +4393,24 @@ send_alert_method_data (gnutls_session_t *session, params_t *data,
         {
           params_iterator_init (&iter, data);
           while (params_iterator_next (&iter, &name, &param))
-            if (openvas_server_sendf_xml (session,
-                                          "<data><name>%s</name>%s</data>",
-                                          name,
-                                          param->value ? param->value : ""))
-              return -1;
+        if (((strcmp (method, "HTTP Get") == 0
+              && strcmp (name, "URL") == 0)
+             || (strcmp (method, "verinice Connector") == 0
+              && (strcmp (name, "verinice_server_url") == 0
+                  || strcmp (name, "verinice_server_username") == 0
+                  || strcmp (name, "verinice_server_password") == 0))
+             || (strcmp (method, "Email") == 0
+              && (strcmp (name, "to_address") == 0
+                  || strcmp (name, "from_address") == 0
+                  || strcmp (name, "notice_report_format") == 0
+                  || strcmp (name, "notice_attach_format") == 0))
+             || (strcmp (method, "syslog") == 0
+              && strcmp (name, "submethod") == 0))
+            && openvas_server_sendf_xml (session,
+                                         "<data><name>%s</name>%s</data>",
+                                         name,
+                                         param->value ? param->value : ""))
+             return -1;
           return 0;
         }
 
@@ -4368,10 +4418,12 @@ send_alert_method_data (gnutls_session_t *session, params_t *data,
       while (params_iterator_next (&iter, &name, &param))
         if (strcmp (name, "pkcs12"))
           {
-            if (openvas_server_sendf_xml (session,
-                                          "<data><name>%s</name>%s</data>",
-                                          name,
-                                          param->value ? param->value : ""))
+            if ((strcmp (name, "defense_center_ip") == 0
+                 || strcmp (name, "defense_center_port") == 0)
+                && openvas_server_sendf_xml (session,
+                                             "<data><name>%s</name>%s</data>",
+                                             name,
+                                             param->value ? param->value : ""))
               return -1;
           }
         else
@@ -4474,13 +4526,13 @@ create_alert_omp (credentials_t * credentials, params_t *params)
                                 comment ? comment : "",
                                 comment ? "</comment>" : "")
           || openvas_server_sendf (&session, "<event>%s", event)
-          || send_alert_data (&session, event_data)
+          || send_alert_event_data (&session, event_data, event)
           || openvas_server_send (&session, "</event>")
           || openvas_server_sendf (&session, "<method>%s", method)
           || send_alert_method_data (&session, method_data, method)
           || openvas_server_send (&session, "</method>")
           || openvas_server_sendf (&session, "<condition>%s", condition)
-          || send_alert_data (&session, condition_data)
+          || send_alert_condition_data (&session, condition_data, condition)
           || openvas_server_send (&session,
                                   "</condition>"
                                   "</create_alert>"))

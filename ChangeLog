@@ -1,3 +1,16 @@
+2013-01-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Check alert data for matching event/condition/method before sending it
+	which reduces bloat in DB.
+
+	* src/gsad_omp.c (send_alert_condition_data): New function.
+	(send_alert_data): Check matching event is selected before sending data.
+	Rename function into send_alert_event_data to stay consistent with other
+	functions.
+	(send_alert_method_data): Check matching method is selected before
+	sending data. Fix coding style.
+	(create_alert_omp): Use adequate alert data sending functions.
+
 2013-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (ovaldef-details): Remove <a href=...> tags for
