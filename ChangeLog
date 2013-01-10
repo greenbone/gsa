@@ -1,3 +1,7 @@
+2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* ChangeLog: Clean up entry.
+
 2013-01-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (edit-header-icons): New template.
@@ -326,7 +330,7 @@
 	* src/html/omp.xsl (details-header-icons): Add cap-type parameter.
 	(task [details], lsc_credential [details], agent [details])
 	(alert [details], filter [details], target [details], config [details])
-	(schedule [details]) (slave [details], note [details])
+	(schedule [details], slave [details], note [details])
 	(override [details], port_list [details]): Add cap-type value to
 	list-window-line-icons template call.
 
