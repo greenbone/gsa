@@ -11857,7 +11857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CVE (CVE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
         title="CVE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CVE"/>
       </a>
@@ -12074,7 +12074,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CPE (CPE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
         title="CPE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CPE"/>
       </a>
@@ -12207,7 +12207,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: OVALDEF (OVAL Definition Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
         title="OVAL definitions" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="OVAL"/>
       </a>

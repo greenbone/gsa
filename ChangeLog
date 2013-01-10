@@ -1,5 +1,10 @@
 2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details, cpe-details, ovaldef-details): Get
+	filter from envelope now that manager stips it out.
+
+2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* ChangeLog: Clean up entry.
 
 2013-01-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
