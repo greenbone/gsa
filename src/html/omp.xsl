@@ -5386,7 +5386,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="radio-button">
+  <xsl:param name="name"></xsl:param>
+  <xsl:param name="value"></xsl:param>
+  <xsl:param name="text"></xsl:param>
+  <xsl:param name="select-value"></xsl:param>
+  <label>
+  <xsl:choose>
+    <xsl:when test="$value = $select-value">
+        <input type="radio" name="{$name}" checked="1" value="{$value}"/>
+    </xsl:when>
+    <xsl:otherwise>
+        <input type="radio" name="{$name}" value="{$value}"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$text">
+      <xsl:value-of select="$text"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$value"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  </label>
+</xsl:template>
+
 <xsl:template name="html-edit-alert-form">
+  <xsl:param name="report-formats"></xsl:param>
+  <xsl:param name="filters"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -5410,18 +5438,408 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="alert" value="{/envelope/params/alert}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
+          <tr class="odd">
             <td valign="top" width="165">Name</td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_alerts_response/alert/name}"/>
             </td>
           </tr>
-          <tr>
+          <tr class="even">
             <td valign="top" width="165">Comment (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_alerts_response/alert/comment}"/>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="145">Event</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="2" valign="top">
+                    <label>
+                      <input type="radio" name="event" value="Task run status changed" checked="1"/>
+                      Task run status changed to
+                    </label>
+                    <xsl:variable name="eventdata"
+                                  select="commands_response/get_alerts_response/alert/event/data/text()"/>
+                    <select name="event_data:status">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Delete Requested'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Done'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'New'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Requested'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Running'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Stop Requested'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Stopped'"/>
+                        <xsl:with-param name="select-value" select="$eventdata"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="even">
+            <xsl:variable name="condition"
+                          select="commands_response/get_alerts_response/alert/condition"/>
+            <td valign="top" width="125">Condition</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="2" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="value" select="'Always'"/>
+                      <xsl:with-param name="select-value" select="$condition/text()"/>
+                      <xsl:with-param name="name" select="'condition'"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="value" select="'Threat level at least'"/>
+                      <xsl:with-param name="select-value" select="$condition/text()"/>
+                      <xsl:with-param name="name" select="'condition'"/>
+                    </xsl:call-template>
+                    <select name="condition_data:level">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'High'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Meduim'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Low'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'Log'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'condition'"/>
+                      <xsl:with-param name="value" select="'Threat level changed'"/>
+                      <xsl:with-param name="select-value" select="$condition/text()"/>
+                      <xsl:with-param name="text" select="'Threat level'"/>
+                    </xsl:call-template>
+                    <select name="condition_data:direction">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'changed'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'increased'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'decreased'"/>
+                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <xsl:variable name="method"
+                        select="commands_response/get_alerts_response/alert/method"/>
+          <tr class="odd">
+            <td valign="top" width="145">Method</td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'Email'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">To Address</td>
+                  <td>
+                    <input type="text" name="method_data:to_address" size="30" maxlength="301"
+                        value="{$method/data[name='to_address']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">From Address</td>
+                  <td>
+                    <input type="text" name="method_data:from_address" size="30" maxlength="301"
+                        value="{$method/data[name='from_address']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">Content</td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td colspan="3" valign="top">
+                          <label>
+                            <xsl:call-template name="radio-button">
+                              <xsl:with-param name="name" select="'method_data:notice'"/>
+                              <xsl:with-param name="text" select="'Simple notice'"/>
+                              <xsl:with-param name="value" select="'1'"/>
+                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                            </xsl:call-template>
+                          </label>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" valign="top">
+                            <xsl:call-template name="radio-button">
+                              <xsl:with-param name="name" select="'method_data:notice'"/>
+                              <xsl:with-param name="text" select="'Include report'"/>
+                              <xsl:with-param name="value" select="'0'"/>
+                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                            </xsl:call-template>
+                          <select name="method_data:notice_report_format">
+                            <xsl:for-each select="$report-formats/report_format">
+                              <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                <xsl:choose>
+                                  <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
+                                    <option value="{@id}" selected="1">
+                                      <xsl:value-of select="name"/>
+                                    </option>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <option value="{@id}">
+                                      <xsl:value-of select="name"/>
+                                    </option>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </xsl:if>
+                            </xsl:for-each>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="3" valign="top">
+                            <xsl:call-template name="radio-button">
+                              <xsl:with-param name="name" select="'method_data:notice'"/>
+                              <xsl:with-param name="text" select="'Attach report'"/>
+                              <xsl:with-param name="value" select="'2'"/>
+                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                            </xsl:call-template>
+                          <select name="method_data:notice_attach_format">
+                            <xsl:for-each select="$report-formats/report_format">
+                              <xsl:choose>
+                                <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
+                                  <option value="{@id}" selected="1">
+                                    <xsl:value-of select="name"/>
+                                  </option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}">
+                                    <xsl:value-of select="name"/>
+                                  </option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
+                          </select>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'syslog syslog'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="'System Logger (Syslog)'"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'syslog SNMP'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="'SNMP'"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'HTTP Get'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">URL</td>
+                  <td>
+                    <input type="text" name="method_data:URL" size="30" maxlength="301"
+                        value="{$method/data[name='URL']/text()}"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'Sourcefire Connector'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">Defense Center IP</td>
+                  <td>
+                    <input type="text" name="method_data:defense_center_ip"
+                           size="30" maxlength="40" value="{$method/data[name='defense_center_ip']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">Defense Center Port</td>
+                  <td>
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='defense_center_port']/text()">
+                        <input type="text" name="method_data:defense_center_port"
+                               size="30" maxlength="400"  value="{$method/data[name='defense_center_port']/text()}"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="text" name="method_data:defense_center_port"
+                               size="30" maxlength="400" value="8307"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">PKCS12 file</td>
+                  <td>
+                    <input type="file" name="method_data:pkcs12" size="30"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'verinice Connector'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="'verinice.PRO Connector'"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">verinice.PRO URL</td>
+                  <td>
+                    <input type="text" name="method_data:verinice_server_url"
+                           size="30" maxlength="256" value="{$method/data[name='verinice_server_url']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">verinice.PRO Username</td>
+                  <td>
+                    <input type="text" name="method_data:verinice_server_username"
+                           size="30" maxlength="40" value="{$method/data[name='verinice_server_username']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150">verinice.PRO Password</td>
+                  <td>
+                    <input type="password" name="method_data:verinice_server_password"
+                           size="30" maxlength="40"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <xsl:variable name="filtername"
+              select="commands_response/get_alerts_response/alert/filter/name"/>
+          <tr>
+            <td valign="top" width="145">Report Filter (optional)</td>
+            <td colspan="2">
+              <select name="filter_id">
+                <option value="0">--</option>
+                <xsl:for-each select="$filters/filter">
+                  <xsl:choose>
+                    <xsl:when test="name = $filtername">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
             </td>
           </tr>
           <tr>
@@ -5438,7 +5856,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_alert">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:call-template name="html-edit-alert-form"/>
+  <xsl:call-template name="html-edit-alert-form">
+    <xsl:with-param
+      name="report-formats"
+      select="get_report_formats_response | commands_response/get_report_formats_response"/>
+    <xsl:with-param
+      name="filters"
+      select="get_filters_response | commands_response/get_filters_response"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="get_alerts_response">
@@ -5479,6 +5904,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="test_alert_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Test Alert</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     MODIFY_ALERT_RESPONSE -->
+
+<xsl:template match="modify_alert_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Modify Alert</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -5895,6 +6334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_alert">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
+  <xsl:apply-templates select="modify_alert_response"/>
   <xsl:apply-templates select="get_alerts_response/alert" mode="details"/>
 </xsl:template>
 
@@ -5905,6 +6345,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="test_alert_response"/>
+  <xsl:apply-templates select="modify_alert_response"/>
   <!-- The for-each makes the get_alerts_response the current node. -->
   <xsl:for-each select="get_alerts_response | commands_response/get_alerts_response">
     <xsl:call-template name="html-alerts-table"/>

@@ -3,6 +3,23 @@
 	* src/html/omp.xsl (cve-details, cpe-details, ovaldef-details): Get
 	filter from envelope now that manager stips it out.
 
+2013-01-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add Alert event, condition, method and filter editing support.
+
+	* src/gsad_omp.c (send_alert_method_data): Check for notice name too
+	when sending method data.
+	(edit_alert): Get report filters and report formats too.
+	(save_alert): Send event, condition, method and filter too.
+	(test_alert): Fix error message links.
+
+	* src/html/omp.xsl (radio-button, modify_alert_repsonse): New template.
+	(html-edit-alert-form): Add event, method, data and filter editing
+	fields.
+	(edit_alert): Send get_report_formats_response and get_filters_response
+	as parameters to html-edit-alert-form.
+	(get_alert, get_alerts): Apply modify_alert_response.
+
 2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* ChangeLog: Clean up entry.
