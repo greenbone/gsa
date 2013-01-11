@@ -1,5 +1,10 @@
 2013-01-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (send_alert_method_data): Check email notice type
+	before sending report formats to not clutter the DB with unneeded data.
+
+2013-01-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-create-alert-form, html-edit-alert-form): Use a
 	drop-down list for syslog and SNMP.
 	(html-edit-alert-form): Fix class values for certain table rows.

@@ -4388,6 +4388,16 @@ send_alert_method_data (gnutls_session_t *session, params_t *data,
       params_iterator_t iter;
       char *name;
       param_t *param;
+      int notice;
+      params_iterator_init (&iter, data);
+      /* Used to check email notice type before sending report formats values */
+      notice = 1;
+      while (params_iterator_next (&iter, &name, &param))
+          if (strcmp (name, "notice") == 0)
+            {
+              notice = atoi (param->value);
+              break;
+            }
 
       if (strcmp (method, "Sourcefire Connector"))
         {
@@ -4403,8 +4413,10 @@ send_alert_method_data (gnutls_session_t *session, params_t *data,
               && (strcmp (name, "to_address") == 0
                   || strcmp (name, "from_address") == 0
                   || strcmp (name, "notice") == 0
-                  || strcmp (name, "notice_report_format") == 0
-                  || strcmp (name, "notice_attach_format") == 0))
+                  || (strcmp (name, "notice_report_format") == 0
+                      && notice == 0)
+                  || (strcmp (name, "notice_attach_format") == 0
+                      && notice == 2)))
              || (strcmp (method, "syslog") == 0
               && strcmp (name, "submethod") == 0))
             && openvas_server_sendf_xml (session,
