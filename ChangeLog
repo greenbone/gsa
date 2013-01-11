@@ -1,3 +1,12 @@
+2013-01-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (html-create-alert-form, html-edit-alert-form): Use a
+	drop-down list for syslog and SNMP.
+	(html-edit-alert-form): Fix class values for certain table rows.
+
+	* src/gsad_omp.c (create_alert_omp, edit_alert_omp): Remove the syslog
+	special case.
+
 2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (cve-details, cpe-details, ovaldef-details): Get

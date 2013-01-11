@@ -5213,26 +5213,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td colspan="2">
               <table border="0" width="100%">
                 <tr>
-                  <td colspan="3" valign="top">
-                    <label>
-                      <input type="radio" name="method" value="syslog syslog"/>
-                      System Logger (Syslog)
+                  <td colspan="2" valign="top">
+                    <label width="250">
+                      <input type="radio" name="method" value="syslog"/>
+                      System Logger
                     </label>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
-                <tr>
-                  <td colspan="3" valign="top">
-                    <label>
-                      <input type="radio" name="method" value="syslog SNMP"/>
-                      SNMP
-                    </label>
+                    <select margin="50" name="method_data:submethod">
+                      <option value="syslog" selected="1">syslog</option>
+                      <option value="SNMP">SNMP</option>
+                    </select>
                   </td>
                 </tr>
               </table>
@@ -5676,7 +5665,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">
@@ -5684,27 +5673,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td colspan="3" valign="top">
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'syslog syslog'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="'System Logger (Syslog)'"/>
+                      <xsl:with-param name="value" select="'syslog'"/>
+                      <xsl:with-param name="select-value" select="gsa:lower-case($method/text())"/>
+                      <xsl:with-param name="text" select="'System Logger'"/>
                     </xsl:call-template>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
-                <tr>
-                  <td colspan="3" valign="top">
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'syslog SNMP'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="'SNMP'"/>
-                    </xsl:call-template>
+                    <select name="method_data:submethod">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'syslog'"/>
+                        <xsl:with-param name="select-value" select="$method/data/text()"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'SNMP'"/>
+                        <xsl:with-param name="select-value" select="$method/data/text()"/>
+                      </xsl:call-template>
+                    </select>
                   </td>
                 </tr>
               </table>
@@ -5734,7 +5716,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td valign="top" width="125"></td>
             <td colspan="2">
               <table border="0" width="100%">

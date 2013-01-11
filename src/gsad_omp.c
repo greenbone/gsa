@@ -4508,14 +4508,6 @@ create_alert_omp (credentials_t * credentials, params_t *params)
       event_data = params_values (params, "event_data:");
       condition_data = params_values (params, "condition_data:");
 
-      /* Special case the syslog submethods, because HTTP only allows one
-       * value to vary per radio. */
-      if (strncmp (method, "syslog ", strlen ("syslog ")) == 0)
-        {
-          params_add (method_data, "submethod", method + strlen ("syslog "));
-          method = "syslog";
-        }
-
       if (openvas_server_sendf (&session,
                                 "<create_alert>"
                                 "<name>%s</name>"
@@ -4988,14 +4980,6 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   event_data = params_values (params, "event_data:");
   condition_data = params_values (params, "condition_data:");
   method_data = params_values (params, "method_data:");
-
-  /* Special case the syslog submethods, because HTTP only allows one
-   * value to vary per radio. */
-  if (strncmp (method, "syslog ", strlen ("syslog ")) == 0)
-    {
-      params_add (method_data, "submethod", method + strlen ("syslog "));
-      method = "syslog";
-    }
 
   if (openvas_server_sendf (&session,
                             "<modify_alert alert_id=\"%s\">"
