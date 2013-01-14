@@ -3834,7 +3834,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
