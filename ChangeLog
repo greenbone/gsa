@@ -1,5 +1,10 @@
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (old-html-tasks-table): Remove.  Replaced by
+	list-window version.
+
+2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Add filt_id param to name link.
 
 	* src/html/wizard.xsl (quick-first-scan-wizard): Add filter args to
