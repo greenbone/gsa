@@ -3969,7 +3969,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="name"/>
             </a>
           </b>

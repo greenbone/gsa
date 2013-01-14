@@ -1,5 +1,12 @@
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (task): Add filt_id param to name link.
+
+	* src/html/wizard.xsl (quick-first-scan-wizard): Add filter args to
+	run_wizard form.
+
+2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (edit-header-icons): Add filt_id param to links.
 
 2013-01-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
