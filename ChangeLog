@@ -1,5 +1,11 @@
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Use the max_results param to check if
+	the notes and result_hosts_only params where unchecked, because these
+	two params default to 1.
+
+2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_tasks): Add the overrides when the filter is
 	missing, so that the initial page respects the overrides param.
 

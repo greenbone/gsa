@@ -8210,7 +8210,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   notes = params_value (params, "notes");
   if (notes == NULL)
-    params_given (params, "notes") || (notes = "1");
+    {
+      if (params_given (params, "max_results"))
+        /* Use the max_results params to determine if the request is from
+         * the Result Filtering form, because the notes param is only sent
+         * when the checkbox is ticked. */
+        notes = "0";
+      else
+        params_given (params, "notes") || (notes = "1");
+    }
 
   overrides = params_value (params, "overrides");
   if (overrides == NULL)
@@ -8218,7 +8226,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   result_hosts_only = params_value (params, "result_hosts_only");
   if (result_hosts_only == NULL)
-    params_given (params, "result_hosts_only") || (result_hosts_only = "1");
+    {
+      if (params_given (params, "max_results"))
+        /* Use the max_results params to determine if the request is from
+         * the Result Filtering form, because the result_hosts_only param is
+         * only sent when the checkbox is ticked. */
+        result_hosts_only = "0";
+      else
+        params_given (params, "result_hosts_only") || (result_hosts_only = "1");
+    }
 
   if (content_type) *content_type = NULL;
   if (report_len) *report_len = 0;
