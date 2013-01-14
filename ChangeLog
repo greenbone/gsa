@@ -1,5 +1,10 @@
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_tasks): Add the overrides when the filter is
+	missing, so that the initial page respects the overrides param.
+
+2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task): Add filter args to report count link.
 
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>

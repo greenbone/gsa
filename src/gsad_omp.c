@@ -2729,6 +2729,10 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
                                            old);
           g_free (old);
         }
+      else if (strcmp (overrides, "0"))
+        params_add (params, "filter", "apply_overrides=1");
+      else
+        params_add (params, "filter", "apply_overrides=0");
     }
 
   return get_many ("task", credentials, params, extra_xml, NULL);
