@@ -311,12 +311,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a href="/help/{$type}s.html?token={/envelope/token}#edit{$type}" title="Help: Edit {$cap-type}">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="{$cap-type}s" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{$cap-type} Details" style="margin-left:3px;">
       <img src="/img/details.png" border="0" alt="Details"/>
     </a>
@@ -12659,15 +12659,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table>
         <tr>
           <th>OVAL identifier:</th>
-          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></td> 
+          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></td>
         </tr>
         <tr>
           <th>Version:</th>
-          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@version"/></td> 
+          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@version"/></td>
         </tr>
         <tr>
           <th>Definition class:</th>
-          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td> 
+          <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@class"/></td>
         </tr>
         <tr>
           <xsl:choose>

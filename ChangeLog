@@ -1,3 +1,7 @@
+2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (edit-header-icons): Add filt_id param to links.
+
 2013-01-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (send_alert_method_data): Check email notice type
@@ -15,7 +19,7 @@
 2013-01-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (cve-details, cpe-details, ovaldef-details): Get
-	filter from envelope now that manager stips it out.
+	filter from envelope now that manager strips it out.
 
 2013-01-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
