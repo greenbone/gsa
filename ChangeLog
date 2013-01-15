@@ -1,5 +1,14 @@
 2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-edit-filter-form): Add Credential and Slave
+	filter types.
+	(get_my_settings): Show credentials and slaves filters. Adapt table rows
+	class and add missing table cells. Remove reports filter.
+	(edit_my_settings): Edit credentials and slaves filters. Remove reports
+	filter. Fix typo in edit-settings-filters template of Report Formats.
+
+2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-create-filter-form): Add Credential and Slave
 	filter types.
 
