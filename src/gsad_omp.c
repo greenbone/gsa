@@ -13175,7 +13175,45 @@ get_my_settings (credentials_t * credentials, params_t *params,
 char *
 get_my_settings_omp (credentials_t * credentials, params_t *params)
 {
-  return get_my_settings (credentials, params, NULL);
+  int ret;
+  entity_t entity;
+  gchar *response;
+
+  /* Get Filters. */
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, "<get_filters/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Filters "
+                             "for the settings. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+  free_entity (entity);
+
+  return get_my_settings (credentials, params, response);
 }
 
 /**
@@ -13263,7 +13301,77 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 char *
 edit_my_settings_omp (credentials_t * credentials, params_t *params)
 {
-  return edit_my_settings (credentials, params, NULL);
+  int ret;
+  entity_t entity;
+  gchar *response;
+
+  /* Get Filters. */
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, "<get_filters/>");
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Filters "
+                             "for the settings. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_my_settings");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting Report "
+                             "Formats for the alert. "
+                             "It is unclear whether the task has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts");
+    }
+  free_entity (entity);
+
+  return edit_my_settings (credentials, params, response);
+}
+
+/**
+ * @brief Send settings resource filters.
+ *
+ * @param[in]   session  GNUTLS session.
+ * @param[in]   data     Data.
+ *
+ * @return 0 on success, -1 on error.
+ */
+static int
+send_settings_filters (gnutls_session_t *session, params_t *data)
+{
+  if (data)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, data);
+      while (params_iterator_next (&iter, &name, &param))
+        if (openvas_server_sendf_xml (session, "<modify_setting>")
+            || openvas_server_sendf_xml (session,
+                                         "<name>%s</name>"
+                                         "<value>%s</value>",
+                                         name,
+                                         param->value ? param->value : "")
+            || openvas_server_sendf_xml (session, "</modify_setting>"))
+          return -1;
+    }
+
+  return 0;
 }
 
 /**
@@ -13287,6 +13395,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   gchar *text_64, *max_64;
   GString *xml;
   entity_t entity;
+  params_t *filters;
 
   *timezone = NULL;
   *password = NULL;
@@ -13441,6 +13550,20 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   g_free (max_64);
 
+  /* Send resources filters */
+  filters = params_values (params, "settings_filter:");
+  if (send_settings_filters (&session, filters))
+    {
+      g_free (max_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
+
   entity = NULL;
   if (read_entity_and_string (&session, &entity, &xml))
     {
@@ -13478,6 +13601,20 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings");
     }
   g_free (max_64);
+
+  if (openvas_server_sendf (&session,
+                            "<get_filters/>")
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings");
+    }
 
   entity = NULL;
   if (read_entity_and_string (&session, &entity, &xml))

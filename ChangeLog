@@ -1,3 +1,21 @@
+2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add per-resource default filters.
+
+	* src/gsad.c (init_validator): Add settings_filter validators.
+	(params_append_mhd): Add settings_filter parameter.
+
+	* src/gsad_omp.c (get_my_settings_omp, edit_my_settings_omp): Get
+	filters too.
+	(send_settings_filter): New function.
+	(save_my_settings_omp): Save settings filters. Get filters before
+	returning get settings page.
+
+	* src/html/omp.xsl (get-settings-filter, edit-settings-filters): New
+	templates.
+	(edit_my_sttings): Add ability to set per-resource default filters.
+	(get_my_settings): Show resource filters.
+
 2013-01-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Use the max_results param to check if

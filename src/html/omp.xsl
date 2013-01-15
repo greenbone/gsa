@@ -323,6 +323,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="get-settings-filter">
+  <xsl:param name="filter"/>
+
+  <xsl:choose>
+    <xsl:when test="$filter">
+      <a href="/omp?cmd=get_filter&amp;filter_id={$filter}&amp;token={/envelope/token}"
+         title="Filter Details">
+        <xsl:value-of select="get_filters_response/filter[@id=$filter]/name"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="edit-settings-filters">
+  <xsl:param name="type"/>
+  <xsl:param name="filter-type"/>
+  <xsl:param name="filter"/>
+  <select style="margin-bottom: 0px;" name="settings_filter:{$type}s_filter">
+    <option value="">--</option>
+    <xsl:variable name="id" select="filters/@id"/>
+    <xsl:for-each select="get_filters_response/filter[type=$filter-type]">
+      <xsl:choose>
+        <xsl:when test="@id = $filter">
+          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+        </xsl:when>
+        <xsl:otherwise>
+          <option value="{@id}"><xsl:value-of select="name"/></option>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </select>
+</xsl:template>
+
 <xsl:template name="list-window-line-icons">
   <xsl:param name="type"/>
   <xsl:param name="cap-type"/>
@@ -19138,7 +19173,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Value</td>
             <td width="100">Actions</td>
           </tr>
-          <tr>
+          <tr class="even">
             <td>Timezone</td>
             <td><xsl:value-of select="/envelope/timezone"/></td>
             <td></td>
@@ -19148,7 +19183,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>********</td>
             <td></td>
           </tr>
-          <tr>
+          <tr class="even">
             <td>Rows Per Page</td>
             <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
             <td></td>
@@ -19157,6 +19192,114 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Wizard Rows</td>
             <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
             <td></td>
+          </tr>
+          <tr class="even">
+            <td>Agents filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='agents_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Alerts filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='alerts_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td>Configs filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='configs_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Filters filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='filters_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td>Notes filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='notes_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Overrides filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='overrides_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td>Port Lists filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='port_lists_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Reports filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='reports_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td>Report Formats filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='report_formats_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Schedules filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='schedules_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td>Targets filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='targets_filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td>Tasks filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='tasks_filter']/value"/>
+              </xsl:call-template>
+            </td>
           </tr>
         </table>
       </div>
@@ -19198,7 +19341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        value="{/envelope/timezone}"/>
               </td>
             </tr>
-            <tr class="odd">
+            <tr>
               <td valign="top">Password</td>
               <td>
                 <label>
@@ -19226,6 +19369,140 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td></td>
             </tr>
+
+            <tr>
+              <td>Agents filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'agent'"/>
+                    <xsl:with-param name="filter-type" select="'Agent'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='agents_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Alerts filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'alert'"/>
+                    <xsl:with-param name="filter-type" select="'Alert'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='alerts_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Configs filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'config'"/>
+                    <xsl:with-param name="filter-type" select="'Config'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='configs_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Filters filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'filter'"/>
+                    <xsl:with-param name="filter-type" select="'Filter'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='filters_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Notes filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'note'"/>
+                    <xsl:with-param name="filter-type" select="'Note'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='notes_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Overrides filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'override'"/>
+                    <xsl:with-param name="filter-type" select="'Override'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='overrides_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Port Lists filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'port_list'"/>
+                    <xsl:with-param name="filter-type" select="'Port List'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='port_lists_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Report filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'report'"/>
+                    <xsl:with-param name="filter-type" select="'Report'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='reports_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Report Formats filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'report_format'"/>
+                    <xsl:with-param name="filter-type" select="'Report Format'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='report_formats_filters']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Schedules filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'schedule'"/>
+                    <xsl:with-param name="filter-type" select="'Schedule'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='schedules_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Targets filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'target'"/>
+                    <xsl:with-param name="filter-type" select="'Target'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='targets_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Tasks filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'task'"/>
+                    <xsl:with-param name="filter-type" select="'Task'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='tasks_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+
             <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="Save My Settings"/>

@@ -728,6 +728,8 @@ init_validator ()
   openvas_validator_add (validator, "file",         "(?s)^.*$");
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   openvas_validator_add (validator, "file:value",   "^yes$");
+  openvas_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "settings_filter:value", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "first",        "^[0-9]+$");
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
@@ -1054,6 +1056,7 @@ params_append_mhd (params_t *params,
 {
   if ((strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
+      || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
       || (strncmp (name, "file:", strlen ("file:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
       || (strncmp (name, "password:", strlen ("password:")) == 0)
