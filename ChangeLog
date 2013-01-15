@@ -1,5 +1,10 @@
 2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-create-filter-form): Add Credential and Slave
+	filter types.
+
+2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add per-resource default filters.
 
 	* src/gsad.c (init_validator): Add settings_filter validators.

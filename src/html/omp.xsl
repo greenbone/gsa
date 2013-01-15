@@ -6698,7 +6698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Filter|Note|Override|Port List|Report|Report Format|Schedule|Target|Task|SecInfo', '|')">
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
                   <option value="{.}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
