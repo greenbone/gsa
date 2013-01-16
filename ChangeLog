@@ -1,5 +1,15 @@
 2013-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Update copyright dates and authors in heading comments of various files.
+
+	* src/html/gsad.xsl: Update heading comment.
+
+	* src/html/help.xsl: Update heading comment.
+
+	* src/html/omp.xsl: Update heading comment.
+
+2013-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add views for DFN-CERT. Minor fixes in OVAL help and details view.
 
 	* src/html/gsad.xsl: Add DFN-CERT Advisories item to SecInfo menu
