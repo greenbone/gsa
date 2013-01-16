@@ -1,3 +1,11 @@
+2013-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (edit-settings-filter): Remove plural s for types.
+	(get_my_settings): Show SecInfo filter.
+	(edit_my_settings): Add SecInfo filter dropdown menu. Use plural form
+	for types for consistency.
+
+
 2013-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Update copyright dates and authors in heading comments of various files.
