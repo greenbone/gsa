@@ -13245,7 +13245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Note">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Notes" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Notes"/>
       </a>
@@ -14232,7 +14232,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Override">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_overrides&amp;filter={/envelope/params/filters}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_overrides&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Overrides" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Overrides"/>
       </a>

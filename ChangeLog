@@ -1,5 +1,10 @@
 2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-note-form)
+	(html-create-override-form): Correct envelope param name in list link.
+
+2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Add NVT to SecInfo menu.
 
 	* src/html/omp.xsl (info/nvt, get_info_nvt_lnk, html-nvt-table): New
