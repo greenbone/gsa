@@ -5,7 +5,6 @@
 	(edit_my_settings): Add SecInfo filter dropdown menu. Use plural form
 	for types for consistency.
 
-
 2013-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Update copyright dates and authors in heading comments of various files.
