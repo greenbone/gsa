@@ -1,5 +1,11 @@
 2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (info/cpe, info/cve, info/ovaldef)
+	(info/dfn_cert_adv): Remove action column centering to match other
+	lists.
+
+2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-note-form)
 	(html-create-override-form): Correct envelope param name in list link.
 

@@ -11483,12 +11483,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="max_cvss"/>
     </td>
     <td>
-      <center>
-        <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="CPE Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </center>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        title="CPE Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -11588,12 +11586,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cvss"/>
     </td>
     <td>
-      <center>
-        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="CVE Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </center>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        title="CVE Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -11740,12 +11736,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <center>
-        <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="OVAL Definition Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </center>
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        title="OVAL Definition Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -11778,12 +11772,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="num_cves"/>
     </td>
     <td>
-      <center>
-        <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-          title="DFN-CERT Advisory Details" style="margin-left:3px;">
-          <img src="/img/details.png" border="0" alt="Details"/>
-        </a>
-      </center>
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        title="DFN-CERT Advisory Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
