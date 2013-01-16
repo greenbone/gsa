@@ -11598,6 +11598,80 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="info/nvt">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_nvt_lnk">
+          <xsl:with-param name="nvt" select="../name"/>
+          <xsl:with-param name="oid" select="@oid"/>
+          <xsl:with-param name="tooltip" select="concat (summary, ' (OID: ', @oid, ')')"/>
+        </xsl:call-template>
+      </b>
+    </td>
+    <td>
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter=family=&quot;{family}&quot;&amp;token={/envelope/token}">
+        <xsl:value-of select="family"/>
+      </a>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../creation_time != ''">
+          <xsl:value-of select="gsa:date (../creation_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../modification_time != ''">
+          <xsl:value-of select="gsa:date (../modification_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="version"/>
+    </td>
+    <td>
+      <!-- "NOCVE" means no CVE ID, skip. -->
+      <xsl:choose>
+        <xsl:when test="cve_id = 'NOCVE'">
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- get the GSA token before entering the for-each loop over the str:tokenize elements -->
+          <xsl:variable name="gsa_token" select="/envelope/token"/>
+
+          <xsl:for-each select="str:tokenize (cve_id, ', ')">
+            <xsl:call-template name="get_info_cve_lnk">
+              <xsl:with-param name="cve" select="text()"/>
+              <xsl:with-param name="gsa_token" select="$gsa_token"/>
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+          </xsl:for-each>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="cvss_base"/>
+    </td>
+    <td>
+      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;details=1&amp;token={/envelope/token}"
+        title="NVT Details" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Details"/>
+      </a>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template match="info/ovaldef">
   <xsl:variable name="class">
     <xsl:choose>
@@ -11737,6 +11811,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;token={$gsa_token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="get_info_nvt_lnk">
+  <xsl:param name="nvt"/>
+  <xsl:param name="oid"/>
+  <xsl:param name="gsa_token"/>
+  <xsl:param name="tooltip"/>
+  <xsl:choose>
+    <xsl:when test="$gsa_token = ''">
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={$gsa_token}"
+         title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -12005,6 +12096,113 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-nvt-table">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">NVT
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/nvt)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+      </xsl:call-template>
+      <a href="/help/nvts.html?token={/envelope/token}"
+        title="Help: NVT">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>NVT</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="cpes">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Family</xsl:with-param>
+                <xsl:with-param name="name">family</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Created</xsl:with-param>
+                <xsl:with-param name="name">created</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Modified</xsl:with-param>
+                <xsl:with-param name="name">modified</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Version</xsl:with-param>
+                <xsl:with-param name="name">version</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">CVE</xsl:with-param>
+                <xsl:with-param name="name">cve</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">CVSS</xsl:with-param>
+                <xsl:with-param name="name">cvss_base</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=NVT'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/nvt"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="6">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-ovaldef-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
@@ -12216,6 +12414,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CVE' or /envelope/params/info_type = 'cve'">
       <xsl:call-template name="html-cve-table"/>
+    </xsl:when>
+    <xsl:when test="/envelope/params/info_type = 'NVT' or /envelope/params/info_type = 'nvt'">
+      <xsl:call-template name="html-nvt-table"/>
     </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'OVALDEF' or /envelope/params/info_type = 'ovaldef'">
       <xsl:call-template name="html-ovaldef-table"/>
@@ -13018,6 +13219,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
          title="Help: NVTS (NVT Details)">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="NVT" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="NVT"/>
       </a>
     </div>
     <div class="gb_window_part_content">

@@ -1,3 +1,12 @@
+2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add NVT to SecInfo menu.
+
+	* src/html/omp.xsl (info/nvt, get_info_nvt_lnk, html-nvt-table): New
+	templates.
+	(get_info_response): Add NVT table.
+	(get_nvts): Add list icon.
+
 2013-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (edit-settings-filter): Remove plural s for types.
