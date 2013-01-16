@@ -1,5 +1,10 @@
 2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:param-or): Get the params out of the top-level
+	params instead of looking in the collection _params.
+
+2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (info/cpe, info/cve, info/ovaldef)
 	(info/dfn_cert_adv): Remove action column centering to match other
 	lists.
