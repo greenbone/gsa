@@ -18,6 +18,8 @@
     xmlns:cpe="http://cpe.mitre.org/dictionary/2.0"
     xmlns:oval="http://oval.mitre.org/XMLSchema/oval-common-5"
     xmlns:oval_definitions="http://oval.mitre.org/XMLSchema/oval-definitions-5"
+    xmlns:dfncert="https://www.dfn-cert.de/dfncert.dtd"
+    xmlns:atom="http://www.w3.org/2005/Atom"
     xsi:schemaLocation="http://scap.nist.gov/schema/configuration/0.1 http://nvd.nist.gov/schema/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.3 http://nvd.nist.gov/schema/scap-core_0.3.xsd http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exslt="http://exslt.org/common"
@@ -11674,6 +11676,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="info/dfn_cert_adv">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_dfn_cert_adv_lnk">
+          <xsl:with-param name="dfn_cert_adv" select="../name"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="title"/>
+    </td>
+    <td>
+      <xsl:value-of select="num_cves"/>
+    </td>
+    <td>
+      <center>
+        <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+          title="DFN-CERT Advisory Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </center>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
@@ -11707,6 +11747,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     title="Details">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$ovaldef"/>
+      <xsl:with-param name="width" select="'55'"/>
+      <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
+    </xsl:call-template>
+  </a>
+</xsl:template>
+
+<xsl:template name="get_info_dfn_cert_adv_lnk">
+  <xsl:param name="dfn_cert_adv"/>
+  <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={$dfn_cert_adv}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+    title="Details">
+     <xsl:call-template name="wrap" disable-output-escaping="yes">
+      <xsl:with-param name="string" select="$dfn_cert_adv"/>
       <xsl:with-param name="width" select="'55'"/>
       <xsl:with-param name="marker" select="'&#8629;&lt;br/&gt;'"/>
     </xsl:call-template>
@@ -12057,6 +12109,94 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-dfn_cert_adv-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: CERT Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP database missing on OMP server.
+        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#cert_missing"
+           title="Help: CERT database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">DFN-CERT Advisories
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/dfn_cert_adv)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+      </xsl:call-template>
+      <a href="/help/dfn_cert_advs.html?token={/envelope/token}"
+        title="Help: DFN-CERT Advisories">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>DFN_CERT_ADV</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="dfn_cert_advs">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Title</xsl:with-param>
+                <xsl:with-param name="name">title</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">#CVEs</xsl:with-param>
+                <xsl:with-param name="name">num_cves</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/dfn_cert_adv"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="2">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="get_info_response">
   <xsl:choose>
     <xsl:when test="count (info/cpe) > 0 and details='1'">
@@ -12068,6 +12208,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="count (info/ovaldef) > 0 and details='1'">
       <xsl:call-template name="ovaldef-details"/>
     </xsl:when>
+    <xsl:when test="count (info/dfn_cert_adv) > 0 and details='1'">
+      <xsl:call-template name="dfn_cert_adv-details"/>
+    </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:call-template name="html-cpe-table"/>
     </xsl:when>
@@ -12076,6 +12219,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="/envelope/params/info_type = 'OVALDEF' or /envelope/params/info_type = 'ovaldef'">
       <xsl:call-template name="html-ovaldef-table"/>
+    </xsl:when>
+    <xsl:when test="/envelope/params/info_type = 'DFN_CERT_ADV' or /envelope/params/info_type = 'dfn_cert_adv'">
+      <xsl:call-template name="html-dfn_cert_adv-table"/>
     </xsl:when>
     <xsl:when test="count (info/nvt) > 0">
       <div class="gb_window">
@@ -12601,10 +12747,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
           <xsl:choose>
             <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cve'">
-              <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={./@ref_id}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@ref_id"/></a>
+              <xsl:call-template name="get_info_cve_lnk">
+                <xsl:with-param name="cve" select="./@ref_id"/>
+                <xsl:with-param name="gsa_token" select="/envelope/token"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:when test="translate(./@source,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'cpe'">
-              <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={./@ref_id}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@ref_id"/></a>
+              <xsl:call-template name="get_info_cpe_lnk">
+                <xsl:with-param name="cpe" select="./@ref_id"/>
+                <xsl:with-param name="gsa_token" select="/envelope/token"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="./@ref_id"/>
@@ -12674,6 +12826,72 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <li>
     <xsl:if test="translate(./@negate,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b>NOT </b></xsl:if><xsl:value-of select="./@comment"/><i> (<a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={./@definition_ref}&amp;details=1&amp;token={/envelope/token}"><xsl:value-of select="./@definition_ref"/></a>)</i><xsl:if test="translate(./@applicability_check,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'true'"><b> [Applicability check]</b></xsl:if>
   </li>
+</xsl:template>
+
+<xsl:template name="dfn_cert_adv-details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">DFN-CERT Advisory Details
+      <a href="/help/dfn_cert_adv.html?token={/envelope/token}#advdetails"
+        title="Help: DFN_CERT_ADV (DFN-CERT Advisory Details)">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+        title="DFN-CERT Advisories" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="OVAL"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <div class="float_right" style="font-size: 10px;">
+        <table style="font-size: 10px;">
+          <tr>
+            <td><b>ID:</b></td>
+            <td>
+              <b><xsl:value-of select="info/name"/></b>
+            </td>
+          </tr>
+          <tr>
+            <td>Created:</td>
+            <td><xsl:value-of select="info/creation_time"/></td>
+          </tr>
+          <tr>
+            <td>Last modified:</td>
+            <td><xsl:value-of select="info/modification_time"/></td>
+          </tr>
+        </table>
+      </div>
+      <h2><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/></h2>
+      <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/>
+
+      <h2>Links:</h2>
+      <ul>
+      <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link">
+        <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
+      </xsl:for-each>
+      </ul>
+
+      <h2>Referenced CVEs:</h2>
+      <ul>
+      <xsl:choose>
+        <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
+          <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
+            <li>
+              <xsl:call-template name="get_info_cve_lnk">
+                <xsl:with-param name="cve" select="."/>
+                <xsl:with-param name="gsa_token" select="/envelope/token"/>
+              </xsl:call-template>
+            </li>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+        <li><i>none</i></li>
+        </xsl:otherwise>
+      </xsl:choose>
+      </ul>
+
+    </div>
+  </div>
 </xsl:template>
 
 <!-- BEGIN NVT DETAILS -->

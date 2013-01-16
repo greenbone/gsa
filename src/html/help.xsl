@@ -2785,6 +2785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
             <li> <a href="cves.html?token={/envelope/token}">CVE</a></li>
             <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Defintions</a></li>
+            <li> <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a></li>
             <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
@@ -2940,6 +2941,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definition</a>.
         This includes the creation time, modification time, version number,
         title, definition class and detailed description.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="dfn_cert_adv.html">
+  <div class="gb_window_part_center">Help: DFN-CERT Advisory Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="dfn_cert_adv"></a>
+      <h1>DFN-CERT Advisory Details</h1>
+      <p>
+        A page that provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisory</a>.
+        This includes the creation time, modification time and summary.
       </p>
     </div>
   </div>
@@ -3300,6 +3324,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         (Source: http://www.first.org/cvss/cvss-guide).
+      </p>
+
+      <a name="dfn_cert_adv"></a>
+      <h2>DFN-CERT Advisory (DFN_CERT_ADV)</h2>
+      <p>
+        An advisory published by DFN-CERT.
       </p>
 
       <a name="ovaldef"></a>
@@ -7152,10 +7182,83 @@ Public License instead of this License.
         This warning dialog occurs when the SCAP database is missing on the OMP server.
       </p>
       <p>
-        The CVE table is always empty when the database is missing.
+        The OVAL Definitions table is always empty when the database is missing.
       </p>
       <p>
         The SCAP data is updated during a SCAP data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="dfn_cert_advs.html">
+  <div class="gb_window_part_center">Help: DFN-CERT Advisories</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="dfn_cert_adv"></a>
+      <h1>DFN-CERT Advisories</h1>
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html#dfn_cert_adv?token={/envelope/token}">DFN-CERT Advisories</a>
+        and summarizes the essential aspects of each.
+      </p>
+      <br/>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>The DFN-CERT IDs of the advisories.</td>
+        </tr>
+        <tr class="odd">
+          <td>Title</td>
+          <td>The titles of the advisories.</td>
+        </tr>
+        <tr>
+          <td>#CVEs</td>
+          <td>The number of CVEs referenced by the advisories</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>DFN-CERT Advisory Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the <a href="/help/dfn-cert-advs.html?token={/envelope/token}">DFN-CERT Advisory Details</a> page. This page has full details of the DFN-CERT Advisory.
+      </p>
+
+      <a name="cert_missing"></a>
+      <h2>Warning: CERT Database Missing</h2>
+      <p>
+        This warning dialog occurs when the CERT database is missing on the OMP server.
+      </p>
+      <p>
+        The CERT advisory table is always empty when the database is missing.
+      </p>
+      <p>
+        The CERT data is updated during a CERT data feed sync.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.

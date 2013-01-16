@@ -1,3 +1,17 @@
+2013-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add views for DFN-CERT. Minor fixes in OVAL help and details view.
+
+	* src/html/gsad.xsl: Add DFN-CERT Advisories item to SecInfo menu
+
+	* src/html/help.xsl: Add help for DFN-CERT Advisories.
+	Change OVAL help saying CVE where it should be OVAL Definitions.
+
+	* src/html/omp.xsl: New templates for DFN-CERT advisory table and
+	details views.
+	Change linking of CVEs and CPEs in OVAL Definition Details to use
+	use get_info_cve_lnk and get_info_cpe_lnk for consistency.
+
 2013-01-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-filter-form): Add Credential and Slave
