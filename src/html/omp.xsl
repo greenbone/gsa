@@ -11994,7 +11994,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:with-param>
     </xsl:call-template>
     <div class="gb_window_part_content_no_pad">
-      <div id="cpes">
+      <div id="cves">
         <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
           <tr class="gbntablehead2">
             <td>

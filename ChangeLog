@@ -1,3 +1,10 @@
+2013-01-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_info): Remove hardcoded filter value for CVE info
+	type.
+
+	* src/html/omp.xsl (html-cve-table): Fix typo in html tag id.
+
 2013-01-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:param-or): Get the params out of the top-level
