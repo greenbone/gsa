@@ -19739,11 +19739,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td></td>
           </tr>
           <tr class="odd">
-            <td>SecInfo filter</td>
+            <td>CPE filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
                 <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='info_filter']/value"/>
+                                select="get_settings_response/setting[name='info_cpe_filter']/value"/>
+              </xsl:call-template>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="even">
+            <td>CVE filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='info_cve_filter']/value"/>
+              </xsl:call-template>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="odd">
+            <td>NVT filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='info_nvt_filter']/value"/>
+              </xsl:call-template>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="even">
+            <td>OVAL filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='info_ovaldef_filter']/value"/>
+              </xsl:call-template>
+            </td>
+            <td></td>
+          </tr>
+          <tr class="odd">
+            <td>DFN-CERT filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='info_dfn_cert_adv_filter']/value"/>
               </xsl:call-template>
             </td>
             <td></td>
@@ -19961,13 +20001,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
             <tr>
-              <td>SecInfo filter</td>
+              <td>CPE filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'info'"/>
+                    <xsl:with-param name="type" select="'info_cpe'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='info_filter']/value"/>
+                                    select="get_settings_response/setting[name='info_cpe_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>CVE filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'info_cve'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='info_cpe_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>NVT filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'info_nvt'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='info_nvt_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>OVAL filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'info_ovaldef'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='info_ovaldef_filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>DFN-CERT filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="type" select="'info_dfn_cert_adv'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='info_dfn_cert_adv_filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
