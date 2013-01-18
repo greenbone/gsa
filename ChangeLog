@@ -5,6 +5,11 @@
 
 2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (download_agent_omp): Set default name with uuid and
+	format for agent package when no filename is available.
+
+2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Handle actions response and indicator for various resource types.
 
 	* src/html/omp.xsl (modify_agent_response, modify_alert_response)

@@ -3901,6 +3901,8 @@ download_agent_omp (credentials_t * credentials,
               else
                 *filename = NULL;
             }
+          if (!(*filename && strlen (*filename)))
+            *filename = g_strdup_printf ("agent-%s-%s", agent_id, format);
           free_entity (entity);
           return 0;
         }
