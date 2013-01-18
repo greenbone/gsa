@@ -551,6 +551,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/caller}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
+      <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <input type="image" src="/img/start.png" alt="{$alt}"
              name="{$alt}" value="{$alt}" title="{$alt}"/>
       <xsl:copy-of select="$params"/>
@@ -4765,7 +4767,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
-      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Agent"/>
@@ -16155,7 +16157,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -16188,48 +16190,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:choose>
-        <xsl:when test="global='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'report_format'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/trashcan_inactive.png"
-               border="0"
-               alt="To Trashcan"
-               style="margin-left:3px;"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
-         title="Report Format Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/omp?cmd=edit_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;sort_order=ascending&amp;sort_field=name&amp;token={/envelope/token}"
-         title="Edit Report Format" style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
-      <div style="display: inline">
-        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="caller" value="{/envelope/caller}"/>
-          <input type="hidden" name="cmd" value="clone"/>
-          <input type="hidden" name="resource_type" value="report_format"/>
-          <input type="hidden" name="next" value="get_report_formats"/>
-          <input type="hidden" name="id" value="{@id}"/>
-          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="image" src="/img/clone.png" alt="Clone Report Format"
-                 name="Clone" value="Clone" title="Clone"/>
-        </form>
-      </div>
-      <a href="/omp?cmd=export_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
-         title="Export Report Format XML"
-         style="margin-left:3px;">
-        <img src="/img/download.png" border="0" alt="Export XML"/>
-      </a>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}"
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Report Format'"/>
+        <xsl:with-param name="type" select="'report_format'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
          title="Verify Report Format"
          style="margin-left:3px;">
         <img src="/img/new.png" border="0" alt="Verify Report Format"/>

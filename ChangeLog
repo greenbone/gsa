@@ -5,6 +5,12 @@
 
 2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (start-icon, agent, report_format): Add filter and
+	filt_id parameters in links to keep filter consistency between actions.
+	(report_format): Use list-window-line-icons template.
+
+2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (download_agent_omp): Set default name with uuid and
 	format for agent package when no filename is available.
 
