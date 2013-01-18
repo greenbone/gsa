@@ -13893,7 +13893,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <xsl:variable name="max" select="35"/>
+      <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
@@ -13951,7 +13951,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <xsl:variable name="max" select="35"/>
+      <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
@@ -14927,7 +14927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <xsl:variable name="max" select="35"/>
+      <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>
@@ -14998,7 +14998,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <xsl:variable name="max" select="35"/>
+      <xsl:variable name="max" select="70"/>
       <xsl:choose>
         <xsl:when test="nvt/@oid = 0">
           <abbr title="Result was an open port.">None</abbr>

@@ -1,3 +1,11 @@
+2013-01-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (note, override): Increased visible string length
+	of NVT name in column "NVT" from 35 to 70. This is not critical
+	because the NVT names to not contain overlong words (or at least
+	we can control it). The worst thing that could happen is
+	that the row grows in height.
+
 2013-01-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/verify.png: New.
