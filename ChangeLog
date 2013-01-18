@@ -1,3 +1,12 @@
+2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Handle actions response and indicator for various resource types.
+
+	* src/html/omp.xsl (modify_agent_response, modify_alert_response)
+	(modify_port_list_response, modify_schedule_response)
+	(modify_slave_response): New templates.
+	(html-gsa-logo): Apply templates for various resource actions responses.
+
 2013-01-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-dfn_cert_adv-table): Change column head 

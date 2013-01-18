@@ -384,6 +384,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="modify_agent_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Agent'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_alert_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Alert'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_filter_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -416,11 +432,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="modify_port_list_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Port List'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_report_format_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
     <xsl:with-param name="command" select="'Modify Report Format'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_schedule_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Schedule'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_slave_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Slave'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -638,13 +678,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/delete_agent_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="commands_response/delete_config_response"
+        <xsl:apply-templates select="get_config/commands_response/delete_config_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="commands_response/delete_lsc_credential_response"
+        <xsl:apply-templates select="get_configs/delete_config_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/delete_task_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="commands_response/modify_lsc_credential_response"
+        <xsl:apply-templates select="get_lsc_credential/modify_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_lsc_credentials/modify_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_lsc_credential/commands_response/delete_lsc_credential_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_lsc_credentials/delete_lsc_credential_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/modify_note_response"
                              mode="response-indicator"/>
@@ -656,11 +702,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_agents/commands_response/verify_agent_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_agent/modify_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_agents/modify_agent_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_agents/verify_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_agent/commands_response/delete_agent_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_agents/delete_agent_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alert/commands_response/delete_alert_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alert/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_alert/modify_alert_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_alerts/modify_alert_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_alerts/create_alert_response"
                              mode="response-indicator"/>
@@ -687,8 +745,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_filters/delete_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_filters/modify_filter_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_lsc_credential/commands_response/delete_lsc_credential_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_lsc_credential/gsad_msg"
                              mode="response-indicator"/>
@@ -726,9 +782,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_port_lists/commands_response/delete_port_list_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_port_list/modify_port_list_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_port_lists/modify_port_list_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_port_list/create_port_range_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_port_list/commands_response/delete_port_range_response"
+        <xsl:apply-templates select="get_port_list/commands_response/delete_port_list_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_port_lists/delete_port_list_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report/create_filter_response"
                              mode="response-indicator"/>
@@ -750,19 +812,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_report/get_reports_response"
                              mode="response-indicator"/>
 -->
-        <xsl:apply-templates select="get_report_format/commands_response/modify_report_format_response"
+        <xsl:apply-templates select="get_report_format/commands_response/delete_report_format_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_report_format/modify_report_format_response"
+        <xsl:apply-templates select="get_report_formats/delete_report_format_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_report_format/delete_report_format_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_report_formats/commands_response/modify_report_format_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_report_formats/commands_response/delete_report_format_response"
+        <xsl:apply-templates select="get_report_formats/modify_report_format_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_formats/create_report_format_response"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_report_formats/modify_report_format_response"
+        <xsl:apply-templates select="get_report_format/modify_report_format_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_report_formats/commands_response/verify_report_format_response"
                              mode="response-indicator"/>
@@ -792,7 +850,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_schedules/gsad_msg"
                              mode="response-indicator"/>
-        <xsl:apply-templates select="get_slave/commands_response/delete_slave_response"
+        <xsl:apply-templates select="get_schedule/modify_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_schedules/modify_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_schedules/delete_schedule_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slave/modify_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slaves/modify_slave_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_slaves/delete_slave_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_slave/gsad_msg"
                              mode="response-indicator"/>

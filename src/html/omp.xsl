@@ -4709,6 +4709,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<!--     MODIFY_AGENT_RESPONSE -->
+
+<xsl:template match="modify_agent_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Agent</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!--     AGENT -->
 
 <xsl:template match="agent">
@@ -4842,12 +4856,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_agent">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_agent_response"/>
+  <xsl:apply-templates select="modify_agent_response"/>
   <xsl:apply-templates select="get_agents_response/agent" mode="details"/>
 </xsl:template>
 
 <!--     GET_AGENTS_RESPONSE -->
 
 <xsl:template match="get_agents_response">
+  <xsl:apply-templates select="modify_agent_response"/>
   <xsl:choose>
     <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
       <xsl:call-template name="command_result_dialog">
@@ -5767,7 +5783,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="modify_alert_response">
   <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Modify Alert</xsl:with-param>
+    <xsl:with-param name="operation">Save Alert</xsl:with-param>
     <xsl:with-param name="status">
       <xsl:value-of select="@status"/>
     </xsl:with-param>
@@ -10921,6 +10937,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_schedule">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_schedule_response"/>
+  <xsl:apply-templates select="modify_schedule_response"/>
   <xsl:apply-templates select="get_schedules_response/schedule" mode="details"/>
 </xsl:template>
 
@@ -10930,6 +10947,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_schedule_response"/>
   <xsl:apply-templates select="create_schedule_response"/>
+  <xsl:apply-templates select="modify_schedule_response"/>
   <!-- The for-each makes the get_schedules_response the current node. -->
   <xsl:for-each select="get_schedules_response | commands_response/get_schedules_response">
     <xsl:choose>
@@ -11337,6 +11355,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_slave">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_slave_response"/>
+  <xsl:apply-templates select="modify_slave_response"/>
   <xsl:apply-templates select="get_slaves_response/slave" mode="details"/>
 </xsl:template>
 
@@ -11346,6 +11365,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_slave_response"/>
   <xsl:apply-templates select="create_slave_response"/>
+  <xsl:apply-templates select="modify_slave_response"/>
   <!-- The for-each makes the get_slaves_response the current node. -->
   <xsl:for-each select="get_slaves_response | commands_response/get_slaves_response">
     <xsl:choose>
