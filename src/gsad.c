@@ -852,6 +852,7 @@ init_validator ()
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
+  openvas_validator_alias (validator, "enable_stop",             "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "esc_first_result", "first_result");
   openvas_validator_alias (validator, "esc_levels",       "levels");

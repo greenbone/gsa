@@ -2563,6 +2563,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            alt="Stop"
            style="margin-left:3px;"/>
     </xsl:when>
+    <xsl:when test="string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1">
+      <xsl:call-template name="stop-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="refresh_interval" value="{/envelope/autorefresh/@interval}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
       <img src="/img/stop_inactive.png" border="0"
            alt="Stop"

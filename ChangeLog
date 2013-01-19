@@ -1,3 +1,10 @@
+2013-01-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add enable_stop.
+
+	* src/html/omp.xsl (task-icons): Enable the stop icon when the
+	enable_stop param is 1, whatever state the task is in.
+
 2013-01-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (info/dfn_cert_adv): Change num_cves to cve_refs.
