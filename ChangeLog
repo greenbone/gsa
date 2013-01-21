@@ -1,3 +1,8 @@
+2013-01-21  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
+
+	* src/html/help.xsl: Some clarifications about recommended
+	authentication mechanism for ldap/ads.
+
 2013-01-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report_format): Remove extra filter url parameter.

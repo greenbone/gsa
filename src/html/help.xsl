@@ -2584,6 +2584,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Take a look at the Auth. DN examples in following table to enable
        authentication against an ADS.
       </p>
+      <p>
+       In "per-User" Authentication, host access rules and role are stored
+       locally. This is the recommended method to use an ADS/LDAP as
+       authentication backend.
+      </p>
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td></td>
@@ -2617,6 +2622,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        This dialog box is only visible if the backend
        is configured to support LDAP authentication and authorization.
+      </p>
+      <p>
+       Using this method requires substantial work on the LDAP backend, as
+       access rules and roles are stored in the ldap, in contrast to the
+       "per-User" method. It is recommended to use the "per-User" method.
       </p>
       <p>
        Changes will be saved after confirming with the "Save" button,
@@ -2653,6 +2663,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        This dialog box is only visible if the backend
        is configured to support ADS authentication and Authorization.
+      </p>
+      <p>
+       Using this method requires substantial work on the ADS backend, as
+       access rules and roles are stored in the ldap, in contrast to the
+       "per-User" method. It is recommended to use the "per-User" method.
       </p>
       <p>
        Changes will be saved after confirming with the "Save" button,
