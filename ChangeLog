@@ -1,3 +1,8 @@
+2013-01-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (get_my_settings): Remove Actions column as it is
+	always empty.
+
 2013-01-21  Felix Wolfsteller <felix.wolfsteller@greenbone.net>
 
 	* src/html/help.xsl: Some clarifications about recommended

@@ -19584,27 +19584,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>Name</td>
             <td>Value</td>
-            <td width="100">Actions</td>
           </tr>
           <tr class="even">
             <td>Timezone</td>
             <td><xsl:value-of select="/envelope/timezone"/></td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Password</td>
             <td>********</td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Rows Per Page</td>
             <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Wizard Rows</td>
             <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Agents filter</td>
@@ -19614,7 +19609,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='agents_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Alerts filter</td>
@@ -19624,7 +19618,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='alerts_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Configs filter</td>
@@ -19634,7 +19627,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='configs_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Credentials filter</td>
@@ -19644,7 +19636,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='lsc_credentials_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Filters filter</td>
@@ -19654,7 +19645,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='filters_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Notes filter</td>
@@ -19664,7 +19654,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='notes_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Overrides filter</td>
@@ -19674,7 +19663,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='overrides_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Port Lists filter</td>
@@ -19684,7 +19672,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='port_lists_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Report Formats filter</td>
@@ -19694,7 +19681,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='report_formats_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Schedules filter</td>
@@ -19704,7 +19690,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='schedules_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Slaves filter</td>
@@ -19714,7 +19699,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='slaves_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>Targets filter</td>
@@ -19724,7 +19708,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='targets_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>Tasks filter</td>
@@ -19734,7 +19717,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='tasks_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>CPE filter</td>
@@ -19744,7 +19726,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='info_cpe_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>CVE filter</td>
@@ -19754,7 +19735,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='info_cve_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>NVT filter</td>
@@ -19764,7 +19744,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='info_nvt_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="even">
             <td>OVAL filter</td>
@@ -19774,7 +19753,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='info_ovaldef_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
           <tr class="odd">
             <td>DFN-CERT filter</td>
@@ -19784,7 +19762,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 select="get_settings_response/setting[name='info_dfn_cert_adv_filter']/value"/>
               </xsl:call-template>
             </td>
-            <td></td>
           </tr>
         </table>
       </div>
