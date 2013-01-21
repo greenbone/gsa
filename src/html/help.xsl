@@ -4016,6 +4016,89 @@ Public License instead of this License.
         If the number of rows in a listing is above this value, and there is
         a wizard associated with the listing, then the wizard be hidden.
       </p>
+
+      <h3>Resource Filters</h3>
+      <p>
+        Default filter applied for a particular resource. The dropdown menu will list
+        <a href="filters.html?token={/envelope/token}">Filters</a> that have the
+        same type as the resource.
+        '--' means no filter will be applied and in this case other values such
+        as Rows Per page will be used.
+      </p>
+
+      <h4>Agents filter</h4>
+      <p>
+        Default filter to use when getting the <a href="agents.html?token={/envelope/token}">Agents</a> page.
+      </p>
+      <h4>Alerts filter</h4>
+      <p>
+        Default filter to use when getting the <a href="alerts.html?token={/envelope/token}">Alerts</a> page.
+      </p>
+      <h4>Configs filter</h4>
+      <p>
+        Default filter to use when getting the <a href="configs.html?token={/envelope/token}">Configs</a> page.
+      </p>
+      <h4>Credentials filter</h4>
+      <p>
+        Default filter to use when getting the <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a> page.
+      </p>
+      <h4>Filters filter</h4>
+      <p>
+        Default filter to use when getting the <a href="filters.html?token={/envelope/token}">Filters</a> page.
+      </p>
+      <h4>Notes filter</h4>
+      <p>
+        Default filter to use when getting the <a href="notes.html?token={/envelope/token}">Notes</a> page.
+      </p>
+      <h4>Overrides filter</h4>
+      <p>
+        Default filter to use when getting the <a href="overrides.html?token={/envelope/token}">Overrides</a> page.
+      </p>
+
+      <h4>Port Lists filter</h4>
+      <p>
+        Default filter to use when getting the <a href="port_lists.html?token={/envelope/token}">Port Lists</a> page.
+      </p>
+      <h4>Report Formats filter</h4>
+      <p>
+        Default filter to use when getting the <a href="report_formats.html?token={/envelope/token}">Report Formats</a> page.
+      </p>
+      <h4>Schedules filter</h4>
+      <p>
+        Default filter to use when getting the <a href="schedules.html?token={/envelope/token}">Schedules</a> page.
+      </p>
+      <h4>Slaves filter</h4>
+      <p>
+        Default filter to use when getting the <a href="slaves.html?token={/envelope/token}">Slaves</a> page.
+      </p>
+      <h4>Targets filter</h4>
+      <p>
+        Default filter to use when getting the <a href="targets.html?token={/envelope/token}">Targets</a> page.
+      </p>
+      <h4>Tasks filter</h4>
+      <p>
+        Default filter to use when getting the <a href="tasks.html?token={/envelope/token}">Tasks</a> page.
+      </p>
+      <h4>CPEs filter</h4>
+      <p>
+        Default filter to use when getting the <a href="cpes.html?token={/envelope/token}">CPEs</a> page.
+      </p>
+      <h4>CVEs filter</h4>
+      <p>
+        Default filter to use when getting the <a href="cves.html?token={/envelope/token}">CVEs</a> page.
+      </p>
+      <h4>NVTs filter</h4>
+      <p>
+        Default filter to use when getting the <a href="nvts.html?token={/envelope/token}">NVTs</a> page.
+      </p>
+      <h4>OVAL filter</h4>
+      <p>
+        Default filter to use when getting the <a href="ovaldefs.html?token={/envelope/token}">OVAL Definitions</a> page.
+      </p>
+      <h4>DFN-CERT filter</h4>
+      <p>
+        Default filter to use when getting the <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a> page.
+      </p>
     </div>
   </div>
 </xsl:template>
