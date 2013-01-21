@@ -5,11 +5,6 @@
 	* src/html/omp.xsl (task-icons): Enable the stop icon when the
 	enable_stop param is 1, whatever state the task is in.
 
-2013-01-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
-
-	* src/html/omp.xsl (info/dfn_cert_adv): Change num_cves to cve_refs.
-	(html-dfn_cert_adv-table): Change name "num_cves" to "cve_refs".
-
 2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (start-icon, agent, report_format): Add filter and
@@ -20,6 +15,11 @@
 
 	* src/gsad_omp.c (download_agent_omp): Set default name with uuid and
 	format for agent package when no filename is available.
+
+2013-01-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (info/dfn_cert_adv): Change num_cves to cve_refs.
+	(html-dfn_cert_adv-table): Change name "num_cves" to "cve_refs".
 
 2013-01-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
