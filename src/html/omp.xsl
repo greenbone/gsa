@@ -135,7 +135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="name"/>
   <xsl:param name="alternative"/>
   <xsl:choose>
-    <xsl:when test="string-length (/envelope/params/node()[name()=$name]) &gt; 0">
+    <xsl:when test="/envelope/params/node()[name()=$name]">
       <func:result>
         <xsl:value-of select="gsa:html-attribute-quote (/envelope/params/node()[name()=$name])"/>
       </func:result>

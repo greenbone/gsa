@@ -1,3 +1,12 @@
+2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (xsl_transform_omp): Check the value instead of the
+	value_size of the param, so that zero-length params are added too.
+
+	* src/html/omp.xsl (gsa:param-or): Check that the param exists instead
+	of checking its length, so that zero-length fields are passed to the
+	resulting page too.
+
 2013-01-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (get_my_settings): Remove Actions column as it is
