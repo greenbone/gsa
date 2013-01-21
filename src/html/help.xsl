@@ -3963,8 +3963,7 @@ Public License instead of this License.
       </xsl:call-template>
 
       <p>
-        This table provides an editable version of the current user's settings, including
-        timezone and password.
+        This table provides an editable version of the current user's settings.
       </p>
 
       <h3>Timezone</h3>
@@ -3996,6 +3995,26 @@ Public License instead of this License.
         After setting the timezone, it is a good idea to check the time in the GSA
         header bar.  If the timezone was correctly specified this should show the
         current time.
+      </p>
+
+      <h3>Password</h3>
+      <p>
+        The password for logging into the GSA.
+      </p>
+
+      <h3>Rows Per Page</h3>
+      <p>
+        The default number of rows displayed in any listing.  This may be
+        overridden by the default filter settings.
+      </p>
+
+      <h3>Wizard Rows</h3>
+      <p>
+        The number of rows up to which a wizard will be displayed.
+      </p>
+      <p>
+        If the number of rows in a listing is above this value, and there is
+        a wizard associated with the listing, then the wizard be hidden.
       </p>
     </div>
   </div>

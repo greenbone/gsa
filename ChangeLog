@@ -1,5 +1,9 @@
 2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (my_settings.html): Describe more settings.
+
+2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (xsl_transform_omp): Check the value instead of the
 	value_size of the param, so that zero-length params are added too.
 
