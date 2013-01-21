@@ -12655,6 +12655,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
 
       <xsl:choose>
+        <xsl:when test="count(info/cve/cert/cert_ref) = 0">
+          <h1>CERT Advisories referencing this CVE: None</h1>
+        </xsl:when>
+        <xsl:otherwise>
+          <h1>CERT Advisories referencing this CVE</h1>
+          <table class="gbntable" cellspacing="2" cellpadding="4">
+            <tr class="gbntablehead2">
+              <td>Name</td>
+              <td>Title</td>
+              <td>Actions</td>
+            </tr>
+            <xsl:for-each select="info/cve/cert/cert_ref">
+              <xsl:variable name="class">
+                <xsl:choose>
+                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                  <xsl:otherwise>odd</xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <tr class="{$class}">
+                <td><xsl:value-of select="name"/></td>
+                <td><xsl:value-of select="title"/></td>
+                <td width="100">
+                  <xsl:choose>
+                    <xsl:when test="@type='DFN-CERT'">
+                    <a href="?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={name}&amp;details=1&amp;token={/envelope/token}" title="Details">
+                      <img src="/img/details.png"
+                      border="0"
+                      alt="Details"
+                      style="margin-left:3px;"/>
+                    </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <div class="error">Unknown CERT type!</div>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </td>
+              </tr>
+            </xsl:for-each>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
         <xsl:when test="count(info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product) = 0">
           <h1>Vulnerable products: None</h1>
         </xsl:when>

@@ -1,3 +1,8 @@
+2013-01-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (cve-details): Add table of CERT advisories
+	referencing the current CVE.
+
 2013-01-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (my_settings.html): Update documentation to reflect
