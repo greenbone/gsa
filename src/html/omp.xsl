@@ -18756,9 +18756,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <table>
-        <xsl:apply-templates select="system_report"/>
-      </table>
+      <xsl:choose>
+        <xsl:when test="@status = '500'">
+          <p>
+            The selected Scan Slave can currently not be reached for retrieval
+            of performance data.
+          </p>
+          <p>
+            Please check network connection or Slave configuration.  The
+            problem may also be temporary, so you could try again at a
+            later time.
+          </p>
+        </xsl:when>
+        <xsl:otherwise>
+          <table>
+            <xsl:apply-templates select="system_report"/>
+          </table>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
@@ -18768,7 +18783,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_system_reports">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:choose>
-    <xsl:when test="get_system_reports_response/@status = '500'">
+    <xsl:when test="not (slave/@id) and get_system_reports_response/@status = '500'">
       <xsl:call-template name="command_result_dialog">
         <xsl:with-param name="operation">
           Get System Reports

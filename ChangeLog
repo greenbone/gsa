@@ -1,5 +1,11 @@
 2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_system_reports_response, get_system_reports): If
+	the command fails in the slave case then show a helpful message instead
+	of the error dialog.
+
+2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (delete_filter_omp): When the filt_id is the filter
 	being removed, then clear filt_id to prevent an error message.
 
