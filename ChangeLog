@@ -1,3 +1,8 @@
+2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (delete_filter_omp): When the filt_id is the filter
+	being removed, then clear filt_id to prevent an error message.
+
 2013-01-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (html-dfn_cert_adv-table): Change sort column
