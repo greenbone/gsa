@@ -16169,7 +16169,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}">
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
