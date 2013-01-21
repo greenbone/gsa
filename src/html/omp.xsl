@@ -12397,7 +12397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">CVEs</xsl:with-param>
-                <xsl:with-param name="name">cve_refs</xsl:with-param>
+                <xsl:with-param name="name">cves</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
               </xsl:call-template>

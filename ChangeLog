@@ -1,5 +1,10 @@
 2013-01-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (html-dfn_cert_adv-table): Change sort column
+	"cve_refs" in table head to "cves".
+
+2013-01-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (cve-details): Add table of CERT advisories
 	referencing the current CVE.
 
