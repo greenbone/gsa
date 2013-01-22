@@ -1,5 +1,13 @@
 2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-logo): Remove commands_response from
+	get_tasks paths.
+
+	* src/html/omp.xsl (get_tasks): Replace commands_response with responses
+	for the commands, as they are now done directly.
+
+2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task-icons, status_bar): Add Ultimate delete states.
 
 2013-01-21  Matthew Mundell <matthew.mundell@greenbone.net>

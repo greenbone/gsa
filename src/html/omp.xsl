@@ -4080,7 +4080,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_task_response"/>
   <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="create_task_response"/>
-  <xsl:apply-templates select="commands_response"/>
+  <xsl:apply-templates select="start_task_response"/>
+  <xsl:apply-templates select="stop_task_response"/>
+  <xsl:apply-templates select="modify_task_response"/>
+  <xsl:apply-templates select="pause_task_response"/>
+  <xsl:apply-templates select="resume_task_response"/>
+  <xsl:apply-templates select="resume_stopped_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
 </xsl:template>
 
