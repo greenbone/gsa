@@ -2497,7 +2497,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
+    <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Pause Requested' or status = 'Paused' or status='Resume Requested' or status='Requested'">
       <img style="margin-left: 3px" src="/img/start_inactive.png" border="0" alt="Start"/>
     </xsl:when>
     <xsl:otherwise>
@@ -2575,7 +2575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested'">
+    <xsl:when test="status='New' or status='Requested' or status='Done' or status='Stopped' or status='Internal Error' or status='Pause Requested' or status='Stop Requested' or status='Resume Requested' or status='Delete Requested' or status='Ultimate Delete Requested'">
       <img src="/img/stop_inactive.png" border="0"
            alt="Stop"
            style="margin-left:3px;"/>
@@ -2975,6 +2975,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="progressbar_box" title="{$status}">
         <div class="progressbar_bar_request" style="width:100px;"></div>
         <div class="progressbar_text"><xsl:value-of select="$status"/></div>
+      </div>
+    </xsl:when>
+    <xsl:when test="$status='Ultimate Delete Requested'">
+      <div class="progressbar_box" title="Delete Requested">
+        <div class="progressbar_bar_request" style="width:100px;"></div>
+        <div class="progressbar_text">Delete Requested</div>
       </div>
     </xsl:when>
     <xsl:when test="$status='Pause Requested'">
