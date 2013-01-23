@@ -62,6 +62,7 @@
 #include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
+#include <openvas/base/openvas_file.h>
 #include <openvas/base/pidfile.h>
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
@@ -2050,31 +2051,6 @@ exec_omp_get (struct MHD_Connection *connection,
 }
 
 /**
- * @brief Checks whether a file is a directory or not.
- *
- * @todo Handle symbolic links.
- *
- * @param[in]  name  Name of directory.
- *
- * @return 1 if parameter is directory, 0 if it is not, -1 if it does
- *         not exist or could not be accessed.
- */
-int
-check_is_dir (const char *name)
-{
-  struct stat sb;
-
-  if (stat (name, &sb))
-    {
-      return -1;
-    }
-  else
-    {
-      return (S_ISDIR (sb.st_mode));
-    }
-}
-
-/**
  * @brief Max length of cookie expires param.
  */
 #define EXPIRES_LENGTH 100
@@ -3345,7 +3321,7 @@ gsad_init (void)
   users = g_ptr_array_new ();
 
   /* Check for required files. */
-  if (check_is_dir (GSA_DATA_DIR) < 1)
+  if (openvas_file_check_is_dir (GSA_DATA_DIR) < 1)
     {
       g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_DATA_DIR);
       return MHD_NO;

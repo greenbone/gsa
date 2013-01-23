@@ -1,5 +1,11 @@
 2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c: Include openvas_file header from base libraries.
+	(gsad_init): Use openvas_file_check_is_dir.
+	(check_is_dir): Remove duplicate function.
+
+2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (edit-settings-filter): Change parameter name from
 	type to uuid.
 	(edit_my_settings): Use fixed uuid values instead of setting filter
