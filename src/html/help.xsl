@@ -2575,19 +2575,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="peruserldapauthentication"></a>
       <h2>LDAP per-User Authentication</h2>
       <p>
-       This dialog box is only visible if the backend
+       These settings are only visible if the backend
        is configured to support "per-User" LDAP authentication.
       </p>
       <p>
        Changes will be saved after confirming with the "Save" button,
        but <b>only get into effect after</b> the backend is restarted.
-       Take a look at the Auth. DN examples in following table to enable
-       authentication against an ADS.
       </p>
       <p>
-       In "per-User" Authentication, host access rules and role are stored
-       locally. This is the recommended method to use an ADS/LDAP as
-       authentication backend.
+       In "per-User" Authentication, host access rules and role are stored locally.
       </p>
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -2609,10 +2605,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr class="odd">
           <td>Auth. DN</td>
-          <td>The DN to authenticate against. Place a single %s where the
-              username will be put.</td>
-          <td>uid=%s,cn=users,o=center,d=org<br/>
+          <td>The Distinguishable Name (DN) for authentication. Place a single %s where the
+              username should be inserted.</td>
+          <td>Regular LDAP:<br/>
+              uid=%s,cn=users,o=center,d=org<br/>
+              <br/>
+              Active Directory:<br/>
               %s@mydomain<br/>
+              or<br/>
               mydomain\%s</td>
         </tr>
       </table>

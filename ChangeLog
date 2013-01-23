@@ -1,3 +1,8 @@
+2013-01-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/help.xsl (configure_users.html): Improved help text on
+	per-user authentication.
+
 2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_base.c (param_free): Free values with params_free.
