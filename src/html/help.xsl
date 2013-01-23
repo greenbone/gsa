@@ -4398,7 +4398,7 @@ Public License instead of this License.
               <li>an IPv4 address range in CIDR notation
                   (e.g. <tt>192.168.13.0/24</tt>)</li>
               <li>an IPv6 address
-                  (e.g. <tt>fe80::222:64ff:fe76:4cea/64</tt>).</li>
+                  (e.g. <tt>fe80::222:64ff:fe76:4cea</tt>).</li>
             </ul>
             These options can be mixed (e.g.
             <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
@@ -4408,7 +4408,7 @@ Public License instead of this License.
           </li>
           <li>
             The Scanner currently expects IPv6 addresses to name a single host,
-            and always replaces the netmasks of IPv6 addresses with 128.
+            and always uses a netmask of 128 for IPv6 addresses.
           </li>
         </ul>
       </p>
