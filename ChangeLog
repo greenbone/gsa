@@ -1,5 +1,9 @@
 2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_base.c (param_free): Free values with params_free.
+
+2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c: Include openvas_file header from base libraries.
 	(gsad_init): Use openvas_file_check_is_dir.
 	(check_is_dir): Remove duplicate function.

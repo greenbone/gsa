@@ -311,6 +311,7 @@ param_free (gpointer param)
   g_free (((param_t*) param)->value);
   g_free (((param_t*) param)->original_value);
   g_free (((param_t*) param)->filename);
+  params_free (((param_t*)param)->values);
   g_free (param);
 }
 
