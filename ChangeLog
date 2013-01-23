@@ -1,3 +1,12 @@
+2013-01-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (edit-settings-filter): Change parameter name from
+	type to uuid.
+	(edit_my_settings): Use fixed uuid values instead of setting filter
+	name.
+
+	* src/gsad_omp.c (send_settings_filter): Use setting id instead of name.
+
 2013-01-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (host): Add colon for IPv6.

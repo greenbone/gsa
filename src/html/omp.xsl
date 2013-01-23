@@ -341,10 +341,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="edit-settings-filters">
-  <xsl:param name="type"/>
+  <xsl:param name="uuid"/>
   <xsl:param name="filter-type"/>
   <xsl:param name="filter"/>
-  <select style="margin-bottom: 0px;" name="settings_filter:{$type}">
+  <select style="margin-bottom: 0px;" name="settings_filter:{$uuid}">
     <option value="">--</option>
     <xsl:variable name="id" select="filters/@id"/>
     <xsl:for-each select="get_filters_response/filter[type=$filter-type]">
@@ -19905,7 +19905,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Agents filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Agents Filter'"/>
+                    <xsl:with-param name="uuid" select="'4a1334c1-cb93-4a79-8634-103b0a50bdcd'"/>
                     <xsl:with-param name="filter-type" select="'Agent'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Agents Filter']/value"/>
@@ -19916,7 +19916,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Alerts filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Alerts Filter'"/>
+                    <xsl:with-param name="uuid" select="'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'"/>
                     <xsl:with-param name="filter-type" select="'Alert'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Alerts Filter']/value"/>
@@ -19927,7 +19927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Configs filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Configs Filter'"/>
+                    <xsl:with-param name="uuid" select="'1a9fbd91-0182-44cd-bc88-a13a9b3b1bef'"/>
                     <xsl:with-param name="filter-type" select="'Config'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Configs Filter']/value"/>
@@ -19938,7 +19938,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Credentials filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Credentials Filter'"/>
+                    <xsl:with-param name="uuid" select="'186a5ac8-fe5a-4fb1-aa22-44031fb339f3'"/>
                     <xsl:with-param name="filter-type" select="'Credential'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Credentials Filter']/value"/>
@@ -19949,7 +19949,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Filters filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Filters Filter'"/>
+                    <xsl:with-param name="uuid" select="'f9691163-976c-47e7-ad9a-38f2d5c81649'"/>
                     <xsl:with-param name="filter-type" select="'Filter'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Filters Filter']/value"/>
@@ -19960,7 +19960,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Notes filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Notes Filter'"/>
+                    <xsl:with-param name="uuid" select="'96abcd5a-9b6d-456c-80b8-c3221bfa499d'"/>
                     <xsl:with-param name="filter-type" select="'Note'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Notes Filter']/value"/>
@@ -19971,7 +19971,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Overrides filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Overrides Filter'"/>
+                    <xsl:with-param name="uuid" select="'eaaaebf1-01ef-4c49-b7bb-955461c78e0a'"/>
                     <xsl:with-param name="filter-type" select="'Override'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Overrides Filter']/value"/>
@@ -19982,7 +19982,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Port Lists filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Port Lists Filter'"/>
+                    <xsl:with-param name="uuid" select="'7d52d575-baeb-4d98-bb68-e1730dbc6236'"/>
                     <xsl:with-param name="filter-type" select="'Port List'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Port Lists Filter']/value"/>
@@ -19993,7 +19993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Report Formats filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Report Formats Filter'"/>
+                    <xsl:with-param name="uuid" select="'249c7a55-065c-47fb-b453-78e11a665565'"/>
                     <xsl:with-param name="filter-type" select="'Report Format'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Report Formats Filter']/value"/>
@@ -20004,7 +20004,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Schedules filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Schedules Filter'"/>
+                    <xsl:with-param name="uuid" select="'a83e321b-d994-4ae8-beec-bfb5fe3e7336'"/>
                     <xsl:with-param name="filter-type" select="'Schedule'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Schedules Filter']/value"/>
@@ -20015,7 +20015,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Slaves filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Slaves Filter'"/>
+                    <xsl:with-param name="uuid" select="'2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'"/>
                     <xsl:with-param name="filter-type" select="'Slave'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Slaves Filter']/value"/>
@@ -20026,7 +20026,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Targets filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Targets Filter'"/>
+                    <xsl:with-param name="uuid" select="'236e2e41-9771-4e7a-8124-c432045985e0'"/>
                     <xsl:with-param name="filter-type" select="'Target'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Targets Filter']/value"/>
@@ -20037,7 +20037,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Tasks filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'Tasks Filter'"/>
+                    <xsl:with-param name="uuid" select="'1c981851-8244-466c-92c4-865ffe05e721'"/>
                     <xsl:with-param name="filter-type" select="'Task'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Tasks Filter']/value"/>
@@ -20048,7 +20048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>CPE filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'CPE Filter'"/>
+                    <xsl:with-param name="uuid" select="'3414a107-ae46-4dea-872d-5c4479a48e8f'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='CPE Filter']/value"/>
@@ -20059,7 +20059,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>CVE filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'CVE Filter'"/>
+                    <xsl:with-param name="uuid" select="'def63b5a-41ef-43f4-b9ef-03ef1665db5d'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='CPE Filter']/value"/>
@@ -20070,7 +20070,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>NVT filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'NVT Filter'"/>
+                    <xsl:with-param name="uuid" select="'bef08b33-075c-4f8c-84f5-51f6137e40a3'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='NVT Filter']/value"/>
@@ -20081,7 +20081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>OVAL filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'OVAL Filter'"/>
+                    <xsl:with-param name="uuid" select="'adb6ffc8-e50e-4aab-9c31-13c741eb8a16'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='OVAL Filter']/value"/>
@@ -20092,7 +20092,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>DFN-CERT filter</td>
               <td>
                 <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="type" select="'DFN-CERT Filter'"/>
+                    <xsl:with-param name="uuid" select="'312350ed-bc06-44f3-8b3f-ab9eb828b80b'"/>
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>

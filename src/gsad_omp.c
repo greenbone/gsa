@@ -13350,18 +13350,17 @@ send_settings_filters (gnutls_session_t *session, params_t *data)
   if (data)
     {
       params_iterator_t iter;
-      char *name;
+      char *uuid;
       param_t *param;
 
       params_iterator_init (&iter, data);
-      while (params_iterator_next (&iter, &name, &param))
-        if (openvas_server_sendf_xml (session, "<modify_setting>")
-            || openvas_server_sendf_xml (session,
-                                         "<name>%s</name>"
-                                         "<value>%s</value>",
-                                         name,
-                                         param->value ? param->value : "")
-            || openvas_server_sendf_xml (session, "</modify_setting>"))
+      while (params_iterator_next (&iter, &uuid, &param))
+        if (openvas_server_sendf_xml (session,
+                                         "<modify_setting setting_id=\"%s\">"
+                                         "<value>%s</value>"
+                                         "</modify_setting>",
+                                         uuid,
+                                         param->value ? param->value : ""))
           return -1;
     }
 
