@@ -1,5 +1,9 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-gsa-navigation): Round corner of last entry.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window, html-configs-table)
 	(html-port-lists-table): Add list icon that reverts to default filter.
 
