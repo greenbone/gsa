@@ -1,5 +1,19 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Remove old SecInfo Management browse page.
+
+	* CMakeLists.txt (FILES): Remove dialog.xsl.
+
+	* src/gsad.c (request_handler): Remove dialog special case.  All users
+	have been converted to new style filtering pages.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Link SecInfo item to CVEs.
+	Remove Lookup NVT subitem.
+
+	* src/html/dialog.xsl: Remove.  Now out of use.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Respect filter params when verifying report format.
 
 	* src/gsad_omp.c (verify_report_format_omp): Convert to new style.
