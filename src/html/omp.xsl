@@ -6277,6 +6277,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
+      <a href="/omp?cmd=get_{$type}s&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_{$type}s&amp;filter={filters/term}&amp;token={/envelope/token}"
            title="Export {$filtered-count} filtered {$cap-type}s as XML"
@@ -9180,6 +9184,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=new_config&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New Scan Config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_configs&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_configs&amp;filter={filters/term}&amp;token={/envelope/token}"
@@ -15437,6 +15445,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=new_port_list&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New Port List">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_port_lists&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_port_lists&amp;filter={filters/term}&amp;token={/envelope/token}"
