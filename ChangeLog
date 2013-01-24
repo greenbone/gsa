@@ -1,3 +1,7 @@
+2013-01-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/gsad.xsl: Don't include dialog.xsl.
+
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/CMakeLists.txt: Remove dialog.xsl.

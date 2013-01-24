@@ -1297,10 +1297,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:include href="oap.xsl"/>
 
-<!-- Dialog -->
-
-<xsl:include href="dialog.xsl"/>
-
 <!-- Help -->
 
 <xsl:include href="help.xsl"/>
