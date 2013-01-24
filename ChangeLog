@@ -1,5 +1,9 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/src/html/omp.xsl (agent, report_format): Use new verify icon.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/src/html/gsad.xsl (html-gsa-logo): Add indicators for filters
 	created from GET pages.
 
