@@ -1,5 +1,9 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/CMakeLists.txt: Remove dialog.xsl.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Remove old SecInfo Management browse page.
 
 	* CMakeLists.txt (FILES): Remove dialog.xsl.

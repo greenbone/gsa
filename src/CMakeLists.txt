@@ -129,10 +129,6 @@ if (PATH_TO_XSLTPROC)
                                      COMMENT "Checking syntax of gsad.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl
                                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/gsad.xsl)
-  add_custom_target (dialog-xsl-syntax ALL
-                                     COMMENT "Checking syntax of dialog.xsl"
-                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/dialog.xsl
-                                     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/dialog.xsl)
   add_custom_target (help-xsl-syntax ALL
                                      COMMENT "Checking syntax of help.xsl"
                                      COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/help.xsl
