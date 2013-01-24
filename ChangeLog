@@ -1,13 +1,17 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/src/html/omp.xsl (agent, report_format): Use new verify icon.
+	* ChangeLog: Cleanup paths in last two entries.
 
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/src/html/gsad.xsl (html-gsa-logo): Add indicators for filters
+	* src/html/omp.xsl (agent, report_format): Use new verify icon.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-logo): Add indicators for filters
 	created from GET pages.
 
-	* src/src/html/omp.xsl (get_tasks, get_alerts, get_targets)
+	* src/html/omp.xsl (get_tasks, get_alerts, get_targets)
 	(get_configs_response, get_schedules, get_slaves, get_notes)
 	(get_overrides, get_port_lists, get_report_formats): Match
 	create_filter_response for error message.
