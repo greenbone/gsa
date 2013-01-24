@@ -790,6 +790,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         filter = "rows=-2";
       else
         filter = "apply_overrides=0 rows=-2";
+      filt_id = "-2";
     }
 
   /* Get the list. */
