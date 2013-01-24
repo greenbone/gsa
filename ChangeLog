@@ -1,5 +1,15 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c: Add headers for all get functions called by the _omp
+	interface functions.
+	(next_page): Always call the local get function, and pass it the
+	response.  This way the XML gets the response for error messages.
+	(get_target, get_targets, get_schedule, get_report_format)
+	(get_report_formats, get_port_list, get_port_lists): Make static like
+	others.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-cpe-table, html-cve-table, html-nvt-table)
 	(html-ovaldef-table, html-dfn_cert_adv-table): Add list icon that
 	reverts to default filter.

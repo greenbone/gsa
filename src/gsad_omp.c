@@ -92,7 +92,13 @@ int manager_port = 9390;
 
 int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **);
 
+static char *get_alert (credentials_t *, params_t *, const char *);
+
 static char *get_alerts (credentials_t *, params_t *, const char *);
+
+static char *get_agent (credentials_t *, params_t *, const char *);
+
+static char *get_agents (credentials_t *, params_t *, const char *);
 
 static char *get_task (credentials_t *, params_t *, const char *);
 
@@ -102,13 +108,13 @@ static char *get_trash (credentials_t *, params_t *, const char *);
 
 static char *get_config_family (credentials_t *, params_t *, int);
 
-char *get_agents (credentials_t *, params_t *, const char *);
-
 static char *get_configs (credentials_t *, params_t *, const char *);
 
-char *get_filter (credentials_t *, params_t *, const char *);
+static char *get_filter (credentials_t *, params_t *, const char *);
 
-char *get_filters (credentials_t *, params_t *, const char *);
+static char *get_filters (credentials_t *, params_t *, const char *);
+
+static char *get_lsc_credential (credentials_t *, params_t *, const char *);
 
 static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
 
@@ -121,16 +127,32 @@ static char *get_overrides (credentials_t *, params_t *, const char *);
 static char *get_override (credentials_t *, params_t *, const char *,
                            const char *);
 
+static char *get_port_list (credentials_t *, params_t *, const char *);
+
 static char *get_port_lists (credentials_t *, params_t *, const char *);
 
 static char *edit_port_list (credentials_t *, params_t *, const char *);
 
-char *get_targets (credentials_t *, params_t *, const char *);
+static char *get_target (credentials_t *, params_t *, const char *);
 
-char *get_report (credentials_t *, params_t *, const char *, gsize *, gchar **,
-                  char **, const char *);
+static char *get_targets (credentials_t *, params_t *, const char *);
+
+static char *get_report (credentials_t *, params_t *, const char *, gsize *,
+                         gchar **, char **, const char *);
+
+static char *get_report_format (credentials_t *, params_t *, const char *);
+
+static char *get_report_formats (credentials_t *, params_t *, const char *);
 
 char *get_result_page (credentials_t *, params_t *, const char *);
+
+static char *get_schedule (credentials_t *, params_t *, const char *);
+
+static char *get_schedules (credentials_t *, params_t *, const char *);
+
+static char *get_slave (credentials_t *, params_t *, const char *);
+
+static char *get_slaves (credentials_t *, params_t *, const char *);
 
 
 /* Helpers. */
@@ -508,7 +530,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_alerts (credentials, params, response);
 
   if (strcmp (next, "get_alert") == 0)
-    return get_alert_omp (credentials, params);
+    return get_alert (credentials, params, response);
 
   if (strcmp (next, "edit_port_list") == 0)
     return edit_port_list (credentials, params, response);
@@ -517,7 +539,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_agents (credentials, params, response);
 
   if (strcmp (next, "get_agent") == 0)
-    return get_agent_omp (credentials, params);
+    return get_agent (credentials, params, response);
 
   if (strcmp (next, "get_configs") == 0)
     return get_configs (credentials, params, response);
@@ -526,7 +548,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_filters (credentials, params, response);
 
   if (strcmp (next, "get_lsc_credential") == 0)
-    return get_lsc_credential_omp (credentials, params);
+    return get_lsc_credential (credentials, params, response);
 
   if (strcmp (next, "get_lsc_credentials") == 0)
     return get_lsc_credentials (credentials, params, response);
@@ -544,7 +566,7 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_overrides (credentials, params, response);
 
   if (strcmp (next, "get_port_list") == 0)
-    return get_port_list_omp (credentials, params);
+    return get_port_list (credentials, params, response);
 
   if (strcmp (next, "get_port_lists") == 0)
     return get_port_lists (credentials, params, response);
@@ -562,25 +584,25 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_report (credentials, params, NULL, NULL, NULL, NULL, response);
 
   if (strcmp (next, "get_report_format") == 0)
-    return get_report_format_omp (credentials, params);
+    return get_report_format (credentials, params, response);
 
   if (strcmp (next, "get_report_formats") == 0)
-    return get_report_formats_omp (credentials, params);
+    return get_report_formats (credentials, params, response);
 
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
 
   if (strcmp (next, "get_schedule") == 0)
-    return get_schedule_omp (credentials, params);
+    return get_schedule (credentials, params, response);
 
   if (strcmp (next, "get_schedules") == 0)
-    return get_schedules_omp (credentials, params);
+    return get_schedules (credentials, params, response);
 
   if (strcmp (next, "get_slaves") == 0)
-    return get_slaves_omp (credentials, params);
+    return get_slaves (credentials, params, response);
 
   if (strcmp (next, "get_slave") == 0)
-    return get_slave_omp (credentials, params);
+    return get_slave (credentials, params, response);
 
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
@@ -5362,12 +5384,6 @@ new_target_omp (credentials_t *credentials, params_t *params)
       return html;                                                             \
     }
 
-char *
-get_target (credentials_t *, params_t *, const char *);
-
-char *
-get_targets (credentials_t *, params_t *, const char *);
-
 /**
  * @brief Create a target, get all targets, XSL transform the result.
  *
@@ -6113,7 +6129,7 @@ edit_target_omp (credentials_t * credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_target (credentials_t * credentials, params_t *params,
             const char *extra_xml)
 {
@@ -6143,7 +6159,7 @@ get_target_omp (credentials_t * credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_targets (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
@@ -11430,7 +11446,7 @@ export_slaves_omp (credentials_t * credentials, params_t *params,
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_schedule (credentials_t * credentials, params_t *params,
               const char *extra_xml)
 {
@@ -11952,7 +11968,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_report_format (credentials_t * credentials, params_t *params,
                    const char *extra_xml)
 {
@@ -11983,7 +11999,7 @@ get_report_format_omp (credentials_t * credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_report_formats (credentials_t * credentials, params_t *params,
                     const char *extra_xml)
 {
@@ -13890,7 +13906,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_port_list (credentials_t * credentials, params_t *params,
                const char * extra_xml)
 {
@@ -13921,7 +13937,7 @@ get_port_list_omp (credentials_t * credentials, params_t *params)
  *
  * @return Result of XSL transformation.
  */
-char *
+static char *
 get_port_lists (credentials_t * credentials, params_t *params,
                 const char *extra_xml)
 {
