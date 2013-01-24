@@ -1,5 +1,10 @@
 2013-01-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Handle default filters for notes and tasks
+	when setting filt_id.
+
+2013-01-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Defualt filt_id to -2 when no filter is
 	provided.
 

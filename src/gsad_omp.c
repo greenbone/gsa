@@ -792,6 +792,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         filter = "apply_overrides=0 rows=-2";
       filt_id = "-2";
     }
+  else if ((strcmp (filter, "sort=nvt") == 0) && (strcmp (type, "note") == 0))
+    filt_id = "-2";
+  else if ((strcmp (filter, "apply_overrides=1") == 0)
+           && (strcmp (type, "task") == 0))
+    filt_id = "-2";
 
   /* Get the list. */
 
