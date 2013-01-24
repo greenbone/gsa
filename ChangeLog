@@ -1,5 +1,18 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Respect filter params when verifying report format.
+
+	* src/gsad_omp.c (verify_report_format_omp): Convert to new style.
+
+	* src/html/gsad.xsl (html-gsa-logo): Adjust indicator path accordingly.
+
+	* src/html/omp.xsl (report_format): Make verify icon filter param like
+	other icons.
+	(get_report_formats): Match verify_report_format_response for error
+	message.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* ChangeLog: Cleanup paths in last two entries.
 
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>

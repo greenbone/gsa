@@ -16302,7 +16302,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'report_format'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={../filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Verify Report Format"
          style="margin-left:3px;">
         <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
@@ -16626,6 +16626,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_report_format_response"/>
+  <xsl:apply-templates select="verify_report_format_response"/>
   <!-- The for-each makes the get_report_formats_response the current node. -->
   <xsl:for-each select="get_report_formats_response | commands_response/get_report_formats_response">
     <xsl:choose>
