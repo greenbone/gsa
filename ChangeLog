@@ -1,5 +1,15 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/src/html/gsad.xsl (html-gsa-logo): Add indicators for filters
+	created from GET pages.
+
+	* src/src/html/omp.xsl (get_tasks, get_alerts, get_targets)
+	(get_configs_response, get_schedules, get_slaves, get_notes)
+	(get_overrides, get_port_lists, get_report_formats): Match
+	create_filter_response for error message.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c: Add headers for all get functions called by the _omp
 	interface functions.
 	(next_page): Always call the local get function, and pass it the
