@@ -1,5 +1,11 @@
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/gsad.xsl (html-cpe-table, html-cve-table, html-nvt-table)
+	(html-ovaldef-table, html-dfn_cert_adv-table): Add list icon that
+	reverts to default filter.
+
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Round corner of last entry.
 
 2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>

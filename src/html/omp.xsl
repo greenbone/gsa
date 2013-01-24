@@ -11931,6 +11931,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CPE">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12034,6 +12038,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/cves.html?token={/envelope/token}"
         title="Help: CVE">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
     <xsl:call-template name="filter-window-part">
@@ -12158,6 +12166,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: NVT">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12278,6 +12290,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: OVAL Definitions">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12381,6 +12397,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/dfn_cert_advs.html?token={/envelope/token}"
         title="Help: DFN-CERT Advisories">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
     <xsl:call-template name="filter-window-part">
