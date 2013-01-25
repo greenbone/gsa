@@ -1,3 +1,7 @@
+2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (nvt): Add minor details.
+
 2013-01-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl: Fix changes accidentally reverted.

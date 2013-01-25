@@ -13242,6 +13242,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN NVT DETAILS -->
 
 <xsl:template match="nvt">
+  <div class="float_right" style="font-size: 10px;">
+    <table style="font-size: 10px;">
+      <xsl:if test="@oid != ''">
+        <tr>
+          <td>ID:</td>
+          <td><xsl:value-of select="@oid"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="modification_time != ''">
+        <tr>
+          <td>Last modified:</td>
+          <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
+        </tr>
+      </xsl:if>
+      <xsl:if test="creation_time != ''">
+        <tr>
+          <td>Created:</td>
+          <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
+        </tr>
+      </xsl:if>
+    </table>
+  </div>
   <table>
     <tr><td><b>Name:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
     <tr><td>Summary:</td><td><xsl:value-of select="summary"/></td></tr>
