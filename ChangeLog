@@ -1,3 +1,12 @@
+2013-01-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add relevant DFN-CERTs to NVT details and scan results.
+
+	* src/html/omp.xsl (ref_cert_list): Add. New template for showing
+	CERT list in scan results.
+	(nvt): Add CERT list.
+	(result-detailed): Add CERT lists.
+
 2013-01-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Handle default filters for notes and tasks
