@@ -786,7 +786,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (filter == NULL || (strcmp (filter, "") == 0))
     {
-      if (strcmp (type, "task"))
+      if (strcmp (type, "info") == 0
+          && params_value (params, "info_type")
+          && strcmp (params_value (params, "info_type"), "nvt") == 0)
+        filter = "sort-reverse=created rows=-2";
+      else if (strcmp (type, "task"))
         filter = "rows=-2";
       else
         filter = "apply_overrides=0 rows=-2";

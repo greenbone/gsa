@@ -1,5 +1,9 @@
 2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Sort NVTs by date descending by default.
+
+2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-navigation): Reorder Secinfo menu.
 
 2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
