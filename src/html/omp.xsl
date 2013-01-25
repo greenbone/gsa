@@ -4078,6 +4078,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_tasks">
   <xsl:apply-templates select="run_wizard_response"/>
   <xsl:apply-templates select="delete_task_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_report_response"/>
   <xsl:apply-templates select="create_task_response"/>
   <xsl:apply-templates select="start_task_response"/>
@@ -4793,7 +4794,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
          title="Verify Agent"
          style="margin-left:3px;">
-        <img src="/img/new.png" border="0" alt="Verify Agent"/>
+        <img src="/img/verify.png" border="0" alt="Verify Agent"/>
       </a>
     </td>
   </tr>
@@ -6235,6 +6236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:apply-templates select="create_alert_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="test_alert_response"/>
   <xsl:apply-templates select="modify_alert_response"/>
   <!-- The for-each makes the get_alerts_response the current node. -->
@@ -6276,6 +6278,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_{$type}s&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_{$type}s&amp;filter={filters/term}&amp;token={/envelope/token}"
@@ -7699,6 +7705,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_targets">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_target_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_target_response"/>
   <!-- The for-each makes the get_targets_response the current node. -->
   <xsl:for-each select="get_targets_response | commands_response/get_targets_response">
@@ -9181,6 +9188,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="New Scan Config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
+      <a href="/omp?cmd=get_configs&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_configs&amp;filter={filters/term}&amp;token={/envelope/token}"
            title="Export {config_count/filtered} filtered Scan Configs as XML"
@@ -9475,6 +9486,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_configs_response">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="delete_config_response"/>
   <xsl:call-template name="html-configs-table"/>
 </xsl:template>
@@ -10971,6 +10983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_schedules">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_schedule_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_schedule_response"/>
   <xsl:apply-templates select="modify_schedule_response"/>
   <!-- The for-each makes the get_schedules_response the current node. -->
@@ -11389,6 +11402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_slaves">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_slave_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_slave_response"/>
   <xsl:apply-templates select="modify_slave_response"/>
   <!-- The for-each makes the get_slaves_response the current node. -->
@@ -11467,7 +11481,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="certlist"/>
   <xsl:variable name="token" select="/envelope/token"/>
   <xsl:variable name="certcount" select="count($certlist)"/>
-  
+
   <xsl:if test="$certcount &gt; 0">
     <tr valign="top">
     <td>CERT:</td>
@@ -11953,6 +11967,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CPE">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12056,6 +12074,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/cves.html?token={/envelope/token}"
         title="Help: CVE">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
     <xsl:call-template name="filter-window-part">
@@ -12180,6 +12202,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: NVT">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12300,6 +12326,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: OVAL Definitions">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
     </div>
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'info'"/>
@@ -12403,6 +12433,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/help/dfn_cert_advs.html?token={/envelope/token}"
         title="Help: DFN-CERT Advisories">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
     <xsl:call-template name="filter-window-part">
@@ -14351,6 +14385,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_notes">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_note_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_note_response"/>
   <!-- The for-each makes the get_notes_response the current node. -->
   <xsl:for-each select="get_notes_response | commands_response/get_notes_response">
@@ -15404,6 +15439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_overrides">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_override_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_override_response"/>
   <!-- The for-each makes the get_overrides_response the current node. -->
   <xsl:for-each select="get_overrides_response | commands_response/get_overrides_response">
@@ -15496,6 +15532,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=new_port_list&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New Port List">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      </a>
+      <a href="/omp?cmd=get_port_lists&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
+         title="Return to system default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
         <a href="/omp?cmd=export_port_lists&amp;filter={filters/term}&amp;token={/envelope/token}"
@@ -16045,6 +16085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_port_lists">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_port_list_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_port_list_response"/>
   <!-- The for-each makes the get_port_lists_response the current node. -->
   <xsl:for-each select="get_port_lists_response | commands_response/get_port_lists_response">
@@ -16320,10 +16361,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'report_format'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={../filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Verify Report Format"
          style="margin-left:3px;">
-        <img src="/img/new.png" border="0" alt="Verify Report Format"/>
+        <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
       </a>
     </td>
   </tr>
@@ -16642,7 +16683,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_report_formats">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_report_format_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
   <xsl:apply-templates select="create_report_format_response"/>
+  <xsl:apply-templates select="verify_report_format_response"/>
   <!-- The for-each makes the get_report_formats_response the current node. -->
   <xsl:for-each select="get_report_formats_response | commands_response/get_report_formats_response">
     <xsl:choose>

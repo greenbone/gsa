@@ -1,5 +1,9 @@
 2013-01-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl: Fix changes accidentally reverted.
+
+2013-01-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add relevant DFN-CERTs to NVT details and scan results.
 
 	* src/html/omp.xsl (ref_cert_list): Add. New template for showing
