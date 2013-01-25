@@ -1,4 +1,8 @@
-2013-01-24  Matthew Mundell <matthew.mundell@greenbone.net>
+2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/gsad.xsl (html-gsa-navigation): Reorder Secinfo menu.
+
+2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Add minor details.
 

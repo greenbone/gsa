@@ -1032,13 +1032,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </ul>
     </li>
     <li>
-     <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">SecInfo Management</a>
+     <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">SecInfo Management</a>
      <ul>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_INFO']">
        <li class="pointy"></li>
-       <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">CPE</a></li>
-       <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">CVE</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">NVT</a></li>
+       <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">CVE</a></li>
+       <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">CPE</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">OVAL Definitions</a></li>
        <li class="last"><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">DFN-CERT Advisories</a></li>
       </xsl:if>
