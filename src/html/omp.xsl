@@ -6280,7 +6280,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=get_{$type}s&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
@@ -9189,7 +9189,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=get_configs&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
@@ -11968,7 +11968,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
@@ -12076,7 +12076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
@@ -12203,7 +12203,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
@@ -12327,7 +12327,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
@@ -12435,7 +12435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
     </div>
@@ -15556,7 +15556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
       <a href="/omp?cmd=get_port_lists&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-         title="Return to system default filter view" style="margin-left:3px;">
+         title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">

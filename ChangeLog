@@ -1,3 +1,9 @@
+2013-01-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (list-window, html-configs-table, html-cpe-table,
+	html-cve-table, html-nvt-table, html-ovaldef-table,
+	html-dfn_cert_adv-table, html-port-lists-table): Adjust tooltip string.
+
 2013-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Sort NVTs by date descending by default.
