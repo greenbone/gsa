@@ -1,3 +1,9 @@
+2013-01-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (gsad_init): Check for glib version when calling
+	g_thread_init and g_mutex_new as these are deprecated since glib 2.31
+	and were causing build failures on systems running new versions.
+
 2013-01-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (list-window, html-configs-table, html-cpe-table,
