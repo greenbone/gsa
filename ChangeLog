@@ -1,3 +1,13 @@
+2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (get_info_response): When a info_name is given, then
+	always go to the details page.  This allows the details page to handle
+	cases like NVTs referencing CVEs before the CVEs are published.  Also
+	call nvt-details instead of doing the page directly.
+	(cve-details): If the CVE is missing, add a note and minimize the CVSS
+	section.
+	(nvt-details): New template.
+
 2013-01-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl: Change URL in xmlns:dfncert from "https:" to "http:"
