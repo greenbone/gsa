@@ -290,7 +290,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       g_ptr_array_add (users, (gpointer) user);
     }
   user->time = time (NULL);
-  g_mutex_unlock (mutex);
   return user;
 }
 
