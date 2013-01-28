@@ -1,5 +1,10 @@
 2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Make everything besides CVE sorted reverse
+	by Created, so that DFN-CERT gets it too.
+
+2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Add special case filter defaults for CVEs
 	and OVALs.
 
