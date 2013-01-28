@@ -1,3 +1,8 @@
+2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Add special case filter defaults for CVEs
+	and OVALs.
+
 2013-01-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (user_add): Revert mutex unlocking change as the caller is
