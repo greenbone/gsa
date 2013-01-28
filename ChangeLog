@@ -1,3 +1,7 @@
+2013-01-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl: Change URL in xmlns:dfncert from "https:" to "http:"
+
 2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_info_response, cve-details, get_nvts): Update
