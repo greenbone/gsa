@@ -12530,8 +12530,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_left"></div>
         <div class="gb_window_part_right"></div>
         <div class="gb_window_part_center">NVT Details
-          <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
-            title="Help: NVTS (NVT Details)">
+          <a href="/help/nvt_details.html?token={/envelope/token}"
+            title="Help: NVT Details">
             <img src="/img/help.png"/>
           </a>
         </div>
@@ -12590,7 +12590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">CVE Details
-      <a href="/help/cve.html?token={/envelope/token}#cvedetails"
+      <a href="/help/cve_details.html?token={/envelope/token}"
         title="Help: CVE (CVE Details)">
         <img src="/img/help.png"/>
       </a>
@@ -13411,8 +13411,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">NVT Details
-      <a href="/help/nvts.html?token={/envelope/token}#nvtdetails"
-         title="Help: NVTS (NVT Details)">
+      <a href="/help/nvt_details.html?token={/envelope/token}"
+         title="Help: NVT Details">
         <img src="/img/help.png"/>
       </a>
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"

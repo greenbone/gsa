@@ -1,3 +1,21 @@
+2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (get_info_response, cve-details, get_nvts): Update
+	help page names.
+
+	* src/html/help.xsl (contents.html): Add SecInfo details pages.  Order
+	SecInfo like in menu.  Remove SecInfo Lookup.  Adjust indenting.
+	(cve.html): Remove.  Now cve_details.html.
+	(cve_details.html): New template.  Was cve.html.
+	(nvts.html): Move down in file.  Expand.  Remove NVT Details section.
+	(browse_infosec.html): Remove.  Feature removed.
+	(cpes.html): Make heading plural.
+	(cves.html): Make heading plural.  Remove excessive BR spacing.  Correct
+	typo.  Add filtering.
+	(nvt_details.html): New template.
+	(ovaldefs.html): Remove excessive BR spacing.  Match column header to
+	page.
+
 2013-01-28  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp (get_many): Check if filt_id was already provided when

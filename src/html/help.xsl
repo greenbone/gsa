@@ -2798,17 +2798,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
           <li> SecInfo Management</li>
           <ul>
-            <li> <a href="cpes.html?token={/envelope/token}">CPE</a></li>
-            <li> <a href="cves.html?token={/envelope/token}">CVE</a></li>
+            <li> <a href="nvts.html?token={/envelope/token}">NVTs</a></li>
+              <ul>
+                <li> <a href="nvt_details.html?token={/envelope/token}">NVT Details</a></li>
+              </ul>
+            <li> <a href="cves.html?token={/envelope/token}">CVEs</a></li>
+              <ul>
+                <li> <a href="cve_details.html?token={/envelope/token}">CVE Details</a></li>
+              </ul>
+            <li> <a href="cpes.html?token={/envelope/token}">CPEs</a></li>
             <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Defintions</a></li>
             <li> <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a></li>
-            <li> <a href="browse_infosec.html?token={/envelope/token}">SecInfo Lookup</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
             <li> <a href="configs.html?token={/envelope/token}">Scan Configs</a></li>
             <ul>
-                <li> <a href="new_config.html?token={/envelope/token}">New Scan Config</a></li>
+              <li> <a href="new_config.html?token={/envelope/token}">New Scan Config</a></li>
               <li> <a href="config_details.html?token={/envelope/token}">Scan Config Details</a></li>
               <li> <a href="config_family_details.html?token={/envelope/token}">Scan Config Family Details</a></li>
               <li> <a href="config_nvt_details.html?token={/envelope/token}">Scan Config NVT Details</a></li>
@@ -2919,7 +2925,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="cve.html">
+<xsl:template mode="help" match="cve_details.html">
   <div class="gb_window_part_center">Help: CVE Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -3352,7 +3358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h2>OVAL Defintion (OVALDEF)</h2>
       <p>
         A definition as specified by the OVAL (Open Vulnerability and Assessment
-        Language), version 5.10.1. It can be used for different classes of 
+        Language), version 5.10.1. It can be used for different classes of
         security data like vulnerabilities, patches or compliance policies.
       </p>
       <p>
@@ -4810,93 +4816,6 @@ Public License instead of this License.
       </p>
       <p>
        Hit the button "Save Note" to submit the modification.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="nvts.html">
-  <div class="gb_window_part_center">Help: NVTs</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div style="text-align:left">
-
-      <br/>
-
-      <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_NVTS'"/>
-      </xsl:call-template>
-
-      <a name="nvts"></a>
-      <h1>Network Vulnerability Tests (NVTs)</h1>
-      <p>
-       Currently, there is one page in the web interface
-       about <a href="glossary.html?token={/envelope/token}#nvt">NVT</a>s.
-      </p>
-
-      <a name="nvtdetails"></a>
-      <h2>NVT Details</h2>
-      <p>
-       A page that provides detailed information about an NVT.
-       This includes the NVT family and the full description of the NVT,
-       as well as a table listing all notes on the NVT.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="browse_infosec.html">
-  <div class="gb_window_part_center">Help: SecInfo Lookup</div>
-  <div class="gb_window_part_content">
-    <div style="float:left;">
-      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
-    </div>
-    <div class="float_right">
-      <a href="/dialog/browse_infosec.html?token={/envelope/token}">Jump to dialog</a>
-    </div>
-    <div style="text-align:left">
-
-      <br/>
-
-      <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_INFO'"/>
-      </xsl:call-template>
-
-      <h1>Security Information Lookup</h1>
-      <p>
-       A page that provides access to the security information database to
-       lookup details for CVE and NVT. This lookup page is a temporary
-       solution until the full management interface for CVE and NVT is
-       implemented like it is already for CPE.
-       Identifiers must be formatted correctly.
-      </p>
-
-      <h2>CVE</h2>
-      <p>
-        A CVE identifier is built using a specific scheme:
-        <code>CVE-YYYY-ZZZZ</code>.
-        <br/>
-        Where:
-        <ul>
-          <li>YYYY is the year of publication of the CVE (on 4 digits)</li>
-          <li>ZZZZ is the unique identifier of the CVE (on 4 digits too)</li>
-        </ul>
-        e.g. <code>CVE-2011-0245</code>
-      </p>
-
-      <h2>NVT</h2>
-      <p>
-        NVTs are uniquely identified using OIDs like
-        <code>1.3.6.1.4.1.25623.1.0.XXXXX</code>.
-        <br/>
-        Where:
-        <ul>
-          <li>1.3.6.1.4.1.25623.1.0 is the standard prefix for legacy IDs</li>
-          <li>XXXXX is the ID of the script</li>
-        </ul>
-        Note that this is an example and even the prefix can vary. OID ranges
-        are described more precisely on
-        http://www.openvas.org/openvas-oids.html
       </p>
     </div>
   </div>
@@ -6996,7 +6915,7 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cpes.html">
-  <div class="gb_window_part_center">Help: CPE</div>
+  <div class="gb_window_part_center">Help: CPEs</div>
   <div class="gb_window_part_content">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -7013,7 +6932,7 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="cpe"></a>
-      <h1>CPE</h1>
+      <h1>CPEs</h1>
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#cpe">CPEs</a> and summarizes
@@ -7095,7 +7014,7 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cves.html">
-  <div class="gb_window_part_center">Help: CVE</div>
+  <div class="gb_window_part_center">Help: CVEs</div>
   <div class="gb_window_part_content">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
@@ -7112,14 +7031,14 @@ Public License instead of this License.
       </xsl:call-template>
 
       <a name="cpe"></a>
-      <h1>CVE</h1>
+      <h1>CVEs</h1>
 
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#cve">CVEs</a> and summarizes
         the essential aspects of each.
       </p>
-      <br/>
+
       <p>
         <b>Note:</b> Most characteristics of a vulnerability (Vector, Complexity, Authentication,
         Confidentiality Impact, Integrity Impact, Availability Impact) are extracted
@@ -7197,9 +7116,11 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the  <a href="#cpedetails">CVE Details</a> page.  This page has
+        will show the  <a href="#cvedetails">CVE Details</a> page.  This page has
         full details of the CVE, including all NVTs known to be addressing this CVE.
       </p>
+
+      <xsl:call-template name="filtering"/>
 
       <a name="cvedetails"></a>
       <h2>CVE Details</h2>
@@ -7231,6 +7152,105 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="nvt_details.html">
+  <div class="gb_window_part_center">Help: NVT Details</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+      <a name="nvt"></a>
+      <h2>NVT Details</h2>
+      <p>
+        A page that provides detailed information about an NVT.
+        This includes creation and modification dates, the
+        description, CVSS information, list of CVEs and
+        links to notes and overrides on the NVT.
+      </p>
+      <p>
+        Clicking on a CVE name will go to the CVE Details page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="nvts.html">
+  <div class="gb_window_part_center">Help: NVTs</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <a name="cpe"></a>
+      <h1>NVTs</h1>
+
+      <p>
+        This table provides an overview of all
+        <a href="glossary.html?token={/envelope/token}#nvt">NVTs</a> and summarizes
+        the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>The NVT identifier.</td>
+        </tr>
+        <tr class="odd">
+          <td>Family</td>
+          <td>The family the NVT belongs to.</td>
+        </tr>
+        <tr>
+          <td>Created</td>
+          <td>The date the NVT was created.</td>
+        </tr>
+        <tr class="odd">
+          <td>Modified</td>
+          <td>This date the NVT was last modified.</td>
+        </tr>
+        <tr>
+          <td>Version</td>
+          <td>The version of the NVT.</td>
+        </tr>
+        <tr>
+          <td>CVSS</td>
+          <td>
+            The combined score calculated from the metrics of the vulnerability.
+            Ranging from 0 to 10.
+          </td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>NVT Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the
+        <a href="/help/nvt_details.html?token={/envelope/token}">NVT Details</a>
+        page. This page has full details of the NVT.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="ovaldefs.html">
   <div class="gb_window_part_center">Help: OVAL Definitions</div>
   <div class="gb_window_part_content">
@@ -7250,12 +7270,13 @@ Public License instead of this License.
 
       <a name="ovaldefs"></a>
       <h1>OVAL Definitions</h1>
+
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definitions</a> and summarizes
         the essential aspects of each.
       </p>
-      <br/>
+
       <p>
         For a detailed description see the OVAL Language Specification at:
         http://oval.mitre.org/language/version5.10.1/
@@ -7336,7 +7357,6 @@ Public License instead of this License.
         <a href="glossary.html#dfn_cert_adv?token={/envelope/token}">DFN-CERT Advisories</a>
         and summarizes the essential aspects of each.
       </p>
-      <br/>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -7352,7 +7372,7 @@ Public License instead of this License.
           <td>The titles of the advisories.</td>
         </tr>
         <tr>
-          <td>#CVEs</td>
+          <td>CVEs</td>
           <td>The number of CVEs referenced by the advisories</td>
         </tr>
       </table>
