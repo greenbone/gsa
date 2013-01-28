@@ -784,27 +784,31 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (filter == NULL || (strcmp (filter, "") == 0))
+  if (filt_id == NULL || (strcmp (filt_id, "") == 0))
     {
-      if (strcmp (type, "info") == 0
-          && params_value (params, "info_type"))
+      if (filter == NULL || (strcmp (filter, "") == 0))
         {
-          if (strcmp (params_value (params, "info_type"), "cve") == 0)
-            filter = "sort-reverse=published rows=-2";
+          if (strcmp (type, "info") == 0
+              && params_value (params, "info_type"))
+            {
+              if (strcmp (params_value (params, "info_type"), "cve") == 0)
+                filter = "sort-reverse=published rows=-2";
+              else
+                filter = "sort-reverse=created rows=-2";
+            }
+          else if (strcmp (type, "task"))
+            filter = "rows=-2";
           else
-            filter = "sort-reverse=created rows=-2";
+            filter = "apply_overrides=0 rows=-2";
+          filt_id = "-2";
         }
-      else if (strcmp (type, "task"))
-        filter = "rows=-2";
-      else
-        filter = "apply_overrides=0 rows=-2";
-      filt_id = "-2";
+      else if ((strcmp (filter, "sort=nvt") == 0)
+               && (strcmp (type, "note") == 0))
+        filt_id = "-2";
+      else if ((strcmp (filter, "apply_overrides=1") == 0)
+               && (strcmp (type, "task") == 0))
+        filt_id = "-2";
     }
-  else if ((strcmp (filter, "sort=nvt") == 0) && (strcmp (type, "note") == 0))
-    filt_id = "-2";
-  else if ((strcmp (filter, "apply_overrides=1") == 0)
-           && (strcmp (type, "task") == 0))
-    filt_id = "-2";
 
   /* Get the list. */
 
