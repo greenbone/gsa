@@ -11954,7 +11954,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CPE
+    <div class="gb_window_part_center">CPEs
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="'info'"/>
         <xsl:with-param name="list" select="info"/>
@@ -12062,7 +12062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">CVE
+    <div class="gb_window_part_center">CVEs
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="'info'"/>
         <xsl:with-param name="list" select="info"/>
@@ -12189,7 +12189,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">NVT
+    <div class="gb_window_part_center">NVTs
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="'info'"/>
         <xsl:with-param name="list" select="info"/>
@@ -12313,7 +12313,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">OVAL Definition
+    <div class="gb_window_part_center">OVAL Definitions
       <xsl:call-template name="filter-window-pager">
         <xsl:with-param name="type" select="'info'"/>
         <xsl:with-param name="list" select="info"/>

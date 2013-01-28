@@ -1,5 +1,13 @@
 2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-cpe-table, html-cve-table, html-nvt-table)
+	(html-ovaldef-table): Make heading plural to match other list pages.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Make SecInfo items plural to
+	match other list pages.
+
+2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Make everything besides CVE sorted reverse
 	by Created, so that DFN-CERT gets it too.
 
