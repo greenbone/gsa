@@ -2798,9 +2798,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   GString *xml = NULL;
   gnutls_session_t session;
-  int socket, notes, overrides, apply_overrides;
+  int socket, notes, get_overrides, apply_overrides;
   gchar *html;
-  const char *task_id;
+  const char *task_id, *overrides, *original_overrides;
 
   task_id = params_value (params, "task_id");
   if (task_id == NULL)
@@ -2810,9 +2810,32 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                          "Diagnostics: Required parameter task_id was NULL.",
                          "/omp?cmd=get_tasks");
 
-  apply_overrides = params_value (params, "overrides")
-                     ? strcmp (params_value (params, "overrides"), "0")
-                     : 0;
+  overrides = params_value (params, "overrides");
+  original_overrides = params_value (params, "original_overrides");
+  if (overrides && original_overrides && strcmp (overrides, original_overrides))
+    {
+      param_t *filt_id, *filter;
+      filt_id = params_get (params, "filt_id");
+      if (filt_id)
+        filt_id->value = NULL;
+
+      filter = params_get (params, "filter");
+      if (filter && filter->value)
+        {
+          gchar *old;
+          old = filter->value;
+          filter->value = g_strdup_printf ("apply_overrides=%s %s",
+                                           overrides,
+                                           old);
+          g_free (old);
+        }
+      else if (strcmp (overrides, "0"))
+        params_add (params, "filter", "apply_overrides=1");
+      else
+        params_add (params, "filter", "apply_overrides=0");
+    }
+
+  apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
   if (task_id == NULL)
     return gsad_message (credentials,
@@ -2839,7 +2862,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   notes = command_enabled (credentials, "GET_NOTES");
-  overrides = command_enabled (credentials, "GET_OVERRIDES");
+  get_overrides = command_enabled (credentials, "GET_OVERRIDES");
   if (openvas_server_sendf (&session,
                             "<commands>"
                             "<get_tasks"
@@ -2859,13 +2882,13 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                              : "",
                             notes ? task_id : "",
                             notes ? "\"/>" : "",
-                            overrides
+                            get_overrides
                              ? "<get_overrides"
                                " sort_field=\"overrides_nvt_name, overrides.text\""
                                " task_id=\""
                              : "",
-                            overrides ? task_id : "",
-                            overrides ? "\"/>" : "",
+                            get_overrides ? task_id : "",
+                            get_overrides ? "\"/>" : "",
                             task_id)
       == -1)
     {

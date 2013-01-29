@@ -1,3 +1,15 @@
+2013-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (task [details]): Add filter params and original
+	override value to refresh form.
+	(task): Add override to name link, to match details icon.
+
+	* src/gsad.c (init_validator): Add original_overrides.
+
+	* src/gsad_omp.c (get_task): When the refresh form has changed the
+	overrides state, then adjust the filter string and remove any named
+	filter.
+
 2013-01-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (cpes.html, cves.html, ovaldefs.html)

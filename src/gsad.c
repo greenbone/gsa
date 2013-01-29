@@ -894,6 +894,7 @@ init_validator ()
   openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
   openvas_validator_alias (validator, "note_result_uuid", "note_result_id");
   openvas_validator_alias (validator, "nvt:value",         "uuid");
+  openvas_validator_alias (validator, "original_overrides",  "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
   openvas_validator_alias (validator, "override_task_id", "optional_task_id");
   openvas_validator_alias (validator, "override_task_uuid", "override_task_id");

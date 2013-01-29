@@ -2821,6 +2821,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_task"/>
           <input type="hidden" name="task_id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="original_overrides" value="{$apply-overrides}"/>
           <select style="margin-bottom: 0px;" name="overrides" size="1">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
@@ -3857,7 +3860,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="name"/>
             </a>
           </b>
