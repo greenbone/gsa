@@ -1,3 +1,39 @@
+2013-01-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Change help for SecInfo to be more consistent, mostly with details
+	pages, filtering and availability. Fix spelling mistakes. Remove now
+	unused anchors. Add new text for OVALDEF, DFN-CERT and CERT references.
+
+	* src/html/help.xsl (contents.html): Add details items for CPE, OVALDEF,
+	DFN_CERT_ADV.
+	(cpe.html): Remove. Now cpe_details.html.
+	(cpe_details.html): New template. Was cpe.html.
+	Remove superfluous anchor.
+	(cve_details.html): Add availability template call. Remove superfluous
+	anchor. Change headings from h2 to h1 and from h3 to h2.
+	Change "an CVE" to "a CVE".
+	(ovaldef.html): Remove. Now ovaldef_details.html.
+	(ovaldef_details.html): New template. Was ovaldef.html. Remove
+	superfluous anchor. Change "a" to "an". Add text for Affected, Criteria,
+	References and Repository history.
+	(dfn_cert_adv.html): Remove. Now dfn_cert_adv_details.html.
+	(dfn_cert_adv_details.html): New template. Was dfn_cert_adv.html.
+	Remove superfluous anchor. Add help text for link and referenced CVEs.
+	(cpes.html): Remove superfluous anchor. Change link to details.
+	Remove old details section. Add filtering template call.
+	(cves.html): Remove superfluous anchor. Change link to details.
+	Add mention of CERT in details description. Remove old details section.
+	(nvt_details.html): Remove superfluous anchor. Add availability template
+	call. Change h2 to h1. Change "an" to "a". Change "CVEs" to list of
+	different refence types. Add mention of CERT links.
+	(ovaldefs.html): Remove superfluous anchor and blank lines. Change
+	details link. Add filtering template call.
+	(dfn_cert_advs.html): Remove superfluous anchor. Change details link.
+	Add filtering template call.
+
+	* src/html/omp.xsl (cpe-details, ovaldef-details, dfn_cert_adv-details):
+	Change help links.
+
 2013-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (get_info_response): When a info_name is given, then

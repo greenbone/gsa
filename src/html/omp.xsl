@@ -12882,7 +12882,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">CPE Details
-      <a href="/help/cpe.html?token={/envelope/token}#cpedetails"
+      <a href="/help/cpe_details.html?token={/envelope/token}"
         title="Help: CPE (CPE Details)">
         <img src="/img/help.png"/>
       </a>
@@ -13031,7 +13031,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">OVAL Definition Details
-      <a href="/help/ovaldef.html?token={/envelope/token}#ovaldetails"
+      <a href="/help/ovaldef_details.html?token={/envelope/token}"
         title="Help: OVALDEF (OVAL Definition Details)">
         <img src="/img/help.png"/>
       </a>
@@ -13226,7 +13226,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">DFN-CERT Advisory Details
-      <a href="/help/dfn_cert_adv.html?token={/envelope/token}#advdetails"
+      <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}"
         title="Help: DFN_CERT_ADV (DFN-CERT Advisory Details)">
         <img src="/img/help.png"/>
       </a>

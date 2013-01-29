@@ -2807,8 +2807,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="cve_details.html?token={/envelope/token}">CVE Details</a></li>
               </ul>
             <li> <a href="cpes.html?token={/envelope/token}">CPEs</a></li>
+              <ul>
+                <li> <a href="cpe_details.html?token={/envelope/token}">CPE Details</a></li>
+              </ul>
             <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Defintions</a></li>
+              <ul>
+                <li> <a href="ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a></li>
+              </ul>
             <li> <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a></li>
+              <ul>
+                <li> <a href="dfn_cert_adv_details.html?token={/envelope/token}">DFN-CERT Advisory Details</a></li>
+              </ul>
           </ul>
           <li> Configuration</li>
           <ul>
@@ -2892,7 +2901,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="cpe.html">
+<xsl:template mode="help" match="cpe_details.html">
   <div class="gb_window_part_center">Help: CPE Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -2904,7 +2913,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="cpe"></a>
       <h1>CPE Details</h1>
       <p>
         A page that provides detailed information about a
@@ -2913,7 +2921,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         deprecation status and the overall status.
       </p>
 
-      <h3>Reported vulnerabilities</h3>
+      <h2>Reported vulnerabilities</h2>
       <p>
         This table provides an overview of the
         <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
@@ -2932,19 +2940,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
-      <a name="cve"></a>
-      <h2>CVE Details</h2>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <h1>CVE Details</h1>
       <p>
-       A page that provides the original detailed information about an CVE.
+       A page that provides the original detailed information about a CVE.
        This includes the dates of publication and last modification, the
        description, CVSS information, list of vulnerable products and
        references.
-     </p>
+      </p>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="ovaldef.html">
+<xsl:template mode="help" match="ovaldef_details.html">
   <div class="gb_window_part_center">Help: OVAL Definition Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -2956,19 +2968,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="ovaldef"></a>
       <h1>OVAL Definition Details</h1>
       <p>
-        A page that provides detailed information about a
+        A page that provides detailed information about an
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definition</a>.
         This includes the creation time, modification time, version number,
         title, definition class and detailed description.
+      </p>
+      <h2>Affected</h2>
+      <p>
+        One or more tables that describe the systems affected by the definition.
+        Each entry consists of one family and a list of platforms and products.
+      </p>
+      <h2>Criteria</h2>
+      <p>
+        Shows a tree of the definition&apos;s criteria. Logical operators are
+        <b>bold</b> with comments in <i>italics</i>. Leaf node comments are
+        written in normal font with their associated OVAL-IDs
+        (tests and extend-definitions) in <i>italics</i>.
+      </p>
+      <h2>References</h2>
+      <p>
+        A table containing references for the OVAL definition, each entry
+        consisting of a source type, ID, and URL.
+      </p>
+      <h2>Repository history</h2>
+      <p>
+        Shows the current status (e.g. draft, interim, accepted) and a table
+        showing the history of the definition. The first column describes the
+        type of event (i.e. submission, change and status changes). The
+        following columns are the date and the contributors, if applicable.
       </p>
     </div>
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="dfn_cert_adv.html">
+<xsl:template mode="help" match="dfn_cert_adv_details.html">
   <div class="gb_window_part_center">Help: DFN-CERT Advisory Details</div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
@@ -2980,12 +3015,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="dfn_cert_adv"></a>
       <h1>DFN-CERT Advisory Details</h1>
       <p>
         A page that provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisory</a>.
-        This includes the creation time, modification time and summary.
+        This includes the creation time, modification time, summary and a link
+        URL to the full advisory.
+      </p>
+      <h3>Referenced CVEs</h3>
+      <p>
+        This list provides an overview of the
+        <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>
+        that are referenced by the advisory.
+        Details of these CVEs can be by clicking on them.
       </p>
     </div>
   </div>
@@ -6931,7 +6973,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="cpe"></a>
       <h1>CPEs</h1>
       <p>
         This table provides an overview of all
@@ -6979,21 +7020,16 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the  <a href="#cpedetails">CPE Details</a> page.  This page has
+        will show the  <a href="cpe_details.html?token={/envelope/token}">
+        CPE Details</a> page.  This page has
         full details of the CPE, including all references to this CPE and the
         status of the CPE.
       </p>
+      <p>
+        Clicking on the CPE name will also go to the CPE Details page.
+      </p>
 
-      <a name="cpedetails"></a>
-      <h2>CPE Details</h2>
-      <p>
-        A page that provides detailed information about a CPE.
-        This includes the all referencing CVEs, creation time, modification time,
-        deprecation status and the overall status.
-      </p>
-      <p>
-        Clicking on the CPE name will go to the CPE Details page.
-      </p>
+      <xsl:call-template name="filtering"/>
 
       <a name="scap_missing"></a>
       <h2>Warning: SCAP Database Missing</h2>
@@ -7030,7 +7066,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="cpe"></a>
       <h1>CVEs</h1>
 
       <p>
@@ -7116,23 +7151,14 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the  <a href="#cvedetails">CVE Details</a> page.  This page has
-        full details of the CVE, including all NVTs known to be addressing this CVE.
+        will show the  <a href="cve_details.html?token={/envelope/token}">CVE Details</a> page.
+        This page has full details of the CVE, including all NVTs and CERT advisories known to be addressing this CVE.
+      </p>
+      <p>
+        Clicking on the CPE name will also go to the CPE Details page.
       </p>
 
       <xsl:call-template name="filtering"/>
-
-      <a name="cvedetails"></a>
-      <h2>CVE Details</h2>
-      <p>
-        A page that provides the original detailed information about an CVE.
-       This includes the dates of publication and last modification, the
-       description, CVSS information, list of vulnerable products and
-       references.
-      </p>
-      <p>
-        Clicking on the CPE name will go to the CPE Details page.
-      </p>
 
       <a name="scap_missing"></a>
       <h2>Warning: SCAP Database Missing</h2>
@@ -7159,16 +7185,22 @@ Public License instead of this License.
     <div style="text-align:left">
 
       <br/>
-      <a name="nvt"></a>
-      <h2>NVT Details</h2>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <h1>NVT Details</h1>
       <p>
-        A page that provides detailed information about an NVT.
+        A page that provides detailed information about a NVT.
         This includes creation and modification dates, the
-        description, CVSS information, list of CVEs and
+        description, CVSS information, lists of references (CVEs, Bugtraq IDs,
+        CERT advisories referencing CVEs of this NVT, other references) and
         links to notes and overrides on the NVT.
       </p>
       <p>
-        Clicking on a CVE name will go to the CVE Details page.
+        Clicking on a CVE name will go to the CVE Details page and clicking on
+        a CERT advisory name will go to the CERT Advisory details page.
       </p>
     </div>
   </div>
@@ -7191,7 +7223,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="cpe"></a>
       <h1>NVTs</h1>
 
       <p>
@@ -7268,15 +7299,12 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="ovaldefs"></a>
       <h1>OVAL Definitions</h1>
-
       <p>
         This table provides an overview of all
         <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definitions</a> and summarizes
         the essential aspects of each.
       </p>
-
       <p>
         For a detailed description see the OVAL Language Specification at:
         http://oval.mitre.org/language/version5.10.1/
@@ -7312,8 +7340,10 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the <a href="/help/ovaldefs.html?token={/envelope/token}">OVAL Definition Details</a> page. This page has full details of the OVAL Defintion.
+        will show the <a href="/help/ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a> page. This page has full details of the OVAL Defintion.
       </p>
+
+      <xsl:call-template name="filtering"/>
 
       <a name="scap_missing"></a>
       <h2>Warning: SCAP Database Missing</h2>
@@ -7350,7 +7380,6 @@ Public License instead of this License.
         <xsl:with-param name="command" select="'GET_INFO'"/>
       </xsl:call-template>
 
-      <a name="dfn_cert_adv"></a>
       <h1>DFN-CERT Advisories</h1>
       <p>
         This table provides an overview of all
@@ -7384,8 +7413,10 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the <a href="/help/dfn-cert-advs.html?token={/envelope/token}">DFN-CERT Advisory Details</a> page. This page has full details of the DFN-CERT Advisory.
+        will show the <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}">DFN-CERT Advisory Details</a> page. This page has full details of the DFN-CERT Advisory.
       </p>
+
+      <xsl:call-template name="filtering"/>
 
       <a name="cert_missing"></a>
       <h2>Warning: CERT Database Missing</h2>
