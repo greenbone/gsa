@@ -1,5 +1,17 @@
 2013-01-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/help.xsl (cpes.html, cves.html, ovaldefs.html)
+	(dfn_cert_advs.html): Change help text and anchor for SCAP / CERT
+	database warning to one for general SecInfo database warning.
+	(nvts.html): Add help text for SecInfo database warning.
+
+	* src/html/omp.xsl (html-cpe-table, html-cpe-table, html-ovaldef-table)
+	(html-dfn_cert_adv-table): Change SCAP / CERT database warning to
+	general SecInfo database warning. Change help link to new anchor.
+	(html-nvt-table): Add SecInfo database warning.
+
+2013-01-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Change help for SecInfo to be more consistent, mostly with details
 	pages, filtering and availability. Fix spelling mistakes. Remove now
 	unused anchors. Add new text for OVALDEF, DFN-CERT and CERT references.

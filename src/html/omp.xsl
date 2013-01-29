@@ -11940,11 +11940,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-cpe-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
       <xsl:with-param name="message">
-        SCAP database missing on OMP server.
-        <a href="/help/cpes.html?token={/envelope/token}#scap_missing"
-           title="Help: SCAP database missing">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
       </xsl:with-param>
@@ -12048,11 +12048,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-cve-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
       <xsl:with-param name="message">
-        SCAP database missing on OMP server.
-        <a href="/help/cves.html?token={/envelope/token}#scap_missing"
-           title="Help: SCAP database missing">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/cves.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
       </xsl:with-param>
@@ -12186,6 +12186,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-nvt-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/nvts.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -12299,11 +12312,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-ovaldef-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
       <xsl:with-param name="message">
-        SCAP database missing on OMP server.
-        <a href="/help/cves.html?token={/envelope/token}#scap_missing"
-           title="Help: SCAP database missing">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/ovaldefs.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
       </xsl:with-param>
@@ -12407,11 +12420,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-dfn_cert_adv-table">
   <xsl:if test="@status = 400">
     <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: CERT Database Missing</xsl:with-param>
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
       <xsl:with-param name="message">
-        SCAP database missing on OMP server.
-        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#cert_missing"
-           title="Help: CERT database missing">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
           <img style="margin-left:5px" src="/img/help.png"/>
         </a>
       </xsl:with-param>

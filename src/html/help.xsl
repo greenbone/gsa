@@ -7031,16 +7031,18 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
 
-      <a name="scap_missing"></a>
-      <h2>Warning: SCAP Database Missing</h2>
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
       <p>
-        This warning dialog occurs when the SCAP database is missing on the OMP server.
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
       </p>
       <p>
         The CPE table is always empty when the database is missing.
       </p>
       <p>
-        The SCAP data is updated during a SCAP data feed sync.
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.
@@ -7160,16 +7162,18 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
 
-      <a name="scap_missing"></a>
-      <h2>Warning: SCAP Database Missing</h2>
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
       <p>
-        This warning dialog occurs when the SCAP database is missing on the OMP server.
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
       </p>
       <p>
         The CVE table is always empty when the database is missing.
       </p>
       <p>
-        The SCAP data is updated during a SCAP data feed sync.
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.
@@ -7278,6 +7282,23 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
+      </p>
+      <p>
+        The NVT table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
     </div>
   </div>
 </xsl:template>
@@ -7345,16 +7366,18 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
 
-      <a name="scap_missing"></a>
-      <h2>Warning: SCAP Database Missing</h2>
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
       <p>
-        This warning dialog occurs when the SCAP database is missing on the OMP server.
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
       </p>
       <p>
         The OVAL Definitions table is always empty when the database is missing.
       </p>
       <p>
-        The SCAP data is updated during a SCAP data feed sync.
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.
@@ -7418,16 +7441,18 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
 
-      <a name="cert_missing"></a>
-      <h2>Warning: CERT Database Missing</h2>
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
       <p>
-        This warning dialog occurs when the CERT database is missing on the OMP server.
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
       </p>
       <p>
-        The CERT advisory table is always empty when the database is missing.
+        The CERT Advisory table is always empty when the database is missing.
       </p>
       <p>
-        The CERT data is updated during a CERT data feed sync.
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
         Most likely the data will appear after the next such feed sync.
         This is usually taken care of automatically by a periodic
         background process.
