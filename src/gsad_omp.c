@@ -2868,7 +2868,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
                             "<get_tasks"
                             " task_id=\"%s\""
                             " actions=\"g\""
-                            " apply_overrides=\"%i\""
+                            " filter=\"apply_overrides=%i\""
                             " details=\"1\" />"
                             "%s%s%s"
                             "%s%s%s"

@@ -1,5 +1,10 @@
 2013-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_task): Use filter to set overrides, because
+	apply_overrides GET_TASKS param is currently out of action.
+
+2013-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (task [details]): Add filter params and original
 	override value to refresh form.
 	(task): Add override to name link, to match details icon.
