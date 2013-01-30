@@ -1,3 +1,7 @@
+2013-01-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp (export_many): Add current date to exported file name.
+
 2013-01-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Use filter to set overrides, because

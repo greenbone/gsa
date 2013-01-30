@@ -1165,6 +1165,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   char *content = NULL;
   gchar *html;
   const char *filter;
+  time_t now;
+  struct tm *tm;
 
   *content_length = 0;
 
@@ -1217,10 +1219,15 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks");
     }
 
+  now = time (NULL);
+  tm = localtime (&now);
   *content_type = GSAD_CONTENT_TYPE_APP_XML;
   *content_disposition = g_strdup_printf ("attachment;"
-                                          " filename=\"%ss.xml\"",
-                                          type);
+                                          " filename=\"%ss-%d-%d-%d.xml\"",
+                                          type,
+                                          tm->tm_mday,
+                                          tm->tm_mon + 1,
+                                          tm->tm_year +1900);
   *content_length = strlen (content);
   free_entity (entity);
   openvas_server_close (socket, session);
