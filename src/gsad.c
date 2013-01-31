@@ -628,6 +628,7 @@ init_validator ()
                          "|(get_overrides)"
                          "|(get_port_list)"
                          "|(get_port_lists)"
+                         "|(get_protocol_doc)"
                          "|(get_report)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
@@ -2029,6 +2030,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_config_family)
   ELSE (get_config_nvt)
   ELSE (get_nvts)
+  ELSE (get_protocol_doc)
   ELSE_OAP (get_settings)
   ELSE (new_agent)
   ELSE (new_config)

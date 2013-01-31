@@ -20308,6 +20308,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<!-- PROTOCOL DOC -->
+
+<xsl:include href="omp-doc.xsl"/>
+
+<xsl:template name="protocol">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Help: OMP
+    </div>
+    <div class="gb_window_part_content">
+      <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+      <div style="text-align:left">
+
+        <br/>
+
+        <h1>OMP</h1>
+
+        <xsl:if test="version">
+          <p>Version: <xsl:value-of select="normalize-space(version)"/></p>
+        </xsl:if>
+
+        <xsl:if test="summary">
+          <p><xsl:value-of select="normalize-space(summary)"/>.</p>
+        </xsl:if>
+
+        <h2 id="contents">Contents</h2>
+        <ol>
+          <li><a href="#type_summary">Summary of Data Types</a></li>
+          <li><a href="#element_summary">Summary of Elements</a></li>
+          <li><a href="#command_summary">Summary of Commands</a></li>
+          <li><a href="#rnc_preamble">RNC Preamble</a></li>
+          <li><a href="#type_details">Data Type Details</a></li>
+          <li><a href="#element_details">Element Details</a></li>
+          <li><a href="#command_details">Command Details</a></li>
+        </ol>
+
+        <xsl:call-template name="type-summary"/>
+        <xsl:call-template name="element-summary"/>
+        <xsl:call-template name="command-summary"/>
+        <xsl:call-template name="rnc-preamble"/>
+        <xsl:call-template name="type-details"/>
+        <xsl:call-template name="element-details"/>
+        <xsl:call-template name="command-details"/>
+
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_protocol_doc">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:for-each select="help_response/schema/protocol">
+    <xsl:call-template name="protocol"/>
+  </xsl:for-each>
+</xsl:template>
+
 <!-- COMMANDS_RESPONSE -->
 
 <xsl:template match="commands_response">

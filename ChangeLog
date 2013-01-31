@@ -1,3 +1,26 @@
+2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add a help page that describes the OMP protocol, much like the HTML
+	format response of the OMP HELP command.
+
+	* CMakeLists.txt: Add new files.
+
+	* src/CMakeLists.txt (rnc-xsl-syntax, omp-doc-xsl-syntax): New targets.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add get_protocol_doc.
+
+	* src/gsad_omp.c (get_protocol_doc): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp-doc.xsl, src/html/rnc.xsl: New files.  These are copies
+	of HTML.xsl and rnc.xsl from openvas-manager/src/schema_formats/HTML.
+	If they are to remain the same as the originals then they should be
+	linked in SVN somehow, but their use depends how the GSA docs will
+	evolve.
+
+	* src/html/omp.xsl (protocol, get_protocol_doc): New templates.
+
 2013-01-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp (export_many): Add current date to exported file name.

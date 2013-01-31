@@ -13695,6 +13695,78 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   return get_my_settings (credentials, params, g_string_free (xml, FALSE));
 }
 
+/**
+ * @brief Get OMP doc.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_protocol_doc_omp (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  entity_t help_response;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the OMP doc. "
+                             "The resource is currently not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<get_protocol_doc>");
+
+  /* Get the resource. */
+
+  if (openvas_server_sendf (&session, "<help format=\"XML\"/>")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the OMP doc. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  help_response = NULL;
+  if (read_entity_and_string (&session, &help_response, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the OMP doc. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (help_response);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append_printf (xml, "</get_protocol_doc>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
 
 /* Port lists. */
 
