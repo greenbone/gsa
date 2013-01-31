@@ -257,6 +257,8 @@ char * restore_omp (credentials_t *, params_t *);
 char * empty_trashcan_omp (credentials_t *, params_t *);
 
 char * get_protocol_doc_omp (credentials_t *, params_t *);
+char * export_omp_doc_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
 
 char * edit_my_settings_omp (credentials_t *, params_t *);
 char * get_my_settings_omp (credentials_t *, params_t *);

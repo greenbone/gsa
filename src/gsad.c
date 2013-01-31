@@ -590,6 +590,7 @@ init_validator ()
                          "|(export_filters)"
                          "|(export_note)"
                          "|(export_notes)"
+                         "|(export_omp_doc)"
                          "|(export_override)"
                          "|(export_overrides)"
                          "|(export_port_list)"
@@ -789,6 +790,7 @@ init_validator ()
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
+  openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "public_key",       "(?s)^.*$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
@@ -1893,6 +1895,10 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_notes"))
     return export_notes_omp (credentials, params, content_type,
                              content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_omp_doc"))
+    return export_omp_doc_omp (credentials, params, content_type,
+                               content_disposition, response_size);
 
   else if (!strcmp (cmd, "export_override"))
     return export_override_omp (credentials, params, content_type,

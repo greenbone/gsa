@@ -20317,6 +20317,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Help: OMP
+      <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
+        <form action="" method="get">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="export_omp_doc"/>
+          <select style="margin-bottom: 0px;" name="protocol_format" size="1">
+            <option value="html" selected="1">HTML</option>
+            <option value="rnc">RNC</option>
+            <option value="xml">XML</option>
+          </select>
+          <input type="image"
+                 name="Download OMP documentation"
+                 src="/img/download.png"
+                 alt="Download" style="margin-left:3px;margin-right:3px;"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>

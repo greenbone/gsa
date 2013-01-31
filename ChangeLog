@@ -1,5 +1,18 @@
 2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add downloading of OMP doc in all three formats.
+
+	* src/gsad.c (init_validator): Add export_omp_doc and protocol_format.
+	(exec_omp_get): Add export_omp_doc.
+
+	* src/gsad_omp.c (export_omp_doc_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (protocol): Add export icon with selector.
+
+2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add Protocol Documentation section
 	under Miscellaneous.
 

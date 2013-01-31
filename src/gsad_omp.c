@@ -13767,6 +13767,122 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
+/**
+ * @brief Download the OMP doc.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_omp_doc_omp (credentials_t * credentials, params_t *params,
+                    enum content_type * content_type,
+                    char **content_disposition, gsize *content_length)
+{
+  entity_t entity, response;
+  gnutls_session_t session;
+  int socket;
+  char *content = NULL, *content_64;
+  gchar *html;
+  const char *format;
+  time_t now;
+  struct tm *tm;
+
+  *content_length = 0;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the OMP doc. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_protocol_doc");
+    }
+
+  format = params_value (params, "protocol_format")
+            ? params_value (params, "protocol_format")
+            : "xml";
+
+  if (openvas_server_sendf (&session,
+                            "<help format=\"%s\"/>",
+                            format)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a list. "
+                           "The list could not be delivered. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_protocol_doc");
+    }
+
+  response = NULL;
+  if (read_entity_and_text (&session, &response, &content))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting OMP doc. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_protocol_doc");
+    }
+  openvas_server_close (socket, session);
+
+  if (strcmp (format, "xml") == 0)
+    *content_length = strlen (content);
+  else
+    {
+      entity = entity_child (response, "schema");
+      if (entity == NULL)
+        {
+          free_entity (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting OMP doc. "
+                               "Diagnostics: Schema element missing.",
+                               "/omp?cmd=get_protocol_doc");
+        }
+
+      content_64 = entity_text (entity);
+      if (strlen (content_64) == 0)
+        {
+          free_entity (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting OMP doc. "
+                               "Diagnostics: Schema empty.",
+                               "/omp?cmd=get_protocol_doc");
+        }
+
+      content = (char *) g_base64_decode (content_64, content_length);
+    }
+
+  now = time (NULL);
+  tm = localtime (&now);
+  *content_type = GSAD_CONTENT_TYPE_APP_XML;
+  *content_disposition = g_strdup_printf ("attachment;"
+                                          " filename=\"omp-%d-%d-%d.%s\"",
+                                          tm->tm_mday,
+                                          tm->tm_mon + 1,
+                                          tm->tm_year +1900,
+                                          format);
+  free_entity (response);
+  openvas_server_close (socket, session);
+  return content;
+}
+
 
 /* Port lists. */
 
