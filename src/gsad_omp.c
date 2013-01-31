@@ -202,7 +202,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
-  const char *refresh_interval;
+  const char *refresh_interval, *xml_flag;
 
   assert (credentials);
 
@@ -269,6 +269,13 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                           "</envelope>",
                           credentials->capabilities,
                           xml);
+
+  xml_flag = params_value (credentials->params, "xml");
+  if (xml_flag && strcmp (xml_flag, "0"))
+    {
+      g_free (xml);
+      return g_string_free (string, FALSE);
+    }
 
   html = xsl_transform (string->str);
   g_string_free (string, TRUE);

@@ -1,5 +1,17 @@
 2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add a flag param "xml", that can be added to any GET URL to request that
+	the XML is returned instead of the HTML.
+
+	* src/gsad_omp.c (xsl_transform_omp): Just return XML if xml flag is
+	present.
+
+	* src/gsad.c (init_validator): Add param xml.
+	(request_handler): Make the content type XML when the xml flag is set
+	and a page is returned from exec_omp_get.
+
+2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add downloading of OMP doc in all three formats.
 
 	* src/gsad.c (init_validator): Add export_omp_doc and protocol_format.

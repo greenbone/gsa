@@ -917,6 +917,7 @@ init_validator ()
   openvas_validator_alias (validator, "show_closed_cves",  "boolean");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
+  openvas_validator_alias (validator, "xml",          "boolean");
 
   openvas_validator_alias (validator, "esc_notes",        "notes");
   openvas_validator_alias (validator, "esc_overrides",    "overrides");
@@ -3019,7 +3020,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
+              const char *xml_flag;
+
               res_len = strlen (res);
+
+              xml_flag = credentials->params
+                          ? params_value (credentials->params, "xml")
+                          : NULL;
+              if (xml_flag && strcmp (xml_flag, "0"))
+                content_type = GSAD_CONTENT_TYPE_APP_XML;
             }
 
           response = MHD_create_response_from_data (res_len,
