@@ -1,5 +1,9 @@
 2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/help.xsl (help): Indent at right level.
+
+2013-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add a help page that describes the OMP protocol, much like the HTML
 	format response of the OMP HELP command.
 
