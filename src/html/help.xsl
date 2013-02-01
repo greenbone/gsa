@@ -3548,6 +3548,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        the report is a plain text document.
       </p>
 
+      <a name="slave"></a>
+      <h2>Slave</h2>
+      <p>
+        A slave is another OpenVAS server on which a <a href="#task">task</a>
+        could be run.
+      </p>
+
       <a name="scan"></a>
       <h2>Scan</h2>
       <p>
