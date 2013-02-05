@@ -4856,6 +4856,12 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <h4>Extra Columns</h4>
+      <p>
+        Additionally, the Notes table can be filtered by certain fields that
+        appear on the Note Details page.  These fields are: Hosts, Port,
+        Task (task_name and task_uuid) and Result.
+      </p>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Note'"/>
@@ -5026,6 +5032,12 @@ Public License instead of this License.
       </p>
 
       <xsl:call-template name="filtering"/>
+      <h4>Extra Columns</h4>
+      <p>
+        Additionally, the Overrides table can be filtered by certain fields that
+        appear on the Override Details page.  These fields are: Hosts, Port,
+        Task (task_name and task_uuid) and Result.
+      </p>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Override'"/>
