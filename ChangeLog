@@ -1,3 +1,10 @@
+2013-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/help.xsl (scap_management.html): Fix "Jump to dialog" link.
+
+	* src/html/oap.xsl (html-scap-form): Fix select for sync_not_available
+	error message.
+
 2013-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* doc/CMakeLists.txt: Prevent superfluous creation of "doc/generated/"

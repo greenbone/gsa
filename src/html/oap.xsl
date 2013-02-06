@@ -742,7 +742,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <b>Warning:</b> Synchronization with this feed is currently not possible.<br/>
                   <xsl:choose>
                     <xsl:when test="scap/sync_not_available/error/text()">
-                      The synchronization script returned the following error message: <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
+                      The synchronization script returned the following error message: <i><xsl:value-of select="scap/sync_not_available/error/text()"/></i>
                     </xsl:when>
                   </xsl:choose>
                 </td>
