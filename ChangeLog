@@ -1,3 +1,8 @@
+2013-02-06  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* doc/CMakeLists.txt: Prevent superfluous creation of "doc/generated/"
+	directory inside the source tree.
+
 2013-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator, exec_omp_get): Add OAP commands

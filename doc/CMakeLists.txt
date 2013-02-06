@@ -101,8 +101,6 @@ endif (XMLMANTOHTML_EXECUTABLE)
 
 ## Install
 
-file (MAKE_DIRECTORY generated/)
-
 install (FILES gsad.8
   DESTINATION ${DATADIR}/man/man8 )
 
