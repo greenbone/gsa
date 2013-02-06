@@ -626,6 +626,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="sync_cert_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Synchronization with CERT Feed'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
@@ -972,6 +980,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_scap_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="commands_response/sync_cert_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="edit_settings/get_settings_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_settings/gsad_msg"
@@ -1100,6 +1110,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
       <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
       <li><a href="/oap?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
+      <li><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>
       <li class="last"><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
      </ul>
     </li>

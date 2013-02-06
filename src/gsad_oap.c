@@ -995,6 +995,77 @@ get_scap_oap(credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Get descriptions of the CERT feed(s) connected to the administrator.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_cert_oap(credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_cert_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the CERT feed list. "
+                             "The current list of CERT feeds is not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List CERT Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_cert/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the CERT feed list. "
+                           "The current list of CERT feeds is not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the CERT feed. "
+                           "The current list of CERT feeds is not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_cert_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
  * @brief Synchronize with an NVT feed and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
@@ -1134,6 +1205,78 @@ sync_scap_oap (credentials_t * credentials, params_t *params)
 
   openvas_server_close (socket, session);
   tracef ("sync_scap_oap: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_oap (credentials, text);
+}
+
+/**
+ * @brief Synchronize with a CERT feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_cert_oap (credentials_t * credentials, params_t *params)
+{
+  tracef ("In sync_cert_oap\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (administrator_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the CERT feed. "
+                             "CERT Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to administrator daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_oap (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize CERT Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_cert/>"
+                            "<describe_cert/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the CERT feed. "
+                           "CERT Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the CERT feed. "
+                           "CERT Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from administrator daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("sync_cert_oap: got text: %s", text);
   fflush (stderr);
   return xsl_transform_oap (credentials, text);
 }

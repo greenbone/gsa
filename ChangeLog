@@ -1,3 +1,24 @@
+2013-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator, exec_omp_get): Add OAP commands
+	get_cert and sync_cert.
+
+	* src/gsad_oap.c, src/gsad_oap.h (get_cert_oap): New function to get
+	CERT feed info.
+	(sync_cert_oap): New function to run CERT sync.
+
+	* src/html/gsad.xsl (sync_cert_response): New template for indicator.
+	(html-gsa-logo): Add indicator for CERT sync.
+	(html-gsa-navigation): Add entry for CERT sync in Administrator menu.
+
+	* src/html/help.xsl (contents.html): Add entry "CERT Feed Management".
+	(cert_management.html): New template, help for CERT Feed Management.
+
+	* src/html/oap.xsl (html-scap-form): Fix select in error message (was
+	"feed/..." instead of "scap/...").
+	(describe_cert_response, html-cert-form, sync_cert_response): New
+	templates for CERT feed management.
+
 2013-02-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (info/cpe, info/cve): Add filt_id to details links.
