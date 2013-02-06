@@ -12627,38 +12627,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right" style="font-size: 10px;">
         <table style="font-size: 10px;">
           <tr>
-            <td><b>ID</b></td>
+            <td>ID:</td>
             <td>
-              <b>
-                <xsl:choose>
-                  <xsl:when test="info/cve">
-                    <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="/envelope/params/info_name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </b>
+              <xsl:choose>
+                <xsl:when test="info/cve">
+                  <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="/envelope/params/info_name"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
-            <td>Published</td>
+            <td>Published:</td>
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:published-datetime"/></td>
           </tr>
           <tr>
-            <td>Last modified</td>
+            <td>Last modified:</td>
             <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:last-modified-datetime"/></td>
           </tr>
           <tr>
-            <td>Last updated</td>
+            <td>Last updated:</td>
             <td><xsl:value-of select="info/update_time"/></td>
-          </tr>
-          <tr>
-            <td>CWE ID</td>
-            <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
           </tr>
         </table>
       </div>
+
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td>
+            <b>
+              <xsl:choose>
+                <xsl:when test="info/cve">
+                  <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="/envelope/params/info_name"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </b>
+          </td>
+        </tr>
+        <tr>
+          <td>CWE ID:</td>
+          <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
+        </tr>
+      </table>
 
       <h1>Description</h1>
 
@@ -12912,13 +12928,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table style="font-size: 10px;">
           <xsl:if test="info/@id != ''">
             <tr>
-              <td>ID</td>
+              <td>ID:</td>
               <td><xsl:value-of select="info/@id"/></td>
             </tr>
           </xsl:if>
           <xsl:if test="info/modification_time != ''">
             <tr>
-              <td>Last modified</td>
+              <td>Last modified:</td>
               <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
             </tr>
           </xsl:if>
@@ -12929,14 +12945,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:if>
           <tr>
-            <td>Last updated</td>
+            <td>Last updated:</td>
             <td><xsl:value-of select="info/update_time"/></td>
           </tr>
         </table>
       </div>
       <table>
         <tr>
-          <td width="100"><b>Name</b></td>
+          <td width="100"><b>Name:</b></td>
           <td>
             <b>
               <xsl:value-of select="info/name"/>
@@ -12945,37 +12961,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <xsl:if test="info/cpe/title">
           <tr>
-            <td>Title</td>
+            <td>Title:</td>
             <td><xsl:value-of select="info/cpe/title"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/@id != ''">
           <tr>
-            <td>NVD ID</td>
+            <td>NVD ID:</td>
             <td><xsl:value-of select="info/@id"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/modification_time != ''">
           <tr>
-            <td>Last modified</td>
+            <td>Last modified:</td>
             <td><xsl:value-of select="gsa:long-time (info/modification_time)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/deprecated_by">
           <tr>
-            <td>Deprecated by</td>
+            <td>Deprecated by:</td>
             <td><xsl:value-of select="info/cpe/deprecated_by"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/update_time">
           <tr>
-            <td>Last updated</td>
+            <td>Last updated:</td>
             <td><xsl:value-of select="info/cpe/update_time"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="info/cpe/status != ''">
           <tr>
-            <td>Status</td>
+            <td>Status:</td>
             <td><xsl:value-of select="info/cpe/status"/></td>
           </tr>
         </xsl:if>

@@ -1,5 +1,11 @@
 2013-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Remove bold from minor ID.  Add colons
+	to field names.  Add Name field.  Move CWE ID across to standard fields.
+	(cpe-details): Add colons to field names.
+
+2013-02-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (notes.html, overrides.html): Note extra filtering
 	fields.
 
