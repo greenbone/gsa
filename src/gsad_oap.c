@@ -1003,7 +1003,7 @@ get_scap_oap(credentials_t * credentials, params_t *params)
  * @return Result of XSL transformation.
  */
 char *
-get_cert_oap(credentials_t * credentials, params_t *params)
+get_cert_oap (credentials_t * credentials, params_t *params)
 {
   tracef ("In get_cert_oap\n");
   entity_t entity;

@@ -1,3 +1,7 @@
+2013-02-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_oap.c (get_cert_oap): Add a space.
+
 2013-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (scap_management.html): Fix "Jump to dialog" link.
