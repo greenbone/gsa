@@ -11575,7 +11575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="max_cvss"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
         title="CPE Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -11678,7 +11678,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cvss"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
         title="CVE Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -11874,7 +11874,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
-  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
     title="Details">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$cpe"/>
@@ -11889,11 +11889,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="gsa_token"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:otherwise>
   </xsl:choose>
@@ -12618,7 +12618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CVE (CVE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="CVE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CVE"/>
       </a>
@@ -12918,7 +12918,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CPE (CPE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="CPE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CPE"/>
       </a>
