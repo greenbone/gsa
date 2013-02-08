@@ -11590,100 +11590,110 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>odd</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <tr class="{$class}">
-    <td>
-      <b>
-        <xsl:call-template name="get_info_cve_lnk">
-          <xsl:with-param name="cve" select="../name"/>
-        </xsl:call-template>
-      </b>
-      <xsl:choose>
-        <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="vector != ''">
-          <xsl:value-of select="vector"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="complexity != ''">
-          <xsl:value-of select="complexity"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="authentication != ''">
-          <xsl:value-of select="authentication"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="confidentiality_impact != ''">
-          <xsl:value-of select="confidentiality_impact"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="integrity_impact != ''">
-          <xsl:value-of select="integrity_impact"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="availability_impact != ''">
-          <xsl:value-of select="availability_impact"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="../creation_time != ''">
-          <xsl:value-of select="gsa:date (../creation_time)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:value-of select="cvss"/>
-    </td>
-    <td>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
-        title="CVE Details" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-    </td>
-  </tr>
+  <tbody class="{$class}">
+    <tr>
+      <td rowspan="2">
+        <b>
+          <xsl:call-template name="get_info_cve_lnk">
+            <xsl:with-param name="cve" select="../name"/>
+          </xsl:call-template>
+        </b>
+        <xsl:choose>
+          <xsl:when test="../comment != ''">
+            <br/>(<xsl:value-of select="../comment"/>)
+          </xsl:when>
+          <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="vector != ''">
+            <xsl:value-of select="vector"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="complexity != ''">
+            <xsl:value-of select="complexity"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="authentication != ''">
+            <xsl:value-of select="authentication"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="confidentiality_impact != ''">
+            <xsl:value-of select="confidentiality_impact"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="integrity_impact != ''">
+            <xsl:value-of select="integrity_impact"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="availability_impact != ''">
+            <xsl:value-of select="availability_impact"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="../creation_time != ''">
+            <xsl:value-of select="gsa:date (../creation_time)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:value-of select="cvss"/>
+      </td>
+      <td rowspan="2">
+        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+          title="CVE Details" style="margin-left:3px;">
+          <img src="/img/details.png" border="0" alt="Details"/>
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" style="font-size: 80%;">
+        <xsl:variable name="truncate_length"
+        select="string-length(description) - string-length(substring-after(substring(description, 250), ' ')) + 1"/>
+        <xsl:value-of select="substring(description, 0, $truncate_length)"/>
+        <xsl:if test="string-length(description) >= $truncate_length"><i><abbr title="[...] {substring(description, $truncate_length, string-length(description))}">[...]</abbr></i></xsl:if>
+      </td>
+    </tr>
+  </tbody>
 </xsl:template>
 
 <xsl:template match="info/nvt">

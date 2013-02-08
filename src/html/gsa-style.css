@@ -295,6 +295,19 @@ tr.even:hover {
  background: #DDDDDD;
 }
 
+tbody.odd {
+ text-align:left;
+ background-color: #EEEEEE;
+}
+
+tbody.odd:hover {
+ background: #DDDDDD;
+}
+
+tbody.even:hover {
+ background: #DDDDDD;
+}
+
 table.odd {
  background-color: #EEEEEE;
 }

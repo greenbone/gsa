@@ -1,3 +1,11 @@
+2013-02-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/gsa-style.css (tbody.odd, tbody.odd:hover, tbody.even:hover):
+	New classes for grouped table rows.
+
+	* src/html/omp.xsl (info/cve): Add descriptions truncated to about 250
+	characters to CVEs table.
+
 2013-02-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_oap.c (get_cert_oap): Add a space.
