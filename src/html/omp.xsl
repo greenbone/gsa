@@ -13432,7 +13432,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="xrefs = 'NOXREF'">
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="xrefs"/>
+            <xsl:for-each select="str:split(xrefs, ', ')">
+                <xsl:value-of select="."/><br/>
+            </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
       </td>
