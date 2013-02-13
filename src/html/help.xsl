@@ -3440,7 +3440,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="dfn_cert_adv"></a>
       <h2>DFN-CERT Advisory (DFN_CERT_ADV)</h2>
       <p>
-        An advisory published by DFN-CERT.
+        An advisory published by DFN-CERT. See the
+        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#about">
+        &quot;About DFN-CERT&quot; section of the DFN-CERT Advisories page</a>
+        for more information.
       </p>
 
       <a name="ovaldef"></a>
@@ -7472,7 +7475,7 @@ Public License instead of this License.
       <h1>DFN-CERT Advisories</h1>
       <p>
         This table provides an overview of all
-        <a href="glossary.html#dfn_cert_adv?token={/envelope/token}">DFN-CERT Advisories</a>
+        <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisories</a>
         and summarizes the essential aspects of each.
       </p>
 
@@ -7494,6 +7497,28 @@ Public License instead of this License.
           <td>The number of CVEs referenced by the advisories</td>
         </tr>
       </table>
+
+      <a name="about"></a>
+      <h3>About DFN-CERT</h3>
+      <p>
+        Based in Hamburg, the DFN-CERT is responsible for a constituency of several
+        hundred universities and research institutions throughout Germany, as well
+        as it provides key security services to government and industry. It has a
+        long term relationship in international, European and national fora and
+        groups related to fighting cyber crime and helping the victims of attacks
+        and incidents. Preparing proactive steps through focused research in the IT
+        security field enables the DFN-CERT to promote best practices. This is done
+        both in writing as well as in educational courses. DFN-CERT's managed
+        service portfolio includes DDoS detection/mitigation, incident management,
+        vulnerability management as well as early warning to key players in
+        Government and industry.<br />
+        For more information see https://www.dfn-cert.de/ or contact &lt;info@dfn-cert.de&gt;.
+      </p>
+      <p>
+        The DFN-CERT advisory service includes the categorization, distribution and
+        rating of advisories issued by different software vendors and distributors,
+        as well as providing a German translation.
+      </p>
 
       <a name="actions"></a>
       <h3>Actions</h3>
