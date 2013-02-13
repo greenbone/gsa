@@ -1,3 +1,7 @@
+2013-02-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/wizard.xsl (wizard): Skip wizard if role is Observer.
+
 2013-02-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Display each nvt reference in a new line.

@@ -55,7 +55,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="wizard-rows"
              select="../get_settings_response/setting[name='Wizard Rows']/value"/>
   <xsl:choose>
-    <xsl:when test="(name (..) = 'get_tasks') and (number (task_count/text ()) &lt;= number ($wizard-rows)) or ($force-wizard = 1)">
+    <xsl:when test="(/envelope/role != 'Observer') and (name (..) = 'get_tasks') and (number (task_count/text ()) &lt;= number ($wizard-rows)) or ($force-wizard = 1)">
       <xsl:call-template name="quick-first-scan-wizard"/>
     </xsl:when>
   </xsl:choose>
