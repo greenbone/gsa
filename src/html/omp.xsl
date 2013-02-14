@@ -11517,10 +11517,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:variable name="xrefcount" select="count(str:split($xreflist, ','))"/>
   <xsl:if test="$xrefcount &gt; 0">
-    <tr valign="top"><td>Other:</td></tr>
     <xsl:for-each select="str:split($xreflist, ',')">
       <tr valign="top">
-        <td></td>
+        <td><xsl:if test="position()=1">Other:</xsl:if></td>
         <td><xsl:value-of select="."/></td>
       </tr>
     </xsl:for-each>
@@ -13361,109 +13360,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <tr><td>OID:</td><td><xsl:value-of select="@oid"/></td></tr>
     <tr><td>Version:</td><td><xsl:value-of select="version"/></td></tr>
     <tr>
-      <td>CVE:</td>
-      <td>
-        <!-- "NOCVE" means no CVE ID, skip. -->
-        <xsl:choose>
-          <xsl:when test="cve_id = 'NOCVE'">
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- get the GSA token before entering the for-each loop over the str:tokenize elements -->
-            <xsl:variable name="gsa_token" select="/envelope/token"/>
-
-            <xsl:for-each select="str:tokenize (cve_id, ', ')">
-              <xsl:call-template name="get_info_cve_lnk">
-                <xsl:with-param name="cve" select="text()"/>
-                <xsl:with-param name="gsa_token" select="$gsa_token"/>
-              </xsl:call-template>
-              <xsl:text> </xsl:text>
-            </xsl:for-each>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Bugtraq ID:</td>
-      <td>
-        <!-- "NOBID" means no Bugtraq ID, skip. -->
-        <xsl:choose>
-          <xsl:when test="bugtraq_id = 'NOBID'">
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="bugtraq_id"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>CERT advisories:</td>
-      <td>
-        <xsl:choose>
-          <xsl:when test="count(cert_refs/cert_ref) = 0">
-            none
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- get the GSA token before entering the for-each loop over the str:tokenize elements -->
-            <xsl:variable name="gsa_token" select="/envelope/token"/>
-
-            <xsl:for-each select="cert_refs/cert_ref">
-              <xsl:choose>
-                <xsl:when test="@type='DFN-CERT'">
-                  <xsl:call-template name="get_info_dfn_cert_adv_lnk">
-                    <xsl:with-param name="dfn_cert_adv" select="@id"/>
-                    <xsl:with-param name="gsa_token" select="$gsa_token"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:text>?</xsl:text><xsl:value-of select="@id"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:text> </xsl:text>
-            </xsl:for-each>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>Other references:</td>
-      <td>
-        <!-- "NOXREF" means no xrefs, skip. -->
-        <xsl:choose>
-          <xsl:when test="xrefs = 'NOXREF'">
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:for-each select="str:split(xrefs, ', ')">
-                <xsl:value-of select="."/><br/>
-            </xsl:for-each>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top">Tags:</td>
-      <td>
-        <!-- "NOTAG" means no tags, skip. -->
-        <xsl:choose>
-          <xsl:when test="tags = 'NOTAG'">
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:for-each select="str:split (tags, '|')">
-              <xsl:value-of select="substring-before (., '=')"/>:
-              <xsl:value-of select="substring-after (., '=')"/><br/>
-            </xsl:for-each>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </tr>
-    <tr>
-      <td>CVSS base:</td>
-      <td><xsl:value-of select="cvss_base"/></td>
-    </tr>
-    <tr>
-      <td>Risk factor:</td>
-      <td><xsl:value-of select="risk_factor"/></td>
-    </tr>
-    <tr>
       <td>Notes:</td>
       <td>
         <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -13483,8 +13379,143 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </tr>
   </table>
 
-  <h1>Description</h1>
-  <pre><xsl:value-of select="description"/></pre>
+  <xsl:choose>
+    <xsl:when test="contains(tags, 'affected=')">
+      <h2>Affected software/OS</h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'affected' = substring-before (., '=')">
+          <xsl:value-of select="substring-after (., '=')"/><br />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>Affected software/OS: None</h2>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <h2>Vulnerability scoring</h2>
+  <table>
+    <tr>
+      <td>CVSS base:</td>
+      <td><xsl:value-of select="cvss_base"/></td>
+    </tr>
+    <tr>
+      <td>Risk factor:</td>
+      <td><xsl:value-of select="risk_factor"/></td>
+    </tr>
+    <xsl:for-each select="str:split (tags, '|')">
+      <xsl:if test="'cvss_base_vector' = substring-before (., '=')">
+        <tr>
+          <td>CVSS base vector:</td>
+          <td><xsl:value-of select="substring-after (., '=')"/></td>
+        </tr>
+      </xsl:if>
+    </xsl:for-each>
+  </table>
+
+  <xsl:choose>
+    <xsl:when test="contains(tags, 'insight=')">
+      <h2>Vulnerability insight</h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'insight' = substring-before (., '=')">
+          <xsl:value-of select="substring-after (., '=')"/><br />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>Vulnerability insight: None</h2>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
+    <xsl:when  test="contains(tags, 'impact=')">
+      <h2>Impact</h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'impact' = substring-before (., '=')">
+          <xsl:value-of select="substring-after (., '=')"/><br />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>Impact: None</h2>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
+    <xsl:when test="contains(tags, 'solution=')">
+      <h2>Solution</h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'solution' = substring-before (., '=')">
+          <xsl:value-of select="substring-after (., '=')"/><br />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>Solution: None</h2>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <!-- "NOTAG" means no tags, skip. -->
+  <xsl:choose>
+    <xsl:when test="tags = 'NOTAG' or (contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
+      <h2>Other tags: None</h2>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>Other tags</h2>
+      <table>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="not(contains('cvss_base_vector|affected|insight|impact|solution',substring-before (., '=')))">
+          <tr>
+            <td valign="top"><xsl:value-of select="substring-before (., '=')"/>:</td>
+            <td><xsl:value-of select="substring-after (., '=')"/></td>
+          </tr>
+        </xsl:if>
+      </xsl:for-each>
+      </table>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:variable name="cve_ref">
+    <xsl:if test="cve_id != '' and cve_id != 'NOCVE'">
+      <xsl:value-of select="cve_id/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="bid_ref">
+    <xsl:if test="bugtraq_id != '' and bugtraq_id != 'NOBID'">
+      <xsl:value-of select="bugtraq_id/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="cert_ref" select="cert_refs/cert_ref"/>
+  <xsl:variable name="xref">
+    <xsl:if test="xrefs != '' and xrefs != 'NOXREF'">
+      <xsl:value-of select="xrefs/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref) > 1110">
+      <h2>References</h2>
+      <table>
+        <xsl:call-template name="ref_cve_list">
+          <xsl:with-param name="cvelist" select="$cve_ref"/>
+        </xsl:call-template>
+        <xsl:call-template name="ref_bid_list">
+          <xsl:with-param name="bidlist" select="$bid_ref"/>
+        </xsl:call-template>
+        <xsl:call-template name="ref_cert_list">
+          <xsl:with-param name="certlist" select="$cert_ref"/>
+        </xsl:call-template>
+        <xsl:call-template name="ref_xref_list">
+          <xsl:with-param name="xreflist" select="$xref"/>
+        </xsl:call-template>
+      </table>
+    </xsl:when>
+    <xsl:otherwise>
+      <h2>References: None</h2>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <h2>Description</h2>
+  <pre style="white-space:pre-wrap;"><xsl:value-of select="description"/></pre>
 </xsl:template>
 
 <xsl:template match="get_notes_response">

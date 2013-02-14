@@ -1,3 +1,14 @@
+2013-02-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (ref_xref_list): Change text "Other:" to appear
+	in same line as first xref entry.
+	(nvt): Move references to new "References" table.
+	Move "CVSS base", "Risk factor" and tag "cvss_base_vector" to new table
+	"Vulnerability scoring".
+	Move script tags "affected", "insight", "impact", "solution" to new
+	sections "Affected software/OS", "Vulnerability insight", "Impact" and
+	"Solution" respectively.
+
 2013-02-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (glossary.html): Add reference to "About DFN-CERT"
