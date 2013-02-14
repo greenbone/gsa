@@ -1,5 +1,10 @@
 2013-02-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (ovaldef-details): Change to make more consistent
+	with other details pages.
+
+2013-02-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (ref_xref_list): Change text "Other:" to appear
 	in same line as first xref entry.
 	(nvt): Move references to new "References" table.
