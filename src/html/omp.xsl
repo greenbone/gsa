@@ -13327,20 +13327,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </div>
-      <h2><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/></h2>
-      <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/>
 
-      <h2>Links:</h2>
-      <ul>
-      <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link">
-        <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
-      </xsl:for-each>
-      </ul>
+      <table>
+        <tr>
+          <td valign="top"><b>Name:</b></td>
+          <td>
+            <b><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:refnum"/></b>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Title:</td>
+          <td>
+            <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Advisory&#160;link:</td>
+          <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
+        </tr>
+      </table>
 
-      <h2>Referenced CVEs:</h2>
-      <ul>
       <xsl:choose>
         <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
+          <h2>Summary</h2>
+          <p><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:summary"/></p>
+        </xsl:when>
+        <xsl:otherwise>
+          <h2>Summary: None</h2>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']) > 0">
+          <h2>Other links:</h2>
+          <ul>
+          <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel!='alternate']">
+            <li><b><xsl:value-of select="@rel"/>: </b> <xsl:value-of select="@href"/></li>
+          </xsl:for-each>
+          </ul>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- hide because the feed is not expected to contain other links -->
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:choose>
+        <xsl:when test="count(info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve) > 0">
+          <h2>Referenced CVEs</h2>
+          <ul>
           <xsl:for-each select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:cve">
             <li>
               <xsl:call-template name="get_info_cve_lnk">
@@ -13349,12 +13383,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </li>
           </xsl:for-each>
+          </ul>
         </xsl:when>
         <xsl:otherwise>
-        <li><i>none</i></li>
+        <h2>Referenced CVEs: None</h2>
         </xsl:otherwise>
       </xsl:choose>
-      </ul>
 
     </div>
   </div>
