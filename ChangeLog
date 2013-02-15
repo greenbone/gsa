@@ -1,3 +1,7 @@
+2013-02-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (nvt): Change to hide empty sections completely.
+
 2013-02-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (dfn_cert_adv-details): Change to make more

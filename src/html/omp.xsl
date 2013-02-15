@@ -13455,7 +13455,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
-      <h2>Affected software/OS: None</h2>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -13489,7 +13488,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
-      <h2>Vulnerability insight: None</h2>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -13503,7 +13501,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
-      <h2>Impact: None</h2>
     </xsl:otherwise>
   </xsl:choose>
 
@@ -13517,14 +13514,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </xsl:when>
     <xsl:otherwise>
-      <h2>Solution: None</h2>
     </xsl:otherwise>
   </xsl:choose>
 
   <!-- "NOTAG" means no tags, skip. -->
   <xsl:choose>
     <xsl:when test="tags = 'NOTAG' or (contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
-      <h2>Other tags: None</h2>
     </xsl:when>
     <xsl:otherwise>
       <h2>Other tags</h2>
@@ -13576,7 +13571,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </table>
     </xsl:when>
     <xsl:otherwise>
-      <h2>References: None</h2>
     </xsl:otherwise>
   </xsl:choose>
 
