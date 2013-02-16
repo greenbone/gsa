@@ -2984,7 +2984,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      credentials = malloc (sizeof (credentials_t));
+      credentials = calloc (1, sizeof (credentials_t));
       if (credentials == NULL) abort ();
       assert (user->username);
       assert (user->password);
