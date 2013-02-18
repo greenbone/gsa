@@ -11483,29 +11483,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="ref_cert_list">
   <xsl:param name="certlist"/>
   <xsl:variable name="token" select="/envelope/token"/>
-  <xsl:variable name="certcount" select="count($certlist)"/>
+  <xsl:variable name="certcount" select="count($certlist/cert_ref)"/>
+
+  <xsl:if test="count($certlist/warning)">
+    <xsl:for-each select="$certlist/warning">
+      <tr valign="top">
+        <td>CERT:</td>
+        <td><i>Warning: <xsl:value-of select="text()"/></i></td>
+      </tr>
+    </xsl:for-each>
+  </xsl:if>
 
   <xsl:if test="$certcount &gt; 0">
     <tr valign="top">
-    <td>CERT:</td>
-    <td>
-      <xsl:for-each select="$certlist">
-        <xsl:choose>
-          <xsl:when test="@type='DFN-CERT'">
-            <xsl:call-template name="get_info_dfn_cert_adv_lnk">
-              <xsl:with-param name="dfn_cert_adv" select="@id"/>
-              <xsl:with-param name="gsa_token" select="$token"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <b>?</b><xsl:value-of select="./@id"/>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:if test="position() &lt; $certcount">
-          <xsl:text>, </xsl:text>
-        </xsl:if>
-      </xsl:for-each>
-    </td>
+      <td>CERT:</td>
+      <td>
+        <xsl:for-each select="$certlist/cert_ref">
+          <xsl:choose>
+            <xsl:when test="@type='DFN-CERT'">
+              <xsl:call-template name="get_info_dfn_cert_adv_lnk">
+                <xsl:with-param name="dfn_cert_adv" select="@id"/>
+                <xsl:with-param name="gsa_token" select="$token"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <b>?</b><xsl:value-of select="./@id"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:if test="position() &lt; $certcount">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </td>
     </tr>
   </xsl:if>
 </xsl:template>
@@ -13546,14 +13555,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="bugtraq_id/text()"/>
     </xsl:if>
   </xsl:variable>
-  <xsl:variable name="cert_ref" select="cert_refs/cert_ref"/>
+  <xsl:variable name="cert_ref" select="cert_refs"/>
   <xsl:variable name="xref">
     <xsl:if test="xrefs != '' and xrefs != 'NOXREF'">
       <xsl:value-of select="xrefs/text()"/>
     </xsl:if>
   </xsl:variable>
   <xsl:choose>
-    <xsl:when test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref) > 1110">
+    <xsl:when test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
       <h2>References</h2>
       <table>
         <xsl:call-template name="ref_cve_list">
@@ -18239,7 +18248,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="nvt/bid/text()"/>
     </xsl:if>
   </xsl:variable>
-  <xsl:variable name="cert_ref" select="nvt/cert/cert_ref"/>
+  <xsl:variable name="cert_ref" select="nvt/cert"/>
   <xsl:variable name="xref">
     <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
       <xsl:value-of select="nvt/xref/text()"/>
@@ -18288,7 +18297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="delta/result/nvt/bid/text()"/>
           </xsl:if>
         </xsl:variable>
-        <xsl:variable name="cert_ref_2" select="delta/result/nvt/cert/cert_ref"/>
+        <xsl:variable name="cert_ref_2" select="delta/result/nvt/cert"/>
         <xsl:variable name="xref_2">
           <xsl:if test="delta/result/nvt/xref != '' and delta/result/nvt/xref != 'NOXREF'">
             <xsl:value-of select="delta/result/nvt/xref/text()"/>
