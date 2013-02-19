@@ -8681,7 +8681,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " delta_states=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>",
-                                filt_id ? filt_id : "0",
+                                filt_id ? filt_id : "-2",
                                 filter ? filter : "",
                                 pos ? pos : "1",
                                 strcmp (autofp, "0") ? autofp_value : "0",

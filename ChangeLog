@@ -1,3 +1,11 @@
+2013-02-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (get_my_settings, edit_my_settings): Add Report
+	Filter.
+
+	* src/gsad_omp.c (get_report): Default filt_id value to -2 for more
+	consistency.
+
 2013-02-19  Werner Koch  <wk@gnupg.org>
 
 	* src/gsad.c (main): Add option --debug-tls.

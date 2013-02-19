@@ -20085,6 +20085,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
+            <td>Reports filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Reports Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
             <td>Report Formats filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20093,7 +20102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Schedules filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20102,7 +20111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Slaves filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20111,7 +20120,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Targets filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20120,7 +20129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Tasks filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20129,7 +20138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>CPE filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20138,7 +20147,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>CVE filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20147,7 +20156,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>NVT filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20156,7 +20165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>OVAL filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20165,7 +20174,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>DFN-CERT filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -20328,6 +20337,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'Port List'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Reports filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'48ae588e-9085-41bc-abcb-3d6389cf7237'"/>
+                    <xsl:with-param name="filter-type" select="'Report'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Reports Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
