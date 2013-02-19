@@ -1,3 +1,10 @@
+2013-02-19  Werner Koch  <wk@gnupg.org>
+
+	* src/gsad.c (main): Add option --debug-tls.
+	(my_gnutls_log_func): New.
+	(main): Print library version numbers with --version if debug-tls
+	is also used.
+
 2013-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (cve-details): Change to hide empty sections if

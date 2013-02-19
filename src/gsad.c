@@ -3275,6 +3275,23 @@ drop_privileges (struct passwd * nobody_pw)
 }
 
 /**
+ * @brief Log function callback used for GNUTLS debugging
+ *
+ * This is used only for debugging, thus we write to stderr.
+ *
+ * Fixme: It would be nice if we could use the regular log functions
+ * but the order of initialization in gsad is a bit strange.
+ */
+static void
+my_gnutls_log_func (int level, const char *text)
+{
+  fprintf (stderr, "[%d] (%d) %s", getpid (), level, text);
+  if (*text && text[strlen (text) -1] != '\n')
+    putc ('\n', stderr);
+}
+
+
+/**
  * @brief Initialization routine for GSAD.
  *
  * This routine checks for required files and initializes the gcrypt
@@ -3445,6 +3462,7 @@ main (int argc, char **argv)
   static gchar *gsad_manager_port_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
+  static int debug_tls = 0;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -3500,6 +3518,9 @@ main (int argc, char **argv)
     {"timeout", '\0',
      0, G_OPTION_ARG_INT, &timeout,
      "Minutes of user idle time before session expires.", "<number>"},
+    {"debug-tls", 0,
+     0, G_OPTION_ARG_INT, &debug_tls,
+     "Enable TLS debugging at <level>", "<level>"},
     {NULL}
   };
 
@@ -3515,12 +3536,24 @@ main (int argc, char **argv)
   if (print_version)
     {
       printf ("Greenbone Security Assistant %s\n", GSAD_VERSION);
+      if (debug_tls)
+        {
+          printf ("gnutls %s\n", gnutls_check_version (NULL));
+          printf ("libmicrohttpd %s\n", MHD_get_version ());
+        }
+      else
       printf ("Copyright (C) 2010-2012 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
       printf
         ("This is free software: you are free to change and redistribute it.\n"
          "There is NO WARRANTY, to the extent permitted by law.\n\n");
       exit (EXIT_SUCCESS);
+    }
+
+  if (debug_tls)
+    {
+      gnutls_global_set_log_function (my_gnutls_log_func);
+      gnutls_global_set_log_level (debug_tls);
     }
 
   switch (gsad_base_init ())
