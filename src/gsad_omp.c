@@ -8658,6 +8658,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (filter == NULL)
     filter = "";
 
+  if ((filt_id == NULL || strcmp (filt_id, "") == 0)
+      && (filter == NULL || strcmp (filter, "") == 0))
+    filt_id = "-2";
+
   if (openvas_server_sendf_xml (&session,
                                 " filt_id=\"%s\""
                                 " filter=\"%s\""
@@ -8681,7 +8685,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " delta_states=\"%s\""
                                 " search_phrase=\"%s\""
                                 " min_cvss_base=\"%s\"/>",
-                                filt_id ? filt_id : "-2",
+                                filt_id ? filt_id : "0",
                                 filter ? filter : "",
                                 pos ? pos : "1",
                                 strcmp (autofp, "0") ? autofp_value : "0",
