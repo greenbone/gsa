@@ -2244,8 +2244,17 @@ send_redirect_header (struct MHD_Connection *connection, const char *location,
 {
   int ret;
   struct MHD_Response *response;
+  char *body;
 
-  response = MHD_create_response_from_data (0, NULL, MHD_NO, MHD_NO);
+  /* Some libmicrohttp versions get into an endless loop in https mode
+     if an empty body is passed.  As a workaround and because it is
+     anyway suggested by the HTTP specs, we provide a short body.  We
+     assume that location does not need to be quoted.  */
+  body = g_strdup_printf ("<html><body>Code 303 - Redirecting to"
+                          " <a href=\"%s\">%s<a/></body></html>\n",
+                          location, location);
+  response = MHD_create_response_from_data (2, "\r\n", MHD_NO, MHD_YES);
+  g_free (body);
 
   if (!response)
     return MHD_NO;
