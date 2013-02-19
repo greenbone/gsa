@@ -1,5 +1,10 @@
 2013-02-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Use new next and previous
+	icons for filtered results.
+
+2013-02-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Check if a filter is already applied when
 	setting the default filt_id value.
 
