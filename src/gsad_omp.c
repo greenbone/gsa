@@ -258,7 +258,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  name, child_name, child_param->value);
         }
 
-      if (param->value && param->valid && param->valid_utf8)
+      if (param->value && param->valid && param->valid_utf8
+          && strcmp (name, "xml_file"))
         xml_string_append (string, "<%s>%s</%s>", name, param->value, name);
     }
   g_string_append (string, "</params>");
