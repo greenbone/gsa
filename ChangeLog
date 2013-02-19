@@ -1,5 +1,18 @@
 2013-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (cve-details): Change to hide empty sections if
+	no CVE data is found. Change to show "CVSS: None" if only CVSS data is
+	missing.
+	(cpe-details): Change to hide "Reported vulnerabilities" when CPE is not
+	found.
+	(ovaldef-details): Change to hide empty sections if no ovaldef data is
+	found and show an info message instead. Add h1 tag to
+	"Repository history: None".
+	(dfn_cert_adv-details): Change to hide empty sections if no advisory
+	data is found and show an info message instead.
+
+2013-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (result-detailed): Fix conditions for references
 	boxes to appear.
 
