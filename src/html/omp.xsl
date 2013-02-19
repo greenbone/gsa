@@ -18255,7 +18255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
-  <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref) > 0">
+  <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
     <div class="issue_box_box">
       <b>References</b><br/>
 
@@ -18303,7 +18303,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="delta/result/nvt/xref/text()"/>
           </xsl:if>
         </xsl:variable>
-        <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != ''">
+        <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != '' or count($cert_ref_2/cert_ref)">
           <div class="issue_box_box">
             <b>References</b><br/>
 
