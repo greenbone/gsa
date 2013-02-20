@@ -12805,7 +12805,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <xsl:choose>
             <xsl:when test="count(info/cve/cert/cert_ref) = 0">
-              <h1>CERT Advisories referencing this CVE: None</h1>
             </xsl:when>
             <xsl:otherwise>
               <h1>CERT Advisories referencing this CVE</h1>
