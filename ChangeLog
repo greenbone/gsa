@@ -1,5 +1,10 @@
 2013-02-20  Timo Pollmeier  <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Hide description section completely when
+	no description is found.
+
+2013-02-20  Timo Pollmeier  <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (cve-details): Hide CERT section completely when
 	no advisory references are found.
 
