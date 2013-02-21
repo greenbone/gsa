@@ -11529,7 +11529,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:for-each select="str:split($xreflist, ',')">
       <tr valign="top">
         <td><xsl:if test="position()=1">Other:</xsl:if></td>
-        <td><xsl:value-of select="."/></td>
+        <xsl:choose>
+          <xsl:when test="contains(., 'URL:')">
+            <td><xsl:value-of select="substring-after(., 'URL:')"/></td>
+          </xsl:when>
+          <xsl:otherwise>
+            <td><xsl:value-of select="."/></td>
+          </xsl:otherwise>
+        </xsl:choose>
       </tr>
     </xsl:for-each>
   </xsl:if>
