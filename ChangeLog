@@ -1,5 +1,11 @@
 2013-02-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 4.0+beta5 release.
+
+	* CHANGES: Updated.
+
+2013-02-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/gsad.xsl (html-footer), src/html/help.xsl (about.html),
 	src/gsad.c (main): Extend copyright notice to include 2013.
 
