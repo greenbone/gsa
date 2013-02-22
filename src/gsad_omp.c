@@ -8659,9 +8659,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (filter == NULL)
     filter = "";
 
-  if ((filt_id == NULL || strcmp (filt_id, "") == 0)
-      && (filter == NULL || strcmp (filter, "") == 0))
-    filt_id = "-2";
+  /* Don't apply default filter when applying result filter checkboxes/textboxes
+   */
+  if (sort_field == NULL && sort_order == NULL)
+    if ((filt_id == NULL || strcmp (filt_id, "") == 0)
+        && (filter == NULL || strcmp (filter, "") == 0))
+      filt_id = "-2";
 
   if (openvas_server_sendf_xml (&session,
                                 " filt_id=\"%s\""

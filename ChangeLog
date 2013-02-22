@@ -1,5 +1,10 @@
 2013-02-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (get_report): Don't apply default filter when result
+	filtering form is applied.
+
+2013-02-21  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (ref_xref_list): Add special display case for URL
 	cross-references.
 
