@@ -207,7 +207,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      Copyright 2009-2012 by <a href="http://www.greenbone.net">Greenbone Networks GmbH</a>
+      Copyright 2009-2013 by <a href="http://www.greenbone.net">Greenbone Networks GmbH</a>
       </p>
 
       <p>
