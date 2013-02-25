@@ -148,6 +148,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </func:function>
 
+<xsl:template name="prognostic-description">
+  <xsl:param name="string"/>
+
+  <xsl:for-each select="str:split($string, '&#10;&#10;')">
+    <p>
+      <xsl:for-each select="str:split(., '&#10;')">
+        <xsl:value-of select="."/>
+        <br/>
+      </xsl:for-each>
+    </p>
+  </xsl:for-each>
+</xsl:template>
+
 <!-- NAMED TEMPLATES -->
 
 <xsl:template name="filter-window-pager">
@@ -18261,11 +18274,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <b>Result 1</b>
       </xsl:when>
     </xsl:choose>
-    <pre>
-      <xsl:call-template name="wrap">
-        <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-      </xsl:call-template>
-    </pre>
+    <xsl:choose>
+      <xsl:when test="$prognostic=1">
+        <xsl:call-template name="prognostic-description">
+          <xsl:with-param name="string" select="description"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <pre>
+          <xsl:call-template name="wrap">
+            <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
+          </xsl:call-template>
+        </pre>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
   <xsl:variable name="cve_ref">
     <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
@@ -18310,11 +18332,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="delta/text() = 'changed'">
         <div class="issue_box_box">
           <b>Result 2</b>
-          <pre>
-            <xsl:call-template name="wrap">
-              <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
-            </xsl:call-template>
-          </pre>
+          <xsl:choose>
+            <xsl:when test="$prognostic=1">
+              <xsl:call-template name="prognostic-description">
+                <xsl:with-param name="string" select="delta/result/description"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <pre>
+                <xsl:call-template name="wrap">
+                  <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
+                </xsl:call-template>
+              </pre>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
         <xsl:variable name="cve_ref_2">
           <xsl:if test="delta/result/nvt/cve != '' and delta/result/nvt/cve != 'NOCVE'">
