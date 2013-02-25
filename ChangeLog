@@ -1,5 +1,9 @@
 2013-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (prognostic-description): Move into template section.
+
+2013-02-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (prognostic-description): New template.
 	(result-detailed): For prognostic results, produce the description with
 	prognostic-description so that the browser does paragraph wrapping.

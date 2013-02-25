@@ -148,6 +148,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </func:function>
 
+<!-- NAMED TEMPLATES -->
+
 <xsl:template name="prognostic-description">
   <xsl:param name="string"/>
 
@@ -160,8 +162,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </p>
   </xsl:for-each>
 </xsl:template>
-
-<!-- NAMED TEMPLATES -->
 
 <xsl:template name="filter-window-pager">
   <xsl:param name="type"/>
