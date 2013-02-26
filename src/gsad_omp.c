@@ -2655,32 +2655,45 @@ get_nvts (credentials_t *credentials, const char *oid,
 }
 
 /**
- * @brief Requests raw information.
+ * @brief Requests SecInfo.
  *
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  *
- * @return XSL transformed NVT details response or error message.
+ * @return XSL transformed SecInfo response or error message.
  */
 char *
 get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
 {
   char *ret;
   GString *extra_attribs;
+  const char *info_type;
 
-  if (params_value (params, "info_type") == NULL)
+  info_type = params_value (params, "info_type");
+  if (info_type == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting raw information. "
-                         "Diagnostics: Required parameter \"info_type\" was NULL.",
+                         "An internal error occurred while getting SecInfo. "
+                         "Diagnostics: Required parameter info_type not provided.",
+                         "/omp?cmd=get_info");
+
+  if (strcmp (info_type, "nvt")
+      && strcmp (info_type, "cve")
+      && strcmp (info_type, "cpe")
+      && strcmp (info_type, "ovaldef")
+      && strcmp (info_type, "dfn_cert_adv"))
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting SecInfo. "
+                         "Diagnostics: Invalid info_type parameter value",
                          "/omp?cmd=get_info");
 
   if (params_value (params, "info_name")
       && params_value (params, "info_id"))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting raw information. "
+                         "An internal error occurred while getting SecInfo. "
                          "Diagnostics: Both ID and Name set.",
                          "/omp?cmd=get_info");
 
