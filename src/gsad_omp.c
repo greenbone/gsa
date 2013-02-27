@@ -2682,7 +2682,12 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml)
       && strcmp (info_type, "cve")
       && strcmp (info_type, "cpe")
       && strcmp (info_type, "ovaldef")
-      && strcmp (info_type, "dfn_cert_adv"))
+      && strcmp (info_type, "dfn_cert_adv")
+      && strcmp (info_type, "NVT")
+      && strcmp (info_type, "CVE")
+      && strcmp (info_type, "CPE")
+      && strcmp (info_type, "OVALDEF")
+      && strcmp (info_type, "DFN_CERT_ADV"))
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting SecInfo. "
