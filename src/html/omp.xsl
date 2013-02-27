@@ -13066,7 +13066,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td><xsl:value-of select="cve:entry/@id"/></td>
                 <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
                 <td width="100">
-                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;token={/envelope/token}" title="Details">
+                  <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;details=1&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
                       border="0"
                       alt="Details"

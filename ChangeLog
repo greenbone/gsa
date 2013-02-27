@@ -1,3 +1,8 @@
+2013-02-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (cpe-details): Add details parameter to CVEs details
+	link.
+
 2013-02-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_info): Return error message when an invalid
