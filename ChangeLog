@@ -1,3 +1,11 @@
+2013-03-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Post branch version bump.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
 2013-02-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_info): Validate info_type in capital letters
