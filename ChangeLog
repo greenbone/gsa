@@ -1,5 +1,9 @@
 2013-03-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (nvt): Skip description in NODESC case.
+
+2013-03-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (nvt): Add sections for summary and detection tags.
 
 2013-03-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
