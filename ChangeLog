@@ -1,3 +1,7 @@
+2013-03-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (nvt): Skip summary in NOSUMMARY case.
+
 2013-03-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Skip description in NODESC case.
