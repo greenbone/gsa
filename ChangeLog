@@ -1,3 +1,33 @@
+2013-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add basic user groups.
+
+	* src/gsad.c (init_validator): Add group commands.  Add group validators
+	and add group to type names.
+	(exec_omp_post, exec_omp_get): Add group commands.
+
+	* src/gsad_omp.c (next_page): Add group pages.
+	(get_group, get_group_omp, get_groups, get_groups_omp, new_group)
+	(new_group_omp, delete_group_omp): New functions.
+	(CHECK): New define.
+	(create_group_omp, export_group_omp, export_groups_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/gsad.xsl (create_group_response): New template.
+	(html-gsa-logo): Match response for indicator icon.
+	(html-gsa-navigation): Add Groups menu item.
+
+	* src/html/oap.xsl (group): Make mode "auth" because the generic macros
+	expect "group" for the Group table.
+	(describe_auth): Match "group" in "auth" mode.
+
+	* src/html/omp.xsl (groups, create_group_response)
+	(delete_group_response, modify_group_response, group, group [trash])
+	(group [details], html-groups-trash-table, html-groups-table)
+	(html-create-group-form, new_group, html-edit-group-form, edit_group)
+	(get_group, get_groups): New templates.
+
 2013-03-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Skip summary in NOSUMMARY case.

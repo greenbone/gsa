@@ -1074,7 +1074,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- AUTHENTICATION DESCRIPTION -->
 
-<xsl:template match="group">
+<xsl:template match="group" mode="auth">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -1185,9 +1185,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="describe_auth_response" mode="show">
-  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap']"/>
-  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ads']"/>
-  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap_connect']"/>
+  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap']" mode="auth"/>
+  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ads']" mode="auth"/>
+  <xsl:apply-templates select="../describe_auth_response/group[@name='method:ldap_connect']" mode="auth"/>
 </xsl:template>
 
 <!-- END AUTHENTICATION DESCRIPTION -->

@@ -114,6 +114,10 @@ static char *get_filter (credentials_t *, params_t *, const char *);
 
 static char *get_filters (credentials_t *, params_t *, const char *);
 
+static char *get_group (credentials_t *, params_t *, const char *);
+
+static char *get_groups (credentials_t *, params_t *, const char *);
+
 static char *get_lsc_credential (credentials_t *, params_t *, const char *);
 
 static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
@@ -554,6 +558,12 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);
+
+  if (strcmp (next, "get_group") == 0)
+    return get_group (credentials, params, response);
+
+  if (strcmp (next, "get_groups") == 0)
+    return get_groups (credentials, params, response);
 
   if (strcmp (next, "get_lsc_credential") == 0)
     return get_lsc_credential (credentials, params, response);
@@ -13914,6 +13924,306 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
   free_entity (response);
   openvas_server_close (socket, session);
   return content;
+}
+
+
+/* Groups. */
+
+/**
+ * @brief Get one group, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_group (credentials_t * credentials, params_t *params,
+           const char *extra_xml)
+{
+  return get_one ("group", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get one group, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_group_omp (credentials_t * credentials, params_t *params)
+{
+  return get_group (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all groups, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_groups (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return get_many ("group", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all groups, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_groups_omp (credentials_t * credentials, params_t *params)
+{
+  return get_groups (credentials, params, NULL);
+}
+
+/**
+ * @brief Returns page to create a new group.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_group (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  xml = g_string_new ("<new_group>");
+  g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_group>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new group.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_group_omp (credentials_t *credentials, params_t *params)
+{
+  return new_group (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete a group, get all groups, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_group_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("group", credentials, params, 0,
+                          get_groups);
+}
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      openvas_server_close (socket, session);                                  \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Create Group");                                   \
+      html = new_group (credentials, params, msg);                             \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Create a group, get all groups, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_group_omp (credentials_t *credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *name, *comment, *users, *group_id;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new group. "
+                             "No new group was created. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_groups");
+    }
+
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  users = params_value (params, "users");
+
+  CHECK (name);
+  CHECK (comment);
+  CHECK (users);
+
+  {
+    int ret;
+    const char *status;
+    entity_t entity;
+
+    /* Create the group. */
+
+    ret = openvas_server_sendf (&session,
+                                "<create_group>"
+                                "<name>%s</name>"
+                                "<comment>%s</comment>"
+                                "<users>%s</users>"
+                                "</create_group>",
+                                name,
+                                comment,
+                                users);
+
+    if (ret == -1)
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new group. "
+                             "No new group was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_groups");
+      }
+
+    entity = NULL;
+    if (read_entity_and_text (&session, &entity, &response))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new group. "
+                             "It is unclear whether the group has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_groups");
+      }
+
+    status = entity_attribute (entity, "status");
+    if ((status == NULL)
+        || (strlen (status) == 0))
+      {
+        openvas_server_close (socket, session);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new group. "
+                             "It is unclear whether the group has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_groups");
+      }
+
+    if (status[0] != '2')
+      {
+        openvas_server_close (socket, session);
+        html = next_page (credentials, params, response);
+        if (html == NULL)
+          html = new_group (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return html;
+      }
+
+    group_id = params_value (params, "group_id");
+    if (group_id && strcmp (group_id, "0"))
+      {
+        gchar *ret;
+        openvas_server_close (socket, session);
+        ret = get_group (credentials, params, response);
+        g_free (response);
+        free_entity (entity);
+        return ret;
+      }
+
+    free_entity (entity);
+  }
+
+  openvas_server_close (socket, session);
+
+  html = next_page (credentials, params, response);
+  if (html == NULL)
+    html = get_groups (credentials, params, response);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
+
+/**
+ * @brief Export a group.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   group_id            UUID of group.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Group XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_group_omp (credentials_t * credentials, params_t *params,
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
+{
+  return export_resource ("group", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of groups.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Groups XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_groups_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_many ("group", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 

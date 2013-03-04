@@ -516,6 +516,7 @@ init_validator ()
                          "|(create_config)"
                          "|(create_alert)"
                          "|(create_filter)"
+                         "|(create_group)"
                          "|(create_lsc_credential)"
                          "|(create_note)"
                          "|(create_override)"
@@ -531,6 +532,7 @@ init_validator ()
                          "|(delete_config)"
                          "|(delete_alert)"
                          "|(delete_filter)"
+                         "|(delete_group)"
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
@@ -588,6 +590,8 @@ init_validator ()
                          "|(export_lsc_credentials)"
                          "|(export_filter)"
                          "|(export_filters)"
+                         "|(export_group)"
+                         "|(export_groups)"
                          "|(export_note)"
                          "|(export_notes)"
                          "|(export_omp_doc)"
@@ -619,6 +623,8 @@ init_validator ()
                          "|(get_filters)"
                          "|(get_alert)"
                          "|(get_alerts)"
+                         "|(get_group)"
+                         "|(get_groups)"
                          "|(get_info)"
                          "|(get_lsc_credential)"
                          "|(get_lsc_credentials)"
@@ -657,6 +663,7 @@ init_validator ()
                          "|(new_alert)"
                          "|(new_config)"
                          "|(new_filter)"
+                         "|(new_group)"
                          "|(new_lsc_credential)"
                          "|(new_note)"
                          "|(new_override)"
@@ -741,6 +748,7 @@ init_validator ()
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
+  openvas_validator_add (validator, "groups",       "^[-_ [:alnum:],]*$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
@@ -803,12 +811,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
-  openvas_validator_add (validator, "role",       "^[[:alnum:] ]{1,40}$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -869,6 +876,7 @@ init_validator ()
   openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "from_file",          "boolean");
   openvas_validator_alias (validator, "force_wizard",       "boolean");
+  openvas_validator_alias (validator, "group_id",           "id");
   openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");
@@ -919,6 +927,7 @@ init_validator ()
   openvas_validator_alias (validator, "show_closed_cves",  "boolean");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
+  openvas_validator_alias (validator, "users",        "observers");
   openvas_validator_alias (validator, "xml",          "boolean");
 
   openvas_validator_alias (validator, "esc_notes",        "notes");
@@ -1579,6 +1588,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_agent)
   ELSE (create_alert)
   ELSE (create_filter)
+  ELSE (create_group)
   ELSE (create_lsc_credential)
   ELSE (create_port_list)
   ELSE (create_port_range)
@@ -1595,6 +1605,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_task)
   ELSE (delete_alert)
   ELSE (delete_filter)
+  ELSE (delete_group)
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
@@ -1802,6 +1813,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_target)
   ELSE (new_task)
   ELSE (new_alert)
+  ELSE (new_group)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (edit_agent)
@@ -1854,6 +1866,14 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_filters"))
     return export_filters_omp (credentials, params, content_type,
                                content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_group"))
+    return export_group_omp (credentials, params, content_type,
+                             content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_groups"))
+    return export_groups_omp (credentials, params, content_type,
+                              content_disposition, response_size);
 
   else if (!strcmp (cmd, "download_lsc_credential"))
     {
@@ -1931,6 +1951,7 @@ exec_omp_get (struct MHD_Connection *connection,
   else if (!strcmp (cmd, "export_report_formats"))
     return export_report_formats_omp (credentials, params, content_type,
                                       content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_schedule"))
     return export_schedule_omp (credentials, params, content_type,
                                 content_disposition, response_size);
@@ -1990,6 +2011,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_alerts)
   ELSE (get_filter)
   ELSE (get_filters)
+  ELSE (get_group)
+  ELSE (get_groups)
   ELSE (get_info)
   ELSE (get_lsc_credential)
   ELSE (get_lsc_credentials)

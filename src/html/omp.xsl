@@ -15735,6 +15735,366 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- END OVERRIDES MANAGEMENT -->
 
+<!-- BEGIN GROUPS MANAGEMENT -->
+
+<xsl:template match="groups">
+</xsl:template>
+
+<xsl:template match="create_group_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Group</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_group_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Delete Group</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_group_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Group</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="group">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;group={../groups/term}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Group'"/>
+        <xsl:with-param name="type" select="'group'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="group" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:value-of select="name"/>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'group'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="group" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Group Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="cap-type" select="'Group'"/>
+        <xsl:with-param name="type" select="'group'"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Users:</td>
+          <td><xsl:value-of select="users/text()"/></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-groups-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="group" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
+<xsl:template name="html-groups-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'group'"/>
+    <xsl:with-param name="cap-type" select="'Group'"/>
+    <xsl:with-param name="resources-summary" select="groups"/>
+    <xsl:with-param name="resources" select="group"/>
+    <xsl:with-param name="count" select="count (group)"/>
+    <xsl:with-param name="grouped-count" select="group_count/grouped"/>
+    <xsl:with-param name="full-count" select="group_count/text ()"/>
+    <xsl:with-param name="headings" select="'Name|name'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- NEW_GROUP -->
+
+<xsl:template name="html-create-group-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Group
+      <a href="/help/new_group.html?token={/envelope/token}"
+         title="Help: New Group">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_groups&amp;group={/envelope/params/group}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Groups" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Groups"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_group"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="group_id" value="{/envelope/params/group_id}"/>
+        <input type="hidden" name="group" value="{/envelope/params/group}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="name" value="unnamed" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Users</td>
+            <td>
+              <input type="text" name="users" size="30" maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Group"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="new_group">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_group_response"/>
+  <xsl:apply-templates select="create_group_response"/>
+  <xsl:call-template name="html-create-group-form"/>
+</xsl:template>
+
+<!--     EDIT_GROUP -->
+
+<xsl:template name="html-edit-group-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Group
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Group'"/>
+        <xsl:with-param name="type" select="'group'"/>
+        <xsl:with-param name="id"
+                        select="commands_response/get_groups_response/group/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_group"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="group_id"
+               value="{commands_response/get_groups_response/group/@id}"/>
+        <input type="hidden" name="next" value="{/envelope/params/next}"/>
+        <input type="hidden" name="group" value="{/envelope/params/group}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="165">Name</td>
+            <td>
+              <input type="text"
+                     name="name"
+                     value="{commands_response/get_groups_response/group/name}"
+                     size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" size="30" maxlength="400"
+                     value="{commands_response/get_groups_response/group/comment}"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Term</td>
+            <td>
+              <input type="text" name="term"
+                     value="{commands_response/get_groups_response/group/term}"
+                     size="50"
+                     maxlength="1000"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Type</td>
+            <td>
+              <select name="optional_resource_type">
+                <xsl:variable name="type">
+                  <xsl:value-of select="commands_response/get_groups_response/group/type"/>
+                </xsl:variable>
+                <option value="">--</option>
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
+                  <xsl:choose>
+                    <xsl:when test=". = $type">
+                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{.}"><xsl:value-of select="."/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Group"/>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_group">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-group-form"/>
+</xsl:template>
+
+<!--     GET_GROUP -->
+
+<xsl:template match="get_group">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_group_response"/>
+  <xsl:apply-templates select="get_groups_response/group" mode="details"/>
+</xsl:template>
+
+<!--     GET_GROUPS -->
+
+<xsl:template match="get_groups">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_group_response"/>
+  <xsl:apply-templates select="create_group_response"/>
+  <!-- The for-each makes the get_groups_response the current node. -->
+  <xsl:for-each select="get_groups_response | commands_response/get_groups_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Groups
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-groups-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END GROUPS MANAGEMENT -->
+
 <!-- BEGIN PORT_LISTS MANAGEMENT -->
 
 <xsl:template name="html-create-port-list-form">

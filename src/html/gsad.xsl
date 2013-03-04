@@ -120,6 +120,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_group_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Group'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_lsc_credential_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -966,6 +974,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_filter/create_filter_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="new_group/create_group_response"
+                             mode="response-indicator"/>
 
         <!-- Administrator -->
         <xsl:apply-templates select="commands_response/create_user_response"
@@ -1108,6 +1118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
+      <li><a href="/oap?cmd=get_groups&amp;token={/envelope/token}">Groups</a></li>
       <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
       <li><a href="/oap?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
       <li><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>

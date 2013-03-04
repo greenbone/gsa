@@ -166,6 +166,19 @@ char * export_report_format_omp (credentials_t *, params_t *,
 char * export_report_formats_omp (credentials_t *, params_t *,
                                   enum content_type *, char **, gsize *);
 
+char * create_group_omp (credentials_t *, params_t *);
+char * delete_group_omp (credentials_t *, params_t *);
+char * delete_trash_group_omp (credentials_t *, params_t *);
+char * edit_group_omp (credentials_t *, params_t *);
+char * export_group_omp (credentials_t *, params_t *, enum content_type *,
+                          char **, gsize *);
+char * export_groups_omp (credentials_t *, params_t *, enum content_type *,
+                           char **, gsize *);
+char * get_group_omp (credentials_t *, params_t *);
+char * get_groups_omp (credentials_t *, params_t *);
+char * new_group_omp (credentials_t *, params_t *);
+char * save_group_omp (credentials_t *, params_t *);
+
 char * get_notes_omp (credentials_t *, params_t *);
 char * get_note_omp (credentials_t *, params_t *);
 char * new_note_omp (credentials_t *, params_t *);
