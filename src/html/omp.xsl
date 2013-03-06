@@ -150,6 +150,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- NAMED TEMPLATES -->
 
+<!-- Currently only a very simple formatting method to produce
+     nice HTML from a structured text:
+     - create paragraphs for each text block separated with a empty line
+-->
+<xsl:template name="structured-text">
+  <xsl:param name="string"/>
+
+  <xsl:for-each select="str:split($string, '&#10;&#10;')">
+    <p>
+      <xsl:value-of select="."/>
+    </p>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template name="prognostic-description">
   <xsl:param name="string"/>
 
@@ -18679,11 +18693,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="substring-after (., '=')"/><br />
                 <br/>
               </xsl:if>
-              <xsl:if test="'insight' = substring-before (., '=')">
-                Vulnerability Insight:<br/>
-                <xsl:value-of select="substring-after (., '=')"/><br />
-                <br/>
-              </xsl:if>
               <xsl:if test="'impact' = substring-before (., '=')">
                 Impact:<br/>
                 <xsl:value-of select="substring-after (., '=')"/><br />
@@ -18726,6 +18735,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="nvt/xref/text()"/>
     </xsl:if>
   </xsl:variable>
+
+  <xsl:for-each select="str:split (nvt/tags, '|')">
+    <xsl:if test="'insight' = substring-before (., '=')">
+      <div class="issue_box_box">
+        <b>Vulnerability Insight</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="substring-after (., '=')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
+  </xsl:for-each>
 
   <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
     <div class="issue_box_box">

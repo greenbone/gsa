@@ -1,3 +1,10 @@
+2013-03-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (structured-text): New. Very simple
+	version that only can do paragraphs.
+	(result-detailed): Moved insight into a sub-box of its own
+	and use structured text formatting.
+
 2013-03-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (result-detailed): Output summary, insight, impact
