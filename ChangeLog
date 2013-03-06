@@ -1,5 +1,13 @@
 2013-03-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/omp.xsl (result-detailed): Moved insight, solution,
+	detection method into sub-boxes of their own.
+	Moved product detection result into a box of its own.
+	Renamed tag "detection" to "vuldetect", because "detection"
+	is already used by detection scripts.
+
+2013-03-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/omp.xsl (structured-text): New. Very simple
 	version that only can do paragraphs.
 	(result-detailed): Moved insight into a sub-box of its own
