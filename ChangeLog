@@ -1,3 +1,9 @@
+2013-03-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed): Output summary, insight, impact
+	and solution nvt tags when result is empty. Add result subtitle with
+	vulnerability detected or scan result content.
+
 2013-03-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add basic user groups.

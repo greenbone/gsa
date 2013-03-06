@@ -13541,7 +13541,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'insight=')">
-      <h2>Vulnerability insight</h2>
+      <h2>Vulnerability Insight</h2>
       <xsl:for-each select="str:split (tags, '|')">
         <xsl:if test="'insight' = substring-before (., '=')">
           <xsl:value-of select="substring-after (., '=')"/><br />
@@ -18671,11 +18671,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <pre>
-          <xsl:call-template name="wrap">
-            <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-          </xsl:call-template>
-        </pre>
+        <xsl:choose>
+          <xsl:when test="string-length(description) &lt; 2">
+            <xsl:for-each select="str:split (nvt/tags, '|')">
+              <xsl:if test="'summary' = substring-before (., '=')">
+                Summary:<br/>
+                <xsl:value-of select="substring-after (., '=')"/><br />
+                <br/>
+              </xsl:if>
+              <xsl:if test="'insight' = substring-before (., '=')">
+                Vulnerability Insight:<br/>
+                <xsl:value-of select="substring-after (., '=')"/><br />
+                <br/>
+              </xsl:if>
+              <xsl:if test="'impact' = substring-before (., '=')">
+                Impact:<br/>
+                <xsl:value-of select="substring-after (., '=')"/><br />
+                <br/>
+              </xsl:if>
+              <xsl:if test="'solution' = substring-before (., '=')">
+                Solution:<br/>
+                <xsl:value-of select="substring-after (., '=')"/><br />
+                <br/>
+              </xsl:if>
+            </xsl:for-each>
+            Result:<br/>
+            Vulnerability detected.
+          </xsl:when>
+          <xsl:otherwise>
+            Result:
+            <pre>
+              <xsl:call-template name="wrap">
+                <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
+              </xsl:call-template>
+            </pre>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </div>
