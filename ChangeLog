@@ -1,3 +1,12 @@
+2013-03-07  Timo Pollmeier  <timo.pollmeier@greenbone.net>
+
+	* src/html/help.xsl (ovaldefs.html): Change help for table rows
+	(see below).
+
+	* src/html/omp.xsl (html-ovaldef-table, info/ovaldef): Remove column
+	"Title", add columns "Created", "Modified". Add title subrow similar to
+	descriptions of CVEs.
+
 2013-03-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (newstyle-nvt): New function.
