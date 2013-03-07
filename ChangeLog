@@ -1,5 +1,11 @@
 2013-03-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (newstyle-nvt): New function.
+	(result-detailed): Check if nvt has newstyle tags and output results
+	accordingly.
+
+2013-03-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/gsad.xsl, src/html/help.xsl: Open www.greenbone.net and
 	www.openvas.org hyperlinks in new tab.
 
