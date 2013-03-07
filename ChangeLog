@@ -1,5 +1,10 @@
 2013-03-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/gsad.xsl, src/html/help.xsl: Open www.greenbone.net and
+	www.openvas.org hyperlinks in new tab.
+
+2013-03-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (get-nvt-tag): New function.
 	(result-detailed): Replace multiple for loop iterations with get-nvt-tag
 	calls.

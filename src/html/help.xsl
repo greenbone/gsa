@@ -207,7 +207,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      Copyright 2009-2013 by <a href="http://www.greenbone.net">Greenbone Networks GmbH</a>
+      Copyright 2009-2013 by <a href="http://www.greenbone.net" target="_blank">Greenbone Networks GmbH</a>
       </p>
 
       <p>
@@ -217,8 +217,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
       Contact: For updates, feature proposals and bug reports
-      contact the <a href="http://www.greenbone.net/company/contact.html">Greenbone
-      team</a> or visit the <a href="http://www.openvas.org">OpenVAS homepage</a>.
+      contact the <a href="http://www.greenbone.net/company/contact.html" target="_blank">
+      Greenbone team</a> or visit the <a href="http://www.openvas.org" target="_blank">OpenVAS homepage</a>.
       </p>
 
       </td><td valign="top">
