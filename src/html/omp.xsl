@@ -11837,7 +11837,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cvss_base"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
         title="NVT Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -12159,11 +12159,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="tooltip"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
          title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
          title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>

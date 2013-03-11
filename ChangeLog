@@ -1,5 +1,10 @@
 2013-03-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (info/nvt, get_info_nvt_lnk): Use filter term and id
+	returned in response instead of envelope params.
+
+2013-03-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Add search All SecInfo feature.
 
 	* src/html/omp.xsl (info/allinfo, get_info_allinfo_action)
