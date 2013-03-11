@@ -1,5 +1,14 @@
 2013-03-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Add default filter setting for All SecInfo page.
+
+	* src/html/omp.xsl (get_my_settings.html, edit_my_settings.html): Add
+	All SecInfo filter setting.
+
+	* src/html/help.xsl (my_settings.html): Update documentation.
+
+2013-03-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Update help documentation to reflect All SecInfo changes.
 
 	* src/html/help.xsl (allinfo.html): New template.

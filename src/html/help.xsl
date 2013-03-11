@@ -4205,6 +4205,10 @@ Public License instead of this License.
       <p>
         Default filter to use when getting the <a href="dfn_cert_advs.html?token={/envelope/token}">DFN-CERT Advisories</a> page.
       </p>
+      <h4>All SecInfo filter</h4>
+      <p>
+        Default filter to use when getting the <a href="allinfo.html?token={/envelope/token}">All SecInfo</a> page.
+      </p>
     </div>
   </div>
 </xsl:template>

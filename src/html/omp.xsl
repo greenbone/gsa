@@ -21014,6 +21014,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
+          <tr class="odd">
+            <td>All SecInfo filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
         </table>
       </div>
     </div>
@@ -21289,6 +21298,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'SecInfo'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+
+            <tr>
+              <td>All SecInfo filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'feefe56b-e2da-4913-81cc-1a6ae3b36e64'"/>
+                    <xsl:with-param name="filter-type" select="'SecInfo'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>
