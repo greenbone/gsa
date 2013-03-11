@@ -1060,7 +1060,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">CVEs</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">CPEs</a></li>
        <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">OVAL Definitions</a></li>
-       <li class="last"><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">DFN-CERT Advisories</a></li>
+       <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">DFN-CERT Advisories</a></li>
+       <li class="last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}">All SecInfo</a></li>
       </xsl:if>
      </ul>
     </li>

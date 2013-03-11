@@ -1,3 +1,16 @@
+2013-03-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add search All SecInfo feature.
+
+	* src/html/omp.xsl (info/allinfo, get_info_allinfo_action)
+	(get_info_allinfo_lnk, html-allinfo-table): New templates.
+	(get_info_response): Add allinfo info_type handling.
+
+	* src/gsad_omp.c (get_info): Validate info_type for allinfo and ALLINFO
+	values.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add All SecInfo submenu.
+
 2013-03-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Renamed tag detection to vuldetect,

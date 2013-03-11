@@ -11983,6 +11983,148 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
+<xsl:template match="info/allinfo">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <xsl:call-template name="get_info_allinfo_lnk">
+          <xsl:with-param name="name" select="../name"/>
+          <xsl:with-param name="type" select="type"/>
+          <xsl:with-param name="id" select="../@id"/>
+        </xsl:call-template>
+      </b>
+      <xsl:choose>
+        <xsl:when test="../comment != ''">
+          <br/>(<xsl:value-of select="../comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="type != ''">
+          <xsl:value-of select="type"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../creation_time != ''">
+          <xsl:value-of select="gsa:date (../creation_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="../modification_time != ''">
+          <xsl:value-of select="gsa:date (../modification_time)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="type = 'cve'">
+          <xsl:call-template name="get_info_allinfo_action">
+            <xsl:with-param name="info_name" select="../name"/>
+            <xsl:with-param name="name" select="'CVE'"/>
+            <xsl:with-param name="type" select="'cve'"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="type = 'cpe'">
+          <xsl:call-template name="get_info_allinfo_action">
+            <xsl:with-param name="info_name" select="../name"/>
+            <xsl:with-param name="name" select="'CPE'"/>
+            <xsl:with-param name="type" select="'cpe'"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="type = 'ovaldef'">
+          <xsl:call-template name="get_info_allinfo_action">
+            <xsl:with-param name="info_name" select="../name"/>
+            <xsl:with-param name="name" select="'OVAL Definition'"/>
+            <xsl:with-param name="type" select="'ovaldef'"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="type = 'dfn_cert_adv'">
+          <xsl:call-template name="get_info_allinfo_action">
+            <xsl:with-param name="info_name" select="../name"/>
+            <xsl:with-param name="name" select="'DFN-CERT Advisory'"/>
+            <xsl:with-param name="type" select="'dfn_cert_adv'"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="type = 'nvt'">
+          <a href="?cmd=get_nvts&amp;oid={../@id}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+             title="NVT Details">
+            <img src="/img/details.png"
+              border="0"
+              alt="NVT Details"
+              style="margin-left:3px;"/>
+          </a>
+        </xsl:when>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="get_info_allinfo_action">
+  <xsl:param name="name"/>
+  <xsl:param name="info_name"/>
+  <xsl:param name="type"/>
+  <xsl:param name="action"/>
+  <a href="/omp?cmd=get_info&amp;info_type={$type}&amp;info_name={$info_name}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+     title="{$name} Details" style="margin-left:3px;">
+    <img src="/img/details.png" border="0" alt="{$name} Details"/>
+  </a>
+</xsl:template>
+
+<xsl:template name="get_info_allinfo_lnk">
+ <xsl:param name="name"/>
+ <xsl:param name="type"/>
+ <xsl:param name="id"/>
+  <xsl:choose>
+    <xsl:when test="$type = 'cve'">
+      <xsl:call-template name="get_info_cve_lnk">
+        <xsl:with-param name="cve" select="$name"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$type = 'cpe'">
+      <xsl:call-template name="get_info_cpe_lnk">
+        <xsl:with-param name="cpe" select="$name"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$type = 'ovaldef'">
+      <xsl:call-template name="get_info_ovaldef_lnk">
+        <xsl:with-param name="ovaldef" select="$name"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$type = 'nvt'">
+      <xsl:call-template name="get_info_nvt_lnk">
+        <xsl:with-param name="nvt" select="$name"/>
+        <xsl:with-param name="oid" select="$id"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="$type = 'dfn_cert_adv'">
+      <xsl:call-template name="get_info_dfn_cert_adv_lnk">
+        <xsl:with-param name="dfn_cert_adv" select="$name"/>
+      </xsl:call-template>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
   <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
@@ -12631,6 +12773,106 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-allinfo-table">
+  <xsl:if test="@status = 400">
+    <xsl:call-template name="error_window">
+      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+      <xsl:with-param name="message">
+        SCAP and/or CERT database missing on OMP server.
+        <a href="/help/allinfo.html?token={/envelope/token}#secinfo_missing"
+           title="Help: SecInfo database missing">
+          <img style="margin-left:5px" src="/img/help.png"/>
+        </a>
+      </xsl:with-param>
+    </xsl:call-template>
+    <br/>
+  </xsl:if>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">All SecInfo Information
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="'info'"/>
+        <xsl:with-param name="list" select="info"/>
+        <xsl:with-param name="count" select="count(info/allinfo)"/>
+        <xsl:with-param name="filtered_count" select="info_count/filtered"/>
+        <xsl:with-param name="full_count" select="info_count/text ()"/>
+        <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+      </xsl:call-template>
+      <a href="/help/allinfo.html?token={/envelope/token}"
+        title="Help: All SecInfo Information">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"
+         title="Return to default filter view" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Return"/>
+      </a>
+    </div>
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'info'"/>
+      <xsl:with-param name="list" select="info"/>
+      <xsl:with-param name="extra_params">
+        <param>
+          <name>info_type</name>
+          <value>allinfo</value>
+        </param>
+      </xsl:with-param>
+    </xsl:call-template>
+    <div class="gb_window_part_content_no_pad">
+      <div id="allinfo">
+        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <tr class="gbntablehead2">
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Name</xsl:with-param>
+                <xsl:with-param name="name">name</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Type</xsl:with-param>
+                <xsl:with-param name="name">type</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Created</xsl:with-param>
+                <xsl:with-param name="name">created</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Modified</xsl:with-param>
+                <xsl:with-param name="name">modified</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=allinfo'"/>
+              </xsl:call-template>
+            </td>
+            <td>Actions</td>
+          </tr>
+          <xsl:apply-templates select="info/allinfo"/>
+          <xsl:if test="string-length (filters/term) &gt; 0">
+            <tr>
+              <td class="footnote" colspan="6">
+                (Applied filter:
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=allinfo&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                  <xsl:value-of select="filters/term"/>
+                </a>)
+              </td>
+            </tr>
+          </xsl:if>
+        </table>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="get_info_response">
   <xsl:choose>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
@@ -12680,6 +12922,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="html-dfn_cert_adv-table"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="/envelope/params/info_type = 'ALLINFO' or /envelope/params/info_type = 'allinfo'">
+      <xsl:choose>
+        <xsl:when test="/envelope/params/info_name">
+          <xsl:call-template name="allinfo-details"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="html-allinfo-table"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
