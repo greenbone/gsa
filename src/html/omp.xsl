@@ -13600,7 +13600,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
 
-  <h2>Vulnerability scoring</h2>
+  <h2>Vulnerability Scoring</h2>
   <table>
     <tr>
       <td>CVSS base:</td>
@@ -13634,10 +13634,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="contains(tags, 'detection=')">
-      <h2>Vulnerability Detection</h2>
+    <xsl:when test="contains(tags, 'vuldetect=')">
+      <h2>Vulnerability Detection Method</h2>
       <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="'detection' = substring-before (., '=')">
+        <xsl:if test="'vuldetect' = substring-before (., '=')">
           <xsl:value-of select="substring-after (., '=')"/><br />
         </xsl:if>
       </xsl:for-each>
@@ -13674,13 +13674,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- "NOTAG" means no tags, skip. -->
   <xsl:choose>
-    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'detection=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
+    <xsl:when test="tags = 'NOTAG' or (contains(tags,'summary=') + contains(tags,'affected=') + contains(tags,'cvss_base_vector=') + contains(tags,'insight=') + contains(tags,'vuldetect=') + contains(tags,'impact=') + contains(tags,'solution=') = count(str:split (tags, '|')))">
     </xsl:when>
     <xsl:otherwise>
       <h2>Other tags</h2>
       <table>
       <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|detection|impact|solution',substring-before (., '=')))">
+        <xsl:if test="not(contains('summary|cvss_base_vector|affected|insight|vuldetect|impact|solution',substring-before (., '=')))">
           <tr>
             <td valign="top"><xsl:value-of select="substring-before (., '=')"/>:</td>
             <td><xsl:value-of select="substring-after (., '=')"/></td>
