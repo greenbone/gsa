@@ -7419,8 +7419,12 @@ Public License instead of this License.
           <td>The Version number of the OVAL defintions.</td>
         </tr>
         <tr>
-          <td>Deprecated</td>
-          <td>Whether the definition is deprecated.</td>
+          <td>Status</td>
+          <td>The lifecycle status of the OVAL definition. See http://oval.mitre.org/repository/about/stages.html for details on
+          status types defined for the MITRE OVAL repository.<br/>
+          If a definition has no status element, but has the "deprecated"
+          attribute set to true, the status will be set to "DEPRECATED".
+          </td>
         </tr>
         <tr class="odd">
           <td>Created</td>
