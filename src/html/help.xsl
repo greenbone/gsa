@@ -2818,6 +2818,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="dfn_cert_adv_details.html?token={/envelope/token}">DFN-CERT Advisory Details</a></li>
               </ul>
+            <li> <a href="allinfo.html?token={/envelope/token}">All SecInfo</a></li>
           </ul>
           <li> Configuration</li>
           <ul>
@@ -7544,6 +7545,96 @@ Public License instead of this License.
       </p>
       <p>
         The CERT Advisory table is always empty when the database is missing.
+      </p>
+      <p>
+        The SCAP data is updated during a SCAP data feed sync and the CERT data
+        is updated during a CERT data feed sync.
+        Most likely the data will appear after the next such feed sync.
+        This is usually taken care of automatically by a periodic
+        background process.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="allinfo.html">
+  <div class="gb_window_part_center">Help: All SecInfo</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;">
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    </div>
+    <div class="float_right">
+      <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}">Jump to dialog</a>
+    </div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_INFO'"/>
+      </xsl:call-template>
+
+      <h1>All SecInfo</h1>
+
+      <p>
+        This table provides an overview of all SecInfo related entries (
+        <a href="glossary.html?token={/envelope/token}#nvt">NVTs</a>,
+        <a href="glossary.html?token={/envelope/token}#cve">CVEs</a>,
+        <a href="glossary.html?token={/envelope/token}#cpe">CPEs</a>,
+        <a href="glossary.html?token={/envelope/token}#ovaldef">OVAL Definitions</a>,
+        <a href="glossary.html?token={/envelope/token}#dfn_cert_adv">DFN-CERT Advisories</a>
+        ) and summarizes the essential aspects of each one.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>SecInfo entry identifier.</td>
+        </tr>
+        <tr class="even">
+          <td>Type</td>
+          <td>The entry type.</td>
+        </tr>
+        <tr class="odd">
+          <td>Created</td>
+          <td>The date the entry was created on.</td>
+        </tr>
+        <tr class="even">
+          <td>Modified</td>
+          <td>The date the entry was last modified on.</td>
+        </tr>
+      </table>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>SecInfo Details</h4>
+      <p>
+        Pressing the details icon
+        <img src="/img/details.png" alt="Details" title="Details" />
+        will show the details page for the specific entry (
+        <a href="/help/nvt_details.html?token={/envelope/token}">NVT Details</a>,
+        <a href="cve_details.html?token={/envelope/token}">CVE Details</a>,
+        <a href="cpe_details.html?token={/envelope/token}">CPE Details</a>,
+        <a href="ovaldef_details.html?token={/envelope/token}">OVAL Definitions Details</a>,
+        <a href="dfn_cert_adv_details.html?token={/envelope/token}">DFN-CERT Advisories Details</a>
+        ).
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <a name="secinfo_missing"></a>
+      <h2>Warning: SecInfo Database Missing</h2>
+      <p>
+        This warning dialog occurs when the SCAP database and/or the CERT
+        database is missing on the OMP server.
+      </p>
+      <p>
+        The SecInfo table is always empty when the database is missing.
       </p>
       <p>
         The SCAP data is updated during a SCAP data feed sync and the CERT data
