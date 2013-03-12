@@ -11984,94 +11984,104 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>odd</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <tr class="{$class}">
-    <td>
-      <b>
-        <xsl:call-template name="get_info_allinfo_lnk">
-          <xsl:with-param name="name" select="../name"/>
-          <xsl:with-param name="type" select="type"/>
-          <xsl:with-param name="id" select="../@id"/>
-        </xsl:call-template>
-      </b>
-      <xsl:choose>
-        <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="type != ''">
-          <xsl:value-of select="type"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="../creation_time != ''">
-          <xsl:value-of select="gsa:date (../creation_time)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="../modification_time != ''">
-          <xsl:value-of select="gsa:date (../modification_time)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          N/A
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="type = 'cve'">
-          <xsl:call-template name="get_info_allinfo_action">
-            <xsl:with-param name="info_name" select="../name"/>
-            <xsl:with-param name="name" select="'CVE'"/>
-            <xsl:with-param name="type" select="'cve'"/>
+  <tbody class="{$class}">
+    <tr>
+      <td rowspan="2">
+        <b>
+          <xsl:call-template name="get_info_allinfo_lnk">
+            <xsl:with-param name="name" select="../name"/>
+            <xsl:with-param name="type" select="type"/>
+            <xsl:with-param name="id" select="../@id"/>
           </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="type = 'cpe'">
-          <xsl:call-template name="get_info_allinfo_action">
-            <xsl:with-param name="info_name" select="../name"/>
-            <xsl:with-param name="name" select="'CPE'"/>
-            <xsl:with-param name="type" select="'cpe'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="type = 'ovaldef'">
-          <xsl:call-template name="get_info_allinfo_action">
-            <xsl:with-param name="info_name" select="../name"/>
-            <xsl:with-param name="name" select="'OVAL Definition'"/>
-            <xsl:with-param name="type" select="'ovaldef'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="type = 'dfn_cert_adv'">
-          <xsl:call-template name="get_info_allinfo_action">
-            <xsl:with-param name="info_name" select="../name"/>
-            <xsl:with-param name="name" select="'DFN-CERT Advisory'"/>
-            <xsl:with-param name="type" select="'dfn_cert_adv'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="type = 'nvt'">
-          <a href="?cmd=get_nvts&amp;oid={../@id}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
-             title="NVT Details">
-            <img src="/img/details.png"
-              border="0"
-              alt="NVT Details"
-              style="margin-left:3px;"/>
-          </a>
-        </xsl:when>
-      </xsl:choose>
-    </td>
-  </tr>
+        </b>
+        <xsl:choose>
+          <xsl:when test="../comment != ''">
+            <br/>(<xsl:value-of select="../comment"/>)
+          </xsl:when>
+          <xsl:otherwise></xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="type != ''">
+            <xsl:value-of select="type"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="../creation_time != ''">
+            <xsl:value-of select="gsa:date (../creation_time)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="../modification_time != ''">
+            <xsl:value-of select="gsa:date (../modification_time)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            N/A
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+      <td rowspan="2">
+        <xsl:choose>
+          <xsl:when test="type = 'cve'">
+            <xsl:call-template name="get_info_allinfo_action">
+              <xsl:with-param name="info_name" select="../name"/>
+              <xsl:with-param name="name" select="'CVE'"/>
+              <xsl:with-param name="type" select="'cve'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="type = 'cpe'">
+            <xsl:call-template name="get_info_allinfo_action">
+              <xsl:with-param name="info_name" select="../name"/>
+              <xsl:with-param name="name" select="'CPE'"/>
+              <xsl:with-param name="type" select="'cpe'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="type = 'ovaldef'">
+            <xsl:call-template name="get_info_allinfo_action">
+              <xsl:with-param name="info_name" select="../name"/>
+              <xsl:with-param name="name" select="'OVAL Definition'"/>
+              <xsl:with-param name="type" select="'ovaldef'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="type = 'dfn_cert_adv'">
+            <xsl:call-template name="get_info_allinfo_action">
+              <xsl:with-param name="info_name" select="../name"/>
+              <xsl:with-param name="name" select="'DFN-CERT Advisory'"/>
+              <xsl:with-param name="type" select="'dfn_cert_adv'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="type = 'nvt'">
+            <a href="?cmd=get_nvts&amp;oid={../@id}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+               title="NVT Details">
+              <img src="/img/details.png"
+                border="0"
+                alt="NVT Details"
+                style="margin-left:3px;"/>
+            </a>
+          </xsl:when>
+        </xsl:choose>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" style="font-size: 95%;">
+        <xsl:variable name="truncate_length"
+        select="string-length(extra) - string-length(substring-after(substring(extra, 135), ' ')) + 1"/>
+        <xsl:value-of select="substring(extra, 0, $truncate_length)"/>
+        <xsl:if test="string-length(extra) >= $truncate_length"><i><abbr title="[...] {substring(extra, $truncate_length, string-length(extra))}">[...]</abbr></i></xsl:if>
+      </td>
+    </tr>
+  </tbody>
 </xsl:template>
 
 <xsl:template name="get_info_allinfo_action">
