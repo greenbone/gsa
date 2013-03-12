@@ -11900,7 +11900,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <xsl:choose>
           <xsl:when test="../creation_time != ''">
-            <xsl:value-of select="gsa:long-time (../creation_time)"/>
+            <xsl:value-of select="gsa:date (../creation_time)"/>
           </xsl:when>
           <xsl:otherwise>
             N/A
@@ -11910,7 +11910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td>
         <xsl:choose>
           <xsl:when test="../modification_time != ''">
-            <xsl:value-of select="gsa:long-time (../modification_time)"/>
+            <xsl:value-of select="gsa:date (../modification_time)"/>
           </xsl:when>
           <xsl:otherwise>
             N/A
@@ -12644,7 +12644,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Definition class</xsl:with-param>
+                <xsl:with-param name="head">Def. class</xsl:with-param>
                 <xsl:with-param name="name">def_class</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>

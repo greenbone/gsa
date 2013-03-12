@@ -7427,10 +7427,14 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="odd">
+          <td>Def. class</td>
+          <td>The definition class of the definition.</td>
+        </tr>
+        <tr>
           <td>Created</td>
           <td>The date the definition was created.</td>
         </tr>
-        <tr>
+        <tr class="odd">
           <td>Modified</td>
           <td>The date the definition was last modified.</td>
         </tr>
