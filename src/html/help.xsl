@@ -7510,6 +7510,10 @@ Public License instead of this License.
           <td>The titles of the advisories.</td>
         </tr>
         <tr>
+          <td>Created</td>
+          <td>The date the advisory was created.</td>
+        </tr>
+        <tr class="odd">
           <td>CVEs</td>
           <td>The number of CVEs referenced by the advisories</td>
         </tr>

@@ -1,10 +1,16 @@
 2013-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
+	"Created" column.
+	
+	* src/html/help.xsl (dfn_cert_advs.html): Add help for "Created" column.
+
+2013-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (info/ovaldef): Use shorter date format "date".
 	(html-ovaldef-table): Shorten "Definition class" to "Def. class".
 
 	* src/html/help.xsl (ovaldefs.html): Add missing "Def. class".
-
 
 2013-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 

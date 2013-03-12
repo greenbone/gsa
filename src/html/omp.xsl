@@ -11966,6 +11966,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="title"/>
     </td>
     <td>
+      <xsl:value-of select="gsa:date (../creation_time)"/>
+    </td>
+    <td>
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
@@ -12746,6 +12749,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="column-name">
                 <xsl:with-param name="head">Title</xsl:with-param>
                 <xsl:with-param name="name">title</xsl:with-param>
+                <xsl:with-param name="type">info</xsl:with-param>
+                <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:call-template name="column-name">
+                <xsl:with-param name="head">Created</xsl:with-param>
+                <xsl:with-param name="name">created</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=DFN_CERT_ADV'"/>
               </xsl:call-template>
