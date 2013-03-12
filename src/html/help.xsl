@@ -2810,7 +2810,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="cpe_details.html?token={/envelope/token}">CPE Details</a></li>
               </ul>
-            <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Defintions</a></li>
+            <li> <a href="ovaldefs.html?token={/envelope/token}">OVAL Definitions</a></li>
               <ul>
                 <li> <a href="ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a></li>
               </ul>
@@ -3448,7 +3448,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <a name="ovaldef"></a>
-      <h2>OVAL Defintion (OVALDEF)</h2>
+      <h2>OVAL Definition (OVALDEF)</h2>
       <p>
         A definition as specified by the OVAL (Open Vulnerability and Assessment
         Language), version 5.10.1. It can be used for different classes of
@@ -7416,7 +7416,7 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Version</td>
-          <td>The Version number of the OVAL defintions.</td>
+          <td>The Version number of the OVAL definitions.</td>
         </tr>
         <tr>
           <td>Status</td>
@@ -7443,7 +7443,7 @@ Public License instead of this License.
       <p>
         Pressing the details icon
         <img src="/img/details.png" alt="Details" title="Details" />
-        will show the <a href="/help/ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a> page. This page has full details of the OVAL Defintion.
+        will show the <a href="/help/ovaldef_details.html?token={/envelope/token}">OVAL Definition Details</a> page. This page has full details of the OVAL Definition.
       </p>
 
       <xsl:call-template name="filtering"/>
