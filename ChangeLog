@@ -1,8 +1,13 @@
+2013-03-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_many, get_tasks): Add permission and owner terms
+	to task default filters.
+
 2013-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
 	"Created" column.
-	
+
 	* src/html/help.xsl (dfn_cert_advs.html): Add help for "Created" column.
 
 2013-03-12  Timo Pollmeier <timo.pollmeier@greenbone.net>

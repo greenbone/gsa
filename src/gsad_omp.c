@@ -817,7 +817,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           else if (strcmp (type, "task"))
             filter = "rows=-2";
           else
-            filter = "apply_overrides=0 rows=-2";
+            filter = "apply_overrides=0 rows=-2 permission=any owner=any";
           filt_id = "-2";
         }
       else if ((strcmp (filter, "sort=nvt") == 0)
@@ -2807,9 +2807,11 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml)
           g_free (old);
         }
       else if (strcmp (overrides, "0"))
-        params_add (params, "filter", "apply_overrides=1");
+        params_add (params, "filter",
+                    "apply_overrides=1 rows=-2 permission=any owner=any");
       else
-        params_add (params, "filter", "apply_overrides=0");
+        params_add (params, "filter",
+                    "apply_overrides=0 rows=-2 permission=any owner=any");
     }
 
   return get_many ("task", credentials, params, extra_xml, NULL);
