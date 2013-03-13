@@ -1,3 +1,8 @@
+2013-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl: URI encode filter strings in GET links, as they may
+	contain special characters like +.
+
 2013-03-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many, get_tasks): Add permission and owner terms
