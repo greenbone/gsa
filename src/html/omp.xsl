@@ -18860,22 +18860,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          NVT:
           <xsl:variable name="max" select="80"/>
-          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-            <xsl:choose>
-              <xsl:when test="string-length(nvt/name) &gt; $max">
-                <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="nvt/name"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </a>
-          (OID:
-           <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-             <xsl:value-of select="nvt/@oid"/>
-           </a>)
+          <xsl:choose>
+            <xsl:when test="string-length(nvt/name) &gt; $max">
+              <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="nvt/name"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
 
@@ -19092,13 +19085,50 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </div>
 
-    <div class="issue_box_box">
-      <b>Vulnerability Detection Method</b>
-      <xsl:call-template name="structured-text">
-        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
-      </xsl:call-template>
-    </div>
   </xsl:if>
+
+  <div class="issue_box_box">
+    <xsl:choose>
+      <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0)">
+        <b>Vulnerability Detection Method</b>
+      </xsl:when>
+      <xsl:otherwise>
+        <b>Log Method</b>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:call-template name="structured-text">
+      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
+    </xsl:call-template>
+    <p>
+      Details:
+      <xsl:choose>
+        <xsl:when test="$prognostic=1">
+          <xsl:call-template name="get_info_cve_lnk">
+            <xsl:with-param name="cve" select="cve/@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="nvt/@oid = 0">
+          <xsl:if test="delta/text()">
+            <br/>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="max" select="80"/>
+          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+            <xsl:choose>
+              <xsl:when test="string-length(nvt/name) &gt; $max">
+                <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="nvt/name"/>
+              </xsl:otherwise>
+            </xsl:choose>
+           (OID: <xsl:value-of select="nvt/@oid"/>)
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </p>
+  </div>
 
   <xsl:if test="count (detection)">
     <div class="issue_box_box">
@@ -19116,7 +19146,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
       </a>
       </td></tr>
-      <tr><td>Details:</td><td>
+      <tr><td>Log:</td><td>
       <!-- TODO This needs a case for delta reports. -->
       <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Product detection results">
