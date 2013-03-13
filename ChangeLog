@@ -1,3 +1,8 @@
+2013-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed): Made Summary and Detection Result
+	sub-boxes of their own. Moved Icons up into the colored bar.
+
 2013-03-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl: URI encode filter strings in GET links, as they may

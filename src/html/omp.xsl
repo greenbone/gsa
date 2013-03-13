@@ -18878,143 +18878,177 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </a>)
         </xsl:otherwise>
       </xsl:choose>
+
+      <!-- Action Icons -->
+      <xsl:if test="$details-button = 1">
+        <xsl:choose>
+          <xsl:when test="delta">
+            <div class="float_right" style="text-align:right">
+              <form class="float_right" style="text-align:right">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_report"/>
+                <input type="hidden" name="report_id" value="{../../../report/@id}"/>
+                <input type="hidden" name="result_id" value="{@id}"/>
+                <input type="hidden" name="delta_report_id" value="{../../../report/delta/report/@id}"/>
+                <input type="hidden" name="task_id" value="{../../task/@id}"/>
+                <input type="hidden" name="overrides" value="{../../filters/apply_overrides}"/>
+                <input type="hidden" name="apply_overrides" value="{../../filters/apply_overrides}"/>
+                <input type="hidden" name="autofp" value="{../../filters/autofp}"/>
+                <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+                <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                <input type="hidden" name="report_result_id" value="{@id}"/>
+                <input type="image"
+                       name="Details"
+                       src="/img/details.png"
+                       alt="Details" style="margin-left:3px;margin-right:3px;"/>
+              </form>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div class="float_right" style="text-align:right">
+              <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
+                 title="Result Details" style="margin-left:3px;">
+                <img src="/img/details.png" border="0" alt="Details"/>
+              </a>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:if test="$note-buttons = 1">
+        <div class="float_right" style="text-align:right">
+          <xsl:if test="count(notes/note) &gt; 0">
+            <a href="#notes-{@id}"
+               title="Notes" style="margin-left:3px;">
+              <img src="/img/note.png" border="0" alt="Notes"/>
+            </a>
+          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="delta">
+            </xsl:when>
+            <xsl:when test="$result-details and original_threat and string-length (original_threat)">
+              <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                 title="Add Note" style="margin-left:3px;">
+                <img src="/img/new_note.png" border="0" alt="Add Note"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$result-details">
+              <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                 title="Add Note" style="margin-left:3px;">
+                <img src="/img/new_note.png" border="0" alt="Add Note"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="original_threat and string-length (original_threat)">
+              <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                 title="Add Note" style="margin-left:3px;">
+                <img src="/img/new_note.png" border="0" alt="Add Note"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                 title="Add Note" style="margin-left:3px;">
+                <img src="/img/new_note.png" border="0" alt="Add Note"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </xsl:if>
+      <xsl:if test="$override-buttons = 1">
+        <div class="float_right" style="text-align:right">
+          <xsl:if test="count(overrides/override) &gt; 0">
+            <a href="#overrides-{@id}"
+               title="Overrides" style="margin-left:3px;">
+              <img src="/img/override.png" border="0" alt="Overrides"/>
+            </a>
+          </xsl:if>
+          <xsl:choose>
+            <xsl:when test="delta">
+            </xsl:when>
+            <xsl:when test="$result-details and original_threat and string-length (original_threat)">
+              <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                 title="Add Override" style="margin-left:3px;">
+                <img src="/img/new_override.png" border="0" alt="Add Override"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$result-details">
+              <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+                 title="Add Override" style="margin-left:3px;">
+                <img src="/img/new_override.png" border="0" alt="Add Override"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="original_threat and string-length (original_threat)">
+              <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                 title="Add Override" style="margin-left:3px;">
+                <img src="/img/new_override.png" border="0" alt="Add Override"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+                 title="Add Override" style="margin-left:3px;">
+                <img src="/img/new_override.png" border="0" alt="Add Override"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </xsl:if>
+
     </div>
   </div>
+
+  <xsl:variable name="cve_ref">
+    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
+      <xsl:value-of select="nvt/cve/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="bid_ref">
+    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
+      <xsl:value-of select="nvt/bid/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="cert_ref" select="nvt/cert"/>
+  <xsl:variable name="xref">
+    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
+      <xsl:value-of select="nvt/xref/text()"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:if test="gsa:newstyle-nvt (nvt)">
+
+    <div class="issue_box_box">
+      <b>Summary</b>
+      <xsl:call-template name="structured-text">
+        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
+      </xsl:call-template>
+    </div>
+
+  </xsl:if>
+
+  <!-- Result -->
   <div class="issue_box_box">
-    <xsl:if test="$details-button = 1">
-      <xsl:choose>
-        <xsl:when test="delta">
-          <div class="float_right" style="text-align:right">
-            <form class="float_right" style="text-align:right">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_report"/>
-              <input type="hidden" name="report_id" value="{../../../report/@id}"/>
-              <input type="hidden" name="result_id" value="{@id}"/>
-              <input type="hidden" name="delta_report_id" value="{../../../report/delta/report/@id}"/>
-              <input type="hidden" name="task_id" value="{../../task/@id}"/>
-              <input type="hidden" name="overrides" value="{../../filters/apply_overrides}"/>
-              <input type="hidden" name="apply_overrides" value="{../../filters/apply_overrides}"/>
-              <input type="hidden" name="autofp" value="{../../filters/autofp}"/>
-              <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="hidden" name="report_result_id" value="{@id}"/>
-              <input type="image"
-                     name="Details"
-                     src="/img/details.png"
-                     alt="Details" style="margin-left:3px;margin-right:3px;"/>
-            </form>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
-          <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
-               title="Result Details" style="margin-left:3px;">
-              <img src="/img/details.png" border="0" alt="Details"/>
-            </a>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
-    <xsl:if test="$note-buttons = 1">
-      <div class="float_right" style="text-align:right">
-        <xsl:if test="count(notes/note) &gt; 0">
-          <a href="#notes-{@id}"
-             title="Notes" style="margin-left:3px;">
-            <img src="/img/note.png" border="0" alt="Notes"/>
-          </a>
-        </xsl:if>
-        <xsl:choose>
-          <xsl:when test="delta">
-          </xsl:when>
-          <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
-               title="Add Note" style="margin-left:3px;">
-              <img src="/img/new_note.png" border="0" alt="Add Note"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$result-details">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
-               title="Add Note" style="margin-left:3px;">
-              <img src="/img/new_note.png" border="0" alt="Add Note"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
-               title="Add Note" style="margin-left:3px;">
-              <img src="/img/new_note.png" border="0" alt="Add Note"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
-               title="Add Note" style="margin-left:3px;">
-              <img src="/img/new_note.png" border="0" alt="Add Note"/>
-            </a>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
-    </xsl:if>
-    <xsl:if test="$override-buttons = 1">
-      <div class="float_right" style="text-align:right">
-        <xsl:if test="count(overrides/override) &gt; 0">
-          <a href="#overrides-{@id}"
-             title="Overrides" style="margin-left:3px;">
-            <img src="/img/override.png" border="0" alt="Overrides"/>
-          </a>
-        </xsl:if>
-        <xsl:choose>
-          <xsl:when test="delta">
-          </xsl:when>
-          <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
-               title="Add Override" style="margin-left:3px;">
-              <img src="/img/new_override.png" border="0" alt="Add Override"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="$result-details">
-            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
-               title="Add Override" style="margin-left:3px;">
-              <img src="/img/new_override.png" border="0" alt="Add Override"/>
-            </a>
-          </xsl:when>
-          <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
-               title="Add Override" style="margin-left:3px;">
-              <img src="/img/new_override.png" border="0" alt="Add Override"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
-               title="Add Override" style="margin-left:3px;">
-              <img src="/img/new_override.png" border="0" alt="Add Override"/>
-            </a>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
-    </xsl:if>
     <xsl:choose>
       <xsl:when test="delta/text() = 'changed'">
         <b>Result 1</b>
+        <p></p>
       </xsl:when>
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="$prognostic=1">
-        <xsl:call-template name="prognostic-description">
-          <xsl:with-param name="string" select="description"/>
-        </xsl:call-template>
+        <p>
+          <xsl:call-template name="prognostic-description">
+            <xsl:with-param name="string" select="description"/>
+          </xsl:call-template>
+        </p>
       </xsl:when>
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="gsa:newstyle-nvt (nvt)">
+            <b>Vulnerability Detection Result</b>
             <xsl:choose>
               <xsl:when test="string-length(description) &lt; 2">
-                    Summary:<br/>
-                    <xsl:value-of select="gsa:get-nvt-tag (nvt/tags, 'summary')"/><br />
-                    <br/>
-                Result:<br/>
-                Vulnerability detected.
+                <p>
+                Vulnerability was detected according to the Vulnerability Detection Method.
+                </p>
               </xsl:when>
               <xsl:otherwise>
-                Result:
                 <pre>
                   <xsl:call-template name="wrap">
                     <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
@@ -19034,24 +19068,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </div>
-  <xsl:variable name="cve_ref">
-    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
-      <xsl:value-of select="nvt/cve/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="bid_ref">
-    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
-      <xsl:value-of select="nvt/bid/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="cert_ref" select="nvt/cert"/>
-  <xsl:variable name="xref">
-    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
-      <xsl:value-of select="nvt/xref/text()"/>
-    </xsl:if>
-  </xsl:variable>
 
   <xsl:if test="gsa:newstyle-nvt (nvt)">
+
     <div class="issue_box_box">
       <b>Impact</b>
       <xsl:call-template name="structured-text">
