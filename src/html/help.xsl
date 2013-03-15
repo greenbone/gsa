@@ -161,6 +161,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </p>
 </xsl:template>
 
+<xsl:template name="hosts_note">
+  <p>
+    Note on <b>Hosts</b>:
+    <ul>
+      <li>
+        The hosts parameter is a comma-separated list of values.  Each value
+        can be
+        <ul>
+          <li>an IPv4 address (e.g. <tt>192.168.13.1</tt>)</li>
+          <li>a hostname (e.g. <tt>myhost1.domain</tt>)</li>
+          <li>an IPv4 address range in long format
+              (e.g. <tt>192.168.1.116-192.168.1.124</tt>)</li>
+          <li>an IPv4 address range in short format
+              (e.g. <tt>192.168.1.116-124</tt>)</li>
+          <li>an IPv4 address range in CIDR notation
+              (e.g. <tt>192.168.13.0/24</tt>)</li>
+          <li>an IPv6 address
+              (e.g. <tt>fe80::222:64ff:fe76:4cea</tt>).</li>
+        </ul>
+        These options can be mixed (e.g.
+        <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
+      </li>
+      <li>
+        The netmask in CIDR notation is limited to 20 (4095 hosts).
+      </li>
+      <li>
+        The Scanner currently expects IPv6 addresses to name a single host,
+        and always uses a netmask of 128 for IPv6 addresses.
+      </li>
+    </ul>
+  </p>
+</xsl:template>
+
 <xsl:template match="help">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -4492,36 +4525,8 @@ Public License instead of this License.
         Hit the button "Create Target" to submit the new target.
         The Targets page will be shown.
       </p>
-      <p>
-        Note on <b>Hosts</b>:
-        <ul>
-          <li>
-            The hosts parameter is a comma-separated list of values.  Each value
-            can be
-            <ul>
-              <li>an IPv4 address (e.g. <tt>192.168.13.1</tt>)</li>
-              <li>a hostname (e.g. <tt>myhost1.domain</tt>)</li>
-              <li>an IPv4 address range in long format
-                  (e.g. <tt>192.168.1.116-192.168.1.124</tt>)</li>
-              <li>an IPv4 address range in short format
-                  (e.g. <tt>192.168.1.116-124</tt>)</li>
-              <li>an IPv4 address range in CIDR notation
-                  (e.g. <tt>192.168.13.0/24</tt>)</li>
-              <li>an IPv6 address
-                  (e.g. <tt>fe80::222:64ff:fe76:4cea</tt>).</li>
-            </ul>
-            These options can be mixed (e.g.
-            <tt>192.168.13.1, myhost2.domain, 192.168.13.0/24</tt>).
-          </li>
-          <li>
-            The netmask in CIDR notation is limited to 20 (4095 hosts).
-          </li>
-          <li>
-            The Scanner currently expects IPv6 addresses to name a single host,
-            and always uses a netmask of 128 for IPv6 addresses.
-          </li>
-        </ul>
-      </p>
+
+      <xsl:call-template name="hosts_note"/>
 
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -6344,6 +6349,8 @@ Public License instead of this License.
           <td>Associated SMB credential, that can be clicked on to view details.</td>
         </tr>
       </table>
+
+      <xsl:call-template name="hosts_note"/>
 
       <h3>New Target</h3>
       <p>

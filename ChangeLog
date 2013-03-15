@@ -1,3 +1,10 @@
+2013-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/help.xsl (hosts_note): New named template ("Note on Hosts").
+	(new_target.html): Replace "Note on Hosts" text with template call for
+	including the text.
+	(targets.html): Add hosts_note template call.
+
 2013-03-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (result-detailed): In Product Detection Result
