@@ -1,3 +1,10 @@
+2013-03-15  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Further prepare for tabular pageable results view.
+
+	* src/html/omp.xsl (result-detailed): Moved all information from
+	the former colored box into the tabular elements. Added host.
+
 2013-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (hosts_note): New named template ("Note on Hosts").
