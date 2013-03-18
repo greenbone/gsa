@@ -18186,22 +18186,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
-  <xsl:if test="count (detection)">
-    <div class="issue_box_box">
-      Product detection result:
-      <xsl:call-template name="get_info_cpe_lnk">
-        <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
-      </xsl:call-template>
-      by <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
-          <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
-         </a>
-      <!-- TODO This needs a case for delta reports. -->
-      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Product detection results" style="margin-left:6px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-    </div>
-  </xsl:if>
   <div class="issue_box_box">
     <xsl:if test="$details-button = 1">
       <xsl:choose>
@@ -18333,16 +18317,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="substring-after (., '=')"/><br />
                 <br/>
               </xsl:if>
-              <xsl:if test="'impact' = substring-before (., '=')">
-                Impact:<br/>
-                <xsl:value-of select="substring-after (., '=')"/><br />
-                <br/>
-              </xsl:if>
-              <xsl:if test="'solution' = substring-before (., '=')">
-                Solution:<br/>
-                <xsl:value-of select="substring-after (., '=')"/><br />
-                <br/>
-              </xsl:if>
             </xsl:for-each>
             Result:<br/>
             Vulnerability detected.
@@ -18376,6 +18350,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
+  <!-- It is desirable to have the tags in a explicit structure so that
+       the sequence can be controlled. This would avoid several calls of
+       the for-each on nvt/tags, see below.
+  --> 
+  <xsl:for-each select="str:split (nvt/tags, '|')">
+    <xsl:if test="'impact' = substring-before (., '=')">
+      <div class="issue_box_box">
+        <b>Impact</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="substring-after (., '=')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
+  </xsl:for-each>
+
+  <xsl:for-each select="str:split (nvt/tags, '|')">
+    <xsl:if test="'solution' = substring-before (., '=')">
+      <div class="issue_box_box">
+        <b>Solution</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="substring-after (., '=')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
+  </xsl:for-each>
+
   <xsl:for-each select="str:split (nvt/tags, '|')">
     <xsl:if test="'insight' = substring-before (., '=')">
       <div class="issue_box_box">
@@ -18387,10 +18387,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:for-each>
 
+  <xsl:for-each select="str:split (nvt/tags, '|')">
+    <xsl:if test="'vuldetect' = substring-before (., '=')">
+      <div class="issue_box_box">
+        <b>Vulnerability Detection Method</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="substring-after (., '=')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
+  </xsl:for-each>
+
+  <xsl:if test="count (detection)">
+    <div class="issue_box_box">
+      <b>Product Detection Result</b>
+      <p>
+      <table>
+      <tr><td>Product:</td><td>
+      <xsl:call-template name="get_info_cpe_lnk">
+        <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
+      </xsl:call-template>
+      </td></tr>
+      <tr><td>Method:</td><td>
+      <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
+        <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
+        (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
+      </a>
+      </td></tr>
+      <tr><td>Details:</td><td>
+      <!-- TODO This needs a case for delta reports. -->
+      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+       title="Product detection results">
+        View details of product detection
+      </a>
+      </td></tr></table>
+      </p>
+    </div>
+  </xsl:if>
+
   <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
     <div class="issue_box_box">
       <b>References</b><br/>
 
+      <p>
       <table>
         <xsl:call-template name="ref_cve_list">
           <xsl:with-param name="cvelist" select="$cve_ref"/>
@@ -18405,6 +18444,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:with-param name="xreflist" select="$xref"/>
         </xsl:call-template>
       </table>
+      </p>
     </div>
   </xsl:if>
 

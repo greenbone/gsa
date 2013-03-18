@@ -1,5 +1,15 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15630. Patch by Jan-Oliver Wagner.
+
+	* src/html/omp.xsl (result-detailed): Moved insight, solution,
+	detection method into sub-boxes of their own.
+	Moved product detection result into a box of its own.
+	Renamed tag "detection" to "vuldetect", because "detection"
+	is already used by detection scripts.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15628. Patch by Jan-Oliver Wagner.
 
 	* src/html/omp.xsl (structured-text): New. Very simple
