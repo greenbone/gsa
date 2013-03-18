@@ -1,3 +1,26 @@
+gsa 4.0+rc1 (2013-03-18)
+
+This is the first release candidate of the upcoming 4.0 release of the Greenbone
+Security Assistant (GSA). It is the web client that makes the full feature set
+of OpenVAS Manager available in a web browser.
+
+This release brings improvements to NVT, ovaldefs, dfn-cert and results details
+content and formatting and increased dependencies version for GnuTLS to 2.8 and
+libraries to 6.0 as well as various other fixes.
+
+Many thanks to everyone who has contributed to this release:
+Hani Benhabiles, Jan-Oliver Wagner, Timo Pollmeier, Matthew Mundell.
+
+Main changes since 4.0+beta5:
+* Add summary and detection sections in NVT details.
+* Adapt results details to NVT description content break-up.
+* ovaldefs and dfn-cert output and doc update.
+* Increase dependencies to GnuTLS 2.8 and libraries 6.0.
+* Notes on help documentation update.
+* URI encode filter terms in HTTP links.
+* Various small fixes.
+
+
 gsa 4.0+beta5 (2013-02-22)
 
 This is the fifth beta version of the upcoming 4.0 release of the Greenbone
