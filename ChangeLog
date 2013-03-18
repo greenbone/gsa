@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15663. Patch by Timo Pollmeier.
+
+	* src/html/omp.xsl (contents.html, glossary.html, ovaldefs.html): Fix
+	typos.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15653. Patch by Timo Pollmeier.
 
 	* src/html/omp.xsl (info/ovaldef, html-ovaldef-table): Remove
