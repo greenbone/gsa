@@ -1,5 +1,13 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15636. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (newstyle-nvt): New function.
+	(result-detailed): Check if nvt has newstyle tags and output results
+	accordingly.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15633. Patch by Hani Benhabiles.
 
 	* src/html/omp.xsl (get-nvt-tag): New function.
