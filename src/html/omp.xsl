@@ -148,6 +148,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </func:function>
 
+<func:function name="gsa:get-nvt-tag">
+    <xsl:param name="tags"/>
+    <xsl:param name="name"/>
+  <xsl:variable name="after">
+    <xsl:value-of select="substring-after (nvt/tags, concat ($name, '='))"/>
+  </xsl:variable>
+  <xsl:choose>
+      <xsl:when test="contains ($after, '|')">
+        <func:result select="substring-before ($after, '|')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <func:result select="$after"/>
+      </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <!-- Currently only a very simple formatting method to produce
@@ -18311,13 +18327,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="string-length(description) &lt; 2">
-            <xsl:for-each select="str:split (nvt/tags, '|')">
-              <xsl:if test="'summary' = substring-before (., '=')">
                 Summary:<br/>
-                <xsl:value-of select="substring-after (., '=')"/><br />
+                <xsl:value-of select="gsa:get-nvt-tag (nvt/tags, 'summary')"/><br />
                 <br/>
-              </xsl:if>
-            </xsl:for-each>
             Result:<br/>
             Vulnerability detected.
           </xsl:when>
@@ -18350,53 +18362,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
-  <!-- It is desirable to have the tags in a explicit structure so that
-       the sequence can be controlled. This would avoid several calls of
-       the for-each on nvt/tags, see below.
-  --> 
-  <xsl:for-each select="str:split (nvt/tags, '|')">
-    <xsl:if test="'impact' = substring-before (., '=')">
-      <div class="issue_box_box">
-        <b>Impact</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="substring-after (., '=')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
-  </xsl:for-each>
+  <div class="issue_box_box">
+    <b>Impact</b>
+    <xsl:call-template name="structured-text">
+      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
+    </xsl:call-template>
+  </div>
 
-  <xsl:for-each select="str:split (nvt/tags, '|')">
-    <xsl:if test="'solution' = substring-before (., '=')">
-      <div class="issue_box_box">
-        <b>Solution</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="substring-after (., '=')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
-  </xsl:for-each>
+  <div class="issue_box_box">
+    <b>Solution</b>
+    <xsl:call-template name="structured-text">
+      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
+    </xsl:call-template>
+  </div>
 
-  <xsl:for-each select="str:split (nvt/tags, '|')">
-    <xsl:if test="'insight' = substring-before (., '=')">
-      <div class="issue_box_box">
-        <b>Vulnerability Insight</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="substring-after (., '=')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
-  </xsl:for-each>
+  <div class="issue_box_box">
+    <b>Vulnerability Insight</b>
+    <xsl:call-template name="structured-text">
+      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
+    </xsl:call-template>
+  </div>
 
-  <xsl:for-each select="str:split (nvt/tags, '|')">
-    <xsl:if test="'vuldetect' = substring-before (., '=')">
-      <div class="issue_box_box">
-        <b>Vulnerability Detection Method</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="substring-after (., '=')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
-  </xsl:for-each>
+  <div class="issue_box_box">
+    <b>Vulnerability Detection Method</b>
+    <xsl:call-template name="structured-text">
+      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
+    </xsl:call-template>
+  </div>
 
   <xsl:if test="count (detection)">
     <div class="issue_box_box">

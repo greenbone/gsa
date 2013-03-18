@@ -1,5 +1,13 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15633. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (get-nvt-tag): New function.
+	(result-detailed): Replace multiple for loop iterations with get-nvt-tag
+	calls.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15630. Patch by Jan-Oliver Wagner.
 
 	* src/html/omp.xsl (result-detailed): Moved insight, solution,
