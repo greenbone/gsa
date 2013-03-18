@@ -13647,11 +13647,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="description">
+    <xsl:when test="description != 'NODESC'">
       <h2>Description</h2>
       <pre style="white-space:pre-wrap;"><xsl:value-of select="description"/></pre>
     </xsl:when>
-    <xsl:otherwise/>
+    <xsl:otherwise>
+      <br/>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 

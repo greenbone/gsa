@@ -1,6 +1,10 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
-	Backport r15592. Patch by Hani Benhabiles.
+	Backport r15595. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (nvt): Skip description in NODESC case.
+
+2013-03-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (nvt): Add sections for summary and detection tags.
 
