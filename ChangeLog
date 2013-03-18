@@ -1,3 +1,9 @@
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r15592. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (nvt): Add sections for summary and detection tags.
+
 2013-02-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_info): Validate info_type in capital letters
