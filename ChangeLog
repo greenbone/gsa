@@ -1,5 +1,14 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15665. Patch by Timo Pollmeier.
+
+	* src/html/omp.xsl (info/ovaldef): Use shorter date format "date".
+	(html-ovaldef-table): Shorten "Definition class" to "Def. class".
+
+	* src/html/help.xsl (ovaldefs.html): Add missing "Def. class".
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15663. Patch by Timo Pollmeier.
 
 	* src/html/help.xsl (contents.html, glossary.html, ovaldefs.html): Fix
