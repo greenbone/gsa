@@ -1,5 +1,14 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15669. Patch by Timo Pollmeier.
+
+	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
+	"Created" column.
+
+	* src/html/help.xsl (dfn_cert_advs.html): Add help for "Created" column.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15665. Patch by Timo Pollmeier.
 
 	* src/html/omp.xsl (info/ovaldef): Use shorter date format "date".
