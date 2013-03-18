@@ -1,5 +1,13 @@
 2013-03-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Post release version bump to 4.0+rc2.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
+2013-03-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Preparing the gsa 4.0+rc1 release.
 
 	* CHANGES: Updated.
