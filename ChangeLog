@@ -1,5 +1,11 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15597. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (nvt): Skip summary in NOSUMMARY case.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15595. Patch by Hani Benhabiles.
 
 	* src/html/omp.xsl (nvt): Skip description in NODESC case.
