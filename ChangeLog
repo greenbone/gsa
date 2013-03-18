@@ -1,5 +1,14 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15628. Patch by Jan-Oliver Wagner.
+
+	* src/html/omp.xsl (structured-text): New. Very simple
+	version that only can do paragraphs.
+	(result-detailed): Moved insight into a sub-box of its own
+	and use structured text formatting.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15621. Patch by Hani Benhabiles.
 
 	* src/html/omp.xsl (result-detailed): Output summary, insight, impact
