@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15634. Patch by Hani Benhabiles.
+
+	* src/html/gsad.xsl, src/html/help.xsl: Open www.greenbone.net and
+	www.openvas.org hyperlinks in new tab.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15636. Patch by Hani Benhabiles.
 
 	* src/html/omp.xsl (newstyle-nvt): New function.
