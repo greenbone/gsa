@@ -1,5 +1,15 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15653. Patch by Timo Pollmeier.
+
+	* src/html/omp.xsl (info/ovaldef, html-ovaldef-table): Remove
+	"deprecated" column, add "status" column in its place.
+
+	* src/html/help.xsl (ovaldefs.html): Remove text for "deprecated",
+	add text for "status".
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15647. Patch by Hani Benhabiles.
 
 	* src/html/omp.xsl (info/nvt, get_info_nvt_lnk): Use filter term and id

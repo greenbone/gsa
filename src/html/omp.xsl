@@ -11879,17 +11879,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:choose>
-          <xsl:when test="deprecated = '0'">
-            No
-          </xsl:when>
-          <xsl:when test="deprecated = '1'">
-            Yes
-          </xsl:when>
-          <xsl:when test="deprecated = ''">
-            N/A
+          <xsl:when test="status != ''">
+            <xsl:value-of select="status"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="version"/>
+            N/A
           </xsl:otherwise>
         </xsl:choose>
       </td>
@@ -12490,8 +12484,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Deprecated</xsl:with-param>
-                <xsl:with-param name="name">deprecated</xsl:with-param>
+                <xsl:with-param name="head">Status</xsl:with-param>
+                <xsl:with-param name="name">status</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
               </xsl:call-template>
