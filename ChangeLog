@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15721. Patch by Jan-Oliver Wagner.
+
+	* CMakeLists.txt: Increased dependency to gnutls from 2.2 to 2.8.
+	Increased dependency to openvas-libraries from 5.0.0 to 6.0.0.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15694. Patch by Timo Pollmeier.
 
 	* src/html/help.xsl (hosts_note): New named template ("Note on Hosts").
