@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15643. Patch by Jan-Oliver Wagner.
+
+	* src/html/omp.xsl (nvt): Renamed tag detection to vuldetect,
+	made section titles case-consistent.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15640. Patch by Timo Pollmeier.
 
 	* src/html/help.xsl (ovaldefs.html): Change help for table rows
