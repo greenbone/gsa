@@ -7418,8 +7418,12 @@ Public License instead of this License.
           <td>Whether the definition is deprecated.</td>
         </tr>
         <tr class="odd">
-          <td>Title</td>
-          <td>The title or short description of the definition.</td>
+          <td>Created</td>
+          <td>The date the definition was created.</td>
+        </tr>
+        <tr>
+          <td>Modified</td>
+          <td>The date the definition was last modified.</td>
         </tr>
       </table>
 
