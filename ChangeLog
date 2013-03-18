@@ -1,5 +1,14 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15694. Patch by Timo Pollmeier.
+
+	* src/html/help.xsl (hosts_note): New named template ("Note on Hosts").
+	(new_target.html): Replace "Note on Hosts" text with template call for
+	including the text.
+	(targets.html): Add hosts_note template call.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15678. Patch by Matthew Mundell.
 
 	* src/html/omp.xsl: URI encode filter strings in GET links, as they may
