@@ -373,12 +373,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a href="/help/{$type}s.html?token={/envelope/token}#edit{$type}" title="Help: Edit {$cap-type}">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="{$cap-type}s" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
   </a>
   <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{$cap-type} Details" style="margin-left:3px;">
       <img src="/img/details.png" border="0" alt="Details"/>
     </a>
@@ -450,7 +450,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type}&amp;{$type}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}{$extra-params-details}&amp;token={/envelope/token}"
      title="{$cap-type} Details" style="margin-left:3px;">
     <img src="/img/details.png" border="0" alt="Details"/>
   </a>
@@ -464,7 +464,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="Edit {$cap-type}"
              style="margin-left:3px;">
             <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -497,7 +497,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Export {$cap-type}"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export"/>
@@ -1296,7 +1296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="../../delta">
             <tr>
               <td>Report 1:</td>
-              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={/envelope/params/filter_id}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
+              <td><a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (/envelope/params/filter_id, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/@id"/></a></td>
             </tr>
             <tr>
               <td><b>Scan 1 started:</b></td>
@@ -1332,7 +1332,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>Report 2:</td>
               <td>
-                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={/envelope/params/filter_id}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
+                <a href="/omp?cmd=get_report&amp;report_id={report/delta/report/@id}&amp;overrides={report/filters/overrides}&amp;autofp={report/filters/autofp}&amp;filter={str:encode-uri (/envelope/params/filter_id, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="report/delta/report/@id"/></a>
               </td>
             </tr>
             <tr>
@@ -3920,7 +3920,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </div>
           <b>
-            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;overrides={../apply_overrides}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;token={/envelope/token}">
               <xsl:value-of select="name"/>
             </a>
           </b>
@@ -3954,7 +3954,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td style="text-align:right;font-size:10px;">
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={../filters/term}&amp;filt_id={../filters/@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
+              <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={../filters/@id}&amp;overrides={../apply_overrides}&amp;token={/envelope/token}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
             </xsl:when>
@@ -4172,7 +4172,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Credential">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_lsc_credentials&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_lsc_credentials&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Credentials" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Credentials"/>
       </a>
@@ -4465,7 +4465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -4638,7 +4638,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Agent">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_agents&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Agents" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Agents"/>
       </a>
@@ -4824,7 +4824,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -4854,7 +4854,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Download installer package" style="margin-left:3px;">
         <img src="/img/agent.png" border="0" alt="Download Installer"/>
       </a>
-      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}"
+      <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}"
          title="Verify Agent"
          style="margin-left:3px;">
         <img src="/img/verify.png" border="0" alt="Verify Agent"/>
@@ -4996,7 +4996,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Alert">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_alerts&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_alerts&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Alerts" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Alerts"/>
       </a>
@@ -5894,7 +5894,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -6338,7 +6338,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <xsl:call-template name="wizard-icon"/>
-      <a href="/omp?cmd=new_{$type}&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New {$cap-type}">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -6347,7 +6347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_{$type}s&amp;filter={filters/term}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_{$type}s&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
            title="Export {$filtered-count} filtered {$cap-type}s as XML"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -6449,7 +6449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="7">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_{$type}s&amp;filter={filters/term}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -6491,11 +6491,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     title="Help: {$cap-type} Details">
     <img src="/img/help.png"/>
   </a>
-  <a href="/omp?cmd=new_{$type}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
      title="New {$cap-type}">
     <img src="/img/new.png" border="0" style="margin-left:3px;"/>
   </a>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
      title="{$cap-type}s" style="margin-left:3px;">
     <img src="/img/list.png" border="0" alt="{$cap-type}s"/>
   </a>
@@ -6526,7 +6526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                style="margin-left:3px;"/>
         </xsl:when>
         <xsl:otherwise>
-          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="Edit {$cap-type}">
             <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
           </a>
@@ -6538,7 +6538,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noexport">
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Export {$cap-type} XML"
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -6599,7 +6599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -6772,7 +6772,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Filter">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_filters&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Filters" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Filters"/>
       </a>
@@ -7001,7 +7001,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Target">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_targets&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_targets&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Targets" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Targets"/>
       </a>
@@ -7522,7 +7522,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={../filters/term}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -7807,7 +7807,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Scan Config">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Scan Config" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Scan Config"/>
       </a>
@@ -7879,7 +7879,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Import Scan Config">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Scan Config" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Scan Config"/>
       </a>
@@ -9027,11 +9027,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Scan Config Details">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
          title="New Scan Config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
-      <a href="/omp?cmd=get_configs&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Scan Configs" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Scan Configs"/>
       </a>
@@ -9058,13 +9058,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  style="margin-left:3px;"/>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                title="Edit Scan Config">
               <img src="/img/edit.png" border="0" style="margin-left:3px;"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            title="Export Scan Config XML"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -9247,7 +9247,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: Scan Configs">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=new_config&amp;filter={filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="New Scan Config">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
@@ -9256,7 +9256,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/list.png" border="0" alt="Return"/>
       </a>
       <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-        <a href="/omp?cmd=export_configs&amp;filter={filters/term}&amp;token={/envelope/token}"
+        <a href="/omp?cmd=export_configs&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
            title="Export {config_count/filtered} filtered Scan Configs as XML"
            style="margin-left:3px;">
           <img src="/img/download.png" border="0" alt="Export XML"/>
@@ -9377,7 +9377,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -9599,7 +9599,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Schedule">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_schedules&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_schedules&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Schedules" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Schedules"/>
       </a>
@@ -10758,7 +10758,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -11085,7 +11085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Slave">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_slaves&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Slaves" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Slaves"/>
       </a>
@@ -11312,7 +11312,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={../filters/term}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -11650,7 +11650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="max_cvss"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={../name}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
         title="CPE Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -11754,7 +11754,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="cvss"/>
       </td>
       <td rowspan="2">
-        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={../name}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
           title="CVE Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
@@ -11837,7 +11837,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cvss_base"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
         title="NVT Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -11918,7 +11918,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <td rowspan="2">
-        <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={../name}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
           title="OVAL Definition Details" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="Details"/>
         </a>
@@ -11972,7 +11972,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={../name}&amp;filter={../../filters/term}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={../name}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
         title="DFN-CERT Advisory Details" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Details"/>
       </a>
@@ -11982,7 +11982,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="get_info_cpe_lnk">
   <xsl:param name="cpe"/>
-  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$cpe}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
     title="Details">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$cpe"/>
@@ -11997,11 +11997,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="gsa_token"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_name={normalize-space($cve)}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
          title="Details"><xsl:value-of select="normalize-space($cve)"/></a>
     </xsl:otherwise>
   </xsl:choose>
@@ -12014,11 +12014,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="tooltip"/>
   <xsl:choose>
     <xsl:when test="$gsa_token = ''">
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={/envelope/token}"
          title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={../../filters/term}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
+      <a href="/omp?cmd=get_nvts&amp;oid={$oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;token={$gsa_token}"
          title="{$tooltip}"><xsl:value-of select="normalize-space($nvt)"/></a>
     </xsl:otherwise>
   </xsl:choose>
@@ -12026,7 +12026,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="get_info_ovaldef_lnk">
   <xsl:param name="ovaldef"/>
-  <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={$ovaldef}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;info_name={$ovaldef}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
     title="Details">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$ovaldef"/>
@@ -12038,7 +12038,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="get_info_dfn_cert_adv_lnk">
   <xsl:param name="dfn_cert_adv"/>
-  <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={$dfn_cert_adv}&amp;details=1&amp;filter={../../filters/term}&amp;token={/envelope/token}"
+  <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;info_name={$dfn_cert_adv}&amp;details=1&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;token={/envelope/token}"
     title="Details">
      <xsl:call-template name="wrap" disable-output-escaping="yes">
       <xsl:with-param name="string" select="$dfn_cert_adv"/>
@@ -12144,7 +12144,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="6">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -12284,7 +12284,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="6">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -12408,7 +12408,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="6">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -12524,7 +12524,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="2">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -12624,7 +12624,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td class="footnote" colspan="2">
                 (Applied filter:
-                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={filters/term}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
+                <a class="footnote" href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (filters/term, true ())}&amp;first={info/@start}&amp;max={info/@max}&amp;token={/envelope/token}">
                   <xsl:value-of select="filters/term"/>
                 </a>)
               </td>
@@ -12742,7 +12742,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CVE (CVE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="CVE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CVE"/>
       </a>
@@ -13044,7 +13044,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: CPE (CPE Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="CPE" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="CPE"/>
       </a>
@@ -13193,7 +13193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: OVALDEF (OVAL Definition Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
         title="OVAL definitions" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="OVAL"/>
       </a>
@@ -13428,7 +13428,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         title="Help: DFN_CERT_ADV (DFN-CERT Advisory Details)">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={/envelope/params/filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;token={/envelope/token}"
         title="DFN-CERT Advisories" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="OVAL"/>
       </a>
@@ -13765,7 +13765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: NVT Details">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
         title="NVT" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="NVT"/>
       </a>
@@ -13790,7 +13790,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Note">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_notes&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_notes&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Notes" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Notes"/>
       </a>
@@ -14778,7 +14778,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Override">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_overrides&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_overrides&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Overrides" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Overrides"/>
       </a>
@@ -16411,7 +16411,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Port List">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_port_lists&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Port Lists" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Port Lists"/>
       </a>
@@ -16500,7 +16500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: New Report Format">
         <img src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_report_formats&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Report Formats" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Report Formats"/>
       </a>
@@ -16695,7 +16695,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{$class}">
     <td>
       <b>
-        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={../filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
+        <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
         </a>
       </b>
@@ -16733,7 +16733,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'report_format'"/>
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
-      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={../filters/term}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Verify Report Format"
          style="margin-left:3px;">
         <img src="/img/verify.png" border="0" alt="Verify Report Format"/>
@@ -17706,42 +17706,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Note"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -17939,42 +17939,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
         <xsl:choose>
           <xsl:when test="$next='get_result' and $delta = 1">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
-            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;token={/envelope/token}"
                title="Edit Override"
                style="margin-left:3px;">
               <img src="/img/edit.png" border="0" alt="Edit"/>
@@ -18119,10 +18119,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={/envelope/params/report_id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={/envelope/params/report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
@@ -18285,7 +18285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise>
           <div class="float_right" style="text-align:right">
-            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
                title="Result Details" style="margin-left:3px;">
               <img src="/img/details.png" border="0" alt="Details"/>
             </a>
@@ -18305,7 +18305,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -18317,13 +18317,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                title="Add Note" style="margin-left:3px;">
               <img src="/img/new_note.png" border="0" alt="Add Note"/>
             </a>
@@ -18343,7 +18343,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="delta">
           </xsl:when>
           <xsl:when test="$result-details and original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={../../../../report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
@@ -18355,13 +18355,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </xsl:when>
           <xsl:when test="original_threat and string-length (original_threat)">
-            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={original_threat}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;threat={threat}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;token={/envelope/token}"
                title="Add Override" style="margin-left:3px;">
               <img src="/img/new_override.png" border="0" alt="Add Override"/>
             </a>
@@ -18477,7 +18477,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td></tr>
       <tr><td>Details:</td><td>
       <!-- TODO This needs a case for delta reports. -->
-      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Product detection results">
         View details of product detection
       </a>
@@ -19872,11 +19872,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newtask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Wizard">
       <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>
@@ -20136,7 +20136,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="Help: New Task">
       <img src="/img/help.png"/>
     </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="Tasks" style="margin-left:3px;">
       <img src="/img/list.png" border="0" alt="Tasks"/>
     </a>

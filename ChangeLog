@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15678. Patch by Matthew Mundell.
+
+	* src/html/omp.xsl: URI encode filter strings in GET links, as they may
+	contain special characters like +.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15669. Patch by Timo Pollmeier.
 
 	* src/html/omp.xsl (info/dfn_cert_adv, html-dfn_cert_adv-table): Add
