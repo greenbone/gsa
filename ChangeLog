@@ -1,3 +1,20 @@
+2013-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add observer groups to task details and task edit.
+
+	* src/gsad.c (init_validator): Remove "groups".  Add group observer
+	rules.
+	(params_append_mhd): Add group_id_optional case.
+
+	* src/gsad_omp.c (edit_task): Get groups too.  Add groups param to XML.
+	(save_task_omp): Add group "+" button handling.  Add groups to OBSERVERS
+	in MODIFY_TASK.  Prepare command format string beforehand, otherwise XML
+	alerts and observer groups are escaped.
+
+	* src/html/omp.xsl (task [details]): Add observer groups.
+	(group [newtask], new-task-group-select): New templates.
+	(html-edit-task-form): Add observer groups field.
+
 2013-03-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Increased dependency to gnutls from 2.2 to 2.8.

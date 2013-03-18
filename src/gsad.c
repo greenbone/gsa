@@ -748,7 +748,6 @@ init_validator ()
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  modify_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
-  openvas_validator_add (validator, "groups",       "^[-_ [:alnum:],]*$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
@@ -761,6 +760,7 @@ init_validator ()
   openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
   openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
@@ -877,6 +877,10 @@ init_validator ()
   openvas_validator_alias (validator, "from_file",          "boolean");
   openvas_validator_alias (validator, "force_wizard",       "boolean");
   openvas_validator_alias (validator, "group_id",           "id");
+  openvas_validator_alias (validator, "group_id_optional",  "id_optional");
+  openvas_validator_alias (validator, "group_id_optional:name",  "number");
+  openvas_validator_alias (validator, "group_id_optional:value", "id_optional");
+  openvas_validator_alias (validator, "groups",             "optional_number");
   openvas_validator_alias (validator, "host_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "host_first_result",  "first_result");
   openvas_validator_alias (validator, "host_max_results",   "max_results");
@@ -925,6 +929,7 @@ init_validator ()
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "show_closed_cves",  "boolean");
+  openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "users",        "observers");
@@ -1084,6 +1089,8 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "method_data:", strlen ("method_data:")) == 0)
       || (strncmp (name, "nvt:", strlen ("nvt:")) == 0)
       || (strncmp (name, "alert_id_optional:", strlen ("alert_id_optional:"))
+          == 0)
+      || (strncmp (name, "group_id_optional:", strlen ("group_id_optional:"))
           == 0))
     {
       param_t *param;

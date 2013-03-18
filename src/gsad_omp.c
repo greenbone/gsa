@@ -2054,7 +2054,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
   int socket;
   gchar *html;
   const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
-  const char *overrides, *alerts;
+  const char *overrides, *alerts, *groups;
   int apply_overrides;
 
   task_id = params_value (params, "task_id");
@@ -2064,6 +2064,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
   sort_order = params_value (params, "sort_order");
   overrides = params_value (params, "overrides");
   alerts = params_value (params, "alerts");
+  groups = params_value (params, "groups");
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
@@ -2104,6 +2105,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "%s"
                             "%s"
                             "%s"
+                            "%s"
                             "</commands>",
                             task_id,
                             command_enabled (credentials, "GET_ALERTS")
@@ -2118,6 +2120,9 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                              : "",
                             command_enabled (credentials, "GET_SLAVES")
                              ? "<get_slaves/>"
+                             : "",
+                            command_enabled (credentials, "GET_GROUPS")
+                             ? "<get_groups/>"
                              : "")
       == -1)
     {
@@ -2140,6 +2145,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                           "<task id=\"%s\"/>"
                           "<user>%s</user>"
                           "<alerts>%s</alerts>"
+                          "<groups>%s</groups>"
                           /* Page that follows. */
                           "<next>%s</next>"
                           /* Passthroughs. */
@@ -2150,6 +2156,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                           task_id,
                           credentials->username,
                           alerts ? alerts : "1",
+                          groups ? groups : "1",
                           next,
                           refresh_interval ? refresh_interval : "",
                           sort_field,
@@ -2215,12 +2222,12 @@ edit_task_omp (credentials_t * credentials, params_t *params)
 char *
 save_task_omp (credentials_t * credentials, params_t *params)
 {
-  gchar *html, *response;
+  gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
   int ret;
-  params_t *alerts;
-  GString *alert_element;
+  params_t *alerts, *groups;
+  GString *alert_element, *group_elements;
   entity_t entity;
 
   submit = params_value (params, "submit_plus");
@@ -2237,6 +2244,23 @@ save_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "alerts", "2");
+      return edit_task_omp (credentials, params);
+    }
+
+  submit = params_value (params, "submit_plus_group");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "groups");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "groups", "2");
       return edit_task_omp (credentials, params);
     }
 
@@ -2281,45 +2305,66 @@ save_task_omp (credentials_t * credentials, params_t *params)
                                   param->value ? param->value : "");
     }
 
+  group_elements = g_string_new ("");
+  groups = params_values (params, "group_id_optional:");
+  if (groups)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, groups);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (group_elements,
+                                  "<group id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+
+
+  format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
+                            "<name>%%s</name>"
+                            "<comment>%%s</comment>"
+                            "%s"
+                            "<schedule id=\"%%s\"/>"
+                            "<slave id=\"%%s\"/>"
+                            "<preferences>"
+                            "<preference>"
+                            "<scanner_name>max_checks</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>max_hosts</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>in_assets</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "</preferences>"
+                            "<observers>%%s%s</observers>"
+                            "</modify_task>",
+                            alert_element->str,
+                            group_elements->str);
   response = NULL;
   entity = NULL;
   ret = omp (credentials,
              &response,
              &entity,
-             "<modify_task task_id=\"%s\">"
-             "<name>%s</name>"
-             "<comment>%s</comment>"
-             "%s"
-             "<schedule id=\"%s\"/>"
-             "<slave id=\"%s\"/>"
-             "<preferences>"
-             "<preference>"
-             "<scanner_name>max_checks</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>max_hosts</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "<preference>"
-             "<scanner_name>in_assets</scanner_name>"
-             "<value>%s</value>"
-             "</preference>"
-             "</preferences>"
-             "<observers>%s</observers>"
-             "</modify_task>",
+             format,
              task_id,
              name,
              comment,
-             alert_element->str,
              schedule_id,
              slave_id,
              max_checks,
              max_hosts,
              strcmp (in_assets, "0") ? "yes" : "no",
              observers);
+  g_free (format);
 
   g_string_free (alert_element, TRUE);
+  g_string_free (group_elements, TRUE);
 
   switch (ret)
     {

@@ -2780,7 +2780,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <tr>
               <td>Observers:</td>
               <td>
-                <xsl:value-of select="observers"/>
+                <xsl:value-of select="observers/text()"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Observer Groups:</td>
+              <td>
+                <xsl:for-each select="observers/group">
+                  <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                  <xsl:if test="position() != last()">, </xsl:if>
+                </xsl:for-each>
               </td>
             </tr>
           </xsl:otherwise>
@@ -2997,6 +3008,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="alert" mode="newtask">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template match="group" mode="newtask">
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
@@ -3715,7 +3730,97 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Observers (optional)</td>
             <td>
               <input type="text" name="observers" size="30" maxlength="400"
-                     value="{gsa:param-or ('observers', commands_response/get_tasks_response/task/observers)}"/>
+                     value="{gsa:param-or ('observers', commands_response/get_tasks_response/task/observers/text())}"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Observer Groups (optional)</td>
+            <td>
+              <xsl:variable name="groups"
+                            select="commands_response/get_groups_response/group"/>
+              <xsl:choose>
+                <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']) &gt; 0">
+                  <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']/value">
+                    <select name="group_id_optional:{position ()}">
+                      <xsl:variable name="group_id" select="text ()"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($group_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$groups">
+                        <xsl:choose>
+                          <xsl:when test="@id = $group_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:for-each select="commands_response/get_tasks_response/task/observers/group">
+                    <select name="group_id_optional:{position ()}">
+                      <xsl:variable name="group_id" select="@id"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($group_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$groups">
+                        <xsl:choose>
+                          <xsl:when test="@id = $group_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:variable name="count">
+                <xsl:variable name="params"
+                              select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+                <xsl:choose>
+                  <xsl:when test="$params &gt; 0">
+                    <xsl:value-of select="$params"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="count (commands_response/get_tasks_response/task/observers/group)"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:call-template name="new-task-group-select">
+                <xsl:with-param name="groups" select="commands_response/get_groups_response"/>
+                <xsl:with-param name="count" select="groups - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <input type="submit" name="submit_plus_group" value="+"/>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/groups)">
+                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="groups" value="{$count + 1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
           <tr>
@@ -20541,6 +20646,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <br/>
     <xsl:call-template name="new-task-alert-select">
       <xsl:with-param name="alerts" select="$alerts"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="new-task-group-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="groups" select="get_groups_response"/>
+  <select name="group_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$groups/group"
+                         mode="newtask"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-task-group-select">
+      <xsl:with-param name="groups" select="$groups"/>
       <xsl:with-param name="count" select="$count - 1"/>
       <xsl:with-param name="position" select="$position + 1"/>
     </xsl:call-template>
