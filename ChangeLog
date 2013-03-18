@@ -1,5 +1,12 @@
 2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	Backport r15647. Patch by Hani Benhabiles.
+
+	* src/html/omp.xsl (info/nvt, get_info_nvt_lnk): Use filter term and id
+	returned in response instead of envelope params.
+
+2013-03-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	Backport r15643. Patch by Jan-Oliver Wagner.
 
 	* src/html/omp.xsl (nvt): Renamed tag detection to vuldetect,
