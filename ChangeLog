@@ -1,3 +1,13 @@
+2013-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add observer groups to task details and task edit.
+
+	* src/gsad_omp.c (new_task): Get groups for dropdown.
+	(create_task_omp): Add group "+" button handling.  Add groups to OBSERVERS
+	in CREATE_TASK.
+
+	* src/html/omp.xsl (new_task): Add observer groups field.
+
 2013-03-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add observer groups to task details and task edit.

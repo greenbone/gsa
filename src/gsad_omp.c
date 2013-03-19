@@ -1689,6 +1689,37 @@ new_task (credentials_t * credentials, const char *message, params_t *params)
         }
     }
 
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      /* Get groups for Observer Groups. */
+
+      if (openvas_server_send (&session,
+                               "<get_groups/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting group list. "
+                               "The current list of groups is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting group list. "
+                               "The current list of groups is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
+
   if (message)
     g_string_append_printf (xml, GSAD_MESSAGE_INVALID, message, "Create Task");
   g_string_append_printf (xml,
@@ -1865,8 +1896,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   const char *name, *comment, *config_id, *target_id;
   const char *slave_id, *schedule_id, *max_checks, *max_hosts, *observers;
   const char *in_assets, *submit;
-  params_t *alerts;
-  GString *alert_element;
+  params_t *alerts, *groups;
+  GString *alert_element, *group_element;
 
   submit = params_value (params, "submit_plus");
   if (submit && (strcmp (submit, "+") == 0))
@@ -1882,6 +1913,23 @@ create_task_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "alerts", "2");
+      return new_task_omp (credentials, params);
+    }
+
+  submit = params_value (params, "submit_plus_group");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "groups");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "groups", "2");
       return new_task_omp (credentials, params);
     }
 
@@ -1906,6 +1954,8 @@ create_task_omp (credentials_t * credentials, params_t *params)
   CHECK (max_checks);
   CHECK (max_hosts);
   CHECK (observers);
+
+  // TODO: Convert to new style that calls "omp", so that XML escaping is done.
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -1945,6 +1995,22 @@ create_task_omp (credentials_t * credentials, params_t *params)
                                   param->value ? param->value : "");
     }
 
+  group_element = g_string_new ("");
+  groups = params_values (params, "group_id_optional:");
+  if (groups)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, groups);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (group_element,
+                                  "<group id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+
   if (slave_id == NULL || strcmp (slave_id, "--") == 0)
     slave_element = g_strdup ("");
   else
@@ -1973,7 +2039,7 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               "<value>%s</value>"
                               "</preference>"
                               "</preferences>"
-                              "<observers>%s</observers>"
+                              "<observers>%s%s</observers>"
                               "</create_task>",
                               config_id,
                               schedule_element,
@@ -1985,10 +2051,12 @@ create_task_omp (credentials_t * credentials, params_t *params)
                               max_checks,
                               max_hosts,
                               strcmp (in_assets, "0") ? "yes" : "no",
-                              observers);
+                              observers,
+                              group_element->str);
 
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
+  g_string_free (group_element, TRUE);
   g_free (slave_element);
 
   if (ret == -1)

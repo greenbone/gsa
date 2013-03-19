@@ -20868,6 +20868,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
+          <td>Observer Groups (optional)</td>
+          <td>
+            <xsl:variable name="groups"
+                          select="get_groups_response/group"/>
+            <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
+              <select name="{name}">
+                <xsl:variable name="group_id" select="value"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($group_id) &gt; 0">
+                    <option value="0">--</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="0" selected="1">--</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:for-each select="$groups">
+                  <xsl:choose>
+                    <xsl:when test="@id = $group_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+              <br/>
+            </xsl:for-each>
+            <xsl:variable name="count"
+                          select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+            <xsl:call-template name="new-task-group-select">
+              <xsl:with-param name="groups" select="get_groups_response"/>
+              <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+              <xsl:with-param name="position" select="$count + 1"/>
+            </xsl:call-template>
+
+            <xsl:choose>
+              <xsl:when test="string-length (/envelope/params/groups)">
+                <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="groups" value="{1}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <input type="submit" name="submit_plus_group" value="+"/>
+          </td>
+        </tr>
+        <tr>
           <td>Add results to Asset Management</td>
           <td>
             <xsl:variable name="yes" select="/envelope/params/in_assets"/>
