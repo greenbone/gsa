@@ -536,6 +536,7 @@ init_validator ()
                          "|(delete_lsc_credential)"
                          "|(delete_note)"
                          "|(delete_override)"
+                         "|(delete_permission)"
                          "|(delete_port_list)"
                          "|(delete_port_range)"
                          "|(delete_report)"
@@ -597,6 +598,8 @@ init_validator ()
                          "|(export_omp_doc)"
                          "|(export_override)"
                          "|(export_overrides)"
+                         "|(export_permission)"
+                         "|(export_permissions)"
                          "|(export_port_list)"
                          "|(export_port_lists)"
                          "|(export_preference_file)"
@@ -634,6 +637,8 @@ init_validator ()
                          "|(get_nvts)"
                          "|(get_override)"
                          "|(get_overrides)"
+                         "|(get_permission)"
+                         "|(get_permissions)"
                          "|(get_port_list)"
                          "|(get_port_lists)"
                          "|(get_protocol_doc)"
@@ -811,11 +816,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -918,6 +923,7 @@ init_validator ()
   openvas_validator_alias (validator, "override_result_uuid", "override_result_id");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "password:name", "preference_name");
+  openvas_validator_alias (validator, "permission_id", "id");
   openvas_validator_alias (validator, "port_manual",       "port");
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
@@ -1616,6 +1622,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_lsc_credential)
   ELSE (delete_note)
   ELSE (delete_override)
+  ELSE (delete_permission)
   ELSE (delete_port_list)
   ELSE (delete_port_range)
   ELSE (delete_report)
@@ -1939,6 +1946,14 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_overrides_omp (credentials, params, content_type,
                                  content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_permission"))
+    return export_permission_omp (credentials, params, content_type,
+                                  content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_permissions"))
+    return export_permissions_omp (credentials, params, content_type,
+                                   content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_port_list"))
     return export_port_list_omp (credentials, params, content_type,
                                  content_disposition, response_size);
@@ -2028,6 +2043,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_notes)
   ELSE (get_override)
   ELSE (get_overrides)
+  ELSE (get_permission)
+  ELSE (get_permissions)
   ELSE (get_port_list)
   ELSE (get_port_lists)
 

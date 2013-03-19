@@ -192,6 +192,14 @@ char * export_note_omp (credentials_t *, params_t *, enum content_type *,
 char * export_notes_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *);
 
+char * delete_permission_omp (credentials_t *, params_t *);
+char * export_permission_omp (credentials_t *, params_t *, enum content_type *,
+                              char **, gsize *);
+char * export_permissions_omp (credentials_t *, params_t *, enum content_type *,
+                               char **, gsize *);
+char * get_permission_omp (credentials_t *, params_t *);
+char * get_permissions_omp (credentials_t *, params_t *);
+
 char * create_port_list_omp (credentials_t *, params_t *);
 char * create_port_range_omp (credentials_t *, params_t *);
 char * new_port_list_omp (credentials_t *, params_t *);

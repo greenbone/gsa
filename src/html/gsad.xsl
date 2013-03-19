@@ -272,6 +272,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="delete_permission_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Permission'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="delete_port_list_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -806,6 +814,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_overrides/commands_response/modify_override_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_permissions/delete_permission_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_port_lists/create_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_port_lists/create_port_list_response"
@@ -1097,7 +1107,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li><a href="/omp?cmd=get_slaves&amp;token={/envelope/token}">Slaves</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
-        <li class="last"><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+        <li><a href="/omp?cmd=get_agents&amp;token={/envelope/token}">Agents</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+        <li class="last"><a href="/omp?cmd=get_permissions&amp;token={/envelope/token}">Permissions</a></li>
       </xsl:if>
      </ul>
     </li>

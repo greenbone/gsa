@@ -131,6 +131,8 @@ static char *get_overrides (credentials_t *, params_t *, const char *);
 static char *get_override (credentials_t *, params_t *, const char *,
                            const char *);
 
+static char *get_permissions (credentials_t *, params_t *, const char *);
+
 static char *get_port_list (credentials_t *, params_t *, const char *);
 
 static char *get_port_lists (credentials_t *, params_t *, const char *);
@@ -582,6 +584,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_overrides") == 0)
     return get_overrides (credentials, params, response);
+
+  if (strcmp (next, "get_permissions") == 0)
+    return get_permissions (credentials, params, response);
 
   if (strcmp (next, "get_port_list") == 0)
     return get_port_list (credentials, params, response);
@@ -14340,6 +14345,125 @@ export_groups_omp (credentials_t * credentials, params_t *params,
                    gsize *content_length)
 {
   return export_many ("group", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
+
+/* Permissions. */
+
+/**
+ * @brief Get one permission, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_permission (credentials_t * credentials, params_t *params,
+                const char *extra_xml)
+{
+  return get_one ("permission", credentials, params, extra_xml, "alerts=\"1\"");
+}
+
+/**
+ * @brief Get one permission, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_permission_omp (credentials_t * credentials, params_t *params)
+{
+  return get_permission (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all permissions, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_permissions (credentials_t * credentials, params_t *params,
+                 const char *extra_xml)
+{
+  return get_many ("permission", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all permissions, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_permissions_omp (credentials_t * credentials, params_t *params)
+{
+  return get_permissions (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete a permission, get all permissions, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_permission_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("permission", credentials, params, 0,
+                          get_permissions);
+}
+
+/**
+ * @brief Export a permission.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   permission_id        UUID of permission.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Permission XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_permission_omp (credentials_t * credentials, params_t *params,
+                       enum content_type * content_type,
+                       char **content_disposition, gsize *content_length)
+{
+  return export_resource ("permission", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of permissions.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Permissions XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_permissions_omp (credentials_t * credentials, params_t *params,
+                        enum content_type * content_type,
+                        char **content_disposition, gsize *content_length)
+{
+  return export_many ("permission", credentials, params, content_type,
                       content_disposition, content_length);
 }
 

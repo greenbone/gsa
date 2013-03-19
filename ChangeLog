@@ -1,6 +1,31 @@
 2013-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Add observer groups to task details and task edit.
+	Add Permissions page.
+
+	* src/gsad.c (init_validator): Add new pages.  Add permission to
+	resource types.  Add permission_id.
+	(exec_omp_post, exec_omp_get): Add new pages.
+
+	* src/gsad_omp.c (next_page): Add get_permissions.
+	(get_permission, get_permission_omp, get_permissions)
+	(get_permissions_omp, delete_permission_omp, export_permission_omp)
+	(export_permissions_omp): New functions.
+
+	* src/gsad_omp.h: Add headers accordingly.
+
+	* src/html/gsad.xsl (delete_permission_response): New template.
+	(html-gsa-logo): Apply delete_permission_response indicator.
+	(html-gsa-navigation): Add Permissions to configuration menu.
+
+	* src/html/omp.xsl (gsa:join): New function.
+	(task): Display observer groups in observer icon too.
+	(delete_permission_response, permission, permission [details])
+	(get_permission, html-permissions-table, get_permissions): New
+	templates.
+
+2013-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add observer groups to New Task.
 
 	* src/gsad_omp.c (new_task): Get groups for dropdown.
 	(create_task_omp): Add group "+" button handling.  Add groups to OBSERVERS

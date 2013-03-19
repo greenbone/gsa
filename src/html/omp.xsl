@@ -881,6 +881,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:join">
+  <xsl:param name="nodes"/>
+  <func:result>
+    <xsl:for-each select="$nodes">
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
 <xsl:template name="build-levels">
   <xsl:param name="filters"></xsl:param>
   <xsl:for-each select="$filters">
@@ -4003,11 +4013,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
-              <xsl:when test="string-length (observers) &gt; 0">
+              <xsl:when test="string-length (observers) &gt; 0 or count (observers/group) &gt; 0">
+                <xsl:variable name="observer_groups">
+                  <xsl:choose>
+                    <xsl:when test="count (observers/group) &gt; 0">
+                      <xsl:value-of select="concat ('&#10;Task made visible for Groups: ', gsa:join (observers/group))"/>
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
                 <img src="/img/provide_view.png"
                      border="0"
-                     alt="Task made visible for: {observers}"
-                     title="Task made visible for: {observers}"/>
+                     alt="Task made visible for: {observers/text()}{$observer_groups}"
+                     title="Task made visible for: {observers/text()}{$observer_groups}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -16547,6 +16565,172 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END GROUPS MANAGEMENT -->
+
+<!-- BEGIN PERMISSIONS MANAGEMENT -->
+
+<xsl:template match="delete_permission_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">
+      Delete Permission
+    </xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="permission">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <div class="float_right">
+        <xsl:choose>
+          <xsl:when test="string-length (observers) &gt; 0">
+            <img src="/img/provide_view.png"
+                 border="0"
+                 alt="Permission made visible for: {observers}"
+                 title="Permission made visible for: {observers}"/>
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+      <b>
+        <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;filter={../filters/term}&amp;first={../permissions/@start}&amp;max={../permissions/@max}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="resource/type"/>
+    </td>
+    <td>
+      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+         title="Details">
+        <xsl:value-of select="resource/*/name"/>
+      </a>
+    </td>
+    <td>
+      <xsl:value-of select="subject/type"/>
+    </td>
+    <td>
+      <xsl:value-of select="subject/name"/>
+    </td>
+    <td>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Permission'"/>
+        <xsl:with-param name="type" select="'permission'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="permission" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Permission Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="cap-type" select="'Permission'"/>
+        <xsl:with-param name="type" select="'permission'"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:capitalise (subject/name)"/></td>
+          <td><xsl:value-of select="subject/name"/></td>
+        </tr>
+        <tr>
+          <td>Resource:</td>
+          <td>
+            <xsl:value-of select="resource/type"/>
+            <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+               title="Details">
+              <xsl:value-of select="resource/*/name"/>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="get_permission">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_permission_response"/>
+  <xsl:apply-templates select="get_permissions_response/permission"
+                       mode="details"/>
+</xsl:template>
+
+<xsl:template name="html-permissions-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'permission'"/>
+    <xsl:with-param name="cap-type" select="'Permission'"/>
+    <xsl:with-param name="resources-summary" select="permissions"/>
+    <xsl:with-param name="resources" select="permission"/>
+    <xsl:with-param name="count" select="count (permission)"/>
+    <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
+    <xsl:with-param name="full-count" select="permission_count/text ()"/>
+    <xsl:with-param name="headings" select="'Name|name Type|resource/type Resource|resource/type SType|subject/type Subject|subject/name'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!--     GET_PERMISSIONS -->
+
+<xsl:template match="get_permissions">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_permission_response"/>
+  <xsl:apply-templates select="create_permission_response"/>
+  <!-- The for-each makes the get_permissions_response the current node. -->
+  <xsl:for-each select="get_permissions_response | commands_response/get_permissions_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Permissions
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-permissions-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END PERMISSIONS MANAGEMENT -->
 
 <!-- BEGIN PORT_LISTS MANAGEMENT -->
 
