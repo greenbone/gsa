@@ -1,5 +1,10 @@
 2013-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (html-create-filter-form, html-edit-filter-form): Add
+	permission to available types.
+
+2013-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (list-window): Skip new icon for permissions.
 	(permission): Remove edit icon from actions.
 
