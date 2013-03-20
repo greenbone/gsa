@@ -16486,33 +16486,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Term</td>
+            <td valign="top" width="175">Users</td>
             <td>
-              <input type="text" name="term"
-                     value="{commands_response/get_groups_response/group/term}"
-                     size="50"
+              <input type="text" name="users"
+                     value="{commands_response/get_groups_response/group/users}"
+                     size="30"
                      maxlength="1000"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175">Type</td>
-            <td>
-              <select name="optional_resource_type">
-                <xsl:variable name="type">
-                  <xsl:value-of select="commands_response/get_groups_response/group/type"/>
-                </xsl:variable>
-                <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Group|Note|Override|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
-                  <xsl:choose>
-                    <xsl:when test=". = $type">
-                      <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{.}"><xsl:value-of select="."/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
             </td>
           </tr>
           <tr>
@@ -16537,6 +16516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_group">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_group_response"/>
+  <xsl:apply-templates select="commands_response/modify_group_response"/>
   <xsl:apply-templates select="get_groups_response/group" mode="details"/>
 </xsl:template>
 
@@ -16546,6 +16526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="delete_group_response"/>
   <xsl:apply-templates select="create_group_response"/>
+  <xsl:apply-templates select="modify_group_response"/>
   <!-- The for-each makes the get_groups_response the current node. -->
   <xsl:for-each select="get_groups_response | commands_response/get_groups_response">
     <xsl:choose>

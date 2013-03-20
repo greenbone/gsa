@@ -1,5 +1,22 @@
 2013-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Implement group editing.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Add
+	save_group and edit_group.
+
+	* src/gsad_omp.c (edit_group, edit_group_omp): New functions.
+	(CHECK): New define.
+	(save_group_omp): New function.
+
+	* src/html/omp.xsl (html-edit-group-form): Add actual fields.
+	(get_group, get_groups): Match MODIFY_GROUP response for error case.
+
+	* src/html/gsad.xsl (modify_group_response): New template.
+	(html-gsa-logo): Apply MODIFY_GROUP indicator icons.
+
+2013-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-filter-form, html-edit-filter-form): Add
 	permission to available types.
 

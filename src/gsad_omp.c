@@ -14308,6 +14308,36 @@ create_group_omp (credentials_t *credentials, params_t *params)
 #undef CHECK
 
 /**
+ * @brief Setup edit_group XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_group (credentials_t * credentials, params_t *params,
+            const char *extra_xml)
+{
+  return edit_resource ("group", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_group XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_group_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_group (credentials, params, NULL);
+}
+
+/**
  * @brief Export a group.
  *
  * @param[in]   credentials          Username and password for authentication.
@@ -14347,6 +14377,120 @@ export_groups_omp (credentials_t * credentials, params_t *params,
   return export_many ("group", credentials, params, content_type,
                       content_disposition, content_length);
 }
+
+/**
+ * @brief Check a param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Group");                                     \
+      html = edit_group (credentials, params, msg);                            \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a group, return the next page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_group_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response;
+  const char *group_id, *name, *comment, *next, *users;
+  entity_t entity;
+
+  group_id = params_value (params, "group_id");
+  name = params_value (params, "name");
+  comment = params_value (params, "comment");
+  users = params_value (params, "users");
+  next = params_value (params, "next");
+
+  CHECK (group_id);
+  CHECK (name);
+  CHECK (comment);
+  CHECK (next);
+  CHECK (users);
+
+  /* Modify the Group. */
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             "<modify_group group_id=\"%s\">"
+             "<name>%s</name>"
+             "<comment>%s</comment>"
+             "<users>%s</users>"
+             "</modify_group>",
+             group_id,
+             name,
+             comment,
+             users);
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a group. "
+                             "The group was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_groups");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a group. "
+                             "It is unclear whether the group has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_groups");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a group. "
+                             "It is unclear whether the group has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_groups");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a group. "
+                               "The group was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_groups");
+        }
+    }
+  else
+    html = edit_group (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
 
 
 /* Permissions. */

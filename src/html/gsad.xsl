@@ -424,6 +424,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="modify_group_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Group'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="modify_lsc_credential_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -777,6 +785,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="get_filters/delete_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_filters/modify_filter_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_group/modify_group_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_groups/modify_group_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_lsc_credential/gsad_msg"
                              mode="response-indicator"/>
