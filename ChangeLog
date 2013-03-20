@@ -1,3 +1,8 @@
+2013-03-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (list-window): Skip new icon for permissions.
+	(permission): Remove edit icon from actions.
+
 2013-03-19  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Permissions page.

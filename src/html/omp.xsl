@@ -6461,10 +6461,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/help.png"/>
       </a>
       <xsl:call-template name="wizard-icon"/>
-      <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="New {$cap-type}">
-        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="$type = 'permission'"/>
+        <xsl:otherwise>
+          <a href="/omp?cmd=new_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+             title="New {$cap-type}">
+            <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
       <a href="/omp?cmd=get_{$type}s&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
          title="Return to default filter view" style="margin-left:3px;">
         <img src="/img/list.png" border="0" alt="Return"/>
@@ -16635,6 +16640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="cap-type" select="'Permission'"/>
         <xsl:with-param name="type" select="'permission'"/>
         <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="noedit" select="1"/>
       </xsl:call-template>
     </td>
   </tr>
