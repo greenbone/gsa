@@ -1,5 +1,13 @@
 2013-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (info/ovaldef): Add XML file to Name column.
+	(ovaldef-details): Show actual ID (with suffix) in ID field.
+	Show XML file name.
+
+	* src/html/help.xsl (ovaldefs.html): Add help text about XML file name.
+
+2013-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Select SecInfo using info_id instead of name in tables.
 
 	* src/gsad.c (init_validator): Change regexp for info_id to accept

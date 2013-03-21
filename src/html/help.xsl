@@ -7419,7 +7419,9 @@ Public License instead of this License.
         </tr>
         <tr>
           <td>Name</td>
-          <td>The OVAL identifier of the definitions.</td>
+          <td>The OVAL identifier of the definitions. This column also shows the
+          XML file that contains this definition in a smaller grey font.
+          </td>
         </tr>
         <tr class="odd">
           <td>Version</td>

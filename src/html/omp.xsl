@@ -11991,6 +11991,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="ovaldef_id" select="../@id"/>
           </xsl:call-template>
         </b>
+        <br/>
+        <span style="font-size:80%; color:grey">
+          <xsl:choose>
+            <xsl:when test="string-length(xml_file) > 45">
+              <abbr title="{xml_file}"><i>[...]</i><xsl:value-of select="substring(xml_file, string-length(xml_file)-40, string-length(xml_file))"/></abbr>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="xml_file"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </span>
         <xsl:choose>
           <xsl:when test="../comment != ''">
             <br/>(<xsl:value-of select="../comment"/>)
@@ -13651,7 +13662,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr>
             <td><b>ID:</b></td>
             <td>
-              <b><xsl:value-of select="info/name"/></b>
+              <b><xsl:value-of select="info/@id"/></b>
             </td>
           </tr>
           <tr>
@@ -13692,6 +13703,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:when>
               <xsl:otherwise />
               </xsl:choose>
+            </tr>
+            <tr>
+              <td>XML&#160;file:</td>
+              <td><xsl:value-of select="info/ovaldef/xml_file"/></td>
             </tr>
           </table>
 
