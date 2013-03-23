@@ -1,5 +1,9 @@
 2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (get_info_response): Indent condition more logically.
+
+2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	ChangeLog: Keep entries for file as a single block.
 
 2013-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>

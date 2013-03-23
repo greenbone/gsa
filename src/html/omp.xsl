@@ -13083,7 +13083,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="cpe-details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -13094,7 +13094,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'CVE' or /envelope/params/info_type = 'cve'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="cve-details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -13105,7 +13105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'NVT' or /envelope/params/info_type = 'nvt'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="nvt-details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -13116,7 +13116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'OVALDEF' or /envelope/params/info_type = 'ovaldef'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="ovaldef-details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -13127,7 +13127,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'DFN_CERT_ADV' or /envelope/params/info_type = 'dfn_cert_adv'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="dfn_cert_adv-details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -13138,7 +13138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="/envelope/params/info_type = 'ALLINFO' or /envelope/params/info_type = 'allinfo'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)
-                         or /envelope/params/info_id">
+                        or /envelope/params/info_id">
           <xsl:call-template name="allinfo-details"/>
         </xsl:when>
         <xsl:otherwise>
