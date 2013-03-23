@@ -1,3 +1,7 @@
+2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	ChangeLog: Keep entries for file as a single block.
+
 2013-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (info/ovaldef): Add XML file to Name column.
@@ -16,17 +20,13 @@
 	* src/html/omp.xsl (info/cpe, info/cve, info/ovaldef)
 	(info/dfn_cert_adv, info_allinfo): Change details links for OVAL
 	definitions to use info_id instead of info_name.
-	
 	(get_info_allinfo_action): Add parameter for ID, change link to use ID.
-
 	(get_info_allinfo_lnk, get_info_cpe_lnk, get_info_cve_lnk)
 	(get_info_ovaldef_lnk, get_info_dfn_cert_adv_lnk): Add optional
 	parameter for ID, change link to selection by ID if it is passed.
-
 	(html-cpe-table, html-cve-table, html-ovaldef-table)
 	(html-dfn_cert_adv-table, html-allinfo-table): Hide filter for
 	selections by name and ID.
-
 	(get_info_response): Show table view if more than one item is selected
 	by name. Show details view if an item is selected by ID.
 
