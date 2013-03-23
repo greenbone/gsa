@@ -193,6 +193,7 @@ char * export_notes_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *);
 
 char * delete_permission_omp (credentials_t *, params_t *);
+char * delete_trash_permission_omp (credentials_t *, params_t *);
 char * export_permission_omp (credentials_t *, params_t *, enum content_type *,
                               char **, gsize *);
 char * export_permissions_omp (credentials_t *, params_t *, enum content_type *,

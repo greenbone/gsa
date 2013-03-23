@@ -1,5 +1,21 @@
 2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add permissions to trashcan.
+
+	* src/gsad.c (init_validator, exec_omp_post): Add
+	delete_trash_permission.
+
+	* src/gsad_omp.c (get_trash): Get permissions trash too.
+	(delete_trash_permission_omp): New function.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/omp.xsl (permission [trash])
+	(html-permissions-trash-table): New template.
+	(get_trash): Add permissions section.
+
+2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (get_info_response): Indent condition more logically.
 
 2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>

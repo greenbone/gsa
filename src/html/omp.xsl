@@ -16740,11 +16740,95 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="permission" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <div class="float_right">
+        <xsl:choose>
+          <xsl:when test="string-length (observers) &gt; 0">
+            <img src="/img/provide_view.png"
+                 border="0"
+                 alt="Permission made visible for: {observers}"
+                 title="Permission made visible for: {observers}"/>
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+      <b>
+        <xsl:value-of select="name"/>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="resource/type"/>
+    </td>
+    <td>
+      <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
+         title="Details">
+        <xsl:value-of select="resource/*/name"/>
+      </a>
+    </td>
+    <td>
+      <xsl:value-of select="subject/type"/>
+    </td>
+    <td>
+      <xsl:value-of select="subject/name"/>
+    </td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'permission'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
 <xsl:template match="get_permission">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="commands_response/delete_permission_response"/>
   <xsl:apply-templates select="get_permissions_response/permission"
                        mode="details"/>
+</xsl:template>
+
+<xsl:template name="html-permissions-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Type</td>
+        <td>Resource</td>
+        <td>SType</td>
+        <td>Subject</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="permission" mode="trash"/>
+    </table>
+  </div>
 </xsl:template>
 
 <xsl:template name="html-permissions-table">
@@ -20617,6 +20701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_lsc_credential_response"/>
   <xsl:apply-templates select="delete_note_response"/>
   <xsl:apply-templates select="delete_override_response"/>
+  <xsl:apply-templates select="delete_permission_response"/>
   <xsl:apply-templates select="delete_port_list_response"/>
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
@@ -20695,38 +20780,44 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="count(get_overrides_response/override)"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
           <tr class="odd">
+            <td><a href="#permissions">Permissions</a></td>
+            <td><xsl:value-of select="count(get_permissions_response/permission)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+          <tr class="even">
             <td><a href="#port_lists">Port Lists</a></td>
             <td><xsl:value-of select="count(get_port_lists_response/port_list)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#report_formats">Report Formats</a></td>
             <td><xsl:value-of select="count(get_report_formats_response/report_format)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#schedules">Schedules</a></td>
             <td><xsl:value-of select="count(get_schedules_response/schedule)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#slaves">Slaves</a></td>
             <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#targets">Targets</a></td>
             <td><xsl:value-of select="count(get_targets_response/target)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-          <tr class="even">
+          <tr class="odd">
             <td><a href="#the_tasks">Tasks</a></td>
             <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
           </tr>
@@ -20793,6 +20884,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_overrides_response the current node. -->
         <xsl:for-each select="get_overrides_response">
           <xsl:call-template name="html-overrides-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+        <a name="permissions"></a>
+        <h1>Permissions</h1>
+        <!-- The for-each makes the get_permissions_response the current node. -->
+        <xsl:for-each select="get_permissions_response">
+          <xsl:call-template name="html-permissions-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 

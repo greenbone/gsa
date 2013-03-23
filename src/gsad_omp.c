@@ -13081,6 +13081,40 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
         }
     }
 
+  /* Get the permissions. */
+
+  if (command_enabled (credentials, "GET_PERMISSIONS"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_permissions"
+                                " trash=\"1\""
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting permission list. "
+                               "The current list of permissions is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting permission list. "
+                               "The current list of permissions is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+    }
+
   /* Get the port lists. */
 
   if (command_enabled (credentials, "GET_PORT_LIST"))
@@ -14553,6 +14587,20 @@ char *
 get_permissions_omp (credentials_t * credentials, params_t *params)
 {
   return get_permissions (credentials, params, NULL);
+}
+
+/**
+ * @brief Delete a permission, get all permissions, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_permission_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("permission", credentials, params, 1, get_trash);
 }
 
 /**
