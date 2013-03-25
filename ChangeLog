@@ -1,3 +1,9 @@
+2013-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/help.xsl (contents.html): Add groups.
+	(glossary.html): Add group.
+	(group_details.html, groups.html, new_group.html): New templates.
+
 2013-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (ovaldefs.html): Change column title from

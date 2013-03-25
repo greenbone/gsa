@@ -2914,6 +2914,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li> Administration</li>
           <ul>
             <li> <a href="configure_users.html?token={/envelope/token}">Configure Users</a></li>
+            <li> <a href="groups.html?token={/envelope/token}">Groups</a></li>
+              <ul>
+                <li> <a href="new_group.html?token={/envelope/token}">New Group</a></li>
+                <li> <a href="group_details.html?token={/envelope/token}">Group Details</a></li>
+              </ul>
             <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
             <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
             <li> <a href="cert_management.html?token={/envelope/token}">CERT Feed Management</a></li>
@@ -3541,6 +3546,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        resources.
       </p>
 
+      <a name="group"></a>
+      <h2>Group</h2>
+      <p>
+       A group is a collection of users.
+      </p>
+
       <a name="note"></a>
       <h2>Note</h2>
       <p>
@@ -4062,6 +4073,123 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="group_details.html">
+  <div class="gb_window_part_center">Help: Group Details
+<!--
+    <a href="/omp?cmd=get_group&amp;group_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
+      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+    </a>
+-->
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_GROUPS'"/>
+      </xsl:call-template>
+
+      <h1>Group Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#group">Group</a>.
+        This includes the name, comment and users.
+      </p>
+
+      <h4>New Group</h4>
+      <p>
+        To create a new group click the
+        new icon <img src="/img/new.png" alt="New Group" title="New Group" /> which
+        goes to the <a href="new_group.html?token={/envelope/token}">New Group</a>
+        page.
+      </p>
+
+      <h4>Groups</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Groups" title="Groups"/>
+       will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
+       page.
+      </p>
+
+      <h4>Edit Group</h4>
+      <p>
+       Pressing the "Edit Group" icon
+       <img src="/img/edit.png" alt="Edit Group" title="Edit Group"/>
+       will switch to an overview of the this group and
+       allows editing the group's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the group as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="groups.html">
+  <div class="gb_window_part_center">Help: Groups
+    <a href="/omp?cmd=get_groups&amp;token={/envelope/token}"
+       title="Groups" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Groups"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_GROUPS'"/>
+      </xsl:call-template>
+
+      <h1>Groups</h1>
+      <p>
+       This table provides an overview of all configured
+       <a href="glossary.html?token={/envelope/token}#group">Groups</a>.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the group and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+      </table>
+
+      <h3>New Group</h3>
+      <p>
+        To create a new group click the
+        new icon <img src="/img/new.png" alt="New Group" title="New Group" /> which
+        goes to the <a href="new_group.html?token={/envelope/token}">New Group</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of groups as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Group'"/>
+      </xsl:call-template>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="my_settings.html">
   <div class="gb_window_part_center">Help: My Settings</div>
   <div class="gb_window_part_content">
@@ -4314,6 +4442,73 @@ Public License instead of this License.
        Pressing the list icon
        <img src="/img/list.png" alt="Filters" title="Filters"/>
        will switch to the <a href="filters.html?token={/envelope/token}">Filters</a>
+       page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_group.html">
+  <div class="gb_window_part_center">Help: New Group
+    <a href="/omp?cmd=new_group&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_GROUP'"/>
+      </xsl:call-template>
+
+      <h1>New Group</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#group">Group</a>
+        the dialog offers these entries.
+        Hit the button "Create Group" to submit the new group.
+        The Groups page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Testing Team</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>All testers</td>
+        </tr>
+        <tr class="odd">
+          <td>Users</td>
+          <td>--</td>
+          <td>1000</td>
+          <td>Space or comma separated list of users</td>
+          <td>alice bob</td>
+        </tr>
+      </table>
+
+      <h4>Groups</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Groups" title="Groups"/>
+       will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
        page.
       </p>
     </div>
