@@ -11994,11 +11994,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <br/>
         <span style="font-size:80%; color:grey">
           <xsl:choose>
-            <xsl:when test="string-length(xml_file) > 45">
-              <abbr title="{xml_file}"><i>[...]</i><xsl:value-of select="substring(xml_file, string-length(xml_file)-40, string-length(xml_file))"/></abbr>
+            <xsl:when test="string-length(file) > 45">
+              <abbr title="{file}"><i>[...]</i><xsl:value-of select="substring(file, string-length(file)-40, string-length(file))"/></abbr>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="xml_file"/>
+              <xsl:value-of select="file"/>
             </xsl:otherwise>
           </xsl:choose>
         </span>
@@ -12031,8 +12031,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:choose>
-          <xsl:when test="def_class != ''">
-            <xsl:value-of select="def_class"/>
+          <xsl:when test="class != ''">
+            <xsl:value-of select="class"/>
           </xsl:when>
           <xsl:otherwise>
             N/A
@@ -12833,8 +12833,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:call-template name="column-name">
-                <xsl:with-param name="head">Def. class</xsl:with-param>
-                <xsl:with-param name="name">def_class</xsl:with-param>
+                <xsl:with-param name="head">Class</xsl:with-param>
+                <xsl:with-param name="name">class</xsl:with-param>
                 <xsl:with-param name="type">info</xsl:with-param>
                 <xsl:with-param name="extra_params" select="'&amp;info_type=OVALDEF'"/>
               </xsl:call-template>
@@ -13705,8 +13705,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </tr>
             <tr>
-              <td>XML&#160;file:</td>
-              <td><xsl:value-of select="info/ovaldef/xml_file"/></td>
+              <td>File:</td>
+              <td><xsl:value-of select="info/ovaldef/file"/></td>
             </tr>
           </table>
 

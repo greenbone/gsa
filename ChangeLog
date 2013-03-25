@@ -1,3 +1,14 @@
+2013-03-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/help.xsl (ovaldefs.html): Change column title from
+	"Def. class" to "class".
+
+	* src/html/omp.xsl (info/ovaldef): Change "def_class" to "class".
+	Change "xml_file" to "file".
+	(html-ovaldef-table): Change column header title from
+	"Def. class" to "class" and OMP element from "def_class" to "class".
+	(ovaldef_details): Change xml_file to file, shorten text to "File".
+
 2013-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add permissions to trashcan.

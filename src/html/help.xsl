@@ -7436,7 +7436,7 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="odd">
-          <td>Def. class</td>
+          <td>Class</td>
           <td>The definition class of the definition.</td>
         </tr>
         <tr>
