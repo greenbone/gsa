@@ -1,5 +1,10 @@
 2013-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (gsa:capitalise, gsa:upper-case): New functions.
+	(permission [details]): Neaten fields.  Add link to subject field.
+
+2013-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add groups.
 	(glossary.html): Add group.
 	(group_details.html, groups.html, new_group.html): New templates.

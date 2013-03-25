@@ -61,9 +61,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- XPATH FUNCTIONS -->
 
+<func:function name="gsa:capitalise">
+  <xsl:param name="string"/>
+  <func:result select="concat (gsa:upper-case (substring ($string, 1, 1)), substring ($string, 2))"/>
+</func:function>
+
 <func:function name="gsa:lower-case">
   <xsl:param name="string"/>
   <func:result select="translate($string, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
+</func:function>
+
+<func:function name="gsa:upper-case">
+  <xsl:param name="string"/>
+  <func:result select="translate($string, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
 </func:function>
 
 <func:function name="gsa:date-tz">
@@ -16722,13 +16732,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="comment"/></td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:capitalise (subject/name)"/></td>
-          <td><xsl:value-of select="subject/name"/></td>
+          <td><xsl:value-of select="gsa:capitalise (subject/type)"/>:</td>
+          <td>
+            <!-- Param login is for users until we have users with IDs. -->
+            <a href="/omp?cmd=get_{subject/type}&amp;{subject/type}_id={subject/*/@id}&amp;login={subject/*/name}&amp;token={/envelope/token}"
+               title="Details">
+              <xsl:value-of select="subject/*/name"/>
+            </a>
+          </td>
         </tr>
         <tr>
           <td>Resource:</td>
           <td>
-            <xsl:value-of select="resource/type"/>
+            <xsl:value-of select="gsa:capitalise (resource/type)"/>
+            <xsl:text> </xsl:text>
             <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/*/@id}&amp;token={/envelope/token}"
                title="Details">
               <xsl:value-of select="resource/*/name"/>
