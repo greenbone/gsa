@@ -16839,7 +16839,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Name</td>
         <td>Type</td>
         <td>Resource</td>
-        <td>SType</td>
+        <td>Subject Type</td>
         <td>Subject</td>
         <td width="100">Actions</td>
       </tr>
@@ -16857,7 +16857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (permission)"/>
     <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Type|resource/type Resource|resource/type SType|subject/type Subject|subject/name'"/>
+    <xsl:with-param name="headings" select="'Name|name Type|resource/type Resource|resource/type Subject&#xa0;Type|subject/type Subject|subject/name'"/>
   </xsl:call-template>
 </xsl:template>
 
