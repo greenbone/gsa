@@ -1,5 +1,10 @@
 2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl (html-users-table, user): Add Groups column.
+	(user): Add groups field.
+
+2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Get users via OMP instead of OAP.
 
 	* src/gsad.c (exec_omp_get): Switch get_user and get_users to OMP.

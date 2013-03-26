@@ -135,6 +135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="gbntablehead2">
             <td>Name</td>
             <td>Role</td>
+            <td>Groups</td>
             <td>Host Access</td>
             <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
               <td>LDAP Authentication</td>
@@ -208,6 +209,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </td>
     <td>
       <xsl:value-of select="role"/>
+    </td>
+    <td>
+      <xsl:for-each select="groups/group">
+        <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+        <xsl:if test="position() != last()">, </xsl:if>
+      </xsl:for-each>
     </td>
     <td>
       <xsl:choose>
@@ -295,6 +304,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>Role:</td>
           <td><xsl:value-of select="role"/></td>
+        </tr>
+        <tr>
+          <td>Groups:</td>
+          <td>
+            <xsl:for-each select="groups/group">
+              <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+                <xsl:value-of select="name"/>
+              </a>
+              <xsl:if test="position() != last()">, </xsl:if>
+            </xsl:for-each>
+          </td>
         </tr>
         <tr>
           <td>Host Access:</td>
