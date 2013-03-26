@@ -1,5 +1,10 @@
 2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Add back rule "role", which is required
+	for creating users, and was removed at some point.
+
+2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl (html-users-table, user): Add Groups column.
 	(user): Add groups field.
 
