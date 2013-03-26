@@ -1,3 +1,9 @@
+2013-03-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (filter-window-part): Set max size for filters
+	selection box so that long filter names don't push filter dialog
+	elements to a second row.
+
 2013-03-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-permissions-trash-table)
