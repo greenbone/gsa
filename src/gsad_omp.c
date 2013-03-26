@@ -16020,6 +16020,166 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
 }
 
 
+/* Users. */
+
+/**
+ * @brief Get a user and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_user_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_users_omp\n");
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *name;
+
+  name = params_value (params, "login");
+
+  if (name == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a user. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_users");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the user. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_users");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Get User\">"
+                                    "Only users given the Manager role"
+                                    " may access User Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands><get_users name=\"%s\"/><describe_auth/></commands>",
+                            name)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_users");
+    }
+
+  xml = g_string_new ("<get_user>");
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting user. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_users");
+    }
+
+  g_string_append (xml, "</get_user>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get all users and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_users_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_users_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *sort_field, *sort_order;
+
+  sort_field = params_value (params, "sort_field");
+  sort_order = params_value (params, "sort_order");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the user list. "
+                             "The current list of users is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List Users\">"
+                                    "Only users given the Administrator role"
+                                    " may access User Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_users"
+                            " sort_field=\"%s\" sort_order=\"%s\"/>"
+                            "<describe_auth/>"
+                            "</commands>",
+                            sort_field ? sort_field : "ROWID",
+                            sort_order ? sort_order : "ascending")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user list. "
+                           "The current list of users is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the user list. "
+                           "The current list of users is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_users_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+
 /* Wizards. */
 
 /**

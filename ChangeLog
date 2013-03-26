@@ -1,3 +1,17 @@
+2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Get users via OMP instead of OAP.
+
+	* src/gsad.c (exec_omp_get): Switch get_user and get_users to OMP.
+
+	* src/gsad_oap.c (get_user_oap, get_users_oap): Remove.  Replaced by OMP
+	equivalents.
+
+	* src/gsad_omp.c (get_user_omp, get_users_omp): New functions.  OMP
+	equivalents of the removed OAP versions.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
 2013-03-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (filter-window-part): Set max size for filters
