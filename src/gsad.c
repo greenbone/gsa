@@ -1611,7 +1611,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_port_range)
   ELSE (create_report)
   ELSE (create_task)
-  ELSE_OAP (create_user)
+  ELSE (create_user)
   ELSE (create_schedule)
   ELSE (create_slave)
   ELSE (create_target)

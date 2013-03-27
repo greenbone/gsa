@@ -38,6 +38,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN USERS MANAGEMENT -->
 
+<xsl:template match="group" mode="newuser">
+  <option value="{@id}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template name="new-user-group-select">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="groups" select="get_groups_response"/>
+  <select name="group_id_optional:{$position}">
+    <option value="--">--</option>
+    <xsl:apply-templates select="$groups/group"
+                         mode="newuser"/>
+  </select>
+  <xsl:if test="$count &gt; 1">
+    <br/>
+    <xsl:call-template name="new-user-group-select">
+      <xsl:with-param name="groups" select="$groups"/>
+      <xsl:with-param name="count" select="$count - 1"/>
+      <xsl:with-param name="position" select="$position + 1"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template name="html-create-user-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -79,6 +102,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
+            <td>Groups (optional)</td>
+            <td>
+              <xsl:variable name="groups"
+                            select="../get_groups_response/group"/>
+              <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
+                <select name="{name}">
+                  <xsl:variable name="group_id" select="value"/>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($group_id) &gt; 0">
+                      <option value="0">--</option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="0" selected="1">--</option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:for-each select="$groups">
+                    <xsl:choose>
+                      <xsl:when test="@id = $group_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+                <br/>
+              </xsl:for-each>
+              <xsl:variable name="count"
+                            select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+              <xsl:call-template name="new-user-group-select">
+                <xsl:with-param name="groups" select="../get_groups_response"/>
+                <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/groups)">
+                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="groups" value="{1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <!-- Force the Create Task button to be the default. -->
+              <input style="position: absolute; left: -100%"
+                     type="submit" name="submit" value="Create User"/>
+              <input type="submit" name="submit_plus_group" value="+"/>
+            </td>
+          </tr>
+          <tr class="odd">
             <td valign="top">Host Access</td>
             <td>
               <label>
@@ -531,6 +605,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_users_response">
   <xsl:apply-templates select="../modify_auth_response" mode="show"/>
+  <xsl:apply-templates select="../create_user_response"/>
   <xsl:call-template name="html-create-user-form"/>
   <!-- If any describe_auth was found, match it here -->
   <xsl:call-template name="describe_auth_response" mode="show"/>

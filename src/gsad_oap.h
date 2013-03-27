@@ -38,7 +38,6 @@
 void oap_init (const gchar *, int);
 
 char * edit_user_oap (credentials_t *, params_t *);
-char * create_user_oap (credentials_t *, params_t *);
 char * delete_user_oap (credentials_t *, params_t *);
 char * save_user_oap (credentials_t *, params_t *);
 char * get_feed_oap (credentials_t *, params_t *);

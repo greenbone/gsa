@@ -1,3 +1,29 @@
+2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Create users via OMP instead of OAP.  At the same time add groups to the
+	create_user page.
+
+	* src/gsad.c (exec_omp_get): Switch create_user to OMP.
+
+	* src/gsad_oap.c (create_user_oap): Remove.  Replaced by OMP equivalent.
+
+	* src/gsad_omp.c (get_users_omp): Correct message.  Get groups too for
+	dropdown.
+	(create_user_omp): New functions.  OMP equivalent of the removed OAP
+	version, which also creates the user in the db and adds the user to
+	any given groups.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/oap.xsl (group [newuser], new-user-group-select): New
+	templates.
+	(html-create-user-form): Add groups field.
+	(get_users_response): Match create_user_response too.
+
+2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Add back rule "role", which is required
+
 2013-03-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Add back rule "role", which is required
