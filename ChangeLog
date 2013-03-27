@@ -1,3 +1,8 @@
+2013-03-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (nvt, result-detailed): Add conditionals to
+	drop sections where content is equal to "N/A".
+ 
 2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move New User to dedicated page.  Bring User Details closer to new

@@ -14099,12 +14099,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'insight=')">
-      <h2>Vulnerability Insight</h2>
-      <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="'insight' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
-        </xsl:if>
-      </xsl:for-each>
+      <xsl:if test="not (contains(tags, 'insight=N/A'))">
+        <h2>Vulnerability Insight</h2>
+        <xsl:for-each select="str:split (tags, '|')">
+          <xsl:if test="'insight' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/><br />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
@@ -14125,12 +14127,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when  test="contains(tags, 'impact=')">
-      <h2>Impact</h2>
-      <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="'impact' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
-        </xsl:if>
-      </xsl:for-each>
+      <xsl:if test="not (contains(tags, 'impact=N/A'))">
+        <h2>Impact</h2>
+        <xsl:for-each select="str:split (tags, '|')">
+          <xsl:if test="'impact' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/><br />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
@@ -14138,12 +14142,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:choose>
     <xsl:when test="contains(tags, 'solution=')">
-      <h2>Solution</h2>
-      <xsl:for-each select="str:split (tags, '|')">
-        <xsl:if test="'solution' = substring-before (., '=')">
-          <xsl:value-of select="substring-after (., '=')"/><br />
-        </xsl:if>
-      </xsl:for-each>
+      <xsl:if test="not (contains(tags, 'solution=N/A'))">
+        <h2>Solution</h2>
+        <xsl:for-each select="str:split (tags, '|')">
+          <xsl:if test="'solution' = substring-before (., '=')">
+            <xsl:value-of select="substring-after (., '=')"/><br />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
@@ -19526,26 +19532,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="gsa:newstyle-nvt (nvt)">
 
-    <div class="issue_box_box">
-      <b>Impact</b>
-      <xsl:call-template name="structured-text">
-        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
-      </xsl:call-template>
-    </div>
+    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
+      <div class="issue_box_box">
+        <b>Impact</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
 
-    <div class="issue_box_box">
-      <b>Solution</b>
-      <xsl:call-template name="structured-text">
-        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
-      </xsl:call-template>
-    </div>
+    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
+      <div class="issue_box_box">
+        <b>Solution</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
 
-    <div class="issue_box_box">
-      <b>Vulnerability Insight</b>
-      <xsl:call-template name="structured-text">
-        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
-      </xsl:call-template>
-    </div>
+    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
+      <div class="issue_box_box">
+        <b>Vulnerability Insight</b>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
+        </xsl:call-template>
+      </div>
+    </xsl:if>
 
   </xsl:if>
 
