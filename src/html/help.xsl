@@ -2516,18 +2516,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="configure_users.html">
-  <div class="gb_window_part_center">Help: Configure Users</div>
+<xsl:template mode="help" match="users.html">
+  <div class="gb_window_part_center">Help: Users
+    <a href="/omp?cmd=get_users&amp;token={/envelope/token}"
+       title="Users" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Users"/>
+    </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_users&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
-      <h1>Configure Users</h1>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_USERS'"/>
+      </xsl:call-template>
+
+      <a name="users"></a>
+      <h1>Users</h1>
+
       <p>
        The administration of users is only accessible for users who own
        the "Administrator" role.
+      </p>
+
+      <p>
+       This table provides an overview of all configured
+       users.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Login name of the user.</td>
+        </tr>
+        <tr class="even">
+          <td>Role</td>
+          <td>Shows the role of the user.</td>
+        </tr>
+        <tr class="odd">
+          <td>Host Access</td>
+          <td>Host access rules of the user.</td>
+        </tr>
+      </table>
+
+      <p>
+        If per-User-LDAP Authentication is configured, an additional column
+        ("LDAP Authentication") with checkboxes is shown. When the checkbox for
+        a given user is ticked, the user can only log in via the configured LDAP-Server.
+      </p>
+
+      <a name="actions"></a>
+      <h3>Actions</h3>
+
+      <h4>Move User to Trashcan</h4>
+      <p>
+       Pressing the trashcan icon
+       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
+       will move the entry to the trashcan and update the list.
+      </p>
+      <p>
+       It is not possible to remove the last Administrator, which
+       is the same as removing the currently used account.
+      </p>
+
+      <h4>Details</h4>
+      <p>
+       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will lead to a page
+       displaying user details.
+      </p>
+
+      <h4>Edit</h4>
+      <p>
+       Pressing the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" /> will lead to a page where the
+       password, role and Host Access rules can be changed.
       </p>
 
       <a name="newuser"></a>
@@ -2728,63 +2795,63 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>adstest.local</td>
         </tr>
       </table>
+    </div>
+  </div>
+</xsl:template>
 
-      <a name="users"></a>
-      <h2>Users</h2>
+<xsl:template mode="help" match="user_details.html">
+  <div class="gb_window_part_center">Help: User Details
+<!--
+    <a href="/omp?cmd=get_user&amp;user_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
+      <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+    </a>
+-->
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_USERS'"/>
+      </xsl:call-template>
+
+      <h1>User Details</h1>
       <p>
-       This table provides an overview of all configured
-       users.
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#user">User</a>.
+        This includes the name, role and groups.
       </p>
 
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>Login name of the user.</td>
-        </tr>
-        <tr class="even">
-          <td>Role</td>
-          <td>Shows the role of the user.</td>
-        </tr>
-        <tr class="odd">
-          <td>Host Access</td>
-          <td>Host access rules of the user.</td>
-        </tr>
-      </table>
-
+      <h4>New User</h4>
       <p>
-        If per-User-LDAP Authentication is configured, an additional column
-        ("LDAP Authentication") with checkboxes is shown. When the checkbox for
-        a given user is ticked, the user can only log in via the configured LDAP-Server.
+        To create a new user click the
+        new icon <img src="/img/new.png" alt="New User" title="New User" /> which
+        goes to the <a href="new_user.html?token={/envelope/token}">New User</a>
+        page.
       </p>
 
-      <a name="actions"></a>
-      <h3>Actions</h3>
-
-      <h4>Move User to Trashcan</h4>
+      <h4>Users</h4>
       <p>
-       Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan" />
-       will move the entry to the trashcan and update the list.
-      </p>
-      <p>
-       It is not possible to remove the last Administrator, which
-       is the same as removing the currently used account.
+       Pressing the list icon
+       <img src="/img/list.png" alt="Users" title="Users"/>
+       will switch to the <a href="users.html?token={/envelope/token}">Users</a>
+       page.
       </p>
 
-      <h4>Details</h4>
+      <h4>Edit User</h4>
       <p>
-       Pressing the details icon <img src="/img/details.png" alt="Details" title="Details" /> will lead to a page
-       displaying user details.
+       Pressing the "Edit User" icon
+       <img src="/img/edit.png" alt="Edit User" title="Edit User"/>
+       will switch to an overview of the this user and
+       allows editing the user's properties.
       </p>
 
-      <h4>Edit</h4>
+      <h4>Exporting</h4>
       <p>
-       Pressing the edit icon <img src="/img/edit.png" alt="Edit" title="Edit" /> will lead to a page where the
-       password, role and Host Access rules can be changed.
+        Export the user as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
       </p>
     </div>
   </div>
@@ -2913,7 +2980,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
           <li> Administration</li>
           <ul>
-            <li> <a href="configure_users.html?token={/envelope/token}">Configure Users</a></li>
+            <li> <a href="users.html?token={/envelope/token}">Users</a></li>
+              <ul>
+                <li> <a href="user_details.html?token={/envelope/token}">User Details</a></li>
+                <li> <a href="new_user.html?token={/envelope/token}">New User</a></li>
+              </ul>
             <li> <a href="groups.html?token={/envelope/token}">Groups</a></li>
               <ul>
                 <li> <a href="new_group.html?token={/envelope/token}">New Group</a></li>
@@ -4988,6 +5059,73 @@ Public License instead of this License.
           <td>/tmp/report.xml</td>
         </tr>
       </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_user.html">
+  <div class="gb_window_part_center">Help: New User
+    <a href="/omp?cmd=new_user&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_USER'"/>
+      </xsl:call-template>
+
+      <h1>New User</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#user">User</a>
+        the dialog offers these entries.
+        Hit the button "Create User" to submit the new user.
+        The Users page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric</td>
+          <td>Testing Team</td>
+        </tr>
+        <tr class="even">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric</td>
+          <td>All testers</td>
+        </tr>
+        <tr class="odd">
+          <td>Users</td>
+          <td>--</td>
+          <td>1000</td>
+          <td>Space or comma separated list of users</td>
+          <td>alice bob</td>
+        </tr>
+      </table>
+
+      <h4>Users</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Users" title="Users"/>
+       will switch to the <a href="users.html?token={/envelope/token}">Users</a>
+       page.
+      </p>
     </div>
   </div>
 </xsl:template>

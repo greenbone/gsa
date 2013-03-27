@@ -680,6 +680,7 @@ init_validator ()
                          "|(new_schedule)"
                          "|(new_target)"
                          "|(new_task)"
+                         "|(new_user)"
                          "|(pause_task)"
                          "|(restore)"
                          "|(resume_paused_task)"
@@ -1832,6 +1833,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   ELSE (new_target)
   ELSE (new_task)
+  ELSE (new_user)
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (get_task)

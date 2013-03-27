@@ -67,13 +67,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">New User
-      <a href="/help/configure_users.html?token={/envelope/token}#newuser"
-         title="Help: Configure Users (New User)">
+      <a href="/help/users.html?token={/envelope/token}#newuser"
+         title="Help: Users (New User)">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Users" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Users"/>
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="/oap" method="post" enctype="multipart/form-data">
+      <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_user"/>
         <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -127,7 +131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Groups (optional)</td>
             <td>
               <xsl:variable name="groups"
-                            select="../get_groups_response/group"/>
+                            select="get_groups_response/group"/>
               <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']">
                 <select name="{name}">
                   <xsl:variable name="group_id" select="value"/>
@@ -155,7 +159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="count"
                             select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
               <xsl:call-template name="new-user-group-select">
-                <xsl:with-param name="groups" select="../get_groups_response"/>
+                <xsl:with-param name="groups" select="get_groups_response"/>
                 <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
                 <xsl:with-param name="position" select="$count + 1"/>
               </xsl:call-template>
@@ -241,9 +245,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">Users
-      <a href="/help/configure_users.html?token={/envelope/token}#users"
-         title="Help: Configure Users (Users)">
+      <a href="/help/users.html?token={/envelope/token}#users"
+         title="Help: Users (Users)">
         <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=new_user&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="New User">
+        <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">
@@ -281,6 +289,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="@status_text"/>
     </xsl:with-param>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="new_user">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_user_response"/>
+  <xsl:apply-templates select="create_user_response"/>
+  <xsl:call-template name="html-create-user-form"/>
 </xsl:template>
 
 <!--     DELETE_USER_RESPONSE -->
@@ -404,15 +419,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        User Details
-       <a href="/help/configure_users.html?token={/envelope/token}#userdetails"
-         title="Help: Configure Users (User Details)">
-         <img src="/img/help.png"/>
-       </a>
+       <xsl:call-template name="details-header-icons">
+         <xsl:with-param name="cap-type" select="'User'"/>
+         <xsl:with-param name="type" select="'user'"/>
+         <xsl:with-param name="noedit" select="1"/>
+         <xsl:with-param name="noexport" select="1"/>
+       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_users&amp;token={/envelope/token}">Users</a>
-      </div>
       <table>
         <tr>
           <td><b>Login Name:</b></td>
@@ -517,8 +531,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Edit User
-       <a href="/help/configure_users.html?token={/envelope/token}#userdetails"
-         title="Help: Configure Users (Edit User)">
+       <a href="/help/users.html?token={/envelope/token}#userdetails"
+         title="Help: Users (Edit User)">
          <img src="/img/help.png"/>
        </a>
     </div>
@@ -649,7 +663,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="get_users_response">
   <xsl:apply-templates select="../modify_auth_response" mode="show"/>
   <xsl:apply-templates select="../create_user_response"/>
-  <xsl:call-template name="html-create-user-form"/>
   <!-- If any describe_auth was found, match it here -->
   <xsl:call-template name="describe_auth_response" mode="show"/>
   <xsl:call-template name="html-users-table"/>
@@ -1220,20 +1233,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="@name='method:ads'">
           ADS Authentication
-          <a href="/help/configure_users.html?token={/envelope/token}#adsauthentication"
-            title="Help: Configure Users (ADS Authentication)">
+          <a href="/help/users.html?token={/envelope/token}#adsauthentication"
+            title="Help: Users (ADS Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:when test="@name='method:ldap'">
           LDAP Authentication and Authorization
-          <a href="/help/configure_users.html?token={/envelope/token}#ldapauthentication"
-            title="Help: Configure Users (LDAP Authentication and Authorization)">
+          <a href="/help/users.html?token={/envelope/token}#ldapauthentication"
+            title="Help: Users (LDAP Authentication and Authorization)">
           <img src="/img/help.png"/></a>
         </xsl:when>
         <xsl:when test="@name='method:ldap_connect'">
           LDAP per-User Authentication
-          <a href="/help/configure_users.html?token={/envelope/token}#peruserldapauthentication"
-            title="Help: Configure Users (LDAP per-User Authentication)">
+          <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
+            title="Help: Users (LDAP per-User Authentication)">
           <img src="/img/help.png"/></a>
         </xsl:when>
       </xsl:choose>

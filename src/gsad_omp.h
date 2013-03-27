@@ -274,6 +274,7 @@ char * save_filter_omp (credentials_t *, params_t *);
 char * create_user_omp (credentials_t *, params_t *);
 char * get_user_omp (credentials_t *, params_t *);
 char * get_users_omp (credentials_t *, params_t *);
+char * new_user_omp (credentials_t *, params_t *);
 
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);

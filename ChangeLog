@@ -1,5 +1,30 @@
 2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Move New User to dedicated page.  Bring User Details closer to new
+	style.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add new_user.
+
+	* src/gsad_omp.c (new_user, new_user_omp): New function.
+	(get_users_omp): Remove GET_GROUPS call.  Now in new_user.
+	(create_user_omp): Call new_user_omp as next page in + case.
+
+	* src/gsad_omp.h: Add header accordingly.
+
+	* src/html/help.xsl (configure_users.html): Remove.  Now in new pages.
+	(users.html, user_details.html, new_user.html): New pages.
+	(contents.html): Add new pages.
+
+	* src/html/oap.xsl (html-create-user-form): Update help location.  Add
+	User List icon.  Get groups from new location.
+	(html-users-table): Update help location.  Add New User icon.
+	(new_user): New template.
+	(user [details]): Make closer to new style.  Update help location.
+	(get_users_response): Remove New User form from Users page.
+	(group [auth]): Update help locations.
+
+2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl (html-create-user-form): Get field values from
 	envelope when plus button was pressed.
 

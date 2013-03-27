@@ -16023,6 +16023,82 @@ save_schedule_omp (credentials_t * credentials, params_t *params)
 /* Users. */
 
 /**
+ * @brief Returns page to create a new user.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+
+  xml = g_string_new ("<new_user>");
+  g_string_append (xml, extra_xml);
+
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_groups/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
+  g_string_append (xml, "</new_user>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new user.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_user_omp (credentials_t *credentials, params_t *params)
+{
+  return new_user (credentials, params, NULL);
+}
+
+/**
  * @brief Get a user and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication
@@ -16148,13 +16224,9 @@ get_users_omp (credentials_t * credentials, params_t *params)
                             "<get_users"
                             " sort_field=\"%s\" sort_order=\"%s\"/>"
                             "<describe_auth/>"
-                            "%s"
                             "</commands>",
                             sort_field ? sort_field : "ROWID",
-                            sort_order ? sort_order : "ascending",
-                            command_enabled (credentials, "GET_GROUPS")
-                             ? "<get_groups/>"
-                             : "")
+                            sort_order ? sort_order : "ascending")
       == -1)
     {
       openvas_server_close (socket, session);
@@ -16215,7 +16287,7 @@ create_user_omp (credentials_t * credentials, params_t *params)
         }
       else
         params_add (params, "groups", "2");
-      return get_users_omp (credentials, params);
+      return new_user_omp (credentials, params);
     }
 
   switch (manager_connect (credentials, &socket, &session, &html))
