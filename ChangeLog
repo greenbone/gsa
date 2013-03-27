@@ -1,5 +1,10 @@
 2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl (html-create-user-form): Get field values from
+	envelope when plus button was pressed.
+
+2013-03-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Create users via OMP instead of OAP.  At the same time add groups to the
 	create_user page.
 

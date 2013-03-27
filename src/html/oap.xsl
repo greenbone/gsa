@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
     version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:gsa="http://openvas.org">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -80,8 +81,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tr class="odd">
             <td valign="top" width="125">Login Name</td>
             <td>
-              <input type="text" name="login" value="" size="30"
-                     maxlength="80"/>
+              <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
+                     size="30" maxlength="80"/>
             </td>
           </tr>
           <tr class="even">
@@ -95,9 +96,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Role</td>
             <td>
               <select name="role">
-                <option value="Admin">Admin</option>
-                <option value="User" selected="1">User</option>
-                <option value="Observer">Observer</option>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/role = 'Admin'">
+                    <option value="Admin" selected="1">Admin</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="Admin">Admin</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="(not /envelope/params/role) or (/envelope/params/role = 'User')">
+                    <option value="User" selected="1">User</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="User">User</option>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                  <xsl:when test="/envelope/params/role = 'Observer'">
+                    <option value="Observer" selected="1">Observer</option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="Observer">Observer</option>
+                  </xsl:otherwise>
+                </xsl:choose>
               </select>
             </td>
           </tr>
@@ -156,21 +178,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td valign="top">Host Access</td>
             <td>
               <label>
-                <input type="radio" name="hosts_allow" value="2" checked="1"/>
+                <xsl:choose>
+                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '2')">
+                    <input type="radio" name="hosts_allow" value="2" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="2"/>
+                  </xsl:otherwise>
+                </xsl:choose>
                 Allow All
               </label>
               <br/>
               <label>
-                <input type="radio" name="hosts_allow" value="1"/>
+                <xsl:choose>
+                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '1')">
+                    <input type="radio" name="hosts_allow" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
                 Allow:
               </label>
               <label>
-                <input type="radio" name="hosts_allow" value="0"/>
+                <xsl:choose>
+                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '0')">
+                    <input type="radio" name="hosts_allow" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="hosts_allow" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
                 Deny:
               </label>
               <br/>
-              <input type="text" name="access_hosts" value="" size="30"
-                     maxlength="500"/>
+              <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
+                     size="30" maxlength="500"/>
             </td>
           </tr>
           <!-- Only if ldap-connect is enabled, it is per-user. !-->
