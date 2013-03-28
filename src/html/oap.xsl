@@ -109,7 +109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:choose>
-                  <xsl:when test="(not /envelope/params/role) or (/envelope/params/role = 'User')">
+                  <xsl:when test="not (boolean (/envelope/params/role)) or (/envelope/params/role = 'User')">
                     <option value="User" selected="1">User</option>
                   </xsl:when>
                   <xsl:otherwise>
@@ -183,7 +183,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <label>
                 <xsl:choose>
-                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '2')">
+                  <xsl:when test="not (boolean (/envelope/params/hosts_allow)) or (/envelope/params/hosts_allow = '2')">
                     <input type="radio" name="hosts_allow" value="2" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -195,7 +195,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <br/>
               <label>
                 <xsl:choose>
-                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '1')">
+                  <xsl:when test="/envelope/params/hosts_allow = '1'">
                     <input type="radio" name="hosts_allow" value="1" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -206,7 +206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <label>
                 <xsl:choose>
-                  <xsl:when test="(not /envelope/params/hosts_allow) or (/envelope/params/hosts_allow = '0')">
+                  <xsl:when test="/envelope/params/hosts_allow = '0'">
                     <input type="radio" name="hosts_allow" value="0" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
