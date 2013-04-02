@@ -1,3 +1,9 @@
+2013-04-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (severity-bar): New template.
+	(result-detailed): Use colored progress bars to showcase a result's
+	severity instead of coloring all the columns headers.
+
 2013-03-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/oap.xsl (html-create-user-form): Add boolean to tests to get

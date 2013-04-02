@@ -876,6 +876,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="severity-bar">
+  <xsl:param name="threat"></xsl:param>
+  <xsl:param name="title"></xsl:param>
+  <xsl:param name="cvss"></xsl:param>
+
+  <xsl:variable name="width"><xsl:value-of select="number($cvss) * 10"/></xsl:variable>
+  <div class="progressbar_box" title="{$title}">
+    <xsl:choose>
+      <xsl:when test="$threat = 'Low'">
+        <div class="progressbar_bar_done" style="width:{$width}px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Medium'">
+        <div class="progressbar_bar_request" style="width:{$width}px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'High'">
+        <div class="progressbar_bar_error" style="width:{$width}px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Log'">
+        <div class="progressbar_bar_done" style="width:0px;"></div>
+      </xsl:when>
+    </xsl:choose>
+    <div class="progressbar_text">
+      <xsl:value-of select="$cvss"/> (<xsl:value-of select="$threat"/>)
+    </div>
+  </div>
+</xsl:template>
 <func:function name="gsa:build-levels">
   <xsl:param name="filters"></xsl:param>
   <func:result>
@@ -19262,7 +19288,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Location</td>
         <td style="text-align:right">Actions</td>
       </tr>
-      <tr style="{$style}; color:#000000">
+      <tr style="background:#bbbbbb; color:#000000">
         <td> <!-- Vulnerability -->
           <xsl:if test="delta/text()">
             <xsl:choose>
@@ -19297,31 +19323,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td> <!-- Severity -->
+          <xsl:variable name="severity_title">
+            <xsl:choose>
+              <xsl:when test="$prognostic=1">
+                <xsl:if test="string-length(cve/cvss_base) &gt; 0">
+                  <xsl:value-of select="cve/cvss_base"/>
+                </xsl:if>
+              </xsl:when>
+            </xsl:choose>
+            <xsl:choose>
+              <xsl:when test="original_threat">
+                <xsl:choose>
+                  <xsl:when test="threat = original_threat">
+                    <xsl:value-of select="threat"/>
+                  </xsl:when>
+                  <xsl:otherwise>(Overridden from <b><xsl:value-of select="original_threat"/></b>)</xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
+
           <xsl:choose>
-            <xsl:when test="$prognostic=1">
-              <xsl:if test="string-length(cve/cvss_base) &gt; 0">
-                <xsl:value-of select="cve/cvss_base"/>
-              </xsl:if>
-            </xsl:when>
-            <xsl:when test="original_threat">
-              <xsl:choose>
-                <xsl:when test="threat = original_threat">
-                  <xsl:if test="string-length(nvt/cvss_base) &gt; 0">
-                    <xsl:value-of select="nvt/cvss_base"/>
-                  </xsl:if>
-                </xsl:when>
-                <xsl:otherwise>
-                  (Overridden from <b><xsl:value-of select="original_threat"/></b>)
-                </xsl:otherwise>
-              </xsl:choose>
+            <xsl:when test="string-length (nvt/cvss_base) &gt; 0">
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="nvt/cvss_base"/>
+                <xsl:with-param name="threat" select="threat"/>
+                <xsl:with-param name="title" select="$severity_title"/>
+              </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:if test="string-length(nvt/cvss_base) &gt; 0">
-                <xsl:value-of select="nvt/cvss_base"/>
-              </xsl:if>
+              <xsl:value-of select="$severity_title"/>
             </xsl:otherwise>
           </xsl:choose>
-          (<xsl:value-of select="threat"/>)
         </td>
         <td> <!-- Host -->
           <xsl:value-of select="host"/>
