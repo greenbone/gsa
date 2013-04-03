@@ -19286,7 +19286,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <table width="100%" border="0">
       <tr style="background:#bbbbbb">
         <td>Vulnerability</td>
-        <td>Severity</td>
+        <td width="104" align="center">Severity</td>
         <td>Host</td>
         <td>Location</td>
         <td style="text-align:right">Actions</td>

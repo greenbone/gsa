@@ -1,3 +1,8 @@
+2013-04-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed): Fixed width of Severity column
+	to harmonize with the new colored bar.
+
 2013-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Delete and edit users via OMP instead of OAP.  Add exporting of users.
