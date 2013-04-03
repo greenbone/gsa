@@ -615,6 +615,8 @@ init_validator ()
                          "|(export_targets)"
                          "|(export_task)"
                          "|(export_tasks)"
+                         "|(export_user)"
+                         "|(export_users)"
                          "|(get_agent)"
                          "|(get_agents)"
                          "|(get_config)"
@@ -821,11 +823,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|User|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -943,6 +945,7 @@ init_validator ()
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
+  openvas_validator_alias (validator, "user_id",      "id");
   openvas_validator_alias (validator, "users",        "observers");
   openvas_validator_alias (validator, "xml",          "boolean");
 
@@ -1634,7 +1637,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_report_format)
   ELSE (delete_schedule)
   ELSE (delete_slave)
-  ELSE_OAP (delete_user)
+  ELSE (delete_user)
   ELSE (delete_target)
   ELSE (delete_trash_agent)
   ELSE (delete_trash_config)
@@ -1856,7 +1859,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE_OAP (edit_settings)
   ELSE (edit_target)
   ELSE (edit_task)
-  ELSE_OAP (edit_user)
+  ELSE (edit_user)
 
   else if (!strcmp (cmd, "export_agent"))
     return export_agent_omp (credentials, params, content_type,
@@ -2013,6 +2016,14 @@ exec_omp_get (struct MHD_Connection *connection,
 
   else if (!strcmp (cmd, "export_tasks"))
     return export_tasks_omp (credentials, params, content_type,
+                             content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_user"))
+    return export_user_omp (credentials, params, content_type,
+                            content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_users"))
+    return export_users_omp (credentials, params, content_type,
                              content_disposition, response_size);
 
   ELSE (get_agent)

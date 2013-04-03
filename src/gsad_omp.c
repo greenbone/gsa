@@ -160,6 +160,10 @@ static char *get_slave (credentials_t *, params_t *, const char *);
 
 static char *get_slaves (credentials_t *, params_t *, const char *);
 
+static char *get_user (credentials_t *, params_t *, const char *);
+
+static char *get_users (credentials_t *, params_t *, const char *);
+
 
 /* Helpers. */
 
@@ -621,11 +625,17 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_schedules") == 0)
     return get_schedules (credentials, params, response);
 
+  if (strcmp (next, "get_slave") == 0)
+    return get_slave (credentials, params, response);
+
   if (strcmp (next, "get_slaves") == 0)
     return get_slaves (credentials, params, response);
 
-  if (strcmp (next, "get_slave") == 0)
-    return get_slave (credentials, params, response);
+  if (strcmp (next, "get_user") == 0)
+    return get_user (credentials, params, response);
+
+  if (strcmp (next, "get_users") == 0)
+    return get_users (credentials, params, response);
 
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response);
@@ -664,7 +674,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while getting a resource. "
-                         "Diagnostics: Required parameter was NULL.",
+                         "Diagnostics: Required ID parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -16099,9 +16109,38 @@ new_user_omp (credentials_t *credentials, params_t *params)
 }
 
 /**
- * @brief Get a user and XSL transform the result.
+ * @brief Delete a user, get all users, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_user_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("user", credentials, params, 0, get_users);
+}
+
+/**
+ * @brief Get one user, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
+{
+  return get_one ("user", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get one user, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
@@ -16109,77 +16148,29 @@ new_user_omp (credentials_t *credentials, params_t *params)
 char *
 get_user_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In get_users_omp\n");
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *name;
-
-  name = params_value (params, "login");
-
-  if (name == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a user. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_users");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case -1:
-        if (html)
-          return html;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the user. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_users");
-      case -2:
-        return xsl_transform_omp (credentials,
-                                  g_strdup
-                                   ("<gsad_msg status_text=\"Access refused.\""
-                                    " operation=\"Get User\">"
-                                    "Only users given the Admin role"
-                                    " may access User Administration."
-                                    "</gsad_msg>"));
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands><get_users name=\"%s\"/><describe_auth/></commands>",
-                            name)
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_users");
-    }
-
-  xml = g_string_new ("<get_user>");
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting user. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_users");
-    }
-
-  g_string_append (xml, "</get_user>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  return get_user (credentials, params, NULL);
 }
 
 /**
- * @brief Get all users and XSL transform the result.
+ * @brief Get all users, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_users (credentials_t * credentials, params_t *params,
+           const char *extra_xml)
+{
+  return get_many ("user", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all users, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  *
  * @return Result of XSL transformation.
@@ -16187,72 +16178,8 @@ get_user_omp (credentials_t * credentials, params_t *params)
 char *
 get_users_omp (credentials_t * credentials, params_t *params)
 {
-  tracef ("In get_users_omp\n");
-  entity_t entity;
-  char *text = NULL;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
-  const char *sort_field, *sort_order;
-
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case -1:
-        if (html)
-          return html;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the user list. "
-                             "The current list of users is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-      case -2:
-        return xsl_transform_omp (credentials,
-                                  g_strdup
-                                   ("<gsad_msg status_text=\"Access refused.\""
-                                    " operation=\"List Users\">"
-                                    "Only users given the Admin role"
-                                    " may access User Administration."
-                                    "</gsad_msg>"));
-    }
-
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_users"
-                            " sort_field=\"%s\" sort_order=\"%s\"/>"
-                            "<describe_auth/>"
-                            "</commands>",
-                            sort_field ? sort_field : "ROWID",
-                            sort_order ? sort_order : "ascending")
-      == -1)
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user list. "
-                           "The current list of users is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  if (read_entity_and_text (&session, &entity, &text))
-    {
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user list. "
-                           "The current list of users is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
-  openvas_server_close (socket, session);
-  tracef ("get_users_omp: got text: %s", text);
-  fflush (stderr);
-  return xsl_transform_omp (credentials, text);
+  // FIX had <describe_auth/>
+  return get_users (credentials, params, NULL);
 }
 
 /**
@@ -16433,6 +16360,78 @@ create_user_omp (credentials_t * credentials, params_t *params)
   g_string_append (xml, "</commands_response>");
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_user XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_user (credentials_t * credentials, params_t *params,
+           const char *extra_xml)
+{
+  // FIX had <describe_auth/>
+  return edit_resource ("user", credentials, params, extra_xml);
+}
+
+/**
+ * @brief Setup edit_user XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_user_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_user (credentials, params, NULL);
+}
+
+/**
+ * @brief Export a user.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   user_id              UUID of user.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Note XML on success.  HTML result of XSL transformation on error.
+ */
+char *
+export_user_omp (credentials_t * credentials, params_t *params,
+                   enum content_type * content_type, char **content_disposition,
+                   gsize *content_length)
+{
+  return export_resource ("user", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of users.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Users XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_users_omp (credentials_t * credentials, params_t *params,
+                  enum content_type * content_type, char **content_disposition,
+                  gsize *content_length)
+{
+  return export_many ("user", credentials, params, content_type,
+                      content_disposition, content_length);
 }
 
 

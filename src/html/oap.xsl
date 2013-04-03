@@ -253,6 +253,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="New User">
         <img src="/img/new.png" border="0" style="margin-left:3px;"/>
       </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+        <a href="/omp?cmd=export_users&amp;filter={str:encode-uri (filters/term, true ())}&amp;token={/envelope/token}"
+           title="Export all Users as XML"
+           style="margin-left:3px;">
+          <img src="/img/download.png" border="0" alt="Export XML"/>
+        </a>
+      </div>
     </div>
     <div class="gb_window_part_content_no_pad">
       <div id="tasks">
@@ -337,7 +344,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
   <tr class="{$class}">
     <td>
-      <b><xsl:value-of select="name"/></b>
+      <b>
+        <a href="/omp?cmd=get_user&amp;user_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="role"/>
@@ -392,23 +409,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="caller" value="{/envelope/caller}"/>
               <input type="hidden" name="cmd" value="delete_user"/>
-              <input type="hidden" name="name" value="{name}"/>
+              <input type="hidden" name="user_id" value="{@id}"/>
               <input type="image" src="/img/delete.png" alt="Delete"
                      name="Delete" value="Delete" title="Delete"/>
             </form>
           </div>
         </xsl:otherwise>
       </xsl:choose>
-      <a href="/oap?cmd=get_user&amp;login={name}&amp;token={/envelope/token}"
-         title="Details"
-         style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Details"/>
-      </a>
-      <a href="/oap?cmd=edit_user&amp;login={name}&amp;token={/envelope/token}"
-         title="Edit User"
-         style="margin-left:3px;">
-        <img src="/img/edit.png" border="0" alt="Edit"/>
-      </a>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'User'"/>
+        <xsl:with-param name="type" select="'user'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="notrash" select="1"/>
+      </xsl:call-template>
     </td>
   </tr>
 </xsl:template>
@@ -658,16 +671,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!--     GET_USERS_RESPONSE -->
-
-<xsl:template match="get_users_response">
-  <xsl:apply-templates select="../modify_auth_response" mode="show"/>
-  <xsl:apply-templates select="../create_user_response"/>
-  <!-- If any describe_auth was found, match it here -->
-  <xsl:call-template name="describe_auth_response" mode="show"/>
-  <xsl:call-template name="html-users-table"/>
-</xsl:template>
-
 <!--     EDIT_USER -->
 
 <xsl:template match="edit_user">
@@ -679,7 +682,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="get_user">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/get_users_response/user" mode="details"/>
+  <xsl:apply-templates select="commands_response/delete_user_response"/>
+  <xsl:apply-templates select="commands_response/modify_user_response"/>
+  <xsl:apply-templates select="get_users_response/user" mode="details"/>
+</xsl:template>
+
+<!--     GET_USERS_RESPONSE -->
+
+<xsl:template match="get_users">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="delete_user_response"/>
+  <xsl:apply-templates select="create_user_response"/>
+  <xsl:apply-templates select="modify_user_response"/>
+  <!-- The for-each makes the get_users_response the current node. -->
+  <xsl:for-each select="get_users_response | commands_response/get_users_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Users
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-users-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- END USERS MANAGEMENT -->

@@ -1,3 +1,40 @@
+2013-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Delete and edit users via OMP instead of OAP.  Add exporting of users.
+	Make the user pages more like the other pages.
+
+	* src/gsad.c (init_validator): Add export commands.  Add new resource
+	types and user_id.
+	(exec_omp_get): Switch delete_user and edit_user to OMP.  Add user
+	export commands.
+
+	* src/gsad_oap.c (delete_user_oap, edit_user_oap): Remove.  Replaced by
+	OMP equivalents.
+
+	* src/gsad_omp.c (next_page): Add get_user and get_users.
+	(get_one): Make error message slightly more specific.
+	(delete_user_omp): New function.  OMP equivalent of removed OAP version.
+	(get_user, get_users): New functions.
+	(get_user_omp, get_users_omp): Let the generic functions do the work
+	via get_user and get_users.
+	(edit_user, edit_user_omp): New functions.  OMP equivalent of removed
+	OAP versions.
+	(export_user_omp, export_users_omp): New functions.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/oap.xsl (html-users-table): Add export icon in heading.
+	(user): Make name column a link.  Use id instead of name in delete icon.
+	Add standard icons.
+	(get_users_response): Remove.
+	(get_user): Update for path changes.  Match delete and modify for error
+	messages.
+	(get_users): New template.
+
+	* src/html/omp.xsl (list-window-line-icons): Add a notrash param so that
+	the user page can use the delete icon instead of the trash icon until
+	users have trashcan capability.
+
 2013-04-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (severity-bar): New template.

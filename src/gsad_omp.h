@@ -272,6 +272,12 @@ char * new_filter_omp (credentials_t *, params_t *);
 char * save_filter_omp (credentials_t *, params_t *);
 
 char * create_user_omp (credentials_t *, params_t *);
+char * delete_user_omp (credentials_t *, params_t *);
+char * edit_user_omp (credentials_t *, params_t *);
+char * export_user_omp (credentials_t *, params_t *, enum content_type *,
+                        char **, gsize *);
+char * export_users_omp (credentials_t *, params_t *, enum content_type *,
+                         char **, gsize *);
 char * get_user_omp (credentials_t *, params_t *);
 char * get_users_omp (credentials_t *, params_t *);
 char * new_user_omp (credentials_t *, params_t *);
