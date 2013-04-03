@@ -3,6 +3,24 @@
 	Delete and edit users via OMP instead of OAP.  Add exporting of users.
 	Make the user pages more like the other pages.
 
+	* src/gsad.c (exec_omp_get): Switch save_user to OMP.
+
+	* src/gsad_oap.c (save_user_oap): Remove.  Replaced by OMP equivalent.
+
+	* src/gsad_omp.c (edit_resource): Split param check in two for better
+	messages.
+	(CHECK): New macro.
+	(save_user_omp): New function.  OMP equivalent of removed OAP version.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/oap.xsl (user [edit]): Add next and user_id params.
+
+2013-04-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Delete and edit users via OMP instead of OAP.  Add exporting of users.
+	Make the user pages more like the other pages.
+
 	* src/gsad.c (init_validator): Add export commands.  Add new resource
 	types and user_id.
 	(exec_omp_get): Switch delete_user and edit_user to OMP.  Add user

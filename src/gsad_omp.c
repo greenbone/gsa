@@ -990,12 +990,20 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   g_free (id_name);
   next = params_value (params, "next");
 
-  if (resource_id == NULL || next == NULL)
+  if (resource_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a resource. "
                          "The resource remains as it was. "
-                         "Diagnostics: Required parameter was NULL.",
+                         "Diagnostics: Required ID parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  if (next == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a resource. "
+                         "The resource remains as it was. "
+                         "Diagnostics: Required parameter 'next' was NULL.",
                          "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
@@ -16392,6 +16400,156 @@ edit_user_omp (credentials_t * credentials, params_t *params)
 {
   return edit_user (credentials, params, NULL);
 }
+
+/**
+ * @brief Check user editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save User");                                      \
+      html = edit_user (credentials, params, msg);                             \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a user, get all users, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_user_omp (credentials_t * credentials, params_t *params)
+{
+  int ret;
+  gchar *html, *response, *buf;
+  const char *user_id, *login, *next, *modify_password, *password, *role;
+  const char *hosts, *hosts_allow, *enable_ldap_connect;
+  entity_t entity;
+  GString *command;
+
+  enable_ldap_connect = params_value (params, "enable_ldap_connect");
+  /* List of hosts user has/lacks access rights. */
+  hosts = params_value (params, "access_hosts");
+  /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
+   * access. */
+  hosts_allow = params_value (params, "hosts_allow");
+  login = params_value (params, "login");
+  modify_password = params_value (params, "modify_password");
+  next = params_value (params, "next");
+  password = params_value (params, "password");
+  role = params_value (params, "role");
+  user_id = params_value (params, "user_id");
+
+  CHECK (user_id);
+  CHECK (login);
+  CHECK (modify_password);
+  CHECK (password);
+  CHECK (role);
+  CHECK (hosts);
+  CHECK (hosts);
+  CHECK (hosts_allow);
+
+  /* Modify the user. */
+
+  command = g_string_new ("");
+  buf = g_markup_printf_escaped ("<modify_user>"
+                                 "<name>%s</name>"
+                                 "<password modify=\"%s\">"
+                                 "%s</password>"
+                                 "<role>%s</role>",
+                                 login,
+                                 modify_password,
+                                 password,
+                                 role);
+  g_string_append (command, buf);
+  g_free (buf);
+
+  if (strcmp (hosts_allow, "2") && strlen (hosts))
+    buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
+                                   hosts_allow, hosts);
+  else
+    buf = g_strdup ("<hosts allow=\"0\"></hosts>");
+  g_string_append (command, buf);
+  g_free (buf);
+
+  enable_ldap_connect = params_value (params, "enable_ldap_connect");
+  if (enable_ldap_connect && strcmp (enable_ldap_connect, "1") == 0)
+    {
+      g_string_append (command, "<sources><source>ldap_connect</source></sources>");
+    }
+  else
+    {
+      g_string_append (command, "<sources><source></source></sources>");
+    }
+  g_string_append (command, "</modify_user>");
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials,
+             &response,
+             &entity,
+             command->str);
+  g_string_free (command, TRUE);
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a user. "
+                             "The user was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_users");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a user. "
+                             "It is unclear whether the user has been saved or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_users");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a user. "
+                             "It is unclear whether the user has been saved or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_users");
+    }
+
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving a user. "
+                               "The user was, however, saved. "
+                               "Diagnostics: Error in parameter next.",
+                               "/omp?cmd=get_users");
+        }
+    }
+  else
+    html = edit_user (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
+}
+
+#undef CHECK
 
 /**
  * @brief Export a user.

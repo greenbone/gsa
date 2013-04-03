@@ -1705,7 +1705,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_target)
   ELSE (save_task)
   ELSE (save_container_task)
-  ELSE_OAP (save_user)
+  ELSE (save_user)
   ELSE (start_task)
   ELSE (stop_task)
   ELSE_OAP (sync_feed)
