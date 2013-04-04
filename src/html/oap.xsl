@@ -2,7 +2,9 @@
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:gsa="http://openvas.org">
+    xmlns:str="http://exslt.org/strings"
+    xmlns:gsa="http://openvas.org"
+    extension-element-prefixes="str func date exslt">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
