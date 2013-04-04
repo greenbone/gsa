@@ -16183,7 +16183,52 @@ delete_user_omp (credentials_t * credentials, params_t *params)
 char *
 get_user (credentials_t * credentials, params_t *params, const char *extra_xml)
 {
-  return get_one ("user", credentials, params, extra_xml, NULL);
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "DESCRIBE_AUTH"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = get_one ("user", credentials, params, extra->str, NULL);
+  g_string_free (extra, TRUE);
+  return html;
 }
 
 /**
@@ -16213,7 +16258,52 @@ static char *
 get_users (credentials_t * credentials, params_t *params,
            const char *extra_xml)
 {
-  return get_many ("user", credentials, params, extra_xml, NULL);
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "DESCRIBE_AUTH"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = get_many ("user", credentials, params, extra->str, NULL);
+  g_string_free (extra, TRUE);
+  return html;
 }
 
 /**
@@ -16227,7 +16317,6 @@ get_users (credentials_t * credentials, params_t *params,
 char *
 get_users_omp (credentials_t * credentials, params_t *params)
 {
-  // FIX had <describe_auth/>
   return get_users (credentials, params, NULL);
 }
 
@@ -16393,8 +16482,52 @@ char *
 edit_user (credentials_t * credentials, params_t *params,
            const char *extra_xml)
 {
-  // FIX had <describe_auth/>
-  return edit_resource ("user", credentials, params, extra_xml);
+  gchar *html;
+  GString *extra;
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "DESCRIBE_AUTH"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+  if (extra_xml)
+    g_string_append (extra, extra_xml);
+  html = edit_resource ("user", credentials, params, extra->str);
+  g_string_free (extra, TRUE);
+  return html;
 }
 
 /**

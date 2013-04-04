@@ -1,5 +1,14 @@
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_user, get_users, edit_user): Get DESCRIBE_AUTH
+	response too, like the OAP version did.
+	(get_users_omp): Remove comment about DESCRIBE_AUTH.
+
+	* src/html/oap.xsl (get_users): Match auth templates, equivalent to the
+	OAP version.
+
+2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (new_user): Add DESCRIBE_AUTH call like Administrator
 	version had.
 
