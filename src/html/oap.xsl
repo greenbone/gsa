@@ -437,8 +437,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <xsl:call-template name="details-header-icons">
          <xsl:with-param name="cap-type" select="'User'"/>
          <xsl:with-param name="type" select="'user'"/>
-         <xsl:with-param name="noedit" select="1"/>
-         <xsl:with-param name="noexport" select="1"/>
        </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
@@ -546,15 +544,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
        Edit User
-       <a href="/help/users.html?token={/envelope/token}#userdetails"
-         title="Help: Users (Edit User)">
-         <img src="/img/help.png"/>
-       </a>
+       <xsl:call-template name="edit-header-icons">
+         <xsl:with-param name="cap-type" select="'User'"/>
+         <xsl:with-param name="type" select="'user'"/>
+         <xsl:with-param name="id"
+                         select="@id"/>
+       </xsl:call-template>
     </div>
     <div class="gb_window_part_content">
-      <div class="float_right">
-        <a href="?cmd=get_users&amp;token={/envelope/token}">Users</a>
-      </div>
       <form action="/oap" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_user"/>

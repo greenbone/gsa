@@ -1,5 +1,10 @@
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl (user [details]): Enable edit and export icons.
+	(user [edit]): Switch to standard icons.  Remove old-style Users link.
+
+2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (get_user, get_users, edit_user): Get DESCRIBE_AUTH
 	response too, like the OAP version did.
 	(get_users_omp): Remove comment about DESCRIBE_AUTH.
