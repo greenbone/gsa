@@ -224,7 +224,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <!-- Only if ldap-connect is enabled, it is per-user. !-->
           <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-            <tr class="odd">
+            <tr class="even">
               <td valign="top">Allow LDAP- Authentication only</td>
               <td>
                 <input type="checkbox" name="enable_ldap_connect" value="1" checked="1"/>

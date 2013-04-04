@@ -1,5 +1,12 @@
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_user): Add DESCRIBE_AUTH call like Administrator
+	version had.
+
+	* src/html/oap.xsl (html-create-user-form): Use even for LDAP field.
+
+2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/gsad.xsl (html-gsa-logo): Move user operation indicator icons
 	into Manager section, updating paths.
 

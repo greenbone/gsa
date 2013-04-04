@@ -16057,6 +16057,47 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml)
   xml = g_string_new ("<new_user>");
   g_string_append (xml, extra_xml);
 
+  if (command_enabled (credentials, "DESCRIBE_AUTH"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<describe_auth/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "No new user was created. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (xml, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   if (command_enabled (credentials, "GET_GROUPS"))
     {
       gchar *response;
