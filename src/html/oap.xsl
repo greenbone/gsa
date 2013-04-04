@@ -4,7 +4,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:str="http://exslt.org/strings"
     xmlns:gsa="http://openvas.org"
-    extension-element-prefixes="str func date exslt">
+    extension-element-prefixes="str">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"

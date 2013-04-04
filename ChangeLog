@@ -1,5 +1,9 @@
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/oap.xsl: Remove extra extension prefixes from last commit.
+
+2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl: Add str prefix to stylesheet.
 
 2013-04-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
