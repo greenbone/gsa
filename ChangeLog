@@ -1,5 +1,12 @@
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_user_omp): Update to newer style so that the
+	generation of the following page is done by the appropriate handler
+	instead of being done manually.  This also corrects the XSL error that
+	was occuring on the Users page after creating the user.
+
+2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/oap.xsl: Remove extra extension prefixes from last commit.
 
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>

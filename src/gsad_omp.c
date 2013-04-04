@@ -16201,12 +16201,13 @@ get_users_omp (credentials_t * credentials, params_t *params)
 char *
 create_user_omp (credentials_t * credentials, params_t *params)
 {
-  gnutls_session_t session;
-  GString *xml;
-  int socket;
-  gchar *html;
   const char *name, *password, *role, *hosts, *hosts_allow;
   const char *enable_ldap_connect, *submit;
+  int ret;
+  params_t *groups;
+  GString *group_elements, *string;
+  gchar *buf, *response, *html;
+  entity_t entity;
 
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
@@ -16225,25 +16226,6 @@ create_user_omp (credentials_t * credentials, params_t *params)
       return new_user_omp (credentials, params);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new user. "
-                             "No new user has been created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_users");
-    }
-
-  xml = g_string_new ("<commands_response>");
-
   name = params_value (params, "login");
   password = params_value (params, "password");
   role = params_value (params, "role");
@@ -16251,123 +16233,110 @@ create_user_omp (credentials_t * credentials, params_t *params)
   hosts_allow = params_value (params, "hosts_allow");
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
 
-  if (name == NULL || password == NULL || role == NULL || hosts == NULL
-      || hosts_allow == NULL)
-    g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Create User"));
-  else
+  if (role == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new user. "
+                         "No new user was created. "
+                         "Diagnostics: Role was NULL.",
+                         "/omp?cmd=get_users");
+
+  if (name == NULL || password == NULL || hosts == NULL || hosts_allow == NULL)
+    return new_user (credentials, params,
+                     GSAD_MESSAGE_INVALID_PARAM ("Create User"));
+
+  /* Create the user. */
+
+  string = g_string_new ("<create_user>");
+  buf = g_markup_printf_escaped ("<name>%s</name>"
+                                 "<password>%s</password>"
+                                 "<role>%s</role>",
+                                 name,
+                                 password,
+                                 role);
+
+  g_string_append (string, buf);
+  g_free (buf);
+
+  group_elements = g_string_new ("<groups>");
+  groups = params_values (params, "group_id_optional:");
+  if (groups)
     {
-      int ret;
-      params_t *groups;
-      GString *group_elements, *string;
-      gchar *buf;
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
 
-      /* Create the user. */
+      params_iterator_init (&iter, groups);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (group_elements,
+                                  "<group id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+  g_string_append (string, group_elements->str);
+  g_string_free (group_elements, TRUE);
+  g_string_append (string, "</groups>");
 
-      string = g_string_new ("<create_user>");
-      buf = g_markup_printf_escaped ("<name>%s</name>"
-                                     "<password>%s</password>"
-                                     "<role>%s</role>",
-                                     name,
-                                     password,
-                                     role);
-
+  if (strcmp (hosts_allow, "2") && strlen (hosts))
+    {
+      buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
+                                     hosts_allow,
+                                     hosts);
       g_string_append (string, buf);
       g_free (buf);
-
-      group_elements = g_string_new ("<groups>");
-      groups = params_values (params, "group_id_optional:");
-      if (groups)
-        {
-          params_iterator_t iter;
-          char *name;
-          param_t *param;
-
-          params_iterator_init (&iter, groups);
-          while (params_iterator_next (&iter, &name, &param))
-            if (param->value && strcmp (param->value, "--"))
-              g_string_append_printf (group_elements,
-                                      "<group id=\"%s\"/>",
-                                      param->value ? param->value : "");
-        }
-      g_string_append (string, group_elements->str);
-      g_string_free (group_elements, TRUE);
-      g_string_append (string, "</groups>");
-
-      if (strcmp (hosts_allow, "2") && strlen (hosts))
-        {
-          buf = g_markup_printf_escaped ("<hosts allow=\"%s\">%s</hosts>",
-                                         hosts_allow,
-                                         hosts);
-          g_string_append (string, buf);
-          g_free (buf);
-        }
-      if ((enable_ldap_connect) && (strcmp (enable_ldap_connect, "1") == 0))
-        {
-          g_string_append (string,
-            "<sources><source>ldap_connect</source></sources>");
-        }
-      g_string_append (string, "</create_user>");
-
-      buf = g_string_free (string, FALSE);
-      ret = openvas_server_send (&session, buf);
-      g_free (buf);
-
-      if (ret == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new user. "
-                               "No new user has been created. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_users");
-        }
-
-      if (read_string (&session, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while creating a new user. "
-                               "It is unclear whether the user has been created or not. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_users");
-        }
     }
-
-  /* Get all users. */
-
-  if (openvas_server_send (&session, "<commands><get_users/><describe_auth/></commands>") == -1)
+  if ((enable_ldap_connect) && (strcmp (enable_ldap_connect, "1") == 0))
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new user. "
-                           "The new user has, however, been created. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_users");
+      g_string_append (string,
+        "<sources><source>ldap_connect</source></sources>");
     }
+  g_string_append (string, "</create_user>");
 
-  if (read_string (&session, &xml))
+  buf = g_string_free (string, FALSE);
+
+  response = NULL;
+  entity = NULL;
+  ret = omp (credentials, &response, &entity, buf);
+  g_free (buf);
+  switch (ret)
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while creating a new user. "
-                           "The new user has, however, been created. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_users");
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new user. "
+                             "No new user was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_users");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new user. "
+                             "It is unclear whether the user has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_users");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new user. "
+                             "It is unclear whether the user has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_users");
     }
 
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</commands_response>");
-  openvas_server_close (socket, session);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+  if (omp_success (entity))
+    {
+      html = next_page (credentials, params, response);
+      if (html == NULL)
+        html = get_users (credentials, params, response);
+    }
+  else
+    html = new_user (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
