@@ -16400,7 +16400,7 @@ save_user_omp (credentials_t * credentials, params_t *params)
 {
   int ret;
   gchar *html, *response, *buf;
-  const char *user_id, *login, *next, *modify_password, *password, *role;
+  const char *user_id, *login, *modify_password, *password, *role;
   const char *hosts, *hosts_allow, *enable_ldap_connect;
   entity_t entity;
   GString *command;
@@ -16413,7 +16413,6 @@ save_user_omp (credentials_t * credentials, params_t *params)
   hosts_allow = params_value (params, "hosts_allow");
   login = params_value (params, "login");
   modify_password = params_value (params, "modify_password");
-  next = params_value (params, "next");
   password = params_value (params, "password");
   role = params_value (params, "role");
   user_id = params_value (params, "user_id");

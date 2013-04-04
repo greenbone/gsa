@@ -1,3 +1,8 @@
+2013-04-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_user_omp): Remove next variable as it is set but
+	not used.
+
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_user_omp): Update to newer style so that the
