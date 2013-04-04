@@ -994,16 +994,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_tasks/run_wizard_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/create_user_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/delete_user_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/modify_user_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="new_filter/create_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_group/create_group_response"
                              mode="response-indicator"/>
 
         <!-- Administrator -->
-        <xsl:apply-templates select="commands_response/create_user_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="commands_response/delete_user_response"
-                             mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/modify_auth_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/modify_settings_response"
@@ -1017,8 +1019,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:apply-templates select="edit_settings/get_settings_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="edit_settings/gsad_msg"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_users/modify_user_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_settings/gsad_msg"
                              mode="response-indicator"/>
