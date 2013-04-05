@@ -17,7 +17,6 @@ Authors:
 Matthew Mundell <matthew.mundell@greenbone.net>
 Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 Michael Wiegand <michael.wiegand@greenbone.net>
-Hartmut Goebel <h.goebel@goebel-consult.de>
 Karl-Heinz Ruskowski <khruskowski@intevation.de>
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
@@ -44,15 +43,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-head">
   <head>
     <link rel="stylesheet" type="text/css" href="/gsa-style.css"/>
-    <!-- Internet Explorer CSS Fixes -->
-    <xsl:comment>[if IE 6]&gt;
-      <!-- HACK: Since this will become a comment for the webserver,
-           URLS are not rewritten within here. Try some locations so
-           one should match. This is ugly, but IE6 is too.
-      -->
-        &lt;link rel="stylesheet" type="text/css" href="IE6fixes.css"/&gt;
-        &lt;link rel="stylesheet" type="text/css" href="../IE6fixes.css"/&gt;
-    &lt;![endif]</xsl:comment>
     <link rel="icon" href="/favicon.gif" type="image/x-icon"/>
     <title>Greenbone Security Assistant</title>
     <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
@@ -661,7 +651,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-gsa-logo">
   <xsl:param name="username"/>
   <xsl:param name="time"/>
-  <div class="gsa-logo-header">
+  <div style="text-align:left;">
     <div class="logo_l">
       <a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}" title="Greenbone Security Assistant">
         <img src="/img/style/logo_l.png" alt="Greenbone Security Assistant"/>

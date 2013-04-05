@@ -1,3 +1,25 @@
+2013-04-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Removing any support of IE6. This browser is highly unsecure for
+	any purpose and supporting would encorage use of a unsecure
+	browser for a security application.
+
+	Meanwhile this browser should really not be used anywhere
+	so even from convenience point of view the support of IE6
+	is not necessary anymore.
+
+	Basically the removal means to revert r7415.
+
+	* src/html/gsad.xsl (html-head): Removed IE6 exception.
+
+	* src/html/login/login.html: Removed IE6 exception.
+
+	* src/html/gsa-style.css (.gsa-logo-header): Removed.
+
+	* CMakeLists.txt: Removed handling of IE6fixes.css.
+
+	* src/html/IE6fixes.css: Removed.
+
 2013-04-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/oap.xsl (user [details]): Enable edit and export icons.
