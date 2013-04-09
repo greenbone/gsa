@@ -1,3 +1,18 @@
+2013-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add groups to Edit User page.
+
+	* src/gsad_omp.c (edit_resource): Append extra_xml inside the page
+	element, as advertised in doc.
+	(edit_user): Get groups for dropdown.
+	(save_user_omp): Add + button handling.  Add groups to command.
+
+	* src/html/gsad.xsl (html-gsa-logo): Add modify_user indicator on
+	edit_user page for error indicator.
+
+	* src/html/oap.xsl (user [edit]): Add Groups field.
+	(edit_user): Match modify_user_response for error message.
+
 2013-04-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_schedule_omp): Add timezone parameter.

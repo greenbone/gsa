@@ -604,6 +604,96 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
+            <td>Groups (optional)</td>
+            <td>
+              <xsl:variable name="groups"
+                            select="../../../get_groups_response/group"/>
+              <xsl:choose>
+                <xsl:when test="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']) &gt; 0">
+                  <xsl:for-each select="/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--']/value">
+                    <select name="group_id_optional:{position ()}">
+                      <xsl:variable name="group_id" select="text ()"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($group_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$groups">
+                        <xsl:choose>
+                          <xsl:when test="@id = $group_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:for-each select="groups/group">
+                    <select name="group_id_optional:{position ()}">
+                      <xsl:variable name="group_id" select="@id"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length ($group_id) &gt; 0">
+                          <option value="0">--</option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="0" selected="1">--</option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:for-each select="$groups">
+                        <xsl:choose>
+                          <xsl:when test="@id = $group_id">
+                            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}"><xsl:value-of select="name"/></option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:for-each>
+                    </select>
+                    <br/>
+                  </xsl:for-each>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:variable name="count">
+                <xsl:variable name="params"
+                              select="count (/envelope/params/_param[substring-before (name, ':') = 'group_id_optional'][value != '--'])"/>
+                <xsl:choose>
+                  <xsl:when test="$params &gt; 0">
+                    <xsl:value-of select="$params"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="count (groups/group)"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:call-template name="new-user-group-select">
+                <xsl:with-param name="groups" select="../../../get_groups_response"/>
+                <xsl:with-param name="count" select="/envelope/params/groups - $count"/>
+                <xsl:with-param name="position" select="$count + 1"/>
+              </xsl:call-template>
+
+              <input type="submit" name="submit_plus_group" value="+"/>
+
+              <xsl:choose>
+                <xsl:when test="string-length (/envelope/params/groups)">
+                  <input type="hidden" name="groups" value="{/envelope/params/groups}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="groups" value="{$count + 1}"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+          </tr>
+          <tr class="odd">
             <td valign="top">Host Access</td>
             <td>
               <label>
@@ -647,7 +737,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <!-- Only if per-user ldap enabled. -->
           <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-            <tr class="odd">
+            <tr>
               <td valign="top">Authentication via LDAP</td>
               <td>
                <xsl:choose>
@@ -676,6 +766,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="edit_user">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_user_response"/>
   <xsl:apply-templates select="commands_response/get_users_response/user" mode="edit"/>
 </xsl:template>
 

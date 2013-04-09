@@ -1024,6 +1024,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
     }
 
   if (openvas_server_sendf (&session,
+                            /* TODO: Remove redundant COMMANDS. */
                             "<commands>"
                             "<get_%ss"
                             " %s_id=\"%s\""
@@ -1045,10 +1046,10 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
 
   xml = g_string_new ("");
 
+  g_string_append_printf (xml, "<edit_%s>", type);
+
   if (extra_xml)
     g_string_append (xml, extra_xml);
-
-  g_string_append_printf (xml, "<edit_%s>", type);
 
   if (read_string (&session, &xml))
     {
@@ -16527,6 +16528,46 @@ edit_user (credentials_t * credentials, params_t *params,
       free_entity (entity);
       g_free (response);
     }
+
+  extra = g_string_new ("");
+  if (command_enabled (credentials, "GET_GROUPS"))
+    {
+      gchar *response;
+      entity_t entity;
+
+      response = NULL;
+      entity = NULL;
+      switch (omp (credentials, &response, &entity, "<get_groups/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users");
+          case 2:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users");
+          default:
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the group list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users");
+        }
+
+      g_string_append (extra, response);
+
+      free_entity (entity);
+      g_free (response);
+    }
+
   if (extra_xml)
     g_string_append (extra, extra_xml);
   html = edit_resource ("user", credentials, params, extra->str);
@@ -16579,9 +16620,27 @@ save_user_omp (credentials_t * credentials, params_t *params)
   int ret;
   gchar *html, *response, *buf;
   const char *user_id, *login, *modify_password, *password, *role;
-  const char *hosts, *hosts_allow, *enable_ldap_connect;
+  const char *hosts, *hosts_allow, *enable_ldap_connect, *submit;
   entity_t entity;
-  GString *command;
+  GString *command, *group_elements;
+  params_t *groups;
+
+  submit = params_value (params, "submit_plus_group");
+  if (submit && (strcmp (submit, "+") == 0))
+    {
+      param_t *count;
+      count = params_get (params, "groups");
+      if (count)
+        {
+          gchar *old;
+          old = count->value;
+          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
+                             : g_strdup ("2");
+        }
+      else
+        params_add (params, "groups", "2");
+      return edit_user_omp (credentials, params);
+    }
 
   enable_ldap_connect = params_value (params, "enable_ldap_connect");
   /* List of hosts user has/lacks access rights. */
@@ -16636,6 +16695,26 @@ save_user_omp (credentials_t * credentials, params_t *params)
     {
       g_string_append (command, "<sources><source></source></sources>");
     }
+
+  group_elements = g_string_new ("<groups>");
+  groups = params_values (params, "group_id_optional:");
+  if (groups)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, groups);
+      while (params_iterator_next (&iter, &name, &param))
+        if (param->value && strcmp (param->value, "--"))
+          g_string_append_printf (group_elements,
+                                  "<group id=\"%s\"/>",
+                                  param->value ? param->value : "");
+    }
+  g_string_append (command, group_elements->str);
+  g_string_free (group_elements, TRUE);
+  g_string_append (command, "</groups>");
+
   g_string_append (command, "</modify_user>");
 
   response = NULL;
