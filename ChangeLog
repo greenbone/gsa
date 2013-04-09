@@ -1,3 +1,9 @@
+2013-04-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_schedule_omp): Add timezone parameter.
+
+	* src/html/omp.xsl (html-create-schedule-form): Add timezone field.
+
 2013-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (gsa:date-tz): Add case for negative timezones.  If
