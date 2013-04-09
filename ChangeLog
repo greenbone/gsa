@@ -1,3 +1,21 @@
+2013-04-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Add CVSS Score calculator.
+
+	* src/gsad.c (init_validator): Add cvss_calculator command. Add cvss_*
+	parameters.
+	(exec_omp_get): Handle cvss_calculator command.
+
+	* src/gsad_omp.c: Include openvas/base/cvss.h
+	(cvss_calculator): New function.
+
+	* src/gsad_omp.h: Add cvss_calculator header.
+
+	* src/html/gsad.xsl (html-gsa-navigation): Add CVSS Calculator Extras
+	submenu entry.
+
+	* src/html/omp.xsl (cvss_calculator): New template.
+
 2013-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add groups to Edit User page.

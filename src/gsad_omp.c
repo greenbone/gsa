@@ -51,6 +51,7 @@
 #include "tracef.h"
 
 #include <openvas/misc/openvas_server.h>
+#include <openvas/base/cvss.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
 
@@ -16815,6 +16816,58 @@ export_users_omp (credentials_t * credentials, params_t *params,
 {
   return export_many ("user", credentials, params, content_type,
                       content_disposition, content_length);
+}
+
+char *
+cvss_calculator (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  const char *cvss_av, *cvss_au, *cvss_ac, *cvss_c, *cvss_i, *cvss_a;
+  const char *cvss_vector;
+
+  cvss_av = params_value (params, "cvss_av");
+  cvss_au = params_value (params, "cvss_au");
+  cvss_ac = params_value (params, "cvss_ac");
+  cvss_c = params_value (params, "cvss_c");
+  cvss_i = params_value (params, "cvss_i");
+  cvss_a = params_value (params, "cvss_a");
+  cvss_vector = params_value (params, "cvss_vector");
+
+  xml = g_string_new ("<cvss_calculator>");
+
+  /* Calculate base score */
+  if (cvss_av && cvss_au && cvss_ac && cvss_c && cvss_i && cvss_a)
+    {
+      char *vector = g_strdup_printf
+                      ("AV:%c/AC:%c/Au:%c/C:%c/I:%c/A:%c",
+                       *cvss_av, *cvss_ac, *cvss_au, *cvss_c, *cvss_i, *cvss_a);
+
+      g_string_append_printf (xml,
+                              "<cvss_vector>%s</cvss_vector>"
+                              "<cvss_score>%.1f</cvss_score>",
+                              vector,
+                              get_cvss_score_from_base_metrics (vector));
+
+      g_string_append_printf
+       (xml,
+        "<cvss_av>%c</cvss_av><cvss_au>%c</cvss_au>"
+        "<cvss_ac>%c</cvss_ac><cvss_c>%c</cvss_c>"
+        "<cvss_i>%c</cvss_i><cvss_a>%c</cvss_a>",
+        *cvss_av, *cvss_au, *cvss_ac, *cvss_c, *cvss_i, *cvss_a);
+
+      g_free (vector);
+    }
+  else if (cvss_vector)
+    {
+      g_string_append_printf (xml,
+                              "<cvss_vector>%s</cvss_vector>"
+                              "<cvss_score>%.1f</cvss_score>",
+                              cvss_vector,
+                              get_cvss_score_from_base_metrics (cvss_vector));
+    }
+
+  g_string_append (xml, "</cvss_calculator>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
 

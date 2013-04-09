@@ -22072,6 +22072,151 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template match="cvss_calculator">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">CVSS Base Score Calculator
+      <a href="/help/cvss_calculator.html?token={/envelope/token}"
+         title="Help: CVSS Base Score Calculator">
+        <img src="/img/help.png"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="get" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="cvss_calculator"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr class="odd">
+            <td valign="top" width="125">CVSS Vector</td>
+            <td>
+              AV:
+              <select name="cvss_av">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'L'"/>
+                  <xsl:with-param name="select-value" select="cvss_av"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'A'"/>
+                  <xsl:with-param name="select-value" select="cvss_av"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'N'"/>
+                  <xsl:with-param name="select-value" select="cvss_av"/>
+                </xsl:call-template>
+              </select>
+              AC:
+              <select name="cvss_ac">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'H'"/>
+                  <xsl:with-param name="select-value" select="cvss_ac"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'M'"/>
+                  <xsl:with-param name="select-value" select="cvss_ac"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'L'"/>
+                  <xsl:with-param name="select-value" select="cvss_ac"/>
+                </xsl:call-template>
+              </select>
+              Au:
+              <select name="cvss_au">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'M'"/>
+                  <xsl:with-param name="select-value" select="cvss_au"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'S'"/>
+                  <xsl:with-param name="select-value" select="cvss_au"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'N'"/>
+                  <xsl:with-param name="select-value" select="cvss_au"/>
+                </xsl:call-template>
+              </select>
+              C:
+              <select name="cvss_c">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'N'"/>
+                  <xsl:with-param name="select-value" select="cvss_c"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'P'"/>
+                  <xsl:with-param name="select-value" select="cvss_c"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'C'"/>
+                  <xsl:with-param name="select-value" select="cvss_c"/>
+                </xsl:call-template>
+              </select>
+              I:
+              <select name="cvss_i">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'N'"/>
+                  <xsl:with-param name="select-value" select="cvss_i"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'P'"/>
+                  <xsl:with-param name="select-value" select="cvss_i"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'C'"/>
+                  <xsl:with-param name="select-value" select="cvss_i"/>
+                </xsl:call-template>
+              </select>
+              A:
+              <select name="cvss_a">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'N'"/>
+                  <xsl:with-param name="select-value" select="cvss_a"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'P'"/>
+                  <xsl:with-param name="select-value" select="cvss_a"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'C'"/>
+                  <xsl:with-param name="select-value" select="cvss_a"/>
+                </xsl:call-template>
+              </select>
+            </td>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Calculate"/>
+            </td>
+          </tr>
+        </table>
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+      </form>
+      <form action="/omp" method="get" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="cvss_calculator"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="125">CVSS Vector</td>
+            <td class="odd">
+              <input type="text" name="cvss_vector" value="{cvss_vector}"
+                     size="30" maxlength="80" style="vertical-align:middle"/>
+            </td>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Calculate"/>
+            </td>
+          </tr>
+        </table>
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+      </form>
+      <xsl:choose>
+        <xsl:when test="cvss_score">
+          <xsl:if test="cvss_score != '-1.0'">
+            <br/><b>Base Score: </b><xsl:value-of select="cvss_score"/><br/><br/>
+          </xsl:if>
+          <xsl:if test="cvss_score = '-1.0'">
+            Erroneous cvss vector value provided.
+          </xsl:if>
+        </xsl:when>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
 <!-- COMMANDS_RESPONSE -->
 
 <xsl:template match="commands_response">

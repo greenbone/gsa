@@ -527,6 +527,7 @@ init_validator ()
                          "|(create_slave)"
                          "|(create_target)"
                          "|(create_task)"
+                         "|(cvss_calculator)"
                          "|(create_user)"
                          "|(delete_agent)"
                          "|(delete_config)"
@@ -736,6 +737,13 @@ init_validator ()
   openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
   openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
   openvas_validator_add (validator, "condition_data:value", "(?s)^.*$");
+  openvas_validator_add (validator, "cvss_av",       "^(L|A|N)$");
+  openvas_validator_add (validator, "cvss_ac",       "^(H|M|L)$");
+  openvas_validator_add (validator, "cvss_au",       "^(M|S|N)$");
+  openvas_validator_add (validator, "cvss_c",       "^(N|P|C)$");
+  openvas_validator_add (validator, "cvss_i",       "^(N|P|C)$");
+  openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
+  openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/Au:(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
   openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
   openvas_validator_add (validator, "day_of_month", "^((0|1|2)[0-9]{1,1})|30|31$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
@@ -1831,7 +1839,10 @@ exec_omp_get (struct MHD_Connection *connection,
 
   /* Check cmd and precondition, start respective OMP command(s). */
 
-  if (!strcmp (cmd, "new_filter"))
+  if (!strcmp (cmd, "cvss_calculator"))
+    return cvss_calculator (credentials, params);
+
+  else if (!strcmp (cmd, "new_filter"))
     return new_filter_omp (credentials, params);
 
   ELSE (new_target)

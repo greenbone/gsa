@@ -286,6 +286,8 @@ char * save_user_omp (credentials_t *, params_t *);
 char * run_wizard_omp (credentials_t *, params_t *);
 char * wizard_omp (credentials_t *, params_t *);
 
+char * cvss_calculator (credentials_t *, params_t *);
+
 char * get_trash_omp (credentials_t *, params_t *params);
 char * restore_omp (credentials_t *, params_t *);
 char * empty_trashcan_omp (credentials_t *, params_t *);
