@@ -1,3 +1,19 @@
+2013-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Move user XSL from oap.xsl to omp.xsl now that it's handled by OMP.
+
+	* src/html/oap.xsl (group [newuser], new-user-group-select)
+	(html-create-user-form, html-users-table, create_user_response)
+	(new_user, delete_user_response, modify_user_response, user)
+	(user [details], user [edit], edit_user, get_user, get_users): Remove.
+	Now in omp.xsl.
+
+	* src/html/omp.xsl (group [newuser], new-user-group-select)
+	(html-create-user-form, html-users-table, create_user_response)
+	(new_user, delete_user_response, modify_user_response, user)
+	(user [details], user [edit], edit_user, get_user, get_users): New
+	templates.  From oap.xsl.
+
 2013-04-09  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Add CVSS Score calculator.
