@@ -16823,7 +16823,7 @@ cvss_calculator (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   const char *cvss_av, *cvss_au, *cvss_ac, *cvss_c, *cvss_i, *cvss_a;
-  const char *cvss_vector;
+  const char *cvss_vector, *name;
 
   cvss_av = params_value (params, "cvss_av");
   cvss_au = params_value (params, "cvss_au");
@@ -16832,6 +16832,7 @@ cvss_calculator (credentials_t * credentials, params_t *params)
   cvss_i = params_value (params, "cvss_i");
   cvss_a = params_value (params, "cvss_a");
   cvss_vector = params_value (params, "cvss_vector");
+  name = params_value (params, "name");
 
   xml = g_string_new ("<cvss_calculator>");
 
@@ -16864,6 +16865,12 @@ cvss_calculator (credentials_t * credentials, params_t *params)
                               "<cvss_score>%.1f</cvss_score>",
                               cvss_vector,
                               get_cvss_score_from_base_metrics (cvss_vector));
+    }
+  else if (name && !strcmp ("vector", name))
+    {
+      g_string_append_printf (xml,
+                              "<cvss_score>%.1f</cvss_score>",
+                              -1.0);
     }
 
   g_string_append (xml, "</cvss_calculator>");

@@ -26,6 +26,14 @@
 
 2013-04-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c (cvss_calculator): Check and return proper value when
+	a bad cvss vector is provided.
+
+	* src/html/omp.xsl (cvss_calculator): Add hidden input to distinguish
+	between from metrics and from vector forms.
+
+2013-04-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add link to cvss calculator help
 	page.
 	(cvss_calculator.html): New template.

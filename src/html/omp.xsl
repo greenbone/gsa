@@ -23097,6 +23097,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </select><br/>
               </td>
               <td style="text-align:right; vertical-align:bottom;">
+                <input type="hidden" name="name" value="metrics"/>
                 <input type="submit" name="submit" value="Calculate"/>
               </td>
             <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -23113,6 +23114,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        size="30" maxlength="80" style="vertical-align:middle"/>
               </td>
               <td style="text-align:right;">
+                <input type="hidden" name="name" value="vector"/>
                 <input type="submit" name="submit" value="Calculate"/>
               </td>
             <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -23122,11 +23124,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="cvss_score">
           <xsl:if test="cvss_score != '-1.0'">
-            <br/><b>Vector: </b><xsl:value-of select="cvss_vector"/><br/>
+            <br/><b>Base Vector: </b><xsl:value-of select="cvss_vector"/><br/>
             <br/><b>Base Score: </b><xsl:value-of select="cvss_score"/><br/><br/>
           </xsl:if>
           <xsl:if test="cvss_score = '-1.0'">
-            Erroneous cvss vector value provided.
+            <br/>Bad CVSS Base Vector value provided.<br/>
           </xsl:if>
         </xsl:when>
       </xsl:choose>
