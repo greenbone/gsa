@@ -604,7 +604,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
-    <xsl:with-param name="command" select="'Modify Auth'"/>
+    <xsl:with-param name="command" select="'Save Auth'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -992,14 +992,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_users/modify_user_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_users/modify_auth_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="new_filter/create_filter_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="new_group/create_group_response"
                              mode="response-indicator"/>
 
         <!-- Administrator -->
-        <xsl:apply-templates select="commands_response/modify_auth_response"
-                             mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/modify_settings_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_feed_response"

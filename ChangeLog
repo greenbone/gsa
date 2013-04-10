@@ -1,3 +1,24 @@
+2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Use new style for modifying auth settings, so that next page works.
+
+	* src/gsad.c (init_validator, exec_omp_post): Rename modify_auth to
+	save_auth.
+
+	* src/gsad_omp.c (save_auth_omp): New function.  Was modify_auth_omp.
+	Rework to use new style.
+	(modify_auth_omp): Remove.  Now save_auth_omp.
+
+	* src/gsad_omp.h: Update header accordingly.
+
+	* src/html/gsad.xsl (modify_auth_response [response-indicator]): Rename
+	from Save to Modify.
+	(html-gsa-logo): Update save_auth indicator location.
+
+	* src/html/omp.xsl (group [auth]): Rename modify_auth to save_auth.
+	Add next to Save form.
+	(modify_auth_response [show]): Rename Modify to Save.
+
 2013-04-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/help.xsl (contents.html): Add link to cvss calculator help

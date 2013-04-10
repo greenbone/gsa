@@ -668,7 +668,6 @@ init_validator ()
                          "|(import_port_list)"
                          "|(import_report_format)"
                          "|(login)"
-                         "|(modify_auth)"
                          "|(new_agent)"
                          "|(new_alert)"
                          "|(new_config)"
@@ -692,6 +691,7 @@ init_validator ()
                          "|(test_alert)"
                          "|(save_agent)"
                          "|(save_alert)"
+                         "|(save_auth)"
                          "|(save_config)"
                          "|(save_config_family)"
                          "|(save_config_nvt)"
@@ -765,7 +765,7 @@ init_validator ()
   openvas_validator_add (validator, "first_result", "^[0-9]+$");
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
-  /* Validator for  modify_auth group, e.g. "method:ldap". */
+  /* Validator for  save_auth group, e.g. "method:ldap". */
   openvas_validator_add (validator, "group",        "^method:(ads|ldap|ldap_connect)$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
@@ -1676,7 +1676,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (import_config)
   ELSE (import_port_list)
   ELSE (import_report_format)
-  ELSE (modify_auth)
   ELSE (pause_task)
   ELSE (restore)
   ELSE (resume_paused_task)
@@ -1684,6 +1683,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (run_wizard)
   ELSE (save_agent)
   ELSE (save_alert)
+  ELSE (save_auth)
   ELSE (save_config)
   ELSE (save_config_family)
   ELSE (save_config_nvt)
