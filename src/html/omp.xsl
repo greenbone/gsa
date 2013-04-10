@@ -329,7 +329,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div style="padding: 2px;">
           Filter:
           <input type="text" name="filter" size="57"
-                 value="{filters/term}"
+                 value="{concat (filters/term, ' ')}"
                  maxlength="1000"/>
           <input type="image"
                  name="Update Filter"

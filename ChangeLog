@@ -1,5 +1,10 @@
 2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/omp.xsl (filter-window-part): Append a space to the filter
+	string, to make it more convenient to add terms.
+
+2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Use new style for modifying auth settings, so that next page works.
 
 	* src/gsad.c (init_validator, exec_omp_post): Rename modify_auth to
