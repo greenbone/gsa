@@ -1,3 +1,10 @@
+2013-04-10  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r15948. Patch by Matthew Mundell.
+
+	* src/html/omp.xsl (gsa:date-tz): Add case for negative timezones.  If
+	there's a problem return 'ERROR' instead of UTC.
+
 2013-03-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	Post release version bump to 4.0+rc2.

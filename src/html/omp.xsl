@@ -69,13 +69,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:date-tz">
   <xsl:param name="time"></xsl:param>
   <func:result>
-    <xsl:if test="string-length ($time) &gt; 0">
+    <!-- 2013-03-26T13:15:00-04:00 -->
+    <!-- 2013-03-26T13:15:00Z -->
+    <!-- 2013-03-26T13:15:00+04:00 -->
+    <xsl:variable name="length" select="string-length ($time)"/>
+    <xsl:if test="$length &gt; 0">
       <xsl:choose>
-        <xsl:when test="substring-after ($time, '+')">
-          <xsl:value-of select="concat ('+', substring-after ($time, '+'))"/>
+        <xsl:when test="substring ($time, $length) = 'Z'">
+          <xsl:value-of select="'UTC'"/>
+        </xsl:when>
+        <xsl:when test="contains ('+-', substring ($time, $length - 5, 1)) and (substring ($time, $length - 2, 1) = ':')">
+          <xsl:value-of select="substring ($time, $length - 5)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="'UTC'"/>
+          <xsl:value-of select="'ERROR'"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
