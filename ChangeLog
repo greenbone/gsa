@@ -1,3 +1,7 @@
+2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_oap.c (get_settings_oap): Correct error messages.
+
 2013-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Move user XSL from oap.xsl to omp.xsl now that it's handled by OMP.

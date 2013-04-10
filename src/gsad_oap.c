@@ -699,7 +699,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
           return html;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the user list. "
+                             "An internal error occurred while getting the settings list. "
                              "The current list of settings is not available. "
                              "Diagnostics: Failure to connect to administrator daemon.",
                              "/omp?cmd=get_tasks");
@@ -722,7 +722,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user list. "
+                           "An internal error occurred while getting the settings list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to send command to administrator daemon.",
                            "/omp?cmd=get_tasks");
@@ -733,7 +733,7 @@ get_settings_oap (credentials_t * credentials, const char * sort_field,
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the user list. "
+                           "An internal error occurred while getting the settings list. "
                            "The current list of settings is not available. "
                            "Diagnostics: Failure to receive response from administrator daemon.",
                            "/omp?cmd=get_tasks");
