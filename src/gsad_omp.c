@@ -16870,6 +16870,141 @@ cvss_calculator (credentials_t * credentials, params_t *params)
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
+/**
+ * @brief Sends a modify_auth with the settings adjustable via the GSA to the
+ * @brief openvas-administrator.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params        Request parameters.
+ *
+ * @return XSL transformated list of users and configuration.
+ */
+char*
+modify_auth_omp (credentials_t* credentials, params_t *params)
+{
+  tracef ("In modify_auth_omp\n");
+  entity_t entity;
+  gnutls_session_t session;
+  int socket;
+  char *text = NULL;
+  char* truefalse;
+  GString* xml = NULL;
+  gchar *html;
+  const char *ldaphost, *method, *authdn, *domain;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving the ldap settings. "
+                             "The settings have not been saved. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Save Settings\">"
+                                    "Only users given the Administrator role"
+                                    " may save the settings."
+                                    "</gsad_msg>"));
+    }
+
+  truefalse = (params_value (params, "enable")
+               && strcmp (params_value (params, "enable"), "1") == 0)
+                ? "true" : "false";
+
+  ldaphost = params_value (params, "ldaphost");
+  method = params_value (params, "group");
+  authdn = params_value (params, "authdn");
+  domain = params_value (params, "domain");
+
+  if (ldaphost == NULL || method == NULL
+      || (strcmp (method, "method:ldap") == 0 && authdn == NULL)
+      || (strcmp (method, "method:ads")  == 0 && domain == NULL)
+      || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
+    {
+      /* Parameter validation failed. Only send get_users and describe_auth. */
+       if (openvas_server_send (&session,
+                                "<commands>"
+                                "<get_users/><describe_auth/>"
+                                "</commands>")
+           == -1)
+        {
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the users list. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      xml = g_string_new ("");
+      g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Modify Authentication Configuration"));
+
+      if (read_string (&session, &xml))
+        {
+          openvas_server_close (socket, session);
+          g_string_free (xml, TRUE);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the users list. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      openvas_server_close (socket, session);
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
+
+  /* Input is valid. Save settings. */
+
+  /** @warning authdn shall contain a single %s, handle with care. */
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<get_users/>"
+                            "<modify_auth><group name=\"%s\">"
+                            "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                            "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                            "<auth_conf_setting key=\"%s\" value=\"%s\"/>"
+                            "</group></modify_auth>"
+                            "<describe_auth/></commands>",
+                            method,
+                            truefalse,
+                            ldaphost,
+                            (strcmp (method, "method:ads") == 0) ? "domain"
+                                                                 : "authdn",
+                            (strcmp (method, "method:ads") == 0) ? domain
+                                                                 : authdn)
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving the ldap settings. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_configs");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the ldap settings. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, text);
+}
+
 
 /* Wizards. */
 

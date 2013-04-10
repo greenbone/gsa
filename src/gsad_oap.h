@@ -46,6 +46,5 @@ char * sync_cert_oap (credentials_t *, params_t *);
 char * get_settings_oap (credentials_t *, params_t *);
 char * edit_settings_oap (credentials_t *, params_t *);
 char * save_settings_oap (credentials_t *, params_t *);
-char * modify_auth_oap (credentials_t *, params_t *);
 
 #endif /* not _GSAD_OAP_H */

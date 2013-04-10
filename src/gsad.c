@@ -1676,7 +1676,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (import_config)
   ELSE (import_port_list)
   ELSE (import_report_format)
-  ELSE_OAP (modify_auth)
+  ELSE (modify_auth)
   ELSE (pause_task)
   ELSE (restore)
   ELSE (resume_paused_task)

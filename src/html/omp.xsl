@@ -21810,6 +21810,126 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<!-- AUTHENTICATION DESCRIPTION -->
+
+<xsl:template match="group" mode="auth">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:choose>
+        <xsl:when test="@name='method:ads'">
+          ADS Authentication
+          <a href="/help/users.html?token={/envelope/token}#adsauthentication"
+            title="Help: Users (ADS Authentication)">
+          <img src="/img/help.png"/></a>
+        </xsl:when>
+        <xsl:when test="@name='method:ldap'">
+          LDAP Authentication and Authorization
+          <a href="/help/users.html?token={/envelope/token}#ldapauthentication"
+            title="Help: Users (LDAP Authentication and Authorization)">
+          <img src="/img/help.png"/></a>
+        </xsl:when>
+        <xsl:when test="@name='method:ldap_connect'">
+          LDAP per-User Authentication
+          <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
+            title="Help: Users (LDAP per-User Authentication)">
+          <img src="/img/help.png"/></a>
+        </xsl:when>
+      </xsl:choose>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div id="tasks">
+        <form action="/oap" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="modify_auth"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <!-- group name is e.g. of method:ldap -->
+          <input type="hidden" name="group" value="{@name}"/>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td>Setting</td>
+              <td>Value</td>
+            </tr>
+              <tr class="odd">
+                <td>Enable</td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                      <input type="checkbox" name="enable" value="1" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="enable" value="1"/>
+                    </xsl:otherwise>
+                 </xsl:choose>
+                 </td>
+              </tr>
+              <tr class="even">
+                <td>
+                <xsl:choose>
+                  <xsl:when test="@name='method:ads'">
+                    ADS
+                  </xsl:when>
+                  <xsl:when test="@name='method:ldap'">
+                    LDAP
+                  </xsl:when>
+                  <xsl:when test="@name='method:ldap_connect'">
+                    LDAP
+                  </xsl:when>
+                </xsl:choose>
+                Host</td>
+                <td><input type="text" name="ldaphost" size="30"
+                     value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
+              </tr>
+              <tr class="odd">
+              <xsl:choose>
+                <xsl:when test="@name='method:ads'">
+                  <td>Domain</td>
+                  <td><input type="text" name="domain" size="30"
+                       value="{auth_conf_setting[@key='domain']/@value}"/></td>
+                </xsl:when>
+                <xsl:otherwise>
+                  <td>Auth. DN</td>
+                  <td><input type="text" name="authdn" size="30"
+                       value="{auth_conf_setting[@key='authdn']/@value}"/></td>
+                </xsl:otherwise>
+              </xsl:choose>
+              </tr>
+            <tr>
+              <td colspan="2" style="text-align:right;">
+                <input type="submit" name="submit" value="Save"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="describe_auth_response">
+</xsl:template>
+
+<xsl:template match="modify_auth_response" mode="show">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Modify Authentication Configuration</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="describe_auth_response" mode="show">
+  <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap']" mode="auth"/>
+  <xsl:apply-templates select="describe_auth_response/group[@name='method:ads']" mode="auth"/>
+  <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="auth"/>
+</xsl:template>
+
+<!-- END AUTHENTICATION DESCRIPTION -->
+
 <!-- END USERS MANAGEMENT -->
 
 <!-- NEW_TARGET -->

@@ -1,5 +1,26 @@
 2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Modify auth info via OMP instead of OAP.
+
+	* src/gsad.c (exec_omp_post): Switch modify_auth to OMP.
+
+	* src/gsad_oap.c (modify_auth_omp): Remove.  Replaced by OMP equivalent.
+
+	* src/gsad_omp.c (modify_auth_omp): New function.  OMP equivalent of
+	removed OAP version.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
+	* src/html/oap.xsl (group [auth], describe_auth_response)
+	(modify_auth_response [show], describe_auth_response [show]): Remove.
+	Now in omp.xsl.
+
+	* src/html/oap.xsl (group [auth], describe_auth_response)
+	(modify_auth_response [show], describe_auth_response [show]): New
+	templates.  From oap.xsl.
+
+2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_oap.c (get_settings_oap): Correct error messages.
 
 2013-04-09  Matthew Mundell <matthew.mundell@greenbone.net>
