@@ -22978,129 +22978,150 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </a>
     </div>
     <div class="gb_window_part_content">
-      <form action="/omp" method="get" enctype="multipart/form-data">
-        <input type="hidden" name="cmd" value="cvss_calculator"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
-            <td valign="top" width="125">CVSS Vector</td>
-            <td>
-              AV:
-              <select name="cvss_av">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'L'"/>
-                  <xsl:with-param name="select-value" select="cvss_av"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'A'"/>
-                  <xsl:with-param name="select-value" select="cvss_av"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'N'"/>
-                  <xsl:with-param name="select-value" select="cvss_av"/>
-                </xsl:call-template>
-              </select>
-              AC:
-              <select name="cvss_ac">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'H'"/>
-                  <xsl:with-param name="select-value" select="cvss_ac"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'M'"/>
-                  <xsl:with-param name="select-value" select="cvss_ac"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'L'"/>
-                  <xsl:with-param name="select-value" select="cvss_ac"/>
-                </xsl:call-template>
-              </select>
-              Au:
-              <select name="cvss_au">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'M'"/>
-                  <xsl:with-param name="select-value" select="cvss_au"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'S'"/>
-                  <xsl:with-param name="select-value" select="cvss_au"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'N'"/>
-                  <xsl:with-param name="select-value" select="cvss_au"/>
-                </xsl:call-template>
-              </select>
-              C:
-              <select name="cvss_c">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'N'"/>
-                  <xsl:with-param name="select-value" select="cvss_c"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'P'"/>
-                  <xsl:with-param name="select-value" select="cvss_c"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'C'"/>
-                  <xsl:with-param name="select-value" select="cvss_c"/>
-                </xsl:call-template>
-              </select>
-              I:
-              <select name="cvss_i">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'N'"/>
-                  <xsl:with-param name="select-value" select="cvss_i"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'P'"/>
-                  <xsl:with-param name="select-value" select="cvss_i"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'C'"/>
-                  <xsl:with-param name="select-value" select="cvss_i"/>
-                </xsl:call-template>
-              </select>
-              A:
-              <select name="cvss_a">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'N'"/>
-                  <xsl:with-param name="select-value" select="cvss_a"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'P'"/>
-                  <xsl:with-param name="select-value" select="cvss_a"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'C'"/>
-                  <xsl:with-param name="select-value" select="cvss_a"/>
-                </xsl:call-template>
-              </select>
-            </td>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Calculate"/>
-            </td>
-          </tr>
-        </table>
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-      </form>
-      <form action="/omp" method="get" enctype="multipart/form-data">
-        <input type="hidden" name="cmd" value="cvss_calculator"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-            <td valign="top" width="125">CVSS Vector</td>
-            <td class="odd">
-              <input type="text" name="cvss_vector" value="{cvss_vector}"
-                     size="30" maxlength="80" style="vertical-align:middle"/>
-            </td>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="Calculate"/>
-            </td>
-          </tr>
-        </table>
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-      </form>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr class="even">
+          <form action="/omp" method="get" enctype="multipart/form-data">
+            <input type="hidden" name="cmd" value="cvss_calculator"/>
+              <td valign="top" width="125">
+                <b>From Metrics</b>
+              </td>
+              <td>
+                <span>Access Vector:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                <select name="cvss_av">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'L'"/>
+                    <xsl:with-param name="content" select="'Local'"/>
+                    <xsl:with-param name="select-value" select="cvss_av"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'A'"/>
+                    <xsl:with-param name="content" select="'Adjacent'"/>
+                    <xsl:with-param name="select-value" select="cvss_av"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'N'"/>
+                    <xsl:with-param name="content" select="'Network'"/>
+                    <xsl:with-param name="select-value" select="cvss_av"/>
+                  </xsl:call-template>
+                </select><br/>
+                <span>Access Complexity:&#160;&#160;</span>
+                <select name="cvss_ac">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'H'"/>
+                    <xsl:with-param name="content" select="'High'"/>
+                    <xsl:with-param name="select-value" select="cvss_ac"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'M'"/>
+                    <xsl:with-param name="content" select="'Medium'"/>
+                    <xsl:with-param name="select-value" select="cvss_ac"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'L'"/>
+                    <xsl:with-param name="content" select="'Low'"/>
+                    <xsl:with-param name="select-value" select="cvss_ac"/>
+                  </xsl:call-template>
+                </select><br/>
+                <span>Authentication:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                <select name="cvss_au">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'M'"/>
+                    <xsl:with-param name="content" select="'Multiple'"/>
+                    <xsl:with-param name="select-value" select="cvss_au"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'S'"/>
+                    <xsl:with-param name="content" select="'Single'"/>
+                    <xsl:with-param name="select-value" select="cvss_au"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'N'"/>
+                    <xsl:with-param name="content" select="'None'"/>
+                    <xsl:with-param name="select-value" select="cvss_au"/>
+                  </xsl:call-template>
+                </select><br/>
+                <span>Confidentiality:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                <select name="cvss_c">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'N'"/>
+                    <xsl:with-param name="content" select="'None'"/>
+                    <xsl:with-param name="select-value" select="cvss_c"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'P'"/>
+                    <xsl:with-param name="content" select="'Partial'"/>
+                    <xsl:with-param name="select-value" select="cvss_c"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'C'"/>
+                    <xsl:with-param name="content" select="'Complete'"/>
+                    <xsl:with-param name="select-value" select="cvss_c"/>
+                  </xsl:call-template>
+                </select><br/>
+                <span>Integrity:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                <select name="cvss_i">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'N'"/>
+                    <xsl:with-param name="content" select="'None'"/>
+                    <xsl:with-param name="select-value" select="cvss_i"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'P'"/>
+                    <xsl:with-param name="content" select="'Partial'"/>
+                    <xsl:with-param name="select-value" select="cvss_i"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'C'"/>
+                    <xsl:with-param name="content" select="'Complete'"/>
+                    <xsl:with-param name="select-value" select="cvss_i"/>
+                  </xsl:call-template>
+                </select><br/>
+                <span>Availability:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                <select name="cvss_a">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'N'"/>
+                    <xsl:with-param name="content" select="'None'"/>
+                    <xsl:with-param name="select-value" select="cvss_a"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'P'"/>
+                    <xsl:with-param name="content" select="'Partial'"/>
+                    <xsl:with-param name="select-value" select="cvss_a"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'C'"/>
+                    <xsl:with-param name="content" select="'Complete'"/>
+                    <xsl:with-param name="select-value" select="cvss_a"/>
+                  </xsl:call-template>
+                </select><br/>
+              </td>
+              <td style="text-align:right; vertical-align:bottom;">
+                <input type="submit" name="submit" value="Calculate"/>
+              </td>
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+          </form>
+        </tr>
+        <tr class="odd">
+          <form action="/omp" method="get" enctype="multipart/form-data">
+            <input type="hidden" name="cmd" value="cvss_calculator"/>
+              <td valign="top" width="125">
+                <b>From Vector</b>
+              </td>
+              <td class="odd">
+                <input type="text" name="cvss_vector" value=""
+                       size="30" maxlength="80" style="vertical-align:middle"/>
+              </td>
+              <td style="text-align:right;">
+                <input type="submit" name="submit" value="Calculate"/>
+              </td>
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+          </form>
+        </tr>
+      </table>
       <xsl:choose>
         <xsl:when test="cvss_score">
           <xsl:if test="cvss_score != '-1.0'">
+            <br/><b>Vector: </b><xsl:value-of select="cvss_vector"/><br/>
             <br/><b>Base Score: </b><xsl:value-of select="cvss_score"/><br/><br/>
           </xsl:if>
           <xsl:if test="cvss_score = '-1.0'">

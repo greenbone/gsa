@@ -1,3 +1,12 @@
+2013-04-10  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/help.xsl (contents.html): Add link to cvss calculator help
+	page.
+	(cvss_calculator.html): New template.
+
+	* src/html/omp.xsl (cvss_calculator): Update presentation of the page.
+	Add full names for metrics and their values.
+
 2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Modify auth info via OMP instead of OAP.

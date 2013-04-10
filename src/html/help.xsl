@@ -3000,6 +3000,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li> <a href="trashcan.html?token={/envelope/token}">Trashcan</a></li>
             <li> <a href="my_settings.html?token={/envelope/token}">My Settings</a></li>
             <li> <a href="performance.html?token={/envelope/token}">Performance</a></li>
+            <li> <a href="cvss_calculator.html?token={/envelope/token}">CVSS Calculator</a></li>
             <li> <a href="powerfilter.html?token={/envelope/token}">Powerfilter</a></li>
             <li> <a href="nvts.html?token={/envelope/token}">NVT Details</a></li>
             <li> Protocol Documentation</li>
@@ -5292,6 +5293,56 @@ Public License instead of this License.
        operating system.  Initially the graphs summarize the past day of
        activity.  At the top of the dialog are links to other time periods,
        like the past hour and month.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="cvss_calculator.html">
+  <div class="gb_window_part_center">Help: CVSS Calculator</div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="float_right"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <a name="cvss_calculator"></a>
+      <h1>CVSS Calculator</h1>
+      <p>
+        This page provides an easy to use
+        <a href="glossary.html?token={/envelope/token}#cvss">CVSS</a>
+        Base Score Calculator.
+      </p>
+      <h3>From Metrics</h3>
+      <p>
+        The CVSS Base Metrics values could be selected from the drop-down menus.
+        <ul>
+          <li>
+            <b>Access Vector:</b> Defines how a vulnerability may be exploited.
+          </li>
+          <li>
+            <b>Access Complexity:</b> Defines How hard it is the exploit the vulnerability.
+          </li>
+          <li>
+            <b>Authentication:</b> Defines how many times an attacker needs to authenticate before exploiting the vulnerability.
+          </li>
+          <li>
+            <b>Confidentiality:</b> Defines the impact on the confidentiality of the data on or processed by the system.
+          </li>
+          <li>
+            <b>Integrity:</b> Defines the impact on the integrity of the exploited system.
+          </li>
+          <li>
+            <b>Availability:</b> Defines the impact on the availability of the system.
+          </li>
+        </ul>
+      </p>
+      <h3>From Vector</h3>
+      <p>
+        Insert the Base Vector (eg: AV:N/AC:M/Au:S/C:P/I:P/A:C) in the input
+        box, and hit the "Calculate" button to calculate the CVSS Base Score
+        directly from a Base Vector.
       </p>
     </div>
   </div>
