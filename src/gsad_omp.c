@@ -2196,11 +2196,9 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
                             "<commands>"
                             "<get_tasks task_id=\"%s\" details=\"1\" />"
                             "<get_targets"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " filter=\"sort=name rows=-1\"/>"
                             "<get_configs"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>"
+                            " filter=\"sort=name rows=-1\"/>"
                             "%s"
                             "%s"
                             "%s"
@@ -2324,6 +2322,7 @@ save_task_omp (credentials_t * credentials, params_t *params)
   gchar *html, *response, *format;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *task_id, *max_checks, *max_hosts, *observers;
+  const char *config_id, *target_id;
   int ret;
   params_t *alerts, *groups;
   GString *alert_element, *group_elements;
@@ -2373,12 +2372,16 @@ save_task_omp (credentials_t * credentials, params_t *params)
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
   in_assets = params_value (params, "in_assets");
+  target_id = params_value (params, "target_id");
+  config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
   slave_id = params_value (params, "slave_id");
   max_checks = params_value (params, "max_checks");
   max_hosts = params_value (params, "max_hosts");
   observers = params_value (params, "observers");
 
+  CHECK (target_id);
+  CHECK (config_id);
   CHECK (schedule_id);
   CHECK (slave_id);
   CHECK (next);
@@ -2425,6 +2428,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
                             "<name>%%s</name>"
                             "<comment>%%s</comment>"
                             "%s"
+                            "<target id=\"%%s\"/>"
+                            "<config id=\"%%s\"/>"
                             "<schedule id=\"%%s\"/>"
                             "<slave id=\"%%s\"/>"
                             "<preferences>"
@@ -2454,6 +2459,8 @@ save_task_omp (credentials_t * credentials, params_t *params)
              task_id,
              name,
              comment,
+             target_id,
+             config_id,
              schedule_id,
              slave_id,
              max_checks,
