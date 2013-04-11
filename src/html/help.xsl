@@ -5299,10 +5299,13 @@ Public License instead of this License.
 </xsl:template>
 
 <xsl:template mode="help" match="cvss_calculator.html">
-  <div class="gb_window_part_center">Help: CVSS Calculator</div>
+  <div class="gb_window_part_center">Help: CVSS Calculator
+      <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">
+        <img src="/img/new.png" title="CVSS Calculator" alt="CVSS Calculator"/>
+      </a>
+  </div>
   <div class="gb_window_part_content">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5340,9 +5343,9 @@ Public License instead of this License.
       </p>
       <h3>From Vector</h3>
       <p>
-        Insert the Base Vector (eg: AV:N/AC:M/Au:S/C:P/I:P/A:C) in the input
-        box, and hit the "Calculate" button to calculate the CVSS Base Score
-        directly from a Base Vector.
+        Insert the Base Vector (eg: <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>
+        in the input box, and hit the "Calculate" button to calculate the CVSS
+        Base Score directly from a Base Vector.
       </p>
     </div>
   </div>

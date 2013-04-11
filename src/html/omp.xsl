@@ -23003,7 +23003,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <form action="/omp" method="get" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="cvss_calculator"/>
               <td valign="top" width="125">
-                <b>From Metrics</b>
+                <b>From Metrics:</b>
               </td>
               <td>
                 <table border="0" cellspacing="0" cellpadding="3" width="50%">
@@ -23152,7 +23152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <form action="/omp" method="get" enctype="multipart/form-data">
             <input type="hidden" name="cmd" value="cvss_calculator"/>
               <td width="125">
-                <b>From Vector</b>
+                <b>From Vector:</b>
               </td>
               <td>
                 <input type="text" name="cvss_vector" value="{cvss_vector}"
@@ -23169,11 +23169,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="cvss_score">
           <xsl:if test="cvss_score != '-1.0'">
-            <br/><b>Base Vector: </b><xsl:value-of select="cvss_vector"/><br/>
-            <br/><b>Base Score: </b><xsl:value-of select="cvss_score"/><br/><br/>
+            <br/>
+            <table cellspacing="5">
+              <tr>
+                <td><b>Base Vector:</b></td>
+                <td>
+                  <xsl:value-of select="cvss_vector"/><br/>
+                </td>
+              </tr>
+              <tr>
+                <td><b>Base Score:</b></td>
+                <td>
+                  <xsl:value-of select="cvss_score"/><br/>
+                </td>
+              </tr>
+            </table>
           </xsl:if>
           <xsl:if test="cvss_score = '-1.0'">
-            <br/>Invalid CVSS Base Vector value provided.<br/><br/>
+            <br/>Invalid CVSS Base Vector value provided. Use back-button of your browser to edit the vector.vector<br/><br/>
           </xsl:if>
         </xsl:when>
       </xsl:choose>

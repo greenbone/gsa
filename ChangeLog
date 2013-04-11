@@ -1,5 +1,13 @@
 2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (severity-bar): Add colons in subtitles. Align
+	calculation results and detail invalid vector error message.
+
+	* src/html/help.xsl (cvss_calculator.html): Add icon to Link to CVSS
+	Calculator. Make example CVSS Vector an actual link to the calculator.
+
+2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (severity-bar): Add text parameter to add text
 	between parenthesizes.
 	(info/cpe): Output max cvss value as a severity bar instead of simple
