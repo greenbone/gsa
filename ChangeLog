@@ -1,3 +1,7 @@
+2013-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (cvss_calculator): Fix a typo.
+
 2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (severity-bar): Add colons in subtitles. Align
