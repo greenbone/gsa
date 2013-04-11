@@ -1,3 +1,10 @@
+2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (severity-bar): Make threat parameter default to
+	cvss-threat return value and title parameter to threat's value.
+	(info/nvt, info/cpe, info/cve): Remove unneeded
+	severity-bar argument values.
+
 2013-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (cvss_calculator): Fix a typo.

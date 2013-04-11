@@ -900,10 +900,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="severity-bar">
-  <xsl:param name="threat"></xsl:param>
-  <xsl:param name="title"></xsl:param>
   <xsl:param name="text"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
+  <xsl:param name="threat"><xsl:value-of select="gsa:cvss-threat($cvss)"/></xsl:param>
+  <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
   <xsl:param name="scale">10</xsl:param>
 
   <xsl:variable name="fill"><xsl:value-of select="number($cvss) * $scale"/></xsl:variable>
@@ -11853,11 +11853,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <xsl:variable name="threat" select="gsa:cvss-threat (max_cvss)"/>
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="max_cvss"/>
-        <xsl:with-param name="threat" select="$threat"/>
-        <xsl:with-param name="title" select="$threat"/>
       </xsl:call-template>
     </td>
     <td>
@@ -11964,11 +11961,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
       <td>
         <xsl:if test="cvss &gt;= 0.0">
-          <xsl:variable name="threat" select="gsa:cvss-threat (cvss)"/>
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="cvss"/>
-            <xsl:with-param name="threat" select="$threat"/>
-            <xsl:with-param name="title" select="$threat"/>
             <xsl:with-param name="scale" select="7"/>
           </xsl:call-template>
         </xsl:if>
@@ -12054,11 +12048,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:variable name="threat" select="gsa:cvss-threat (cvss_base)"/>
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="cvss_base"/>
-        <xsl:with-param name="threat" select="$threat"/>
-        <xsl:with-param name="title" select="$threat"/>
       </xsl:call-template>
     </td>
     <td>
