@@ -5343,7 +5343,7 @@ Public License instead of this License.
       </p>
       <h3>From Vector</h3>
       <p>
-        Insert the Base Vector (eg: <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>
+        Insert the Base Vector (eg: <a href="/omp?cmd=cvss_calculator&amp;cvss_vector=AV:N/AC:M/Au:S/C:P/I:P/A:C&amp;token={/envelope/token}">AV:N/AC:M/Au:S/C:P/I:P/A:C</a>)
         in the input box, and hit the "Calculate" button to calculate the CVSS
         Base Score directly from a Base Vector.
       </p>

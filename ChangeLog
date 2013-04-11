@@ -4,6 +4,17 @@
 
 2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/help.xsl (cvss_calculator.html): Fix typo.
+
+	* src/html/omp.xsl (cvss-threat): New function. Returns cvss threat
+	name for a given cvss score value.
+	(severity-bar): Add scale parameter to adjust size of the bar.
+	(info/cpe): Use cvss-threat function.
+	(info/nvt, info/cve): Show a severity bar for the CVSS value.
+	(cvss_calculator): Fix error message typo and result cell spacing.
+
+2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (severity-bar): Add colons in subtitles. Align
 	calculation results and detail invalid vector error message.
 

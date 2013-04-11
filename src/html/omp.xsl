@@ -198,6 +198,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 </func:function>
 
+<func:function name="gsa:cvss-threat">
+  <xsl:param name="cvss_score"/>
+  <xsl:variable name="threat">
+    <xsl:choose>
+      <xsl:when test="$cvss_score &lt;= 3.9">Low</xsl:when>
+      <xsl:when test="$cvss_score &lt;= 6.9 and $cvss_score &gt; 3.9">Medium</xsl:when>
+      <xsl:when test="$cvss_score &gt; 6.9">High</xsl:when>
+      <xsl:otherwise>Log</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <func:result select="$threat"/>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <!-- Currently only a very simple formatting method to produce
@@ -891,18 +904,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="title"></xsl:param>
   <xsl:param name="text"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
+  <xsl:param name="scale">10</xsl:param>
 
-  <xsl:variable name="width"><xsl:value-of select="number($cvss) * 10"/></xsl:variable>
-  <div class="progressbar_box" title="{$title}">
+  <xsl:variable name="fill"><xsl:value-of select="number($cvss) * $scale"/></xsl:variable>
+  <xsl:variable name="width"><xsl:value-of select="10 * $scale"/></xsl:variable>
+  <div class="progressbar_box" title="{$title}" style="width:{$width}px;">
     <xsl:choose>
       <xsl:when test="$threat = 'Low'">
-        <div class="progressbar_bar_done" style="width:{$width}px;"></div>
+        <div class="progressbar_bar_done" style="width:{$fill}px;"></div>
       </xsl:when>
       <xsl:when test="$threat = 'Medium'">
-        <div class="progressbar_bar_request" style="width:{$width}px;"></div>
+        <div class="progressbar_bar_request" style="width:{$fill}px;"></div>
       </xsl:when>
       <xsl:when test="$threat = 'High'">
-        <div class="progressbar_bar_error" style="width:{$width}px;"></div>
+        <div class="progressbar_bar_error" style="width:{$fill}px;"></div>
       </xsl:when>
       <xsl:when test="$threat = 'Log'">
         <div class="progressbar_bar_done" style="width:0px;"></div>
@@ -11838,14 +11853,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <xsl:variable name="threat">
-        <xsl:choose>
-          <xsl:when test="max_cvss &lt;= 3.9">Low</xsl:when>
-          <xsl:when test="max_cvss &lt;= 6.9 and max_cvss &gt; 3.9">Medium</xsl:when>
-          <xsl:when test="max_cvss &gt; 6.9">High</xsl:when>
-          <xsl:otherwise>High</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
+      <xsl:variable name="threat" select="gsa:cvss-threat (max_cvss)"/>
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="max_cvss"/>
         <xsl:with-param name="threat" select="$threat"/>
@@ -11955,7 +11963,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </td>
       <td>
-        <xsl:value-of select="cvss"/>
+        <xsl:if test="cvss &gt;= 0.0">
+          <xsl:variable name="threat" select="gsa:cvss-threat (cvss)"/>
+          <xsl:call-template name="severity-bar">
+            <xsl:with-param name="cvss" select="cvss"/>
+            <xsl:with-param name="threat" select="$threat"/>
+            <xsl:with-param name="title" select="$threat"/>
+            <xsl:with-param name="scale" select="7"/>
+          </xsl:call-template>
+        </xsl:if>
       </td>
       <td rowspan="2">
         <a href="/omp?cmd=get_info&amp;info_type=cve&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
@@ -12038,7 +12054,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="cvss_base"/>
+      <xsl:variable name="threat" select="gsa:cvss-threat (cvss_base)"/>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="cvss_base"/>
+        <xsl:with-param name="threat" select="$threat"/>
+        <xsl:with-param name="title" select="$threat"/>
+      </xsl:call-template>
     </td>
     <td>
       <a href="/omp?cmd=get_nvts&amp;oid={@oid}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;details=1&amp;token={/envelope/token}"
@@ -23170,7 +23191,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="cvss_score">
           <xsl:if test="cvss_score != '-1.0'">
             <br/>
-            <table cellspacing="5">
+            <table>
               <tr>
                 <td><b>Base Vector:</b></td>
                 <td>
@@ -23186,7 +23207,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </table>
           </xsl:if>
           <xsl:if test="cvss_score = '-1.0'">
-            <br/>Invalid CVSS Base Vector value provided. Use back-button of your browser to edit the vector.<br/><br/>
+            <br/>Invalid CVSS Base Vector value provided.
+            Use back button of your browser to edit the vector.<br/><br/>
           </xsl:if>
         </xsl:when>
       </xsl:choose>
