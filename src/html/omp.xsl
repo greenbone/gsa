@@ -18564,7 +18564,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
             <tr class="gbntablehead2">
               <td style="font-size:10px;">Threat</td>
-              <td style="font-size:10px;">CVSS</td>
+              <td style="font-size:10px;width:104px">CVSS</td>
               <td style="font-size:10px;">CVE</td>
               <td style="font-size:10px;">Threats</td>
             </tr>
@@ -18606,7 +18606,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:when>
                   </xsl:choose>
                 </td>
-                <td><xsl:value-of select="$cvss"/></td>
+                <td>
+                  <xsl:if test="$cvss &gt;= 0.0">
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="$cvss"/>
+                    </xsl:call-template>
+                  </xsl:if>
+                </td>
                 <td>
                   <xsl:call-template name="get_info_cve_lnk">
                     <xsl:with-param name="cve" select="$cve"/>
@@ -23192,7 +23198,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr>
                 <td><b>Base Score:</b></td>
                 <td>
-                  <xsl:value-of select="cvss_score"/><br/>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="cvss_score"/>
+                  </xsl:call-template>
                 </td>
               </tr>
             </table>

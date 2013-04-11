@@ -1,3 +1,7 @@
+2013-04-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (cvss_calculator, host): Use CVSS bar instead of plain CVSS value.
+
 2013-04-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (filter-window-part): Set the value of the -- option
