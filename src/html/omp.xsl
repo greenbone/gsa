@@ -308,7 +308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="{name}" value="{value}"/>
             </xsl:for-each>
             <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
-              <option value="">--</option>
+              <option value="--">--</option>
               <xsl:variable name="id" select="filters/@id"/>
               <xsl:for-each select="../filters/get_filters_response/filter">
                 <xsl:choose>

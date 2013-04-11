@@ -818,7 +818,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (filt_id == NULL || (strcmp (filt_id, "") == 0))
+  if (filt_id == NULL
+      || (strcmp (filt_id, "") == 0)
+      || (strcmp (filt_id, "--") == 0))
     {
       if (filter == NULL || (strcmp (filter, "") == 0))
         {
@@ -834,7 +836,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
             filter = "rows=-2";
           else
             filter = "apply_overrides=0 rows=-2 permission=any owner=any";
-          filt_id = "-2";
+          if (filt_id && strcmp (filt_id, ""))
+            /* Request to use "filter" instead. */
+            filt_id = "0";
+          else
+            filt_id = "-2";
         }
       else if ((strcmp (filter, "sort=nvt") == 0)
                && (strcmp (type, "note") == 0))
