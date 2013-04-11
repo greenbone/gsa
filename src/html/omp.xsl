@@ -889,6 +889,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="severity-bar">
   <xsl:param name="threat"></xsl:param>
   <xsl:param name="title"></xsl:param>
+  <xsl:param name="text"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
 
   <xsl:variable name="width"><xsl:value-of select="number($cvss) * 10"/></xsl:variable>
@@ -908,7 +909,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
     </xsl:choose>
     <div class="progressbar_text">
-      <xsl:value-of select="$cvss"/> (<xsl:value-of select="$threat"/>)
+      <xsl:value-of select="$cvss"/>
+      <xsl:choose>
+        <xsl:when test="$text">
+          (<xsl:value-of select="$threat"/>)
+        </xsl:when>
+      </xsl:choose>
     </div>
   </div>
 </xsl:template>
@@ -11832,7 +11838,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="cve_refs"/>
     </td>
     <td>
-      <xsl:value-of select="max_cvss"/>
+      <xsl:variable name="threat">
+        <xsl:choose>
+          <xsl:when test="max_cvss &lt;= 3.9">Low</xsl:when>
+          <xsl:when test="max_cvss &lt;= 6.9 and max_cvss &gt; 3.9">Medium</xsl:when>
+          <xsl:when test="max_cvss &gt; 6.9">High</xsl:when>
+          <xsl:otherwise>High</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="max_cvss"/>
+        <xsl:with-param name="threat" select="$threat"/>
+        <xsl:with-param name="title" select="$threat"/>
+      </xsl:call-template>
     </td>
     <td>
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_id={../@id}&amp;filter={str:encode-uri (../../filters/term, true ())}&amp;filt_id={../../filters/@id}&amp;first={../../info/@start}&amp;max={../../info/@max}&amp;details=1&amp;token={/envelope/token}"
@@ -19368,6 +19386,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="severity-bar">
                 <xsl:with-param name="cvss" select="nvt/cvss_base"/>
                 <xsl:with-param name="threat" select="threat"/>
+                <xsl:with-param name="text" select="threat"/>
                 <xsl:with-param name="title" select="$severity_title"/>
               </xsl:call-template>
             </xsl:when>

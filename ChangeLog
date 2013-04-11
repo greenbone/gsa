@@ -1,5 +1,14 @@
 2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (severity-bar): Add text parameter to add text
+	between parenthesizes.
+	(info/cpe): Output max cvss value as a severity bar instead of simple
+	text.
+	(result-detailed): Add threat value as text argument for severity-bar
+	call.
+
+2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (cvss_calculator): Send back cvss metrics separately
 	when a user uses a cvss vector.
 
