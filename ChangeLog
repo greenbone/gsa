@@ -1,3 +1,14 @@
+2013-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (cvss_calculator): Send back cvss metrics separately
+	when a user uses a cvss vector.
+
+	* src/html/help.xsl (cvss_calculator.html): Fix typo.
+
+	* src/html/omp.xsl (cvss_calculator): Update page presentation for
+	consistent positioning and size of metrics' dropdown menus. Remove table
+	rows highlighting and fix error message.
+
 2013-04-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (filter-window-part): Append a space to the filter

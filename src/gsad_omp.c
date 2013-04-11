@@ -16860,11 +16860,33 @@ cvss_calculator (credentials_t * credentials, params_t *params)
     }
   else if (cvss_vector)
     {
+      double cvss_score = get_cvss_score_from_base_metrics (cvss_vector);
+
       g_string_append_printf (xml,
                               "<cvss_vector>%s</cvss_vector>"
                               "<cvss_score>%.1f</cvss_score>",
                               cvss_vector,
-                              get_cvss_score_from_base_metrics (cvss_vector));
+                              cvss_score);
+
+      if (cvss_score != -1.0)
+        {
+            cvss_av = strstr (cvss_vector, "AV:");
+            cvss_ac = strstr (cvss_vector, "/AC:");
+            cvss_au = strstr (cvss_vector, "/Au:");
+            cvss_c = strstr (cvss_vector, "/C:");
+            cvss_i = strstr (cvss_vector, "/I:");
+            cvss_a = strstr (cvss_vector, "/A:");
+
+            if (cvss_av && cvss_ac && cvss_au && cvss_c
+                && cvss_i && cvss_a)
+              g_string_append_printf
+               (xml,
+                "<cvss_av>%c</cvss_av><cvss_ac>%c</cvss_ac>"
+                "<cvss_au>%c</cvss_au><cvss_c>%c</cvss_c>"
+                "<cvss_i>%c</cvss_i><cvss_a>%c</cvss_a>",
+                *(cvss_av + 3), *(cvss_ac + 4), *(cvss_au + 4),
+                *(cvss_c + 3), *(cvss_i + 3), *(cvss_a + 3));
+        }
     }
   else if (name && !strcmp ("vector", name))
     {

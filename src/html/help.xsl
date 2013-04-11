@@ -5322,7 +5322,7 @@ Public License instead of this License.
             <b>Access Vector:</b> Defines how a vulnerability may be exploited.
           </li>
           <li>
-            <b>Access Complexity:</b> Defines How hard it is the exploit the vulnerability.
+            <b>Access Complexity:</b> Defines how hard it is the exploit the vulnerability.
           </li>
           <li>
             <b>Authentication:</b> Defines how many times an attacker needs to authenticate before exploiting the vulnerability.
