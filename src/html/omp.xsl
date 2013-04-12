@@ -3516,43 +3516,88 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="cmd" value="save_container_task"/>
             </xsl:when>
             <xsl:otherwise>
-              <tr>
-                <td valign="top">Scan Config (immutable)</td>
-                <td>
-                  <input type="hidden" name="cmd" value="save_task"/>
-                  <select name="scanconfig" disabled="1">
-                    <xsl:choose>
-                      <xsl:when
-                        test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
-                        <xsl:apply-templates
-                          select="commands_response/get_tasks_response/task/config"
-                          mode="newtask"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="--">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td>Scan Targets (immutable)</td>
-                <td>
-                  <select name="target_id" disabled="1">
-                    <xsl:choose>
-                      <xsl:when
-                        test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
-                        <xsl:apply-templates
-                          select="commands_response/get_tasks_response/task/target"
-                          mode="newtask"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="--">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </select>
-                </td>
-              </tr>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_tasks_response/task/status = 'New'">
+                  <tr>
+                    <td valign="top">Scan Config</td>
+                    <td>
+                      <input type="hidden" name="cmd" value="save_task"/>
+                      <select name="config_id">
+                        <xsl:choose>
+                          <xsl:when
+                            test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
+                            <xsl:apply-templates
+                              select="commands_response/get_configs_response/config"
+                              mode="newtask"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Scan Targets</td>
+                    <td>
+                      <select name="target_id">
+                        <xsl:choose>
+                          <xsl:when
+                            test="string-length (commands_response/get_targets_response/target/name) &gt; 0">
+                            <xsl:apply-templates
+                              select="commands_response/get_targets_response/target"
+                              mode="newtask"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </select>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr>
+                    <td valign="top">Scan Config (immutable)</td>
+                    <td>
+                      <input type="hidden" name="cmd" value="save_task"/>
+                      <input type="hidden" name="config_id" value="0"/>
+                      <select name="dummy" disabled="0">
+                        <xsl:choose>
+                          <xsl:when
+                            test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
+                            <xsl:apply-templates
+                              select="commands_response/get_tasks_response/task/config"
+                              mode="newtask"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Scan Targets (immutable)</td>
+                    <td>
+                      <input type="hidden" name="target_id" value="0"/>
+                      <select name="dummy2" disabled="0">
+                        <xsl:choose>
+                          <xsl:when
+                            test="string-length (commands_response/get_tasks_response/task/target/name) &gt; 0">
+                            <xsl:apply-templates
+                              select="commands_response/get_tasks_response/task/target"
+                              mode="newtask"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="0">--</option>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </select>
+                    </td>
+                  </tr>
+                </xsl:otherwise>
+              </xsl:choose>
               <tr>
                 <td>Alerts (optional)</td>
                 <td>
