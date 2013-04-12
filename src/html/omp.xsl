@@ -13401,7 +13401,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <tr>
                   <td>Base score</td>
                   <td>
-                    <xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                    <xsl:call-template name="severity-bar">
+                      <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                    </xsl:call-template>
                     (AV:<xsl:choose>
                       <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'LOCAL'">L</xsl:when>
                       <xsl:when test="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:access-vector = 'NETWORK'">N</xsl:when>
@@ -13727,7 +13729,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <table class="gbntable" cellspacing="2" cellpadding="4">
             <tr class="gbntablehead2">
               <td>Name</td>
-              <td>CVSS</td>
+              <td width="104">CVSS</td>
               <td>Actions</td>
             </tr>
             <xsl:for-each select="info/cpe/cves/cve">
@@ -13739,7 +13741,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:variable>
               <tr class="{$class}">
                 <td><xsl:value-of select="cve:entry/@id"/></td>
-                <td><xsl:value-of select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/></td>
+                <td>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
+                  </xsl:call-template>
+                </td>
                 <td width="100">
                   <a href="?cmd=get_info&amp;info_type=cve&amp;info_name={cve:entry/@id}&amp;details=1&amp;token={/envelope/token}" title="Details">
                     <img src="/img/details.png"
@@ -14202,7 +14208,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <table>
     <tr>
       <td>CVSS base:</td>
-      <td><xsl:value-of select="cvss_base"/></td>
+      <td>
+        <xsl:call-template name="severity-bar">
+          <xsl:with-param name="cvss" select="cvss_base"/>
+        </xsl:call-template>
+      </td>
     </tr>
     <tr>
       <td>Risk factor:</td>
