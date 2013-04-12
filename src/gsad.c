@@ -648,6 +648,7 @@ init_validator ()
                          "|(get_port_lists)"
                          "|(get_protocol_doc)"
                          "|(get_report)"
+                         "|(get_report_hosts)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
                          "|(get_result)"
@@ -2101,6 +2102,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_result)
   ELSE (get_report_format)
   ELSE (get_report_formats)
+  ELSE (get_report_hosts)
   ELSE (get_schedule)
   ELSE (get_schedules)
   ELSE (get_slave)

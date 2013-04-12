@@ -9462,6 +9462,104 @@ get_report_omp (credentials_t * credentials, params_t *params,
                      content_disposition, NULL);
 }
 
+/**
+ * @brief Get ths hosts for a report, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_report_hosts (credentials_t * credentials, params_t *params)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+  const char *report_id, *filt_id, *filter;
+
+  report_id = params_value (params, "report_id");
+  filt_id = params_value (params, "filt_id");
+  filter = params_value (params, "filter");
+
+  if (report_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while getting a report's hosts. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting . "
+                             "The current report is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  xml = g_string_new ("<get_report_hosts_response>");
+
+  if (openvas_server_sendf (&session,
+                            "<get_reports report_id='%s'"
+                            " filt_id=\"%s\""
+                            " filter=\"%s\""
+                            "/>",
+                            report_id,
+                            filt_id ? filt_id : "0",
+                            filter ? filter : "")
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting report's hosts. "
+                           "The current report is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting a report's hosts. "
+                           "The current report is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  g_string_append (xml, "</get_report_hosts_response>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Get hosts for a report, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_report_hosts_omp (credentials_t * credentials, params_t *params)
+{
+  return get_report_hosts (credentials, params);
+}
+
 #define REQUIRE(arg, backurl)                                         \
   if (arg == NULL)                                                    \
     return gsad_message (credentials,                                 \

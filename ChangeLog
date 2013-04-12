@@ -1,3 +1,17 @@
+2013-04-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add cmd value get_report_hosts.
+	(exec_omp_get): Handle get_report_hosts command.
+	(get_report_hosts, get_report_hosts_omp): New functions.
+
+	* src/gsad_omp.h: Add get_report_hosts_omp prototype.
+
+	* src/html/omp.xsl (html-report-details): Add button for Report Hosts.
+	Don't apply report overview template.
+	(get_report_hosts): New template for Report Hosts page.
+	(get_reports_response/report/report [overview]): Remove template as
+	duplicate.
+
 2013-04-12  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (nvt, cve-details, cpe-details): Use CVSS bar instead

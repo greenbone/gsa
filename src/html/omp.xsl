@@ -1285,6 +1285,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          title="Help: View Report (View Report)">
         <img src="/img/help.png"/>
       </a>
+      <a href="/omp?cmd=get_report_hosts&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Report Hosts" style="margin-left:3px;">
+        <img src="/img/agent.png" border="0" alt="Report Hosts"/>
+      </a>
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
         </xsl:when>
@@ -2593,12 +2597,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
-          <!--
-          <xsl:apply-templates select="report" mode="report-assets"/>
-          -->
-
-          <xsl:apply-templates select="report" mode="overview"/>
-
           <xsl:apply-templates select="report" mode="details"/>
         </xsl:when>
         <xsl:otherwise>
@@ -20285,93 +20283,108 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </table>
 </xsl:template>
 
-<xsl:template match="get_reports_response/report/report" mode="overview">
-  <table class="gbntable" cellspacing="2" cellpadding="4">
-    <tr class="gbntablehead2">
-      <td>Host</td>
-      <td>OS</td>
-      <td>Start</td>
-      <td>End</td>
-      <td><img src="/img/high.png" alt="High" title="High"/></td>
-      <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
-      <td><img src="/img/low.png" alt="Low" title="Low"/></td>
-      <td><img src="/img/log.png" alt="Log" title="Log"/></td>
-      <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
-      <td>Total</td>
-    </tr>
-    <xsl:for-each select="host" >
-      <xsl:variable name="current_host" select="ip"/>
-      <tr>
-        <td>
-          <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
-          <a href="#{$current_host}"><xsl:value-of select="$current_host"/>
-          <xsl:if test="$hostname">
-            <xsl:value-of select="concat(' (', $hostname, ')')"/>
-          </xsl:if>
-          </a>
-        </td>
-        <td>
-          <xsl:call-template name="os-icon">
-            <xsl:with-param name="host" select="../host"/>
-            <xsl:with-param name="current_host" select="$current_host"/>
-          </xsl:call-template>
-        </td>
-        <td>
-          <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
-        </td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="end/text() != ''">
-              <xsl:value-of select="concat (date:month-abbreviation(end/text()), ' ', date:day-in-month(end/text()), ', ', format-number(date:hour-in-day(end/text()), '00'), ':', format-number(date:minute-in-hour(end/text()), '00'), ':', format-number(date:second-in-minute(end/text()), '00'))"/>
-            </xsl:when>
-            <xsl:otherwise>(not finished)</xsl:otherwise>
-          </xsl:choose>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
-        </td>
-        <td>
-          <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
-        </td>
-      </tr>
-    </xsl:for-each>
-    <tr>
-      <td>Total: <xsl:value-of select="count(host_start)"/></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>
-        <xsl:value-of select="count(results/result[threat/text() = 'High'])"/>
-      </td>
-      <td>
-        <xsl:value-of select="count(results/result[threat/text() = 'Medium'])"/>
-      </td>
-      <td>
-        <xsl:value-of select="count(results/result[threat/text() = 'Low'])"/>
-      </td>
-      <td>
-        <xsl:value-of select="count(results/result[threat/text() = 'Log'])"/>
-      </td>
-      <td>
-        <xsl:value-of select="count(results/result[threat/text() = 'False Positive'])"/>
-      </td>
-      <td>
-        <xsl:value-of select="count(results/result)"/>
-      </td>
-    </tr>
-  </table>
+<xsl:template match="get_report_hosts_response">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="get_reports_response/report/report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Filtered Report Hosts
+      <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Report Summary" style="margin-left:3px;">
+        <img src="/img/details.png" border="0" alt="Report Summary"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Host</td>
+          <td>OS</td>
+          <td>Start</td>
+          <td>End</td>
+          <td><img src="/img/high.png" alt="High" title="High"/></td>
+          <td><img src="/img/medium.png" alt="Medium" title="Medium"/></td>
+          <td><img src="/img/low.png" alt="Low" title="Low"/></td>
+          <td><img src="/img/log.png" alt="Log" title="Log"/></td>
+          <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
+          <td>Total</td>
+        </tr>
+        <xsl:for-each select="$report/host" >
+          <xsl:variable name="current_host" select="ip"/>
+          <tr>
+            <td>
+              <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
+              <xsl:value-of select="$current_host"/>
+              <xsl:if test="$hostname">
+                <xsl:value-of select="concat(' (', $hostname, ')')"/>
+              </xsl:if>
+            </td>
+            <td>
+              <xsl:call-template name="os-icon">
+                <xsl:with-param name="host" select="../host"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:value-of select="concat (date:month-abbreviation(start/text()), ' ', date:day-in-month(start/text()), ', ', format-number(date:hour-in-day(start/text()), '00'), ':', format-number(date:minute-in-hour(start/text()), '00'), ':', format-number(date:second-in-minute(start/text()), '00'))"/>
+            </td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="end/text() != ''">
+                  <xsl:value-of select="concat (date:month-abbreviation(end/text()), ' ', date:day-in-month(end/text()), ', ', format-number(date:hour-in-day(end/text()), '00'), ':', format-number(date:minute-in-hour(end/text()), '00'), ':', format-number(date:second-in-minute(end/text()), '00'))"/>
+                </xsl:when>
+                <xsl:otherwise>(not finished)</xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
+            </td>
+            <td>
+              <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+            </td>
+          </tr>
+        </xsl:for-each>
+        <tr>
+          <td>Total: <xsl:value-of select="count($report/host_start)"/></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <xsl:value-of select="count($report/results/result[threat/text() = 'High'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count($report/results/result[threat/text() = 'Medium'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count($report/results/result[threat/text() = 'Low'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count($report/results/result[threat/text() = 'Log'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count($report/results/result[threat/text() = 'False Positive'])"/>
+          </td>
+          <td>
+            <xsl:value-of select="count($report/results/result)"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </xsl:template>
 
 <xsl:template match="port">
