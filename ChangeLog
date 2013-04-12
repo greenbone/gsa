@@ -1,5 +1,16 @@
 2013-04-12  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Backport r16023. Patch by Matthew Mundell.
+
+	* src/html/omp.xsl (filter-window-part): Set the value of the -- option
+	in the filter dropdown to "--".  The is to differentiate it from the link
+	in the menu.
+
+	* src/gsad_omp.c (get_many): Check for a filt_id of "--", and use the
+	system filter instead.
+
+2013-04-12  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Backport r15993. Patch by Matthew Mundell.
 
 	* src/html/omp.xsl (filter-window-part): Append a space to the filter
