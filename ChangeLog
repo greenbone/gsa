@@ -1,3 +1,9 @@
+2013-04-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/tag.png: New.
+
+	* CMakeLists.txt: Install new icon.
+
 2013-04-12  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add cmd value get_report_hosts.
