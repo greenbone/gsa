@@ -20289,7 +20289,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Filtered Report Hosts
+      Report: Hosts
       <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Report Summary" style="margin-left:3px;">
         <img src="/img/details.png" border="0" alt="Report Summary"/>
@@ -20337,22 +20337,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:otherwise>(not finished)</xsl:otherwise>
               </xsl:choose>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
             </td>
-            <td>
+            <td style="text-align:right">
               <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
             </td>
           </tr>
@@ -20362,22 +20362,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td></td>
           <td></td>
           <td></td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result[threat/text() = 'High'])"/>
           </td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result[threat/text() = 'Medium'])"/>
           </td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result[threat/text() = 'Low'])"/>
           </td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result[threat/text() = 'Log'])"/>
           </td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result[threat/text() = 'False Positive'])"/>
           </td>
-          <td>
+          <td style="text-align:right">
             <xsl:value-of select="count($report/results/result)"/>
           </td>
         </tr>
