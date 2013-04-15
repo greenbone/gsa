@@ -1338,11 +1338,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
           </div>
         </xsl:when>
-        <xsl:otherwise>
-          <div class="float_right">
-            <a href="?cmd=get_task&amp;task_id={report/task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Task</a>
-          </div>
-        </xsl:otherwise>
       </xsl:choose>
 
       <a name="summary"/>
@@ -1363,7 +1358,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:otherwise>
             <tr>
               <td><b>Result of Task:</b></td>
-              <td><b><xsl:value-of select="report/task/name"/></b></td>
+              <td>
+                <a href="?cmd=get_task&amp;task_id={report/task/@id}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                  <xsl:value-of select="report/task/name"/>
+                </a>
+              </td>
             </tr>
             <tr>
               <td>Order of results:</td>

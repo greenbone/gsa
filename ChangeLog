@@ -1,3 +1,8 @@
+2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (html-report-details): Link to task directly on its
+	name, instead of top right corner.
+
 2013-04-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/img/tag.png: New.
