@@ -1,5 +1,13 @@
 2013-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Post release version bump to 4.0.1.
+
+	* CMakeLists.txt: Updated version number.
+
+	* src/html/help.xsl: Updated version number.
+
+2013-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Preparing the gsa 4.0.0 release.
 
 	* CHANGES: Updated.
