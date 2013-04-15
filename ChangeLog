@@ -1,3 +1,15 @@
+2013-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 4.0.0 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Set version to 4.0.0. Switch version scheme.
+
+	* INSTALL: Document increased GnuTLS dependency.
+
+	* src/html/help.xsl: Updated version number.
+
 2013-04-12  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport r16027. Patch by Matthew Mundell.

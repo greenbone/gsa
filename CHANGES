@@ -1,3 +1,54 @@
+gsa 4.0.0 (2013-04-15)
+
+This is the first release of the Greenbone Security Assistant (GSA) 4.0 module
+for the Open Vulnerability Assessment System release 6 (OpenVAS-6).
+It is the web client that makes the full feature set of OpenVAS Manager
+available in a web browser.
+
+GSA 4.0 implements all of the new features of the protocol OMP 4.0.
+This includes automatic filtering of likely false positives, powerfilter
+support in more places, access to OVAL and DFN-CERT data and a wizard for new
+users. For a complete list of changes, please refer to the list below.
+
+Many thanks to everyone who has contributed to this release:
+Andre Heinecke, Hani Benhabiles, Henri Doreau, Andre Heinecke, Werner Koch,
+Matthew Mundell, Timo Pollmeier, Jan-Oliver Wagner, Michael Wiegand and Felix
+Wolfsteller.
+
+Main changes since 3.0.x:
+* Increase dependencies to GnuTLS 2.8 and libraries 6.0.
+* Renamed "Escalator" to "Alert".
+* Added keyword filter, pagination, export and edit to Targets.
+* "New Target" now a page of its own.
+* The CMake infrastructure has been cleaned up to ensure that compilation with
+  modern gccs works.
+* Support for OMP capabilities has been added.
+* Support for Auto-FP feature and trusted vendor updates has been added.
+* Support for multiple alerts per task has been added.
+* Support for a wizard for new users has been added.
+* Support for filter management has been added.
+* Powerfilters are now available in more places.
+* CPE Management has been improved.
+* Support for browsing the CVE database has been added.
+* Support for accessing OVAL and DFN-CERT data has been added.
+* Powerfilters have been improved and are now available in more places.
+* SCAP synchronization can now be triggered from the web interface.
+* Date selection for schedules has been improved.
+* The documentation available through the Help menu has been updated and
+  extended.
+* Exporting and editing is now supported for more objects.
+* Add summary and detection sections in NVT details.
+* Adapt results details to NVT description content break-up.
+* ovaldefs and dfn-cert output and doc update.
+* URI encode filter terms in HTTP links.
+
+And additionally changes compared to last release candidate 4.0+rc1:
+* Editing of the associated config and target is now allowed as long as the
+  task is in the "New" status.
+* Switch to the system default filter is now possible even if a personal
+  default filter was defined.
+
+
 gsa 4.0+rc1 (2013-03-18)
 
 This is the first release candidate of the upcoming 4.0 release of the Greenbone

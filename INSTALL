@@ -14,7 +14,7 @@ some supported platforms.
 
 Prerequisites:
 * openvas-libraries (>= 6.0.0)
-* gnutls (>= 2.2)
+* gnutls (>= 2.8)
 * cmake
 * glib-2.0 (>= 2.16)
 * libxml
