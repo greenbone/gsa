@@ -20363,22 +20363,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td></td>
           <td></td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result[threat/text() = 'High'])"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=h ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: High" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result[threat/text() = 'High'])"/>
+            </a>
           </td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result[threat/text() = 'Medium'])"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=m ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: Medium" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result[threat/text() = 'Medium'])"/>
+            </a>
           </td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result[threat/text() = 'Low'])"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=l ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: Low" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result[threat/text() = 'Low'])"/>
+            </a>
           </td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result[threat/text() = 'Log'])"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=g ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: Log" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result[threat/text() = 'Log'])"/>
+            </a>
           </td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result[threat/text() = 'False Positive'])"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=f ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: False Positive" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result[threat/text() = 'False Positive'])"/>
+            </a>
           </td>
           <td style="text-align:right">
-            <xsl:value-of select="count($report/results/result)"/>
+            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=hmlgf ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
+               title="Report Summary: Total" style="margin-left:3px;">
+              <xsl:value-of select="count($report/results/result)"/>
+            </a>
           </td>
         </tr>
       </table>

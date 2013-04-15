@@ -1,5 +1,10 @@
 2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (get_report_hosts_response): Link total
+	vulnerabilities values back to report summary with appropriate filter.
+
+2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (get_report_hosts_response): Right align
 	values in vulns columns. Change page title.
 
