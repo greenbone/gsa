@@ -140,6 +140,10 @@ static char *get_port_lists (credentials_t *, params_t *, const char *);
 
 static char *edit_port_list (credentials_t *, params_t *, const char *);
 
+static char *get_tag (credentials_t *, params_t *, const char *);
+
+static char *get_tags (credentials_t *, params_t *, const char *);
+
 static char *get_target (credentials_t *, params_t *, const char *);
 
 static char *get_targets (credentials_t *, params_t *, const char *);
@@ -598,6 +602,12 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_port_lists") == 0)
     return get_port_lists (credentials, params, response);
+
+  if (strcmp (next, "get_tag") == 0)
+    return get_tag (credentials, params, response);
+
+  if (strcmp (next, "get_tags") == 0)
+    return get_tags (credentials, params, response);
 
   if (strcmp (next, "get_targets") == 0)
     return get_targets (credentials, params, response);
@@ -6229,6 +6239,607 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params)
   ret = get_trash (credentials, params, xml->str);
   g_string_free (xml, FALSE);
   return ret;
+}
+
+/**
+ * @brief Returns page to create a new tag.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *end;
+  const char *attach_type, *attach_id, *tag_id, *next, *filter, *first, *max;
+
+  attach_type = params_value (params, "attach_type");
+  attach_id = params_value (params, "attach_id");
+
+  tag_id = params_value (params, "tag_id");
+  next = params_value (params, "next");
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting targets list. "
+                             "The current list of targets is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  xml = g_string_new ("<new_tag>");
+
+  g_string_append (xml, extra_xml);
+
+  end = g_markup_printf_escaped ("<tag id=\"%s\"/>"
+                                 /* Page that follows. */
+                                 "<next>%s</next>"
+                                 /* Passthroughs. */
+                                 "<filters><term>%s</term></filters>"
+                                 "<tags start=\"%s\" max=\"%s\"/>"
+                                 "<attach_type>%s</attach_type>"
+                                 "<attach_id>%s</attach_id>"
+                                 "<tag_name>%s:unnamed</tag_name>"
+                                 "<tag_value></tag_value>"
+                                 "<comment></comment>"
+                                 "<active>1</active>"
+                                 "</new_tag>",
+                                 tag_id ? tag_id : "0",
+                                 next ? next : "",
+                                 filter ? filter : "",
+                                 first ? first : "",
+                                 max ? max : "",
+                                 attach_type ? attach_type : "agent",
+                                 attach_id ? attach_id : "-unspecified-",
+                                 attach_type ? attach_type : "default");
+  g_string_append (xml, end);
+  g_free (end);
+
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Returns page to create a new target.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_tag_omp (credentials_t *credentials, params_t *params)
+{
+  return new_tag (credentials, params, NULL);
+}
+
+/**
+ * @brief Check a tag creation param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "New Tag");                                        \
+      html = new_tag (credentials, params, msg);                               \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Create a tag, get report, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_tag_omp (credentials_t *credentials, params_t *params)
+{
+  char *ret;
+  gchar *response, *html;
+  const char *name, *comment, *value, *attach_type, *attach_id, *active;
+  entity_t entity;
+
+  name = params_value (params, "tag_name");
+  CHECK (name)
+
+  comment = params_value (params, "comment");
+  CHECK (comment)
+
+  value = params_value (params, "tag_value");
+  CHECK (value)
+
+  attach_type = params_value (params, "attach_type");
+  CHECK (attach_type)
+
+  attach_id = params_value (params, "attach_id");
+  CHECK (attach_id)
+
+  active = params_value (params, "active");
+  CHECK (active)
+
+  if (name == NULL || comment == NULL || value == NULL
+      || attach_type == NULL || attach_id == NULL || active == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while creating a new tag. "
+                         "No new tag was created. "
+                         "Diagnostics: A required parameter was NULL.",
+                         "/omp?cmd=get_tags");
+
+  response = NULL;
+  entity = NULL;
+  switch (omp (credentials,
+               &response,
+               &entity,
+               "<create_tag>"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<value>%s</value>"
+               "<attach>"
+               "<type>%s</type>"
+               "<id>%s</id>"
+               "</attach>"
+               "<active>%s</active>"
+               "</create_tag>",
+               name,
+               comment,
+               value,
+               attach_type,
+               attach_id,
+               active))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new tag. "
+                             "No new tag was created. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_targets");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new tag. "
+                             "It is unclear whether the tag has been created or not. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_tags");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while creating a new tag. "
+                             "It is unclear whether the tag has been created or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tags");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_tags (credentials, params, response);
+    }
+  else
+    ret = new_tag (credentials, params, response);
+  free_entity (entity);
+  g_free (response);
+  return ret;
+}
+
+#undef CHECK
+
+/**
+ * @brief Delete note, get next page, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_tag_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("tag", credentials, params, 0, NULL);
+}
+
+/**
+ * @brief Delete a note, get all notes, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+delete_trash_tag_omp (credentials_t * credentials, params_t *params)
+{
+  return delete_resource ("tag", credentials, params, 1, get_trash);
+}
+
+/**
+ * @brief Setup edit_tag XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_tag (credentials_t * credentials, params_t *params,
+          const char *extra_xml)
+{
+  GString *xml;
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *edit;
+  const char *tag_id, *next, *filter, *first, *max;
+
+  tag_id = params_value (params, "tag_id");
+  if (tag_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while editing a tag. "
+                         "The tag remains as it was. "
+                         "Diagnostics: Required parameter was NULL.",
+                         "/omp?cmd=get_tags");
+
+  next = params_value (params, "next");
+  filter = params_value (params, "filter");
+  first = params_value (params, "first");
+  max = params_value (params, "max");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while editing a tag. "
+                             "The tag remains as it was. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tags");
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<get_tags"
+                            " tag_id=\"%s\""
+                            "/>",
+                            tag_id)
+      == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting tag info. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tags");
+    }
+
+  xml = g_string_new ("");
+
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+
+  edit = g_markup_printf_escaped ("<edit_tag>"
+                                  "<tag id=\"%s\"/>"
+                                  /* Page that follows. */
+                                  "<next>%s</next>"
+                                  /* Passthroughs. */
+                                  "<filters><term>%s</term></filters>"
+                                  "<tags start=\"%s\" max=\"%s\"/>",
+                                  tag_id,
+                                  next,
+                                  filter,
+                                  first,
+                                  max);
+
+  g_string_append (xml, edit);
+  g_free (edit);
+
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting target info. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tags");
+    }
+
+  /* Cleanup, and return transformed XML. */
+
+  g_string_append (xml, "</edit_tag>");
+  openvas_server_close (socket, session);
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+}
+
+/**
+ * @brief Setup edit_tag XML, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+edit_tag_omp (credentials_t * credentials, params_t *params)
+{
+  return edit_tag (credentials, params, NULL);
+}
+
+/**
+ * @brief Check a tag editing param.
+ *
+ * @param[in]  name  Param name.
+ */
+#define CHECK(name)                                                            \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *msg;                                                              \
+      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
+                            "Given " G_STRINGIFY (name) " was invalid",        \
+                            "Save Tag");                                       \
+      html = edit_tag (credentials, params, msg);                              \
+      g_free (msg);                                                            \
+      return html;                                                             \
+    }
+
+/**
+ * @brief Modify a tag, get all tags, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+save_tag_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *name, *comment, *value, *attach_type, *attach_id, *active;
+  const char *tag_id;
+  entity_t entity;
+  char* ret;
+
+  tag_id = params_value (params, "tag_id");
+  CHECK (tag_id)
+  name = params_value (params, "tag_name");
+  CHECK (name)
+  comment = params_value (params, "comment");
+  CHECK (comment)
+  value = params_value (params, "tag_value");
+  CHECK (value)
+  attach_type = params_value (params, "attach_type");
+  CHECK (attach_type)
+  attach_id = params_value (params, "attach_id");
+  CHECK (attach_id)
+  active = params_value (params, "active");
+  CHECK (active)
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a tag."
+                             " The tag was not modified. "
+                             "Diagnostics: Failure to connect to "
+                             "manager daemon.",
+                             "/omp?cmd=get_targets");
+    }
+
+  response = NULL;
+  entity = NULL;
+  switch (omp (credentials,
+               &response,
+               &entity,
+               "<modify_tag tag_id=\"%s\">"
+               "<name>%s</name>"
+               "<comment>%s</comment>"
+               "<value>%s</value>"
+               "<attach>"
+               "<type>%s</type>"
+               "<id>%s</id>"
+               "</attach>"
+               "<active>%s</active>"
+               "</modify_tag>",
+               tag_id,
+               name,
+               comment,
+               value,
+               attach_type,
+               attach_id,
+               active))
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a tag. "
+                             "The tag remains the same. "
+                             "Diagnostics: Failure to send command to "
+                             "manager daemon.",
+                             "/omp?cmd=get_targets");
+      case 2:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a tag. "
+                             "It is unclear whether the tag has been saved "
+                             "or not. "
+                             "Diagnostics: Failure to receive response from "
+                             "manager daemon.",
+                             "/omp?cmd=get_tags");
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while saving a tag. "
+                             "It is unclear whether the tag has been saved "
+                             "or not. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_tags");
+    }
+
+  if (omp_success (entity))
+    {
+      ret = next_page (credentials, params, response);
+      if (ret == NULL)
+        ret = get_tags (credentials, params, response);
+    }
+  else
+    ret = edit_tag (credentials, params, response);
+
+  free_entity (entity);
+  g_free (response);
+  return ret;
+
+}
+
+#undef CHECK
+
+/**
+ * @brief Export a tag.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Target XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_tag_omp (credentials_t * credentials, params_t *params,
+                enum content_type * content_type, char **content_disposition,
+                gsize *content_length)
+{
+  return export_resource ("tag", credentials, params, content_type,
+                          content_disposition, content_length);
+}
+
+/**
+ * @brief Export a list of tags.
+ *
+ * @param[in]   credentials          Username and password for authentication.
+ * @param[in]   params               Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ *
+ * @return Targets XML on success.  HTML result of XSL transformation
+ *         on error.
+ */
+char *
+export_tags_omp (credentials_t * credentials, params_t *params,
+                 enum content_type * content_type, char **content_disposition,
+                 gsize *content_length)
+{
+  return export_many ("tag", credentials, params, content_type,
+                      content_disposition, content_length);
+}
+
+/**
+ * @brief Get one tag, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_tag (credentials_t * credentials, params_t *params,
+         const char *extra_xml)
+{
+  return get_one ("tag", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get one tag, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_tag_omp (credentials_t * credentials, params_t *params)
+{
+  return get_tag (credentials, params, NULL);
+}
+
+/**
+ * @brief Get all tags, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_tags (credentials_t * credentials, params_t *params,
+          const char *extra_xml)
+{
+  return get_many ("tag", credentials, params, extra_xml, NULL);
+}
+
+/**
+ * @brief Get all tags, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_tags_omp (credentials_t * credentials, params_t *params)
+{
+  return get_tags (credentials, params, NULL);
 }
 
 /**
@@ -13390,6 +14001,42 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml)
                                "The current list of slaves is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_slaves");
+        }
+    }
+
+  /* Get the tags. */
+
+  if (command_enabled (credentials, "GET_TAGS"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_tags"
+                                " trash=\"1\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting tags list. "
+                               "The current list of tags is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting tags list. "
+                               "The current list of tags is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tags");
         }
     }
 

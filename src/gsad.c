@@ -525,6 +525,7 @@ init_validator ()
                          "|(create_report)"
                          "|(create_schedule)"
                          "|(create_slave)"
+                         "|(create_tag)"
                          "|(create_target)"
                          "|(create_task)"
                          "|(cvss_calculator)"
@@ -544,6 +545,7 @@ init_validator ()
                          "|(delete_report_format)"
                          "|(delete_schedule)"
                          "|(delete_slave)"
+                         "|(delete_tag)"
                          "|(delete_target)"
                          "|(delete_task)"
                          "|(delete_trash_agent)"
@@ -558,6 +560,7 @@ init_validator ()
                          "|(delete_trash_report_format)"
                          "|(delete_trash_schedule)"
                          "|(delete_trash_slave)"
+                         "|(delete_trash_tag)"
                          "|(delete_trash_target)"
                          "|(delete_trash_task)"
                          "|(delete_user)"
@@ -579,6 +582,7 @@ init_validator ()
                          "|(edit_schedule)"
                          "|(edit_settings)"
                          "|(edit_slave)"
+                         "|(edit_tag)"
                          "|(edit_target)"
                          "|(edit_task)"
                          "|(edit_user)"
@@ -612,6 +616,8 @@ init_validator ()
                          "|(export_schedules)"
                          "|(export_slave)"
                          "|(export_slaves)"
+                         "|(export_tag)"
+                         "|(export_tags)"
                          "|(export_target)"
                          "|(export_targets)"
                          "|(export_task)"
@@ -658,6 +664,8 @@ init_validator ()
                          "|(get_slave)"
                          "|(get_slaves)"
                          "|(get_system_reports)"
+                         "|(get_tag)"
+                         "|(get_tags)"
                          "|(get_target)"
                          "|(get_targets)"
                          "|(get_task)"
@@ -681,6 +689,7 @@ init_validator ()
                          "|(new_report_format)"
                          "|(new_slave)"
                          "|(new_schedule)"
+                         "|(new_tag)"
                          "|(new_target)"
                          "|(new_task)"
                          "|(new_user)"
@@ -708,6 +717,7 @@ init_validator ()
                          "|(save_schedule)"
                          "|(save_settings)"
                          "|(save_slave)"
+                         "|(save_tag)"
                          "|(save_target)"
                          "|(save_task)"
                          "|(save_user)"
@@ -724,6 +734,8 @@ init_validator ()
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "attach_id",    "^[[:alnum:]-_.:\\/~]+$");
+  openvas_validator_add (validator, "attach_type",  "^(agent|alert|config|cpe|cve|dfn_cert_adv|filter|group|lsc_credential|note|nvt|ovaldef|override|permission|port_list|report|report_format|schedule|slave|target|task|user)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
@@ -832,11 +844,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|User|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -845,6 +857,9 @@ init_validator ()
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "summary",    "^.{0,400}$");
+  openvas_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "tag_value",       "^[\\-_[:alnum:], \\./]{0,200}$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id_optional",  "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
@@ -1627,6 +1642,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (create_user)
   ELSE (create_schedule)
   ELSE (create_slave)
+  ELSE (create_tag)
   ELSE (create_target)
   ELSE (create_config)
   ELSE (create_note)
@@ -1647,6 +1663,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_schedule)
   ELSE (delete_slave)
   ELSE (delete_user)
+  ELSE (delete_tag)
   ELSE (delete_target)
   ELSE (delete_trash_agent)
   ELSE (delete_trash_config)
@@ -1660,6 +1677,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (delete_trash_report_format)
   ELSE (delete_trash_schedule)
   ELSE (delete_trash_slave)
+  ELSE (delete_trash_tag)
   ELSE (delete_trash_target)
   ELSE (delete_trash_task)
   ELSE (delete_config)
@@ -1711,6 +1729,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_schedule)
   ELSE_OAP (save_settings)
   ELSE (save_slave)
+  ELSE (save_tag)
   ELSE (save_target)
   ELSE (save_task)
   ELSE (save_container_task)
@@ -1847,6 +1866,7 @@ exec_omp_get (struct MHD_Connection *connection,
     return new_filter_omp (credentials, params);
 
   ELSE (new_target)
+  ELSE (new_tag)
   ELSE (new_task)
   ELSE (new_user)
   ELSE (new_alert)
@@ -1868,6 +1888,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_report_format)
   ELSE (edit_schedule)
   ELSE (edit_slave)
+  ELSE (edit_tag)
   ELSE_OAP (edit_settings)
   ELSE (edit_target)
   ELSE (edit_task)
@@ -2014,6 +2035,14 @@ exec_omp_get (struct MHD_Connection *connection,
     return export_slaves_omp (credentials, params, content_type,
                               content_disposition, response_size);
 
+  else if (!strcmp (cmd, "export_tag"))
+    return export_tag_omp (credentials, params, content_type,
+                           content_disposition, response_size);
+
+  else if (!strcmp (cmd, "export_tags"))
+    return export_tags_omp (credentials, params, content_type,
+                            content_disposition, response_size);
+
   else if (!strcmp (cmd, "export_target"))
     return export_target_omp (credentials, params, content_type,
                               content_disposition, response_size);
@@ -2108,6 +2137,8 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_slave)
   ELSE (get_slaves)
   ELSE (get_system_reports)
+  ELSE (get_tag)
+  ELSE (get_tags)
   ELSE (get_target)
   ELSE (get_targets)
   ELSE (get_trash)

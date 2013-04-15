@@ -3762,6 +3762,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         and a maximum duration the task is allowed to take.
       </p>
 
+      <a name="tag"></a>
+      <h2>Tag</h2>
+      <p>
+       A tag is a short data package consisting of a name and a value that is
+       attached to a resource of any kind and contains user-defined information
+       on this resource.
+      </p>
+
       <a name="target"></a>
       <h2>Target</h2>
       <p>
@@ -4763,6 +4771,93 @@ Public License instead of this License.
        Pressing the list icon
        <img src="/img/list.png" alt="Overrides" title="Overrides"/>
        will switch to the overrides page.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="new_tag.html">
+  <div class="gb_window_part_center">Help: New Tag
+    <a href="/omp?cmd=new_tag&amp;max=-2&amp;token={/envelope/token}">
+      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'CREATE_TAG'"/>
+      </xsl:call-template>
+
+      <h1>New Tag</h1>
+      <p>
+        For creating a new
+        <a href="glossary.html?token={/envelope/token}#tag">Tag</a>
+        the dialog offers these entries.
+        Hit the button "Create Tag" to submit the new target.
+        The Targets page will be shown.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td></td>
+          <td>Mandatory</td>
+          <td>Max Length</td>
+          <td>Syntax</td>
+          <td>Example</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>yes</td>
+          <td>80</td>
+          <td>Alphanumeric and -_,: \./</td>
+          <td>geo:long</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>no</td>
+          <td>200</td>
+          <td>Alphanumeric and -_, \./</td>
+          <td>50.231</td>
+        </tr>
+        <tr class="odd">
+          <td>Comment</td>
+          <td>no</td>
+          <td>400</td>
+          <td>Alphanumeric and -_;'äüöÄÜÖß, \./</td>
+          <td>Longitude of the target</td>
+        </tr>
+        <tr class="even">
+          <td>Attach to Type</td>
+          <td>--</td>
+          <td>--</td>
+          <td>Any resource type</td>
+          <td>Target</td>
+        </tr>
+        <tr class="odd">
+          <td>Attach to ID</td>
+          <td>yes</td>
+          <td>--</td>
+          <td>A valid resource ID, existence of the resource is not mandatory</td>
+          <td>12508a75-e1f9-4acd-85b9-d1f3ea48db37</td>
+        </tr>
+        <tr class="even">
+          <td>Active</td>
+          <td>--</td>
+          <td>--</td>
+          <td>Yes or No.</td>
+          <td>Yes</td>
+        </tr>
+      </table>
+
+      <h4>Tags</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Tags" title="Tags"/>
+       will switch to the tags page.
       </p>
     </div>
   </div>
@@ -6610,6 +6705,59 @@ Public License instead of this License.
   </div>
 </xsl:template>
 
+<xsl:template mode="help" match="tag_details.html">
+  <div class="gb_window_part_center">Help: Tag Details
+    <img src="/img/details.png" border="0" style="margin-left:3px;"/>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TAGS'"/>
+      </xsl:call-template>
+
+      <h1>Tag Details</h1>
+      <p>
+        Provides detailed information about a
+        <a href="glossary.html?token={/envelope/token}#tag">Tag</a>.
+        This includes the name, value, comment, resource it is attached to and whether it is active.
+      </p>
+
+      <h4>New Tag</h4>
+      <p>
+        To create a new tag click the
+        new icon <img src="/img/new.png" alt="New Tag" title="New Tag" /> which
+        goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
+        page.
+      </p>
+
+      <h4>Tags</h4>
+      <p>
+       Pressing the list icon
+       <img src="/img/list.png" alt="Tags" title="Tags"/>
+       will switch to the tags page.
+      </p>
+
+      <h4>Edit Tag</h4>
+      <p>
+       Pressing the "Edit Tag" icon
+       <img src="/img/edit.png" alt="Edit Tag" title="Edit Tag"/>
+       will switch to an overview of this tag and
+       allows editing the tag's properties.
+      </p>
+
+      <h4>Exporting</h4>
+      <p>
+        Export the tag as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template mode="help" match="target_details.html">
   <div class="gb_window_part_center">Help: Target Details
     <a href="/omp?cmd=get_target&amp;target_id=b493b7a8-7489-11df-a3ec-002264764cea&amp;token={/envelope/token}">
@@ -6672,6 +6820,82 @@ Public License instead of this License.
         Details of these tasks can be seen after a click on the Details
         <img src="/img/details.png" alt="Details" title="Details" /> icon.
       </p>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template mode="help" match="tags.html">
+  <div class="gb_window_part_center">Help: Tags
+    <a href="/omp?cmd=get_tags&amp;token={/envelope/token}"
+       title="Tags" style="margin-left:3px;">
+      <img src="/img/list.png" border="0" alt="Tags"/>
+    </a>
+  </div>
+  <div class="gb_window_part_content">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
+
+      <br/>
+
+      <xsl:call-template name="availability">
+        <xsl:with-param name="command" select="'GET_TAGS'"/>
+      </xsl:call-template>
+
+      <h1>Tags</h1>
+      <p>
+       This table provides an overview of all
+       <a href="glossary.html?token={/envelope/token}#tag">tags</a> and summarizes
+       the essential aspects of each.
+      </p>
+
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Name</td>
+          <td>Shows name of the tag and,
+              if specified, the comment in brackets below
+              the name.</td>
+        </tr>
+        <tr class="even">
+          <td>Value</td>
+          <td>The value associated with the tag.</td>
+        </tr>
+        <tr class="odd">
+          <td>Attach type</td>
+          <td>The resource type the tag is attached to.</td>
+        </tr>
+        <tr class="even">
+          <td>Attach ID</td>
+          <td>The ID of the resource the tag is attached to.</td>
+        </tr>
+        <tr class="odd">
+          <td>Modified</td>
+          <td>The date the tag was last modified.</td>
+        </tr>
+      </table>
+
+      <h3>New Tag</h3>
+      <p>
+        To create a new tag click the
+        new icon <img src="/img/new.png" alt="New Tag" title="New Tag" /> which
+        goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
+        page.
+      </p>
+
+      <h3>Exporting</h3>
+      <p>
+        Export the current list of tags as XML by clicking on the
+        export icon <img src="/img/download.png" alt="Export" title="Export XML" />.
+      </p>
+
+      <xsl:call-template name="filtering"/>
+
+      <xsl:call-template name="list-window-line-actions">
+        <xsl:with-param name="type" select="'Tag'"/>
+      </xsl:call-template>
     </div>
   </div>
 </xsl:template>

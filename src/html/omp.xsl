@@ -7047,7 +7047,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
                   <option value="{.}"><xsl:value-of select="."/></option>
                 </xsl:for-each>
               </select>
@@ -7131,7 +7131,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
                 </xsl:variable>
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Target|Task|SecInfo', '|')">
+                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
                   <xsl:choose>
                     <xsl:when test=". = $type">
                       <option value="{.}" selected="1"><xsl:value-of select="$type"/></option>
@@ -7199,6 +7199,558 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- END FILTERS MANAGEMENT -->
+
+
+<!-- BEGIN TAGS MANAGEMENT -->
+
+<xsl:template match="get_tags">
+  <xsl:apply-templates select="gsad_msg"/>
+
+  <xsl:apply-templates select="delete_tag_response"/>
+  <xsl:apply-templates select="create_filter_response"/>
+  <xsl:apply-templates select="create_tag_response"/>
+
+  <!-- The for-each makes the get_targets_response the current node. -->
+  <xsl:for-each select="get_tags_response | commands_response/get_tags_response">
+    <xsl:choose>
+      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+        <xsl:call-template name="command_result_dialog">
+          <xsl:with-param name="operation">
+            Get Tags
+          </xsl:with-param>
+          <xsl:with-param name="status">
+            <xsl:value-of select="@status"/>
+          </xsl:with-param>
+          <xsl:with-param name="msg">
+            <xsl:value-of select="@status_text"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="html-tags-table"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="html-tags-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'tag'"/>
+    <xsl:with-param name="cap-type" select="'Tag'"/>
+    <xsl:with-param name="resources-summary" select="tags"/>
+    <xsl:with-param name="resources" select="tag"/>
+    <xsl:with-param name="count" select="count (tag)"/>
+    <xsl:with-param name="filtered-count" select="tag_count/filtered"/>
+    <xsl:with-param name="full-count" select="tag_count/text ()"/>
+    <xsl:with-param name="headings" select="'Name|name Value|value Active|active Attach&#xa0;Type|attach_type Attach&#xa0;ID|attach_id Modified|modified'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="tag">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="value"/>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="active=0">
+          No
+        </xsl:when>
+        <xsl:otherwise>
+          Yes
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="attach/type"/>
+    </td>
+    <td>
+      <xsl:value-of select="attach/id"/>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:date (modification_time)"/>
+    </td>
+    <td>
+      <xsl:call-template name="list-window-line-icons">
+        <xsl:with-param name="cap-type" select="'Tag'"/>
+        <xsl:with-param name="type" select="'tag'"/>
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template match="get_tag">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="commands_response/delete_tag_response"/>
+  <xsl:apply-templates select="get_tags_response/tag" mode="details"/>
+</xsl:template>
+
+<xsl:template match="tag" mode="details">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Tag Details
+      <xsl:call-template name="details-header-icons">
+        <xsl:with-param name="cap-type" select="'Tag'"/>
+        <xsl:with-param name="type" select="'tag'"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="minor-details"/>
+      <h1>
+        <xsl:value-of select="name"/>
+        <xsl:if test="value != ''">=&quot;<xsl:value-of select="value"/>&quot;</xsl:if>
+      </h1>
+      <table>
+        <tr>
+          <td><b>Name:</b></td>
+          <td><b><xsl:value-of select="name"/></b></td>
+        </tr>
+        <tr>
+          <td>Value:</td>
+          <td><xsl:value-of select="value"/></td>
+        </tr>
+        <tr>
+          <td>Comment:</td>
+          <td><xsl:value-of select="comment"/></td>
+        </tr>
+        <tr>
+          <td>Attached to resource type:</td>
+          <td><xsl:value-of select="attach/type"/></td>
+        </tr>
+        <tr>
+          <td>Attached to resource ID:</td>
+          <td><xsl:value-of select="attach/id"/></td>
+        </tr>
+        <tr>
+          <td>Active:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="active = 0">No</xsl:when>
+              <xsl:otherwise>Yes</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="tag" mode="trash">
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="position() mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <tr class="{$class}">
+    <td>
+      <b><xsl:value-of select="name"/></b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <br/>(<xsl:value-of select="comment"/>)
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td><xsl:value-of select="value"/></td>
+    <td><xsl:value-of select="attach/type"/></td>
+    <td><xsl:value-of select="attach/id"/></td>
+    <td>
+      <xsl:call-template name="restore-icon">
+        <xsl:with-param name="id" select="@id"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="in_use='0'">
+          <xsl:call-template name="trash-delete-icon">
+            <xsl:with-param name="type" select="'tag'"/>
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/delete_inactive.png"
+               border="0"
+               alt="Delete"
+               style="margin-left:3px;"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+</xsl:template>
+
+<xsl:template name="tag_attach_types">
+  <xsl:param name="select_type"/>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'agent'"/>
+    <xsl:with-param name="content" select="'Agent'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'alert'"/>
+    <xsl:with-param name="content" select="'Alert'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'cpe'"/>
+    <xsl:with-param name="content" select="'CPE'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'lsc_credential'"/>
+    <xsl:with-param name="content" select="'Credential'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'cve'"/>
+    <xsl:with-param name="content" select="'CVE'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'dfn_cert_adv'"/>
+    <xsl:with-param name="content" select="'DFN-CERT Advisory'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'filter'"/>
+    <xsl:with-param name="content" select="'Filter'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'group'"/>
+    <xsl:with-param name="content" select="'Group'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'note'"/>
+    <xsl:with-param name="content" select="'Note'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'nvt'"/>
+    <xsl:with-param name="content" select="'NVT'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'ovaldef'"/>
+    <xsl:with-param name="content" select="'OVAL definition'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'override'"/>
+    <xsl:with-param name="content" select="'Override'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'permission'"/>
+    <xsl:with-param name="content" select="'Permission'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'port_list'"/>
+    <xsl:with-param name="content" select="'Port list'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'report'"/>
+    <xsl:with-param name="content" select="'Report'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'report_format'"/>
+    <xsl:with-param name="content" select="'Report Format'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'config'"/>
+    <xsl:with-param name="content" select="'Scan Configuration'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'schedule'"/>
+    <xsl:with-param name="content" select="'Schedule'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'slave'"/>
+    <xsl:with-param name="content" select="'Slave'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'target'"/>
+    <xsl:with-param name="content" select="'Target'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'task'"/>
+    <xsl:with-param name="content" select="'Task'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'user'"/>
+    <xsl:with-param name="content" select="'User'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="new_tag">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_tag_response"/>
+  <xsl:apply-templates select="commands_response/delete_tag_response"/>
+  <xsl:call-template name="html-create-tag-form"/>
+  <!-- <xsl:call-template name="html-import-tag-form"/> -->
+</xsl:template>
+
+<xsl:template name="html-create-tag-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">New Tag
+      <a href="/help/new_tag.html?token={/envelope/token}"
+         title="Help: New Tag">
+        <img src="/img/help.png"/>
+      </a>
+      <a href="/omp?cmd=get_tags&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="Tags" style="margin-left:3px;">
+        <img src="/img/list.png" border="0" alt="Tags"/>
+      </a>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_tag"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="filter" value="{filters/term}"/>
+        <input type="hidden" name="first" value="{targets/@start}"/>
+        <input type="hidden" name="max" value="{targets/@max}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="tag_name" value="{tag_name}" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Value (Optional)
+            </td>
+            <td>
+              <input type="text" name="tag_value" value="{tag_value}" size="30"
+                     maxlength="200"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" value="{comment}" size="30"
+                     maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Attach to Type</td>
+            <td>
+              <select name="attach_type">
+                <xsl:call-template name="tag_attach_types">
+                  <xsl:with-param name="select_type">
+                    <xsl:value-of select="attach_type"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Attach to ID</td>
+            <td>
+              <input type="text" name="attach_id" value="{attach_id}" size="30"
+                         maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Active</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="active!=0">
+                    <input type="radio" name="active" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="active" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Yes
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="active=0">
+                    <input type="radio" name="active" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="active" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                No
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Create Tag"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="edit_tag">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:call-template name="html-edit-tag-form"/>
+</xsl:template>
+
+<xsl:template name="html-edit-tag-form">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">Edit Tag
+      <xsl:call-template name="edit-header-icons">
+        <xsl:with-param name="cap-type" select="'Tag'"/>
+        <xsl:with-param name="type" select="'tag'"/>
+        <xsl:with-param name="id"
+                        select="get_tags_response/tag/@id"/>
+      </xsl:call-template>
+    </div>
+    <div class="gb_window_part_content">
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_tag"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden"
+               name="tag_id"
+               value="{get_tags_response/tag/@id}"/>
+        <input type="hidden" name="next" value="{next}"/>
+        <input type="hidden" name="sort_field" value="{sort_field}"/>
+        <input type="hidden" name="sort_order" value="{sort_order}"/>
+        <input type="hidden" name="filter" value="{filters/term}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="first" value="{tags/@start}"/>
+        <input type="hidden" name="max" value="{tags/@max}"/>
+        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+          <tr>
+            <td valign="top" width="175">Name
+            </td>
+            <td>
+              <input type="text" name="tag_name" value="{get_tags_response/tag/name}" size="30"
+                     maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Value (Optional)
+            </td>
+            <td>
+              <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
+                     maxlength="200"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Comment (optional)</td>
+            <td>
+              <input type="text" name="comment" value="{get_tags_response/tag/comment}" size="30"
+                     maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Attach to Type</td>
+            <td>
+              <select name="attach_type">
+                <xsl:call-template name="tag_attach_types">
+                  <xsl:with-param name="select_type">
+                    <xsl:value-of select="get_tags_response/tag/attach/type"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="175">Attach to ID</td>
+            <td>
+              <input type="text" name="attach_id" value="{get_tags_response/tag/attach/id}" size="30"
+                         maxlength="80"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Active</td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="get_tags_response/tag/active!=0">
+                    <input type="radio" name="active" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="active" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Yes
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="get_tags_response/tag/active=0">
+                    <input type="radio" name="active" value="0" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="active" value="0"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                No
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right;">
+              <input type="submit" name="submit" value="Save Tag"/>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
+<xsl:template match="modify_tag_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Save Tag</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- END TAGS MANAGEMENT -->
+
 
 <!-- BEGIN TARGET LOCATORS MANAGEMENT -->
 
@@ -20858,6 +21410,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="html-tags-trash-table">
+  <div id="tasks">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td>Name</td>
+        <td>Value</td>
+        <td>Attach type</td>
+        <td>Attach ID</td>
+        <td width="100">Actions</td>
+      </tr>
+      <xsl:apply-templates select="tag" mode="trash"/>
+    </table>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-targets-trash-table">
   <div id="tasks">
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
@@ -20910,6 +21477,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="delete_report_format_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
   <xsl:apply-templates select="delete_slave_response"/>
+  <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="delete_target_response"/>
   <xsl:apply-templates select="delete_task_response"/>
   <xsl:apply-templates select="empty_trashcan_response"/>
@@ -21014,14 +21582,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="count(get_slaves_response/slave)"/></td>
           </tr>
         </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
           <tr class="even">
-            <td><a href="#targets">Targets</a></td>
+            <td><a href="#targets">Tags</a></td>
+            <td><xsl:value-of select="count(get_tags_response/tag)"/></td>
+          </tr>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+          <tr class="odd">
+            <td><a href="#tags">Targets</a></td>
             <td><xsl:value-of select="count(get_targets_response/target)"/></td>
           </tr>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-          <tr class="odd">
+          <tr class="even">
             <td><a href="#the_tasks">Tasks</a></td>
             <td><xsl:value-of select="count(get_tasks_response/task)"/></td>
           </tr>
@@ -21133,6 +21707,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- The for-each makes the get_slaves_response the current node. -->
         <xsl:for-each select="get_slaves_response">
           <xsl:call-template name="html-slaves-trash-table"/>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+        <a name="tags"></a>
+        <h1>Tags</h1>
+        <!-- The for-each makes the get_tags_response the current node. -->
+        <xsl:for-each select="get_tags_response">
+          <xsl:call-template name="html-tags-trash-table"/>
         </xsl:for-each>
       </xsl:if>
 
@@ -22644,6 +23227,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr class="even">
+            <td>Tags filter</td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Tags Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
             <td>Targets filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -22913,6 +23505,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:with-param name="filter-type" select="'Slave'"/>
                     <xsl:with-param name="filter"
                                     select="get_settings_response/setting[name='Slaves Filter']/value"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Tags filter</td>
+              <td>
+                <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'108eea3b-fc61-483c-9da9-046762f137a8'"/>
+                    <xsl:with-param name="filter-type" select="'Tag'"/>
+                    <xsl:with-param name="filter"
+                                    select="get_settings_response/setting[name='Tags Filter']/value"/>
                 </xsl:call-template>
               </td>
             </tr>

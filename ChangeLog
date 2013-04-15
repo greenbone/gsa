@@ -1,3 +1,56 @@
+2013-04-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add Tags table, Tag details, Create Tag, Edit tag pages.
+
+	* src/gsad.c (init_validator): Add commands create_tag, delete_tag,
+	delete_trash_tag, edit_tag, export_tag, export_tags, get_tag, get_tags,
+	new_tag, save_tag. Add parameter types attach_id, attach_type.
+	Add Tag to parameter types resource_type and optional_resource_type.
+	Add parameter types tag_id, tag_name, tag_value.
+	(exec_omp_post): Add create_tag, delete_tag, delete_trash_tag, save_tag.
+	(exec_omp_get): Add else if cases for new_tag, edit_tag, export_tag,
+	export_tags, get_tag, get_tags.
+
+	* src/gsad_omp.c (get_tag, get_tags): New function prototypes.
+	(next_page): Add cases for get_tag, get_tags.
+	(CHECK): new #define for checking tag creation parameters.
+	(new_tag, new_tag_omp, create_tag): New functions for creating tags.
+	(delete_tag_omp, delete_trash_tag_omp): New functions for deleting tags.
+	(CHECK): new #define for checking tag editing parameters.
+	(edit_tag, edit_tag_omp, save_tag_omp): New functions for editing tags.
+	(export_tag_omp, export_tags_omp): New functions for exporting tags.
+	(get_tag, get_tag_omp, get_tags, get_tags_omp): New functions to get
+	information about tags.
+	(get_trash): Add getting tags from trashcan.
+
+	* src/gsad_omp.h (create_tag_omp, delete_tag_omp, delete_trash_tag_omp)
+	(edit_tag_omp, export_tags_omp, export_tag_omp, get_tag_omp)
+	(get_tags_omp, new_tag_omp, save_tag_omp): New function prototypes.
+
+	* src/html/gsad.xsl (create_tag_response, delete_tag_response)
+	(modify_tag_response): New indicator templates.
+	(html-gsa-logo): Add tag response indicators for get_tag, get_tags
+	and gsad_message.
+	(html-gsa-navigation): Add Tags item to Configuration menu.
+
+	* src/html/help.xsl (glossary.html): Add entry "Tag".
+	(new_tag.html, tag_details.html, tags.html): New help pages for tag
+	management functions.
+
+	* src/html/omp.xsl (html-create-filter-form): Add option "Tag" to filter
+	type selection.
+	(get_tags, html-tags-table, tag): New templates for Tags table.
+	(get_tag, tag mode=details): New templates for Tag details.
+	(tag mode=trash): New template for Tags in trashcan.
+	(tag_attach_types): New template for selection of attached resource
+	types.
+	(new_tag, html-create-tag-form): New templates for creation of new Tags.
+	(edit_tag, html-edit-tag-form, modify_tag_response): New templates for
+	editing tags.
+	(html-tags-trash-table): New template for Tags trash table.
+	(get_trash): Add response indicator and section for Tags.
+	(get_my_settings): Add tags filter.
+
 2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (get_report_hosts_response): Link total

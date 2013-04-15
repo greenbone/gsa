@@ -190,6 +190,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="create_tag_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Create Tag'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_target_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -315,6 +323,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
     <xsl:with-param name="command" select="'Delete Slave'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="delete_tag_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Delete Tag'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -475,6 +491,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="status" select="@status"/>
     <xsl:with-param name="status_text" select="@status_text"/>
     <xsl:with-param name="command" select="'Save Slave'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="modify_tag_response" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="@status"/>
+    <xsl:with-param name="status_text" select="@status_text"/>
+    <xsl:with-param name="command" select="'Save Tag'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -922,6 +946,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_system_reports/get_system_reports_response"
                              mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/commands_response/delete_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/create_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/create_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/delete_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tag/modify_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tags/gsad_msg"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tags/create_filter_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tags/create_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tags/delete_tag_response"
+                             mode="response-indicator"/>
+        <xsl:apply-templates select="get_tags/modify_tag_response"
+                             mode="response-indicator"/>
         <xsl:apply-templates select="get_target/commands_response/delete_target_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_target/create_target_response"
@@ -1097,6 +1143,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
         <li><a href="/omp?cmd=get_alerts&amp;token={/envelope/token}">Alerts</a></li>
+      </xsl:if>
+      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+        <li><a href="/omp?cmd=get_tags&amp;token={/envelope/token}">Tags</a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
         <li><a href="/omp?cmd=get_filters&amp;token={/envelope/token}">Filters</a></li>
