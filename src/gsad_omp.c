@@ -10073,6 +10073,16 @@ get_report_omp (credentials_t * credentials, params_t *params,
                      content_disposition, NULL);
 }
 
+#define REQUIRE(arg, backurl)                                         \
+  if (arg == NULL)                                                    \
+    return gsad_message (credentials,                                 \
+                         "Internal error", __FUNCTION__, __LINE__,    \
+                         "An internal error occurred."                \
+                         " Diagnostics: Required parameter \""        \
+                         G_STRINGIFY (arg)                            \
+                         "\" was NULL.",                              \
+                         backurl)
+
 /**
  * @brief Get ths hosts for a report, XSL transform the result.
  *
@@ -10082,24 +10092,22 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_hosts (credentials_t * credentials, params_t *params)
+get_report_section (credentials_t * credentials, params_t *params)
 {
   GString *xml;
   gnutls_session_t session;
   int socket;
   gchar *html;
-  const char *report_id, *filt_id, *filter;
+  const char *report_id, *section;
 
+  section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
-  filt_id = params_value (params, "filt_id");
-  filter = params_value (params, "filter");
 
-  if (report_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a report's hosts. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+  REQUIRE(section, "/omp?cmd=get_tasks");
+  REQUIRE(report_id, "/omp?cmd=get_tasks");
+
+  if (!strcmp (section, "summary"))
+    return get_report_omp (credentials, params, NULL, NULL, NULL);
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -10118,16 +10126,12 @@ get_report_hosts (credentials_t * credentials, params_t *params)
                              "/omp?cmd=get_tasks");
     }
 
-  xml = g_string_new ("<get_report_hosts_response>");
+  xml = g_string_new ("");
+  g_string_append_printf (xml, "<get_report_%s_response>", section);
 
   if (openvas_server_sendf (&session,
-                            "<get_reports report_id='%s'"
-                            " filt_id=\"%s\""
-                            " filter=\"%s\""
-                            "/>",
-                            report_id,
-                            filt_id ? filt_id : "0",
-                            filter ? filter : "")
+                            "<get_reports report_id='%s'/>",
+                            report_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -10152,44 +10156,11 @@ get_report_hosts (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_tasks");
     }
 
-  g_string_append (xml, "</get_report_hosts_response>");
+  g_string_append_printf (xml, "</get_report_%s_response>", section);
+
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
-
-/**
- * @brief Get hosts for a report, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_report_hosts_omp (credentials_t * credentials, params_t *params)
-{
-  return get_report_hosts (credentials, params);
-}
-
-#define REQUIRE(arg, backurl)                                         \
-  if (arg == NULL)                                                    \
-    return gsad_message (credentials,                                 \
-                         "Internal error", __FUNCTION__, __LINE__,    \
-                         "An internal error occurred."                \
-                         " Diagnostics: Required parameter \""        \
-                         G_STRINGIFY (arg)                            \
-                         "\" was NULL.",                              \
-                         backurl)
-
-#define REQUIRE_PARAM(arg, backurl)                                   \
-  if (params_value (params, arg) == NULL)                             \
-    return gsad_message (credentials,                                 \
-                         "Internal error", __FUNCTION__, __LINE__,    \
-                         "An internal error occurred."                \
-                         " Diagnostics: Required parameter \""        \
-                         arg                                          \
-                         "\" was NULL.",                              \
-                         backurl)
 
 /**
  * @brief Get a report section, XSL transform the result.
@@ -10202,16 +10173,7 @@ get_report_hosts_omp (credentials_t * credentials, params_t *params)
 char *
 get_report_section_omp (credentials_t * credentials, params_t *params)
 {
-  const char *section = params_value (params, "report_section");
-
-  REQUIRE(section, "/omp?cmd=get_tasks");
-
-  if (!strcmp (section, "summary"))
-    return get_report_omp (credentials, params, NULL, NULL, NULL);
-  else if (!strcmp (section, "hosts"))
-    return get_report_hosts_omp (credentials, params);
-  else
-    return get_report_omp (credentials, params, NULL, NULL, NULL);
+  return get_report_section (credentials, params);
 }
 
 /**

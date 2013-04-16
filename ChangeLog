@@ -1,3 +1,21 @@
+2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add ports value to report_section
+	parameter.
+
+	* src/gsad_omp.c: Remove unused macro REQUIRE_PARAM
+	(get_report_hosts): Rename into get_report_sections. Refactor code to be
+	usable by requests for different report sections.
+	(get_report_hosts_omp): Remove function.
+	(get_report_section_omp): Call get_report_section.
+
+	* src/gsad_omp.h: Remove get_report_hosts_omp declaration.
+
+	* src/html/omp.xsl (report-sections): Add report ports entry.
+	(get_report_ports_response): New template.
+	(get_reports_response/report/report [details]): Remove host ports
+	summary.
+
 2013-04-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add Tags table, Tag details, Create Tag, Edit tag pages.

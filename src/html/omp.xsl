@@ -20819,6 +20819,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="content" select="'Report: Hosts'"/>
       </xsl:call-template>
     </xsl:if>
+    <xsl:if test="$current != 'ports'">
+      <xsl:call-template name="opt">
+        <xsl:with-param name="value" select="'ports'"/>
+        <xsl:with-param name="content" select="'Report: Ports'"/>
+      </xsl:call-template>
+    </xsl:if>
   </select>
 </xsl:template>
 
@@ -20957,6 +20963,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="get_report_ports_response">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:variable name="report" select="get_reports_response/report/report"/>
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report: Ports
+      <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
+        <form action="/omp" method="get">
+          <input type="hidden" name="cmd" value="get_report_section"/>
+          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <xsl:call-template name="report-sections">
+            <xsl:with-param name="current" select="'ports'"/>
+          </xsl:call-template>
+          <input type="image"
+                 name="Go to Section"
+                 src="/img/refresh.png"
+                 alt="Go to Section"
+                 style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:for-each select="$report/host" >
+        <xsl:variable name="current_host" select="ip"/>
+        <h2>
+          Port summary for <xsl:value-of select="$current_host"/>
+        </h2>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Service (Port)</td>
+            <td>Threat</td>
+          </tr>
+          <xsl:apply-templates select="../ports/port[host/text() = $current_host]"/>
+        </table>
+      </xsl:for-each>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="port">
   <xsl:variable name="class">
     <xsl:choose>
@@ -21041,16 +21089,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
           </table>
         </xsl:if>
-        <h2>
-          Port summary for <xsl:value-of select="$current_host"/>
-        </h2>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Service (Port)</td>
-            <td>Threat</td>
-          </tr>
-          <xsl:apply-templates select="../ports/port[host/text() = $current_host]"/>
-        </table>
       </xsl:otherwise>
     </xsl:choose>
     <a name="{$current_host}"/>
