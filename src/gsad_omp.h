@@ -66,6 +66,7 @@ char * delete_report_omp (credentials_t *, params_t *);
 char * get_report_omp (credentials_t *, params_t *, gsize *, gchar **, char **);
 
 char * get_report_hosts_omp (credentials_t *, params_t *);
+char * get_report_section_omp (credentials_t *, params_t *);
 
 char * get_result_omp (credentials_t *, params_t *);
 

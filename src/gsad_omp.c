@@ -10192,6 +10192,29 @@ get_report_hosts_omp (credentials_t * credentials, params_t *params)
                          backurl)
 
 /**
+ * @brief Get a report section, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_report_section_omp (credentials_t * credentials, params_t *params)
+{
+  const char *section = params_value (params, "report_section");
+
+  REQUIRE(section, "/omp?cmd=get_tasks");
+
+  if (!strcmp (section, "summary"))
+    return get_report_omp (credentials, params, NULL, NULL, NULL);
+  else if (!strcmp (section, "hosts"))
+    return get_report_hosts_omp (credentials, params);
+  else
+    return get_report_omp (credentials, params, NULL, NULL, NULL);
+}
+
+/**
  * @brief Get one result, XSL transform the result.
  *
  * @param[in]  credentials   Username and password for authentication.

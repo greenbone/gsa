@@ -53,6 +53,21 @@
 
 2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report-sections): New template.
+	(html-report-details, get_report_hosts_response): Add dropdown menu to
+	select report section. Remove overrides dropdown menu. Style update.
+
+	* src/gsad.c (init_validator): Add get_report_section and remove
+	get_report_hosts commands. Add report_section parameter.
+	(exec_omp_get): Handle get_report_section. Remove get_report_hosts
+	handler.
+
+	* src/gsad_omp.c (get_report_section_omp): New function.
+
+	* src/gsad_omp.h: Add get_report_section_omp header.
+
+2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (get_report_hosts_response): Link total
 	vulnerabilities values back to report summary with appropriate filter.
 

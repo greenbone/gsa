@@ -1280,56 +1280,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="@type='prognostic'">
         Prognostic
       </xsl:if>
-      Report Summary
+      Report: Summary
       <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (View Report)">
-        <img src="/img/help.png"/>
+        <img style="vertical-align: text-top;" src="/img/help.png"/>
       </a>
-      <a href="/omp?cmd=get_report_hosts&amp;report_id={report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Report Hosts" style="margin-left:3px;">
-        <img src="/img/agent.png" border="0" alt="Report Hosts"/>
-      </a>
-      <xsl:choose>
-        <xsl:when test="@type='prognostic'">
-        </xsl:when>
-        <xsl:otherwise>
-          <div id="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-            <form action="" method="get">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_report"/>
-              <xsl:choose>
-                <xsl:when test="../../delta">
-                  <input type="hidden" name="report_id" value="{report/@id}"/>
-                  <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="report_id" value="{report/@id}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <input type="hidden" name="filter" value="{report/filters/term}"/>
-              <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-              <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
-              <input type="hidden" name="task_id" value="{task/@id}"/>
-              <select style="margin-bottom: 0px;" name="overrides" size="1">
-                <xsl:choose>
-                  <xsl:when test="$apply-overrides = 0">
-                    <option value="0" selected="1">&#8730;No overrides</option>
-                    <option value="1" >Apply overrides</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="0">No overrides</option>
-                    <option value="1" selected="1">&#8730;Apply overrides</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </select>
-              <input type="image"
-                     name="Update"
-                     src="/img/refresh.png"
-                     alt="Update" style="margin-left:3px;margin-right:3px;"/>
-            </form>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
+      <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 20px; font-weight: normal;">
+        <form action="/omp" method="get">
+          <input type="hidden" name="cmd" value="get_report_section"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:call-template name="report-sections">
+            <xsl:with-param name="current" select="'summary'"/>
+          </xsl:call-template>
+          <input type="image"
+                 name="Go to Section"
+                 src="/img/refresh.png"
+                 alt="Go to Section"
+                 style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
       <xsl:choose>
@@ -20834,6 +20804,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </table>
 </xsl:template>
 
+<xsl:template name="report-sections">
+  <xsl:param name="current">summary</xsl:param>
+  <select name="report_section">
+    <xsl:if test="$current != 'summary'">
+      <xsl:call-template name="opt">
+        <xsl:with-param name="value" select="'summary'"/>
+        <xsl:with-param name="content" select="'Report: Summary'"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$current != 'hosts'">
+      <xsl:call-template name="opt">
+        <xsl:with-param name="value" select="'hosts'"/>
+        <xsl:with-param name="content" select="'Report: Hosts'"/>
+      </xsl:call-template>
+    </xsl:if>
+  </select>
+</xsl:template>
+
 <xsl:template match="get_report_hosts_response">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="get_reports_response/report/report"/>
@@ -20842,13 +20830,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Hosts
-      <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Report Summary" style="margin-left:3px;">
-        <img src="/img/details.png" border="0" alt="Report Summary"/>
-      </a>
+      <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
+        <form action="/omp" method="get">
+          <input type="hidden" name="cmd" value="get_report_section"/>
+          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <xsl:call-template name="report-sections">
+            <xsl:with-param name="current" select="'hosts'"/>
+          </xsl:call-template>
+          <input type="image"
+                 name="Go to Section"
+                 src="/img/refresh.png"
+                 alt="Go to Section"
+                 style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </div>
     </div>
     <div class="gb_window_part_content">
-
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td>Host</td>
@@ -20905,7 +20903,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
             </td>
             <td style="text-align:right">
-              <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri (concat ('=&quot;', $current_host, '&quot;'), true ())}&amp;filt_id=&amp;token={/envelope/token}"
+                 title="Report Summary: Medium" style="margin-left:3px;">
+                <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+              </a>
             </td>
           </tr>
         </xsl:for-each>

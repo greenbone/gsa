@@ -654,9 +654,9 @@ init_validator ()
                          "|(get_port_lists)"
                          "|(get_protocol_doc)"
                          "|(get_report)"
-                         "|(get_report_hosts)"
                          "|(get_report_format)"
                          "|(get_report_formats)"
+                         "|(get_report_section)"
                          "|(get_result)"
                          "|(get_settings)"
                          "|(get_schedule)"
@@ -838,6 +838,7 @@ init_validator ()
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
+  openvas_validator_add (validator, "report_section",  "^(summary|hosts)$");
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
@@ -2131,7 +2132,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_result)
   ELSE (get_report_format)
   ELSE (get_report_formats)
-  ELSE (get_report_hosts)
+  ELSE (get_report_section)
   ELSE (get_schedule)
   ELSE (get_schedules)
   ELSE (get_slave)
