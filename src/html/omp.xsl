@@ -7173,6 +7173,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- BEGIN TAGS MANAGEMENT -->
 
+<xsl:template name="tagged_resource_link">
+  <xsl:param name="res_type"/>
+  <xsl:param name="res_id"/>
+  <xsl:param name="res_name"/>
+  <xsl:param name="token"/>
+  <xsl:choose>
+    <xsl:when test="$res_type='cve' or $res_type='cpe' or $res_type='ovaldef' or $res_type='dfn_cert_adv'">
+      <a href="/omp?cmd=get_info&amp;info_type={$res_type}&amp;info_id={$res_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$res_name"/>
+      </a>
+    </xsl:when>
+    <xsl:when test="$res_type='nvt'">
+      <a href="/omp?cmd=get_nvts&amp;oid={$res_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$res_name"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=get_{$res_type}&amp;{$res_type}_id={$res_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$res_name"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="get_tags">
   <xsl:apply-templates select="gsad_msg"/>
 
@@ -7212,7 +7236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (tag)"/>
     <xsl:with-param name="filtered-count" select="tag_count/filtered"/>
     <xsl:with-param name="full-count" select="tag_count/text ()"/>
-    <xsl:with-param name="headings" select="'Name|name Value|value Active|active Attach&#xa0;Type|attach_type Attach&#xa0;ID|attach_id Modified|modified'"/>
+    <xsl:with-param name="headings" select="'Name|name Value|value Active|active Attach&#xa0;Type|attach_type Attach&#xa0;Name|attach_name Modified|modified'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -7254,7 +7278,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="attach/type"/>
     </td>
     <td>
-      <xsl:value-of select="attach/id"/>
+      <xsl:choose>
+        <xsl:when test="orphaned='0' and attach/name!=''">
+          <xsl:call-template name="tagged_resource_link">
+            <xsl:with-param name="res_type" select="attach/type"/>
+            <xsl:with-param name="res_id" select="attach/id"/>
+            <xsl:with-param name="res_name" select="attach/name"/>
+            <xsl:with-param name="token" select="/envelope/token"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          N/A <i>(ID: <xsl:value-of select="attach/id"/>)</i>
+        </xsl:otherwise>
+      </xsl:choose>
     </td>
     <td>
       <xsl:value-of select="gsa:date (modification_time)"/>
@@ -7305,6 +7341,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Comment:</td>
           <td><xsl:value-of select="comment"/></td>
         </tr>
+        <xsl:choose>
+          <xsl:when test="attach/name != '' and orphaned='0'">
+            <tr>
+              <td>Attached to resource:</td>
+              <td>
+                <xsl:call-template name="tagged_resource_link">
+                  <xsl:with-param name="res_type" select="attach/type"/>
+                  <xsl:with-param name="res_id" select="attach/id"/>
+                  <xsl:with-param name="res_name" select="attach/name"/>
+                  <xsl:with-param name="token" select="/envelope/token"/>
+                </xsl:call-template>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
         <tr>
           <td>Attached to resource type:</td>
           <td><xsl:value-of select="attach/type"/></td>
@@ -7318,6 +7369,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:choose>
               <xsl:when test="active = 0">No</xsl:when>
+              <xsl:otherwise>Yes</xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td>Orphaned:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="orphaned = 0">No</xsl:when>
               <xsl:otherwise>Yes</xsl:otherwise>
             </xsl:choose>
           </td>

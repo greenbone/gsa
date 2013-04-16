@@ -1,3 +1,17 @@
+2013-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (tagged_resource_link): New template for a
+	arbitrary resource link.
+	(html-tags-table): Change attach_id to attach_name in heading.
+	(tag): Show name of attach resource instead of ID if available and
+	link to resource.
+	(tag mode=details): Add name with link to attach resource and
+	"orphaned" row to tag details page.
+
+	* src/html/help.xsl (tags.html, tag_details.html): Change description
+	of table contents according to include new attach resource name and
+	orphaned status.
+
 2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (get_report_ports_response): Use a single table of

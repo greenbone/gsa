@@ -6723,7 +6723,9 @@ Public License instead of this License.
       <p>
         Provides detailed information about a
         <a href="glossary.html?token={/envelope/token}#tag">Tag</a>.
-        This includes the name, value, comment, resource it is attached to and whether it is active.
+        This includes the name, value, comment, resource it is attached to,
+        whether it is active and whether it is orphaned (attached to a
+        nonexistent resource).
       </p>
 
       <h4>New Tag</h4>
@@ -6868,8 +6870,12 @@ Public License instead of this License.
           <td>The resource type the tag is attached to.</td>
         </tr>
         <tr class="even">
-          <td>Attach ID</td>
-          <td>The ID of the resource the tag is attached to.</td>
+          <td>Attach Name</td>
+          <td>The Name of the resource the tag is attached to if available,
+          the ID otherwise.<br/>
+          Clicking a resource name with a link will open the details page of
+          the resource.
+          </td>
         </tr>
         <tr class="odd">
           <td>Modified</td>
