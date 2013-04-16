@@ -20963,6 +20963,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:key name="kReportPorts" match="get_reports_response/report/report/ports/port/text()" use="."/>
 <xsl:template match="get_report_ports_response">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="get_reports_response/report/report"/>
@@ -20988,19 +20989,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <xsl:for-each select="$report/host" >
-        <xsl:variable name="current_host" select="ip"/>
-        <h2>
-          Port summary for <xsl:value-of select="$current_host"/>
-        </h2>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Service (Port)</td>
-            <td>Threat</td>
-          </tr>
-          <xsl:apply-templates select="../ports/port[host/text() = $current_host]"/>
-        </table>
-      </xsl:for-each>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>Service (Port)</td>
+          <td>Host</td>
+          <td>Threat</td>
+        </tr>
+
+        <xsl:for-each select="$report/ports/port/text()[generate-id() = generate-id(key('kReportPorts', .))]">
+          <xsl:variable name="class">
+            <xsl:choose>
+              <xsl:when test="position() mod 2 = 0">even</xsl:when>
+              <xsl:otherwise>odd</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="port" select="../text()"/>
+          <tbody class="{$class}">
+            <tr>
+              <td rowspan="{count(../../port[text() = $port]) + 1}">
+                <xsl:value-of select="$port"/>
+              </td>
+              <xsl:for-each select="../../port[text() = $port]">
+                <tr>
+                  <td>
+                      <xsl:value-of select="host"/>
+                  </td>
+                  <td>
+                      <xsl:value-of select="threat"/>
+                  </td>
+                </tr>
+              </xsl:for-each>
+            </tr>
+          </tbody>
+        </xsl:for-each>
+      </table>
     </div>
   </div>
 </xsl:template>

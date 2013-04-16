@@ -1,5 +1,10 @@
 2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (get_report_ports_response): Use a single table of
+	ports rows with all hosts/threats matching them.
+
+2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Add ports value to report_section
 	parameter.
 
