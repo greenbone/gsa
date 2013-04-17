@@ -10038,22 +10038,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 }
 
 /**
- * @brief Get the report page.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- *
- * @return Report.
- */
-char *
-get_report_page (credentials_t *credentials, params_t *params,
-                 const char *extra_xml)
-{
-  return get_report (credentials, params, NULL, NULL, NULL, NULL, extra_xml);
-}
-
-/**
  * @brief Get a report and XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -10097,11 +10081,13 @@ get_report_section (credentials_t * credentials, params_t *params)
   GString *xml;
   gnutls_session_t session;
   int socket;
-  gchar *html;
-  const char *report_id, *section;
+  gchar *html, *request;
+  const char *report_id, *section, *filter, *filt_id;
 
   section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
+  filter = params_value (params, "filter");
+  filt_id = params_value (params, "filt_id");
 
   REQUIRE(section, "/omp?cmd=get_tasks");
   REQUIRE(report_id, "/omp?cmd=get_tasks");
@@ -10129,12 +10115,19 @@ get_report_section (credentials_t * credentials, params_t *params)
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_report_%s_response>", section);
 
-  if (openvas_server_sendf (&session,
-                            "<get_reports report_id='%s'/>",
-                            report_id)
-      == -1)
+  request = g_markup_printf_escaped
+             ("<get_reports report_id=\"%s\""
+              " filter=\"%s\""
+              " filt_id=\"%s\""
+              "/>",
+              report_id,
+              filter ? filter : "",
+              filt_id ? filt_id : "0");
+
+  if (openvas_server_sendf (&session, request) == -1)
     {
       g_string_free (xml, TRUE);
+      g_free (request);
       openvas_server_close (socket, session);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10143,6 +10136,7 @@ get_report_section (credentials_t * credentials, params_t *params)
                            "Diagnostics: Failure to send command to manager daemon.",
                            "/omp?cmd=get_tasks");
     }
+  g_free (request);
 
   if (read_string (&session, &xml))
     {

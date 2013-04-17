@@ -1,3 +1,18 @@
+2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_report_page): Remove unused function.
+	(get_report_section): Send filter and filt_id as part of get_report
+	command.
+
+	* src/html/omp.xsl (gsa:threat-color): New function.
+	(html-report-details): Add filter and filt_id parameters to report
+	section form.
+	(report-section-filter): New template.
+	(get_report_hosts_response, get_report_ports_response): Add filter and
+	filt_id parameters to report section form. Add filter box.
+	(get_report_ports_response): Add IANA column to ports table. Use
+	adequate background color for threat column. Fix filter by host link.
+
 2013-04-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (result-detailed): Take care that for prognostic
@@ -17,12 +32,12 @@
 	of table contents according to include new attach resource name and
 	orphaned status.
 
-2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2013-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (get_report_ports_response): Use a single table of
 	ports rows with all hosts/threats matching them.
 
-2013-04-15  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2013-04-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add ports value to report_section
 	parameter.

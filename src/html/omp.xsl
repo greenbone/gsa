@@ -211,6 +211,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="$threat"/>
 </func:function>
 
+<func:function name="gsa:threat-color">
+  <xsl:param name="threat"/>
+  <xsl:variable name="color">
+    <xsl:choose>
+      <xsl:when test="gsa:lower-case($threat) = 'high'">red</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'medium'">orange</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'low'">lightskyblue</xsl:when>
+      <xsl:otherwise></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <func:result select="$color"/>
+</func:function>
+
 <!-- NAMED TEMPLATES -->
 
 <!-- Currently only a very simple formatting method to produce
@@ -1297,6 +1310,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  src="/img/refresh.png"
                  alt="Go to Section"
                  style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="token" value="{/envelope/token}"/>
         </form>
       </div>
@@ -20893,6 +20908,86 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </select>
 </xsl:template>
 
+<xsl:template name="report-section-filter">
+  <xsl:param name="report"/>
+  <xsl:param name="section">summary</xsl:param>
+  <div style="background-color: #EEEEEE;">
+    <div style="float: right">
+      <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
+        <div style="display: inline; padding: 2px; vertical-align:middle;">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="create_filter"/>
+          <input type="hidden" name="caller" value="{/envelope/caller}"/>
+          <input type="hidden" name="term" value="{$report/filters/term}"/>
+          <input type="hidden" name="optional_resource_type" value="report_section"/>
+          <input type="hidden" name="next" value="get_report_section"/>
+          <input type="hidden" name="report_section" value="{$section}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="text" name="name" value="" size="10"
+                 maxlength="80" style="vertical-align:middle"/>
+          <input type="image"
+                 name="New Filter"
+                 src="/img/new.png"
+                 alt="New Filter"
+                 style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+        </div>
+      </form>
+      <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
+        <div style="display: inline; padding: 2px; vertical-align:middle;">
+          <input type="hidden" name="cmd" value="get_report_section"/>
+          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <input type="hidden" name="report_section" value="{$section}"/>
+          <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
+            <option value="">--</option>
+            <xsl:variable name="id" select="$report/filters/@id"/>
+            <xsl:for-each select="../filters/get_filters_response/filter">
+              <xsl:choose>
+                <xsl:when test="@id = $id">
+                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </select>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="image"
+                 name="Switch Filter"
+                 src="/img/refresh.png"
+                 alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+          <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
+             title="Filters">
+            <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                 src="/img/list.png" border="0" alt="Filters"/>
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <form action="" method="get">
+      <input type="hidden" name="cmd" value="get_report_section"/>
+      <input type="hidden" name="report_id" value="{$report/@id}"/>
+      <input type="hidden" name="report_section" value="{$section}"/>
+      <div style="padding: 2px;">
+        Filter:
+        <input type="text" name="filter" size="57"
+               value="{concat ($report/filters/term, ' ')}"
+               maxlength="1000"/>
+        <input type="image"
+               name="Update Filter"
+               src="/img/refresh.png"
+               alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+        <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
+          <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+               src="/img/help.png" border="0"/>
+        </a>
+      </div>
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+    </form>
+  </div>
+</xsl:template>
+
 <xsl:template match="get_report_hosts_response">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="get_reports_response/report/report"/>
@@ -20913,11 +21008,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  src="/img/refresh.png"
                  alt="Go to Section"
                  style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="token" value="{/envelope/token}"/>
         </form>
       </div>
     </div>
     <div class="gb_window_part_content">
+      <xsl:call-template name="report-section-filter">
+        <xsl:with-param name="report" select="$report"/>
+        <xsl:with-param name="section" select="'hosts'"/>
+      </xsl:call-template>
+
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td>Host</td>
@@ -20974,7 +21076,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri (concat ('=&quot;', $current_host, '&quot;'), true ())}&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34;&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report Summary: Medium" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
               </a>
@@ -21049,19 +21151,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  src="/img/refresh.png"
                  alt="Go to Section"
                  style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
           <input type="hidden" name="token" value="{/envelope/token}"/>
         </form>
       </div>
     </div>
     <div class="gb_window_part_content">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <xsl:call-template name="report-section-filter">
+        <xsl:with-param name="report" select="$report"/>
+        <xsl:with-param name="section" select="'ports'"/>
+      </xsl:call-template>
+
+      <table class="gbntable" cellpadding="4">
         <tr class="gbntablehead2">
-          <td>Service (Port)</td>
+          <td>Port</td>
+          <td>IANA</td>
           <td>Host</td>
           <td>Threat</td>
         </tr>
 
         <xsl:for-each select="$report/ports/port/text()[generate-id() = generate-id(key('kReportPorts', .))]">
+          <xsl:sort data-type="number" select="substring-before (../text(), '/')"/>
           <xsl:variable name="class">
             <xsl:choose>
               <xsl:when test="position() mod 2 = 0">even</xsl:when>
@@ -21072,14 +21183,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <tbody class="{$class}">
             <tr>
               <td rowspan="{count(../../port[text() = $port]) + 1}">
-                <xsl:value-of select="$port"/>
+                <xsl:choose>
+                  <xsl:when test="contains($port, ' ')">
+                    <xsl:value-of select="substring-before($port, ' ')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$port"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+              <td rowspan="{count(../../port[text() = $port]) + 1}">
+                <xsl:choose>
+                  <xsl:when test="contains($port, 'IANA: ')">
+                    <xsl:value-of select="substring-before(substring-after($port, 'IANA: '), ')')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                  </xsl:otherwise>
+                </xsl:choose>
               </td>
               <xsl:for-each select="../../port[text() = $port]">
                 <tr>
                   <td>
                       <xsl:value-of select="host"/>
                   </td>
-                  <td>
+                  <td style="background-color: {gsa:threat-color(threat)};">
                       <xsl:value-of select="threat"/>
                   </td>
                 </tr>
