@@ -1,5 +1,11 @@
 2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Change title wording from
+	Filtered to Report:. Remove security issues per host header. Remove back
+	to summary link.
+
+2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (get_report_hosts_response): Remove unneeded link for
 	all levels case.
 

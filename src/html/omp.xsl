@@ -2529,7 +2529,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
-      Filtered
+      Report:
       <xsl:if test="../../delta">Delta</xsl:if>
       <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
       Results
@@ -21303,9 +21303,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
     <a name="{$current_host}"/>
-    <h3>
-      Security Issues reported for <xsl:value-of select="$current_host"/>
-    </h3>
     <xsl:variable name="on">
       <xsl:choose>
         <xsl:when test="$prognostic=1">0</xsl:when>
@@ -21321,7 +21318,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="show-overrides" select="$on"/>
       </xsl:call-template>
     </xsl:for-each>
-    <a href="#summary">Back to summary</a>
   </xsl:for-each>
 </xsl:template>
 
