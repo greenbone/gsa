@@ -1,3 +1,8 @@
+2013-04-17  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed): Take care that for prognostic
+	report there is also a colored cvss bar.
+
 2013-04-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (tagged_resource_link): New template for a

@@ -20042,6 +20042,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="title" select="$severity_title"/>
               </xsl:call-template>
             </xsl:when>
+            <xsl:when test="string-length (cve/cvss_base) &gt; 0">
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="cve/cvss_base"/>
+              </xsl:call-template>
+            </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$severity_title"/>
             </xsl:otherwise>
