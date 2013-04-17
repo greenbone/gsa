@@ -21119,10 +21119,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter={str:encode-uri ('levels=hmlgf ', true ())}&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report Summary: Total" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result)"/>
-            </a>
+            <xsl:value-of select="count($report/results/result)"/>
           </td>
         </tr>
       </table>

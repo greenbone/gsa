@@ -1,5 +1,10 @@
 2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (get_report_hosts_response): Remove unneeded link for
+	all levels case.
+
+2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (get_report_page): Remove unused function.
 	(get_report_section): Send filter and filt_id as part of get_report
 	command.
