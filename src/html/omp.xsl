@@ -211,6 +211,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result select="$threat"/>
 </func:function>
 
+<func:function name="gsa:threat-max-cvss">
+  <xsl:param name="threat"/>
+  <xsl:variable name="cvss">
+    <xsl:choose>
+      <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'medium'">6.9</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <func:result select="$cvss"/>
+</func:function>
+
 <func:function name="gsa:threat-color">
   <xsl:param name="threat"/>
   <xsl:variable name="color">
@@ -914,12 +927,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="severity-bar">
   <xsl:param name="text"></xsl:param>
+  <xsl:param name="notext"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
   <xsl:param name="threat"><xsl:value-of select="gsa:cvss-threat($cvss)"/></xsl:param>
   <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
   <xsl:param name="scale">10</xsl:param>
 
-  <xsl:variable name="fill"><xsl:value-of select="number($cvss) * $scale"/></xsl:variable>
+  <xsl:variable name="fill">
+    <xsl:value-of select="number($cvss) * $scale"/>
+  </xsl:variable>
   <xsl:variable name="width"><xsl:value-of select="10 * $scale"/></xsl:variable>
   <div class="progressbar_box" title="{$title}" style="width:{$width}px;">
     <xsl:choose>
@@ -936,14 +952,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_bar_done" style="width:0px;"></div>
       </xsl:when>
     </xsl:choose>
-    <div class="progressbar_text">
-      <xsl:value-of select="$cvss"/>
-      <xsl:choose>
-        <xsl:when test="$text">
-          (<xsl:value-of select="$threat"/>)
-        </xsl:when>
-      </xsl:choose>
-    </div>
+    <xsl:if test="not($notext)">
+      <div class="progressbar_text">
+        <xsl:value-of select="$cvss"/>
+        <xsl:choose>
+          <xsl:when test="$text">
+            (<xsl:value-of select="$threat"/>)
+          </xsl:when>
+        </xsl:choose>
+      </div>
+    </xsl:if>
   </div>
 </xsl:template>
 <func:function name="gsa:build-levels">
@@ -4251,6 +4269,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:for-each>
   <func:result>0</func:result>
+</func:function>
+
+<func:function name="gsa:table-row-class">
+  <xsl:param name="position"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="$position mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </func:result>
 </func:function>
 
 <xsl:template match="task" mode="trash">
@@ -21219,25 +21247,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <table class="gbntable" cellpadding="4">
+          <col/>
+          <col/>
+          <col/>
+          <col width="100px"/>
         <tr class="gbntablehead2">
           <td>Port</td>
           <td>IANA</td>
-          <td>Host</td>
+          <td>Hosts</td>
           <td>Threat</td>
         </tr>
 
-        <xsl:for-each select="$report/ports/port/text()[generate-id() = generate-id(key('kReportPorts', .))]">
+        <xsl:for-each select="$report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]">
           <xsl:sort data-type="number" select="substring-before (../text(), '/')"/>
-          <xsl:variable name="class">
-            <xsl:choose>
-              <xsl:when test="position() mod 2 = 0">even</xsl:when>
-              <xsl:otherwise>odd</xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
           <xsl:variable name="port" select="../text()"/>
-          <tbody class="{$class}">
-            <tr>
-              <td rowspan="{count(../../port[text() = $port]) + 1}">
+            <tr class="{gsa:table-row-class(position())}">
+              <td>
                 <xsl:choose>
                   <xsl:when test="contains($port, ' ')">
                     <xsl:value-of select="substring-before($port, ' ')"/>
@@ -21247,7 +21272,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </td>
-              <td rowspan="{count(../../port[text() = $port]) + 1}">
+              <td>
                 <xsl:choose>
                   <xsl:when test="contains($port, 'IANA: ')">
                     <xsl:value-of select="substring-before(substring-after($port, 'IANA: '), ')')"/>
@@ -21256,18 +21281,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:otherwise>
                 </xsl:choose>
               </td>
-              <xsl:for-each select="../../port[text() = $port]">
-                <tr>
-                  <td>
-                      <xsl:value-of select="host"/>
-                  </td>
-                  <td style="background-color: {gsa:threat-color(threat)};">
-                      <xsl:value-of select="threat"/>
-                  </td>
-                </tr>
-              </xsl:for-each>
+              <td>
+                  <xsl:value-of select="count($report/ports/port[text() = $port])"/>
+              </td>
+              <td>
+                <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
+                <xsl:if test="$threat = 'low' or $threat = 'medium' or $threat = 'high'">
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="gsa:threat-max-cvss($threat)"/>
+                    <xsl:with-param name="notext" select="'1'"/>
+                  </xsl:call-template>
+                </xsl:if>
+              </td>
             </tr>
-          </tbody>
         </xsl:for-each>
       </table>
     </div>

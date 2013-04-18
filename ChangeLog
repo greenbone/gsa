@@ -1,9 +1,18 @@
+2013-04-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (gsa:threat-max-cvss, gsa:table-row-class): New
+	functions.
+	(severity-bar): Add notext parameter.
+	(get_report_ports_response): Change table style to output number of port
+	related hosts only. Output threat as a colorized bar. Skip "general"
+	ports.
+
 2013-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (html-edit-task-form): Select existing target and
 	config in dropdowns.
 
-2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2013-04-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (host-distance): New template.
 	(get_report_hosts_response): Add Ports, Apps and Distance columns.
