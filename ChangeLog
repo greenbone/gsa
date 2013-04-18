@@ -1,5 +1,13 @@
 2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (host-distance): New template.
+	(get_report_hosts_response): Add Ports, Apps and Distance columns.
+	Add adequate per-host and per-threat links for all table cells.
+	(report [assets], get_report_hosts_response): Use host-distance
+	template.
+
+2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-report-details): Change title wording from
 	Filtered to Report:. Remove security issues per host header. Remove back
 	to summary link.
