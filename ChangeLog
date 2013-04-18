@@ -1,3 +1,10 @@
+2013-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r16092.
+
+	* src/html/omp.xsl (html-edit-task-form): Select existing target and
+	config in dropdowns.
+
 2013-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump to 4.0.1.
