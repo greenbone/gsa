@@ -3589,13 +3589,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <td valign="top">Scan Config</td>
                     <td>
                       <input type="hidden" name="cmd" value="save_task"/>
+                      <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
                       <select name="config_id">
                         <xsl:choose>
                           <xsl:when
                             test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
-                            <xsl:apply-templates
-                              select="commands_response/get_configs_response/config"
-                              mode="newtask"/>
+                            <xsl:for-each select="commands_response/get_configs_response/config">
+                              <xsl:choose>
+                                <xsl:when test="@id = $config_id">
+                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
                           </xsl:when>
                           <xsl:otherwise>
                             <option value="0">--</option>
@@ -3607,13 +3615,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <tr>
                     <td>Scan Targets</td>
                     <td>
+                      <xsl:variable name="target_id" select="gsa:param-or ('target_id', commands_response/get_tasks_response/task/target/@id)"/>
                       <select name="target_id">
                         <xsl:choose>
                           <xsl:when
                             test="string-length (commands_response/get_targets_response/target/name) &gt; 0">
-                            <xsl:apply-templates
-                              select="commands_response/get_targets_response/target"
-                              mode="newtask"/>
+                            <xsl:for-each select="commands_response/get_targets_response/target">
+                              <xsl:choose>
+                                <xsl:when test="@id = $target_id">
+                                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:for-each>
                           </xsl:when>
                           <xsl:otherwise>
                             <option value="0">--</option>

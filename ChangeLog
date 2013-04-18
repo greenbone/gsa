@@ -1,3 +1,8 @@
+2013-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-edit-task-form): Select existing target and
+	config in dropdowns.
+
 2013-04-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (host-distance): New template.
