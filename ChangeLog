@@ -1,5 +1,13 @@
 2013-04-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report-summary-sorting)
+	(report-summary-sorting-link): New templates.
+	(html-report-details): Use newly added templates. Move filtering section
+	into the Report Results window. Fix typo getting filter_id instead of
+	filter from envelope.
+
+2013-04-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (gsa:threat-max-cvss, gsa:table-row-class): New
 	functions.
 	(severity-bar): Add notext parameter.
