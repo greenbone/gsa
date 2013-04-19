@@ -926,7 +926,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="severity-bar">
-  <xsl:param name="text"></xsl:param>
+  <xsl:param name="extra_text"></xsl:param>
   <xsl:param name="notext"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
   <xsl:param name="threat"><xsl:value-of select="gsa:cvss-threat($cvss)"/></xsl:param>
@@ -952,16 +952,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="progressbar_bar_done" style="width:0px;"></div>
       </xsl:when>
     </xsl:choose>
-    <xsl:if test="not($notext)">
       <div class="progressbar_text">
-        <xsl:value-of select="$cvss"/>
-        <xsl:choose>
-          <xsl:when test="$text">
-            (<xsl:value-of select="$threat"/>)
-          </xsl:when>
-        </xsl:choose>
+        <xsl:if test="not($notext)">
+          <xsl:value-of select="$cvss"/>
+        </xsl:if>
+        <xsl:if test="$extra_text">
+          <xsl:value-of select="$extra_text"/>
+        </xsl:if>
       </div>
-    </xsl:if>
   </div>
 </xsl:template>
 <func:function name="gsa:build-levels">
@@ -20103,7 +20101,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:call-template name="severity-bar">
                 <xsl:with-param name="cvss" select="nvt/cvss_base"/>
                 <xsl:with-param name="threat" select="threat"/>
-                <xsl:with-param name="text" select="threat"/>
+                <xsl:with-param name="extra_text" select="concat (' (', threat, ')')"/>
                 <xsl:with-param name="title" select="$severity_title"/>
               </xsl:call-template>
             </xsl:when>
@@ -21294,6 +21292,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
                 <xsl:if test="$threat = 'low' or $threat = 'medium' or $threat = 'high'">
                   <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="extra_text" select="../threat"/>
                     <xsl:with-param name="cvss" select="gsa:threat-max-cvss($threat)"/>
                     <xsl:with-param name="notext" select="'1'"/>
                   </xsl:call-template>

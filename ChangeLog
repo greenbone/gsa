@@ -1,3 +1,12 @@
+2013-04-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (severity-bar): Rename text prameter to extra_text
+	for clarification. Don't add parenthesizes so that caller can define
+	output format. Let notext define whether cvss is outputted or not.
+	(result-detailed [result, detailed]): Add parenthesizes around threat.
+	(get_report_ports_response): Add port threat value as extra text for
+	severity bar.
+
 2013-04-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/omp.xsl (html-config-family-table): Take care that for
