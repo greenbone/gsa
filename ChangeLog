@@ -1,5 +1,10 @@
 2013-04-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (get_report_ports_response): Add empty severity bar
+	in no-threat case.
+
+2013-04-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (severity-bar): Rename text prameter to extra_text
 	for clarification. Don't add parenthesizes so that caller can define
 	output format. Let notext define whether cvss is outputted or not.

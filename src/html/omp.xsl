@@ -21290,13 +21290,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
               <td>
                 <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
-                <xsl:if test="$threat = 'low' or $threat = 'medium' or $threat = 'high'">
+                <xsl:variable name="extra_text">
+                  <xsl:choose>
+                    <xsl:when test="$threat = 'low' or $threat = 'medium' or $threat = 'high'">
+                      <xsl:value-of select="../threat"/>
+                    </xsl:when>
+                    <xsl:otherwise>None</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+
                   <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="extra_text" select="../threat"/>
+                    <xsl:with-param name="extra_text" select="$extra_text"/>
                     <xsl:with-param name="cvss" select="gsa:threat-max-cvss($threat)"/>
                     <xsl:with-param name="notext" select="'1'"/>
                   </xsl:call-template>
-                </xsl:if>
               </td>
             </tr>
         </xsl:for-each>
