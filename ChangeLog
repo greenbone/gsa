@@ -1,3 +1,8 @@
+2013-04-19  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/omp.xsl (html-config-family-table): Take care that for
+	prognostic report there is also a colored cvss bar.
+
 2013-04-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report-summary-sorting)

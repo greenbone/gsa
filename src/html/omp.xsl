@@ -8866,7 +8866,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Name</td>
         <td>OID</td>
         <td>Risk</td>
-        <td style="text-align:right;">CVSS</td>
+        <td style="text-align:center;">CVSS</td>
         <td>Timeout</td>
         <td>Prefs</td>
         <xsl:if test="edit">
@@ -8900,8 +8900,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>
                   <xsl:apply-templates select="risk_factor"/>
                 </td>
-                <td style="text-align:right;">
-                  <xsl:value-of select="cvss_base"/>
+                <td>
+                  <xsl:call-template name="severity-bar">
+                    <xsl:with-param name="cvss" select="cvss_base"/>
+                  </xsl:call-template>
                 </td>
                 <td>
                   <xsl:variable
@@ -8992,8 +8994,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <xsl:apply-templates select="risk_factor"/>
               </td>
-              <td style="text-align:right;">
-                <xsl:value-of select="cvss_base"/>
+              <td>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="cvss_base"/>
+                </xsl:call-template>
               </td>
               <td>
                 <xsl:choose>
