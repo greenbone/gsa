@@ -2897,10 +2897,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (method, "GET"))
     {
-      const char *token  = NULL;
-      const char *cookie = NULL;
+      const char *token, *cookie, *language;
       user_t *user;
       gchar *sid;
+
+      token = NULL;
+      cookie = NULL;
 
       /* Second or later call for this request, a GET. */
 
@@ -3120,6 +3122,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
       credentials->capabilities = strdup (user->capabilities);
       credentials->token = strdup (user->token);
       credentials->caller = reconstruct_url (connection, url);
+      /* Accept-Language: de; q=1.0, en; q=0.5 */
+      language = MHD_lookup_connection_value (connection,
+                                              MHD_HEADER_KIND,
+                                              "Accept-Language");
+      credentials->language = g_strdup (language ? language : "en");
 
       sid = g_strdup (user->cookie);
 

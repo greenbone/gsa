@@ -1,3 +1,15 @@
+2013-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Pass Accept-Language header to XSL in ENVELOPE/I18N.
+
+	* src/gsad.c (request_handler): Add Accept-language to credentials.
+
+	* src/gsad_base.c (credentials_t): Add language.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add I18N to ENVELOPE.
+
+	* src/html/gsad.xsl (i18n): New template.
+
 2013-04-19  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (get_report_ports_response): Add empty severity bar

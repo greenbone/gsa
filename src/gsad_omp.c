@@ -232,14 +232,16 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml)
                                  "<time>%s</time>"
                                  "<timezone>%s</timezone>"
                                  "<login>%s</login>"
-                                 "<role>%s</role>",
+                                 "<role>%s</role>"
+                                 "<i18n>%s</i18n>",
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  ctime_now,
                                  credentials->timezone
                                    ? credentials->timezone : "",
                                  credentials->username,
-                                 credentials->role);
+                                 credentials->role,
+                                 credentials->language);
   g_string_append (string, res);
   g_free (res);
 
