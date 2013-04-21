@@ -1,3 +1,20 @@
+2013-04-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Starting I18N support (Internationzation).
+	
+	* src/html/po: New. Direcory for translation files.
+
+	* src/html/po/de.xml: New. Initial german translations.
+	This initial set covers just a few strings.
+
+	* src/html/gsad.xsl (gsa:i18n): New. Translates a string
+	into the language of the browser prefrence. Only german
+	supported in this initial version.
+	Also applying this function to a couple of strings.
+
+	* src/html/omp.xsl: Apply i18n to a single string for
+	demonstration.
+
 2013-04-20  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Pass Accept-Language header to XSL in ENVELOPE/I18N.

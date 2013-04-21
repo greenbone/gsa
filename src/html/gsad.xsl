@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
     version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:func = "http://exslt.org/functions"
+    xmlns:gsa="http://openvas.org"
+    extension-element-prefixes="func">
     <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
@@ -37,6 +40,22 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
+
+<!-- XPATH FUNCTIONS -->
+
+<func:function name="gsa:i18n">
+  <xsl:param name="str"/>
+  <func:result>
+    <xsl:choose>
+      <xsl:when test="substring(/envelope/i18n, 1, 2) = 'de' and document('po/de.xml')//i18n/msg[msgid = $str]/msgstr">
+        <xsl:value-of select="document('po/de.xml')//i18n/msg[msgid = $str]/msgstr"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$str"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </func:result>
+</func:function>
 
 <!-- HEADERS, FOOTER, SIDEBARS -->
 
@@ -688,15 +707,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="$username = ''">
           </xsl:when>
           <xsl:when test="string-length ($username) &gt; 45">
-            Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
+            <xsl:value-of select="gsa:i18n('Logged in as')"/>
+            <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="substring ($username, 1, 45)"/>...</a></b> |
           </xsl:when>
           <xsl:otherwise>
-            Logged in as <div style="display: inline;"><xsl:value-of select="/envelope/role"/></div>
+            <xsl:value-of select="gsa:i18n('Logged in as')"/>
+            <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
             <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |
           </xsl:otherwise>
         </xsl:choose>
-        <a href="/logout?token={/envelope/token}" title="Logout" style="margin-left:3px;">Logout</a>
+        <a href="/logout?token={/envelope/token}" title="Logout" style="margin-left:3px;">
+          <xsl:value-of select="gsa:i18n('Logout')"/>
+        </a>
         <br/>
         <br/>
         <xsl:value-of select="$time"/>
@@ -1091,16 +1114,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-        <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">Tasks</a></li>
+        <li><a href="/omp?cmd=get_tasks&amp;overrides=1&amp;token={/envelope/token}">
+              <xsl:value-of select="gsa:i18n('Tasks')"/>
+            </a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='CREATE_TASK'] and /envelope/capabilities/help_response/schema/command[name='GET_TARGETS'] and /envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-        <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">New Task</a></li>
+        <li><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">
+              <xsl:value-of select="gsa:i18n('New Task')"/>
+            </a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
-        <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt&amp;token={/envelope/token}">Notes</a></li>
+        <li><a href="/omp?cmd=get_notes&amp;filter=sort=nvt&amp;token={/envelope/token}">
+              <xsl:value-of select="gsa:i18n('Notes')"/>
+            </a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
-        <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">Overrides</a></li>
+        <li class="last"><a href="/omp?cmd=get_overrides&amp;token={/envelope/token}">
+              <xsl:value-of select="gsa:i18n('Overrides')"/>
+            </a></li>
       </xsl:if>
      </ul>
     </li>
@@ -1130,7 +1161,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <ul>
       <li class="pointy"></li>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-        <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">Targets</a></li>
+        <li><a href="/omp?cmd=get_targets&amp;token={/envelope/token}">
+              <xsl:value-of select="gsa:i18n('Targets')"/>
+            </a></li>
       </xsl:if>
       <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
         <li class="indent"><a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}">Port Lists</a></li>

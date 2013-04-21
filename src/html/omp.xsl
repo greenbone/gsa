@@ -1371,10 +1371,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="@type='prognostic'">
         Prognostic
       </xsl:if>
-      Report: Summary
+      <xsl:value-of select="gsa:i18n('Report: Summary')"/>
       <a href="/help/view_report.html?token={/envelope/token}#viewreport"
          title="Help: View Report (View Report)">
-        <img style="vertical-align: text-top;" src="/img/help.png"/>
+        <img style="vertical-align: text-top;margin-left: 5px" src="/img/help.png"/>
       </a>
       <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Greenbone Security Assistant
+$Id$
+Description: German translations of strings.
+
+Authors:
+Jan-Oliver Wagner <Jan-Oliver.Wagner@greenbone.net>
+
+Copyright:
+Copyright (C) 2013 Greenbone Networks GmbH
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2,
+or, at your option, any later version as published by the Free
+Software Foundation
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<i18n>
+  <msg>
+    <msgid>Apply overrides</msgid>
+    <msgstr>Übersteuerung anwenden</msgstr>
+  </msg>
+  <msg>
+    <msgid>Logged in as</msgid>
+    <msgstr>Angemeldet als</msgstr>
+  </msg>
+  <msg>
+    <msgid>Logout</msgid>
+    <msgstr>Abmelden</msgstr>
+  </msg>
+  <msg>
+    <msgid>New Task</msgid>
+    <msgstr>Neue Aufgabe</msgstr>
+  </msg>
+  <msg>
+    <msgid>Notes</msgid>
+    <msgstr>Notizen</msgstr>
+  </msg>
+  <msg>
+    <msgid>Overrides</msgid>
+    <msgstr>Übersteuerungen</msgstr>
+  </msg>
+  <msg>
+    <msgid>Report: Summary</msgid>
+    <msgstr>Bericht: Übersicht</msgstr>
+  </msg>
+  <msg>
+    <msgid>Targets</msgid>
+    <msgstr>Ziele</msgstr>
+  </msg>
+  <msg>
+    <msgid>Tasks</msgid>
+    <msgstr>Aufgaben</msgstr>
+  </msg>
+</i18n>
