@@ -304,6 +304,9 @@ install (FILES src/html/login/login.html src/html/gsa-style.css
 install (FILES src/html/img/gsa_splash.png
          DESTINATION ${GSA_DATA_DIR}/login/img)
 
+install (FILES src/html/po/de.xml
+         DESTINATION ${GSA_DATA_DIR}/po)
+
 install (FILES src/html/img/style/window_dec_a.png
                src/html/img/style/window_dec_b.png
                src/html/img/style/window_dec_c.png

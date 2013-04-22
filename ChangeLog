@@ -1,3 +1,7 @@
+2013-04-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* CMakeLists.txt: Install de.po.
+
 2013-04-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Starting I18N support (Internationzation).
