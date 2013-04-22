@@ -22,7 +22,7 @@ Authors:
 Matthew Mundell <matthew.mundell@greenbone.net>
 
 Copyright:
-Copyright (C) 2012 Greenbone Networks GmbH
+Copyright (C) 2012, 2013 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2,
@@ -65,30 +65,38 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <a name="wizard"></a>
   <table>
     <tr>
-      <td valign="top"><b>Welcome dear new user!</b>
+      <td valign="top"><b><xsl:value-of select="gsa:i18n('Welcome dear new user!')"/></b>
         <p>
-          To explore this powerful application and to
+          <xsl:value-of select="gsa:i18n('To explore this powerful application and to
           have a quick start for doing things the first time,
-          I am here to assist you with some hints and short-cuts.
+          I am here to assist you with some hints and short-cuts.')"/>
         </p>
         <p>
-          I will appear automatically in areas where you have
+          <xsl:value-of select="gsa:i18n('I will appear automatically in areas where you have
           created no or only a few objects. And disappear when you
-          have more than
+          have more than')"/>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="../get_settings_response/setting[@id='20f3034c-e709-11e1-87e7-406186ea4fc5']/value"/>
-          objects. You can call me with this
-          icon <img src="img/wizard.png"/> any time later on.
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n('objects. You can call me with this
+          icon')"/>
+          <xsl:text> </xsl:text>
+          <img src="img/wizard.png"/>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n('any time later on.')"/>
         </p>
         <p>
-          For more detailed information on functionality,
-          please try the integrated help system. It is always available
-          as a context sensitive link as icon <img src="img/help.png"/>.
+          <xsl:value-of select="gsa:i18n('For more detailed information
+          on functionality, please try the integrated help system. It is
+          always available as a context sensitive link as icon')"/>
+          <xsl:text> </xsl:text>
+          <img src="img/help.png"/>.
         </p>
       </td>
       <td valign="top"><img src="img/enchantress.png"/></td>
-      <td valign="top"><b>Quick start: Immediately scan an IP address</b>
+      <td valign="top"><b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address')"/> </b>
         <p>
-          IP address or hostname:
+          <xsl:value-of select="gsa:i18n('IP address or hostname:')"/>
           <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="cmd" value="run_wizard"/>
@@ -103,18 +111,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </form>
         </p>
         <p>
-          For this short-cut I will do the following for you:
+          <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:')"/>
           <ol>
-            <li>Create a new Target with default Port List</li>
-            <li>Create a new Task using this target with default Scan Configuration</li>
-            <li>Start this scan task right away</li>
-            <li>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</li>
+            <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Start this scan task right away')"/></li>
+            <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress')"/></li>
           </ol>
         </p>
         <p>
-          In fact, you must not lean back. As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the details icon (<img src="img/details.png"/>)
-          and review the results collected so far.
+          <xsl:value-of select="gsa:i18n('In fact, you must not lean back.
+          As soon as the scan progress is beyond 1%,
+          you can already jump into the scan report via the details icon')"/>
+          <xsl:text> </xsl:text>
+          (<img src="img/details.png"/>)
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa:i18n('and review the results collected so far.')"/>
         </p>
       </td>
     </tr>
@@ -126,9 +138,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">Task Wizard
+  <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('Task Wizard')"/>
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="Help: Task Wizard">
-      <img src="/img/help.png"/>
+      <img src="/img/help.png" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="New Task">

@@ -63,4 +63,93 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <msgid>Tasks</msgid>
     <msgstr>Aufgaben</msgstr>
   </msg>
+
+  <!-- wizard.xsl -->
+
+  <msg>
+    <msgid>Task Wizard</msgid>
+    <msgstr>Aufgaben-Wizard</msgstr>
+  </msg>
+  <msg>
+    <msgid>Welcome dear new user!</msgid>
+    <msgstr>Willkommen neue Anwender!</msgstr>
+  </msg>
+  <msg>
+    <msgid>
+      To explore this powerful application and to
+      have a quick start for doing things the first time,
+      I am here to assist you with some hints and short-cuts.
+    </msgid>
+    <msgstr>
+      Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen
+      und um schnell erste Ergebnisse zu erzielen, helfe ich
+      mit Hinweisen und Abkürzungen.
+    </msgstr>
+  </msg>
+  <msg>
+    <msgid>I will appear automatically in areas where you have
+          created no or only a few objects. And disappear when you
+          have more than
+    </msgid>
+    <msgstr>Ich erscheine automatisch dort wo noch keine oder nur wenige
+            Objekte vorliegen. Und verschwinde wieder wenn mehr als</msgstr>
+  </msg>
+  <msg>
+    <msgid>objects. You can call me with this icon</msgid>
+    <msgstr>Objekte vorliegen. Ich kann aber über dieses Icon</msgstr>
+  </msg>
+  <msg>
+    <msgid>any time later on.</msgid>
+    <msgstr>jederzeit wieder aktiviert werden.</msgstr>
+  </msg>
+  <msg>
+    <msgid>For more detailed information
+          on functionality, please try the integrated help system. It is
+          always available as a context sensitive link as icon
+    </msgid>
+    <msgstr>Für detaillierte Information zu den Funktionen steht das
+            integrierte Hilfe-System zur Verfügung. Diese steht jederzeit
+            kontext-bezogen über das Hilfe-Icon bereit:
+            </msgstr>
+  </msg>
+  <msg>
+    <msgid>Quick start: Immediately scan an IP address</msgid>
+    <msgstr>Schnellstart: Unmittelbar ein IP Adresse scannen</msgstr>
+  </msg>
+  <msg>
+    <msgid>IP address or hostname:</msgid>
+    <msgstr>IP-Adresse oder Hostname:</msgstr>
+  </msg>
+  <msg>
+    <msgid>For this short-cut I will do the following for you:</msgid>
+    <msgstr>Für diese Abkürzung werde ich folgendes durchführen:</msgstr>
+  </msg>
+  <msg>
+    <msgid>Create a new Target with default Port List</msgid>
+    <msgstr>Erstellen eines neuen Ziels mit voreingestellter Port-Liste</msgstr>
+  </msg>
+  <msg>
+    <msgid>Create a new Task using this target with default Scan Configuration</msgid>
+    <msgstr>Erstellen einer neuen Aufgabe mit diesem Ziel und voreingestellter Scan-Konfiguration</msgstr>
+  </msg>
+  <msg>
+    <msgid>Start this scan task right away</msgid>
+    <msgstr>Direktes Starten dieser Scan-Aufgabe</msgstr>
+  </msg>
+  <msg>
+    <msgid>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</msgid>
+    <msgstr>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</msgstr>
+  </msg>
+  <msg>
+    <msgid>In fact, you must not lean back.
+          As soon as the scan progress is beyond 1%,
+          you can already jump into the scan report via the details icon</msgid>
+    <msgstr>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
+            über 1% liegt kann man bereits in die Details des Scan-Berichts</msgstr>
+  </msg>
+  <msg>
+    <msgid>and review the results collected so far.</msgid>
+    <msgstr>springen</msgstr>
+  </msg>
+
 </i18n>

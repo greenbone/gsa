@@ -1,3 +1,11 @@
+2013-04-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/gsad.xsl (gsa:i18n): Use normalize-space() for string comparison.
+
+	* src/html/wizard.xsl: Mark string for i18n.
+
+	* src/html/po/de.xml: Added translations for wizard.
+
 2013-04-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_report): Remove dead code. Add error parameter to
