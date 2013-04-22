@@ -149,7 +149,7 @@ static char *get_target (credentials_t *, params_t *, const char *);
 static char *get_targets (credentials_t *, params_t *, const char *);
 
 static char *get_report (credentials_t *, params_t *, const char *, gsize *,
-                         gchar **, char **, const char *);
+                         gchar **, char **, const char *, int *);
 
 static char *get_report_format (credentials_t *, params_t *, const char *);
 
@@ -621,7 +621,15 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
     return get_tasks (credentials, params, response);
 
   if (strcmp (next, "get_report") == 0)
-    return get_report (credentials, params, NULL, NULL, NULL, NULL, response);
+    {
+      char *result;
+      int error = 0;
+
+      result = get_report (credentials, params, NULL, NULL, NULL,
+                           NULL, response, &error);
+
+      return error ? result : xsl_transform_omp (credentials, result);
+    }
 
   if (strcmp (next, "get_report_format") == 0)
     return get_report_format (credentials, params, response);
@@ -8997,7 +9005,7 @@ delete_report_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
- * @brief Get a report and XSL transform the result.
+ * @brief Get a report and return the result.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -9006,13 +9014,14 @@ delete_report_omp (credentials_t * credentials, params_t *params)
  * @param[out] content_type         Content type if known, else NULL.
  * @param[out] content_disposition  Content disposition, if content_type set.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] error        Set to 1 if error, else 0.
  *
  * @return Report.
  */
 char *
 get_report (credentials_t * credentials, params_t *params, const char *commands,
             gsize *report_len, gchar **content_type, char **content_disposition,
-            const char *extra_xml)
+            const char *extra_xml, int *error)
 {
   char *report_encoded = NULL;
   gchar *report_decoded = NULL;
@@ -9101,32 +9110,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (content_type) *content_type = NULL;
   if (report_len) *report_len = 0;
 
-  if (alert_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a report. "
-                         "The report could not be delivered. "
-                         "Diagnostics: alert_id was NULL.",
-                         "/omp?cmd=get_tasks");
-
-  if (search_phrase == NULL)
-    {
-      xml = g_string_new ("");
-      g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
-                              "Given search_phrase was invalid",
-                              "Get Report");
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-    }
-
-  if (min_cvss_base == NULL)
-    {
-      xml = g_string_new ("");
-      g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
-                              "Given min_cvss_base was invalid",
-                              "Get Report");
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-    }
-
   if (autofp == NULL || strlen (autofp) == 0) autofp = "0";
 
   if (autofp_value == NULL || strlen (autofp_value) == 0) autofp_value = "1";
@@ -9153,12 +9136,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           return html;
         /* Fall through. */
       default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a report. "
-                             "The report could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
+        {
+          if (error) *error = 1;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting a report. "
+                               "The report could not be delivered. "
+                               "Diagnostics: Failure to connect to manager daemon.",
+                               "/omp?cmd=get_tasks");
+        }
     }
 
   /* Run any extra commands. */
@@ -9171,6 +9157,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_free (commands_xml, TRUE);
           openvas_server_close (socket, session);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9183,6 +9170,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_free (commands_xml, TRUE);
           openvas_server_close (socket, session);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9346,6 +9334,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9360,6 +9349,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9375,6 +9365,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           openvas_server_close (socket, session);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9399,6 +9390,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
+          if (error) *error = 1;
           return ret;
         }
       free_entity (entity);
@@ -9441,6 +9433,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
+      if (error) *error = 1;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -9521,6 +9514,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
+      if (error) *error = 1;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a report. "
@@ -9543,6 +9537,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9555,6 +9550,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report == NULL)
             {
               free_entity (entity);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9587,6 +9583,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           if (report_len == NULL)
             {
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9599,6 +9596,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (read_entity (&session, &entity))
             {
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9642,12 +9640,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                 }
               free_entity (entity);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return report_decoded;
             }
           else
             {
               free_entity (entity);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9704,7 +9704,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   g_string_append_printf (xml, GSAD_MESSAGE_INVALID,
                                           "Given host search_phrase was invalid",
                                           "Get Report");
-                  return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+                  return g_string_free (xml, FALSE);
                 }
 
 
@@ -9756,6 +9756,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (read_entity_and_string (&session, &entity, &xml))
         {
           openvas_server_close (socket, session);
+          if (error) *error = 1;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting a report. "
@@ -9794,6 +9795,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9806,6 +9808,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9830,6 +9833,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                 {
                   g_string_free (xml, TRUE);
                   openvas_server_close (socket, session);
+                  if (error) *error = 1;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -9842,6 +9846,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                 {
                   g_string_free (xml, TRUE);
                   openvas_server_close (socket, session);
+                  if (error) *error = 1;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
                                        "An internal error occurred while getting the filter list. "
@@ -9855,7 +9860,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           g_string_append (xml, "</get_prognostic_report>");
           openvas_server_close (socket, session);
-          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+          return g_string_free (xml, FALSE);
         }
 
       if (type && (strcmp (type, "assets") == 0))
@@ -9865,7 +9870,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           else
             g_string_append (xml, "</get_report>");
           openvas_server_close (socket, session);
-          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+          return g_string_free (xml, FALSE);
         }
 
       report_entity = entity_child (entity, "report");
@@ -9906,6 +9911,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_free (task_id);
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9919,6 +9925,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               g_free (task_id);
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9934,7 +9941,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         {
           g_string_append (xml, "</get_delta_result>");
           openvas_server_close (socket, session);
-          return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+          return g_string_free (xml, FALSE);
         }
 
       if (command_enabled (credentials, "GET_REPORT_FORMATS"))
@@ -9946,6 +9953,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9958,6 +9966,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9976,6 +9985,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -9988,6 +9998,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting a report. "
@@ -10010,6 +10021,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -10022,6 +10034,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             {
               g_string_free (xml, TRUE);
               openvas_server_close (socket, session);
+              if (error) *error = 1;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
                                    "An internal error occurred while getting the filter list. "
@@ -10035,7 +10048,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       g_string_append (xml, "</get_report>");
       openvas_server_close (socket, session);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+      return g_string_free (xml, FALSE);
     }
 }
 
@@ -10055,8 +10068,13 @@ get_report_omp (credentials_t * credentials, params_t *params,
                 gsize *report_len, gchar ** content_type,
                 char **content_disposition)
 {
-  return get_report (credentials, params, NULL, report_len, content_type,
-                     content_disposition, NULL);
+  char *result;
+  int error = 0;
+
+  result = get_report (credentials, params, NULL, report_len, content_type,
+                       content_disposition, NULL, &error);
+
+  return error ? result : xsl_transform_omp (credentials, result);
 }
 
 #define REQUIRE(arg, backurl)                                         \

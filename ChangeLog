@@ -1,3 +1,11 @@
+2013-04-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Remove dead code. Add error parameter to
+	notify caller when an error occured. Let caller XSL transform the
+	result.
+	(get_report_omp): XSL transform result is no error occured.
+	(next_page): Adapt get_report call.
+
 2013-04-22  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (gsad_init): Pass NULL to gcry_check_version to disable
@@ -10,7 +18,7 @@
 2013-04-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Starting I18N support (Internationzation).
-	
+
 	* src/html/po: New. Direcory for translation files.
 
 	* src/html/po/de.xml: New. Initial german translations.
