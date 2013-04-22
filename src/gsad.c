@@ -3454,10 +3454,12 @@ gsad_init (void)
   gcry_control (GCRYCTL_SET_THREAD_CBS, &gcry_threads_pthread);
 
   /* Version check should be the very first call because it makes sure that
-   * important subsystems are intialized. */
-  if (!gcry_check_version (GCRYPT_VERSION))
+   * important subsystems are intialized.
+   * We pass NULL to gcry_check_version to disable the internal version mismatch
+   * test. */
+  if (!gcry_check_version (NULL))
     {
-      g_critical ("%s: libgcrypt version mismatch\n", __FUNCTION__);
+      g_critical ("%s: libgcrypt version check failed\n", __FUNCTION__);
       return MHD_NO;
     }
 

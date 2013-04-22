@@ -1,3 +1,8 @@
+2013-04-22  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (gsad_init): Pass NULL to gcry_check_version to disable
+	the internal version check of libgcrypt.
+
 2013-04-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt: Install de.po.
