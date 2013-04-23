@@ -1,3 +1,10 @@
+2013-04-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/po/de.xml: Shorted xml tag names from msgid to id
+	and mststr to str.
+
+	* src/html/gsad.xsl (gsa:i18n): Use shorter names in po file.
+
 2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add closed_cves value to report_section.

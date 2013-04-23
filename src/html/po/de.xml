@@ -28,128 +28,128 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <i18n>
   <msg>
-    <msgid>Apply overrides</msgid>
-    <msgstr>Übersteuerung anwenden</msgstr>
+    <id>Apply overrides</id>
+    <str>Übersteuerung anwenden</str>
   </msg>
   <msg>
-    <msgid>Logged in as</msgid>
-    <msgstr>Angemeldet als</msgstr>
+    <id>Logged in as</id>
+    <str>Angemeldet als</str>
   </msg>
   <msg>
-    <msgid>Logout</msgid>
-    <msgstr>Abmelden</msgstr>
+    <id>Logout</id>
+    <str>Abmelden</str>
   </msg>
   <msg>
-    <msgid>New Task</msgid>
-    <msgstr>Neue Aufgabe</msgstr>
+    <id>New Task</id>
+    <str>Neue Aufgabe</str>
   </msg>
   <msg>
-    <msgid>Notes</msgid>
-    <msgstr>Notizen</msgstr>
+    <id>Notes</id>
+    <str>Notizen</str>
   </msg>
   <msg>
-    <msgid>Overrides</msgid>
-    <msgstr>Übersteuerungen</msgstr>
+    <id>Overrides</id>
+    <str>Übersteuerungen</str>
   </msg>
   <msg>
-    <msgid>Report: Summary</msgid>
-    <msgstr>Bericht: Übersicht</msgstr>
+    <id>Report: Summary</id>
+    <str>Bericht: Übersicht</str>
   </msg>
   <msg>
-    <msgid>Targets</msgid>
-    <msgstr>Ziele</msgstr>
+    <id>Targets</id>
+    <str>Ziele</str>
   </msg>
   <msg>
-    <msgid>Tasks</msgid>
-    <msgstr>Aufgaben</msgstr>
+    <id>Tasks</id>
+    <str>Aufgaben</str>
   </msg>
 
   <!-- wizard.xsl -->
 
   <msg>
-    <msgid>Task Wizard</msgid>
-    <msgstr>Aufgaben-Wizard</msgstr>
+    <id>Task Wizard</id>
+    <str>Aufgaben-Wizard</str>
   </msg>
   <msg>
-    <msgid>Welcome dear new user!</msgid>
-    <msgstr>Willkommen neue Anwender!</msgstr>
+    <id>Welcome dear new user!</id>
+    <str>Willkommen neue Anwender!</str>
   </msg>
   <msg>
-    <msgid>
+    <id>
       To explore this powerful application and to
       have a quick start for doing things the first time,
       I am here to assist you with some hints and short-cuts.
-    </msgid>
-    <msgstr>
+    </id>
+    <str>
       Um die umfangreichen Möglichkeiten dieser Anwendung kennenzulernen
       und um schnell erste Ergebnisse zu erzielen, helfe ich
       mit Hinweisen und Abkürzungen.
-    </msgstr>
+    </str>
   </msg>
   <msg>
-    <msgid>I will appear automatically in areas where you have
+    <id>I will appear automatically in areas where you have
           created no or only a few objects. And disappear when you
           have more than
-    </msgid>
-    <msgstr>Ich erscheine automatisch dort wo noch keine oder nur wenige
-            Objekte vorliegen. Und verschwinde wieder wenn mehr als</msgstr>
+    </id>
+    <str>Ich erscheine automatisch dort wo noch keine oder nur wenige
+            Objekte vorliegen. Und verschwinde wieder wenn mehr als</str>
   </msg>
   <msg>
-    <msgid>objects. You can call me with this icon</msgid>
-    <msgstr>Objekte vorliegen. Ich kann aber über dieses Icon</msgstr>
+    <id>objects. You can call me with this icon</id>
+    <str>Objekte vorliegen. Ich kann aber über dieses Icon</str>
   </msg>
   <msg>
-    <msgid>any time later on.</msgid>
-    <msgstr>jederzeit wieder aktiviert werden.</msgstr>
+    <id>any time later on.</id>
+    <str>jederzeit wieder aktiviert werden.</str>
   </msg>
   <msg>
-    <msgid>For more detailed information
+    <id>For more detailed information
           on functionality, please try the integrated help system. It is
           always available as a context sensitive link as icon
-    </msgid>
-    <msgstr>Für detaillierte Information zu den Funktionen steht das
+    </id>
+    <str>Für detaillierte Information zu den Funktionen steht das
             integrierte Hilfe-System zur Verfügung. Diese steht jederzeit
             kontext-bezogen über das Hilfe-Icon bereit:
-            </msgstr>
+            </str>
   </msg>
   <msg>
-    <msgid>Quick start: Immediately scan an IP address</msgid>
-    <msgstr>Schnellstart: Unmittelbar ein IP Adresse scannen</msgstr>
+    <id>Quick start: Immediately scan an IP address</id>
+    <str>Schnellstart: Unmittelbar ein IP Adresse scannen</str>
   </msg>
   <msg>
-    <msgid>IP address or hostname:</msgid>
-    <msgstr>IP-Adresse oder Hostname:</msgstr>
+    <id>IP address or hostname:</id>
+    <str>IP-Adresse oder Hostname:</str>
   </msg>
   <msg>
-    <msgid>For this short-cut I will do the following for you:</msgid>
-    <msgstr>Für diese Abkürzung werde ich folgendes durchführen:</msgstr>
+    <id>For this short-cut I will do the following for you:</id>
+    <str>Für diese Abkürzung werde ich folgendes durchführen:</str>
   </msg>
   <msg>
-    <msgid>Create a new Target with default Port List</msgid>
-    <msgstr>Erstellen eines neuen Ziels mit voreingestellter Port-Liste</msgstr>
+    <id>Create a new Target with default Port List</id>
+    <str>Erstellen eines neuen Ziels mit voreingestellter Port-Liste</str>
   </msg>
   <msg>
-    <msgid>Create a new Task using this target with default Scan Configuration</msgid>
-    <msgstr>Erstellen einer neuen Aufgabe mit diesem Ziel und voreingestellter Scan-Konfiguration</msgstr>
+    <id>Create a new Task using this target with default Scan Configuration</id>
+    <str>Erstellen einer neuen Aufgabe mit diesem Ziel und voreingestellter Scan-Konfiguration</str>
   </msg>
   <msg>
-    <msgid>Start this scan task right away</msgid>
-    <msgstr>Direktes Starten dieser Scan-Aufgabe</msgstr>
+    <id>Start this scan task right away</id>
+    <str>Direktes Starten dieser Scan-Aufgabe</str>
   </msg>
   <msg>
-    <msgid>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</msgid>
-    <msgstr>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</msgstr>
+    <id>Switch the view to reload every 30 seconds so you can lean back and watch the scan progress</id>
+    <str>Wechseln der Ansicht auf Seitenaktualisierung alle 30 Sekunden so dass man sich zurücklehnen und dem Scan-Fortschritt zuschauen kann</str>
   </msg>
   <msg>
-    <msgid>In fact, you must not lean back.
+    <id>In fact, you must not lean back.
           As soon as the scan progress is beyond 1%,
-          you can already jump into the scan report via the details icon</msgid>
-    <msgstr>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
-            über 1% liegt kann man bereits in die Details des Scan-Berichts</msgstr>
+          you can already jump into the scan report via the details icon</id>
+    <str>Im Grunde muss man sich aber nicht zurücklehnen. Sobald der Scan-Fortschritt
+            über 1% liegt kann man bereits in die Details des Scan-Berichts</str>
   </msg>
   <msg>
-    <msgid>and review the results collected so far.</msgid>
-    <msgstr>springen</msgstr>
+    <id>and review the results collected so far.</id>
+    <str>springen</str>
   </msg>
 
 </i18n>

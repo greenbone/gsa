@@ -48,8 +48,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <func:result>
     <xsl:choose>
       <xsl:when test="substring(/envelope/i18n, 1, 2) = 'de' and
-                      document('po/de.xml')//i18n/msg[normalize-space(msgid) = normalize-space($str)]/msgstr">
-        <xsl:value-of select="document('po/de.xml')//i18n/msg[normalize-space(msgid) = normalize-space($str)]/msgstr"/>
+                      document('po/de.xml')//i18n/msg[normalize-space(id) = normalize-space($str)]/str">
+        <xsl:value-of select="document('po/de.xml')//i18n/msg[normalize-space(id) = normalize-space($str)]/str"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$str"/>
