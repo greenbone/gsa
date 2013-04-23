@@ -1,3 +1,14 @@
+2013-04-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add results value to report_section.
+
+	* src/gsad_omp.c (get_report_section): Make results the default section.
+	Handle summary section.
+
+	* src/html/omp.xsl (html-report-details): Remove summary section.
+	(get_report_summary_response, report [summary]): New templates.
+	(report-sections): Add and make default, the results section.
+
 2013-04-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/gsad.xsl (gsa:i18n): Use normalize-space() for string comparison.

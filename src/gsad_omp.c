@@ -10112,8 +10112,25 @@ get_report_section (credentials_t * credentials, params_t *params)
   REQUIRE(section, "/omp?cmd=get_tasks");
   REQUIRE(report_id, "/omp?cmd=get_tasks");
 
-  if (!strcmp (section, "summary"))
+  if (!strcmp (section, "results"))
     return get_report_omp (credentials, params, NULL, NULL, NULL);
+  else if (!strcmp (section, "summary"))
+    {
+      char *result;
+      int error = 0;
+
+      result = get_report (credentials, params, NULL, NULL, NULL,
+                           NULL, NULL, &error);
+      if (error)
+        return result;
+
+      xml = g_string_new ("");
+      g_string_append_printf (xml, "<get_report_%s_response>", section);
+      g_string_append (xml, result);
+      g_string_append_printf (xml, "</get_report_%s_response>", section);
+
+      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
