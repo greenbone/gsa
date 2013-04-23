@@ -21455,37 +21455,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <a name="{$current_host}"></a>
-        <xsl:if test="$delta = 0">
-          <h2>
-            CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>
-          </h2>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td>CVE</td>
-              <td>NVT</td>
-            </tr>
-            <xsl:variable name="host" select="."/>
-            <xsl:variable name="token" select="/envelope/token"/>
-            <xsl:for-each select="str:split(detail[name = 'Closed CVEs']/value, ',')">
-              <tr>
-                <td>
-                  <xsl:call-template name="get_info_cve_lnk">
-                    <xsl:with-param name="cve" select="."/>
-                    <xsl:with-param name="gsa_token" select="$token"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  <xsl:variable name="cve" select="normalize-space(.)"/>
-                  <xsl:variable name="closed_cve"
-                                select="$host/detail[name = 'Closed CVE' and contains(value, $cve)]"/>
-                  <a href="omp?cmd=get_nvts&amp;oid={$closed_cve/source/name}&amp;token={$token}">
-                    <xsl:value-of select="$closed_cve/source/description"/>
-                  </a>
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
     <a name="{$current_host}"/>

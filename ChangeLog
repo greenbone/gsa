@@ -7,6 +7,11 @@
 
 2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-report-details): Remove Closed CVEs table as it
+	is now in its own section.
+
+2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Add closed_cves value to report_section.
 
 	* src/gsad_omp.c (get_report_section): Handle closed_cves report section
