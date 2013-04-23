@@ -966,7 +966,6 @@ init_validator ()
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
   openvas_validator_alias (validator, "select:name",  "family");
-  openvas_validator_alias (validator, "show_closed_cves",  "boolean");
   openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");

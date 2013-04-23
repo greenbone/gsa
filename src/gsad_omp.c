@@ -9037,7 +9037,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
-  const char *show_closed_cves, *filt_id, *filter;
+  const char *filt_id, *filter;
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -9074,10 +9074,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   autofp_value = params_value (params, "autofp_value");
   if (autofp_value == NULL)
     params_given (params, "autofp_value") || (autofp_value = "1");
-
-  show_closed_cves = params_value (params, "show_closed_cves");
-  if (show_closed_cves == NULL)
-    params_given (params, "show_closed_cves") || (show_closed_cves = "0");
 
   notes = params_value (params, "notes");
   if (notes == NULL)
@@ -9116,9 +9112,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (strcmp (autofp, "2") == 0)
     autofp_value = "2";
-
-  if (show_closed_cves == NULL || strlen (show_closed_cves) == 0)
-    show_closed_cves = "0";
 
   if (notes == NULL || strlen (notes) == 0) notes = "1";
 
@@ -9290,7 +9283,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (openvas_server_sendf_xml (&session,
                                     "<get_reports"
                                     " autofp=\"%s\""
-                                    " show_closed_cves=\"%i\""
                                     " notes=\"%i\""
                                     " notes_details=\"1\""
                                     " apply_overrides=\"%i\""
@@ -9308,7 +9300,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " min_cvss_base=\"%s\""
                                     " alert_id=\"%s\"/>",
                                     strcmp (autofp, "0") ? autofp_value : "0",
-                                    strcmp (show_closed_cves, "0") ? 1 : 0,
                                     strcmp (esc_notes, "0") ? 1 : 0,
                                     strcmp (esc_overrides, "0") ? 1 : 0,
                                     strcmp (esc_overrides, "0") ? 1 : 0,
@@ -9460,7 +9451,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " filter=\"%s\""
                                 " pos=\"%s\""
                                 " autofp=\"%s\""
-                                " show_closed_cves=\"%i\""
                                 " notes=\"%i\""
                                 " notes_details=\"1\""
                                 " apply_overrides=\"%i\""
@@ -9482,7 +9472,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 filter ? filter : "",
                                 pos ? pos : "1",
                                 strcmp (autofp, "0") ? autofp_value : "0",
-                                strcmp (show_closed_cves, "0") ? 1 : 0,
                                 strcmp (notes, "0") ? 1 : 0,
                                 strcmp (overrides, "0") ? 1 : 0,
                                 strcmp (overrides, "0") ? 1 : 0,
@@ -10221,7 +10210,6 @@ get_report_section_omp (credentials_t * credentials, params_t *params)
  * @param[in]  levels        Levels.
  * @param[in]  search_phrase      Search phrase.
  * @param[in]  autofp             Auto FP filter flag.
- * @param[in]  show_closed_cves   Show closed CVEs filter flag.
  * @param[in]  notes              Notes filter flag.
  * @param[in]  overrides          Overrides filter flag.
  * @param[in]  min_cvss_base      Min CVSS base.
@@ -10241,11 +10229,11 @@ get_result (credentials_t *credentials, const char *result_id,
             const char *report_id, const char *first_result,
             const char *max_results, const char *levels,
             const char *search_phrase, const char *autofp,
-            const char *show_closed_cves, const char *notes,
-            const char *overrides, const char *min_cvss_base,
-            const char *result_hosts_only, const char *sort_field,
-            const char *sort_order, const char *delta_report_id,
-            const char *delta_states, const char *extra_xml)
+            const char *notes, const char *overrides,
+            const char *min_cvss_base, const char *result_hosts_only,
+            const char *sort_field, const char *sort_order,
+            const char *delta_report_id, const char *delta_states,
+            const char *extra_xml)
 {
   GString *xml;
   gnutls_session_t session;
@@ -10363,7 +10351,6 @@ get_result_omp (credentials_t *credentials, params_t *params)
                      params_value (params, "levels"),
                      params_value (params, "search_phrase"),
                      params_value (params, "autofp"),
-                     params_value (params, "show_closed_cves"),
                      params_value (params, "notes"),
                      params_value (params, "overrides"),
                      params_value (params, "min_cvss_base"),
@@ -10400,7 +10387,6 @@ get_result_page (credentials_t *credentials, params_t *params,
                      params_value (params, "levels"),
                      params_value (params, "search_phrase"),
                      params_value (params, "autofp"),
-                     params_value (params, "show_closed_cves"),
                      params_value (params, "notes"),
                      params_value (params, "overrides"),
                      params_value (params, "min_cvss_base"),
@@ -10564,7 +10550,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
   const char *next;
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
-  const char *sort_order, *levels, *autofp, *show_closed_cves, *notes;
+  const char *sort_order, *levels, *autofp, *notes;
   const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
 
   result_id = params_value (params, "result_id");
@@ -10575,7 +10561,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
   max_results = params_value (params, "max_results");
   levels = params_value (params, "levels");
   autofp = params_value (params, "autofp");
-  show_closed_cves = params_value (params, "show_closed_cves");
   notes = params_value (params, "notes");
   report_id = params_value (params, "report_id");
   search_phrase = params_value (params, "search_phrase");
@@ -10689,7 +10674,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
                      "<sort_order>%s</sort_order>"
                      "<levels>%s</levels>"
                      "<autofp>%s</autofp>"
-                     "<show_closed_cves>%s</show_closed_cves>"
                      "<notes>%s</notes>"
                      "<overrides>%s</overrides>"
                      "<result_hosts_only>%s</result_hosts_only>"
@@ -10710,7 +10694,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
                      sort_order,
                      levels,
                      autofp,
-                     show_closed_cves,
                      notes,
                      overrides,
                      result_hosts_only,
@@ -11327,7 +11310,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
   const char *next;
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
-  const char *sort_order, *levels, *autofp, *show_closed_cves, *notes;
+  const char *sort_order, *levels, *autofp, *notes;
   const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
 
   result_id = params_value (params, "result_id");
@@ -11338,7 +11321,6 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
   max_results = params_value (params, "max_results");
   levels = params_value (params, "levels");
   autofp = params_value (params, "autofp");
-  show_closed_cves = params_value (params, "show_closed_cves");
   notes = params_value (params, "notes");
   report_id = params_value (params, "report_id");
   search_phrase = params_value (params, "search_phrase");
@@ -11454,7 +11436,6 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
                      "<sort_order>%s</sort_order>"
                      "<levels>%s</levels>"
                      "<autofp>%s</autofp>"
-                     "<show_closed_cves>%s</show_closed_cves>"
                      "<notes>%s</notes>"
                      "<overrides>%s</overrides>"
                      "<result_hosts_only>%s</result_hosts_only>"
@@ -11475,7 +11456,6 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
                      sort_order,
                      levels,
                      autofp,
-                     show_closed_cves,
                      notes,
                      overrides,
                      result_hosts_only,

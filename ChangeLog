@@ -1,5 +1,18 @@
 2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Remove show_closed_cves parameter.
+
+	* src/gsad_omp.c (get_report, get_result, get_result_omp)
+	(get_result_page, new_note, new_override): Remove show_closed_cves
+	parameter.
+
+	* src/html/omp.xsl (report-summary-sorting-link, html-report-details)
+	(report [summary]): Remove show_closed_cves parameter from urls and
+	forms.
+	(html-report-details): Remove show closed cves label.
+
+2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Handle alert_report with
 	get_report_section_omp.
 
