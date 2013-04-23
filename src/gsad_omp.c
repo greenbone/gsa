@@ -10103,7 +10103,8 @@ get_report_section (credentials_t * credentials, params_t *params)
 
   if (!strcmp (report_section, "results"))
     return get_report_omp (credentials, params, NULL, NULL, NULL);
-  else if (!strcmp (report_section, "summary"))
+  else if (!strcmp (report_section, "summary")
+           || !strcmp (report_section, "closed_cves"))
     {
       char *result;
       int error = 0;

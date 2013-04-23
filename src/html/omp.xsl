@@ -1408,10 +1408,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
 
-      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-         title="Help: View Report (View Report)">
-        <img style="vertical-align: text-top;margin-left: 3px" src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="report-help-icon"/>
       <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 8px; font-weight: normal;">
         <form action="/omp" method="get">
           <input type="hidden" name="cmd" value="get_report_section"/>
@@ -20251,6 +20248,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="content" select="'Report: Summary'"/>
       </xsl:call-template>
     </xsl:if>
+    <xsl:if test="$current != 'results'">
+      <xsl:call-template name="opt">
+        <xsl:with-param name="value" select="'results'"/>
+        <xsl:with-param name="content" select="'Report: Results'"/>
+      </xsl:call-template>
+    </xsl:if>
     <xsl:if test="$current != 'hosts'">
       <xsl:call-template name="opt">
         <xsl:with-param name="value" select="'hosts'"/>
@@ -20263,10 +20266,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="content" select="'Report: Ports'"/>
       </xsl:call-template>
     </xsl:if>
-    <xsl:if test="$current != 'results'">
+    <xsl:if test="$current != 'closed_cves'">
       <xsl:call-template name="opt">
-        <xsl:with-param name="value" select="'results'"/>
-        <xsl:with-param name="content" select="'Report: Results'"/>
+        <xsl:with-param name="value" select="'closed_cves'"/>
+        <xsl:with-param name="content" select="'Report: Closed CVEs'"/>
       </xsl:call-template>
     </xsl:if>
   </select>
@@ -20373,10 +20376,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       Report: Hosts
-      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-         title="Help: View Report (View Report)">
-        <img style="vertical-align: text-top;margin-left: 3px" src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="report-help-icon"/>
 
       <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">
@@ -20554,10 +20554,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       Report: Ports
 
-      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-         title="Help: View Report (View Report)">
-        <img style="vertical-align: text-top;margin-left: 3px" src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="report-help-icon"/>
 
       <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">
@@ -20645,6 +20642,89 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="report-help-icon">
+  <a href="/help/view_report.html?token={/envelope/token}#viewreport"
+     title="Help: View Report (View Report)">
+    <img style="vertical-align: text-top;margin-left: 3px" src="/img/help.png"/>
+  </a>
+</xsl:template>
+
+<xsl:template match="get_report_closed_cves_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="closed_cves"/>
+</xsl:template>
+
+<xsl:template match="report" mode="closed_cves">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      Report: Closed CVEs
+
+      <xsl:call-template name="report-help-icon"/>
+      <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 20px; font-weight: normal;">
+        <form action="/omp" method="get">
+          <input type="hidden" name="cmd" value="get_report_section"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
+          <xsl:call-template name="report-sections">
+            <xsl:with-param name="current" select="'closed_cves'"/>
+          </xsl:call-template>
+          <input type="image"
+                 name="Go to Section"
+                 src="/img/refresh.png"
+                 alt="Go to Section"
+                 style="vertical-align: text-top;margin-left:3px;"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </div>
+    </div>
+    <div class="gb_window_part_content">
+      <xsl:call-template name="report-section-filter">
+        <xsl:with-param name="report" select="report"/>
+        <xsl:with-param name="section" select="'closed_cves'"/>
+      </xsl:call-template>
+
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <xsl:for-each select="report/host" >
+          <xsl:variable name="current_host" select="ip"/>
+          <tr class="gbntablehead2">
+            <td>CVE</td>
+            <td>Host</td>
+            <td>NVT</td>
+          </tr>
+          <xsl:variable name="host" select="."/>
+          <xsl:variable name="token" select="/envelope/token"/>
+          <xsl:for-each select="str:split(detail[name = 'Closed CVEs']/value, ',')">
+            <tr>
+              <td>
+                <xsl:call-template name="get_info_cve_lnk">
+                  <xsl:with-param name="cve" select="."/>
+                  <xsl:with-param name="gsa_token" select="$token"/>
+                </xsl:call-template>
+              </td>
+              <td>
+                <xsl:value-of select="$current_host"/>
+              </td>
+              <td>
+                <xsl:variable name="cve" select="normalize-space(.)"/>
+                <xsl:variable name="closed_cve"
+                              select="$host/detail[name = 'Closed CVE' and contains(value, $cve)]"/>
+                <a href="omp?cmd=get_nvts&amp;oid={$closed_cve/source/name}&amp;token={$token}">
+                  <xsl:value-of select="$closed_cve/source/description"/>
+                </a>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </xsl:for-each>
+      </table>
+
+    </div>
+  </div>
+
+</xsl:template>
+
 <xsl:template match="get_report_summary_response">
   <xsl:apply-templates select="get_report/get_reports_response/report"
                        mode="summary"/>
@@ -20666,10 +20746,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Prognostic
       </xsl:if>
       <xsl:value-of select="gsa:i18n('Report: Summary')"/>
-      <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-         title="Help: View Report (View Report)">
-        <img style="vertical-align: text-top;margin-left: 5px" src="/img/help.png"/>
-      </a>
+      <xsl:call-template name="report-help-icon"/>
       <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">
           <input type="hidden" name="cmd" value="get_report_section"/>
@@ -21378,29 +21455,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <a name="{$current_host}"></a>
-<!--
-        <h2>
-          All host details
-        </h2>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
-          <tr class="gbntablehead2">
-            <td>Name</td>
-            <td>Value</td>
-            <td>Source Type</td>
-            <td>Source Name</td>
-            <td>Source Description</td>
-          </tr>
-          <xsl:for-each select="../host[ip = $current_host]/detail">
-            <tr>
-              <td><xsl:value-of select="name"/></td>
-              <td><xsl:value-of select="value"/></td>
-              <td><xsl:value-of select="source/type"/></td>
-              <td><xsl:value-of select="source/name"/></td>
-              <td><xsl:value-of select="source/description"/></td>
-            </tr>
-          </xsl:for-each>
-        </table>
--->
         <xsl:if test="$delta = 0">
           <h2>
             CVEs closed by vendor security updates for <xsl:value-of select="$current_host"/>

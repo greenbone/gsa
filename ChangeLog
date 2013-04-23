@@ -1,5 +1,19 @@
 2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad.c (init_validator): Add closed_cves value to report_section.
+
+	* src/gsad_omp.c (get_report_section): Handle closed_cves report section
+	case.
+
+	* src/html/omp.xsl (html-report-details, report [summary])
+	(get_report_hosts_response, get_report_ports_response): Use
+	report-help-icon.
+	(report-sections): Add closed cves choice.
+	(report-help-icon, get_report_closed_cves_response)
+	(report [closed_cves]): New templates.
+
+2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove show_closed_cves parameter.
 
 	* src/gsad_omp.c (get_report, get_result, get_result_omp)

@@ -838,7 +838,9 @@ init_validator ()
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "report_section",  "^(summary|results|hosts|ports)$");
+  openvas_validator_add (validator, "report_section",
+                                    "^(summary|results|hosts|ports"
+                                    "|closed_cves)$");
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
