@@ -1,4 +1,15 @@
-2013-04-22  Hani Benhabiles <hani.benhabiles@greenbone.net>
+2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Handle alert_report with
+	get_report_section_omp.
+
+	* src/gsad_omp.c (get_report_section): Change variable name section to
+	report_section.
+
+	* src/html/omp.xsl (get_report_summary_response): Add report_section
+	parameter to alert report forms.
+
+2013-04-23  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add results value to report_section.
 

@@ -20921,12 +20921,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <div id="small_form" style="float:right;">
                   <form action="" method="post">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="report_section" value="summary"/>
                     <input type="hidden" name="filter" value="{report/filters/term}"/>
                     <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
 
                     <!-- Report page filters. -->
                     <input type="hidden" name="overrides" value="{$apply-overrides}"/>
@@ -21037,12 +21038,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <div id="small_form" style="float:right;">
                   <form action="" method="post">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
+                    <input type="hidden" name="report_section" value="summary"/>
                     <input type="hidden" name="filter" value="{report/filters/term}"/>
                     <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
 
                     <!-- Report page filters. -->
                     <input type="hidden" name="overrides" value="{$apply-overrides}"/>
@@ -21222,12 +21224,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <div id="small_form" class="float_right">
                   <form action="" method="post">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="alert_report"/>
+                    <input type="hidden" name="report_section" value="summary"/>
                     <input type="hidden" name="caller" value="{/envelope/caller}"/>
                     <input type="hidden" name="report_id" value="{report/@id}"/>
                     <input type="hidden" name="filter" value="{report/filters/term}"/>
                     <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
 
                     <!-- Report page filters. -->
                     <input type="hidden" name="overrides" value="{$apply-overrides}"/>

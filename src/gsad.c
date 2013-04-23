@@ -1685,13 +1685,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
     {
-      gchar *content_type_omp;
-      gsize response_size;
-      char *content_disposition;
-      con_info->response = get_report_omp (credentials, con_info->params,
-                                           &response_size,
-                                           &content_type_omp,
-                                           &content_disposition);
+      con_info->response = get_report_section_omp
+                            (credentials, con_info->params);
     }
   ELSE (import_config)
   ELSE (import_port_list)

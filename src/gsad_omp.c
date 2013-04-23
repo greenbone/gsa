@@ -10102,19 +10102,19 @@ get_report_section (credentials_t * credentials, params_t *params)
   gnutls_session_t session;
   int socket;
   gchar *html, *request;
-  const char *report_id, *section, *filter, *filt_id;
+  const char *report_id, *report_section, *filter, *filt_id;
 
-  section = params_value (params, "report_section");
+  report_section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
   filter = params_value (params, "filter");
   filt_id = params_value (params, "filt_id");
 
-  REQUIRE(section, "/omp?cmd=get_tasks");
+  REQUIRE(report_section, "/omp?cmd=get_tasks");
   REQUIRE(report_id, "/omp?cmd=get_tasks");
 
-  if (!strcmp (section, "results"))
+  if (!strcmp (report_section, "results"))
     return get_report_omp (credentials, params, NULL, NULL, NULL);
-  else if (!strcmp (section, "summary"))
+  else if (!strcmp (report_section, "summary"))
     {
       char *result;
       int error = 0;
@@ -10125,9 +10125,9 @@ get_report_section (credentials_t * credentials, params_t *params)
         return result;
 
       xml = g_string_new ("");
-      g_string_append_printf (xml, "<get_report_%s_response>", section);
+      g_string_append_printf (xml, "<get_report_%s_response>", report_section);
       g_string_append (xml, result);
-      g_string_append_printf (xml, "</get_report_%s_response>", section);
+      g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
     }
@@ -10150,7 +10150,7 @@ get_report_section (credentials_t * credentials, params_t *params)
     }
 
   xml = g_string_new ("");
-  g_string_append_printf (xml, "<get_report_%s_response>", section);
+  g_string_append_printf (xml, "<get_report_%s_response>", report_section);
 
   request = g_markup_printf_escaped
              ("<get_reports report_id=\"%s\""
@@ -10187,7 +10187,7 @@ get_report_section (credentials_t * credentials, params_t *params)
                            "/omp?cmd=get_tasks");
     }
 
-  g_string_append_printf (xml, "</get_report_%s_response>", section);
+  g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
   openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
