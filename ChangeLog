@@ -1,3 +1,45 @@
+2013-04-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add table of user tags to most resource types. Output tags on notes in
+	reports.
+
+	* src/gsad.c (init_validator): Add NVT as resource_type and
+	optional_resource_type. Add parameters next_id, next_type, next_subtype.
+
+	* src/gsad_omp.c (): Add header for get_config, get_nvts.
+	(next_page): Add handling of get_config, get_filter, get_nvts,
+	get_target as values for parameter next.
+	(new_tag): Add handling of parameter tag_name. Add handling of
+	parameters next_type, next_subtype, next_id to get back to details pages
+	after creating a new tag.
+	(edit_tag): Add handling of parameters next_type, next_subtype, next_id
+	to get back to details pages after editing a tag. Rename filtering
+	limits element "tags" to "limits".
+	(get_config): Add parameter extra_xml and include it in the response.
+	(get_config_omp, edit_config_omp, save_config_omp): Adapt to new
+	get_config parameter extra_xml
+
+	* src/html/gsad.xsl (html-gsa-logo): Add tag action indicators (create,
+	delete, edit) to details pages: get_task, get_config,
+	get_lsc_credential, get_agent, get_alert, get_filter, get_group,
+	get_info, get_note, get_nvts, get_override, get_permission,
+	get_port_list, get_report, get_report_format, get_result, get_schedule,
+	get_slave, get_target, get_user.
+
+	* src/html/omp.xsl (user-tags-window, tag mode=for_resource): New
+	templates for user tags sub-window.
+	(task mode=details, lsc_credential mode=details, agent mode=details)
+	(alert mode=details, filter mode=details, target mode=details)
+	(html-config-table, schedule mode=details, slave mode=details)
+	(cve-details, cpe-details, ovaldef-details, dfn_cert_adv-details)
+	(get_nvts, note mode=details, override mode=details, group mode=details)
+	(permission mode=details, port_list mode=details)
+	(report_format mode=details, user mode=details): Add user tags window.
+	(html-create-tag-form, html-edit-tag-form): Adjust to new next page
+	parameters new page.
+	(note-detailed): Output tags on notes in reports.
+	(get_trash): Fix swapped anchors for tags and targets.
+
 2013-04-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/po/de.xml: Shorted xml tag names from msgid to id

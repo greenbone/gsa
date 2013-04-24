@@ -109,6 +109,8 @@ static char *get_trash (credentials_t *, params_t *, const char *);
 
 static char *get_config_family (credentials_t *, params_t *, int);
 
+static char *get_config (credentials_t *, params_t *, const char *, int);
+
 static char *get_configs (credentials_t *, params_t *, const char *);
 
 static char *get_filter (credentials_t *, params_t *, const char *);
@@ -126,6 +128,9 @@ static char *get_lsc_credentials (credentials_t *, params_t *, const char *);
 static char *get_notes (credentials_t *, params_t *, const char *);
 
 static char *get_note (credentials_t *, params_t *, const char *, const char *);
+
+static char *get_nvts (credentials_t *credentials, const char *oid,
+                       const char *commands);
 
 static char *get_overrides (credentials_t *, params_t *, const char *);
 
@@ -566,8 +571,14 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_agent") == 0)
     return get_agent (credentials, params, response);
 
+  if (strcmp (next, "get_config") == 0)
+    return get_config (credentials, params, response, 0);
+
   if (strcmp (next, "get_configs") == 0)
     return get_configs (credentials, params, response);
+
+  if (strcmp (next, "get_filter") == 0)
+    return get_filter (credentials, params, response);
 
   if (strcmp (next, "get_filters") == 0)
     return get_filters (credentials, params, response);
@@ -590,6 +601,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
   if (strcmp (next, "get_notes") == 0)
     return get_notes (credentials, params, response);
 
+  if (strcmp (next, "get_nvts") == 0)
+    return get_nvts (credentials, params_value(params, "oid"), NULL);
+
   if (strcmp (next, "get_override") == 0)
     return get_override (credentials, params, NULL, response);
 
@@ -610,6 +624,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_tags") == 0)
     return get_tags (credentials, params, response);
+
+  if (strcmp (next, "get_target") == 0)
+    return get_target (credentials, params, response);
 
   if (strcmp (next, "get_targets") == 0)
     return get_targets (credentials, params, response);
@@ -6267,13 +6284,20 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *attach_type, *attach_id, *tag_id, *next, *filter, *first, *max;
+  const char *attach_type, *attach_id, *tag_id, *tag_name,
+             *next, *next_type, *next_subtype, *next_id,
+             *filter, *first, *max;
 
   attach_type = params_value (params, "attach_type");
   attach_id = params_value (params, "attach_id");
 
   tag_id = params_value (params, "tag_id");
+  tag_name = params_value (params, "tag_name");
+
   next = params_value (params, "next");
+  next_type = params_value (params, "next_type");
+  next_subtype = params_value (params, "next_subtype");
+  next_id = params_value (params, "next_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
@@ -6302,24 +6326,33 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   end = g_markup_printf_escaped ("<tag id=\"%s\"/>"
                                  /* Page that follows. */
                                  "<next>%s</next>"
+                                 "<next_type>%s</next_type>"
+                                 "<next_subtype>%s</next_subtype>"
+                                 "<next_id>%s</next_id>"
                                  /* Passthroughs. */
                                  "<filters><term>%s</term></filters>"
-                                 "<tags start=\"%s\" max=\"%s\"/>"
+                                 "<limits start=\"%s\" max=\"%s\"/>"
                                  "<attach_type>%s</attach_type>"
                                  "<attach_id>%s</attach_id>"
-                                 "<tag_name>%s:unnamed</tag_name>"
+                                 "<tag_name>%s%s</tag_name>"
                                  "<tag_value></tag_value>"
                                  "<comment></comment>"
                                  "<active>1</active>"
                                  "</new_tag>",
                                  tag_id ? tag_id : "0",
                                  next ? next : "",
+                                 next_type ? next_type : "",
+                                 next_subtype ? next_subtype : "",
+                                 next_id ? next_id : "",
                                  filter ? filter : "",
                                  first ? first : "",
                                  max ? max : "",
                                  attach_type ? attach_type : "agent",
                                  attach_id ? attach_id : "-unspecified-",
-                                 attach_type ? attach_type : "default");
+                                 tag_name ? tag_name : (attach_type
+                                                          ? attach_type
+                                                          : "default"),
+                                 tag_name ? "" : ":unnamed");
   g_string_append (xml, end);
   g_free (end);
 
@@ -6509,7 +6542,8 @@ edit_tag (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *edit;
-  const char *tag_id, *next, *filter, *first, *max;
+  const char *tag_id, *next, *next_type, *next_subtype, *next_id,
+             *filter, *first, *max;
 
   tag_id = params_value (params, "tag_id");
   if (tag_id == NULL)
@@ -6521,6 +6555,9 @@ edit_tag (credentials_t * credentials, params_t *params,
                          "/omp?cmd=get_tags");
 
   next = params_value (params, "next");
+  next_type = params_value (params, "next_type");
+  next_subtype = params_value (params, "next_subtype");
+  next_id = params_value (params, "next_id");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
@@ -6567,14 +6604,20 @@ edit_tag (credentials_t * credentials, params_t *params,
                                   "<tag id=\"%s\"/>"
                                   /* Page that follows. */
                                   "<next>%s</next>"
+                                  "<next_type>%s</next_type>"
+                                  "<next_subtype>%s</next_subtype>"
+                                  "<next_id>%s</next_id>"
                                   /* Passthroughs. */
                                   "<filters><term>%s</term></filters>"
-                                  "<tags start=\"%s\" max=\"%s\"/>",
+                                  "<limits start=\"%s\" max=\"%s\"/>",
                                   tag_id,
-                                  next,
-                                  filter,
-                                  first,
-                                  max);
+                                  next ? next : "",
+                                  next_type ? next_type : "",
+                                  next_subtype ? next_subtype : "",
+                                  next_id ? next_id : "",
+                                  filter ? filter : "",
+                                  first ? first : "",
+                                  max ? max : "");
 
   g_string_append (xml, edit);
   g_free (edit);
@@ -7582,12 +7625,14 @@ get_configs_omp (credentials_t * credentials, params_t *params)
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[in]  edit         0 for config view page, else config edit page.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_config (credentials_t * credentials, params_t *params, int edit)
+get_config (credentials_t * credentials, params_t *params,
+            const char *extra_xml, int edit)
 {
   GString *xml;
   gnutls_session_t session;
@@ -7624,6 +7669,8 @@ get_config (credentials_t * credentials, params_t *params, int edit)
   xml = g_string_new ("<get_config_response>");
   if (edit) g_string_append (xml, "<edit/>");
 
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   /* Get the config families. */
 
   if (openvas_server_sendf (&session,
@@ -7704,7 +7751,7 @@ get_config (credentials_t * credentials, params_t *params, int edit)
 char *
 get_config_omp (credentials_t * credentials, params_t *params)
 {
-  return get_config (credentials, params, 0);
+  return get_config (credentials, params, NULL, 0);
 }
 
 /**
@@ -7752,7 +7799,7 @@ new_config_omp (credentials_t *credentials, params_t *params)
 char *
 edit_config_omp (credentials_t * credentials, params_t *params)
 {
-  return get_config (credentials, params, 1);
+  return get_config (credentials, params, NULL, 1);
 }
 
 /**
@@ -8014,7 +8061,7 @@ save_config_omp (credentials_t * credentials, params_t *params)
 
   next = params_value (params, "next:");
   if (next == NULL || strcmp (next, "Save Config") == 0)
-    return get_config (credentials, params, 1);
+    return get_config (credentials, params, NULL, 1);
   return get_config_family (credentials, params, 1);
 }
 

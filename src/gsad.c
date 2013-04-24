@@ -847,11 +847,11 @@ init_validator ()
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|nvt|note|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo)$");
   openvas_validator_add (validator, "optional_resource_type",
-                         "^(agent|alert|config|filter|group|lsc_credential|note|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
-                         "Agent|Alert|Config|Credential|Filter|Group|Note|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
+                         "^(agent|alert|config|filter|group|lsc_credential|note|nvt|override|permission|port_list|report|report_format|schedule|slave|tag|target|task|user|info|"
+                         "Agent|Alert|Config|Credential|Filter|Group|Note|NVT|Override|Permission|Port List|Report|Report Format|Schedule|Slave|Tag|Target|Task|User|SecInfo|)$");
   openvas_validator_add (validator, "select:",      "^$");
   openvas_validator_add (validator, "select:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "method_data:name", "^(.*){0,400}$");
@@ -945,6 +945,9 @@ init_validator ()
   openvas_validator_alias (validator, "method_data:from_address:", "email");
   openvas_validator_alias (validator, "new_threat",   "threat");
   openvas_validator_alias (validator, "next",         "page");
+  openvas_validator_alias (validator, "next_id",      "info_id");
+  openvas_validator_alias (validator, "next_type",    "resource_type");
+  openvas_validator_alias (validator, "next_subtype", "info_type");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "note_task_id", "optional_task_id");
   openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
