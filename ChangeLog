@@ -1,3 +1,8 @@
+2013-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (exec_omp_post): Clear the credentials when allocating, at
+	least so that the new language field is initialised.
+
 2013-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator, exec_omp_post): Add command toggle_tag.

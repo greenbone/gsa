@@ -1584,7 +1584,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   /* From here, the user is authenticated. */
 
-  credentials = malloc (sizeof (credentials_t));
+  credentials = calloc (1, sizeof (credentials_t));
   if (credentials == NULL)
     {
       user_release (user);
