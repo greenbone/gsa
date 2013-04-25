@@ -6896,6 +6896,115 @@ get_tags_omp (credentials_t * credentials, params_t *params)
 }
 
 /**
+ * @brief Set tag enabled status.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+toggle_tag_omp (credentials_t * credentials, params_t *params)
+{
+  gnutls_session_t session;
+  int socket;
+  gchar *html, *response;
+  const char *tag_id, *enable;
+  entity_t entity;
+
+  tag_id = params_value (params, "tag_id");
+  enable = params_value (params, "enable");
+
+  if (tag_id == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while modifying a tag. "
+                         "The tag was not modified. "
+                         "Diagnostics: Required parameter tag_id was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  if (enable == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while modifying a tag. "
+                         "The tag was not modified. "
+                         "Diagnostics: Required parameter enable was NULL.",
+                         "/omp?cmd=get_tasks");
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case 0:
+        break;
+      case -1:
+        if (html)
+          return html;
+        /* Fall through. */
+      default:
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while modifying a tag."
+                             " The tag is not modified. "
+                             "Diagnostics: Failure to connect to"
+                             " manager daemon.",
+                             "/omp?cmd=get_tasks");
+    }
+
+  /* Delete the resource and get all resources. */
+
+  if (openvas_server_sendf (&session,
+                            "<modify_tag tag_id=\"%s\">"
+                            "<active>%s</active>"
+                            "</modify_tag>",
+                            tag_id,
+                            enable
+                            )
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while modifying a tag. "
+                           "The tag is not modified. "
+                           "Diagnostics: Failure to send command to"
+                           " manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  entity = NULL;
+  if (read_entity_and_text (&session, &entity, &response))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while modifying a tag. "
+                           "It is unclear whether the tag has been modified"
+                           " or not. "
+                           "Diagnostics: Failure to read response from"
+                           " manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+  free_entity (entity);
+
+  openvas_server_close (socket, session);
+
+  /* Cleanup, and return transformed XML. */
+
+  if (params_given (params, "next") == 0)
+    {
+      params_add (params, "next", "get_tags");
+    }
+  html = next_page (credentials, params, response);
+  g_free (response);
+  if (html == NULL)
+    return gsad_message (credentials,
+                         "Internal error", __FUNCTION__, __LINE__,
+                         "An internal error occurred while modifying a tag. "
+                         "Diagnostics: Error in parameter next.",
+                         "/omp?cmd=get_tasks");
+  return html;
+}
+
+/**
  * @brief Setup edit_target XML, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

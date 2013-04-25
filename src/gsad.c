@@ -726,6 +726,7 @@ init_validator ()
                          "|(sync_feed)"
                          "|(sync_scap)"
                          "|(sync_cert)"
+                         "|(toggle_tag)"
                          "|(verify_agent)"
                          "|(verify_report_format)"
                          "|(wizard)$");
@@ -1740,6 +1741,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE_OAP (sync_scap)
   ELSE_OAP (sync_cert)
   ELSE (test_alert)
+  ELSE (toggle_tag)
   else
     {
       con_info->response = gsad_message (credentials,

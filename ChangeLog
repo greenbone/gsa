@@ -1,5 +1,22 @@
 2013-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (init_validator, exec_omp_post): Add command toggle_tag.
+
+	* src/gsad_omp.c (toggle_tag_omp): New function for changing only the
+	"active" status of a tag.
+
+	* src/gsad_omp.h (toggle_tag_omp): New function prototype.
+
+	* src/html/omp.xsl (user-tags-window): Remove width limit of actions
+	column.
+	(tag mode=for_resource, tag): Add toggle button.
+	(tag_toggle_button): New template for disabling and enabling tags.
+
+	* src/html/help.xsl (list-window-line-actions, tags.html): Add enabling
+	and disabling of tags to actions.
+
+2013-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (init_validator): Make attach_id accept empty values.
 
 	* src/gsad_omp.c (new_tag): Change default attach_id to empty string.

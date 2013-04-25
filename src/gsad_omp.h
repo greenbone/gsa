@@ -140,6 +140,7 @@ char * get_tag_omp (credentials_t *, params_t *);
 char * get_tags_omp (credentials_t *, params_t *);
 char * new_tag_omp (credentials_t *, params_t *);
 char * save_tag_omp (credentials_t *, params_t *);
+char * toggle_tag_omp (credentials_t *, params_t *);
 
 char * edit_target_omp (credentials_t *, params_t *);
 char * get_target_omp (credentials_t *, params_t *);

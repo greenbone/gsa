@@ -963,7 +963,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Name</td>
               <td>Value</td>
               <td>Comment</td>
-              <td width="75px">Actions</td>
+              <td>Actions</td>
             </tr>
             <xsl:apply-templates select="$user_tags/tag" mode="for_resource">
               <xsl:with-param name="act_type" select="$act_type"/>
@@ -997,6 +997,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td><xsl:value-of select="value"/></td>
     <td><xsl:value-of select="comment"/></td>
     <td>
+
+      <xsl:call-template name="toggle-tag-icon">
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="enable" select="0"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="{$act_next}"/>
+          <input type="hidden" name="{concat($act_type,'_id')}" value="{$act_id}"/>
+          <xsl:choose>
+            <xsl:when test="$act_type='nvt'">
+              <input type="hidden" name="oid" value="{$act_id}"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="hidden" name="{concat($act_type,'_id')}" value="{$act_id}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <xsl:if test="$act_subtype != ''">
+            <input type="hidden"
+                   name="{$act_type}_type"
+                   value="{$act_subtype}"/>
+          </xsl:if>
+          <xsl:if test="$act_type = 'info'">
+            <input type="hidden"
+                   name="details"
+                   value="1"/>
+          </xsl:if>
+        </xsl:with-param>
+        <xsl:with-param name="fragment" select="'#user_tags'"/>
+      </xsl:call-template>
 
       <xsl:call-template name="trashcan-icon">
         <xsl:with-param name="type" select="'tag'"/>
@@ -1049,6 +1079,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template name="toggle-tag-icon">
+  <xsl:param name="id"></xsl:param>
+  <xsl:param name="enable"></xsl:param>
+  <xsl:param name="fragment"></xsl:param>
+  <xsl:param name="params"></xsl:param>
+
+  <div style="display: inline">
+    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/caller}"/>
+      <input type="hidden" name="cmd" value="toggle_tag"/>
+      <input type="hidden" name="enable" value="{$enable}"/>
+      <input type="hidden" name="tag_id" value="{$id}"/>
+      <xsl:choose>
+        <xsl:when test="$enable">
+          <input type="image" src="/img/start.png" alt="Enable Tag"
+                 name="Enable Tag" value="Enable Tag" title="Enable Tag"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <input type="image" src="/img/stop.png" alt="Disable Tag"
+                 name="Disable Tag" value="Disable Tag" title="Disable Tag"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:copy-of select="$params"/>
+    </form>
+  </div>
 </xsl:template>
 
 <!-- END General tags table -->
@@ -6851,6 +6909,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:date (modification_time)"/>
     </td>
     <td>
+      <xsl:call-template name="toggle-tag-icon">
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="enable" select="number(active=0)"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="next" value="get_tags"/>
+          <input type="hidden" name="tag_id" value="{@id}"/>
+          <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        </xsl:with-param>
+        <xsl:with-param name="fragment" select="'#user_tags'"/>
+      </xsl:call-template>
       <xsl:call-template name="list-window-line-icons">
         <xsl:with-param name="cap-type" select="'Tag'"/>
         <xsl:with-param name="type" select="'tag'"/>

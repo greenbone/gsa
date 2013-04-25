@@ -56,8 +56,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="noclone"/>
   <xsl:param name="noedit"/>
   <xsl:param name="noexport"/>
+  <xsl:param name="showenable"/>
   <a name="actions"></a>
   <h3>Actions</h3>
+
+  <xsl:choose>
+    <xsl:when test="$showenable">
+      <h4>Enable / Disable <xsl:value-of select="$type"/></h4>
+      <p>
+      Pressing the enable icon
+      <img src="/img/start.png" alt="Enable {$type}" title="Enable {$type}" />
+      will set the activity status of the <xsl:value-of select="$type"/> to active
+      while pressing the disable button
+      <img src="/img/stop.png" alt="Disable {$type}" title="Disable {$type}" />
+      will set it to inactive.
+      </p>
+    </xsl:when>
+  </xsl:choose>
 
   <h4>Move <xsl:value-of select="$type"/> to Trashcan</h4>
   <p>
@@ -6901,6 +6916,7 @@ Public License instead of this License.
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Tag'"/>
+        <xsl:with-param name="showenable" select="1"/>
       </xsl:call-template>
     </div>
   </div>
