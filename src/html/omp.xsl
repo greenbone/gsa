@@ -6837,7 +6837,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          N/A <i>(ID: <xsl:value-of select="attach/id"/>)</i>
+          N/A
+          <xsl:choose>
+            <xsl:when test="attach/id != ''">
+              <i> (ID: <xsl:value-of select="attach/id"/>)</i>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -7186,7 +7192,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to ID</td>
+            <td valign="top" width="175">Attach to ID (optional)</td>
             <td>
               <input type="text" name="attach_id" value="{attach_id}" size="30"
                          maxlength="80"/>
@@ -7230,8 +7236,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="create_tag_response">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation">Create Tag</xsl:with-param>
+    <xsl:with-param name="status">
+      <xsl:value-of select="@status"/>
+    </xsl:with-param>
+    <xsl:with-param name="msg">
+      <xsl:value-of select="@status_text"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="edit_tag">
   <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="modify_tag_response"/>
   <xsl:call-template name="html-edit-tag-form"/>
 </xsl:template>
 
@@ -7325,7 +7344,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175">Attach to ID</td>
+            <td valign="top" width="175">Attach to ID (optional)</td>
             <td>
               <input type="text" name="attach_id" value="{get_tags_response/tag/attach/id}" size="30"
                          maxlength="80"/>

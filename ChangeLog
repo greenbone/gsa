@@ -1,3 +1,18 @@
+2013-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Make attach_id accept empty values.
+
+	* src/gsad_omp.c (new_tag): Change default attach_id to empty string.
+
+	* src/html/help.xsl (new_tag.html): Change to make attach ID optional
+	but require an existing ID if not empty.
+
+	* src/html/omp.xsl (tag): Hide ID in brackets if it is empty.
+	(html-create-tag-form): Add "(optional)" to "Attach to ID".
+	(create_tag_response): New template.
+	(edit_tag): Add apply_templates for modify_tag_response.
+	(html-edit-tag-form): Add "(optional)" to "Attach to ID".
+
 2013-04-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add table of user tags to most resource types. Output tags on notes in

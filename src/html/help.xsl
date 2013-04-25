@@ -4839,9 +4839,9 @@ Public License instead of this License.
         </tr>
         <tr class="odd">
           <td>Attach to ID</td>
-          <td>yes</td>
+          <td>no</td>
           <td>--</td>
-          <td>A valid resource ID, existence of the resource is not mandatory</td>
+          <td>Either empty or a valid ID of an existing resource</td>
           <td>12508a75-e1f9-4acd-85b9-d1f3ea48db37</td>
         </tr>
         <tr class="even">

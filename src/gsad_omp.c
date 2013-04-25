@@ -6348,7 +6348,7 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
                                  first ? first : "",
                                  max ? max : "",
                                  attach_type ? attach_type : "agent",
-                                 attach_id ? attach_id : "-unspecified-",
+                                 attach_id ? attach_id : "",
                                  tag_name ? tag_name : (attach_type
                                                           ? attach_type
                                                           : "default"),

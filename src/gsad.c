@@ -734,7 +734,7 @@ init_validator ()
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "attach_id",    "^[[:alnum:]-_.:\\/~]+$");
+  openvas_validator_add (validator, "attach_id",    "^[[:alnum:]-_.:\\/~]*$");
   openvas_validator_add (validator, "attach_type",  "^(agent|alert|config|cpe|cve|dfn_cert_adv|filter|group|lsc_credential|note|nvt|ovaldef|override|permission|port_list|report|report_format|schedule|slave|target|task|user)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
