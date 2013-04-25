@@ -1,5 +1,11 @@
 2013-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (edit_user): Remove init of extra that was clearing
+	existing value.
+	(save_user_omp): Set the source to "file" for the classic case.
+
+2013-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Clear the credentials when allocating, at
 	least so that the new language field is initialised.
 

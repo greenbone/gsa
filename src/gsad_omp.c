@@ -17441,7 +17441,6 @@ edit_user (credentials_t * credentials, params_t *params,
       g_free (response);
     }
 
-  extra = g_string_new ("");
   if (command_enabled (credentials, "GET_GROUPS"))
     {
       gchar *response;
@@ -17605,7 +17604,7 @@ save_user_omp (credentials_t * credentials, params_t *params)
     }
   else
     {
-      g_string_append (command, "<sources><source></source></sources>");
+      g_string_append (command, "<sources><source>file</source></sources>");
     }
 
   group_elements = g_string_new ("<groups>");
