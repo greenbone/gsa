@@ -1,3 +1,8 @@
+2013-04-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result-detailed [result, detailed]): Use CVSS
+	value only for severity bar.
+
 2013-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (edit_user): Remove init of extra that was clearing
