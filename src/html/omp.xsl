@@ -19768,13 +19768,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="show-overrides">0</xsl:param>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
-  <xsl:variable name="style">
-    <xsl:choose>
-       <xsl:when test="threat='Low'">background:#539dcb</xsl:when>
-       <xsl:when test="threat='Medium'">background:#f99f31</xsl:when>
-       <xsl:when test="threat='High'">background:#cb1d17</xsl:when>
-    </xsl:choose>
-  </xsl:variable>
   <a class="anchor" name="result-{@id}"/>
 
   <div class="issue_box_head" style="background:#ffffff">
@@ -20800,8 +20793,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="get_report_hosts_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="hosts"/>
+</xsl:template>
+
+<xsl:template match="report" mode="hosts">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="get_reports_response/report/report"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -20812,7 +20809,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">
           <input type="hidden" name="cmd" value="get_report_section"/>
-          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
           <xsl:call-template name="report-sections">
             <xsl:with-param name="current" select="'hosts'"/>
           </xsl:call-template>
@@ -20829,7 +20826,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="$report"/>
+        <xsl:with-param name="report" select="report"/>
         <xsl:with-param name="section" select="'hosts'"/>
       </xsl:call-template>
 
@@ -20849,8 +20846,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><img src="/img/false_positive.png" alt="False Positive" title="False Positive"/></td>
           <td>Total</td>
         </tr>
-        <xsl:for-each select="$report/host" >
+        <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>
+          <xsl:variable name="id" select="../@id"/>
           <tr>
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
@@ -20888,37 +20886,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=h&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=h&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} High)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
               </a>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=m&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=m&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} Medium)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
               </a>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=l&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=l&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} Low)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
               </a>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=g&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=g&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} Log)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
               </a>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=f&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=f&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} False Positive)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
               </a>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter==&#34;{$current_host}&#34; levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
                  title="Report: Summary ({$current_host} All)" style="margin-left:3px;">
                 <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
               </a>
@@ -20926,7 +20924,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </xsl:for-each>
         <tr>
-          <td>Total: <xsl:value-of select="count($report/host_start)"/></td>
+          <td>Total: <xsl:value-of select="count(report/host_start)"/></td>
           <td></td>
           <td></td>
           <td></td>
@@ -20934,39 +20932,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td></td>
           <td></td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=h&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=h&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (High)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result[threat/text() = 'High'])"/>
+              <xsl:value-of select="count(report/results/result[threat/text() = 'High'])"/>
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=m&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=m&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (Medium)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result[threat/text() = 'Medium'])"/>
+              <xsl:value-of select="count(report/results/result[threat/text() = 'Medium'])"/>
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=l&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=l&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (Low)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result[threat/text() = 'Low'])"/>
+              <xsl:value-of select="count(report/results/result[threat/text() = 'Low'])"/>
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=g&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=g&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (Log)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result[threat/text() = 'Log'])"/>
+              <xsl:value-of select="count(report/results/result[threat/text() = 'Log'])"/>
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=f&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=f&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (False Positive)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result[threat/text() = 'False Positive'])"/>
+              <xsl:value-of select="count(report/results/result[threat/text() = 'False Positive'])"/>
             </a>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;filter=levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
+            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
                title="Report: Summary (All)" style="margin-left:3px;">
-              <xsl:value-of select="count($report/results/result)"/>
+              <xsl:value-of select="count(report/results/result)"/>
             </a>
           </td>
         </tr>
@@ -20975,10 +20973,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:key name="kReportPorts" match="get_reports_response/report/report/ports/port/text()" use="."/>
 <xsl:template match="get_report_ports_response">
+  <xsl:apply-templates select="get_report/get_reports_response/report"
+                       mode="ports"/>
+</xsl:template>
+
+<xsl:key name="kReportPorts" match="report/ports/port/text()" use="."/>
+<xsl:template match="report" mode="ports">
   <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="get_reports_response/report/report"/>
+  <xsl:variable name="report" select="report"/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -20990,7 +20993,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="small_inline_form" style="display: inline; margin-left: 20px; font-weight: normal;">
         <form action="/omp" method="get">
           <input type="hidden" name="cmd" value="get_report_section"/>
-          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <input type="hidden" name="report_id" value="{report/@id}"/>
           <xsl:call-template name="report-sections">
             <xsl:with-param name="current" select="'ports'"/>
           </xsl:call-template>
@@ -21007,7 +21010,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content">
       <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="$report"/>
+        <xsl:with-param name="report" select="report"/>
         <xsl:with-param name="section" select="'ports'"/>
       </xsl:call-template>
 
@@ -21023,7 +21026,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Threat</td>
         </tr>
 
-        <xsl:for-each select="$report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]">
+        <xsl:for-each select="report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('kReportPorts', .))]">
           <xsl:sort data-type="number" select="substring-before (../text(), '/')"/>
           <xsl:variable name="port" select="../text()"/>
             <tr class="{gsa:table-row-class(position())}">
@@ -21047,7 +21050,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </td>
               <td>
-                  <xsl:value-of select="count($report/ports/port[text() = $port])"/>
+                  <xsl:value-of select="count(../../port[text() = $port])"/>
               </td>
               <td>
                 <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
@@ -21118,13 +21121,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td>CVE</td>
+          <td>Host</td>
+          <td>NVT</td>
+        </tr>
         <xsl:for-each select="report/host" >
           <xsl:variable name="current_host" select="ip"/>
-          <tr class="gbntablehead2">
-            <td>CVE</td>
-            <td>Host</td>
-            <td>NVT</td>
-          </tr>
           <xsl:variable name="host" select="."/>
           <xsl:variable name="token" select="/envelope/token"/>
           <xsl:for-each select="str:split(detail[name = 'Closed CVEs']/value, ',')">

@@ -1,3 +1,15 @@
+2013-04-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_report_section): Refactor code. Always use
+	get_reports function instead of sending get_reports command.
+
+	* src/html/omp.xsl (result-detailed [result, detailed]): Remove unused
+	variable.
+	(report [hosts], report [ports]): New templates.
+	(get_report_hosts_response, get_report_ports_response): Move body to new
+	report templates and apply them.
+	(report [closed_cves]): Use one table for all hosts.
+
 2013-04-26  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (result-detailed [result, detailed]): Use CVSS

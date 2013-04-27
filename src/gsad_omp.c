@@ -10244,98 +10244,29 @@ static char *
 get_report_section (credentials_t * credentials, params_t *params)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html, *request;
-  const char *report_id, *report_section, *filter, *filt_id;
+  const char *report_id, *report_section;
+  char *result;
+  int error = 0;
 
   report_section = params_value (params, "report_section");
   report_id = params_value (params, "report_id");
-  filter = params_value (params, "filter");
-  filt_id = params_value (params, "filt_id");
 
   REQUIRE(report_section, "/omp?cmd=get_tasks");
   REQUIRE(report_id, "/omp?cmd=get_tasks");
 
   if (!strcmp (report_section, "results"))
     return get_report_omp (credentials, params, NULL, NULL, NULL);
-  else if (!strcmp (report_section, "summary")
-           || !strcmp (report_section, "closed_cves"))
-    {
-      char *result;
-      int error = 0;
 
-      result = get_report (credentials, params, NULL, NULL, NULL,
-                           NULL, NULL, &error);
-      if (error)
-        return result;
-
-      xml = g_string_new ("");
-      g_string_append_printf (xml, "<get_report_%s_response>", report_section);
-      g_string_append (xml, result);
-      g_string_append_printf (xml, "</get_report_%s_response>", report_section);
-
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
-    }
-
-  switch (manager_connect (credentials, &socket, &session, &html))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting . "
-                             "The current report is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks");
-    }
+  result = get_report (credentials, params, NULL, NULL, NULL,
+                       NULL, NULL, &error);
+  if (error)
+    return result;
 
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_report_%s_response>", report_section);
-
-  request = g_markup_printf_escaped
-             ("<get_reports report_id=\"%s\""
-              " filter=\"%s\""
-              " filt_id=\"%s\""
-              "/>",
-              report_id,
-              filter ? filter : "",
-              filt_id ? filt_id : "0");
-
-  if (openvas_server_sendf (&session, request) == -1)
-    {
-      g_string_free (xml, TRUE);
-      g_free (request);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting report's hosts. "
-                           "The current report is not available. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-  g_free (request);
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting a report's hosts. "
-                           "The current report is not available. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks");
-    }
-
+  g_string_append (xml, result);
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  openvas_server_close (socket, session);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE));
 }
 
