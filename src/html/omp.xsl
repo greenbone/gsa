@@ -21294,10 +21294,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:when>
           <xsl:otherwise>
             <tr>
-              <td><b>Scan started:</b></td>
+              <td><b>Scan initiated:</b></td>
+              <td>
+                <xsl:if test="string-length (report/timestamp)">
+                  <b><xsl:value-of select="concat (date:day-abbreviation (report/timestamp), ' ', date:month-abbreviation (report/timestamp), ' ', date:day-in-month (report/timestamp), ' ', format-number(date:hour-in-day(report/timestamp), '00'), ':', format-number(date:minute-in-hour(report/timestamp), '00'), ':', format-number(date:second-in-minute(report/timestamp), '00'), ' ', date:year(report/timestamp))"/></b>
+                </xsl:if>
+              </td>
+            </tr>
+            <tr>
+              <td>Scan started:</td>
               <td>
                 <xsl:if test="string-length (report/scan_start)">
-                  <b><xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/></b>
+                  <xsl:value-of select="concat (date:day-abbreviation (report/scan_start), ' ', date:month-abbreviation (report/scan_start), ' ', date:day-in-month (report/scan_start), ' ', format-number(date:hour-in-day(report/scan_start), '00'), ':', format-number(date:minute-in-hour(report/scan_start), '00'), ':', format-number(date:second-in-minute(report/scan_start), '00'), ' ', date:year(report/scan_start))"/>
                 </xsl:if>
               </td>
             </tr>
