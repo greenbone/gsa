@@ -1,5 +1,10 @@
 2013-04-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Set rows in filter for GET_FILTERS to get
+	all rows, otherwise Rows Per Page is used.
+
+2013-04-29  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (report [summary]): Add a "Scan initiated" field and
 	highlight this instead of "Scan started" because this is what the Tasks
 	and Task Details page are using.  This is the time that the report was

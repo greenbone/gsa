@@ -939,7 +939,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf_xml (&session,
                                 "<get_filters"
-                                " filter=\"type=%s or type=\"/>",
+                                " filter=\"rows=-1 type=%s or type=\"/>",
                                 type)
       == -1)
     {
