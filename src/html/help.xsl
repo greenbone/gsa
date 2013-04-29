@@ -5783,6 +5783,27 @@ Public License instead of this License.
           </ul>
         </li>
       </ul>
+      <ul>
+        <li>
+          tag="geo:long=52.2788"
+          <ul>
+            <li>
+              Include any item that has a tag named "geo:long" with the
+              value "52.2788".
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          tag~geo
+          <ul>
+            <li>
+              Include any item that has a tag with a name containing "geo".
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <a name="syntax"></a>
       <h3>Syntax</h3>
@@ -5858,6 +5879,16 @@ Public License instead of this License.
       <p>
         The column keyword "<b>sort-reverse</b>" is like "sort", but sorts
         backwards.
+      </p>
+      <p>
+        The column keyword "<b>tag</b>" selects items with a given tag
+        attached. Either the name or the name and value, separated by an equals
+        sign (=) can be given. Neither tag name nor value are put into quotes or
+        use any other string delimiter.<br/>
+        When both name and value are given, the tags must match both. If only
+        the name is given, the tag can have any value, including none.<br/>
+        The "tag" keyword supports the = and ~ relations. &gt; and &lt; will
+        behave the same as =.
       </p>
 
       <h4>Date format</h4>
