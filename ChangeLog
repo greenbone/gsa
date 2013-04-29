@@ -1,5 +1,10 @@
 2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (tag [details], note-detailed): Remove quotes around
+	tag values to match filter syntax.
+
+2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/omp.xsl (get_my_settings): Fix class attributes of table rows
 	for alternating background colors
 

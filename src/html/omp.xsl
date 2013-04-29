@@ -6940,7 +6940,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="minor-details"/>
       <h1>
         <xsl:value-of select="name"/>
-        <xsl:if test="value != ''">=&quot;<xsl:value-of select="value"/>&quot;</xsl:if>
+        <xsl:if test="value != ''">=<xsl:value-of select="value"/></xsl:if>
       </h1>
       <table>
         <tr>
@@ -19376,7 +19376,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:for-each select="user_tags/tag">
         <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;token={/envelope/token}">
           <xsl:value-of select="name"/>
-          <xsl:if test="value != ''">=&quot;<xsl:value-of select="value"/>&quot;</xsl:if>
+          <xsl:if test="value != ''">=<xsl:value-of select="value"/></xsl:if>
         </a>
         <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
       </xsl:for-each>
