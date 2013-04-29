@@ -5,6 +5,11 @@
 
 2013-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result-header): New template.
+	(result-detailed): Refactor code into result-header.
+
+2013-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (cvss-threat, threat-max-cvss): Rename to
 	cvss-risk-factor and risk-factor-max-cvss. Adapt values to match CR-42
 	names and values.
