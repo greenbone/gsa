@@ -1,3 +1,12 @@
+2013-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (cvss-threat, threat-max-cvss): Rename to
+	cvss-risk-factor and risk-factor-max-cvss. Adapt values to match CR-42
+	names and values.
+	(severity-bar): Call cvss-risk-factor template. Match None threat value.
+	(report [ports]): Match critical threat case too. Call
+	risk-factor-max-cvss template.
+
 2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/help.xsl (powerfilter.html): Add special keyword "tag" and

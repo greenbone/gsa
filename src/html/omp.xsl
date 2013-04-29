@@ -198,27 +198,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
 </func:function>
 
-<func:function name="gsa:cvss-threat">
+<func:function name="gsa:cvss-risk-factor">
   <xsl:param name="cvss_score"/>
   <xsl:variable name="threat">
     <xsl:choose>
-      <xsl:when test="$cvss_score &lt;= 3.9">Low</xsl:when>
-      <xsl:when test="$cvss_score &lt;= 6.9 and $cvss_score &gt; 3.9">Medium</xsl:when>
-      <xsl:when test="$cvss_score &gt; 6.9">High</xsl:when>
-      <xsl:otherwise>Log</xsl:otherwise>
+      <xsl:when test="$cvss_score = 0.0">None</xsl:when>
+      <xsl:when test="$cvss_score &gt;= 0.1 and $cvss_score &lt;= 2.0">Low</xsl:when>
+      <xsl:when test="$cvss_score &gt;= 2.1 and $cvss_score &lt;= 5.0">Medium</xsl:when>
+      <xsl:when test="$cvss_score &gt;= 5.1 and $cvss_score &lt;= 8.0">High</xsl:when>
+      <xsl:when test="$cvss_score &gt;= 8.1 and $cvss_score &lt;= 10.0">High</xsl:when>
+      <xsl:otherwise>None</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <func:result select="$threat"/>
 </func:function>
 
-<func:function name="gsa:threat-max-cvss">
+<func:function name="gsa:risk-factor-max-cvss">
   <xsl:param name="threat"/>
   <xsl:variable name="cvss">
     <xsl:choose>
-      <xsl:when test="gsa:lower-case($threat) = 'low'">3.9</xsl:when>
-      <xsl:when test="gsa:lower-case($threat) = 'medium'">6.9</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'none'">0.0</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'low'">2.0</xsl:when>
+      <xsl:when test="gsa:lower-case($threat) = 'medium'">5.0</xsl:when>
       <xsl:when test="gsa:lower-case($threat) = 'high'">10.0</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
+      <xsl:when test="gsa:lower-case($threat) = 'critical'">10.0</xsl:when>
+      <xsl:otherwise>0.0</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   <func:result select="$cvss"/>
@@ -1134,7 +1138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="extra_text"></xsl:param>
   <xsl:param name="notext"></xsl:param>
   <xsl:param name="cvss"></xsl:param>
-  <xsl:param name="threat"><xsl:value-of select="gsa:cvss-threat($cvss)"/></xsl:param>
+  <xsl:param name="threat"><xsl:value-of select="gsa:cvss-risk-factor($cvss)"/></xsl:param>
   <xsl:param name="title"><xsl:value-of select="$threat"/></xsl:param>
   <xsl:param name="scale">10</xsl:param>
 
@@ -1144,6 +1148,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="width"><xsl:value-of select="10 * $scale"/></xsl:variable>
   <div class="progressbar_box" title="{$title}" style="width:{$width}px;">
     <xsl:choose>
+      <xsl:when test="$threat = 'None'">
+        <div class="progressbar_bar_done" style="width:0px;"></div>
+      </xsl:when>
+      <xsl:when test="$threat = 'Log'">
+        <div class="progressbar_bar_done" style="width:0px;"></div>
+      </xsl:when>
       <xsl:when test="$threat = 'Low'">
         <div class="progressbar_bar_done" style="width:{$fill}px;"></div>
       </xsl:when>
@@ -1152,9 +1162,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:when test="$threat = 'High'">
         <div class="progressbar_bar_error" style="width:{$fill}px;"></div>
-      </xsl:when>
-      <xsl:when test="$threat = 'Log'">
-        <div class="progressbar_bar_done" style="width:0px;"></div>
       </xsl:when>
     </xsl:choose>
       <div class="progressbar_text">
@@ -21056,7 +21063,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:variable name="threat" select="gsa:lower-case(../threat)"/>
                 <xsl:variable name="extra_text">
                   <xsl:choose>
-                    <xsl:when test="$threat = 'low' or $threat = 'medium' or $threat = 'high'">
+                    <xsl:when test="$threat = 'low' or $threat = 'medium' or $threat = 'high' or $threat = 'critical'">
                       <xsl:value-of select="../threat"/>
                     </xsl:when>
                     <xsl:otherwise>None</xsl:otherwise>
@@ -21065,7 +21072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
                   <xsl:call-template name="severity-bar">
                     <xsl:with-param name="extra_text" select="$extra_text"/>
-                    <xsl:with-param name="cvss" select="gsa:threat-max-cvss($threat)"/>
+                    <xsl:with-param name="cvss" select="gsa:risk-factor-max-cvss($threat)"/>
                     <xsl:with-param name="notext" select="'1'"/>
                   </xsl:call-template>
               </td>
