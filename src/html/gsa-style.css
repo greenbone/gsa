@@ -139,6 +139,10 @@ div.float_right {
   float: right;
 }
 
+div.float_left {
+  float: left;
+}
+
 div.diff-line {
  white-space: pre;
  font-family: monospace;

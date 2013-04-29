@@ -1,3 +1,8 @@
+2013-04-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result-header): Style update. Fix width for table
+	columns and align actions to the left.
+
 2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (tag [details], note-detailed): Remove quotes around

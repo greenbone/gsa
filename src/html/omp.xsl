@@ -19727,11 +19727,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
   <tr style="background:#bbbbbb">
-    <td>Vulnerability</td>
-    <td width="104" align="center">Severity</td>
-    <td>Host</td>
+    <td style="width: 35%">Vulnerability</td>
+    <td style="width: 13%">Severity</td>
+    <td style="width: 17%">Host</td>
     <td>Location</td>
-    <td style="text-align:right">Actions</td>
+    <td style="width: 10%">Actions</td>
   </tr>
   <tr style="background:#bbbbbb; color:#000000">
     <td> <!-- Vulnerability -->
@@ -19825,8 +19825,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="$details-button = 1">
         <xsl:choose>
           <xsl:when test="delta">
-            <div class="float_right" style="text-align:right">
-              <form class="float_right" style="text-align:right">
+            <div class="float_left">
+              <form class="float_left">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_report"/>
                 <input type="hidden" name="report_id" value="{../../../report/@id}"/>
@@ -19847,7 +19847,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </xsl:when>
           <xsl:otherwise>
-            <div class="float_right" style="text-align:right">
+            <div class="float_left">
               <a href="/omp?cmd=get_result&amp;result_id={@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../filters/overrides}&amp;autofp={../../filters/autofp}&amp;report_result_id={@id}&amp;token={/envelope/token}"
                  title="Result Details" style="margin-left:3px;">
                 <img src="/img/details.png" border="0" alt="Details"/>
@@ -19857,7 +19857,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:choose>
       </xsl:if>
       <xsl:if test="$note-buttons = 1">
-        <div class="float_right" style="text-align:right">
+        <div class="float_left">
           <xsl:if test="count(notes/note) &gt; 0">
             <a href="#notes-{@id}"
                title="Notes" style="margin-left:3px;">
@@ -19895,7 +19895,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
       <xsl:if test="$override-buttons = 1">
-        <div class="float_right" style="text-align:right">
+        <div class="float_left">
           <xsl:if test="count(overrides/override) &gt; 0">
             <a href="#overrides-{@id}"
                title="Overrides" style="margin-left:3px;">
@@ -19943,19 +19943,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="show-overrides">0</xsl:param>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
-  <a class="anchor" name="result-{@id}"/>
-
-  <div class="issue_box_head" style="background:#ffffff">
-    <table width="100%" border="0">
-      <xsl:apply-templates select="." mode="result-header">
-        <xsl:with-param name="details-button" select="$details-button"/>
-        <xsl:with-param name="note-buttons" select="$note-buttons"/>
-        <xsl:with-param name="override-buttons" select="$override-buttons"/>
-        <xsl:with-param name="result-details" select="$result-details"/>
-        <xsl:with-param name="prognostic" select="$prognostic"/>
-      </xsl:apply-templates>
-    </table>
-  </div>
 
   <xsl:variable name="cve_ref">
     <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
@@ -19974,15 +19961,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
   </xsl:variable>
 
-  <xsl:if test="gsa:newstyle-nvt (nvt)">
+  <a class="anchor" name="result-{@id}"/>
 
+  <div class="issue_box_head" style="background:#ffffff">
+    <table width="100%" border="0">
+      <xsl:apply-templates select="." mode="result-header">
+        <xsl:with-param name="details-button" select="$details-button"/>
+        <xsl:with-param name="note-buttons" select="$note-buttons"/>
+        <xsl:with-param name="override-buttons" select="$override-buttons"/>
+        <xsl:with-param name="result-details" select="$result-details"/>
+        <xsl:with-param name="prognostic" select="$prognostic"/>
+      </xsl:apply-templates>
+    </table>
+  </div>
+
+  <xsl:if test="gsa:newstyle-nvt (nvt)">
     <div class="issue_box_box">
       <b>Summary</b>
       <xsl:call-template name="structured-text">
         <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
       </xsl:call-template>
     </div>
-
   </xsl:if>
 
   <!-- Result -->
