@@ -6284,23 +6284,13 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   gnutls_session_t session;
   int socket;
   gchar *html, *end;
-  const char *attach_type, *attach_id, *tag_id, *tag_name,
-             *next, *next_type, *next_subtype, *next_id,
-             *filter, *first, *max;
+  const char *attach_type, *attach_id, *tag_id, *tag_name;
 
   attach_type = params_value (params, "attach_type");
   attach_id = params_value (params, "attach_id");
 
   tag_id = params_value (params, "tag_id");
   tag_name = params_value (params, "tag_name");
-
-  next = params_value (params, "next");
-  next_type = params_value (params, "next_type");
-  next_subtype = params_value (params, "next_subtype");
-  next_id = params_value (params, "next_id");
-  filter = params_value (params, "filter");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6324,14 +6314,6 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
   g_string_append (xml, extra_xml);
 
   end = g_markup_printf_escaped ("<tag id=\"%s\"/>"
-                                 /* Page that follows. */
-                                 "<next>%s</next>"
-                                 "<next_type>%s</next_type>"
-                                 "<next_subtype>%s</next_subtype>"
-                                 "<next_id>%s</next_id>"
-                                 /* Passthroughs. */
-                                 "<filters><term>%s</term></filters>"
-                                 "<limits start=\"%s\" max=\"%s\"/>"
                                  "<attach_type>%s</attach_type>"
                                  "<attach_id>%s</attach_id>"
                                  "<tag_name>%s%s</tag_name>"
@@ -6340,13 +6322,6 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml)
                                  "<active>1</active>"
                                  "</new_tag>",
                                  tag_id ? tag_id : "0",
-                                 next ? next : "",
-                                 next_type ? next_type : "",
-                                 next_subtype ? next_subtype : "",
-                                 next_id ? next_id : "",
-                                 filter ? filter : "",
-                                 first ? first : "",
-                                 max ? max : "",
                                  attach_type ? attach_type : "agent",
                                  attach_id ? attach_id : "",
                                  tag_name ? tag_name : (attach_type
@@ -6542,8 +6517,7 @@ edit_tag (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *edit;
-  const char *tag_id, *next, *next_type, *next_subtype, *next_id,
-             *filter, *first, *max;
+  const char *tag_id;
 
   tag_id = params_value (params, "tag_id");
   if (tag_id == NULL)
@@ -6553,14 +6527,6 @@ edit_tag (credentials_t * credentials, params_t *params,
                          "The tag remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tags");
-
-  next = params_value (params, "next");
-  next_type = params_value (params, "next_type");
-  next_subtype = params_value (params, "next_subtype");
-  next_id = params_value (params, "next_id");
-  filter = params_value (params, "filter");
-  first = params_value (params, "first");
-  max = params_value (params, "max");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6601,23 +6567,8 @@ edit_tag (credentials_t * credentials, params_t *params,
     g_string_append (xml, extra_xml);
 
   edit = g_markup_printf_escaped ("<edit_tag>"
-                                  "<tag id=\"%s\"/>"
-                                  /* Page that follows. */
-                                  "<next>%s</next>"
-                                  "<next_type>%s</next_type>"
-                                  "<next_subtype>%s</next_subtype>"
-                                  "<next_id>%s</next_id>"
-                                  /* Passthroughs. */
-                                  "<filters><term>%s</term></filters>"
-                                  "<limits start=\"%s\" max=\"%s\"/>",
-                                  tag_id,
-                                  next ? next : "",
-                                  next_type ? next_type : "",
-                                  next_subtype ? next_subtype : "",
-                                  next_id ? next_id : "",
-                                  filter ? filter : "",
-                                  first ? first : "",
-                                  max ? max : "");
+                                  "<tag id=\"%s\"/>",
+                                  tag_id);
 
   g_string_append (xml, edit);
   g_free (edit);

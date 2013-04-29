@@ -1,5 +1,27 @@
 2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (new_tag, edit_tag): Remove passthrough of next page
+	and filter parameters.
+
+	* src/html/omp.xsl (user-tags-window): Rename act_type to resource_type,
+	act_type to resource_subtype, act_id to resource_id, act_next to next.
+	Add default values for resource_id, next and user_tags.
+	(tag mode=for_resource): Rename act_type to resource_type,
+	act_type to resource_subtype, act_id to resource_id, act_next to next.
+	(task mode=details, lsc_credential mode=details, agent mode=details)
+	(alert mode=details, filter mode=details, target mode=details)
+	(html-config-table, schedule mode=details, slave mode=details)
+	(cve-details, cpe-details, ovaldef-details, dfn_cert_adv-details)
+	(get_nvts, note mode=details, override mode=details, group mode=details)
+	(permission mode=details, port_list mode=details)
+	(report_format mode=details, user mode=details): Adjust to new
+	user-tags-window parameters and remove parameters covered by new
+	defaults.
+	(html-create-tag-form, html-edit-tag-form): Get filter and next page
+	parameters from /envelope/params.
+
+2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/help.xsl (contents.html): Add items for tags (Tags, New Tag,
 	Tag Details)
 
