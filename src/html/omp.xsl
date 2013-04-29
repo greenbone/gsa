@@ -24046,7 +24046,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>Targets filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24055,7 +24055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>Tasks filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24064,7 +24064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>CPE filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24073,7 +24073,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>CVE filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24082,7 +24082,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>NVT filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24091,7 +24091,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>OVAL filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24100,7 +24100,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td>DFN-CERT filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -24109,7 +24109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td>All SecInfo filter</td>
             <td>
               <xsl:call-template name="get-settings-filter">

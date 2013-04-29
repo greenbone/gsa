@@ -1,5 +1,10 @@
 2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/omp.xsl (get_my_settings): Fix class attributes of table rows
+	for alternating background colors
+
+2013-04-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (new_tag, edit_tag): Remove passthrough of next page
 	and filter parameters.
 
