@@ -1,5 +1,11 @@
 2013-04-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (user_find): Add token bad or missing return.
+	(request_handler): For GET requests, serve the login page when the token
+	is bad or missing.
+
+2013-04-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/omp.xsl (html-create-user-form): Correct name in comment.
 	(user [edit]): Add dummy input to force Save button to be default.
 

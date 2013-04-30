@@ -303,7 +303,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
  * @param[out]  user_return  User.
  *
  * @return 0 ok (user in user_return), 1 bad token, 2 expired token,
- *         3 bad/missing cookie.
+ *         3 bad/missing cookie, 4 bad/missing token.
  */
 int
 user_find (const gchar *cookie, const gchar *token, user_t **user_return)
@@ -311,6 +311,8 @@ user_find (const gchar *cookie, const gchar *token, user_t **user_return)
   int ret;
   user_t *user = NULL;
   int index;
+  if (token == NULL)
+    return 4;
   g_mutex_lock (mutex);
   for (index = 0; index < users->len; index++)
     {
@@ -2968,24 +2970,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (openvas_validate (validator, "token", token))
         token = NULL;
 
-      if (token == NULL)
-        {
-          res = gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occured inside GSA daemon. "
-                              "Diagnostics: Token missing or bad.",
-                              "/omp?cmd=get_tasks");
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
-          free (res);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        1);
-        }
-
       cookie = MHD_lookup_connection_value (connection,
                                             MHD_COOKIE_KIND,
                                             SID_COOKIE_NAME);
@@ -3011,7 +2995,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      if ((ret == 2) || (ret == 3))
+      if ((ret == 2) || (ret == 3) || (ret == 4))
         {
           time_t now;
           gchar *xml;
@@ -3049,7 +3033,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     ? (strncmp (url, "/logout", strlen ("/logout"))
                         ? "Session has expired.  Please login again."
                         : "Already logged out.")
-                    : "Cookie missing or bad.  Please login again."),
+                    : ((ret == 3)
+                       ? "Cookie missing or bad.  Please login again."
+                       : "Token missing or bad.  Please login again.")),
                   ctime_now,
                   (((export == 0)
                     && strncmp (url, "/logout", strlen ("/logout")))
