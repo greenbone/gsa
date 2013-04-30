@@ -1,5 +1,9 @@
 2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result [result-header]): Remove extra line break.
+
+2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result [result-body]): New template.
 	(result-detailed [details]): Refactor code into result-body template.
 

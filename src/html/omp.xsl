@@ -20300,7 +20300,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
     </xsl:otherwise>
   </xsl:choose>
-  <br/>
 </xsl:template>
 
 <xsl:template name="result-detailed" match="result" mode="detailed">
@@ -20335,8 +20334,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </tr>
     </table>
   </div>
-  <!--
-        -->
 
 </xsl:template>
 
