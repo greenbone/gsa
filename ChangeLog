@@ -1,5 +1,12 @@
 2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result [result-body]): New template.
+	(result-detailed [details]): Refactor code into result-body template.
+
+	* src/html/gsa-style.css: Remove unused .issue_box_head a. Tweak coloring.
+
+2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad_omp.c (save_alert_omp): Don't send next element.
 
 2013-04-30  Timo Pollmeier <timo.pollmeier@greenbone.net>

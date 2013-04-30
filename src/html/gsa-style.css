@@ -710,14 +710,8 @@ text-align:right;
  margin:3px;
  margin-bottom:0px;
  background: #3a3a3a;
- color: #FFFFFF;
  border:1px solid #CCCCCC;
  border-bottom:0px;
-}
-
-/* Links in Issue Box shall be white */
-.issue_box_head a {
-  color: #FFFFFF;
 }
 
 .issue_box_box {

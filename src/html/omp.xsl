@@ -19726,7 +19726,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
-  <tr style="background:#bbbbbb">
+  <tr style="font-weight:bold; background:#bbbbbb">
     <td style="width: 35%">Vulnerability</td>
     <td style="width: 13%">Severity</td>
     <td style="width: 17%">Host</td>
@@ -19936,44 +19936,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<xsl:template name="result-detailed" match="result" mode="detailed">
-  <xsl:param name="details-button">1</xsl:param>
-  <xsl:param name="note-buttons">1</xsl:param>
-  <xsl:param name="override-buttons">1</xsl:param>
-  <xsl:param name="show-overrides">0</xsl:param>
+<xsl:template match="result" mode="result-body">
+  <xsl:param name="note-buttons"/>
+  <xsl:param name="override-buttons"/>
   <xsl:param name="result-details"/>
+  <xsl:param name="show-overrides"/>
   <xsl:param name="prognostic"/>
-
-  <xsl:variable name="cve_ref">
-    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
-      <xsl:value-of select="nvt/cve/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="bid_ref">
-    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
-      <xsl:value-of select="nvt/bid/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="cert_ref" select="nvt/cert"/>
-  <xsl:variable name="xref">
-    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
-      <xsl:value-of select="nvt/xref/text()"/>
-    </xsl:if>
-  </xsl:variable>
-
-  <a class="anchor" name="result-{@id}"/>
-
-  <div class="issue_box_head" style="background:#ffffff">
-    <table width="100%" border="0">
-      <xsl:apply-templates select="." mode="result-header">
-        <xsl:with-param name="details-button" select="$details-button"/>
-        <xsl:with-param name="note-buttons" select="$note-buttons"/>
-        <xsl:with-param name="override-buttons" select="$override-buttons"/>
-        <xsl:with-param name="result-details" select="$result-details"/>
-        <xsl:with-param name="prognostic" select="$prognostic"/>
-      </xsl:apply-templates>
-    </table>
-  </div>
 
   <xsl:if test="gsa:newstyle-nvt (nvt)">
     <div class="issue_box_box">
@@ -20059,7 +20027,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:call-template>
       </div>
     </xsl:if>
-
   </xsl:if>
 
   <div class="issue_box_box">
@@ -20131,6 +20098,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
     </div>
   </xsl:if>
+
+  <xsl:variable name="cve_ref">
+    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
+      <xsl:value-of select="nvt/cve/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="bid_ref">
+    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
+      <xsl:value-of select="nvt/bid/text()"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="cert_ref" select="nvt/cert"/>
+  <xsl:variable name="xref">
+    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
+      <xsl:value-of select="nvt/xref/text()"/>
+    </xsl:if>
+  </xsl:variable>
 
   <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
     <div class="issue_box_box">
@@ -20317,6 +20301,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
   <br/>
+</xsl:template>
+
+<xsl:template name="result-detailed" match="result" mode="detailed">
+  <xsl:param name="details-button">1</xsl:param>
+  <xsl:param name="note-buttons">1</xsl:param>
+  <xsl:param name="override-buttons">1</xsl:param>
+  <xsl:param name="show-overrides">0</xsl:param>
+  <xsl:param name="result-details"/>
+  <xsl:param name="prognostic"/>
+
+  <a class="anchor" name="result-{@id}"/>
+
+  <div class="issue_box_head" style="background:#ffffff">
+    <table width="100%" border="0">
+      <xsl:apply-templates select="." mode="result-header">
+        <xsl:with-param name="details-button" select="$details-button"/>
+        <xsl:with-param name="note-buttons" select="$note-buttons"/>
+        <xsl:with-param name="override-buttons" select="$override-buttons"/>
+        <xsl:with-param name="result-details" select="$result-details"/>
+        <xsl:with-param name="prognostic" select="$prognostic"/>
+      </xsl:apply-templates>
+      <tr style="padding:0px; color:#000000">
+        <td colspan="5">
+          <xsl:apply-templates select="." mode="result-body">
+            <xsl:with-param name="note-buttons" select="$note-buttons"/>
+            <xsl:with-param name="override-buttons" select="$override-buttons"/>
+            <xsl:with-param name="result-details" select="$result-details"/>
+            <xsl:with-param name="result-details" select="$show-overrides"/>
+            <xsl:with-param name="prognostic" select="$prognostic"/>
+          </xsl:apply-templates>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!--
+        -->
+
 </xsl:template>
 
 <!--     GET_RESULT -->
