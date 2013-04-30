@@ -1,3 +1,8 @@
+2013-04-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (html-create-user-form): Correct name in comment.
+	(user [edit]): Add dummy input to force Save button to be default.
+
 2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
