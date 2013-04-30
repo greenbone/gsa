@@ -1,5 +1,19 @@
 2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(html-create-override-form, html-edit-override-form, result [details])
+	(get_reports_response/report/report [details]): Add div and table around
+	result-detailed call.
+	(result [result-header]): Don't fix table cells sizes.
+	(result [result-body]): Include content as part of global result table
+	and adjust accordingly.
+	(result-detailed [detailed]): Let caller adjust surrounding div and table.
+
+	* src/html/gsa-style.css: Add issue_box_all, remove issue_box_head and
+	clean issue_box_box classes.
+
+2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result [result-header]): Remove extra line break.
 
 2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>

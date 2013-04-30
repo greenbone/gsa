@@ -14994,13 +14994,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <xsl:for-each select="get_results_response/results/result">
-            <xsl:call-template name="result-detailed">
-              <xsl:with-param name="details-button">0</xsl:with-param>
-              <xsl:with-param name="override-buttons">0</xsl:with-param>
-              <xsl:with-param name="note-buttons">0</xsl:with-param>
-            </xsl:call-template>
-          </xsl:for-each>
+          <div class="issue_box_all">
+            <table width="100%">
+              <xsl:for-each select="get_results_response/results/result">
+                <xsl:call-template name="result-detailed">
+                  <xsl:with-param name="details-button">0</xsl:with-param>
+                  <xsl:with-param name="override-buttons">0</xsl:with-param>
+                  <xsl:with-param name="note-buttons">0</xsl:with-param>
+                </xsl:call-template>
+              </xsl:for-each>
+            </table>
+          </div>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
@@ -15328,13 +15332,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <xsl:for-each select="get_notes_response/note/result">
-            <xsl:call-template name="result-detailed">
-              <xsl:with-param name="details-button">0</xsl:with-param>
-              <xsl:with-param name="note-buttons">0</xsl:with-param>
-              <xsl:with-param name="override-buttons">0</xsl:with-param>
-            </xsl:call-template>
-          </xsl:for-each>
+          <div class="issue_box_all">
+            <table width="100%">
+              <xsl:for-each select="get_notes_response/note/result">
+                <xsl:call-template name="result-detailed">
+                  <xsl:with-param name="details-button">0</xsl:with-param>
+                  <xsl:with-param name="note-buttons">0</xsl:with-param>
+                  <xsl:with-param name="override-buttons">0</xsl:with-param>
+                </xsl:call-template>
+              </xsl:for-each>
+            </table>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
     </div>
@@ -16000,13 +16008,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <xsl:for-each select="get_results_response/results/result">
-            <xsl:call-template name="result-detailed">
-              <xsl:with-param name="details-button">0</xsl:with-param>
-              <xsl:with-param name="override-buttons">0</xsl:with-param>
-              <xsl:with-param name="override-buttons">0</xsl:with-param>
-            </xsl:call-template>
-          </xsl:for-each>
+          <div class="issue_box_all">
+            <table width="100%">
+              <xsl:for-each select="get_results_response/results/result">
+                <xsl:call-template name="result-detailed">
+                  <xsl:with-param name="details-button">0</xsl:with-param>
+                  <xsl:with-param name="override-buttons">0</xsl:with-param>
+                  <xsl:with-param name="override-buttons">0</xsl:with-param>
+                </xsl:call-template>
+              </xsl:for-each>
+            </table>
+          </div>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
@@ -16367,13 +16379,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <h3>
             Associated Result
           </h3>
-          <xsl:for-each select="get_overrides_response/override/result">
-            <xsl:call-template name="result-detailed">
-              <xsl:with-param name="details-button">0</xsl:with-param>
-              <xsl:with-param name="override-buttons">0</xsl:with-param>
-              <xsl:with-param name="note-buttons">0</xsl:with-param>
-            </xsl:call-template>
-          </xsl:for-each>
+          <div class="issue_box_all">
+            <table width="100%">
+              <xsl:for-each select="get_overrides_response/override/result">
+                <xsl:call-template name="result-detailed">
+                  <xsl:with-param name="details-button">0</xsl:with-param>
+                  <xsl:with-param name="override-buttons">0</xsl:with-param>
+                  <xsl:with-param name="note-buttons">0</xsl:with-param>
+                </xsl:call-template>
+              </xsl:for-each>
+            </table>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
     </div>
@@ -19696,13 +19712,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <xsl:call-template name="result-detailed">
-        <xsl:with-param name="details-button">0</xsl:with-param>
-        <xsl:with-param name="note-buttons">1</xsl:with-param>
-        <xsl:with-param name="override-buttons">1</xsl:with-param>
-        <xsl:with-param name="show-overrides">1</xsl:with-param>
-        <xsl:with-param name="result-details">1</xsl:with-param>
-      </xsl:call-template>
+      <div class="issue_box_all">
+        <table width="100%">
+          <xsl:call-template name="result-detailed">
+            <xsl:with-param name="details-button">0</xsl:with-param>
+            <xsl:with-param name="note-buttons">1</xsl:with-param>
+            <xsl:with-param name="override-buttons">1</xsl:with-param>
+            <xsl:with-param name="show-overrides">1</xsl:with-param>
+            <xsl:with-param name="result-details">1</xsl:with-param>
+          </xsl:call-template>
+        </table>
+      </div>
     </div>
   </div>
 </xsl:template>
@@ -19727,11 +19747,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="result-details"/>
   <xsl:param name="prognostic"/>
   <tr style="font-weight:bold; background:#bbbbbb">
-    <td style="width: 35%">Vulnerability</td>
-    <td style="width: 13%">Severity</td>
-    <td style="width: 17%">Host</td>
+    <td>Vulnerability</td>
+    <td>Severity</td>
+    <td>Host</td>
     <td>Location</td>
-    <td style="width: 10%">Actions</td>
+    <td>Actions</td>
   </tr>
   <tr style="background:#bbbbbb; color:#000000">
     <td> <!-- Vulnerability -->
@@ -19943,40 +19963,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="show-overrides"/>
   <xsl:param name="prognostic"/>
 
-  <xsl:if test="gsa:newstyle-nvt (nvt)">
-    <div class="issue_box_box">
-      <b>Summary</b>
-      <xsl:call-template name="structured-text">
-        <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
-      </xsl:call-template>
-    </div>
-  </xsl:if>
-
-  <!-- Result -->
-  <div class="issue_box_box">
-    <xsl:choose>
-      <xsl:when test="delta/text() = 'changed'">
-        <b>Result 1</b>
-        <p></p>
-      </xsl:when>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="$prognostic=1">
-        <p>
-          <xsl:call-template name="prognostic-description">
-            <xsl:with-param name="string" select="description"/>
+  <tr>
+    <td colspan="5">
+      <xsl:if test="gsa:newstyle-nvt (nvt)">
+        <div class="issue_box_box">
+          <b>Summary</b>
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string"
+                            select="gsa:get-nvt-tag (nvt/tags, 'summary')"/>
           </xsl:call-template>
-        </p>
-      </xsl:when>
-      <xsl:otherwise>
+        </div>
+      </xsl:if>
+
+      <!-- Result -->
+      <div class="issue_box_box">
         <xsl:choose>
-          <xsl:when test="gsa:newstyle-nvt (nvt)">
-            <b>Vulnerability Detection Result</b>
+          <xsl:when test="delta/text() = 'changed'">
+            <b>Result 1</b>
+            <p></p>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="$prognostic=1">
+            <p>
+              <xsl:call-template name="prognostic-description">
+                <xsl:with-param name="string" select="description"/>
+              </xsl:call-template>
+            </p>
+          </xsl:when>
+          <xsl:otherwise>
             <xsl:choose>
-              <xsl:when test="string-length(description) &lt; 2">
-                <p>
-                Vulnerability was detected according to the Vulnerability Detection Method.
-                </p>
+              <xsl:when test="gsa:newstyle-nvt (nvt)">
+                <b>Vulnerability Detection Result</b>
+                <xsl:choose>
+                  <xsl:when test="string-length(description) &lt; 2">
+                    <p>
+                    Vulnerability was detected according to the Vulnerability Detection Method.
+                    </p>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <pre>
+                      <xsl:call-template name="wrap">
+                        <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
+                      </xsl:call-template>
+                    </pre>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
                 <pre>
@@ -19986,284 +20018,232 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </pre>
               </xsl:otherwise>
             </xsl:choose>
-          </xsl:when>
-          <xsl:otherwise>
-            <pre>
-              <xsl:call-template name="wrap">
-                <xsl:with-param name="string"><xsl:value-of select="description"/></xsl:with-param>
-              </xsl:call-template>
-            </pre>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-  </div>
-
-  <xsl:if test="gsa:newstyle-nvt (nvt)">
-
-    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
-      <div class="issue_box_box">
-        <b>Impact</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
-        </xsl:call-template>
       </div>
-    </xsl:if>
 
-    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
-      <div class="issue_box_box">
-        <b>Solution</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
+      <xsl:if test="gsa:newstyle-nvt (nvt)">
 
-    <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
-      <div class="issue_box_box">
-        <b>Vulnerability Insight</b>
-        <xsl:call-template name="structured-text">
-          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
-        </xsl:call-template>
-      </div>
-    </xsl:if>
-  </xsl:if>
-
-  <div class="issue_box_box">
-    <xsl:choose>
-      <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0)">
-        <b>Vulnerability Detection Method</b>
-      </xsl:when>
-      <xsl:otherwise>
-        <b>Log Method</b>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:call-template name="structured-text">
-      <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
-    </xsl:call-template>
-    <p>
-      Details:
-      <xsl:choose>
-        <xsl:when test="$prognostic=1">
-          <xsl:call-template name="get_info_cve_lnk">
-            <xsl:with-param name="cve" select="cve/@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="nvt/@oid = 0">
-          <xsl:if test="delta/text()">
-            <br/>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:variable name="max" select="80"/>
-          <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
-            <xsl:choose>
-              <xsl:when test="string-length(nvt/name) &gt; $max">
-                <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="nvt/name"/>
-              </xsl:otherwise>
-            </xsl:choose>
-           (OID: <xsl:value-of select="nvt/@oid"/>)
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </p>
-  </div>
-
-  <xsl:if test="count (detection)">
-    <div class="issue_box_box">
-      <b>Product Detection Result</b>
-      <p>
-      <table>
-      <tr><td>Product:</td><td>
-      <xsl:call-template name="get_info_cpe_lnk">
-        <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
-      </xsl:call-template>
-      </td></tr>
-      <tr><td>Method:</td><td>
-      <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
-        <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
-        (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
-      </a>
-      </td></tr>
-      <tr><td>Log:</td><td>
-      <!-- TODO This needs a case for delta reports. -->
-      <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="Product detection results">
-        View details of product detection
-      </a>
-      </td></tr></table>
-      </p>
-    </div>
-  </xsl:if>
-
-  <xsl:variable name="cve_ref">
-    <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
-      <xsl:value-of select="nvt/cve/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="bid_ref">
-    <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
-      <xsl:value-of select="nvt/bid/text()"/>
-    </xsl:if>
-  </xsl:variable>
-  <xsl:variable name="cert_ref" select="nvt/cert"/>
-  <xsl:variable name="xref">
-    <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
-      <xsl:value-of select="nvt/xref/text()"/>
-    </xsl:if>
-  </xsl:variable>
-
-  <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
-    <div class="issue_box_box">
-      <b>References</b><br/>
-
-      <p>
-      <table>
-        <xsl:call-template name="ref_cve_list">
-          <xsl:with-param name="cvelist" select="$cve_ref"/>
-        </xsl:call-template>
-        <xsl:call-template name="ref_bid_list">
-          <xsl:with-param name="bidlist" select="$bid_ref"/>
-        </xsl:call-template>
-        <xsl:call-template name="ref_cert_list">
-          <xsl:with-param name="certlist" select="$cert_ref"/>
-        </xsl:call-template>
-        <xsl:call-template name="ref_xref_list">
-          <xsl:with-param name="xreflist" select="$xref"/>
-        </xsl:call-template>
-      </table>
-      </p>
-    </div>
-  </xsl:if>
-
-  <xsl:if test="delta">
-    <xsl:choose>
-      <xsl:when test="delta/text() = 'changed'">
-        <div class="issue_box_box">
-          <b>Result 2</b>
-          <xsl:choose>
-            <xsl:when test="$prognostic=1">
-              <xsl:call-template name="prognostic-description">
-                <xsl:with-param name="string" select="delta/result/description"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <pre>
-                <xsl:call-template name="wrap">
-                  <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
-                </xsl:call-template>
-              </pre>
-            </xsl:otherwise>
-          </xsl:choose>
-        </div>
-        <xsl:variable name="cve_ref_2">
-          <xsl:if test="delta/result/nvt/cve != '' and delta/result/nvt/cve != 'NOCVE'">
-            <xsl:value-of select="nvt/cve/text()"/>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:variable name="bid_ref_2">
-          <xsl:if test="delta/result/nvt/bid != '' and delta/result/nvt/bid != 'NOBID'">
-            <xsl:value-of select="delta/result/nvt/bid/text()"/>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:variable name="cert_ref_2" select="delta/result/nvt/cert"/>
-        <xsl:variable name="xref_2">
-          <xsl:if test="delta/result/nvt/xref != '' and delta/result/nvt/xref != 'NOXREF'">
-            <xsl:value-of select="delta/result/nvt/xref/text()"/>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != '' or count($cert_ref_2/cert_ref)">
+        <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'impact') != 'N/A'">
           <div class="issue_box_box">
-            <b>References</b><br/>
-
-            <table>
-              <xsl:call-template name="ref_cve_list">
-                <xsl:with-param name="cvelist" select="$cve_ref_2"/>
-              </xsl:call-template>
-              <xsl:call-template name="ref_bid_list">
-                <xsl:with-param name="bidlist" select="$bid_ref_2"/>
-              </xsl:call-template>
-              <xsl:call-template name="ref_cert_list">
-                <xsl:with-param name="certlist" select="$cert_ref_2"/>
-              </xsl:call-template>
-              <xsl:call-template name="ref_xref_list">
-                <xsl:with-param name="xreflist" select="$xref_2"/>
-              </xsl:call-template>
-            </table>
+            <b>Impact</b>
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'impact')"/>
+            </xsl:call-template>
           </div>
         </xsl:if>
-        <div class="issue_box_box">
-          <b>Different Lines</b>
-          <p>
-            <xsl:call-template name="highlight-diff">
-              <xsl:with-param name="string"><xsl:value-of select="delta/diff"/></xsl:with-param>
+
+        <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'solution') != 'N/A'">
+          <div class="issue_box_box">
+            <b>Solution</b>
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'solution')"/>
             </xsl:call-template>
+          </div>
+        </xsl:if>
+
+        <xsl:if test="gsa:get-nvt-tag (nvt/tags, 'insight') != 'N/A'">
+          <div class="issue_box_box">
+            <b>Vulnerability Insight</b>
+            <xsl:call-template name="structured-text">
+              <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'insight')"/>
+            </xsl:call-template>
+          </div>
+        </xsl:if>
+      </xsl:if>
+
+      <div class="issue_box_box">
+        <xsl:choose>
+          <xsl:when test="(nvt/cvss_base &gt; 0) or (cve/cvss_base &gt; 0)">
+            <b>Vulnerability Detection Method</b>
+          </xsl:when>
+          <xsl:otherwise>
+            <b>Log Method</b>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:call-template name="structured-text">
+          <xsl:with-param name="string" select="gsa:get-nvt-tag (nvt/tags, 'vuldetect')"/>
+        </xsl:call-template>
+        <p>
+          Details:
+          <xsl:choose>
+            <xsl:when test="$prognostic=1">
+              <xsl:call-template name="get_info_cve_lnk">
+                <xsl:with-param name="cve" select="cve/@id"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="nvt/@oid = 0">
+              <xsl:if test="delta/text()">
+                <br/>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="max" select="80"/>
+              <a href="?cmd=get_nvts&amp;oid={nvt/@oid}&amp;token={/envelope/token}">
+                <xsl:choose>
+                  <xsl:when test="string-length(nvt/name) &gt; $max">
+                    <abbr title="{nvt/name} ({nvt/@oid})"><xsl:value-of select="substring(nvt/name, 0, $max)"/>...</abbr>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="nvt/name"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+               (OID: <xsl:value-of select="nvt/@oid"/>)
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </p>
+      </div>
+
+      <xsl:if test="count (detection)">
+        <div class="issue_box_box">
+          <b>Product Detection Result</b>
+          <p>
+          <table>
+          <tr><td>Product:</td><td>
+          <xsl:call-template name="get_info_cpe_lnk">
+            <xsl:with-param name="cpe" select="detection/result/details/detail[name = 'product']/value/text()"/>
+          </xsl:call-template>
+          </td></tr>
+          <tr><td>Method:</td><td>
+          <a href="?cmd=get_nvts&amp;oid={detection/result/details/detail[name = 'source_oid']/value/text()}&amp;token={/envelope/token}">
+            <xsl:value-of select="detection/result/details/detail[name = 'source_name']/value/text()"/>
+            (OID: <xsl:value-of select="detection/result/details/detail[name = 'source_oid']/value/text()"/>)
+          </a>
+          </td></tr>
+          <tr><td>Log:</td><td>
+          <!-- TODO This needs a case for delta reports. -->
+          <a href="/omp?cmd=get_result&amp;result_id={detection/result/@id}&amp;apply_overrides={../../filters/apply_overrides}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../../report/@id}&amp;report_result_id={@id}&amp;delta_report_id={../../../report/delta/report/@id}&amp;autofp={../../filters/autofp}&amp;overrides={../../filters/overrides}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           title="Product detection results">
+            View details of product detection
+          </a>
+          </td></tr></table>
           </p>
         </div>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:if>
-  <xsl:variable name="delta">
-    <xsl:choose>
-      <xsl:when test="delta">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <a class="anchor" name="notes-{@id}"/>
-  <xsl:for-each select="notes/note">
-    <xsl:choose>
-      <xsl:when test="active = 0">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="note-detailed">
-          <xsl:with-param name="note-buttons">
-            <xsl:value-of select="$note-buttons"/>
-          </xsl:with-param>
-          <xsl:with-param name="delta" select="$delta"/>
-          <xsl:with-param name="next">
-            <xsl:choose>
-              <xsl:when test="$result-details">get_result</xsl:when>
-              <xsl:otherwise>get_report</xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-  <xsl:for-each select="delta/notes/note">
-    <xsl:choose>
-      <xsl:when test="active = 0">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="note-detailed">
-          <xsl:with-param name="note-buttons">
-            <xsl:value-of select="$note-buttons"/>
-          </xsl:with-param>
-          <xsl:with-param name="delta" select="2"/>
-          <xsl:with-param name="next">
-            <xsl:choose>
-              <xsl:when test="$result-details">get_result</xsl:when>
-              <xsl:otherwise>get_report</xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-  <xsl:choose>
-    <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
-      <a class="anchor" name="overrides-{@id}"/>
-      <xsl:for-each select="overrides/override">
+      </xsl:if>
+
+      <xsl:variable name="cve_ref">
+        <xsl:if test="nvt/cve != '' and nvt/cve != 'NOCVE'">
+          <xsl:value-of select="nvt/cve/text()"/>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:variable name="bid_ref">
+        <xsl:if test="nvt/bid != '' and nvt/bid != 'NOBID'">
+          <xsl:value-of select="nvt/bid/text()"/>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:variable name="cert_ref" select="nvt/cert"/>
+      <xsl:variable name="xref">
+        <xsl:if test="nvt/xref != '' and nvt/xref != 'NOXREF'">
+          <xsl:value-of select="nvt/xref/text()"/>
+        </xsl:if>
+      </xsl:variable>
+
+      <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
+        <div class="issue_box_box">
+          <b>References</b><br/>
+
+          <p>
+          <table>
+            <xsl:call-template name="ref_cve_list">
+              <xsl:with-param name="cvelist" select="$cve_ref"/>
+            </xsl:call-template>
+            <xsl:call-template name="ref_bid_list">
+              <xsl:with-param name="bidlist" select="$bid_ref"/>
+            </xsl:call-template>
+            <xsl:call-template name="ref_cert_list">
+              <xsl:with-param name="certlist" select="$cert_ref"/>
+            </xsl:call-template>
+            <xsl:call-template name="ref_xref_list">
+              <xsl:with-param name="xreflist" select="$xref"/>
+            </xsl:call-template>
+          </table>
+          </p>
+        </div>
+      </xsl:if>
+
+      <xsl:if test="delta">
+        <xsl:choose>
+          <xsl:when test="delta/text() = 'changed'">
+            <div class="issue_box_box">
+              <b>Result 2</b>
+              <xsl:choose>
+                <xsl:when test="$prognostic=1">
+                  <xsl:call-template name="prognostic-description">
+                    <xsl:with-param name="string" select="delta/result/description"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <pre>
+                    <xsl:call-template name="wrap">
+                      <xsl:with-param name="string"><xsl:value-of select="delta/result/description"/></xsl:with-param>
+                    </xsl:call-template>
+                  </pre>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+            <xsl:variable name="cve_ref_2">
+              <xsl:if test="delta/result/nvt/cve != '' and delta/result/nvt/cve != 'NOCVE'">
+                <xsl:value-of select="nvt/cve/text()"/>
+              </xsl:if>
+            </xsl:variable>
+            <xsl:variable name="bid_ref_2">
+              <xsl:if test="delta/result/nvt/bid != '' and delta/result/nvt/bid != 'NOBID'">
+                <xsl:value-of select="delta/result/nvt/bid/text()"/>
+              </xsl:if>
+            </xsl:variable>
+            <xsl:variable name="cert_ref_2" select="delta/result/nvt/cert"/>
+            <xsl:variable name="xref_2">
+              <xsl:if test="delta/result/nvt/xref != '' and delta/result/nvt/xref != 'NOXREF'">
+                <xsl:value-of select="delta/result/nvt/xref/text()"/>
+              </xsl:if>
+            </xsl:variable>
+            <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != '' or count($cert_ref_2/cert_ref)">
+              <div class="issue_box_box">
+                <b>References</b><br/>
+
+                <table>
+                  <xsl:call-template name="ref_cve_list">
+                    <xsl:with-param name="cvelist" select="$cve_ref_2"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="ref_bid_list">
+                    <xsl:with-param name="bidlist" select="$bid_ref_2"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="ref_cert_list">
+                    <xsl:with-param name="certlist" select="$cert_ref_2"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="ref_xref_list">
+                    <xsl:with-param name="xreflist" select="$xref_2"/>
+                  </xsl:call-template>
+                </table>
+              </div>
+            </xsl:if>
+            <div class="issue_box_box">
+              <b>Different Lines</b>
+              <p>
+                <xsl:call-template name="highlight-diff">
+                  <xsl:with-param name="string"><xsl:value-of select="delta/diff"/></xsl:with-param>
+                </xsl:call-template>
+              </p>
+            </div>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:variable name="delta">
+        <xsl:choose>
+          <xsl:when test="delta">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <a class="anchor" name="notes-{@id}"/>
+      <xsl:for-each select="notes/note">
         <xsl:choose>
           <xsl:when test="active = 0">
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="override-detailed">
-              <xsl:with-param name="override-buttons">
-                <xsl:value-of select="$override-buttons"/>
+            <xsl:call-template name="note-detailed">
+              <xsl:with-param name="note-buttons">
+                <xsl:value-of select="$note-buttons"/>
               </xsl:with-param>
               <xsl:with-param name="delta" select="$delta"/>
               <xsl:with-param name="next">
@@ -20276,14 +20256,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
-      <xsl:for-each select="delta/overrides/override">
+      <xsl:for-each select="delta/notes/note">
         <xsl:choose>
           <xsl:when test="active = 0">
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="override-detailed">
-              <xsl:with-param name="override-buttons">
-                <xsl:value-of select="$override-buttons"/>
+            <xsl:call-template name="note-detailed">
+              <xsl:with-param name="note-buttons">
+                <xsl:value-of select="$note-buttons"/>
               </xsl:with-param>
               <xsl:with-param name="delta" select="2"/>
               <xsl:with-param name="next">
@@ -20296,10 +20276,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
-    </xsl:when>
-    <xsl:otherwise>
-    </xsl:otherwise>
-  </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="$show-overrides = 1 or ../../filters/apply_overrides = 1">
+          <a class="anchor" name="overrides-{@id}"/>
+          <xsl:for-each select="overrides/override">
+            <xsl:choose>
+              <xsl:when test="active = 0">
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="override-detailed">
+                  <xsl:with-param name="override-buttons">
+                    <xsl:value-of select="$override-buttons"/>
+                  </xsl:with-param>
+                  <xsl:with-param name="delta" select="$delta"/>
+                  <xsl:with-param name="next">
+                    <xsl:choose>
+                      <xsl:when test="$result-details">get_result</xsl:when>
+                      <xsl:otherwise>get_report</xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+          <xsl:for-each select="delta/overrides/override">
+            <xsl:choose>
+              <xsl:when test="active = 0">
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="override-detailed">
+                  <xsl:with-param name="override-buttons">
+                    <xsl:value-of select="$override-buttons"/>
+                  </xsl:with-param>
+                  <xsl:with-param name="delta" select="2"/>
+                  <xsl:with-param name="next">
+                    <xsl:choose>
+                      <xsl:when test="$result-details">get_result</xsl:when>
+                      <xsl:otherwise>get_report</xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
 </xsl:template>
 
 <xsl:template name="result-detailed" match="result" mode="detailed">
@@ -20312,29 +20337,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <a class="anchor" name="result-{@id}"/>
 
-  <div class="issue_box_head" style="background:#ffffff">
-    <table width="100%" border="0">
-      <xsl:apply-templates select="." mode="result-header">
-        <xsl:with-param name="details-button" select="$details-button"/>
-        <xsl:with-param name="note-buttons" select="$note-buttons"/>
-        <xsl:with-param name="override-buttons" select="$override-buttons"/>
-        <xsl:with-param name="result-details" select="$result-details"/>
-        <xsl:with-param name="prognostic" select="$prognostic"/>
-      </xsl:apply-templates>
-      <tr style="padding:0px; color:#000000">
-        <td colspan="5">
-          <xsl:apply-templates select="." mode="result-body">
-            <xsl:with-param name="note-buttons" select="$note-buttons"/>
-            <xsl:with-param name="override-buttons" select="$override-buttons"/>
-            <xsl:with-param name="result-details" select="$result-details"/>
-            <xsl:with-param name="result-details" select="$show-overrides"/>
-            <xsl:with-param name="prognostic" select="$prognostic"/>
-          </xsl:apply-templates>
-        </td>
-      </tr>
-    </table>
-  </div>
-
+  <xsl:apply-templates select="." mode="result-header">
+    <xsl:with-param name="details-button" select="$details-button"/>
+    <xsl:with-param name="note-buttons" select="$note-buttons"/>
+    <xsl:with-param name="override-buttons" select="$override-buttons"/>
+    <xsl:with-param name="result-details" select="$result-details"/>
+    <xsl:with-param name="prognostic" select="$prognostic"/>
+  </xsl:apply-templates>
+  <xsl:apply-templates select="." mode="result-body">
+    <xsl:with-param name="note-buttons" select="$note-buttons"/>
+    <xsl:with-param name="override-buttons" select="$override-buttons"/>
+    <xsl:with-param name="result-details" select="$result-details"/>
+    <xsl:with-param name="result-details" select="$show-overrides"/>
+    <xsl:with-param name="prognostic" select="$prognostic"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <!--     GET_RESULT -->
@@ -21896,15 +21912,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:for-each select="../results/result[host/text() = $current_host]">
-      <xsl:call-template name="result-detailed">
-        <xsl:with-param name="prognostic" select="$prognostic"/>
-        <xsl:with-param name="details-button" select="$on"/>
-        <xsl:with-param name="note-buttons" select="$on"/>
-        <xsl:with-param name="override-buttons" select="$on"/>
-        <xsl:with-param name="show-overrides" select="$on"/>
-      </xsl:call-template>
-    </xsl:for-each>
+  <div class="issue_box_all">
+    <table width="100%">
+      <xsl:for-each select="../results/result[host/text() = $current_host]">
+        <xsl:call-template name="result-detailed">
+          <xsl:with-param name="prognostic" select="$prognostic"/>
+          <xsl:with-param name="details-button" select="$on"/>
+          <xsl:with-param name="note-buttons" select="$on"/>
+          <xsl:with-param name="override-buttons" select="$on"/>
+          <xsl:with-param name="show-overrides" select="$on"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </table>
+  </div>
   </xsl:for-each>
 </xsl:template>
 
