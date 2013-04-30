@@ -10277,15 +10277,11 @@ get_result (credentials_t *credentials, const char *result_id,
   int socket;
   gchar *html;
 
-  REQUIRE (apply_overrides, "/omp?cmd=get_tasks");
-  REQUIRE (autofp, "/omp?cmd=get_tasks");
+  if (apply_overrides == NULL)
+    apply_overrides = "1";
 
-  if (apply_overrides == NULL || autofp == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a result. "
-                         "Diagnostics: Required parameter was NULL.",
-                         "/omp?cmd=get_tasks");
+  if (autofp == NULL)
+    autofp = "0";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {

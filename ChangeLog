@@ -1,3 +1,8 @@
+2013-05-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_result): Make the command params optional, in case
+	the user crafts the URL by hand.
+
 2013-04-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (user_find): Add token bad or missing return.
