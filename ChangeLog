@@ -1,3 +1,7 @@
+2013-04-30  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_alert_omp): Don't send next element.
+
 2013-04-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (tagged_resource_link, tag, tag [details]): Rename

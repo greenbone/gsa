@@ -5292,12 +5292,10 @@ save_alert_omp (credentials_t * credentials, params_t *params)
   if (openvas_server_sendf (&session,
                             "<modify_alert alert_id=\"%s\">"
                             "<name>%s</name>"
-                            "<next>%s</next>"
                             "<filter id=\"%s\"/>"
                             "%s%s%s",
                             alert_id,
                             name,
-                            next,
                             filter_id,
                             comment ? "<comment>" : "",
                             comment ? comment : "",
