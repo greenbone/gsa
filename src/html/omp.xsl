@@ -6771,24 +6771,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- BEGIN TAGS MANAGEMENT -->
 
 <xsl:template name="tagged_resource_link">
-  <xsl:param name="res_type"/>
-  <xsl:param name="res_id"/>
-  <xsl:param name="res_name"/>
+  <xsl:param name="resource_type"/>
+  <xsl:param name="resource_id"/>
+  <xsl:param name="resource_name"/>
   <xsl:param name="token"/>
   <xsl:choose>
-    <xsl:when test="$res_type='cve' or $res_type='cpe' or $res_type='ovaldef' or $res_type='dfn_cert_adv'">
-      <a href="/omp?cmd=get_info&amp;info_type={$res_type}&amp;info_id={$res_id}&amp;details=1&amp;token={$token}">
-        <xsl:value-of select="$res_name"/>
+    <xsl:when test="$resource_type='cve' or $resource_type='cpe' or $resource_type='ovaldef' or $resource_type='dfn_cert_adv'">
+      <a href="/omp?cmd=get_info&amp;info_type={$resource_type}&amp;info_id={$resource_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:when>
-    <xsl:when test="$res_type='nvt'">
-      <a href="/omp?cmd=get_nvts&amp;oid={$res_id}&amp;details=1&amp;token={$token}">
-        <xsl:value-of select="$res_name"/>
+    <xsl:when test="$resource_type='nvt'">
+      <a href="/omp?cmd=get_nvts&amp;oid={$resource_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="/omp?cmd=get_{$res_type}&amp;{$res_type}_id={$res_id}&amp;details=1&amp;token={$token}">
-        <xsl:value-of select="$res_name"/>
+      <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
+        <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -6878,9 +6878,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="orphaned='0' and attach/name!=''">
           <xsl:call-template name="tagged_resource_link">
-            <xsl:with-param name="res_type" select="attach/type"/>
-            <xsl:with-param name="res_id" select="attach/id"/>
-            <xsl:with-param name="res_name" select="attach/name"/>
+            <xsl:with-param name="resource_type" select="attach/type"/>
+            <xsl:with-param name="resource_id" select="attach/id"/>
+            <xsl:with-param name="resource_name" select="attach/name"/>
             <xsl:with-param name="token" select="/envelope/token"/>
           </xsl:call-template>
         </xsl:when>
@@ -6961,9 +6961,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Attached to resource:</td>
               <td>
                 <xsl:call-template name="tagged_resource_link">
-                  <xsl:with-param name="res_type" select="attach/type"/>
-                  <xsl:with-param name="res_id" select="attach/id"/>
-                  <xsl:with-param name="res_name" select="attach/name"/>
+                  <xsl:with-param name="resource_type" select="attach/type"/>
+                  <xsl:with-param name="resource_id" select="attach/id"/>
+                  <xsl:with-param name="resource_name" select="attach/name"/>
                   <xsl:with-param name="token" select="/envelope/token"/>
                 </xsl:call-template>
               </td>

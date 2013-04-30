@@ -1,3 +1,9 @@
+2013-04-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (tagged_resource_link, tag, tag [details]): Rename
+	  res_type to resource_type,res_id to resource_id, res_name to
+	  resource_name for consistency.
+
 2013-04-29  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_many): Set rows in filter for GET_FILTERS to get
