@@ -22771,7 +22771,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
-                     size="30" maxlength="500"/>
+                     size="30" maxlength="2000"/>
             </td>
           </tr>
           <!-- Only if ldap-connect is enabled, it is per-user. !-->
@@ -23290,7 +23290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
               <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
-                     maxlength="500"/>
+                     maxlength="2000"/>
             </td>
           </tr>
           <!-- Only if per-user ldap enabled. -->

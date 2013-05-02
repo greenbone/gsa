@@ -1,5 +1,13 @@
 2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Make hosts_opt max length 2000 like
+	hosts.  80 was much too short.
+
+	* src/html/omp.xsl (html-create-user-form, user [edit]): Make length
+	2000 to match validator.
+
+2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (edit_resource, edit_task): Add default for parameter
 	"next", in case user crafts URL by hand.
 	(save_container_task_omp): Remove old sort params.  Add default for
