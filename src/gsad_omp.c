@@ -160,6 +160,8 @@ static char *get_report_format (credentials_t *, params_t *, const char *);
 
 static char *get_report_formats (credentials_t *, params_t *, const char *);
 
+static char *get_report_section (credentials_t *, params_t *, const char *);
+
 char *get_result_page (credentials_t *, params_t *, const char *);
 
 static char *get_schedule (credentials_t *, params_t *, const char *);
@@ -653,6 +655,9 @@ next_page (credentials_t *credentials, params_t *params, gchar *response)
 
   if (strcmp (next, "get_report_formats") == 0)
     return get_report_formats (credentials, params, response);
+
+  if (strcmp (next, "get_report_section") == 0)
+    return get_report_section (credentials, params, response);
 
   if (strcmp (next, "get_result") == 0)
     return get_result_page (credentials, params, response);
@@ -10190,7 +10195,8 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_section (credentials_t * credentials, params_t *params)
+get_report_section (credentials_t * credentials, params_t *params,
+                    const char *extra_xml)
 {
   GString *xml;
   const char *report_id, *report_section;
@@ -10213,6 +10219,8 @@ get_report_section (credentials_t * credentials, params_t *params)
 
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_report_%s_response>", report_section);
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
   g_string_append (xml, result);
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
@@ -10230,7 +10238,7 @@ get_report_section (credentials_t * credentials, params_t *params)
 char *
 get_report_section_omp (credentials_t * credentials, params_t *params)
 {
-  return get_report_section (credentials, params);
+  return get_report_section (credentials, params, NULL);
 }
 
 /**

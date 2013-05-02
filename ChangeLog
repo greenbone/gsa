@@ -1,5 +1,15 @@
 2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/gsad_omp.c: Add get_report_section header.
+	(next_page): Handle get_report_section case.
+	(get_report_section): Add argument for extra_xml.
+	(get_report_section_omp): Adapt for get_report_section interface change.
+
+	* src/html/omp.xsl (report [section-filter]): Fix create filter form
+	parameters.
+
+2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report-section-filter): Match report as
 	section-filter mode. Remove report parameter.
 	(report [hosts], report [ports], report [closed_cves])

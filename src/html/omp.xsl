@@ -20715,10 +20715,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="create_filter"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="term" value="{filters/term}"/>
-          <input type="hidden" name="optional_resource_type" value="report_section"/>
+          <input type="hidden" name="optional_resource_type" value="report"/>
           <input type="hidden" name="next" value="get_report_section"/>
           <input type="hidden" name="report_section" value="{$section}"/>
           <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+          <input type="hidden" name="comment" value=""/>
           <input type="text" name="name" value="" size="10"
                  maxlength="80" style="vertical-align:middle"/>
           <input type="image"
