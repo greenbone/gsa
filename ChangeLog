@@ -1,3 +1,14 @@
+2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (edit_resource, edit_task): Add default for parameter
+	"next", in case user crafts URL by hand.
+	(save_container_task_omp): Remove old sort params.  Add default for
+	"next".
+	(get_task): Remove duplicate task_id check.
+	(create_tag_omp): Remove NULL check on params.  This is already done in
+	the CHECK macro calls.
+	(edit_target, save_target_omp): Add default for "next".
+
 2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c: Add get_report_section header.

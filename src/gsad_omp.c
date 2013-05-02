@@ -1048,12 +1048,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                          "/omp?cmd=get_tasks");
 
   if (next == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while editing a resource. "
-                         "The resource remains as it was. "
-                         "Diagnostics: Required parameter 'next' was NULL.",
-                         "/omp?cmd=get_tasks");
+    next = "get_tasks";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2209,13 +2204,16 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml)
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
-  if (task_id == NULL || next == NULL)
+  if (task_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a task. "
                          "The task remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
+
+  if (next == NULL)
+    next = "get_task";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -2578,7 +2576,7 @@ char *
 save_container_task_omp (credentials_t * credentials, params_t *params)
 {
   gchar *response, *html;
-  const char *comment, *name, *next, *sort_field, *sort_order, *task_id;
+  const char *comment, *name, *next, *task_id;
   const char *observers, *in_assets;
   int ret;
   entity_t entity;
@@ -2587,8 +2585,6 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   next = params_value (params, "next");
-  sort_field = params_value (params, "sort_field");
-  sort_order = params_value (params, "sort_order");
   task_id = params_value (params, "task_id");
   observers = params_value (params, "observers");
 
@@ -2596,8 +2592,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
     return edit_task (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM ("Save Task"));
 
-  if (next == NULL || sort_field == NULL || sort_order == NULL
-      || task_id == NULL || in_assets == NULL)
+  if (task_id == NULL || in_assets == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while saving a task. "
@@ -2605,6 +2600,8 @@ save_container_task_omp (credentials_t * credentials, params_t *params)
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_tasks");
 
+  if (next == NULL)
+    next = "get_task";
 
   response = NULL;
   entity = NULL;
@@ -3076,13 +3073,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml)
     }
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
-
-  if (task_id == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while getting a task. "
-                         "Diagnostics: Required parameter task_id was NULL.",
-                         "/omp?cmd=get_tasks");
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -6403,15 +6393,6 @@ create_tag_omp (credentials_t *credentials, params_t *params)
   active = params_value (params, "active");
   CHECK (active)
 
-  if (name == NULL || comment == NULL || value == NULL
-      || attach_type == NULL || attach_id == NULL || active == NULL)
-    return gsad_message (credentials,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred while creating a new tag. "
-                         "No new tag was created. "
-                         "Diagnostics: A required parameter was NULL.",
-                         "/omp?cmd=get_tags");
-
   response = NULL;
   entity = NULL;
   switch (omp (credentials,
@@ -6978,18 +6959,21 @@ edit_target (credentials_t * credentials, params_t *params,
   const char *target_id, *next, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
-  next = params_value (params, "next");
   filter = params_value (params, "filter");
   first = params_value (params, "first");
   max = params_value (params, "max");
+  next = params_value (params, "next");
 
-  if (target_id == NULL || next == NULL)
+  if (target_id == NULL)
     return gsad_message (credentials,
                          "Internal error", __FUNCTION__, __LINE__,
                          "An internal error occurred while editing a target. "
                          "The target remains as it was. "
                          "Diagnostics: Required parameter was NULL.",
                          "/omp?cmd=get_targets");
+
+  if (next == NULL)
+    next = "get_target";
 
   switch (manager_connect (credentials, &socket, &session, &html))
     {
@@ -7211,9 +7195,11 @@ save_target_omp (credentials_t * credentials, params_t *params)
   target_smb_credential = params_value (params, "lsc_smb_credential_id");
   target_id = params_value (params, "target_id");
 
+  if (next == NULL)
+    next = "get_target";
+
   CHECK (name);
   CHECK (target_id);
-  CHECK (next);
   CHECK (target_source);
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
@@ -7364,14 +7350,14 @@ save_target_omp (credentials_t * credentials, params_t *params)
 
   /* Pass response to handler of following page. */
 
-  if (strcmp (params_value (params, "next"), "get_targets") == 0)
+  if (strcmp (next, "get_targets") == 0)
     {
       html = get_targets (credentials, params, response);
       g_free (response);
       return html;
     }
 
-  if (strcmp (params_value (params, "next"), "get_target") == 0)
+  if (strcmp (next, "get_target") == 0)
     {
       html = get_target (credentials, params, response);
       g_free (response);
