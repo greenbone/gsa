@@ -1,3 +1,10 @@
+2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (report-section-filter): Match report as
+	section-filter mode. Remove report parameter.
+	(report [hosts], report [ports], report [closed_cves])
+	(report [summary]): Adjust section-filter template call.
+
 2013-05-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/omp.xsl (user-tags-window): Change Icon for "Add Tag" to

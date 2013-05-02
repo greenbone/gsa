@@ -20705,8 +20705,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </select>
 </xsl:template>
 
-<xsl:template name="report-section-filter">
-  <xsl:param name="report"/>
+<xsl:template match="report" mode="section-filter">
   <xsl:param name="section">summary</xsl:param>
   <div style="background-color: #EEEEEE;">
     <div style="float: right">
@@ -20715,7 +20714,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="create_filter"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
-          <input type="hidden" name="term" value="{$report/filters/term}"/>
+          <input type="hidden" name="term" value="{filters/term}"/>
           <input type="hidden" name="optional_resource_type" value="report_section"/>
           <input type="hidden" name="next" value="get_report_section"/>
           <input type="hidden" name="report_section" value="{$section}"/>
@@ -20732,12 +20731,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
         <div style="display: inline; padding: 2px; vertical-align:middle;">
           <input type="hidden" name="cmd" value="get_report_section"/>
-          <input type="hidden" name="report_id" value="{$report/@id}"/>
+          <input type="hidden" name="report_id" value="{@id}"/>
           <input type="hidden" name="report_section" value="{$section}"/>
           <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id">
             <option value="">--</option>
-            <xsl:variable name="id" select="$report/filters/@id"/>
-            <xsl:for-each select="../filters/get_filters_response/filter">
+            <xsl:variable name="id" select="filters/@id"/>
+            <xsl:for-each select="../../../filters/get_filters_response/filter">
               <xsl:choose>
                 <xsl:when test="@id = $id">
                   <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -20764,12 +20763,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <form action="" method="get">
       <input type="hidden" name="cmd" value="get_report_section"/>
-      <input type="hidden" name="report_id" value="{$report/@id}"/>
+      <input type="hidden" name="report_id" value="{@id}"/>
       <input type="hidden" name="report_section" value="{$section}"/>
       <div style="padding: 2px;">
         Filter:
         <input type="text" name="filter" size="57"
-               value="{concat ($report/filters/term, ' ')}"
+               value="{concat (filters/term, ' ')}"
                maxlength="1000"/>
         <input type="image"
                name="Update Filter"
@@ -20831,10 +20830,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="report"/>
+      <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'hosts'"/>
-      </xsl:call-template>
+      </xsl:apply-templates>
 
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
@@ -21015,10 +21013,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="report"/>
+      <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'ports'"/>
-      </xsl:call-template>
+      </xsl:apply-templates>
 
       <table class="gbntable" cellpadding="4">
           <col/>
@@ -21121,10 +21118,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="report"/>
+      <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'closed_cves'"/>
-      </xsl:call-template>
+      </xsl:apply-templates>
 
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
@@ -21206,10 +21202,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <xsl:call-template name="report-section-filter">
-        <xsl:with-param name="report" select="report"/>
+      <xsl:apply-templates select="report" mode="section-filter">
         <xsl:with-param name="section" select="'summary'"/>
-      </xsl:call-template>
+      </xsl:apply-templates>
 
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
