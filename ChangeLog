@@ -1,5 +1,12 @@
 2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [result-pager]): New template.
+	(html-report-details): Rename for consistency into report [results].
+	Refactor code into report result-pager template.
+	(get_reports_response): Call report [results] template.
+
+2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/gsad.c (init_validator): Fix port parameter regex to allow
 	returned port names values.
 

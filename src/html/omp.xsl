@@ -1559,7 +1559,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </table>
 </xsl:template>
 
-<xsl:template name="html-report-details">
+<xsl:template match="report" mode="results-pager">
+  <xsl:variable name="levels"
+                select="report/filters/text()"/>
+  <xsl:choose>
+    <xsl:when test="count(report/results/result) &gt; 0">
+      <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
+      <xsl:if test = "report/results/@start &gt; 1">
+        <xsl:choose>
+          <xsl:when test="../../delta">
+            <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+          </xsl:when>
+          <xsl:when test="@type='prognostic'">
+            <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:value-of select="report/results/@start"/> -
+      <xsl:value-of select="$last"/>
+      of <xsl:value-of select="report/result_count/filtered"/>
+      (total: <xsl:value-of select="report/result_count/text()"/>)
+      <xsl:if test = "$last &lt; report/result_count/filtered">
+        <xsl:choose>
+          <xsl:when test="../../delta">
+            <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
+          </xsl:when>
+          <xsl:when test="@type='prognostic'">
+            <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="vertical-align: text-top; margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="report" mode="results">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
   <xsl:variable name="apply-overrides"
@@ -1574,43 +1616,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="@type='prognostic'">Prognostic</xsl:if>
       Results
 
-      <xsl:choose>
-        <xsl:when test="count(report/results/result) &gt; 0">
-          <xsl:variable name="last" select="report/results/@start + count(report/results/result) - 1"/>
-          <xsl:if test = "report/results/@start &gt; 1">
-            <xsl:choose>
-              <xsl:when test="../../delta">
-                <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
-              </xsl:when>
-              <xsl:when test="@type='prognostic'">
-                <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start - report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/previous.png" border="0" title="Previous"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:if>
-          <xsl:value-of select="report/results/@start"/> -
-          <xsl:value-of select="$last"/>
-          of <xsl:value-of select="report/result_count/filtered"/>
-          <xsl:if test = "$last &lt; report/result_count/filtered">
-            <xsl:choose>
-              <xsl:when test="../../delta">
-                <a href="?cmd=get_report&amp;delta_report_id={../../delta}&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;delta_states={report/filters/delta/text()}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
-              </xsl:when>
-              <xsl:when test="@type='prognostic'">
-                <a href="?cmd=get_report&amp;type=prognostic&amp;host={report/filters/host}&amp;pos=1&amp;host_search_phrase={../../host_search_phrase}&amp;host_levels={../../host_levels}&amp;host_first_result={../../results/@start}&amp;host_max_results={../../results/@max}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="?cmd=get_report&amp;report_id={report/@id}&amp;first_result={report/results/@start + report/results/@max}&amp;max_results={report/results/@max}&amp;levels={$levels}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;notes={report/filters/notes}&amp;overrides={report/filters/apply_overrides}&amp;result_hosts_only={report/filters/result_hosts_only}&amp;apply_min_cvss_base={number (string-length (report/filters/min_cvss_base) &gt; 0)}&amp;min_cvss_base={report/filters/min_cvss_base}&amp;search_phrase={report/filters/phrase}&amp;autofp={report/filters/autofp}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/next.png" border="0" title="Next"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-      </xsl:choose>
-
+      <xsl:apply-templates select="." mode="results-pager"/>
       <xsl:call-template name="report-help-icon"/>
       <div id="small_inline_form" style="vertical-align: text-top;display: inline; margin-left: 8px; font-weight: normal;">
         <form action="/omp" method="get">
@@ -18329,7 +18335,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="assets"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="html-report-details"/>
+            <xsl:apply-templates select="." mode="results"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
