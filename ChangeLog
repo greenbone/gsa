@@ -1,3 +1,19 @@
+2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Describe and sync feeds via OMP instead of OAP.
+
+	* src/gsad.c (exec_omp_post): Switch commands to OMP.
+
+	* src/gsad_oap.c (get_feed_oap, get_scap_oap, get_cert_oap)
+	(sync_feed_oap, sync_scap_oap, sync_cert_oap): Remove.  Replaced by OMP
+	equivalents.
+
+	* src/gsad_omp.c (get_feed_omp, get_scap_omp, get_cert_omp)
+	(sync_feed_omp, sync_scap_omp, sync_cert_omp): Remove.  OMP equivalents
+	of remove OAP versions.
+
+	* src/gsad_oap.h, src/gsad_omp.h: Update headers accordingly.
+
 2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report [result-pager]): New template.

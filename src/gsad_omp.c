@@ -16098,6 +16098,438 @@ import_port_list_omp (credentials_t * credentials, params_t *params)
 }
 
 
+/* Feeds. */
+
+/**
+ * @brief Get descriptions of the feed(s) connected to the manager.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_feed_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_feed_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the feed list. "
+                             "The current list of feeds is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_feed/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the feed list. "
+                           "The current list of feeds is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the feed. "
+                           "The current list of feeds is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_feed_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Get descriptions of the scap feed(s) connected to the manager.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_scap_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_scap_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the SCAP feed list. "
+                             "The current list of SCAP feeds is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List SCAP Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_scap/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the SCAP feed list. "
+                           "The current list of SCAP feeds is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting SCAP the feed. "
+                           "The current list of SCAP feeds is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_scap_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Get descriptions of the CERT feed(s) connected to the manager.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_cert_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In get_cert_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the CERT feed list. "
+                             "The current list of CERT feeds is not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"List CERT Feeds\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<describe_cert/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the CERT feed list. "
+                           "The current list of CERT feeds is not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while getting the CERT feed. "
+                           "The current list of CERT feeds is not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("get_cert_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Synchronize with an NVT feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_feed_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In sync_feed_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the NVT feed. "
+                             "Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_feed/>"
+                            "<describe_feed/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the NVT feed. "
+                           "Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the NVT feed. "
+                           "Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("sync_feed_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Synchronize with a SCAP feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_scap_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In sync_scap_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the SCAP feed. "
+                             "SCAP Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize SCAP Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_scap/>"
+                            "<describe_scap/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the SCAP feed. "
+                           "SCAP Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the SCAP feed. "
+                           "SCAP Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("sync_scap_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+/**
+ * @brief Synchronize with a CERT feed and XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication
+ * @param[in]  params       Request parameters.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+sync_cert_omp (credentials_t * credentials, params_t *params)
+{
+  tracef ("In sync_cert_omp\n");
+  entity_t entity;
+  char *text = NULL;
+  gnutls_session_t session;
+  int socket;
+  gchar *html;
+
+  switch (manager_connect (credentials, &socket, &session, &html))
+    {
+      case -1:
+        if (html)
+          return html;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while synchronizing with the CERT feed. "
+                             "CERT Feed synchronization is currently not available. "
+                             "Diagnostics: Failure to connect to manager daemon.",
+                             "/omp?cmd=get_tasks");
+      case -2:
+        return xsl_transform_omp (credentials,
+                                  g_strdup
+                                   ("<gsad_msg status_text=\"Access refused.\""
+                                    " operation=\"Synchronize CERT Feed\">"
+                                    "Only users given the Administrator role"
+                                    " may access Feed Administration."
+                                    "</gsad_msg>"));
+    }
+
+  if (openvas_server_sendf (&session,
+                            "<commands>"
+                            "<sync_cert/>"
+                            "<describe_cert/>"
+                            "</commands>")
+      == -1)
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the CERT feed. "
+                           "CERT Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  if (read_entity_and_text (&session, &entity, &text))
+    {
+      openvas_server_close (socket, session);
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while synchronizing with the CERT feed. "
+                           "CERT Feed synchronization is currently not available. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_tasks");
+    }
+
+  openvas_server_close (socket, session);
+  tracef ("sync_cert_omp: got text: %s", text);
+  fflush (stderr);
+  return xsl_transform_omp (credentials, text);
+}
+
+
 /* Filters. */
 
 /**

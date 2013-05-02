@@ -37,12 +37,6 @@
 
 void oap_init (const gchar *, int);
 
-char * get_feed_oap (credentials_t *, params_t *);
-char * get_scap_oap (credentials_t *, params_t *);
-char * get_cert_oap (credentials_t *, params_t *);
-char * sync_feed_oap (credentials_t *, params_t *);
-char * sync_scap_oap (credentials_t *, params_t *);
-char * sync_cert_oap (credentials_t *, params_t *);
 char * get_settings_oap (credentials_t *, params_t *);
 char * edit_settings_oap (credentials_t *, params_t *);
 char * save_settings_oap (credentials_t *, params_t *);
