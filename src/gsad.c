@@ -826,7 +826,7 @@ init_validator ()
   openvas_validator_add (validator, "package_format", "^(key)|(rpm)|(deb)|(exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
   openvas_validator_add (validator, "password:value", "(?s)^.*$");
-  openvas_validator_add (validator, "port",       "^[-[:alnum:] \\(\\)_/]{1,400}$");
+  openvas_validator_add (validator, "port",       "^.{1,60}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
   openvas_validator_add (validator, "port_type", "^tcp|udp$");
   /** @todo Better regex. */
