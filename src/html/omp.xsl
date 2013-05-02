@@ -989,14 +989,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="resource_id"/>
   <xsl:param name="next"/>
 
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <tr class="{$class}">
+  <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="name"/></td>
     <td><xsl:value-of select="value"/></td>
     <td><xsl:value-of select="comment"/></td>
@@ -2937,13 +2930,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="report" name="report">
   <xsl:param name="container">0</xsl:param>
   <xsl:param name="observed">0</xsl:param>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/></b><br/>
       <xsl:choose>
@@ -3646,13 +3634,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates select="report"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="class">
-        <xsl:choose>
-          <xsl:when test="position() mod 2 = 0">even</xsl:when>
-          <xsl:otherwise>odd</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <tr class="{$class}">
+
+      <tr class="{gsa:table-row-class(position())}">
         <td>
           <div class="float_right">
             <xsl:choose>
@@ -3808,13 +3791,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </func:function>
 
 <xsl:template match="task" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -4243,13 +4221,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_lsc_credential&amp;lsc_credential_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -4280,13 +4253,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="lsc_credential" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
     </td>
@@ -4359,13 +4327,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="targets/target">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}"
@@ -4605,13 +4568,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     AGENT -->
 
 <xsl:template match="agent">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_agent&amp;agent_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -4654,13 +4612,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="agent" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -5678,13 +5631,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     ALERT -->
 
 <xsl:template match="alert">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -5754,13 +5702,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="alert" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -6052,13 +5995,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="tasks/task">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -6391,13 +6329,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="filter">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_filter&amp;filter_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -6424,13 +6357,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="filter" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <xsl:value-of select="name"/>
@@ -6510,13 +6438,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="alerts/alert">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -6838,13 +6761,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="tag">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../tags/@start}&amp;max={../tags/@max}&amp;token={/envelope/token}">
@@ -7002,13 +6920,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="tag" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -8012,13 +7925,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     TARGET -->
 
 <xsl:template match="target">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;first={../targets/@start}&amp;max={../targets/@max}&amp;token={/envelope/token}">
@@ -8070,13 +7978,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="target" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -8229,13 +8132,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="tasks/task">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -8508,13 +8406,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="all/get_nvts_response/nvt" >
               <xsl:variable name="current_name" select="name/text()"/>
               <xsl:variable name="id" select="@oid"/>
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="$current_name"/></td>
                 <td>
                   <xsl:value-of select="@oid"/>
@@ -8602,13 +8495,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <xsl:for-each select="get_nvts_response/nvt" >
             <xsl:variable name="current_name" select="name/text()"/>
-            <xsl:variable name="class">
-              <xsl:choose>
-                <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                <xsl:otherwise>odd</xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <tr class="{$class}">
+
+            <tr class="{gsa:table-row-class(position())}">
               <td><xsl:value-of select="$current_name"/></td>
               <td>
                 <xsl:value-of select="@oid"/>
@@ -8673,13 +8561,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="config_id"></xsl:param>
   <xsl:param name="config_name"></xsl:param>
   <xsl:param name="edit"></xsl:param>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="nvt/name"/></td>
     <td><xsl:value-of select="name"/></td>
     <td>
@@ -8718,13 +8601,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="preference-details" match="preference" mode="details">
   <xsl:param name="config"></xsl:param>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="name"/></td>
     <td>
       <xsl:choose>
@@ -8755,13 +8633,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="for_config_details"></xsl:param>
   <xsl:param name="family"></xsl:param>
   <xsl:param name="nvt"></xsl:param>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <xsl:if test="$for_config_details">
       <td><xsl:value-of select="nvt/name"/></td>
     </xsl:if>
@@ -9187,13 +9060,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="name=''">
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="class">
-        <xsl:choose>
-          <xsl:when test="position() mod 2 = 0">even</xsl:when>
-          <xsl:otherwise>odd</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <tr class="{$class}">
+
+      <tr class="{gsa:table-row-class(position())}">
         <td><xsl:value-of select="$current_name"/></td>
         <td>
           <xsl:choose>
@@ -9293,13 +9161,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="name=''">
     </xsl:when>
     <xsl:otherwise>
-      <xsl:variable name="class">
-        <xsl:choose>
-          <xsl:when test="position() mod 2 = 0">even</xsl:when>
-          <xsl:otherwise>odd</xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <tr class="{$class}">
+
+      <tr class="{gsa:table-row-class(position())}">
         <td><xsl:value-of select="$current_name"/></td>
         <td>
           <xsl:choose>
@@ -9712,13 +9575,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td>Actions</td>
           </tr>
           <xsl:for-each select="$config/tasks/task">
-            <xsl:variable name="class">
-              <xsl:choose>
-                <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                <xsl:otherwise>odd</xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <tr class="{$class}">
+
+            <tr class="{gsa:table-row-class(position())}">
               <td><xsl:value-of select="name"/></td>
               <td width="100">
                 <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -9881,13 +9739,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- CONFIG -->
 
 <xsl:template match="config">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -9967,13 +9820,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="config" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -11272,13 +11120,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="schedule">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_schedule&amp;schedule_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -11350,13 +11193,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="schedule" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -11530,13 +11368,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="tasks/task">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -11829,13 +11662,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     SLAVE -->
 
 <xsl:template match="slave">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -11863,13 +11691,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="slave" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -11952,13 +11775,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="tasks/task">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -12132,13 +11950,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/cpe">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <xsl:call-template name="get_info_cpe_lnk">
@@ -12191,13 +12004,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/cve">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tbody class="{$class}">
+
+  <tbody class="{gsa:table-row-class(position())}">
     <tr>
       <td rowspan="2">
         <b>
@@ -12310,13 +12118,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/nvt">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <xsl:call-template name="get_info_nvt_lnk">
@@ -12386,13 +12189,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/ovaldef">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tbody class="{$class}">
+
+  <tbody class="{gsa:table-row-class(position())}">
     <tr>
       <td rowspan="2">
         <b>
@@ -12494,13 +12292,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/dfn_cert_adv">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <xsl:call-template name="get_info_dfn_cert_adv_lnk">
@@ -12534,13 +12327,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="info/allinfo">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tbody class="{$class}">
+
+  <tbody class="{gsa:table-row-class(position())}">
     <tr>
       <td rowspan="2">
         <b>
@@ -13791,13 +13579,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>Actions</td>
                 </tr>
                 <xsl:for-each select="info/cve/cert/cert_ref">
-                  <xsl:variable name="class">
-                    <xsl:choose>
-                      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                      <xsl:otherwise>odd</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <tr class="{$class}">
+
+                  <tr class="{gsa:table-row-class(position())}">
                     <td><xsl:value-of select="name"/></td>
                     <td><xsl:value-of select="title"/></td>
                     <td width="100">
@@ -13834,13 +13617,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <xsl:for-each select="info/cve/raw_data/cve:entry/vuln:vulnerable-software-list/vuln:product">
                   <xsl:sort select="text()"/>
-                  <xsl:variable name="class">
-                    <xsl:choose>
-                      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                      <xsl:otherwise>odd</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <tr class="{$class}">
+
+                  <tr class="{gsa:table-row-class(position())}">
                     <td><xsl:value-of select="text()"/></td>
                     <td width="100">
                       <a href="?cmd=get_info&amp;info_type=cpe&amp;info_name={text()}&amp;details=1&amp;token={/envelope/token}"
@@ -13869,13 +13647,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>Actions</td>
                 </tr>
                 <xsl:for-each select="info/cve/nvts/nvt">
-                  <xsl:variable name="class">
-                    <xsl:choose>
-                      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                      <xsl:otherwise>odd</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <tr class="{$class}">
+
+                  <tr class="{gsa:table-row-class(position())}">
                     <td><xsl:value-of select="name"/></td>
                     <td width="100">
                       <a href="?cmd=get_nvts&amp;oid={@oid}&amp;token={/envelope/token}" title="Details">
@@ -14019,13 +13792,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="info/cpe/cves/cve">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="cve:entry/@id"/></td>
                 <td>
                   <xsl:call-template name="severity-bar">
@@ -14163,13 +13931,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>Name</td>
                 </tr>
                 <xsl:for-each select="./*">
-                <xsl:variable name="class">
-                  <xsl:choose>
-                    <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                    <xsl:otherwise>odd</xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <tr class="{$class}">
+
+                <tr class="{gsa:table-row-class(position())}">
                   <td><xsl:value-of select="name()"/></td>
                   <td><xsl:value-of select="text()"/></td>
                 </tr>
@@ -14204,13 +13967,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <td>URL</td>
                 </tr>
                 <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference">
-                  <xsl:variable name="class">
-                    <xsl:choose>
-                      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                      <xsl:otherwise>odd</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <tr class="{$class}">
+
+                  <tr class="{gsa:table-row-class(position())}">
                   <td><xsl:value-of select="./@source"/></td>
                   <td>
                   <xsl:choose>
@@ -14253,13 +14011,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td>Contributors</td>
               </tr>
               <xsl:for-each select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:dates/*">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name()"/>
                   <xsl:if test="name() = 'status_change'">
                     <i> (<xsl:value-of select="text()"/>)</i>
@@ -15370,13 +15123,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next">get_notes</xsl:param>
   <xsl:param name="params"/>
   <xsl:param name="params-get"/>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
       <xsl:choose>
@@ -15428,13 +15176,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next">get_notes</xsl:param>
   <xsl:param name="params"/>
   <xsl:param name="params-get"/>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
       <xsl:choose>
@@ -16417,13 +16160,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next">get_overrides</xsl:param>
   <xsl:param name="params"/>
   <xsl:param name="params-get"/>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
       <xsl:choose>
@@ -16488,13 +16226,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="next">get_overrides</xsl:param>
   <xsl:param name="params"/>
   <xsl:param name="params-get"/>
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <xsl:variable name="max" select="70"/>
       <xsl:choose>
@@ -16811,13 +16544,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="group">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;group={../groups/term}&amp;token={/envelope/token}">
@@ -16842,13 +16570,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="group" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <xsl:value-of select="name"/>
@@ -17130,13 +16853,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="permission">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <div class="float_right">
         <xsl:choose>
@@ -17240,13 +16958,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="permission" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <div class="float_right">
         <xsl:choose>
@@ -17579,13 +17292,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     PORT_LIST -->
 
 <xsl:template match="port_list">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_port_list&amp;port_list_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">
@@ -17619,13 +17327,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="port_list" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -17703,13 +17406,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="in_use" select="in_use"/>
         <xsl:for-each select="port_ranges/port_range">
-          <xsl:variable name="class">
-            <xsl:choose>
-              <xsl:when test="position() mod 2 = 0">even</xsl:when>
-              <xsl:otherwise>odd</xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <tr class="{$class}">
+
+          <tr class="{gsa:table-row-class(position())}">
             <td><xsl:value-of select="start"/></td>
             <td><xsl:value-of select="end"/></td>
             <td><xsl:value-of select="type"/></td>
@@ -17729,13 +17427,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="targets/target">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_target&amp;target_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -17901,13 +17594,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>Actions</td>
         </tr>
         <xsl:for-each select="commands_response/get_port_lists_response/port_list/port_ranges/port_range">
-          <xsl:variable name="class">
-            <xsl:choose>
-              <xsl:when test="position() mod 2 = 0">even</xsl:when>
-              <xsl:otherwise>odd</xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <tr class="{$class}">
+
+          <tr class="{gsa:table-row-class(position())}">
             <td><xsl:value-of select="start"/></td>
             <td><xsl:value-of select="end"/></td>
             <td><xsl:value-of select="type"/></td>
@@ -18242,13 +17930,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     REPORT_FORMAT -->
 
 <xsl:template match="report_format">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
@@ -18299,13 +17982,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report_format" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
@@ -18356,13 +18034,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Value</td>
       </tr>
       <xsl:for-each select="param">
-        <xsl:variable name="class">
-          <xsl:choose>
-            <xsl:when test="position() mod 2 = 0">even</xsl:when>
-            <xsl:otherwise>odd</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <tr class="{$class}">
+
+        <tr class="{gsa:table-row-class(position())}">
           <td>
             <xsl:value-of select="name"/>
           </td>
@@ -18448,13 +18121,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>Value</td>
       </tr>
       <xsl:for-each select="param">
-        <xsl:variable name="class">
-          <xsl:choose>
-            <xsl:when test="position() mod 2 = 0">even</xsl:when>
-            <xsl:otherwise>odd</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <tr class="{$class}">
+
+        <tr class="{gsa:table-row-class(position())}">
           <td><xsl:value-of select="name"/></td>
           <td>
             <xsl:choose>
@@ -18561,13 +18229,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>Actions</td>
             </tr>
             <xsl:for-each select="alerts/alert">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <td><xsl:value-of select="name"/></td>
                 <td width="100">
                   <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="Details">
@@ -18975,14 +18638,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td style="font-size:10px;">Threats</td>
             </tr>
             <xsl:for-each select="detail[name = 'App']">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:variable name="app" select="value"/>
-              <tr class="{$class}">
+
+              <tr class="{gsa:table-row-class(position())}">
                 <xsl:variable name="cve"
                               select="../detail[name = concat ($app, '/CVE')]/value"/>
                 <xsl:variable name="threats"
@@ -19728,13 +19385,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="result" mode="overview">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="port"/></td>
     <td><xsl:value-of select="threat"/></td>
   </tr>
@@ -21870,13 +21522,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="port">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td><xsl:value-of select="text()"/></td>
     <td><xsl:value-of select="threat"/></td>
   </tr>
@@ -22890,13 +22537,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     USER -->
 
 <xsl:template match="user">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+
+  <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
         <a href="/omp?cmd=get_user&amp;user_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}">

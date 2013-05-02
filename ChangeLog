@@ -1,3 +1,8 @@
+2013-05-02  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl: Clean code. Replace code to calculate table row
+	class in all templates with gsa:table-row-class.
+
 2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Make hosts_opt max length 2000 like
