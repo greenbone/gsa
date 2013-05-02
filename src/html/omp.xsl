@@ -940,14 +940,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="Add tag"
             style="margin-left:3px;">
-              <img src="/img/tag.png" border="0" alt="Add tag"/>
+              <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=new_tag&amp;attach_id={$resource_id}&amp;attach_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="Add tag"
             style="margin-left:3px;">
-              <img src="/img/tag.png" border="0" alt="Add tag"/>
+              <img src="/img/new.png" border="0" alt="Add tag"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>

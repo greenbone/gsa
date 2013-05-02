@@ -1,3 +1,8 @@
+2013-05-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/omp.xsl (user-tags-window): Change Icon for "Add Tag" to
+	"new.png".
+
 2013-05-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_result): Make the command params optional, in case
