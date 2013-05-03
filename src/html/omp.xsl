@@ -19485,7 +19485,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </td>
     <td> <!-- Host -->
-      <xsl:value-of select="host"/>
+      <xsl:variable name="ip" select="host"/>
+      <xsl:variable name="hostname"
+                    select="../../host[ip = $ip]/detail[name = 'hostname']/value"/>
+
+      <xsl:value-of select="$ip"/>
+      <xsl:if test="$hostname != ''">
+        (<xsl:value-of select="$hostname"/>)
+      </xsl:if>
     </td>
     <td> <!-- Location -->
       <xsl:choose>

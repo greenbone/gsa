@@ -1,3 +1,8 @@
+2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (result [result-header]): Add hostname next to IP
+	address when available.
+
 2013-05-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Describe and sync feeds via OMP instead of OAP.
