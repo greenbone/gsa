@@ -20499,6 +20499,76 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                        mode="hosts"/>
 </xsl:template>
 
+<xsl:template name="report-hosts-link">
+  <xsl:param name="report_id"/>
+  <xsl:param name="current_host"/>
+  <xsl:param name="levels"/>
+  <xsl:param name="filter"/>
+  <xsl:param name="name">
+    <xsl:choose>
+      <xsl:when test="$levels = 'h'">High</xsl:when>
+      <xsl:when test="$levels = 'm'">Medium</xsl:when>
+      <xsl:when test="$levels = 'l'">Low</xsl:when>
+      <xsl:when test="$levels = 'g'">Log</xsl:when>
+      <xsl:when test="$levels = 'f'">False Positive</xsl:when>
+      <xsl:when test="$levels = 'hmlgf'">All</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:variable name="count">
+    <xsl:choose>
+      <xsl:when test="$name = 'All' and $current_host = ''">
+        <xsl:value-of select="count(report/results/result)"/>
+      </xsl:when>
+      <xsl:when test="$name = 'All'">
+        <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+      </xsl:when>
+      <xsl:when test="$current_host = ''">
+        <xsl:value-of select="count(report/results/result[threat/text() = $name])"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = $name])"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$count &gt; 0 and $current_host = ''">
+      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=levels={$levels} {$filter}&amp;token={/envelope/token}"
+         title="Report: Summary ({$name})" style="margin-left:3px;">
+         <xsl:value-of select="$count"/>
+      </a>
+    </xsl:when>
+    <xsl:when test="$count &gt; 0">
+      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{$current_host}&#34; levels={$levels} {$filter}&amp;token={/envelope/token}"
+         title="Report: Summary ({$current_host} {$name})" style="margin-left:3px;">
+         <xsl:value-of select="$count"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$count"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="report-ports-link">
+  <xsl:param name="report_id"/>
+  <xsl:param name="current_host"/>
+  <xsl:param name="count"/>
+  <xsl:param name="filter"/>
+
+  <xsl:choose>
+    <xsl:when test="$count &gt; 0">
+        <a href="/omp?cmd=get_report_section&amp;report_id={$report_id}&amp;report_section=ports&amp;filter==&#34;{$current_host}&#34; {$filter}&amp;token={/envelope/token}"
+         title="Report: Ports ({$current_host})" style="margin-left:3px;">
+        <xsl:value-of select="$count"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$count"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="report" mode="hosts">
   <xsl:apply-templates select="gsad_msg"/>
   <div class="gb_window">
@@ -20565,7 +20635,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:value-of select="count (str:tokenize (detail[name = 'ports']/value, ','))"/>
+              <xsl:variable name="port-count" select="count (../ports/port[host = $current_host and not(contains(text(), 'general/'))])"/>
+
+              <xsl:call-template name="report-ports-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="count" select="$port-count"/>
+              </xsl:call-template>
             </td>
             <td>
               <xsl:value-of select="count (detail[name = 'App'])"/>
@@ -20587,40 +20664,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=h&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} High)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'High'])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'h'"/>
+              </xsl:call-template>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=m&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} Medium)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Medium'])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'m'"/>
+              </xsl:call-template>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=l&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} Low)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Low'])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'l'"/>
+              </xsl:call-template>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=g&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} Log)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'Log'])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'g'"/>
+              </xsl:call-template>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=f&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} False Positive)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = 'False Positive'])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'f'"/>
+              </xsl:call-template>
             </td>
             <td style="text-align:right">
-              <a href="/omp?cmd=get_report&amp;report_id={$id}&amp;filter==&#34;{$current_host}&#34; levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
-                 title="Report: Summary ({$current_host} All)" style="margin-left:3px;">
-                <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
-              </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="current_host" select="$current_host"/>
+                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="levels" select="'hmlgf'"/>
+              </xsl:call-template>
             </td>
           </tr>
         </xsl:for-each>
@@ -20633,40 +20722,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td></td>
           <td></td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=h&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (High)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result[threat/text() = 'High'])"/>
-            </a>
+              <xsl:call-template name="report-hosts-link">
+                <xsl:with-param name="report_id" select="report/@id"/>
+                <xsl:with-param name="levels" select="'h'"/>
+                <xsl:with-param name="filter" select="report/filters/term"/>
+              </xsl:call-template>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=m&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (Medium)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result[threat/text() = 'Medium'])"/>
-            </a>
+            <xsl:call-template name="report-hosts-link">
+              <xsl:with-param name="report_id" select="report/@id"/>
+              <xsl:with-param name="levels" select="'m'"/>
+              <xsl:with-param name="filter" select="report/filters/term"/>
+            </xsl:call-template>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=l&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (Low)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result[threat/text() = 'Low'])"/>
-            </a>
+            <xsl:call-template name="report-hosts-link">
+              <xsl:with-param name="report_id" select="report/@id"/>
+              <xsl:with-param name="levels" select="'l'"/>
+              <xsl:with-param name="filter" select="report/filters/term"/>
+            </xsl:call-template>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=g&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (Log)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result[threat/text() = 'Log'])"/>
-            </a>
+            <xsl:call-template name="report-hosts-link">
+              <xsl:with-param name="report_id" select="report/@id"/>
+              <xsl:with-param name="levels" select="'g'"/>
+              <xsl:with-param name="filter" select="report/filters/term"/>
+            </xsl:call-template>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=f&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (False Positive)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result[threat/text() = 'False Positive'])"/>
-            </a>
+            <xsl:call-template name="report-hosts-link">
+              <xsl:with-param name="report_id" select="report/@id"/>
+              <xsl:with-param name="levels" select="'f'"/>
+              <xsl:with-param name="filter" select="report/filters/term"/>
+            </xsl:call-template>
           </td>
           <td style="text-align:right">
-            <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter=levels=hmlgf&amp;filt_id=&amp;token={/envelope/token}"
-               title="Report: Summary (All)" style="margin-left:3px;">
-              <xsl:value-of select="count(report/results/result)"/>
-            </a>
+            <xsl:call-template name="report-hosts-link">
+              <xsl:with-param name="report_id" select="report/@id"/>
+              <xsl:with-param name="levels" select="'hmlgf'"/>
+              <xsl:with-param name="filter" select="report/filters/term"/>
+            </xsl:call-template>
           </td>
         </tr>
       </table>

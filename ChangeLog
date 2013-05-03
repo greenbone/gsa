@@ -1,5 +1,12 @@
 2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report-hosts-link, report-ports-link): New
+	templates.
+	(report [hosts]): Fix ports number count. Refactor code in new
+	templates.
+
+2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (gsa:date-diff): New function.
 	(report [summary]): Remove order by results row. Add scan duration row.
 
