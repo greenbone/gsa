@@ -910,7 +910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </xsl:template>
 
-<!-- General tags table -->
+<!-- General tags views -->
 
 <xsl:template name="user-tags-window">
   <xsl:param name="resource_type"/>
@@ -1104,7 +1104,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<!-- END General tags table -->
+<xsl:template name="user_tag_list">
+  <xsl:param name="user_tags" select="user_tags" />
+  <xsl:for-each select="user_tags/tag">
+    <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;token={/envelope/token}">
+      <xsl:value-of select="name"/>
+      <xsl:if test="value != ''">=<xsl:value-of select="value"/></xsl:if>
+    </a>
+    <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
+  </xsl:for-each>
+</xsl:template>
+
+<!-- END General tags views -->
 
 <xsl:template match="sort">
 </xsl:template>
@@ -6746,6 +6757,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:when>
+    <!-- FIXME: Make get_result work without task_id param and link correctly-->
+    <xsl:when test="$resource_type='result'">
+      <xsl:value-of select="$resource_name"/>
+    </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
         <xsl:value-of select="$resource_name"/>
@@ -7073,6 +7088,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="opt">
     <xsl:with-param name="value" select="'report_format'"/>
     <xsl:with-param name="content" select="'Report Format'"/>
+    <xsl:with-param name="select-value" select="$select_type"/>
+  </xsl:call-template>
+    <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="'result'"/>
+    <xsl:with-param name="content" select="'Result'"/>
     <xsl:with-param name="select-value" select="$select_type"/>
   </xsl:call-template>
   <xsl:call-template name="opt">
@@ -18786,6 +18806,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="get_reports_alert_response"/>
   <xsl:apply-templates select="get_reports_response"/>
+  <xsl:for-each select="get_reports_response/report/report">
+    <xsl:call-template name="user-tags-window">
+      <xsl:with-param name="resource_type" select="'report'"/>
+      <xsl:with-param name="title" select="concat('User Tags for &quot;', task/name, '&quot; (', gsa:long-time(timestamp), '): ')"/>
+    </xsl:call-template>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="get_asset">
@@ -19082,15 +19108,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:if>
     <xsl:if test="count(user_tags/tag)">
-    Tags:
-      <xsl:for-each select="user_tags/tag">
-        <a href="/omp?cmd=get_tag&amp;tag_id={@id}&amp;token={/envelope/token}">
-          <xsl:value-of select="name"/>
-          <xsl:if test="value != ''">=<xsl:value-of select="value"/></xsl:if>
-        </a>
-        <xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if>
-      </xsl:for-each>
-    <br/>
+      Tags:
+      <xsl:call-template name="user_tag_list"/>
+      <br/>
     </xsl:if>
     Last modified: <xsl:value-of select="gsa:long-time (modification_time)"/>.
   </div>
@@ -19325,6 +19345,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </div>
     </xsl:if>
+    <div>
+      <xsl:if test="count(user_tags/tag)">
+        Tags:
+        <xsl:call-template name="user_tag_list"/>
+        <br/>
+      </xsl:if>
+    </div>
     <div>Last modified: <xsl:value-of select="gsa:long-time (modification_time)"/>.</div>
   </div>
 </xsl:template>
@@ -19419,6 +19446,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </div>
+  <xsl:call-template name="user-tags-window">
+    <xsl:with-param name="resource_type" select="'result'"/>
+    <xsl:with-param name="title" select="'User Tags for this Result:'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="result" mode="overview">
@@ -19650,6 +19681,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
     </td>
   </tr>
+  <xsl:if test="count(user_tags/tag)">
+    <tr>
+      <td colspan="5" class="note_box_box">
+        <b>Result Tags: </b>
+        <xsl:call-template name="user_tag_list"/>
+      </td>
+    </tr>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="result" mode="result-body">

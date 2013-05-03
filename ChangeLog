@@ -1,3 +1,16 @@
+2013-05-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "result" to
+	attach_type, resource_type, optional_resource_type.
+
+	* src/html/omp.xsl (user_tag_list): New template for inline listing of
+	user tags.
+	(tagged_resource_link): Don't link to results.
+	(tag_attach_types): Add option "Result".
+	(get_report): Add user tags window.
+	(note-detailed): Replace hardcoded user tags list with template call.
+	(override-detailed, result [result-header]): Add tags list.
+
 2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (report-hosts-link, report-ports-link): New
