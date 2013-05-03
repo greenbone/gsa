@@ -1,5 +1,10 @@
 2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (gsa:date-diff): New function.
+	(report [summary]): Remove order by results row. Add scan duration row.
+
+2013-05-03  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result [result-header]): Add hostname next to IP
 	address when available.
 

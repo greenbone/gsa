@@ -3796,6 +3796,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:date-diff">
+  <xsl:param name="start"/>
+  <xsl:param name="end"/>
+
+  <xsl:variable name="difference" select="date:difference ($start, $end)"/>
+  <xsl:variable name="fromepoch"
+                select="date:add ('1970-01-01T00:00:00Z', $difference)"/>
+  <xsl:variable name="seconds"
+                select="date:second-in-minute($fromepoch)"/>
+  <xsl:variable name="minutes"
+                select="date:minute-in-hour($fromepoch)"/>
+  <xsl:variable name="hours"
+                select="date:hour-in-day($fromepoch)"/>
+  <xsl:variable name="days"
+                select="date:day-in-year($fromepoch) - 1"/>
+  <func:result>
+      <xsl:if test="$days">
+          <xsl:value-of select="concat ($days, ' days ')"/>
+      </xsl:if>
+      <xsl:if test="$hours">
+          <xsl:value-of select="concat ($hours, ' hours ')"/>
+      </xsl:if>
+      <xsl:if test="$minutes">
+          <xsl:value-of select="concat ($minutes, ' minutes ')"/>
+      </xsl:if>
+      <xsl:if test="$seconds">
+          <xsl:value-of select="concat ($seconds, ' seconds')"/>
+      </xsl:if>
+  </func:result>
+</func:function>
+
 <xsl:template match="task" mode="trash">
 
   <tr class="{gsa:table-row-class(position())}">
@@ -20904,10 +20935,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </a>
               </td>
             </tr>
-            <tr>
-              <td>Order of results:</td>
-              <td>by host</td>
-            </tr>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
@@ -21009,6 +21036,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <td>
                 <xsl:if test="string-length (report/scan_end)">
                   <xsl:value-of select="concat (date:day-abbreviation (report/scan_end), ' ', date:month-abbreviation (report/scan_end), ' ', date:day-in-month (report/scan_end), ' ', format-number(date:hour-in-day(report/scan_end), '00'), ':', format-number(date:minute-in-hour(report/scan_end), '00'), ':', format-number(date:second-in-minute(report/scan_end), '00'), ' ', date:year(report/scan_end))"/>
+                </xsl:if>
+              </td>
+            </tr>
+            <tr>
+              <td>Scan duration:</td>
+              <td>
+                <xsl:if test="string-length (report/scan_start) and string-length (report/scan_end)">
+                  <xsl:value-of select="gsa:date-diff (report/scan_start, report/scan_end)"/>
                 </xsl:if>
               </td>
             </tr>
