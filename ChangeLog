@@ -1,3 +1,7 @@
+2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/omp.xsl (host): Add missing app variable.
+
 2013-05-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "result" to

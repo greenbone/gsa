@@ -18697,6 +18697,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:for-each select="detail[name = 'App']">
 
               <tr class="{gsa:table-row-class(position())}">
+                <xsl:variable name="app"
+                              select="value"/>
                 <xsl:variable name="cve"
                               select="../detail[name = concat ($app, '/CVE')]/value"/>
                 <xsl:variable name="threats"
