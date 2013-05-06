@@ -19465,7 +19465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>Location</td>
     <td>Actions</td>
   </tr>
-  <tr class="gbntablehead2">
+  <tr>
     <td> <!-- Vulnerability -->
       <xsl:if test="delta/text()">
         <xsl:choose>

@@ -1,5 +1,10 @@
 2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result-header): Remove gbntable2 class from second
+	row.
+
+2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
 	(html-create-override-form, html-edit-override-form, result [details])
 	(report [details]): Remove result-detailed template div wrapper.
