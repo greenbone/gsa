@@ -1618,7 +1618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       Fold filtering box:
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=0&amp;token={/envelope/token}"
          title="Fold filter box">
-        <img src="/img/trend_up.png"
+        <img src="/img/fold.png"
              alt="Fold Filter box" title="Fold Filter box"/>
       </a>
     </xsl:when>
@@ -1626,7 +1626,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       Unfold filtering box:
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=1&amp;token={/envelope/token}"
          title="Unfold filter box">
-        <img src="/img/trend_down.png"
+        <img src="/img/unfold.png"
              alt="Unfold filter box" title="Unfold filter box"/>
       </a>
     </xsl:otherwise>

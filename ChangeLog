@@ -1,3 +1,12 @@
+2013-05-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/img/fold.png, src/html/img/unfold.png: New.
+
+	* CMakeLists.txt: Install the two new icons.
+
+	* src/html/omp.xsl (report): Use the new icons instead of the
+	temporary ones.
+
 2013-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_result): Make task_id optional, add "details"
