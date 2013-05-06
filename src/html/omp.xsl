@@ -1690,9 +1690,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
           <input type="hidden" name="sort_field" value="{$sort_field}"/>
           <input type="hidden" name="sort_order" value="{$sort_order}"/>
-          <input type="hidden"
-                 name="overrides"
-                 value="{report/filters/apply_overrides}"/>
           <xsl:if test="../../delta">
             <div style="float: right;">
               <div style="padding: 2px;">Show delta results:</div>
@@ -1828,6 +1825,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </div>
             </xsl:otherwise>
           </xsl:choose>
+
+          <div style="padding: 2px;">
+            <xsl:choose>
+              <xsl:when test="report/filters/apply_overrides = 0">
+                <label>
+                  <input type="checkbox" name="overrides" value="1"/>
+                  Show Overrides
+                </label>
+              </xsl:when>
+              <xsl:otherwise>
+                <label>
+                  <input type="checkbox" name="overrides" value="1" checked="1"/>
+                  Show Overrides
+                </label>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
 
           <div style="padding: 2px;">
             <xsl:choose>

@@ -1,5 +1,10 @@
 2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (result-header): Add filtering option to show
+	results overrides.
+
+2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (result-header): Remove gbntable2 class from second
 	row.
 
