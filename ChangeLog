@@ -1,3 +1,15 @@
+2013-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_result): Make task_id optional, add "details"
+	parameter to OMP command.
+
+	* src/html/omp.c (tagged_resource_link): Remove extra case for result.
+	(result-details): Add alternative values for task_id, task_name in case
+	they are (null), getting the data directly from the result element.
+	Add variables report_id, report_result_id, set to parameters with same
+	name from envelope if available. Use report_id element and id attribute
+	from result otherwise.
+
 2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Validate filterbox parameter.

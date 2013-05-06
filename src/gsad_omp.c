@@ -10313,17 +10313,20 @@ get_result (credentials_t *credentials, const char *result_id,
                             "<get_results"
                             " result_id=\"%s\""
                             " autofp=\"%s\""
-                            " task_id=\"%s\""
+                            "%s%s%s"
                             " apply_overrides=\"%s\""
                             " overrides=\"%s\""
                             " overrides_details=\"1\""
                             " notes=\"1\""
-                            " notes_details=\"1\"/>"
+                            " notes_details=\"1\""
+                            " details=\"1\"/>"
                             "</commands>",
                             commands ? commands : "",
                             result_id,
                             autofp,
-                            task_id,
+                            task_id ? " task_id=\"" : "",
+                            task_id ? task_id : "",
+                            task_id ? "\"" : "",
                             apply_overrides,
                             apply_overrides)
       == -1)

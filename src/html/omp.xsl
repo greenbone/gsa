@@ -6795,10 +6795,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="$resource_name"/>
       </a>
     </xsl:when>
-    <!-- FIXME: Make get_result work without task_id param and link correctly-->
-    <xsl:when test="$resource_type='result'">
-      <xsl:value-of select="$resource_name"/>
-    </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_{$resource_type}&amp;{$resource_type}_id={$resource_id}&amp;details=1&amp;token={$token}">
         <xsl:value-of select="$resource_name"/>
@@ -19392,8 +19388,46 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="result" mode="details" name="result-details">
   <xsl:param name="delta" select="0"/>
-  <xsl:param name="task_id" select="../../../../task/@id"/>
-  <xsl:param name="task_name" select="../../../../task/name"/>
+  <xsl:param name="task_id">
+    <xsl:choose>
+      <xsl:when test="../../../../task/@id != '(null)'">
+        <xsl:value-of select="../../../../task/@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="task/@id"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="task_name">
+    <xsl:choose>
+      <xsl:when test="../../../../task/name != '(null)'">
+        <xsl:value-of select="../../../../task/name"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="task/name"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:variable name="report_id">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/report_id != ''">
+        <xsl:value-of select="/envelope/params/report_id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="report/@id"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="report_result_id">
+    <xsl:choose>
+      <xsl:when test="/envelope/params/report_result_id != ''">
+        <xsl:value-of select="/envelope/params/report_result_id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@id"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -19418,9 +19452,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
 
             <input type="hidden" name="report_id"
-                   value="{/envelope/params/report_id}"/>
+                   value="{$report_id}"/>
             <input type="hidden" name="report_result_id"
-                   value="{/envelope/params/report_result_id}"/>
+                   value="{$report_result_id}"/>
             <input type="hidden" name="autofp"
                    value="{/envelope/params/autofp}"/>
 
@@ -19448,10 +19482,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="float_right">
         <xsl:choose>
           <xsl:when test="$delta=0">
-            <a href="?cmd=get_report&amp;report_id={/envelope/params/report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/overrides}&amp;token={/envelope/token}#result-{$report_result_id}">Report</a>
           </xsl:when>
           <xsl:otherwise>
-            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{/envelope/params/report_result_id}">Report</a>
+            <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}">Report</a>
           </xsl:otherwise>
         </xsl:choose>
       </div>
