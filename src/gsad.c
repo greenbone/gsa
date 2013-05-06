@@ -81,7 +81,6 @@
 
 #include "gsad_base.h"
 #include "gsad_omp.h"
-#include "gsad_oap.h" /* for create_user_oap */
 #include "tracef.h"
 #include "validator.h"
 
@@ -109,11 +108,6 @@
  * @brief Fallback GSAD port.
  */
 #define DEFAULT_GSAD_REDIRECT_PORT 80
-
-/**
- * @brief Fallback Administrator port.
- */
-#define DEFAULT_OPENVAS_ADMINISTRATOR_PORT 9393
 
 /**
  * @brief Fallback Manager port.
@@ -582,7 +576,6 @@ init_validator ()
                          "|(edit_port_list)"
                          "|(edit_report_format)"
                          "|(edit_schedule)"
-                         "|(edit_settings)"
                          "|(edit_slave)"
                          "|(edit_tag)"
                          "|(edit_target)"
@@ -660,7 +653,6 @@ init_validator ()
                          "|(get_report_formats)"
                          "|(get_report_section)"
                          "|(get_result)"
-                         "|(get_settings)"
                          "|(get_schedule)"
                          "|(get_schedules)"
                          "|(get_slave)"
@@ -717,7 +709,6 @@ init_validator ()
                          "|(save_port_list)"
                          "|(save_report_format)"
                          "|(save_schedule)"
-                         "|(save_settings)"
                          "|(save_slave)"
                          "|(save_tag)"
                          "|(save_target)"
@@ -1354,17 +1345,10 @@ params_mhd_validate (void *params)
     con_info->response = name ## _omp (credentials, con_info->params);
 
 /**
- * @brief Add else branch for an OMP operation.
- */
-#define ELSE_OAP(name) \
-  else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    con_info->response = name ## _oap (credentials, con_info->params);
-
-/**
  * @brief Handle a complete POST request.
  *
  * Ensures there is a command, then depending on the command validates
- * parameters and calls the appropriate OAP or OMP function (like
+ * parameters and calls the appropriate OMP function (like
  * create_task_omp).
  *
  * @param[in]   con_info     Connection info.
@@ -1730,7 +1714,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_port_list)
   ELSE (save_report_format)
   ELSE (save_schedule)
-  ELSE_OAP (save_settings)
   ELSE (save_slave)
   ELSE (save_tag)
   ELSE (save_target)
@@ -1776,7 +1759,6 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
 }
 
 #undef ELSE
-#undef ELSE_OAP
 
 /**
  * @brief Add else branch for an OMP operation.
@@ -1784,13 +1766,6 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
     return name ## _omp (credentials, params);
-
-/**
- * @brief Add else branch for an OAP operation.
- */
-#define ELSE_OAP(name) \
-  else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    return name ## _oap (credentials, params);
 
 /**
  * @brief Handle a complete GET request.
@@ -1893,7 +1868,6 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_schedule)
   ELSE (edit_slave)
   ELSE (edit_tag)
-  ELSE_OAP (edit_settings)
   ELSE (edit_target)
   ELSE (edit_task)
   ELSE (edit_user)
@@ -2157,7 +2131,6 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_config_nvt)
   ELSE (get_nvts)
   ELSE (get_protocol_doc)
-  ELSE_OAP (get_settings)
   ELSE (new_agent)
   ELSE (new_config)
   ELSE (new_lsc_credential)
@@ -2828,7 +2801,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
   const char *url_base = "/";
   char *default_file = "/login/login.html";
   const char *omp_cgi_base = "/omp";
-  const char *oap_cgi_base = "/oap";
   enum content_type content_type;
   char *content_disposition = NULL;
   gsize response_size = 0;
@@ -3121,10 +3093,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       /* Serve the request. */
 
-      if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base))
-          || !strncmp (&url[0], oap_cgi_base, strlen (oap_cgi_base)))
+      if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base)))
         {
-          /* URL requests to run OMP or OAP command. */
+          /* URL requests to run OMP command. */
 
           unsigned int res_len = 0;
           gchar *content_type_string = NULL;
@@ -3550,7 +3521,6 @@ main (int argc, char **argv)
   gchar *rc_name;
   int gsad_port;
   int gsad_redirect_port = DEFAULT_GSAD_REDIRECT_PORT;
-  int gsad_administrator_port = DEFAULT_OPENVAS_ADMINISTRATOR_PORT;
   int gsad_manager_port = DEFAULT_OPENVAS_MANAGER_PORT;
 
   /* Initialise. */
@@ -3572,10 +3542,8 @@ main (int argc, char **argv)
   static int timeout = SESSION_TIMEOUT;
   static gchar *gsad_address_string = NULL;
   static gchar *gsad_manager_address_string = NULL;
-  static gchar *gsad_administrator_address_string = NULL;
   static gchar *gsad_port_string = NULL;
   static gchar *gsad_redirect_port_string = NULL;
-  static gchar *gsad_administrator_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
@@ -3593,18 +3561,12 @@ main (int argc, char **argv)
     {"listen", '\0',
      0, G_OPTION_ARG_STRING, &gsad_address_string,
      "Listen on <address>.", "<address>" },
-    {"alisten", '\0',
-     0, G_OPTION_ARG_STRING, &gsad_administrator_address_string,
-     "Administrator address.", "<address>" },
     {"mlisten", '\0',
      0, G_OPTION_ARG_STRING, &gsad_manager_address_string,
      "Manager address.", "<address>" },
     {"port", 'p',
      0, G_OPTION_ARG_STRING, &gsad_port_string,
      "Use port number <number>.", "<number>"},
-    {"aport", 'a',
-     0, G_OPTION_ARG_STRING, &gsad_administrator_port_string,
-     "Use administrator port number <number>.", "<number>"},
     {"mport", 'm',
      0, G_OPTION_ARG_STRING, &gsad_manager_port_string,
      "Use manager port number <number>.", "<number>"},
@@ -3742,19 +3704,6 @@ main (int argc, char **argv)
       if (gsad_manager_port <= 0 || gsad_manager_port >= 65536)
         {
           g_critical ("%s: Manager port must be a number between 0 and 65536\n",
-                      __FUNCTION__);
-          exit (EXIT_FAILURE);
-        }
-    }
-
-  if (gsad_administrator_port_string)
-    {
-      /* flawfinder: ignore, for atoi boundaries are checked properly */
-      gsad_administrator_port = atoi (gsad_administrator_port_string);
-      if (gsad_administrator_port <= 0 || gsad_administrator_port >= 65536)
-        {
-          g_critical ("%s: Administrator port must be a number"
-                      " between 0 and 65536\n",
                       __FUNCTION__);
           exit (EXIT_FAILURE);
         }
@@ -3912,7 +3861,6 @@ main (int argc, char **argv)
   else
     {
       omp_init (gsad_manager_address_string, gsad_manager_port);
-      oap_init (gsad_administrator_address_string, gsad_administrator_port);
 
       gsad_address.sin_family = AF_INET;
       gsad_address.sin_port = htons (gsad_port);

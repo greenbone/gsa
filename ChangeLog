@@ -1,3 +1,25 @@
+2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Remove remains of OAP support.
+
+	* src/gsad.c (DEFAULT_OPENVAS_ADMINISTRATOR_PORT): Remove.
+	(init_validator): Remove settings commands.
+	(ELSE_OAP): Remove.
+	(exec_omp_post, exec_omp_get): Remove settings commands.
+	(request_handler): Remove /oap support.
+	(main): Remove --alisten and --aport.  Remove OAP init.
+
+	* src/html/gsad.xsl: Remove oap.xsl include.
+	(html-gsa-logo): Remove settings indicator icons.
+	(html-gsa-navigation): Switch URLs to omp.  Remove Settings item.
+
+	* src/html/omp.xsl (describe_feed_response, html-feed-form)
+	(sync_feed_response, describe_scap_response, html-scap-form)
+	(sync_scap_response, describe_cert_response, html-cert-form)
+	(sync_cert_response): New templates.  From oap.xsl.
+
+	* src/html/oap.xsl: Remove.
+
 2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/omp.xsl (result-header): Add filtering option to show

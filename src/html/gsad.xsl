@@ -1190,19 +1190,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              mode="response-indicator"/>
 
         <!-- Administrator -->
-        <xsl:apply-templates select="commands_response/modify_settings_response"
-                             mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_feed_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_scap_response"
                              mode="response-indicator"/>
         <xsl:apply-templates select="commands_response/sync_cert_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="edit_settings/get_settings_response"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="edit_settings/gsad_msg"
-                             mode="response-indicator"/>
-        <xsl:apply-templates select="get_settings/gsad_msg"
                              mode="response-indicator"/>
         <xsl:apply-templates select="get_users/gsad_msg"
                              mode="response-indicator"/>
@@ -1336,15 +1328,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </ul>
     </li>
     <li>
-     <a href="/oap?cmd=get_users&amp;token={/envelope/token}">Administration</a>
+     <a href="/omp?cmd=get_users&amp;token={/envelope/token}">Administration</a>
      <ul>
       <li class="pointy"></li>
-      <li><a href="/oap?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
-      <li><a href="/oap?cmd=get_groups&amp;token={/envelope/token}">Groups</a></li>
-      <li><a href="/oap?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
-      <li><a href="/oap?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
-      <li><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>
-      <li class="last"><a href="/oap?cmd=get_settings&amp;token={/envelope/token}">Settings</a></li>
+      <li><a href="/omp?cmd=get_users&amp;token={/envelope/token}">Users</a></li>
+      <li><a href="/omp?cmd=get_groups&amp;token={/envelope/token}">Groups</a></li>
+      <li><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">NVT Feed</a></li>
+      <li><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">SCAP Feed</a></li>
+      <li class="last"><a href="/omp?cmd=get_cert&amp;token={/envelope/token}">CERT Feed</a></li>
      </ul>
     </li>
     <li class="last_button">
@@ -1536,10 +1527,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- OMP -->
 
 <xsl:include href="omp.xsl"/>
-
-<!-- OAP -->
-
-<xsl:include href="oap.xsl"/>
 
 <!-- Help -->
 
