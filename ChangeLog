@@ -1,3 +1,14 @@
+2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/omp.xsl (html-create-note-form, html-edit-note-form)
+	(html-create-override-form, html-edit-override-form, result [details])
+	(report [details]): Remove result-detailed template div wrapper.
+	(result-header): Use css classes instead of inline styling.
+	(result-body): Remove issue_box_box divs.
+
+	* src/html/gsa-style.css: Remove unused issue_box_* css classes. Keep
+	top border for note and override boxes.
+
 2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/omp.xsl (host): Add missing app variable.
