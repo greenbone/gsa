@@ -292,7 +292,7 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 ## Install
 
 install (FILES src/html/favicon.gif src/html/gsad.xsl src/html/gsa-style.css
-               src/html/help.xsl src/html/oap.xsl src/html/omp.xsl
+               src/html/help.xsl src/html/omp.xsl
 			   src/html/omp-doc.xsl src/html/rnc.xsl
 			   src/html/os.xml src/html/wizard.xsl
          DESTINATION ${GSA_DATA_DIR})

@@ -35,14 +35,10 @@ add_library (gsad_omp STATIC gsad_omp.c)
 set_target_properties (gsad_omp PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
 target_link_libraries (gsad_omp "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
 
-add_library (gsad_oap STATIC gsad_oap.c)
-set_target_properties (gsad_oap PROPERTIES COMPILE_FLAGS "${OPENVAS_CFLAGS} ${LIBMICROHTTPD_CFLAGS} ${LIBXML_CFLAGS} ${GLIB_CFLAGS} ${GTHREAD_CFLAGS} ${LIBEXSLT_CFLAGS} ${LIBXSLT_CFLAGS} ${GNUTLS_CFLAGS}")
-target_link_libraries (gsad_oap "${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS} ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS} ${LIBXSLT_LDFLAGS} ${OPENVAS_LDFLAGS} ${GNUTLS_LDFLAGS}")
-
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_oap gsad_base)
+target_link_libraries (gsad gsad_omp gsad_base)
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (USE_LIBXSLT)
@@ -117,10 +113,6 @@ add_dependencies (check splint rats flawfinder)
 ## Very superficial check if stylesheets are fine
 
 if (PATH_TO_XSLTPROC)
-  add_custom_target (oap-xsl-syntax ALL
-                                    COMMENT "Checking syntax of oap.xsl"
-                                    COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/oap.xsl
-                                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/html/oap.xsl)
   add_custom_target (omp-xsl-syntax ALL
                                     COMMENT "Checking syntax of omp.xsl"
                                     COMMAND xsltproc ${CMAKE_CURRENT_SOURCE_DIR}/html/omp.xsl

@@ -1,5 +1,15 @@
 2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Remove leftover OAP files.
+
+	* CMakeLists.txt (FILES): Remove oap.xsl.
+
+	* src/CMakeLists.txt: Remove OAP files.
+
+	* src/gsad_oap.c, src/gsad_oap.h: Remove.
+
+2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Remove remains of OAP support.
 
 	* src/gsad.c (DEFAULT_OPENVAS_ADMINISTRATOR_PORT): Remove.
