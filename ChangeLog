@@ -1,3 +1,12 @@
+2013-05-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Validate filterbox parameter.
+
+	* src/html/omp.xsl (report [filterbox]): New template. Refactored code
+	from report results template. Add fold/unfold filterbox code.
+	(report [results]): Refactor code. Apply filterbox template.
+	(report [section-filter]): Remove default section value.
+
 2013-05-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Remove leftover OAP files.

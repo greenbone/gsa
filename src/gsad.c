@@ -905,8 +905,9 @@ init_validator ()
   openvas_validator_alias (validator, "esc_max_results",  "max_results");
   openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
   openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
-  openvas_validator_alias (validator, "filter_id",          "id");
   openvas_validator_alias (validator, "filt_id",            "id");
+  openvas_validator_alias (validator, "filter_id",          "id");
+  openvas_validator_alias (validator, "filterbox",          "boolean");
   openvas_validator_alias (validator, "from_file",          "boolean");
   openvas_validator_alias (validator, "force_wizard",       "boolean");
   openvas_validator_alias (validator, "group_id",           "id");

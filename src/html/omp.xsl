@@ -1612,6 +1612,389 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="report" mode="filterbox">
+  <xsl:choose>
+    <xsl:when test="/envelope/params/filterbox &gt; 0">
+      Fold filtering box:
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=0&amp;token={/envelope/token}"
+         title="Fold filter box">
+        <img src="/img/trend_up.png"
+             alt="Fold Filter box" title="Fold Filter box"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      Unfold filtering box:
+      <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;filterbox=1&amp;token={/envelope/token}"
+         title="Unfold filter box">
+        <img src="/img/trend_down.png"
+             alt="Unfold filter box" title="Unfold filter box"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:if test="/envelope/params/filterbox &gt; 0">
+    <div style="background-color: #EEEEEE;">
+      <xsl:variable name="sort_field">
+        <xsl:value-of select="report/sort/field/text()"/>
+      </xsl:variable>
+      <xsl:variable name="sort_order">
+        <xsl:value-of select="report/sort/field/order"/>
+      </xsl:variable>
+      <form action="" method="get">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="get_report"/>
+        <input type="hidden" name="report_id" value="{report/@id}"/>
+        <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+            <input type="hidden" name="type" value="prognostic"/>
+            <input type="hidden" name="host" value="{report/filters/host}"/>
+            <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
+            <input type="hidden" name="host_levels" value="{../../host_levels}"/>
+            <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
+            <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
+          </xsl:when>
+          <xsl:when test="../../delta">
+            <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
+          </xsl:when>
+          <xsl:otherwise>
+          </xsl:otherwise>
+        </xsl:choose>
+        <input type="hidden" name="sort_field" value="{$sort_field}"/>
+        <input type="hidden" name="sort_order" value="{$sort_order}"/>
+        <xsl:if test="../../delta">
+          <div style="float: right;">
+            <div style="padding: 2px;">Show delta results:</div>
+            <div style="margin-left: 8px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/same = 0">
+                    <input type="checkbox" name="delta_state_same" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_same"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                = same
+              </label>
+            </div>
+            <div style="margin-left: 8px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/new = 0">
+                    <input type="checkbox" name="delta_state_new" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_new"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                + new
+              </label>
+            </div>
+            <div style="margin-left: 8px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/gone = 0">
+                    <input type="checkbox" name="delta_state_gone" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_gone"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                &#8722; gone
+              </label>
+            </div>
+            <div style="margin-left: 8px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="report/filters/delta/changed = 0">
+                    <input type="checkbox" name="delta_state_changed" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_changed"
+                           value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                ~ changed
+              </label>
+            </div>
+          </div>
+        </xsl:if>
+        <div style="padding: 2px;">
+          Results per page:
+          <input type="text" name="max_results" size="5"
+                 value="{report/results/@max}"
+                 maxlength="400"/>
+        </div>
+
+        <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+          </xsl:when>
+          <xsl:otherwise>
+            <div style="padding: 2px;">
+              Auto-FP:
+              <div style="margin-left: 30px">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/autofp = 0">
+                      <input type="checkbox" name="autofp" value="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="autofp" value="1" checked="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  Trust vendor security updates
+                </label>
+                <div style="margin-left: 30px">
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/autofp = 2">
+                        <input type="radio" name="autofp_value" value="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="autofp_value" value="1" checked="1"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    Full CVE match
+                  </label>
+                  <br/>
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="report/filters/autofp = 2">
+                        <input type="radio" name="autofp_value" value="2" checked="1"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="autofp_value" value="2"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    Partial CVE match
+                  </label>
+                </div>
+              </div>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:choose>
+          <xsl:when test="@type='prognostic'">
+          </xsl:when>
+          <xsl:otherwise>
+            <div style="padding: 2px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="report/filters/notes = 0">
+                    <input type="checkbox" name="notes" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="notes" value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                Show notes
+              </label>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+
+        <div style="padding: 2px;">
+          <xsl:choose>
+            <xsl:when test="report/filters/apply_overrides = 0">
+              <label>
+                <input type="checkbox" name="overrides" value="1"/>
+                Show Overrides
+              </label>
+            </xsl:when>
+            <xsl:otherwise>
+              <label>
+                <input type="checkbox" name="overrides" value="1" checked="1"/>
+                Show Overrides
+              </label>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+
+        <div style="padding: 2px;">
+          <xsl:choose>
+            <xsl:when test="report/filters/result_hosts_only = 0">
+              <label>
+                <input type="checkbox" name="result_hosts_only" value="1"/>
+                Only show hosts that have results
+              </label>
+            </xsl:when>
+            <xsl:otherwise>
+              <label>
+                <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
+                Only show hosts that have results
+              </label>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+        <div style="padding: 2px;">
+          <label>
+            <xsl:choose>
+              <xsl:when test="report/filters/min_cvss_base = ''">
+                <input type="checkbox" name="apply_min_cvss_base" value="1"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="checkbox" name="apply_min_cvss_base" value="1"
+                       checked="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            CVSS &gt;=
+          </label>
+          <select name="min_cvss_base">
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'10.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'9.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:choose>
+              <xsl:when test="report/filters/min_cvss_base = ''">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'8.0'"/>
+                  <xsl:with-param name="select-value" select="'8.0'"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'8.0'"/>
+                  <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'7.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'6.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'5.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'4.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'3.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'2.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'1.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+            <xsl:call-template name="opt">
+              <xsl:with-param name="value" select="'0.0'"/>
+              <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
+            </xsl:call-template>
+          </select>
+        </div>
+        <div style="padding: 2px;">
+          Text phrase:
+          <input type="text" name="search_phrase" size="50"
+                 value="{report/filters/phrase}"
+                 maxlength="400"/>
+        </div>
+        <div style="float: right">
+          <input type="submit" value="Apply" title="Apply"/>
+        </div>
+        <div style="padding: 2px;">
+          Threat:
+          <table style="display: inline">
+            <tr>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/filter[text()='High']">
+                      <input type="checkbox" name="level_high" value="1"
+                             checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_high" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <img src="/img/high.png" alt="High" title="High"/>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/filter[text()='Medium']">
+                      <input type="checkbox" name="level_medium" value="1"
+                             checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_medium" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <img src="/img/medium.png" alt="Medium" title="Medium"/>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/filter[text()='Low']">
+                      <input type="checkbox" name="level_low" value="1"
+                             checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_low" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <img src="/img/low.png" alt="Low" title="Low"/>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/filter[text()='Log']">
+                      <input type="checkbox" name="level_log" value="1"
+                             checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_log" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <img src="/img/log.png" alt="Log" title="Log"/>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="report/filters/filter[text()='False Positive']">
+                      <input type="checkbox"
+                             name="level_false_positive"
+                             value="1"
+                             checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox"
+                             name="level_false_positive"
+                             value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
+                </label>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </form>
+    </div>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="report" mode="results">
   <xsl:variable name="levels"
                 select="report/filters/text()"/>
@@ -1648,7 +2031,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
     <div class="gb_window_part_content">
-      <!-- TODO: Move to template. -->
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
         </xsl:when>
@@ -1661,367 +2043,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </p>
         </xsl:otherwise>
       </xsl:choose>
-      <br/>
-      <div style="background-color: #EEEEEE;">
-        <xsl:variable name="sort_field">
-          <xsl:value-of select="report/sort/field/text()"/>
-        </xsl:variable>
-        <xsl:variable name="sort_order">
-          <xsl:value-of select="report/sort/field/order"/>
-        </xsl:variable>
-        <form action="" method="get">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="get_report"/>
-          <input type="hidden" name="report_id" value="{report/@id}"/>
-          <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-              <input type="hidden" name="type" value="prognostic"/>
-              <input type="hidden" name="host" value="{report/filters/host}"/>
-              <input type="hidden" name="host_search_phrase" value="{../../host_search_phrase}"/>
-              <input type="hidden" name="host_levels" value="{../../host_levels}"/>
-              <input type="hidden" name="host_first_result" value="{../../results/@start}"/>
-              <input type="hidden" name="host_max_results" value="{../../results/@max}"/>
-            </xsl:when>
-            <xsl:when test="../../delta">
-              <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-            </xsl:when>
-            <xsl:otherwise>
-            </xsl:otherwise>
-          </xsl:choose>
-          <input type="hidden" name="sort_field" value="{$sort_field}"/>
-          <input type="hidden" name="sort_order" value="{$sort_order}"/>
-          <xsl:if test="../../delta">
-            <div style="float: right;">
-              <div style="padding: 2px;">Show delta results:</div>
-              <div style="margin-left: 8px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/delta/same = 0">
-                      <input type="checkbox" name="delta_state_same" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="delta_state_same"
-                             value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  = same
-                </label>
-              </div>
-              <div style="margin-left: 8px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/delta/new = 0">
-                      <input type="checkbox" name="delta_state_new" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="delta_state_new"
-                             value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  + new
-                </label>
-              </div>
-              <div style="margin-left: 8px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/delta/gone = 0">
-                      <input type="checkbox" name="delta_state_gone" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="delta_state_gone"
-                             value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  &#8722; gone
-                </label>
-              </div>
-              <div style="margin-left: 8px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/delta/changed = 0">
-                      <input type="checkbox" name="delta_state_changed" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="delta_state_changed"
-                             value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  ~ changed
-                </label>
-              </div>
-            </div>
-          </xsl:if>
-          <div style="padding: 2px;">
-            Results per page:
-            <input type="text" name="max_results" size="5"
-                   value="{report/results/@max}"
-                   maxlength="400"/>
-          </div>
 
-          <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-            </xsl:when>
-            <xsl:otherwise>
-              <div style="padding: 2px;">
-                Auto-FP:
-                <div style="margin-left: 30px">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/autofp = 0">
-                        <input type="checkbox" name="autofp" value="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="autofp" value="1" checked="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    Trust vendor security updates
-                  </label>
-                  <div style="margin-left: 30px">
-                    <label>
-                      <xsl:choose>
-                        <xsl:when test="report/filters/autofp = 2">
-                          <input type="radio" name="autofp_value" value="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="radio" name="autofp_value" value="1" checked="1"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      Full CVE match
-                    </label>
-                    <br/>
-                    <label>
-                      <xsl:choose>
-                        <xsl:when test="report/filters/autofp = 2">
-                          <input type="radio" name="autofp_value" value="2" checked="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="radio" name="autofp_value" value="2"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      Partial CVE match
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </xsl:otherwise>
-          </xsl:choose>
+      <xsl:apply-templates select="." mode="filterbox"/>
 
-          <xsl:choose>
-            <xsl:when test="@type='prognostic'">
-            </xsl:when>
-            <xsl:otherwise>
-              <div style="padding: 2px;">
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="report/filters/notes = 0">
-                      <input type="checkbox" name="notes" value="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="notes" value="1" checked="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  Show notes
-                </label>
-              </div>
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <div style="padding: 2px;">
-            <xsl:choose>
-              <xsl:when test="report/filters/apply_overrides = 0">
-                <label>
-                  <input type="checkbox" name="overrides" value="1"/>
-                  Show Overrides
-                </label>
-              </xsl:when>
-              <xsl:otherwise>
-                <label>
-                  <input type="checkbox" name="overrides" value="1" checked="1"/>
-                  Show Overrides
-                </label>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-
-          <div style="padding: 2px;">
-            <xsl:choose>
-              <xsl:when test="report/filters/result_hosts_only = 0">
-                <label>
-                  <input type="checkbox" name="result_hosts_only" value="1"/>
-                  Only show hosts that have results
-                </label>
-              </xsl:when>
-              <xsl:otherwise>
-                <label>
-                  <input type="checkbox" name="result_hosts_only" value="1" checked="1"/>
-                  Only show hosts that have results
-                </label>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-          <div style="padding: 2px;">
-            <label>
-              <xsl:choose>
-                <xsl:when test="report/filters/min_cvss_base = ''">
-                  <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="checkbox" name="apply_min_cvss_base" value="1"
-                         checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              CVSS &gt;=
-            </label>
-            <select name="min_cvss_base">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'10.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'9.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:choose>
-                <xsl:when test="report/filters/min_cvss_base = ''">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'8.0'"/>
-                    <xsl:with-param name="select-value" select="'8.0'"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'8.0'"/>
-                    <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'7.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'6.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'5.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'4.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'3.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'2.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'1.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'0.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/min_cvss_base"/>
-              </xsl:call-template>
-            </select>
-          </div>
-          <div style="padding: 2px;">
-            Text phrase:
-            <input type="text" name="search_phrase" size="50"
-                   value="{report/filters/phrase}"
-                   maxlength="400"/>
-          </div>
-          <div style="float: right">
-            <input type="submit" value="Apply" title="Apply"/>
-          </div>
-          <div style="padding: 2px;">
-            Threat:
-            <table style="display: inline">
-              <tr>
-                <td class="threat_info_table_h">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='High']">
-                        <input type="checkbox" name="level_high" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_high" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/high.png" alt="High" title="High"/>
-                  </label>
-                </td>
-                <td class="threat_info_table_h">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Medium']">
-                        <input type="checkbox" name="level_medium" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_medium" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/medium.png" alt="Medium" title="Medium"/>
-                  </label>
-                </td>
-                <td class="threat_info_table_h">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Low']">
-                        <input type="checkbox" name="level_low" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_low" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/low.png" alt="Low" title="Low"/>
-                  </label>
-                </td>
-                <td class="threat_info_table_h">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='Log']">
-                        <input type="checkbox" name="level_log" value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox" name="level_log" value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/log.png" alt="Log" title="Log"/>
-                  </label>
-                </td>
-                <td class="threat_info_table_h">
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="report/filters/filter[text()='False Positive']">
-                        <input type="checkbox"
-                               name="level_false_positive"
-                               value="1"
-                               checked="1"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="checkbox"
-                               name="level_false_positive"
-                               value="1"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <img src="/img/false_positive.png" alt="False Positive" title="False Positive"/>
-                  </label>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </form>
-      </div>
-      <br/>
       <div style="background-color: #EEEEEE;">
         <div style="float: right">
           <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
@@ -20425,7 +20449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="report" mode="section-filter">
-  <xsl:param name="section">summary</xsl:param>
+  <xsl:param name="section"/>
   <div style="background-color: #EEEEEE;">
     <div style="float: right">
       <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post">
