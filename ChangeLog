@@ -1,5 +1,9 @@
 2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (report [filterbox]): Add details hidden parameter.
+
+2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [fold-filter-icon])
 	(report [show-details-icon], report [results]): Reduce left and right
 	margins on various elements by one pixel.

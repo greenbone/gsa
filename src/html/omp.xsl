@@ -1659,9 +1659,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="report/sort/field/order"/>
       </xsl:variable>
       <form action="" method="get">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="get_report"/>
         <input type="hidden" name="report_id" value="{report/@id}"/>
+        <input type="hidden" name="details" value="{/envelope/params/details}"/>
+        <input type="hidden" name="token" value="{/envelope/token}"/>
         <xsl:choose>
           <xsl:when test="@type='prognostic'">
             <input type="hidden" name="type" value="prognostic"/>
