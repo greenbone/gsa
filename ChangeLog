@@ -1,5 +1,25 @@
 2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
+	* src/html/omp.xsl (show-details-icon): Rename to result-details-icon.
+	Rename icons tooltips.
+	(report [results]): Adjust section-selector wrapper. Remove
+	show-details-icon template call. Add whitespace after powerfilter.
+	(gsa:table-row-class): No class when position below zero.
+	(result-header): Add collapse-details-button parameter. Add collapse
+	details icon in vulnerability column header. Fix Actions column width.
+	Add alternating background colour for second row. Link to result details
+	from vulnerability name. Rearrange notes and overrides buttons for
+	consistency.
+	(result-detailed): Add collapse-details-button and result-body
+	parameters.
+	(report [report-sections]: Rename to section-selector. Include wrapper
+	html code in template to remove duplicate code by caller.
+	(report [hosts], report [ports], report [closed_cves])
+	(report [summary]): Remove report-sections wrapper code.
+	(report [details]): Adjust result-detailed template call.
+
+2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
 	* src/html/omp.xsl (report [filterbox]): Add details hidden parameter.
 
 2013-05-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
