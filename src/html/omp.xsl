@@ -1612,7 +1612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=0&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Fold filter">
         <img src="/img/fold.png"
-             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Fold filter" title="Fold filter"/>
       </a>
     </xsl:when>
@@ -1620,7 +1620,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;filterbox=1&amp;details={/envelope/params/details}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Unfold filter">
         <img src="/img/unfold.png"
-             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Unfold filter" title="Unfold filter"/>
       </a>
     </xsl:otherwise>
@@ -1633,7 +1633,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;details=0&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Hide results details">
         <img src="/img/list.png"
-             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Hide results details" title="Hide results details"/>
       </a>
     </xsl:when>
@@ -1641,7 +1641,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=get_report&amp;report_id={report/@id}&amp;details=1&amp;filterbox={/envelope/params/filterbox}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="Show results details">
         <img src="/img/details.png"
-             style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+             style="vertical-align:middle;margin-left:2px;margin-right:2px;"
              alt="Show results details" title="Show results details"/>
       </a>
     </xsl:otherwise>
@@ -2096,7 +2096,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                      name="New Filter"
                      src="/img/new.png"
                      alt="New Filter"
-                     style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                     style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
             </div>
           </form>
           <form style="display: inline; margin: 0; vertical-align:middle" action="" method="get">
@@ -2137,10 +2137,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="image"
                      name="Switch Filter"
                      src="/img/refresh.png"
-                     alt="Switch" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                     alt="Switch" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
               <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
                  title="Filters">
-                <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+                <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
                      src="/img/list.png" border="0" alt="Filters"/>
               </a>
             </div>
@@ -2174,9 +2174,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="image"
                    name="Update Filter"
                    src="/img/refresh.png"
-                   alt="Update" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+                   alt="Update" style="vertical-align:middle;margin-left:2px;margin-right:2px;"/>
             <a href="/help/powerfilter.html?token={/envelope/token}" title="Help: Powerfilter">
-              <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+              <img style="vertical-align:middle;margin-left:2px;margin-right:2px;"
                    src="/img/help.png" border="0"/>
             </a>
             <xsl:apply-templates select="." mode="fold-filter-icon"/>
